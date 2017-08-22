@@ -35,7 +35,7 @@ AddEventHandler('banPlayer', function(playerId)
 			if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the kick ACTUALLY AN ADMIN?
 				local bannedIdentifiers = GetNumPlayerIdentifiers(playerId)
 					for i = 0, bannedIdentifiers-1 do
-						updateBlacklist(GetPlayerIdentifier(source,i))
+						updateBlacklist(GetPlayerIdentifier(playerId,i))
 					end
 				DropPlayer(playerId, "Banned by an Admin")
 			end
