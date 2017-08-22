@@ -70,7 +70,7 @@ Citizen.CreateThread(function()
 
 		elseif WarMenu.Button('Close') then
 			WarMenu.CloseMenu()
-		elseif IsControlJustReleased(0, 244) and isAdmin then --M by default
+		elseif IsControlJustReleased(0, 289) and isAdmin then --M by default
 			WarMenu.OpenMenu('admin')
 		end
 		
@@ -115,7 +115,7 @@ function spectatePlayer(target,name)
 		end
 
 
-		TriggerEvent("showNotification", "Spectating ~b~<C>"..name.."</C>.")
+		ShowNotification("Spectating ~b~<C>"..name.."</C>.")
 	else
 		if(not IsScreenFadedOut() and not IsScreenFadingOut()) then
 			DoScreenFadeOut(1000)
@@ -133,8 +133,12 @@ function spectatePlayer(target,name)
 			end
 		end
 
-		TriggerEvent("showNotification", "Stopped Spectating ~b~<C>"..name.."</C>.")
+		ShowNotification("Stopped Spectating ~b~<C>"..name.."</C>.")
 	end
 end
 
-
+function ShowNotification(text)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawNotification(0,1)
+end

@@ -69,7 +69,6 @@ Citizen.CreateThread(function()
 			end
 		end
 		SaveResourceFile("EasyAdmin", "banlist.txt", content, -1)
-		print("Updated Banlist! With Contents: ".. content)
 	end
 	updateBlacklist()
 end)
