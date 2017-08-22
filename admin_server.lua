@@ -35,7 +35,9 @@ AddEventHandler('banPlayer', function(playerId)
 			if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the kick ACTUALLY AN ADMIN?
 				local bannedIdentifiers = GetNumPlayerIdentifiers(playerId)
 					for i = 0, bannedIdentifiers-1 do
-						updateBlacklist(GetPlayerIdentifier(playerId,i))
+						if not string.find(GetPlayerIdentifier(playerId,i), "ip:") then
+							updateBlacklist(GetPlayerIdentifier(playerId,i))
+						end
 					end
 				DropPlayer(playerId, "Banned by an Admin")
 			end
@@ -81,6 +83,7 @@ local numIds = GetNumPlayerIdentifiers(source)
 				setKickReason('You are Blacklisted from joining this Server.')
 				print("Connection Refused, Blacklisted!\n")
 				CancelEvent()
+				return
 			end
 		end
 	end
