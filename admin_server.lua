@@ -1,5 +1,5 @@
 admins = {
-"steam:1100001055119e3",
+"license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317",
 }
 
 RegisterServerEvent('amiadmin')
@@ -33,7 +33,10 @@ AddEventHandler('banPlayer', function(playerId)
 	for i,admin in ipairs(admins) do
 		for i = 0, numIds-1 do
 			if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the kick ACTUALLY AN ADMIN?
-				updateBlacklist(GetPlayerIdentifier(playerId, 0))
+				local bannedIdentifiers = GetNumPlayerIdentifiers(playerId)
+					for i = 0, bannedIdentifiers-1 do
+						updateBlacklist(GetPlayerIdentifier(source,i))
+					end
 				DropPlayer(playerId, "Banned by an Admin")
 			end
 		end

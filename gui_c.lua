@@ -70,7 +70,7 @@ Citizen.CreateThread(function()
 
 		elseif WarMenu.Button('Close') then
 			WarMenu.CloseMenu()
-		elseif IsControlJustReleased(0, 244) then --M by default
+		elseif IsControlJustReleased(0, 244) and isAdmin then --M by default
 			WarMenu.OpenMenu('admin')
 		end
 		
