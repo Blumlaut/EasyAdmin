@@ -66,7 +66,7 @@ blacklist = {}
 Citizen.CreateThread(function()
 	function updateBlacklist(addItem)
 		blacklist = {}
-		content = LoadResourceFile("EasyAdmin", "banlist.txt")
+		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
 		if not addItem then
 			for index,value in ipairs(mysplit(content, "|")) do 
 				blacklist[index] = value
