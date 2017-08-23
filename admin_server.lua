@@ -46,6 +46,19 @@ AddEventHandler('banPlayer', function(playerId)
 end)
 
 
+RegisterServerEvent("updateBanlist")
+AddEventHandler('updateBanlist', function(playerId)
+	local numIds = GetNumPlayerIdentifiers(source)
+	for i,admin in ipairs(admins) do
+		for i = 0, numIds-1 do
+			if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the kick ACTUALLY AN ADMIN?
+				updateBlacklist()
+			end
+		end
+	end
+end)
+
+
 
 blacklist = {}
 

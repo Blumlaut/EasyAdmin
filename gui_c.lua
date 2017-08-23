@@ -37,6 +37,10 @@ Citizen.CreateThread(function()
 				
 				elseif WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
 				
+				elseif WarMenu.Button('Refresh Banlist') then
+					TriggerServerEvent("updateBanlist")
+				elseif WarMenu.Button('Close') then
+					WarMenu.CloseMenu()
 				end
 			end
 		WarMenu.Display()
@@ -68,8 +72,6 @@ Citizen.CreateThread(function()
 		end
 		WarMenu.Display()
 
-		elseif WarMenu.Button('Close') then
-			WarMenu.CloseMenu()
 		elseif IsControlJustReleased(0, 289) and isAdmin then --M by default
 			WarMenu.OpenMenu('admin')
 		end
