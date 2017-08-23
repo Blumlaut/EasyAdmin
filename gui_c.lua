@@ -100,40 +100,22 @@ function spectatePlayer(target,name)
 	if target == playerPed then enable = false end
 
 	if(enable)then
-		if (not IsScreenFadedOut() and not IsScreenFadingOut()) then
-			DoScreenFadeOut(1000)
-			while (not IsScreenFadedOut()) do
-				Wait(0)
-			end
 
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(true, target)
 
-			if(IsScreenFadedOut()) then
-				DoScreenFadeIn(1000)
-			end
-		end
 
 
 		ShowNotification("Spectating ~b~<C>"..name.."</C>.")
 	else
-		if(not IsScreenFadedOut() and not IsScreenFadingOut()) then
-			DoScreenFadeOut(1000)
-			while (not IsScreenFadedOut()) do
-				Wait(0)
-			end
 
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, target)
 
-			if(IsScreenFadedOut()) then
-				DoScreenFadeIn(1000)
-			end
-		end
 
 		ShowNotification("Stopped Spectating ~b~<C>"..name.."</C>.")
 	end
