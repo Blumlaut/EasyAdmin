@@ -1,69 +1,71 @@
 admins = {
-	"license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317",
+"license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317",
 }
 
 Citizen.CreateThread(function()
-	RegisterServerEvent('amiadmin')
-	AddEventHandler('amiadmin', function()
-		local numIds = GetNumPlayerIdentifiers(source)
-		for i,admin in ipairs(admins) do
-			for i = 0, numIds-1 do
-				if admin == GetPlayerIdentifier(source,i) then -- is the player an admin?
-					TriggerClientEvent("adminresponse", source, true)
-				end
+
+
+RegisterServerEvent('amiadmin')
+AddEventHandler('amiadmin', function()
+	local numIds = GetPlayerIdentifiers(source)
+	for i,admin in ipairs(admins) do
+		for i,theId in ipairs(numIds) do
+			if admin == theId then -- is the player an admin?
+				TriggerClientEvent("adminresponse", source, true)
 			end
 		end
-	end)
-	
-	RegisterServerEvent("kickPlayer")
-	AddEventHandler('kickPlayer', function(playerId)
-		local numIds = GetNumPlayerIdentifiers(source)
-		for i,admin in ipairs(admins) do
-			for i = 0, numIds-1 do
-				if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the kick ACTUALLY AN ADMIN?
-					DropPlayer(playerId, "Kicked by an Admin")
-				end
+	end
+end)
+
+RegisterServerEvent("kickPlayer")
+AddEventHandler('kickPlayer', function(playerId)
+	local numIds = GetPlayerIdentifiers(source)
+	for i,admin in ipairs(admins) do
+		for i,theId in ipairs(numIds) do
+			if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
+				DropPlayer(playerId, "Kicked by an Admin")
 			end
 		end
-	end)
-	
-	
-	RegisterServerEvent("banPlayer")
-	AddEventHandler('banPlayer', function(playerId)
-		local numIds = GetNumPlayerIdentifiers(source)
-		for i,admin in ipairs(admins) do
-			for i = 0, numIds-1 do
-				if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the kick ACTUALLY AN ADMIN?
-					local bannedIdentifiers = GetNumPlayerIdentifiers(playerId)
-					for i = 0, bannedIdentifiers-1 do
-						if string.find(GetPlayerIdentifier(playerId,i), "license:") then
-							updateBlacklist(GetPlayerIdentifier(playerId,i))
+	end
+end)
+
+
+RegisterServerEvent("banPlayer")
+AddEventHandler('banPlayer', function(playerId)
+	local numIds = GetPlayerIdentifiers(source)
+	for i,admin in ipairs(admins) do
+		for i,theId in ipairs(numIds) do
+			if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
+				local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+					for i,identifier in ipairs(bannedIdentifiers) do
+						if string.find(identifier, "license:") then
+							updateBlacklist(identifier)
 						end
 					end
-					DropPlayer(playerId, "Banned by an Admin")
-				end
+				DropPlayer(playerId, "Banned by an Admin")
 			end
 		end
-	end)
-	
-	
-	RegisterServerEvent("updateBanlist")
-	AddEventHandler('updateBanlist', function(playerId)
-		local numIds = GetNumPlayerIdentifiers(source)
-		for i,admin in ipairs(admins) do
-			for i = 0, numIds-1 do
-				if admin == GetPlayerIdentifier(source,i) then -- is the player requesting the update ACTUALLY AN ADMIN?
-					updateBlacklist()
-				end
+	end
+end)
+
+
+RegisterServerEvent("updateBanlist")
+AddEventHandler('updateBanlist', function(playerId)
+	local numIds = GetPlayerIdentifiers(source)
+	for i,admin in ipairs(admins) do
+		for i,theId in ipairs(numIds) do
+			if admin == theId then -- is the player requesting the update ACTUALLY AN ADMIN?
+				updateBlacklist()
 			end
 		end
-	end)
-	
-	
-	
-	blacklist = {}
-	
-	
+	end
+end)
+
+
+
+blacklist = {}
+
+
 	function updateBlacklist(addItem)
 		blacklist = {}
 		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
@@ -83,37 +85,38 @@ Citizen.CreateThread(function()
 		end
 		SaveResourceFile("EasyAdmin", "banlist.txt", content, -1)
 	end
-	updateBlacklist()
-	
-	
-	AddEventHandler('playerConnecting', function(playerName, setKickReason)
-		local numIds = GetNumPlayerIdentifiers(source)
-		for i,blacklisted in ipairs(blacklist) do
-			for i = 0, numIds-1 do
-				if blacklisted == GetPlayerIdentifier(source,i) then
-					setKickReason('You are Blacklisted from joining this Server.')
-					print("Connection Refused, Blacklisted!\n")
-					CancelEvent()
-					return
-				end
+
+
+AddEventHandler('playerConnecting', function(playerName, setKickReason)
+local numIds = GetPlayerIdentifiers(source)
+	for i,blacklisted in ipairs(blacklist) do
+		for i,theId in ipairs(numIds) do
+			if blacklisted == theId then
+				setKickReason('You are Blacklisted from joining this Server.')
+				print("Connection Refused, Blacklisted!\n")
+				CancelEvent()
+				return
 			end
 		end
-	end)
-	
-	
-	
-	---------------------------------- USEFUL
-	
-	
-	function mysplit(inputstr, sep)
-		if sep == nil then
-			sep = "%s"
-		end
-		local t={} ; i=1
-		for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-			t[i] = str
-			i = i + 1
-		end
-		return t
 	end
 end)
+
+function mysplit(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t={} ; i=1
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+		t[i] = str
+		i = i + 1
+	end
+	return t
+end
+
+updateBlacklist()
+
+---------------------------------- USEFUL
+end)
+
+
+
