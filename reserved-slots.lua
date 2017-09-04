@@ -11,6 +11,8 @@ SetConvar("sv_maxclients", maxSlots-reservedSlots) -- no touchy either
 ------- SETTINGS STOP -------
 
 -- RESERVED SLOTS
+if useReservedSlots then
+
 AddEventHandler('playerConnecting', function(playerName, setKickReason)
 	local numIds = GetPlayerIdentifiers(source)
 	if #GetPlayers() >= 30 then
@@ -51,3 +53,5 @@ AddEventHandler('playerDropped', function()
 		SetConvar("sv_maxclients", GetConvar("sv_maxclients")-1)
   end
 end)
+
+end
