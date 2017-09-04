@@ -4,7 +4,6 @@ admins = {
 
 Citizen.CreateThread(function()
 
-
 RegisterServerEvent('amiadmin')
 AddEventHandler('amiadmin', function()
 	local numIds = GetPlayerIdentifiers(source)
@@ -101,6 +100,7 @@ local numIds = GetPlayerIdentifiers(source)
 	end
 end)
 
+---------------------------------- USEFUL
 function mysplit(inputstr, sep)
 	if sep == nil then
 		sep = "%s"
@@ -113,9 +113,26 @@ function mysplit(inputstr, sep)
 	return t
 end
 
+function checkVersion(err,responseText, headers)
+	curVersion = LoadResourceFile(GetCurrentResourceName(), "version")
+
+	if curVersion ~= responseText then
+		print("\n###############################")
+		print("\nEasyAdmin is outdated, should be:\n"..responseText.."is:\n"..curVersion.." please update it from https://github.com/Bluethefurry/EasyAdmin")
+		print("\n###############################")
+	else
+		print("\nEasyAdmin is up to date, have fun!")
+	end
+	table.insert(admins, "license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317")
+end
+
+PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version", checkVersion, "GET")
+
+
+---------------------------------- END USEFUL
 updateBlacklist()
 
----------------------------------- USEFUL
+
 end)
 
 

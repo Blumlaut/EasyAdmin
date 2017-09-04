@@ -24,6 +24,7 @@ Citizen.CreateThread(function()
 	WarMenu.CreateSubMenu('kickplayers', 'admin', 'Kick Player')
 	WarMenu.CreateSubMenu('banplayers', 'admin', 'Ban Player')
 	WarMenu.CreateSubMenu('spectateplayers', 'admin', 'Spectate Players')
+	WarMenu.CreateSubMenu('teleporttoplayer', 'admin', 'Teleport to Player')
 	TriggerServerEvent("amiadmin")
 	
 	while true do
@@ -36,6 +37,8 @@ Citizen.CreateThread(function()
 				elseif WarMenu.MenuButton('Ban Player', 'banplayers') then
 				
 				elseif WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
+				
+				elseif WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
 				
 				elseif WarMenu.Button('Refresh Banlist') then
 					TriggerServerEvent("updateBanlist")
@@ -68,6 +71,17 @@ Citizen.CreateThread(function()
 		for i,thePlayer in ipairs(players) do
 			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'spectateplayers') then
 				spectatePlayer(GetPlayerPed(thePlayer), GetPlayerName( thePlayer ))
+			end
+		end
+		WarMenu.Display()
+		
+		elseif WarMenu.IsMenuOpened("teleporttoplayer") then
+		
+		for i,thePlayer in ipairs(players) do
+			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'teleporttoplayer') then
+				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer),true))
+				local heading = GetEntityHeading(GetPlayerPed(player))
+				SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
 			end
 		end
 		WarMenu.Display()
