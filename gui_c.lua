@@ -1,18 +1,22 @@
 isAdmin = false
 players = {}
+banlist = {}
 
 RegisterNetEvent("adminresponse")
 RegisterNetEvent("Z:playerUpdate")
 RegisterNetEvent("amiadmin")
+RegisterNetEvent("fillBanlist")
 
 AddEventHandler('adminresponse', function(response)
-
 isAdmin = response
-
+TriggerServerEvent("updateBanlist")
 end)
 
 
+AddEventHandler("fillBanlist", function(thebanlist)
+banlist = thebanlist
 
+end)
 
 
 
@@ -23,9 +27,13 @@ Citizen.CreateThread(function()
 	WarMenu.CreateMenu('admin', 'Admin Menu')
 	WarMenu.CreateSubMenu('kickplayers', 'admin', 'Kick Player')
 	WarMenu.CreateSubMenu('banplayers', 'admin', 'Ban Player')
+	WarMenu.CreateSubMenu('unbanplayers', 'admin', 'Unban Player')
 	WarMenu.CreateSubMenu('spectateplayers', 'admin', 'Spectate Players')
 	WarMenu.CreateSubMenu('teleporttoplayer', 'admin', 'Teleport to Player')
 	TriggerServerEvent("amiadmin")
+	
+	
+	
 	
 	while true do
 		if WarMenu.IsMenuOpened('admin') then
@@ -42,6 +50,8 @@ Citizen.CreateThread(function()
 				
 				elseif WarMenu.Button('Refresh Banlist') then
 					TriggerServerEvent("updateBanlist")
+				elseif WarMenu.MenuButton('Unban Player', "unbanplayers") then
+				
 				elseif WarMenu.Button('Close') then
 					WarMenu.CloseMenu()
 				end
@@ -85,6 +95,16 @@ Citizen.CreateThread(function()
 			end
 		end
 		WarMenu.Display()
+		
+		elseif WarMenu.IsMenuOpened("unbanplayers") then
+		
+		for i,theBanned in ipairs(banlist) do
+			if WarMenu.MenuButton(theBanned, 'unbanplayers') then
+				TriggerServerEvent("unbanPlayer", theBanned)
+				TriggerServerEvent("updateBanlist")
+			end
+		end
+		WarMenu.Display()
 
 		elseif IsControlJustReleased(0, 289) and isAdmin then --M by default
 			WarMenu.OpenMenu('admin')
@@ -100,10 +120,10 @@ Citizen.CreateThread( function()
 		Citizen.Wait(0)
 			players = {}
 			for i = 0, 31 do
-				if NetworkIsPlayerActive( i ) then
-					table.insert( players, i )
-				end
+			if NetworkIsPlayerActive( i ) then
+				table.insert( players, i )
 			end
+		end
 	end
 end)
 
@@ -131,7 +151,7 @@ function spectatePlayer(target,name)
 			NetworkSetInSpectatorMode(false, target)
 
 
-		ShowNotification("Stopped Spectating ~b~<C>"..name.."</C>.")
+		ShowNotification("Stopped Spectating.")
 	end
 end
 

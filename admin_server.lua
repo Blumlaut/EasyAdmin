@@ -1,5 +1,9 @@
-admins = {
-"license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317",
+-- note that nothing has changed, i just added some examples, put your admins here as you've always did!
+admins = { 
+"steamid:A246A196C9", -- steamid64 converted to hex, this might need to be in lowercase, i didn't test
+"licence:examplelicence", -- licence as displayed by FiveM
+"ip:127.0.0.1" -- i don't recommend using an ip *at all*, but it still works
+
 }
 
 Citizen.CreateThread(function()
@@ -54,7 +58,23 @@ AddEventHandler('updateBanlist', function(playerId)
 	for i,admin in ipairs(admins) do
 		for i,theId in ipairs(numIds) do
 			if admin == theId then -- is the player requesting the update ACTUALLY AN ADMIN?
-				updateBlacklist()
+				updateBlacklist(false,true)
+				Citizen.Wait(300)
+				TriggerClientEvent("fillBanlist", source, blacklist)
+			end
+		end
+	end
+end)
+
+
+
+RegisterServerEvent("unbanPlayer")
+AddEventHandler('unbanPlayer', function(playerId)
+	local numIds = GetPlayerIdentifiers(source)
+	for i,admin in ipairs(admins) do
+		for i,theId in ipairs(numIds) do
+			if admin == theId then -- is the player requesting the unban ACTUALLY AN ADMIN?
+				updateBlacklistRemove(playerId)
 			end
 		end
 	end
@@ -65,7 +85,7 @@ end)
 blacklist = {}
 
 
-	function updateBlacklist(addItem)
+	function updateBlacklist(addItem,sharewithclients)
 		blacklist = {}
 		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
 		if not addItem then
@@ -78,6 +98,30 @@ blacklist = {}
 			else
 				content = content..""..addItem
 			end
+			for index,value in ipairs(mysplit(content, "|")) do 
+				blacklist[index] = value
+			end
+		end
+		SaveResourceFile("EasyAdmin", "banlist.txt", content, -1)
+	end
+	
+	
+	function updateBlacklistRemove(removeItem)
+		blacklist = {}
+		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
+		if not removeItem then
+			for index,value in ipairs(mysplit(content, "|")) do 
+				blacklist[index] = value
+			end
+		else
+			oldcontent = content
+			content = string.gsub(content, removeItem.."|", "")
+			if oldcontent == content then
+				content = string.gsub(content, removeItem, "")
+			end
+			
+		
+			Citizen.Trace(content)
 			for index,value in ipairs(mysplit(content, "|")) do 
 				blacklist[index] = value
 			end
@@ -116,21 +160,29 @@ end
 function checkVersion(err,responseText, headers)
 	curVersion = LoadResourceFile(GetCurrentResourceName(), "version")
 
-	if curVersion ~= responseText then
+	updatePath = "/Bluethefurry/EasyAdmin"
+	resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
+
+	if curVersion ~= responseText and tonumber(curVersion) < tonumber(responseText) then
 		print("\n###############################")
-		print("\nEasyAdmin is outdated, should be:\n"..responseText.."is:\n"..curVersion.." please update it from https://github.com/Bluethefurry/EasyAdmin")
+		print("\n"..resourceName.." is outdated, should be:\n"..responseText.."is:\n"..curVersion.."\nplease update it from https://github.com"..updatePath.."")
 		print("\n###############################")
+	elseif tonumber(curVersion) > tonumber(responseText) then
+		print("You somehow skipped a few versions of "..resourceName.." or the git went offline, if it's still online i advise you to update ( or downgrade? )")
 	else
-		print("\nEasyAdmin is up to date, have fun!")
+		--print("\n"..resourceName.." is up to date, have fun!")
 	end
-	table.insert(admins, "license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317")
+	--table.insert(admins, "license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317") -- what??!?! an evil heckler exploit? and noone even noticed :(
+	SetTimeout(3600000, checkVersionHTTPRequest)	
 end
 
-PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version", checkVersion, "GET")
-
+function checkVersionHTTPRequest()
+	PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version", checkVersion, "GET")
+end
 
 ---------------------------------- END USEFUL
 updateBlacklist()
+checkVersionHTTPRequest()
 
 
 end)
