@@ -102,7 +102,7 @@ blacklist = {}
 				blacklist[index] = value
 			end
 		end
-		SaveResourceFile("EasyAdmin", "banlist.txt", content, -1)
+		SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
 	end
 	
 	
@@ -126,7 +126,7 @@ blacklist = {}
 				blacklist[index] = value
 			end
 		end
-		SaveResourceFile("EasyAdmin", "banlist.txt", content, -1)
+		SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
 	end
 
 
