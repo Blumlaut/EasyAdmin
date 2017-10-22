@@ -61,7 +61,18 @@ Citizen.CreateThread(function()
 		
 		for i,thePlayer in ipairs(players) do
 			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'kickplayers') then
-				TriggerServerEvent("kickPlayer", GetPlayerServerId( thePlayer ))
+			
+				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+			
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+			
+				local result = GetOnscreenKeyboardResult()
+			
+				if result then
+					TriggerServerEvent("kickPlayer", GetPlayerServerId( thePlayer ), result)
+				end
 			end
 		end
 		WarMenu.Display()
@@ -70,7 +81,18 @@ Citizen.CreateThread(function()
 		
 		for i,thePlayer in ipairs(players) do
 			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'banplayers') then
-				TriggerServerEvent("banPlayer", GetPlayerServerId( thePlayer ))
+				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+				
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+				
+				local result = GetOnscreenKeyboardResult()
+				
+				
+				if result then
+					TriggerServerEvent("banPlayer", GetPlayerServerId( thePlayer ), result)
+				end
 			end
 		end
 		WarMenu.Display()

@@ -21,12 +21,12 @@ AddEventHandler('amiadmin', function()
 end)
 
 RegisterServerEvent("kickPlayer")
-AddEventHandler('kickPlayer', function(playerId)
+AddEventHandler('kickPlayer', function(playerId,reason)
 	local numIds = GetPlayerIdentifiers(source)
 	for i,admin in ipairs(admins) do
 		for i,theId in ipairs(numIds) do
 			if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
-				DropPlayer(playerId, "Kicked by an Admin")
+				DropPlayer(playerId, "Kicked by an Admin, Reason: "..reason)
 			end
 		end
 	end
@@ -34,7 +34,7 @@ end)
 
 
 RegisterServerEvent("banPlayer")
-AddEventHandler('banPlayer', function(playerId)
+AddEventHandler('banPlayer', function(playerId,reason)
 	local numIds = GetPlayerIdentifiers(source)
 	for i,admin in ipairs(admins) do
 		for i,theId in ipairs(numIds) do
@@ -42,10 +42,11 @@ AddEventHandler('banPlayer', function(playerId)
 				local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 					for i,identifier in ipairs(bannedIdentifiers) do
 						if string.find(identifier, "license:") then
-							updateBlacklist(identifier)
+							reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " )"
+							updateBlacklist(identifier..";"..reason)
 						end
 					end
-				DropPlayer(playerId, "Banned by an Admin")
+				DropPlayer(playerId, "Banned by an Admin, Reason: "..reason)
 			end
 		end
 	end
@@ -83,14 +84,24 @@ end)
 
 
 blacklist = {}
+blacklist.reasons = {}
 
 
-	function updateBlacklist(addItem,sharewithclients)
+	function updateBlacklist(addItem)
 		blacklist = {}
+		blacklist.reasons = {}
 		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
 		if not addItem then
 			for index,value in ipairs(mysplit(content, "|")) do 
-				blacklist[index] = value
+				curstring = "" -- make a new string 
+				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
+					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
+					curstring = curstring..string.sub(value,i,i) -- add our current letter to our string 
+				end
+				local reason = string.match(value, "^.*%;(.*)"  ) or "none given" -- get the reason from the string or use "none given" if it's nil
+				
+				blacklist[index] = curstring
+				blacklist.reasons[index] = reason
 			end
 		else
 			if string.len(content) > 1 then
@@ -99,44 +110,57 @@ blacklist = {}
 				content = content..""..addItem
 			end
 			for index,value in ipairs(mysplit(content, "|")) do 
-				blacklist[index] = value
+				curstring = "" -- make a new string 
+				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
+					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
+					curstring = curstring..string.sub(value,i,i) -- add our current letter to our string 
+				end
+				local reason = string.match(value, "^.*%;(.*)"  ) or "none given" -- get the reason from the string or use "none given" if it's nil
+		
+				blacklist[index] = curstring
+				blacklist.reasons[index] = reason
 			end
 		end
 		SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
 	end
 	
 	
+	
 	function updateBlacklistRemove(removeItem)
 		blacklist = {}
+		blacklist.reasons = {}
 		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
-		if not removeItem then
+			oldcontent = content			
 			for index,value in ipairs(mysplit(content, "|")) do 
-				blacklist[index] = value
+				curstring = "" -- make a new string 
+				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
+					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
+					curstring = curstring..string.sub(value,i,i) -- add our current letter to our string 
+				end
+				local reason = string.match(value, "^.*%;(.*)"  ) or "none given" -- get the reason from the string or use "none given" if it's nil
+				
+				if removeItem == curstring then
+					content = string.gsub(content, value.."|", "")
+				end
+				if oldcontent == content then
+					if removeItem == curstring then
+						content = string.gsub(content, value, "")
+					end
+				end
+				
 			end
-		else
-			oldcontent = content
-			content = string.gsub(content, removeItem.."|", "")
-			if oldcontent == content then
-				content = string.gsub(content, removeItem, "")
-			end
-			
-		
-			Citizen.Trace(content)
-			for index,value in ipairs(mysplit(content, "|")) do 
-				blacklist[index] = value
-			end
-		end
 		SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
+		updateBlacklist(false,false)
 	end
 
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason)
 local numIds = GetPlayerIdentifiers(source)
-	for i,blacklisted in ipairs(blacklist) do
+	for bi,blacklisted in ipairs(blacklist) do
 		for i,theId in ipairs(numIds) do
 			if blacklisted == theId then
-				setKickReason('You are Blacklisted from joining this Server.')
-				print("Connection Refused, Blacklisted!\n")
+				setKickReason('You are Blacklisted from joining this Server \nReason: '..blacklist.reasons[bi])
+				print("Connection Refused, Blacklisted for "..blacklist.reasons[bi].."!\n")
 				CancelEvent()
 				return
 			end
