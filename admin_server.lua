@@ -204,7 +204,13 @@ function checkVersionHTTPRequest()
 	PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version", checkVersion, "GET")
 end
 
+function loopUpdateBlacklist()
+	updateBlacklist()
+	SetTimeout(300000, loopUpdateBlacklist)
+end
+
 ---------------------------------- END USEFUL
+SetTimeout(300000, loopUpdateBlacklist)
 updateBlacklist()
 checkVersionHTTPRequest()
 
