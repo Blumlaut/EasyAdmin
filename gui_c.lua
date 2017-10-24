@@ -1,5 +1,5 @@
 isAdmin = false
-showLicenses = true
+showLicenses = false
 players = {}
 banlist = {}
 banlist.reasons = {}

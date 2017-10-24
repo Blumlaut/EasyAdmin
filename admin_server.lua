@@ -73,13 +73,14 @@ end)
 
 RegisterServerEvent("updateBanlist")
 AddEventHandler('updateBanlist', function(playerId)
-	local numIds = GetPlayerIdentifiers(source)
+	local src = source
+	local numIds = GetPlayerIdentifiers(src)
 	for i,admin in ipairs(admins) do
 		for i,theId in ipairs(numIds) do
 			if admin == theId then -- is the player requesting the update ACTUALLY AN ADMIN?
 				updateBlacklist(false,true)
 				Citizen.Wait(300)
-				TriggerClientEvent("fillBanlist", source, blacklist, blacklist.reasons)
+				TriggerClientEvent("fillBanlist", src, blacklist, blacklist.reasons)
 			end
 		end
 	end
