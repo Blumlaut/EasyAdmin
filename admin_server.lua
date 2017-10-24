@@ -237,7 +237,6 @@ SetTimeout(300000, loopUpdateBlacklist)
 updateBlacklist()
 checkVersionHTTPRequest()
 
-updateBlacklistRemove("license:af71e859705375a0eb43fbeaadb03d37cc22bab7")
 end)
 
 
