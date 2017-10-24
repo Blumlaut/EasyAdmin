@@ -1,4 +1,5 @@
 isAdmin = false
+showLicenses = true
 players = {}
 banlist = {}
 banlist.reasons = {}
@@ -32,6 +33,7 @@ Citizen.CreateThread(function()
 	WarMenu.CreateSubMenu('unbanplayers', 'admin', 'Unban Player')
 	WarMenu.CreateSubMenu('spectateplayers', 'admin', 'Spectate Players')
 	WarMenu.CreateSubMenu('teleporttoplayer', 'admin', 'Teleport to Player')
+	WarMenu.CreateSubMenu('settings', 'admin', 'Settings')
 	TriggerServerEvent("amiadmin")
 	
 	
@@ -50,9 +52,9 @@ Citizen.CreateThread(function()
 				
 				elseif WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
 				
-				elseif WarMenu.Button('Refresh Banlist') then
-					TriggerServerEvent("updateBanlist")
 				elseif WarMenu.MenuButton('Unban Player', "unbanplayers") then
+				
+				elseif WarMenu.MenuButton('Settings', "settings") then
 				
 				elseif WarMenu.Button('Close') then
 					WarMenu.CloseMenu()
@@ -123,12 +125,37 @@ Citizen.CreateThread(function()
 		elseif WarMenu.IsMenuOpened("unbanplayers") then
 		
 		for i,theBanned in ipairs(banlist) do
-			if WarMenu.Button(theBanned, 'unbanplayers', banlist.reasons[i]) then
-				TriggerServerEvent("unbanPlayer", theBanned)
-				TriggerServerEvent("updateBanlist")
+			if showLicenses then
+				if WarMenu.Button(theBanned) then
+					TriggerServerEvent("unbanPlayer", theBanned)
+					TriggerServerEvent("updateBanlist")
+					Citizen.Trace("unbanning user")
+				end
+			else
+				if WarMenu.Button(banlist.reasons[i]) then
+					TriggerServerEvent("unbanPlayer", theBanned)
+					Citizen.Trace("unbanning user")
+					TriggerServerEvent("updateBanlist")
+				end
 			end
 		end
 		WarMenu.Display()
+		
+		elseif WarMenu.IsMenuOpened("settings") then
+			if showLicenses then
+				sl = "Licenses"
+			else
+				sl = "Reasons"
+			end
+			if WarMenu.Button("Banlist: Show Licenses/Reasons", sl) then
+				showLicenses = not showLicenses
+			elseif WarMenu.Button('Refresh Banlist') then
+				TriggerServerEvent("updateBanlist")
+			end
+			
+		WarMenu.Display()
+				
+				
 
 		elseif IsControlJustReleased(0, 289) and isAdmin then --M by default
 			WarMenu.OpenMenu('admin')

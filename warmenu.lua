@@ -18,7 +18,7 @@ local currentKey = nil
 local currentMenu = nil
 
 
-local menuWidth = 0.23
+local menuWidth = 0.35
 
 local titleHeight = 0.11
 local titleYOffset = 0.03
@@ -185,7 +185,7 @@ function WarMenu.CreateMenu(id, title)
     menus[id].aboutToBeClosed = false
 
     -- Top left corner
-	menus[id].x = 0.7375
+	menus[id].x = 0.6075
 	menus[id].y = 0.025
 
     menus[id].currentOption = 1

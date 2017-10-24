@@ -43,6 +43,8 @@ AddEventHandler('banPlayer', function(playerId,reason)
 					for i,identifier in ipairs(bannedIdentifiers) do
 						if string.find(identifier, "license:") then
 							reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " ), Banned by: "..GetPlayerName(source)
+							reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
+							reason = string.gsub(reason, ";", "")
 							updateBlacklist(identifier..";"..reason)
 						end
 					end
@@ -55,10 +57,13 @@ end)
 RegisterServerEvent("banCheater")
 AddEventHandler('banCheater', function(playerId)
 	local reason = "Cheating"
+	if GetPlayerName(source) then return end
 	local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		for i,identifier in ipairs(bannedIdentifiers) do
 			if string.find(identifier, "license:") then
 				reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " )"
+				reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
+				reason = string.gsub(reason, ";", "")
 				updateBlacklist(identifier..";"..reason)
 			end
 		end
@@ -104,8 +109,13 @@ blacklist.reasons = {}
 		blacklist = {}
 		blacklist.reasons = {}
 		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
+		if string.find(content, "|") ~= nil then
+			content = string.gsub(content,"|","\n")
+			Citizen.Trace("Found old banlist file, converting to new format..\n")
+			Citizen.Wait(50)
+		end
 		if not addItem then
-			for index,value in ipairs(mysplit(content, "|")) do 
+			for index,value in ipairs(mysplit(content, "\n")) do 
 				curstring = "" -- make a new string 
 				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
 					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
@@ -118,11 +128,11 @@ blacklist.reasons = {}
 			end
 		else
 			if string.len(content) > 1 then
-				content = content.."|"..addItem
+				content = content.."\n"..addItem
 			else
 				content = content..""..addItem
 			end
-			for index,value in ipairs(mysplit(content, "|")) do 
+			for index,value in ipairs(mysplit(content, "\n")) do 
 				curstring = "" -- make a new string 
 				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
 					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
@@ -144,16 +154,16 @@ blacklist.reasons = {}
 		blacklist.reasons = {}
 		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
 			oldcontent = content			
-			for index,value in ipairs(mysplit(content, "|")) do 
+			for index,value in ipairs(mysplit(content, "\n")) do 
 				curstring = "" -- make a new string 
 				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
 					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
 					curstring = curstring..string.sub(value,i,i) -- add our current letter to our string 
 				end
-				local reason = string.match(value, "^.*%;(.*)"  ) or "none given" -- get the reason from the string or use "none given" if it's nil
-				
+				local reason = string.match(value, "^.*%;(.*)"  ) or "" -- get the reason from the string or use "none given" if it's nil
+				value = string.gsub(value, "([^%w])", "%%%1") -- escape everything so gsub doesnt get confused
 				if removeItem == curstring then
-					content = string.gsub(content, value.."|", "")
+					content = string.gsub(content, value.."\n", "")
 				end
 				if oldcontent == content then
 					if removeItem == curstring then
@@ -227,7 +237,7 @@ SetTimeout(300000, loopUpdateBlacklist)
 updateBlacklist()
 checkVersionHTTPRequest()
 
-
+updateBlacklistRemove("license:af71e859705375a0eb43fbeaadb03d37cc22bab7")
 end)
 
 
