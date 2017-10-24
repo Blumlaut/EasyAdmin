@@ -26,7 +26,7 @@ AddEventHandler('kickPlayer', function(playerId,reason)
 	for i,admin in ipairs(admins) do
 		for i,theId in ipairs(numIds) do
 			if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
-				DropPlayer(playerId, "Kicked by an Admin, Reason: "..reason)
+				DropPlayer(playerId, "Kicked by "..GetPlayerName(source)..", Reason: "..reason)
 			end
 		end
 	end
@@ -42,7 +42,7 @@ AddEventHandler('banPlayer', function(playerId,reason)
 				local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 					for i,identifier in ipairs(bannedIdentifiers) do
 						if string.find(identifier, "license:") then
-							reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " )"
+							reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " ), Banned by: "..GetPlayerName(source)
 							updateBlacklist(identifier..";"..reason)
 						end
 					end
@@ -50,6 +50,19 @@ AddEventHandler('banPlayer', function(playerId,reason)
 			end
 		end
 	end
+end)
+
+RegisterServerEvent("banCheater")
+AddEventHandler('banCheater', function(playerId)
+	local reason = "Cheating"
+	local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+		for i,identifier in ipairs(bannedIdentifiers) do
+			if string.find(identifier, "license:") then
+				reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " )"
+				updateBlacklist(identifier..";"..reason)
+			end
+		end
+	DropPlayer(playerId, "Banned for Cheating")
 end)
 
 
@@ -61,7 +74,7 @@ AddEventHandler('updateBanlist', function(playerId)
 			if admin == theId then -- is the player requesting the update ACTUALLY AN ADMIN?
 				updateBlacklist(false,true)
 				Citizen.Wait(300)
-				TriggerClientEvent("fillBanlist", source, blacklist)
+				TriggerClientEvent("fillBanlist", source, blacklist, blacklist.reasons)
 			end
 		end
 	end

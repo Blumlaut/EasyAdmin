@@ -1,6 +1,7 @@
 isAdmin = false
 players = {}
 banlist = {}
+banlist.reasons = {}
 
 RegisterNetEvent("adminresponse")
 RegisterNetEvent("Z:playerUpdate")
@@ -13,8 +14,9 @@ TriggerServerEvent("updateBanlist")
 end)
 
 
-AddEventHandler("fillBanlist", function(thebanlist)
+AddEventHandler("fillBanlist", function(thebanlist,thebanlistreasons)
 banlist = thebanlist
+banlist.reasons = thebanlistreasons
 
 end)
 
@@ -121,7 +123,7 @@ Citizen.CreateThread(function()
 		elseif WarMenu.IsMenuOpened("unbanplayers") then
 		
 		for i,theBanned in ipairs(banlist) do
-			if WarMenu.MenuButton(theBanned, 'unbanplayers') then
+			if WarMenu.Button(theBanned, 'unbanplayers', banlist.reasons[i]) then
 				TriggerServerEvent("unbanPlayer", theBanned)
 				TriggerServerEvent("updateBanlist")
 			end
