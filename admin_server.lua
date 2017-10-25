@@ -54,23 +54,6 @@ AddEventHandler('banPlayer', function(playerId,reason)
 	end
 end)
 
-RegisterServerEvent("banCheater")
-AddEventHandler('banCheater', function(playerId)
-	local reason = "Cheating"
-	if GetPlayerName(source) then return end
-	local bannedIdentifiers = GetPlayerIdentifiers(playerId)
-		for i,identifier in ipairs(bannedIdentifiers) do
-			if string.find(identifier, "license:") then
-				reason = reason.." ( Nickname: "..GetPlayerName(playerId).. " )"
-				reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
-				reason = string.gsub(reason, ";", "")
-				updateBlacklist(identifier..";"..reason)
-			end
-		end
-	DropPlayer(playerId, "Banned for Cheating")
-end)
-
-
 RegisterServerEvent("updateBanlist")
 AddEventHandler('updateBanlist', function(playerId)
 	local src = source
