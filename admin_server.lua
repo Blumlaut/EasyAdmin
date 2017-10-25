@@ -176,6 +176,20 @@ blacklist.reasons = {}
 		SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
 		updateBlacklist(false,false)
 	end
+	
+	function IsIdentifierBanned(identifier)
+		local identifierfound = false
+		for index,value in ipairs(blacklist) do 
+			if identifier == value then
+				identifierfound = true
+			end
+		end
+		return identifierfound
+	end
+	
+	function BanIdentifier(identifier,reason)
+		updateBlacklist(identifier..";"..reason)
+	end
 
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason)

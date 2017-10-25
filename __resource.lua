@@ -10,3 +10,8 @@ client_scripts {
 	"warmenu.lua",
 	"gui_c.lua",
 }
+
+exports {
+    'IsIdentifierBanned',
+    'BanIdentifier'
+}
