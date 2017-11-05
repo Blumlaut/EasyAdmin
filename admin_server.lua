@@ -55,8 +55,8 @@ AddEventHandler('banPlayer', function(playerId,reason)
 end)
 
 RegisterServerEvent("banCheater")
-AddEventHandler('banCheater', function(playerId)
-	local reason = "Cheating"
+AddEventHandler('banCheater', function(playerId,reason)
+	if not reason then reason = "Cheating" end
 	if GetPlayerName(source) then return end
 	local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		for i,identifier in ipairs(bannedIdentifiers) do
