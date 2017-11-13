@@ -8,6 +8,7 @@ server_scripts {
 
 client_scripts {
 	"warmenu.lua",
+	"admin_client.lua",
 	"gui_c.lua",
 }
 
