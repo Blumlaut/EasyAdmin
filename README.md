@@ -1,4 +1,6 @@
-# EasyAdmin
+# [EasyAdmin](https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245)
+
+
 
 **Note: this script is licensed under "[No License](https://choosealicense.com/no-license/)", you are allowed to:**
 
