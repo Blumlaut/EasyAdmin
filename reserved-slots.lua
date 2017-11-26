@@ -1,9 +1,9 @@
 whitelisted = {
-"license:3ae8c16fccbde58e1afa98e90ccf6fef0e924317",
+"license:here",
 }
 
 ------- SETTINGS START -------
-useReservedSlots = true -- do we even want reserved slots?
+useReservedSlots = false -- do we even want reserved slots?
 reservedSlots = 2 -- how many do we want?
 maxSlots = GetConvarInt("sv_maxclients") -- no touchy
 maxSlots = tonumber(maxSlots)
@@ -21,7 +21,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason)
 	else
 		kickme = false
 	end
-	
+
 	for i,user in ipairs(whitelisted) do
 		for i,theId in ipairs(numIds) do
 			if user == theId and tonumber(#GetPlayers()) < maxSlots then
@@ -30,7 +30,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason)
 			end
 		end
 	end
-				
+
 	for i,admin in ipairs(admins) do
 		for i,theId in ipairs(numIds) do
 			if admin == theId and tonumber(#GetPlayers()) < maxSlots then -- is the player an admin and do we have free slots?
@@ -39,7 +39,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason)
 			end
 		end
 	end
-	
+
 	if kickme and tonumber(#GetPlayers()) >= 30 then
 		setKickReason('This server is full (past ' .. tostring(GetConvar("sv_maxclients")) .. ' players).')
 		print("Connection Refused, Slot Reserved/Server Full!\n")
