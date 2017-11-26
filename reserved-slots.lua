@@ -7,12 +7,12 @@ useReservedSlots = false -- do we even want reserved slots?
 reservedSlots = 2 -- how many do we want?
 maxSlots = GetConvarInt("sv_maxclients") -- no touchy
 maxSlots = tonumber(maxSlots)
-SetConvar("sv_maxclients", maxSlots-reservedSlots) -- no touchy either
 
 ------- SETTINGS STOP -------
 
 -- RESERVED SLOTS
 if useReservedSlots then
+SetConvar("sv_maxclients", maxSlots-reservedSlots) -- no touchy either
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason)
 	local numIds = GetPlayerIdentifiers(source)
