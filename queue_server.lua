@@ -2,8 +2,8 @@
 
 useQueue = false
 queuedUsers = { }
-currentPlayers = 0
-maxTries = 60 -- defines how often we try / stay in the queue before disconnecting
+currentPlayers = #GetPlayers() -- get our current player count, in case it gets restarted
+maxTries = 120 -- defines how often we try / stay in the queue before disconnecting
 maxPlayers = GetConvarInt("sv_maxclients", 30) -- get our maximum playercount
 
 if useQueue then
@@ -42,7 +42,7 @@ if useQueue then
 			end
 
 			if isBanned then
-				--return
+				return
 			end
 
 			if isAdmin then -- if our player is an admin, move him to the front of the queue.
@@ -54,7 +54,7 @@ if useQueue then
 			local foundme = false
 
 			while true do
-				Wait(2000)
+				Wait(1000)
 				foundme = false
 				maxPlayers = GetConvarInt("sv_maxclients", 30)
 				greenlight = false
@@ -81,6 +81,7 @@ if useQueue then
 					end
 				end
 				if not foundme then
+					deferrals.done("You lost your position in the Queue, please try reconnecting")
 					break
 				end
 			end
