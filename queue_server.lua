@@ -1,12 +1,28 @@
 
 
-useQueue = false
+useQueue = true
 queuedUsers = { }
-currentPlayers = #GetPlayers() -- get our current player count, in case it gets restarted
+playerCount = 0 -- get our current player count, in case it gets restarted
 maxTries = 120 -- defines how often we try / stay in the queue before disconnecting
 maxPlayers = GetConvarInt("sv_maxclients", 30) -- get our maximum playercount
 
 if useQueue then
+
+		RegisterServerEvent('hardcap:playerActivated')
+
+		AddEventHandler('hardcap:playerActivated', function()
+		  if not queuedUsers[source] then
+			playerCount = playerCount + 1
+			queuedUsers[source] = true
+		  end
+		end)
+
+		AddEventHandler('playerDropped', function()
+		  if queuedUsers[source] then
+			playerCount = playerCount - 1
+			queuedUsers[source] = nil
+		  end
+		end)
 
 	Citizen.CreateThread(function()
 		AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
@@ -61,7 +77,7 @@ if useQueue then
 				for i,theKey in ipairs(queuedUsers) do
 					if theKey.name	== n then
 						foundme = true
-						if currentPlayers >= maxPlayers then
+						if playerCount >= maxPlayers then
 							if queuedUsers[i].tries == maxTries then
 								deferrals.done("This Server is Full, please try again later!")
 								table.remove(queuedUsers,i)
@@ -71,10 +87,9 @@ if useQueue then
 							queuedUsers[i].tries = queuedUsers[i].tries+1
 						else
 							deferrals.update("Your Position in Queue: "..i)
-							if i == 1 and currentPlayers < maxPlayers then
+							if i == 1 and playerCount < maxPlayers then
 								table.remove(queuedUsers,i)
 								deferrals.done()
-								currentPlayers = currentPlayers+1
 								break
 							end
 						end
@@ -99,9 +114,6 @@ if useQueue then
 					table.remove(queuedUsers,i)
 					caught = true
 				end
-			end
-			if not caught then
-				currentPlayers = currentPlayers-1
 			end
 		end)
 	end)
