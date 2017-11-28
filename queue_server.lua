@@ -1,8 +1,9 @@
 
 
-useQueue = true
+useQueue = false
 queuedUsers = { }
-playerCount = 0 -- get our current player count, in case it gets restarted
+users = { }
+playerCount = #GetPlayers() -- get our current player count, in case it gets restarted
 maxTries = 120 -- defines how often we try / stay in the queue before disconnecting
 maxPlayers = GetConvarInt("sv_maxclients", 30) -- get our maximum playercount
 
@@ -11,16 +12,16 @@ if useQueue then
 		RegisterServerEvent('hardcap:playerActivated')
 
 		AddEventHandler('hardcap:playerActivated', function()
-		  if not queuedUsers[source] then
+		  if not users[source] then
 			playerCount = playerCount + 1
-			queuedUsers[source] = true
+			users[source] = true
 		  end
 		end)
 
 		AddEventHandler('playerDropped', function()
-		  if queuedUsers[source] then
+		  if users[source] then
 			playerCount = playerCount - 1
-			queuedUsers[source] = nil
+			users[source] = nil
 		  end
 		end)
 
