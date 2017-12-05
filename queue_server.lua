@@ -1,6 +1,6 @@
 
 
-useQueue = true
+useQueue = false
 queuedUsers = { }
 users = { }
 playerCount = #GetPlayers() -- get our current player count, in case it gets restarted
