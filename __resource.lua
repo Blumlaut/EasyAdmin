@@ -11,9 +11,5 @@ client_scripts {
 	"warmenu.lua",
 	"admin_client.lua",
 	"gui_c.lua",
-}
-
-exports {
-    'IsIdentifierBanned',
-    'BanIdentifier'
+	"queue_client.lua",
 }

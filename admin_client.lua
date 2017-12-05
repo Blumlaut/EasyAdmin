@@ -8,19 +8,18 @@ RegisterNetEvent("amiadmin")
 RegisterNetEvent("fillBanlist")
 
 AddEventHandler('adminresponse', function(response)
-isAdmin = response
-TriggerServerEvent("updateBanlist")
+	isAdmin = response
+	TriggerServerEvent("updateBanlist")
 end)
 
 
 AddEventHandler("fillBanlist", function(thebanlist,thebanlistreasons)
-banlist = thebanlist
-banlist.reasons = thebanlistreasons
-
+	banlist = thebanlist
+	banlist.reasons = thebanlistreasons
 end)
 
 Citizen.CreateThread( function()
-	while true do 
+	while true do
 		Citizen.Wait(0)
 			players = {}
 			for i = 0, 31 do

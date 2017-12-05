@@ -1,36 +1,34 @@
 
 
-useQueue = false
+useQueue = true
 queuedUsers = { }
 users = { }
 playerCount = #GetPlayers() -- get our current player count, in case it gets restarted
-maxTries = 120 -- defines how often we try / stay in the queue before disconnecting
+maxTries = 360 -- defines how often we try / stay in the queue before disconnecting
 maxPlayers = GetConvarInt("sv_maxclients", 30) -- get our maximum playercount
 
 if useQueue then
-
-		RegisterServerEvent('hardcap:playerActivated')
-
-		AddEventHandler('hardcap:playerActivated', function()
+		RegisterServerEvent('EasyAdmin:playerActivated')
+		AddEventHandler('EasyAdmin:playerActivated', function() -- stole this from hardcap so we can handle the "hardcap" ourselves
 		  if not users[source] then
 			playerCount = playerCount + 1
 			users[source] = true
 		  end
 		end)
-
-		AddEventHandler('playerDropped', function()
+		AddEventHandler('playerDropped', function() -- stole this from hardcap so we can handle the "hardcap" ourselves
 		  if users[source] then
 			playerCount = playerCount - 1
 			users[source] = nil
 		  end
 		end)
+		StopResource("hardcap") -- stop hardcap, we will handle it from here
 
 	Citizen.CreateThread(function()
 		AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
 
 			local numIds = GetPlayerIdentifiers(source)
 			deferrals.defer()
-			deferrals.update("Checking for a Free Slot...")
+			deferrals.update(strings.checkforslot)
 			local s = source
 			local n = name
 			local greenlight = false
@@ -42,7 +40,7 @@ if useQueue then
 			for bi,blacklisted in ipairs(blacklist) do
 				for i,theId in ipairs(numIds) do
 					if blacklisted == theId then -- make sure Queue isn't used as otherwise they will conflict
-						deferrals.done('You are Blacklisted from joining this Server \nReason: '..blacklist.reasons[bi])
+						deferrals.done(string.format( strings.bannedjoin, blacklist.reasons[bi] ))
 						print("Connection Refused, Blacklisted for "..blacklist.reasons[bi].."!\n")
 						isBanned = true
 						return
@@ -80,14 +78,14 @@ if useQueue then
 						foundme = true
 						if playerCount >= maxPlayers then
 							if queuedUsers[i].tries == maxTries then
-								deferrals.done("This Server is Full, please try again later!")
+								deferrals.done(strings.serverfulldenied)
 								table.remove(queuedUsers,i)
 								break
 							end
-							deferrals.update("Server Full, Your Position in Queue: "..i..", Disconnecting in "..maxTries-queuedUsers[i].tries.." tries.")
+							deferrals.update(string.format(strings.serverfulltrying, i, maxTries-queuedUsers[i].tries ))
 							queuedUsers[i].tries = queuedUsers[i].tries+1
 						else
-							deferrals.update("Your Position in Queue: "..i)
+							deferrals.update(string.format(strings.posinqueue, i))
 							if i == 1 and playerCount < maxPlayers then
 								table.remove(queuedUsers,i)
 								deferrals.done()
@@ -97,7 +95,7 @@ if useQueue then
 					end
 				end
 				if not foundme then
-					deferrals.done("You lost your position in the Queue, please try reconnecting")
+					deferrals.done(strings.lostqueuepos)
 					break
 				end
 			end
