@@ -162,7 +162,7 @@ Citizen.CreateThread(function()
 			local numIds = GetPlayerIdentifiers(theKey)
 			for i,admin in ipairs(admins) do
 				for i,theId in ipairs(numIds) do
-					if admin == theId then -- is the player an admin?
+					if admin == theId .. '\r' or admin == theId then -- is the player an admin?
 						TriggerClientEvent("adminresponse", theKey, true)
 					end
 				end
