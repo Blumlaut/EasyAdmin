@@ -9,21 +9,27 @@ permissions = {
 	teleport = false,
 }
 
-RegisterNetEvent("adminresponse")
-RegisterNetEvent("Z:playerUpdate")
-RegisterNetEvent("amiadmin")
-RegisterNetEvent("fillBanlist")
-RegisterNetEvent("requestSpectate")
+RegisterNetEvent("EasyAdmin:adminresponse")
+RegisterNetEvent("EasyAdmin:amiadmin")
+RegisterNetEvent("EasyAdmin:fillBanlist")
+RegisterNetEvent("EasyAdmin:requestSpectate")
 
-AddEventHandler('adminresponse', function(response,permission)
+RegisterNetEvent("EasyAdmin:SetSetting")
+
+
+AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
 	permissions[response] = permission
 	if permission == true then
 		isAdmin = true
 	end
 end)
 
+AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
+	settings[setting] = state
+end)
 
-AddEventHandler("fillBanlist", function(thebanlist,thebanlistreasons)
+
+AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist,thebanlistreasons)
 	banlist = thebanlist
 	banlist.reasons = thebanlistreasons
 end)
@@ -40,7 +46,7 @@ Citizen.CreateThread( function()
 	end
 end)
 
-AddEventHandler('requestSpectate', function(playerId)
+AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 	spectatePlayer(GetPlayerPed(playerId),GetPlayerName(playerId))
 end)
 
