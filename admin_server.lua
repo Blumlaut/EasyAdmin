@@ -28,47 +28,32 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent('amiadmin')
 	AddEventHandler('amiadmin', function()
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player an admin?
-					TriggerClientEvent("adminresponse", source, true)
-				end
-			end
+		if isPlayerAnAdmin(source) then
+			TriggerClientEvent("adminresponse", source, true)
 		end
 	end)
 
 	RegisterServerEvent("kickPlayer")
 	AddEventHandler('kickPlayer', function(playerId,reason)
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
-					DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
-				end
-			end
+		if isPlayerAnAdmin(source) then
+				DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
 		end
 	end)
 
 
 	RegisterServerEvent("banPlayer")
 	AddEventHandler('banPlayer', function(playerId,reason)
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
-					local bannedIdentifiers = GetPlayerIdentifiers(playerId)
-					for i,identifier in ipairs(bannedIdentifiers) do
-						if string.find(identifier, "license:") then
-							reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
-							reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
-							reason = string.gsub(reason, ";", "")
-							updateBlacklist(identifier..";"..reason)
-						end
-					end
-					DropPlayer(playerId, string.format(strings.banned, reason ) )
+		if isPlayerAnAdmin(source) then
+			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+			for i,identifier in ipairs(bannedIdentifiers) do
+				if string.find(identifier, "license:") then
+					reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
+					reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
+					reason = string.gsub(reason, ";", "")
+					updateBlacklist(identifier..";"..reason)
 				end
 			end
+			DropPlayer(playerId, string.format(strings.banned, reason ) )
 		end
 	end)
 
@@ -92,16 +77,11 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("updateBanlist")
 	AddEventHandler('updateBanlist', function(playerId)
 		local src = source
-		local numIds = GetPlayerIdentifiers(src)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the update ACTUALLY AN ADMIN?
-					updateBlacklist(false,true)
-					Citizen.Wait(300)
-					TriggerClientEvent("fillBanlist", src, blacklist, blacklist.reasons)
-				end
+		if isPlayerAnAdmin(source) then
+				updateBlacklist(false,true)
+				Citizen.Wait(300)
+				TriggerClientEvent("fillBanlist", src, blacklist, blacklist.reasons)
 			end
-		end
 	end)
 
 	RegisterCommand("addadmin", function(source, args, rawCommand)
@@ -125,13 +105,8 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("unbanPlayer")
 	AddEventHandler('unbanPlayer', function(playerId)
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the unban ACTUALLY AN ADMIN?
-					updateBlacklistRemove(playerId)
-				end
-			end
+		if isPlayerAnAdmin(source) then
+			updateBlacklistRemove(playerId)
 		end
 	end)
 
@@ -257,6 +232,18 @@ Citizen.CreateThread(function()
 		updateBlacklist(identifier..";"..reason)
 	end
 
+	function isPlayerAnAdmin(player)
+		local isadmin = false
+		local numIds = GetPlayerIdentifiers(player)
+		for i,admin in pairs(admins) do
+			for i,theId in pairs(numIds) do
+				if admin == theId then -- is the player an admin?
+					isadmin = true
+				end
+			end
+		end
+		return isadmin
+	end
 
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
@@ -271,6 +258,8 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
+
+
 
 	---------------------------------- USEFUL
 	function mysplit(inputstr, sep)
