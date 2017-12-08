@@ -69,7 +69,6 @@ if useQueue then
 			local foundme = false
 
 			while true do
-				Wait(1000)
 				foundme = false
 				maxPlayers = GetConvarInt("sv_maxclients", 30)
 				greenlight = false
@@ -98,7 +97,9 @@ if useQueue then
 					deferrals.done(strings.lostqueuepos)
 					break
 				end
+				Wait(1000)
 			end
+
 		end)
 	end)
 
