@@ -17,7 +17,9 @@ RegisterNetEvent("requestSpectate")
 
 AddEventHandler('adminresponse', function(response,permission)
 	permissions[response] = permission
-	isAdmin = true
+	if permission == true then
+		isAdmin = true
+	end
 end)
 
 
