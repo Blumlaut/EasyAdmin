@@ -27,15 +27,15 @@ Citizen.CreateThread(function()
 			if isAdmin == false then
 				WarMenu.CloseMenu()
 			elseif isAdmin == true then
-				if permissions.kick or settings.forceShowGUIButtons and WarMenu.MenuButton('Kick Player', 'kickplayers') then
+				if (permissions.kick or settings.forceShowGUIButtons) and WarMenu.MenuButton('Kick Player', 'kickplayers') then
 
-				elseif permissions.ban or settings.forceShowGUIButtons and WarMenu.MenuButton('Ban Player', 'banplayers') then
+				elseif (permissions.ban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Ban Player', 'banplayers') then
 
-				elseif permissions.spectate or settings.forceShowGUIButtons and WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
+				elseif (permissions.spectate or settings.forceShowGUIButtons) and WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
 
-				elseif permissions.teleport or settings.forceShowGUIButtons and WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
+				elseif (permissions.teleport or settings.forceShowGUIButtons) and WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
 
-				elseif permissions.unban or settings.forceShowGUIButtons and WarMenu.MenuButton('Unban Player', "unbanplayers") then
+				elseif (permissions.unban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Unban Player', "unbanplayers") then
 
 				elseif WarMenu.MenuButton('Settings', "settings") then
 
