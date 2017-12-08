@@ -8,7 +8,7 @@ strings = { -- these are the strings we use to show our players, feel free to ed
 	bannedjoin = "You are Blacklisted from joining this Server \nReason: %s",
 	kicked = "Kicked by %s, Reason: %q",
 	banned = "You have been banned from this Server, Reason: %q",
-	reasonadd = "( Nickname: %s ), Banned by: %q",
+	reasonadd = " ( Nickname: %s ), Banned by: %q",
 	bancheating = "Banned for Cheating",
 	bancheatingadd = " ( Nickname: %s )",
 	nongiven = "non given",
@@ -28,22 +28,31 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent('amiadmin')
 	AddEventHandler('amiadmin', function()
-		if isPlayerAnAdmin(source) then
-			TriggerClientEvent("adminresponse", source, true)
-		end
+		TriggerClientEvent("adminresponse", source, "ban",DoesPlayerHavePermission(source,"command.ban"))
+		TriggerClientEvent("adminresponse", source, "kick",DoesPlayerHavePermission(source,"command.kick"))
+		TriggerClientEvent("adminresponse", source, "spectate",DoesPlayerHavePermission(source,"command.spectate"))
+		TriggerClientEvent("adminresponse", source, "unban",DoesPlayerHavePermission(source,"command.unban"))
+		TriggerClientEvent("adminresponse", source, "teleport",DoesPlayerHavePermission(source,"command.teleport"))
 	end)
 
 	RegisterServerEvent("kickPlayer")
 	AddEventHandler('kickPlayer', function(playerId,reason)
-		if isPlayerAnAdmin(source) then
+		if DoesPlayerHavePermission(source,"command.kick") then
 				DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
+		end
+	end)
+
+	RegisterServerEvent("requestSpectate")
+	AddEventHandler('requestSpectate', function(playerId)
+		if DoesPlayerHavePermission(source,"command.spectate") then
+				TriggerClientEvent("requestSpectate", source, playerId)
 		end
 	end)
 
 
 	RegisterServerEvent("banPlayer")
 	AddEventHandler('banPlayer', function(playerId,reason)
-		if isPlayerAnAdmin(source) then
+		if DoesPlayerHavePermission(source,"command.ban") then
 			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 			for i,identifier in ipairs(bannedIdentifiers) do
 				if string.find(identifier, "license:") then
@@ -77,7 +86,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("updateBanlist")
 	AddEventHandler('updateBanlist', function(playerId)
 		local src = source
-		if isPlayerAnAdmin(source) then
+		if DoesPlayerHavePermission(source,"command.kick") then
 				updateBlacklist(false,true)
 				Citizen.Wait(300)
 				TriggerClientEvent("fillBanlist", src, blacklist, blacklist.reasons)
@@ -105,12 +114,34 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("unbanPlayer")
 	AddEventHandler('unbanPlayer', function(playerId)
-		if isPlayerAnAdmin(source) then
+		if DoesPlayerHavePermission(source,"command.unban") then
 			updateBlacklistRemove(playerId)
 		end
 	end)
 
+	function DoesPlayerHavePermission(player, object)
+		local haspermission = false
 
+		if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
+			haspermission = true
+			print("player has permission to do "..object)
+		else
+			haspermission = false
+			print("player doesn't have permission to do "..object)
+		end
+
+		if not haspermission then -- if not, check if they are admin using the legacy method.
+			local numIds = GetPlayerIdentifiers(player)
+			for i,admin in pairs(admins) do
+				for i,theId in pairs(numIds) do
+					if admin == theId then
+						haspermission = true
+					end
+				end
+			end
+		end
+		return haspermission
+	end
 
 	blacklist = {}
 	blacklist.reasons = {}
@@ -230,19 +261,6 @@ Citizen.CreateThread(function()
 
 	function BanIdentifier(identifier,reason)
 		updateBlacklist(identifier..";"..reason)
-	end
-
-	function isPlayerAnAdmin(player)
-		local isadmin = false
-		local numIds = GetPlayerIdentifiers(player)
-		for i,admin in pairs(admins) do
-			for i,theId in pairs(numIds) do
-				if admin == theId then -- is the player an admin?
-					isadmin = true
-				end
-			end
-		end
-		return isadmin
 	end
 
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)

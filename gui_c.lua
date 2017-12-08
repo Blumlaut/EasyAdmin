@@ -24,15 +24,15 @@ Citizen.CreateThread(function()
 			if isAdmin == false then
 				WarMenu.CloseMenu()
 			elseif isAdmin == true then
-				if WarMenu.MenuButton('Kick Player', 'kickplayers') then
+				if permissions.kick and WarMenu.MenuButton('Kick Player', 'kickplayers') then
 
-				elseif WarMenu.MenuButton('Ban Player', 'banplayers') then
+				elseif permissions.ban and WarMenu.MenuButton('Ban Player', 'banplayers') then
 
-				elseif WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
+				elseif permissions.spectate and WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
 
-				elseif WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
+				elseif permissions.teleport and WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
 
-				elseif WarMenu.MenuButton('Unban Player', "unbanplayers") then
+				elseif permissions.unban and WarMenu.MenuButton('Unban Player', "unbanplayers") then
 
 				elseif WarMenu.MenuButton('Settings', "settings") then
 
@@ -86,7 +86,7 @@ Citizen.CreateThread(function()
 
 		for i,thePlayer in ipairs(players) do
 			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'spectateplayers') then
-				spectatePlayer(GetPlayerPed(thePlayer), GetPlayerName( thePlayer ))
+				TriggerServerEvent("requestSpectate",thePlayer)
 			end
 		end
 		WarMenu.Display()
@@ -131,6 +131,8 @@ Citizen.CreateThread(function()
 				showLicenses = not showLicenses
 			elseif WarMenu.Button('Refresh Banlist') then
 				TriggerServerEvent("updateBanlist")
+			elseif WarMenu.Button('Refresh Permissions') then
+				TriggerServerEvent("amiadmin")
 			end
 
 		WarMenu.Display()
