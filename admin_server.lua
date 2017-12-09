@@ -8,7 +8,7 @@ strings = { -- these are the strings we use to show our players, feel free to ed
 	bannedjoin = "You are Blacklisted from joining this Server \nReason: %s",
 	kicked = "Kicked by %s, Reason: %q",
 	banned = "You have been banned from this Server, Reason: %q",
-	reasonadd = "( Nickname: %s ), Banned by: %q",
+	reasonadd = " ( Nickname: %s ), Banned by: %q",
 	bancheating = "Banned for Cheating",
 	bancheatingadd = " ( Nickname: %s )",
 	nongiven = "non given",
@@ -26,49 +26,52 @@ strings = { -- these are the strings we use to show our players, feel free to ed
 Citizen.CreateThread(function()
 
 
-	RegisterServerEvent('amiadmin')
-	AddEventHandler('amiadmin', function()
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player an admin?
-					TriggerClientEvent("adminresponse", source, true)
-				end
-			end
+	RegisterServerEvent('EasyAdmin:amiadmin')
+	AddEventHandler('EasyAdmin:amiadmin', function()
+		TriggerClientEvent("EasyAdmin:adminresponse", source, "ban",DoesPlayerHavePermission(source,"command.ban"))
+		TriggerClientEvent("EasyAdmin:adminresponse", source, "kick",DoesPlayerHavePermission(source,"command.kick"))
+		TriggerClientEvent("EasyAdmin:adminresponse", source, "spectate",DoesPlayerHavePermission(source,"command.spectate"))
+		TriggerClientEvent("EasyAdmin:adminresponse", source, "unban",DoesPlayerHavePermission(source,"command.unban"))
+		TriggerClientEvent("EasyAdmin:adminresponse", source, "teleport",DoesPlayerHavePermission(source,"command.teleport"))
+
+		-- give player the right settings to work with
+		TriggerClientEvent("EasyAdmin:SetSetting", source, "button",GetConvarInt("ea_MenuButton", 289) )
+		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
+		else
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", false)
+		end
+
+	end)
+
+	RegisterServerEvent("EasyAdmin:kickPlayer")
+	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
+		if DoesPlayerHavePermission(source,"command.kick") then
+				DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
 		end
 	end)
 
-	RegisterServerEvent("kickPlayer")
-	AddEventHandler('kickPlayer', function(playerId,reason)
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
-					DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
-				end
-			end
+	RegisterServerEvent("EasyAdmin:requestSpectate")
+	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
+		if DoesPlayerHavePermission(source,"command.spectate") then
+				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
 		end
 	end)
 
 
-	RegisterServerEvent("banPlayer")
-	AddEventHandler('banPlayer', function(playerId,reason)
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the kick ACTUALLY AN ADMIN?
-					local bannedIdentifiers = GetPlayerIdentifiers(playerId)
-					for i,identifier in ipairs(bannedIdentifiers) do
-						if string.find(identifier, "license:") then
-							reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
-							reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
-							reason = string.gsub(reason, ";", "")
-							updateBlacklist(identifier..";"..reason)
-						end
-					end
-					DropPlayer(playerId, string.format(strings.banned, reason ) )
+	RegisterServerEvent("EasyAdmin:banPlayer")
+	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason)
+		if DoesPlayerHavePermission(source,"command.ban") then
+			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+			for i,identifier in ipairs(bannedIdentifiers) do
+				if string.find(identifier, "license:") then
+					reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
+					reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
+					reason = string.gsub(reason, ";", "")
+					updateBlacklist(identifier..";"..reason)
 				end
 			end
+			DropPlayer(playerId, string.format(strings.banned, reason ) )
 		end
 	end)
 
@@ -89,19 +92,14 @@ Citizen.CreateThread(function()
 	end)
 
 
-	RegisterServerEvent("updateBanlist")
-	AddEventHandler('updateBanlist', function(playerId)
+	RegisterServerEvent("EasyAdmin:updateBanlist")
+	AddEventHandler('EasyAdmin:updateBanlist', function(playerId)
 		local src = source
-		local numIds = GetPlayerIdentifiers(src)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the update ACTUALLY AN ADMIN?
-					updateBlacklist(false,true)
-					Citizen.Wait(300)
-					TriggerClientEvent("fillBanlist", src, blacklist, blacklist.reasons)
-				end
+		if DoesPlayerHavePermission(source,"command.kick") then
+				updateBlacklist(false,true)
+				Citizen.Wait(300)
+				TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist, blacklist.reasons)
 			end
-		end
 	end)
 
 	RegisterCommand("addadmin", function(source, args, rawCommand)
@@ -110,7 +108,7 @@ Citizen.CreateThread(function()
 			for i,theId in ipairs(numIds) do
 				if string.find(theId, "license:") then
 					updateAdmins(theId)
-					TriggerClientEvent("adminresponse", args[1], true)
+					TriggerClientEvent("EasyAdmin:adminresponse", args[1], true)
 					TriggerClientEvent("chat:addMessage", args[1], { args = { "EasyAdmin", strings.newadmin } })
 					Citizen.Trace("player has been added as an admin!")
 				end
@@ -123,19 +121,36 @@ Citizen.CreateThread(function()
 		end
 	end, true)
 
-	RegisterServerEvent("unbanPlayer")
-	AddEventHandler('unbanPlayer', function(playerId)
-		local numIds = GetPlayerIdentifiers(source)
-		for i,admin in pairs(admins) do
-			for i,theId in ipairs(numIds) do
-				if admin == theId then -- is the player requesting the unban ACTUALLY AN ADMIN?
-					updateBlacklistRemove(playerId)
-				end
-			end
+	RegisterServerEvent("EasyAdmin:unbanPlayer")
+	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
+		if DoesPlayerHavePermission(source,"command.unban") then
+			updateBlacklistRemove(playerId)
 		end
 	end)
 
+	function DoesPlayerHavePermission(player, object)
+		local haspermission = false
 
+		if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
+			haspermission = true
+			print("player has permission to do "..object)
+		else
+			haspermission = false
+			print("player doesn't have permission to do "..object)
+		end
+
+		if not haspermission then -- if not, check if they are admin using the legacy method.
+			local numIds = GetPlayerIdentifiers(player)
+			for i,admin in pairs(admins) do
+				for i,theId in pairs(numIds) do
+					if admin == theId then
+						haspermission = true
+					end
+				end
+			end
+		end
+		return haspermission
+	end
 
 	blacklist = {}
 	blacklist.reasons = {}
@@ -163,7 +178,7 @@ Citizen.CreateThread(function()
 			for i,admin in ipairs(admins) do
 				for i,theId in ipairs(numIds) do
 					if admin == theId .. '\r' or admin == theId then -- is the player an admin?
-						TriggerClientEvent("adminresponse", theKey, true)
+						TriggerClientEvent("EasyAdmin:adminresponse", theKey, true)
 					end
 				end
 			end
@@ -257,7 +272,6 @@ Citizen.CreateThread(function()
 		updateBlacklist(identifier..";"..reason)
 	end
 
-
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
 		for bi,blacklisted in ipairs(blacklist) do
@@ -271,6 +285,8 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
+
+
 
 	---------------------------------- USEFUL
 	function mysplit(inputstr, sep)

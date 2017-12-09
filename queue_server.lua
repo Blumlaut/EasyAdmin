@@ -1,13 +1,13 @@
 
 
-useQueue = false
+useQueue = GetConvar("ea_useQueue", "false")
 queuedUsers = { }
 users = { }
 playerCount = #GetPlayers() -- get our current player count, in case it gets restarted
-maxTries = 360 -- defines how often we try / stay in the queue before disconnecting
+maxTries = GetConvarInt("ea_QueueTries", 360) -- defines how often we try / stay in the queue before disconnecting
 maxPlayers = GetConvarInt("sv_maxclients", 30) -- get our maximum playercount
 
-if useQueue then
+if useQueue == "true" then
 		RegisterServerEvent('EasyAdmin:playerActivated')
 		AddEventHandler('EasyAdmin:playerActivated', function() -- stole this from hardcap so we can handle the "hardcap" ourselves
 		  if not users[source] then

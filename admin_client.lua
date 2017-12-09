@@ -1,19 +1,35 @@
 players = {}
 banlist = {}
 banlist.reasons = {}
+permissions = {
+	ban = false,
+	kick = false,
+	spectate = false,
+	unban = false,
+	teleport = false,
+}
 
-RegisterNetEvent("adminresponse")
-RegisterNetEvent("Z:playerUpdate")
-RegisterNetEvent("amiadmin")
-RegisterNetEvent("fillBanlist")
+RegisterNetEvent("EasyAdmin:adminresponse")
+RegisterNetEvent("EasyAdmin:amiadmin")
+RegisterNetEvent("EasyAdmin:fillBanlist")
+RegisterNetEvent("EasyAdmin:requestSpectate")
 
-AddEventHandler('adminresponse', function(response)
-	isAdmin = response
-	TriggerServerEvent("updateBanlist")
+RegisterNetEvent("EasyAdmin:SetSetting")
+
+
+AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
+	permissions[response] = permission
+	if permission == true then
+		isAdmin = true
+	end
+end)
+
+AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
+	settings[setting] = state
 end)
 
 
-AddEventHandler("fillBanlist", function(thebanlist,thebanlistreasons)
+AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist,thebanlistreasons)
 	banlist = thebanlist
 	banlist.reasons = thebanlistreasons
 end)
@@ -30,9 +46,12 @@ Citizen.CreateThread( function()
 	end
 end)
 
+AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
+	spectatePlayer(GetPlayerPed(playerId),GetPlayerName(playerId))
+end)
 
 function spectatePlayer(target,name)
-	local playerPed = GetPlayerPed(-1) -- yourself
+	local playerPed = PlayerPedId() -- yourself
 	enable = true
 	if target == playerPed then enable = false end
 
