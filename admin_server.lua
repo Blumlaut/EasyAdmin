@@ -367,7 +367,7 @@ Citizen.CreateThread(function()
 		local numIds = GetPlayerIdentifiers(source)
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
-				if blacklisted == theId and not useQueue then -- make sure Queue isn't used as otherwise they will conflict
+				if blacklisted == theId and useQueue == "false" then -- make sure Queue isn't used as otherwise they will conflict
 					setKickReason(string.format( strings.bannedjoin, blacklist.reasons[bi] ))
 					print("Connection Refused, Blacklisted for "..blacklist.reasons[bi].."!\n")
 					CancelEvent()
