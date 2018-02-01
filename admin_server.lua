@@ -1,7 +1,7 @@
 
--- THIS IS OBSOLETE NOW, PLEASE USE THE 'admins.txt' FILE TO ADD ADMINS
+-- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 admins = {}
--- THIS IS OBSOLETE NOW, PLEASE USE THE 'admins.txt' FILE TO ADD ADMINS
+-- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 
 strings = { -- these are the strings we use to show our players, feel free to edit to your liking
 	-- EasyAdmin Base strings
