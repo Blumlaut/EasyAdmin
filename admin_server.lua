@@ -29,11 +29,11 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
-		local banperm = DoesPlayerHavePermission(source,"command.ban")
-		local kickperm = DoesPlayerHavePermission(source,"command.kick")
-		local spectateperm = DoesPlayerHavePermission(source,"command.spectate")
-		local unbanperm = DoesPlayerHavePermission(source,"command.unban")
-		local teleportperm = DoesPlayerHavePermission(source,"command.teleport")
+		local banperm = DoesPlayerHavePermission(source,"easyadmin.ban")
+		local kickperm = DoesPlayerHavePermission(source,"easyadmin.kick")
+		local spectateperm = DoesPlayerHavePermission(source,"easyadmin.spectate")
+		local unbanperm = DoesPlayerHavePermission(source,"easyadmin.unban")
+		local teleportperm = DoesPlayerHavePermission(source,"easyadmin.teleport")
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "ban",banperm)
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "kick",kickperm)
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "spectate",spectateperm)
@@ -68,14 +68,14 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:kickPlayer")
 	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
-		if DoesPlayerHavePermission(source,"command.kick") then
+		if DoesPlayerHavePermission(source,"easyadmin.kick") then
 				DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
 		end
 	end)
 
 	RegisterServerEvent("EasyAdmin:requestSpectate")
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
-		if DoesPlayerHavePermission(source,"command.spectate") then
+		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
 		end
 	end)
@@ -83,7 +83,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason)
-		if DoesPlayerHavePermission(source,"command.ban") then
+		if DoesPlayerHavePermission(source,"easyadmin.ban") then
 			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 			for i,identifier in ipairs(bannedIdentifiers) do
 				if string.find(identifier, "license:") then
@@ -117,7 +117,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:updateBanlist")
 	AddEventHandler('EasyAdmin:updateBanlist', function(playerId)
 		local src = source
-		if DoesPlayerHavePermission(source,"command.kick") then
+		if DoesPlayerHavePermission(source,"easyadmin.kick") then
 				updateBlacklist(false,true)
 				Citizen.Wait(300)
 				TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist, blacklist.reasons)
@@ -147,7 +147,7 @@ Citizen.CreateThread(function()
 	end, true)
 
 	RegisterCommand("kick", function(source, args, rawCommand)
-		if args[1] and tonumber(args[1]) then
+		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.kick") then
 			local reason = ""
 			for i,theArg in pairs(args) do
 				if i ~= 1 then -- make sure we are not adding the kicked player as a reason
@@ -160,10 +160,10 @@ Citizen.CreateThread(function()
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
 			end
 		end
-	end, true)
+	end, false)
 
 	RegisterCommand("ban", function(source, args, rawCommand)
-		if args[1] and tonumber(args[1]) then
+		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.ban") then
 			local reason = ""
 			for i,theArg in pairs(args) do
 				if i ~= 1 then
@@ -185,30 +185,30 @@ Citizen.CreateThread(function()
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
 			end
 		end
-	end, true)
+	end, false)
 
 	RegisterCommand("spectate", function(source, args, rawCommand)
-		if args[1] and tonumber(args[1]) then
+		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			if GetPlayerName(args[1]) then
 				TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1])
 			else
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
 			end
 		end
-	end, true)
+	end, false)
 
 	RegisterCommand("unban", function(source, args, rawCommand)
-		if args[1] then
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
 			updateBlacklistRemove(args[1])
 			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.done } })
 		end
-	end, true)
+	end, false)
 
 	RegisterCommand("teleport", function(source, args, rawCommand)
-		if args[1] then
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			-- not yet
 		end
-	end, true)
+	end, false)
 
 
 
@@ -216,7 +216,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
 	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
-		if DoesPlayerHavePermission(source,"command.unban") then
+		if DoesPlayerHavePermission(source,"easyadmin.unban") then
 			updateBlacklistRemove(playerId)
 		end
 	end)
