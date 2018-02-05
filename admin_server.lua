@@ -6,9 +6,9 @@ admins = {}
 strings = { -- these are the strings we use to show our players, feel free to edit to your liking
 	-- EasyAdmin Base strings
 	bannedjoin = "You are Blacklisted from joining this Server \nReason: %s",
-	kicked = "Kicked by %s, Reason: %q",
-	banned = "You have been banned from this Server, Reason: %q",
-	reasonadd = " ( Nickname: %s ), Banned by: %q",
+	kicked = "Kicked by %s, Reason: %s",
+	banned = "You have been banned from this Server, Reason: %s",
+	reasonadd = " ( Nickname: %s ), Banned by: %s",
 	bancheating = "Banned for Cheating",
 	bancheatingadd = " ( Nickname: %s )",
 	nongiven = "non given",
@@ -18,7 +18,7 @@ strings = { -- these are the strings we use to show our players, feel free to ed
 	-- Queue Strings
 	checkforslot = "Checking for a Free Slot...",
 	serverfulldenied = "This Server is Full, please try again later!",
-	serverfulltrying = "Server Full, Your Position in Queue: %s, Disconnecting in %q tries.",
+	serverfulltrying = "Server Full, Your Position in Queue: %s, Disconnecting in %s tries.",
 	posinqueue = "Your Position in Queue: %s",
 	lostqueuepos = "You lost your position in the Queue, please try reconnecting",
 }
