@@ -166,37 +166,38 @@ Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(0)
 		if drawInfo then
-			local text = ""
-			-- godmode checks
-			text=text.."\nGodmode:"
+			local text = {}
+			-- cheat checks
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
 			if targetGod then
-				text=text.."~r~Yes~w~"
+				table.insert(text,"Godmode: ~r~Detected~w~")
 			else
-				text=text.."~g~No~w~"
+				table.insert(text,"Godmode: ~g~None Detected~w~")
+			end
+			if not CanPedRagdoll(targetPed) and not IsPedInAnyVehicle(targetPed, false) and (GetPedParachuteState(targetPed) == -1 or GetPedParachuteState(targetPed) == 0) and not IsPedInParachuteFreeFall(targetPed) then
+				table.insert(text,"~r~Anti-Ragdoll~w~")
 			end
 			-- health info
-			text=text.."\nHealth: "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed)
-			text=text.."\nArmor: "..GetPedArmour(targetPed)
-			text=text.."\nStamina: "..GetPlayerSprintStaminaRemaining(target)
+			table.insert(text,"Health: "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed))
+			table.insert(text,"Armor: "..GetPedArmour(targetPed))
 			-- misc info
-			text=text.."\nWanted level: "..GetPlayerWantedLevel(target)
+			table.insert(text,"Wanted level: "..GetPlayerWantedLevel(drawTarget))
 
-
-			SetTextFont(0)
-	    SetTextProportional(1)
-	    SetTextScale(0.0, 0.30)
-	    SetTextDropshadow(0, 0, 0, 0, 255)
-	    SetTextEdge(1, 0, 0, 0, 255)
-	    SetTextDropShadow()
-	    SetTextOutline()
-	    SetTextEntry("STRING")
-	    AddTextComponentString(text)
-	    DrawText(0.05, 0.05)
+			for i,theText in pairs(text) do
+				SetTextFont(0)
+		    SetTextProportional(1)
+		    SetTextScale(0.0, 0.30)
+		    SetTextDropshadow(0, 0, 0, 0, 255)
+		    SetTextEdge(1, 0, 0, 0, 255)
+		    SetTextDropShadow()
+		    SetTextOutline()
+		    SetTextEntry("STRING")
+		    AddTextComponentString(theText)
+		    DrawText(0.3, 0.7+(i/30))
+			end
 
 		end
 	end
 end)
-
 
