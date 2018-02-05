@@ -149,3 +149,54 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 	end
 end)
+
+function DrawPlayerInfo(target)
+	drawTarget = target
+	drawInfo = true
+end
+
+function StopDrawPlayerInfo()
+	drawInfo = false
+	drawTarget = 0
+end
+
+
+
+Citizen.CreateThread( function()
+	while true do
+		Citizen.Wait(0)
+		if drawInfo then
+			local text = ""
+			-- godmode checks
+			text=text.."\nGodmode:"
+			local targetPed = GetPlayerPed(drawTarget)
+			local targetGod = GetPlayerInvincible(drawTarget)
+			if targetGod then
+				text=text.."~r~Yes~w~"
+			else
+				text=text.."~g~No~w~"
+			end
+			-- health info
+			text=text.."\nHealth: "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed)
+			text=text.."\nArmor: "..GetPedArmour(targetPed)
+			text=text.."\nStamina: "..GetPlayerSprintStaminaRemaining(target)
+			-- misc info
+			text=text.."\nWanted level: "..GetPlayerWantedLevel(target)
+
+
+			SetTextFont(0)
+	    SetTextProportional(1)
+	    SetTextScale(0.0, 0.30)
+	    SetTextDropshadow(0, 0, 0, 0, 255)
+	    SetTextEdge(1, 0, 0, 0, 255)
+	    SetTextDropShadow()
+	    SetTextOutline()
+	    SetTextEntry("STRING")
+	    AddTextComponentString(text)
+	    DrawText(0.05, 0.05)
+
+		end
+	end
+end)
+
+

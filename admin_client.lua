@@ -47,33 +47,32 @@ Citizen.CreateThread( function()
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
-	spectatePlayer(GetPlayerPed(playerId),GetPlayerName(playerId))
+	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 end)
 
-function spectatePlayer(target,name)
+function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
 	enable = true
-	if target == playerPed then enable = false end
+	if targetPed == playerPed then enable = false end
 
 	if(enable)then
 
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
-			NetworkSetInSpectatorMode(true, target)
+			NetworkSetInSpectatorMode(true, targetPed)
 
-
-
-		ShowNotification("Spectating ~b~<C>"..name.."</C>.")
+			DrawPlayerInfo(target)
+			ShowNotification("Spectating ~b~<C>"..name.."</C>.")
 	else
 
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
-			NetworkSetInSpectatorMode(false, target)
+			NetworkSetInSpectatorMode(false, targetPed)
 
-
-		ShowNotification("Stopped Spectating.")
+			StopDrawPlayerInfo()
+			ShowNotification("Stopped Spectating.")
 	end
 end
 
