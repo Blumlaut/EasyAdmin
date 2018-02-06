@@ -35,15 +35,20 @@ AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist,thebanlistreasons)
 end)
 
 Citizen.CreateThread( function()
-	while true do
-		Citizen.Wait(0)
-			players = {}
-			for i = 0, 31 do
-			if NetworkIsPlayerActive( i ) then
-				table.insert( players, i )
-			end
-		end
-	end
+  while true do
+    Citizen.Wait(0)
+    players = {}
+    local localplayers = {}
+    for i = 0, 31 do
+      if NetworkIsPlayerActive( i ) then
+        table.insert( localplayers, GetPlayerServerId(i) )
+      end
+    end
+    table.sort(localplayers)
+    for i,thePlayer in ipairs(localplayers) do
+      table.insert(players,GetPlayerFromServerId(thePlayer))
+    end
+  end
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
