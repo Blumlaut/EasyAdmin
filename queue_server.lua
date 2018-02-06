@@ -4,21 +4,26 @@ useQueue = GetConvar("ea_useQueue", "false")
 queuedUsers = { }
 users = { }
 playerCount = #GetPlayers() -- get our current player count, in case it gets restarted
-maxTries = GetConvarInt("ea_QueueTries", 360) -- defines how often we try / stay in the queue before disconnecting
+maxTries = GetConvarInt("ea_QueueTries", 500) -- defines how often we try / stay in the queue before disconnecting
 maxPlayers = GetConvarInt("sv_maxclients", 30) -- get our maximum playercount
 
 if useQueue == "true" then
 		RegisterServerEvent('EasyAdmin:playerActivated')
 		AddEventHandler('EasyAdmin:playerActivated', function() -- stole this from hardcap so we can handle the "hardcap" ourselves
 		  if not users[source] then
-			playerCount = playerCount + 1
-			users[source] = true
+				playerCount = playerCount + 1
+				users[source] = true
+				for i,theKey in ipairs(queuedUsers) do
+					if theKey.name == GetPlayerName(source) then
+						table.remove(queuedUsers,i) -- player was activated, remove him from the queue so new clients can join!
+					end
+				end
 		  end
 		end)
 		AddEventHandler('playerDropped', function() -- stole this from hardcap so we can handle the "hardcap" ourselves
 		  if users[source] then
-			playerCount = playerCount - 1
-			users[source] = nil
+				playerCount = playerCount - 1
+				users[source] = nil
 		  end
 		end)
 		StopResource("hardcap") -- stop hardcap, we will handle it from here
@@ -31,7 +36,6 @@ if useQueue == "true" then
 			deferrals.update(strings.checkforslot)
 			local s = source
 			local n = name
-			local greenlight = false
 			local deferrals = deferrals
 			local isAdmin = false
 			local isBanned = false
@@ -71,9 +75,8 @@ if useQueue == "true" then
 			while true do
 				foundme = false
 				maxPlayers = GetConvarInt("sv_maxclients", 30)
-				greenlight = false
 				for i,theKey in ipairs(queuedUsers) do
-					if theKey.name	== n then
+					if theKey.name == n then
 						foundme = true
 						if playerCount >= maxPlayers then
 							if queuedUsers[i].tries == maxTries then
@@ -86,7 +89,6 @@ if useQueue == "true" then
 						else
 							deferrals.update(string.format(strings.posinqueue, i))
 							if i == 1 and playerCount < maxPlayers then
-								table.remove(queuedUsers,i)
 								deferrals.done()
 								break
 							end
@@ -108,11 +110,9 @@ if useQueue == "true" then
 		AddEventHandler('playerDropped', function(reason)
 			local s = source
 			local n = GetPlayerName(source)
-			local caught = false
 			for i,theKey in ipairs(queuedUsers) do
 				if theKey.name == n then
 					table.remove(queuedUsers,i)
-					caught = true
 				end
 			end
 		end)
