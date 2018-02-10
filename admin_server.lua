@@ -392,24 +392,30 @@ Citizen.CreateThread(function()
 		return t
 	end
 
-	function checkVersion(err,responseText, headers)
-		curVersion = LoadResourceFile(GetCurrentResourceName(), "version")
 
-		updatePath = "/Bluethefurry/EasyAdmin"
-		resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
+local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+local curVersion = json.decode(verFile).version
+local updatePath = "/Bluethefurry/EasyAdmin"
+local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
+	function checkVersion(err,response, headers)
+		local data = json.decode(response)
 
-		if curVersion ~= responseText and tonumber(curVersion) < tonumber(responseText) then
-			print("\n###############################")
-			print("\n"..resourceName.." is outdated, should be:\n"..responseText.."is:\n"..curVersion.."\nplease update it from https://github.com"..updatePath.."")
-			print("\n###############################")
-		elseif tonumber(curVersion) > tonumber(responseText) then
-			print(resourceName..": Version higher than production, skipping..")
+
+		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
+			print("\n--------------------------------------------------------------------------")
+			print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+			print("\nUpdate Changelog:\n"..data.changelog)
+			print("\n--------------------------------------------------------------------------")
+		elseif tonumber(curVersion) > tonumber(data.version) then
+			print("Your version of "..resourceName.." seems to be higher than the current version.")
+		else
+			print(resourceName.." is up to date!")
 		end
 		SetTimeout(3600000, checkVersionHTTPRequest)
 	end
 
 	function checkVersionHTTPRequest()
-		PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version", checkVersion, "GET")
+		PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version.json", checkVersion, "GET")
 	end
 
 	function loopUpdateBlacklist()

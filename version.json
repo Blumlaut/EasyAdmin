@@ -1,0 +1,4 @@
+{
+    "version":"4.15",
+    "changelog":"EasyAdmin now displays some rudimentary player informations when spectating\nWe fixed some issues with the 'strings', there should be less formatting errors now\nwe changed the queue up a bit, report back how it behaves now!\nplayer list should now sort by first joined rather than seem quite random."
+}
