@@ -1,4 +1,4 @@
 {
-    "version":"4.15",
-    "changelog":"EasyAdmin now displays some rudimentary player informations when spectating\nWe fixed some issues with the 'strings', there should be less formatting errors now\nwe changed the queue up a bit, report back how it behaves now!\nplayer list should now sort by first joined rather than seem quite random."
+    "version":"4.18",
+    "changelog":"Added ea_moderationNotification convar, this convar can be used to log kicks and bans into a discord channel!\nPlease see the wiki (https://github.com/Bluethefurry/EasyAdmin/wiki/) for a better explenation."
 }
