@@ -21,8 +21,13 @@ strings = { -- these are the strings we use to show our players, feel free to ed
 	serverfulltrying = "Server Full, Your Position in Queue: %s, Disconnecting in %s tries.",
 	posinqueue = "Your Position in Queue: %s",
 	lostqueuepos = "You lost your position in the Queue, please try reconnecting",
+	adminkickedplayer = "**%s** kicked **%s**, Reason: %s",
+	adminbannedplayer = "**%s** banned **%s**, Reason: %s",
+	adminunbannedplayer = "**%s** unbanned **%s**",
 }
 
+
+moderationNotification = GetConvar("ea_moderationNotification", "false")
 
 Citizen.CreateThread(function()
 
@@ -69,6 +74,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:kickPlayer")
 	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
 		if DoesPlayerHavePermission(source,"easyadmin.kick") then
+				SendWebhookMessage(moderationNotification,string.format(strings.adminkickedplayer, GetPlayerName(source), GetPlayerName(playerId), reason))
 				DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
 		end
 	end)
@@ -93,6 +99,7 @@ Citizen.CreateThread(function()
 					updateBlacklist(identifier..";"..reason)
 				end
 			end
+			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason))
 			DropPlayer(playerId, string.format(strings.banned, reason ) )
 		end
 	end)
@@ -155,6 +162,7 @@ Citizen.CreateThread(function()
 				end
 			end
 			if GetPlayerName(args[1]) then
+				SendWebhookMessage(moderationNotification,string.format(strings.adminkickedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason))
 				DropPlayer(args[1], string.format(strings.kicked, GetPlayerName(source), reason) )
 			else
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
@@ -180,6 +188,7 @@ Citizen.CreateThread(function()
 						updateBlacklist(identifier..";"..reason)
 					end
 				end
+				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason))
 				DropPlayer(args[1], string.format(strings.banned, reason ) )
 			else
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
@@ -201,6 +210,7 @@ Citizen.CreateThread(function()
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
 			updateBlacklistRemove(args[1])
 			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.done } })
+			SendWebhookMessage(moderationNotification,string.format(strings.adminunbannedplayer, GetPlayerName(source), args[1]))
 		end
 	end, false)
 
@@ -218,6 +228,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
 			updateBlacklistRemove(playerId)
+			SendWebhookMessage(moderationNotification,string.format(strings.adminunbannedplayer, GetPlayerName(source), playerId))
 		end
 	end)
 
@@ -380,6 +391,14 @@ Citizen.CreateThread(function()
 
 
 	---------------------------------- USEFUL
+	
+	
+	function SendWebhookMessage(webhook,message)
+		if webhook ~= "false" then
+			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
+		end
+	end
+	
 	function mysplit(inputstr, sep)
 		if sep == nil then
 			sep = "%s"
