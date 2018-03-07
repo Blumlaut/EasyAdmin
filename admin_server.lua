@@ -158,7 +158,7 @@ Citizen.CreateThread(function()
 			local reason = ""
 			for i,theArg in pairs(args) do
 				if i ~= 1 then -- make sure we are not adding the kicked player as a reason
-					reason = reason..theArg
+					reason = reason.." "..theArg
 				end
 			end
 			if GetPlayerName(args[1]) then
@@ -175,7 +175,7 @@ Citizen.CreateThread(function()
 			local reason = ""
 			for i,theArg in pairs(args) do
 				if i ~= 1 then
-					reason = reason..theArg
+					reason = reason.." "..theArg
 				end
 			end
 			if GetPlayerName(args[1]) then
