@@ -27,11 +27,10 @@ strings = { -- these are the strings we use to show our players, feel free to ed
 }
 
 
-moderationNotification = GetConvar("ea_moderationNotification", "false")
 
 Citizen.CreateThread(function()
 
-
+	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		local banperm = DoesPlayerHavePermission(source,"easyadmin.ban")
