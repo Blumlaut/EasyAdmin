@@ -11,11 +11,14 @@ Citizen.CreateThread(function()
 	local selectedItemIndex = 1
 
 	WarMenu.CreateMenu('admin', 'Admin Menu')
-	WarMenu.CreateSubMenu('kickplayers', 'admin', 'Kick Player')
-	WarMenu.CreateSubMenu('banplayers', 'admin', 'Ban Player')
-	WarMenu.CreateSubMenu('unbanplayers', 'admin', 'Unban Player')
-	WarMenu.CreateSubMenu('spectateplayers', 'admin', 'Spectate Players')
-	WarMenu.CreateSubMenu('teleporttoplayer', 'admin', 'Teleport to Player')
+	WarMenu.CreateSubMenu('playermanagement', 'admin', 'Player Management')
+	WarMenu.CreateSubMenu('ingamemanagement', 'admin', 'Game Management')
+	WarMenu.CreateSubMenu('kickplayers', 'playermanagement', 'Kick Player')
+	WarMenu.CreateSubMenu('banplayers', 'playermanagement', 'Ban Player')
+	WarMenu.CreateSubMenu('unbanplayers', 'playermanagement', 'Unban Player')
+	WarMenu.CreateSubMenu('spectateplayers', 'ingamemanagement', 'Spectate Players')
+	WarMenu.CreateSubMenu('teleporttoplayer', 'ingamemanagement', 'Teleport to Player')
+	WarMenu.CreateSubMenu('teleportplayer', 'ingamemanagement', 'Teleport Player to Me')
 	WarMenu.CreateSubMenu('settings', 'admin', 'Settings')
 	TriggerServerEvent("EasyAdmin:amiadmin")
 
@@ -27,23 +30,35 @@ Citizen.CreateThread(function()
 			if isAdmin == false then
 				WarMenu.CloseMenu()
 			elseif isAdmin == true then
-				if (permissions.kick or settings.forceShowGUIButtons) and WarMenu.MenuButton('Kick Player', 'kickplayers') then
+				WarMenu.MenuButton('Player Management', 'playermanagement')
+				WarMenu.MenuButton('Game Management', "ingamemanagement")
+				WarMenu.MenuButton('Settings', "settings")
 
-				elseif (permissions.ban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Ban Player', 'banplayers') then
-
-				elseif (permissions.spectate or settings.forceShowGUIButtons) and WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
-
-				elseif (permissions.teleport or settings.forceShowGUIButtons) and WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
-
-				elseif (permissions.unban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Unban Player', "unbanplayers") then
-
-				elseif WarMenu.MenuButton('Settings', "settings") then
-
-				elseif WarMenu.Button('Close') then
+				if WarMenu.Button('Close') then
 					WarMenu.CloseMenu()
 				end
 			end
 		WarMenu.Display()
+		
+		elseif WarMenu.IsMenuOpened("playermanagement") then
+			if (permissions.kick or settings.forceShowGUIButtons) and WarMenu.MenuButton('Kick Player', 'kickplayers') then
+
+			elseif (permissions.ban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Ban Player', 'banplayers') then
+				
+			elseif (permissions.unban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Unban Player', "unbanplayers") then
+				
+			end
+		WarMenu.Display()
+		elseif WarMenu.IsMenuOpened("ingamemanagement") then
+			
+			if (permissions.spectate or settings.forceShowGUIButtons) and WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
+
+			elseif (permissions.teleport or settings.forceShowGUIButtons) and WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
+				
+			elseif (permissions.teleport or settings.forceShowGUIButtons) and WarMenu.MenuButton('Bring player', 'teleportplayer') then
+				
+			end
+			WarMenu.Display()
 		elseif WarMenu.IsMenuOpened("kickplayers") then
 
 		for i,thePlayer in ipairs(players) do
@@ -104,6 +119,18 @@ Citizen.CreateThread(function()
 			end
 		end
 		WarMenu.Display()
+		
+	elseif WarMenu.IsMenuOpened("teleportplayer") then
+	local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+	for i,thePlayer in ipairs(players) do
+		if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'teleportplayer') then
+			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(thePlayer), px,py,pz)
+		end
+	end
+	if WarMenu.MenuButton("All Players", 'teleportplayer') then
+		TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
+	end
+	WarMenu.Display()
 
 		elseif WarMenu.IsMenuOpened("unbanplayers") then
 

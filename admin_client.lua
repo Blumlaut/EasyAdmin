@@ -16,6 +16,9 @@ RegisterNetEvent("EasyAdmin:requestSpectate")
 
 RegisterNetEvent("EasyAdmin:SetSetting")
 
+RegisterNetEvent("EasyAdmin:TeleportRequest")
+
+
 
 AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
 	permissions[response] = permission
@@ -53,6 +56,10 @@ end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+end)
+
+AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
+	SetEntityCoords(PlayerPedId(), px,py,pz,0,0,0, false)
 end)
 
 function spectatePlayer(targetPed,target,name)

@@ -220,7 +220,12 @@ Citizen.CreateThread(function()
 	end, false)
 
 
-
+	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords")
+	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)
+		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
+			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
+		end
+	end)
 
 
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
