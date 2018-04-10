@@ -6,174 +6,30 @@ settings = {
 	forceShowGUIButtons = false,
 }
 
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("Admin Menu", "~b~Admin Menu")
+_menuPool:Add(mainMenu)
+
+
+
 Citizen.CreateThread(function()
 	local currentItemIndex = 1
 	local selectedItemIndex = 1
-
-	WarMenu.CreateMenu('admin', 'Admin Menu')
-	WarMenu.CreateSubMenu('playermanagement', 'admin', 'Player Management')
-	WarMenu.CreateSubMenu('ingamemanagement', 'admin', 'Game Management')
-	WarMenu.CreateSubMenu('kickplayers', 'playermanagement', 'Kick Player')
-	WarMenu.CreateSubMenu('banplayers', 'playermanagement', 'Ban Player')
-	WarMenu.CreateSubMenu('unbanplayers', 'playermanagement', 'Unban Player')
-	WarMenu.CreateSubMenu('spectateplayers', 'ingamemanagement', 'Spectate Players')
-	WarMenu.CreateSubMenu('teleporttoplayer', 'ingamemanagement', 'Teleport to Player')
-	WarMenu.CreateSubMenu('teleportplayer', 'ingamemanagement', 'Teleport Player to Me')
-	WarMenu.CreateSubMenu('settings', 'admin', 'Settings')
+	NativeUI.CreatePool()
 	TriggerServerEvent("EasyAdmin:amiadmin")
-
-
-
-
+	TriggerServerEvent("EasyAdmin:updateBanlist")
+	
+	
+	
 	while true do
-		if WarMenu.IsMenuOpened('admin') then
-			if isAdmin == false then
-				WarMenu.CloseMenu()
-			elseif isAdmin == true then
-				WarMenu.MenuButton('Player Management', 'playermanagement')
-				WarMenu.MenuButton('Game Management', "ingamemanagement")
-				WarMenu.MenuButton('Settings', "settings")
-
-				if WarMenu.Button('Close') then
-					WarMenu.CloseMenu()
-				end
-			end
-		WarMenu.Display()
+		_menuPool:ProcessMenus()
+		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
+			-- clear and re-create incase of permission change+player count change
+			GenerateMenu()
+			mainMenu:Visible(not mainMenu:Visible())
+		end
 		
-		elseif WarMenu.IsMenuOpened("playermanagement") then
-			if (permissions.kick or settings.forceShowGUIButtons) and WarMenu.MenuButton('Kick Player', 'kickplayers') then
-
-			elseif (permissions.ban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Ban Player', 'banplayers') then
-				
-			elseif (permissions.unban or settings.forceShowGUIButtons) and WarMenu.MenuButton('Unban Player', "unbanplayers") then
-				
-			end
-		WarMenu.Display()
-		elseif WarMenu.IsMenuOpened("ingamemanagement") then
-			
-			if (permissions.spectate or settings.forceShowGUIButtons) and WarMenu.MenuButton('Spectate Player', 'spectateplayers') then
-
-			elseif (permissions.teleport or settings.forceShowGUIButtons) and WarMenu.MenuButton('Teleport to Player', 'teleporttoplayer') then
-				
-			elseif (permissions.teleport or settings.forceShowGUIButtons) and WarMenu.MenuButton('Bring player', 'teleportplayer') then
-				
-			end
-			WarMenu.Display()
-		elseif WarMenu.IsMenuOpened("kickplayers") then
-
-		for i,thePlayer in ipairs(players) do
-			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'kickplayers') then
-
-				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
-
-				if result then
-					TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( thePlayer ), result)
-				end
-			end
-		end
-		WarMenu.Display()
-
-		elseif WarMenu.IsMenuOpened("banplayers") then
-
-		for i,thePlayer in ipairs(players) do
-			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'banplayers') then
-				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
-
-
-				if result then
-					TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), result)
-				end
-			end
-		end
-		WarMenu.Display()
-
-
-		elseif WarMenu.IsMenuOpened("spectateplayers") then
-
-		for i,thePlayer in ipairs(players) do
-			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'spectateplayers') then
-				TriggerServerEvent("EasyAdmin:requestSpectate",thePlayer)
-			end
-		end
-		WarMenu.Display()
-
-		elseif WarMenu.IsMenuOpened("teleporttoplayer") then
-
-		for i,thePlayer in ipairs(players) do
-			if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'teleporttoplayer') then
-				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer),true))
-				local heading = GetEntityHeading(GetPlayerPed(player))
-				SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
-			end
-		end
-		WarMenu.Display()
-		
-	elseif WarMenu.IsMenuOpened("teleportplayer") then
-	local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-	for i,thePlayer in ipairs(players) do
-		if WarMenu.MenuButton("["..GetPlayerServerId( thePlayer ).."] "..GetPlayerName( thePlayer ), 'teleportplayer') then
-			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(thePlayer), px,py,pz)
-		end
-	end
-	if WarMenu.MenuButton("All Players", 'teleportplayer') then
-		TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
-	end
-	WarMenu.Display()
-
-		elseif WarMenu.IsMenuOpened("unbanplayers") then
-
-		for i,theBanned in ipairs(banlist) do
-			if showLicenses then
-				if WarMenu.Button(theBanned) then
-					TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
-					TriggerServerEvent("EasyAdmin:updateBanlist")
-					Citizen.Trace("unbanning user")
-				end
-			else
-				if WarMenu.Button(banlist.reasons[i]) then
-					TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
-					Citizen.Trace("unbanning user")
-					TriggerServerEvent("EasyAdmin:updateBanlist")
-				end
-			end
-		end
-		WarMenu.Display()
-
-		elseif WarMenu.IsMenuOpened("settings") then
-			if showLicenses then
-				sl = "Licenses"
-			else
-				sl = "Reasons"
-			end
-			if WarMenu.Button("Banlist: Show Licenses/Reasons", sl) then
-				showLicenses = not showLicenses
-			elseif WarMenu.Button('Refresh Banlist') then
-				TriggerServerEvent("EasyAdmin:updateBanlist")
-			elseif WarMenu.Button('Refresh Permissions') then
-				TriggerServerEvent("amiadmin")
-			end
-
-		WarMenu.Display()
-
-
-
-		elseif IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
-			WarMenu.OpenMenu('admin')
-		end
-
-		Citizen.Wait(0)
+		Citizen.Wait(1)
 	end
 end)
 
@@ -187,6 +43,169 @@ function StopDrawPlayerInfo()
 	drawTarget = 0
 end
 
+function GenerateMenu() -- this is a big ass function
+	mainMenu:Clear()
+	playermanagement = _menuPool:AddSubMenu(mainMenu, "Player Management")
+	if permissions.kick or settings.forceShowGUIButtons then playermanagement_kickplayers = _menuPool:AddSubMenu(playermanagement, "Kick Player") end
+	if permissions.ban or settings.forceShowGUIButtons then playermanagement_banplayers = _menuPool:AddSubMenu(playermanagement, "Ban Player") end
+	if permissions.unban or settings.forceShowGUIButtons then playermanagement_unbanplayers = _menuPool:AddSubMenu(playermanagement, "Unban Player") end
+	
+	ingamemanagement = _menuPool:AddSubMenu(mainMenu, "Game Management")
+	if permissions.spectate or settings.forceShowGUIButtons then ingamemanagement_spectateplayers = _menuPool:AddSubMenu(ingamemanagement, "Spectate Player") end
+	if permissions.teleport or settings.forceShowGUIButtons then ingamemanagement_teleporttoplayer = _menuPool:AddSubMenu(ingamemanagement, "Teleport to Player") end
+	if permissions.teleport or settings.forceShowGUIButtons then ingamemanagement_teleportplayer = _menuPool:AddSubMenu(ingamemanagement, "Teleport Player to Me") end
+	settingsMenu = _menuPool:AddSubMenu(mainMenu, "Settings")
+	
+	-- show menu
+	
+	-- util stuff
+	
+	for i = 0, 256, 1 do
+		if NetworkIsPlayerActive(i) then
+			
+			-- generate specific menu stuff, dirty but it works for now
+			if permissions.kick then
+				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
+				playermanagement_kickplayers:AddItem(thisItem)
+				playermanagement_kickplayers.OnItemSelect = function(sender, item, index)
+					if item == thisItem then
+						DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+						
+						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+							Citizen.Wait( 0 )
+						end
+						
+						local result = GetOnscreenKeyboardResult()
+						
+						if result then
+							TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( i ), result)
+						end
+					end
+				end
+			end
+			
+			if permissions.ban then
+				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
+				playermanagement_banplayers:AddItem(thisItem)
+				playermanagement_banplayers.OnItemSelect = function(sender, item, index)
+					if item == thisItem then
+						DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+						
+						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+							Citizen.Wait( 0 )
+						end
+						
+						local result = GetOnscreenKeyboardResult()
+						
+						if result then
+							TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( i ), result)
+						end
+					end
+				end
+			end
+			
+			if permissions.spectate then
+				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
+				ingamemanagement_spectateplayers:AddItem(thisItem)
+				ingamemanagement_spectateplayers.OnItemSelect = function(sender, item, index)
+					if item == thisItem then
+						TriggerServerEvent("EasyAdmin:requestSpectate",i)
+					end
+				end
+			end
+			
+			if permissions.teleport then
+				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
+				ingamemanagement_teleporttoplayer:AddItem(thisItem)
+				ingamemanagement_teleporttoplayer.OnItemSelect = function(sender, item, index)
+					if item == thisItem then
+						local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(i),true))
+						local heading = GetEntityHeading(GetPlayerPed(player))
+						SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+					end
+				end
+			end
+			
+			if permissions.teleport then
+				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
+				Citizen.Trace("ok")
+				ingamemanagement_teleportplayer:AddItem(thisItem)
+				ingamemanagement_teleportplayer.OnItemSelect = function(sender, item, index)
+					if item == thisItem then
+						local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+						TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(i), px,py,pz)
+					end
+				end
+			end
+		end
+	end
+	
+	for i,theBanned in ipairs(banlist) do
+		Citizen.Trace(i)
+		if showLicenses then 
+			reason = theBanned
+		else
+			reason = banlist.reasons[i]
+		end
+		local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
+		playermanagement_unbanplayers:AddItem(thisItem)
+		playermanagement_unbanplayers.OnItemSelect = function(sender, item, index)
+			if item == thisItem then
+				TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
+				TriggerServerEvent("EasyAdmin:updateBanlist")
+				mainMenu:Visible(false)
+				GenerateMenu()
+			end
+		end
+	end
+	
+	-- "all players" function
+	local thisItem = NativeUI.CreateItem("All Players", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
+	ingamemanagement_teleportplayer:AddItem(thisItem)
+	ingamemanagement_teleportplayer.OnItemSelect = function(sender, item, index)
+		if item == thisItem then
+			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
+		end
+	end
+
+
+	local sl = {"Reasons", "Licenses"}
+	local thisItem = NativeUI.CreateListItem("~h~Banlist:~h~ Show Type", sl, 1,"Toggle Between Ban Reasons or Identifiers in the 'Unban Player' Menu.\nRequires Reopening.")
+	settingsMenu:AddItem(thisItem)
+	settingsMenu.OnListChange = function(sender, item, index)
+			if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == "Reasons" then
+						showLicenses = false
+					else
+						showLicenses = true
+					end
+			end
+	end
+	
+	
+	local thisItem = NativeUI.CreateItem("Refresh Banlist", "This Refreshes the Banlist in the 'Unban Player' Menu.\nRequires Reopening.")
+	settingsMenu:AddItem(thisItem)
+	settingsMenu.OnItemSelect = function(sender, item, index)
+		if item == thisItem then
+			TriggerServerEvent("EasyAdmin:updateBanlist")
+		end
+	end
+	
+	local thisItem = NativeUI.CreateItem("Refresh Permissions", "This Refreshes your current Permissions.\nRequires Reopening.")
+	settingsMenu:AddItem(thisItem)
+	settingsMenu.OnItemSelect = function(sender, item, index)
+		if item == thisItem then
+			TriggerServerEvent("amiadmin")
+		end
+	end
+	
+
+	
+	
+	_menuPool:RefreshIndex() -- refresh indexes
+end
 
 
 Citizen.CreateThread( function()
@@ -210,21 +229,20 @@ Citizen.CreateThread( function()
 			table.insert(text,"Armor: "..GetPedArmour(targetPed))
 			-- misc info
 			table.insert(text,"Wanted level: "..GetPlayerWantedLevel(drawTarget))
-
+			
 			for i,theText in pairs(text) do
 				SetTextFont(0)
-		    SetTextProportional(1)
-		    SetTextScale(0.0, 0.30)
-		    SetTextDropshadow(0, 0, 0, 0, 255)
-		    SetTextEdge(1, 0, 0, 0, 255)
-		    SetTextDropShadow()
-		    SetTextOutline()
-		    SetTextEntry("STRING")
-		    AddTextComponentString(theText)
-		    DrawText(0.3, 0.7+(i/30))
+				SetTextProportional(1)
+				SetTextScale(0.0, 0.30)
+				SetTextDropshadow(0, 0, 0, 0, 255)
+				SetTextEdge(1, 0, 0, 0, 255)
+				SetTextDropShadow()
+				SetTextOutline()
+				SetTextEntry("STRING")
+				AddTextComponentString(theText)
+				DrawText(0.3, 0.7+(i/30))
 			end
-
+			
 		end
 	end
 end)
-

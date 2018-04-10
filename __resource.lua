@@ -6,6 +6,7 @@ server_scripts {
 	"version",
 }
 
+client_script '@NativeUI/NativeUI.lua'
 client_scripts {
 	"warmenu.lua",
 	"admin_client.lua",
