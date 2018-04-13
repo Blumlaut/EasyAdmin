@@ -297,7 +297,7 @@ Citizen.CreateThread( function()
 				SetTextOutline()
 				SetTextEntry("STRING")
 				AddTextComponentString(theText)
-				DrawText(0.3, 0.7+(i/30))
+				EndTextCommandDisplayText(0.3, 0.7+(i/30))
 			end
 			
 		end
