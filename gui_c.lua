@@ -7,15 +7,12 @@ settings = {
 }
 
 _menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu")
+mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", 1320, 0)
 _menuPool:Add(mainMenu)
 
 
 
 Citizen.CreateThread(function()
-	local currentItemIndex = 1
-	local selectedItemIndex = 1
-	NativeUI.CreatePool()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:updateBanlist")
 	
