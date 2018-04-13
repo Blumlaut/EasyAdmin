@@ -140,56 +140,65 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-	for i,theBanned in ipairs(banlist) do
-		Citizen.Trace(i)
-		if showLicenses then 
-			reason = theBanned
-		else
-			reason = banlist.reasons[i]
+	if permissions.unban then
+		for i,theBanned in ipairs(banlist) do
+			Citizen.Trace(i)
+			if showLicenses then 
+				reason = theBanned
+			else
+				reason = banlist.reasons[i]
+			end
+			local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
+			playermanagement_unbanplayers:AddItem(thisItem)
+			playermanagement_unbanplayers.OnItemSelect = function(sender, item, index)
+				if item == thisItem then
+					TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
+					TriggerServerEvent("EasyAdmin:updateBanlist")
+					mainMenu:Visible(false)
+					GenerateMenu()
+				end
+			end
 		end
-		local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
-		playermanagement_unbanplayers:AddItem(thisItem)
-		playermanagement_unbanplayers.OnItemSelect = function(sender, item, index)
+	end
+	
+	
+	if permissions.teleport then
+		-- "all players" function
+		local thisItem = NativeUI.CreateItem("All Players", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
+		ingamemanagement_teleportplayer:AddItem(thisItem)
+		ingamemanagement_teleportplayer.OnItemSelect = function(sender, item, index)
 			if item == thisItem then
-				TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
+				local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
+			end
+		end
+	end
+
+
+	if permissions.unban then
+		local sl = {"Reasons", "Licenses"}
+		local thisItem = NativeUI.CreateListItem("~h~Banlist:~h~ Show Type", sl, 1,"Toggle Between Ban Reasons or Identifiers in the 'Unban Player' Menu.\nRequires Reopening.")
+		settingsMenu:AddItem(thisItem)
+		settingsMenu.OnListChange = function(sender, item, index)
+				if item == thisItem then
+						i = item:IndexToItem(index)
+						if i == "Reasons" then
+							showLicenses = false
+						else
+							showLicenses = true
+						end
+				end
+		end
+	end
+	
+	
+	if permissions.unban then
+		local thisItem = NativeUI.CreateItem("Refresh Banlist", "This Refreshes the Banlist in the 'Unban Player' Menu.\nRequires Reopening.")
+		settingsMenu:AddItem(thisItem)
+		settingsMenu.OnItemSelect = function(sender, item, index)
+			if item == thisItem then
 				TriggerServerEvent("EasyAdmin:updateBanlist")
-				mainMenu:Visible(false)
-				GenerateMenu()
 			end
-		end
-	end
-	
-	-- "all players" function
-	local thisItem = NativeUI.CreateItem("All Players", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
-	ingamemanagement_teleportplayer:AddItem(thisItem)
-	ingamemanagement_teleportplayer.OnItemSelect = function(sender, item, index)
-		if item == thisItem then
-			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
-		end
-	end
-
-
-	local sl = {"Reasons", "Licenses"}
-	local thisItem = NativeUI.CreateListItem("~h~Banlist:~h~ Show Type", sl, 1,"Toggle Between Ban Reasons or Identifiers in the 'Unban Player' Menu.\nRequires Reopening.")
-	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnListChange = function(sender, item, index)
-			if item == thisItem then
-					i = item:IndexToItem(index)
-					if i == "Reasons" then
-						showLicenses = false
-					else
-						showLicenses = true
-					end
-			end
-	end
-	
-	
-	local thisItem = NativeUI.CreateItem("Refresh Banlist", "This Refreshes the Banlist in the 'Unban Player' Menu.\nRequires Reopening.")
-	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnItemSelect = function(sender, item, index)
-		if item == thisItem then
-			TriggerServerEvent("EasyAdmin:updateBanlist")
 		end
 	end
 	
