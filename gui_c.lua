@@ -46,14 +46,7 @@ end
 function GenerateMenu() -- this is a big ass function
 	mainMenu:Clear()
 	playermanagement = _menuPool:AddSubMenu(mainMenu, "Player Management")
-	if permissions.kick or settings.forceShowGUIButtons then playermanagement_kickplayers = _menuPool:AddSubMenu(playermanagement, "Kick Player") end
-	if permissions.ban or settings.forceShowGUIButtons then playermanagement_banplayers = _menuPool:AddSubMenu(playermanagement, "Ban Player") end
-	if permissions.unban or settings.forceShowGUIButtons then playermanagement_unbanplayers = _menuPool:AddSubMenu(playermanagement, "Unban Player") end
-	
-	ingamemanagement = _menuPool:AddSubMenu(mainMenu, "Game Management")
-	if permissions.spectate or settings.forceShowGUIButtons then ingamemanagement_spectateplayers = _menuPool:AddSubMenu(ingamemanagement, "Spectate Player") end
-	if permissions.teleport or settings.forceShowGUIButtons then ingamemanagement_teleporttoplayer = _menuPool:AddSubMenu(ingamemanagement, "Teleport to Player") end
-	if permissions.teleport or settings.forceShowGUIButtons then ingamemanagement_teleportplayer = _menuPool:AddSubMenu(ingamemanagement, "Teleport Player to Me") end
+	servermanagement = _menuPool:AddSubMenu(mainMenu, "Server Management")
 	settingsMenu = _menuPool:AddSubMenu(mainMenu, "Settings")
 	
 	-- show menu
@@ -62,115 +55,101 @@ function GenerateMenu() -- this is a big ass function
 	
 	for i = 0, 256, 1 do
 		if NetworkIsPlayerActive(i) then
-			
+			thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(i).."] "..GetPlayerName(i))
 			-- generate specific menu stuff, dirty but it works for now
 			if permissions.kick then
-				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
-				playermanagement_kickplayers:AddItem(thisItem)
-				playermanagement_kickplayers.OnItemSelect = function(sender, item, index)
-					if item == thisItem then
-						DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-						
-						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-							Citizen.Wait( 0 )
-						end
-						
-						local result = GetOnscreenKeyboardResult()
-						
-						if result then
-							TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( i ), result)
-						end
+				local thisItem = NativeUI.CreateItem("Kick Player","")
+				thisPlayer:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+					
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+					
+					if result then
+						TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( i ), result)
 					end
 				end
 			end
 			
 			if permissions.ban then
-				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
-				playermanagement_banplayers:AddItem(thisItem)
-				playermanagement_banplayers.OnItemSelect = function(sender, item, index)
-					if item == thisItem then
-						DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-						
-						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-							Citizen.Wait( 0 )
-						end
-						
-						local result = GetOnscreenKeyboardResult()
-						
-						if result then
-							TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( i ), result)
-						end
+				local thisItem = NativeUI.CreateItem("Ban Player","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player.")
+				thisPlayer:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+					
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+					
+					if result then
+						TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( i ), result)
 					end
 				end
 			end
 			
 			if permissions.spectate then
-				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
-				ingamemanagement_spectateplayers:AddItem(thisItem)
-				ingamemanagement_spectateplayers.OnItemSelect = function(sender, item, index)
-					if item == thisItem then
-						TriggerServerEvent("EasyAdmin:requestSpectate",i)
-					end
+				local thisItem = NativeUI.CreateItem("Spectate Player", "")
+				thisPlayer:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:requestSpectate",i)
 				end
 			end
 			
 			if permissions.teleport then
-				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
-				ingamemanagement_teleporttoplayer:AddItem(thisItem)
-				ingamemanagement_teleporttoplayer.OnItemSelect = function(sender, item, index)
-					if item == thisItem then
-						local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(i),true))
-						local heading = GetEntityHeading(GetPlayerPed(player))
-						SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
-					end
+				local thisItem = NativeUI.CreateItem("Teleport to Player","")
+				thisPlayer:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(i),true))
+					local heading = GetEntityHeading(GetPlayerPed(player))
+					SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
 				end
 			end
 			
 			if permissions.teleport then
-				local thisItem = NativeUI.CreateItem("["..GetPlayerServerId(i).."] "..GetPlayerName(i), "")
-				Citizen.Trace("ok")
-				ingamemanagement_teleportplayer:AddItem(thisItem)
-				ingamemanagement_teleportplayer.OnItemSelect = function(sender, item, index)
-					if item == thisItem then
-						local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-						TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(i), px,py,pz)
-					end
+				local thisItem = NativeUI.CreateItem("Teleport Player to Me","")
+				thisPlayer:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+					TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(i), px,py,pz)
 				end
 			end
 		end
 	end
 	
 	if permissions.unban then
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,"Unban Player")
 		for i,theBanned in ipairs(banlist) do
-			Citizen.Trace(i)
 			if showLicenses then 
 				reason = theBanned
 			else
 				reason = banlist.reasons[i]
 			end
 			local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
-			playermanagement_unbanplayers:AddItem(thisItem)
-			playermanagement_unbanplayers.OnItemSelect = function(sender, item, index)
-				if item == thisItem then
-					TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
-					TriggerServerEvent("EasyAdmin:updateBanlist")
-					mainMenu:Visible(false)
-					GenerateMenu()
-				end
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned)
+				TriggerServerEvent("EasyAdmin:updateBanlist")
+				mainMenu:Visible(false)
+				GenerateMenu()
 			end
 		end
 	end
 	
+	thisPlayer = _menuPool:AddSubMenu(playermanagement,"All Players")
 	
 	if permissions.teleport then
 		-- "all players" function
-		local thisItem = NativeUI.CreateItem("All Players", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
-		ingamemanagement_teleportplayer:AddItem(thisItem)
-		ingamemanagement_teleportplayer.OnItemSelect = function(sender, item, index)
-			if item == thisItem then
-				local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
-			end
+		local thisItem = NativeUI.CreateItem("Teleport To Me", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
+		thisPlayer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
 		end
 	end
 
