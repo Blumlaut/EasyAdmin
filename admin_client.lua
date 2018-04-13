@@ -7,6 +7,7 @@ permissions = {
 	spectate = false,
 	unban = false,
 	teleport = false,
+	manageserver = true,
 }
 
 RegisterNetEvent("EasyAdmin:adminresponse")

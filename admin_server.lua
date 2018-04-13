@@ -38,11 +38,13 @@ Citizen.CreateThread(function()
 		local spectateperm = DoesPlayerHavePermission(source,"easyadmin.spectate")
 		local unbanperm = DoesPlayerHavePermission(source,"easyadmin.unban")
 		local teleportperm = DoesPlayerHavePermission(source,"easyadmin.teleport")
+		local manageserverperm = DoesPlayerHavePermission(source,"easyadmin.manageserver")
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "ban",banperm)
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "kick",kickperm)
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "spectate",spectateperm)
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "unban",unbanperm)
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "teleport",teleportperm)
+		TriggerClientEvent("EasyAdmin:adminresponse", source, "manageserver",manageserverperm)
 
 		if banperm then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', 'ban a player', { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
@@ -58,6 +60,10 @@ Citizen.CreateThread(function()
 		end
 		if teleportperm then
 			TriggerClientEvent('chat:addSuggestion', source, '/teleport', 'teleport to a player', { {name='player id', help="the player's server id"} })
+		end
+		if manageserverperm then
+			TriggerClientEvent('chat:addSuggestion', source, '/setgametype', 'set server game type', { {name='game type', help="the game type"} })
+			TriggerClientEvent('chat:addSuggestion', source, '/setmapname', 'set server map name', { {name='map name', help="the map name"} })
 		end
 
 		-- give player the right settings to work with
@@ -82,6 +88,34 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
+		end
+	end)
+	
+	RegisterServerEvent("EasyAdmin:SetGameType")
+	AddEventHandler('EasyAdmin:SetGameType', function(text)
+		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+				SetGameType(text)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:SetMapName")
+	AddEventHandler('EasyAdmin:SetMapName', function(text)
+		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+				SetMapName(text)
+		end
+	end)
+	
+	RegisterServerEvent("EasyAdmin:StartResource")
+	AddEventHandler('EasyAdmin:StartResource', function(text)
+		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+				StartResource(text)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:StopResource")
+	AddEventHandler('EasyAdmin:StopResource', function(text)
+		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+				StopResource(text)
 		end
 	end)
 
@@ -216,6 +250,18 @@ Citizen.CreateThread(function()
 	RegisterCommand("teleport", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			-- not yet
+		end
+	end, false)
+	
+	RegisterCommand("setgametype", function(source, args, rawCommand)
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+			SetGameType(args[1])
+		end
+	end, false)
+	
+	RegisterCommand("setmapname", function(source, args, rawCommand)
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+			SetMapName(args[1])
 		end
 	end, false)
 

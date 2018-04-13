@@ -122,6 +122,89 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
+	thisPlayer = _menuPool:AddSubMenu(playermanagement,"All Players")
+	
+	if permissions.teleport then
+		-- "all players" function
+		local thisItem = NativeUI.CreateItem("Teleport To Me", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
+		thisPlayer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
+			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
+		end
+	end
+
+	if permissions.manageserver then
+		local thisItem = NativeUI.CreateItem("Set Game Type", "~r~~h~NOTE:~h~~w~ This will set the Game Type as listed on the Serverlist.")
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
+			
+			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+				Citizen.Wait( 0 )
+			end
+			
+			local result = GetOnscreenKeyboardResult()
+			
+			if result then
+				TriggerServerEvent("EasyAdmin:SetGameType", result)
+			end
+		end
+		
+		local thisItem = NativeUI.CreateItem("Set Map Name", "~r~~h~NOTE:~h~~w~ This will set the Map Name as listed on the Serverlist.")
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
+			
+			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+				Citizen.Wait( 0 )
+			end
+			
+			local result = GetOnscreenKeyboardResult()
+			
+			if result then
+				TriggerServerEvent("EasyAdmin:SetMapName", result)
+			end
+		end
+		
+		local thisItem = NativeUI.CreateItem("Start Resource by Name", "~r~~h~NOTE:~h~~w~ This will start a resource installed on the server.")
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
+			
+			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+				Citizen.Wait( 0 )
+			end
+			
+			local result = GetOnscreenKeyboardResult()
+			
+			if result then
+				TriggerServerEvent("EasyAdmin:StartResource", result)
+			end
+		end
+		
+		local thisItem = NativeUI.CreateItem("Stop Resource by Name", "~r~~h~NOTE:~h~~w~ This will stop a resource installed on the server.")
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
+			
+			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+				Citizen.Wait( 0 )
+			end
+			
+			local result = GetOnscreenKeyboardResult()
+			
+			if result then
+				if result ~= GetCurrentResourceName() and result ~= "NativeUI" then
+					TriggerServerEvent("EasyAdmin:StopResource", result)
+				else
+					TriggerEvent("chat:addMessage", { args = { "EasyAdmin", "Don't do that, please." } })
+				end
+			end
+		end
+		
+	end
+	
 	if permissions.unban then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,"Unban Player")
 		for i,theBanned in ipairs(banlist) do
@@ -141,17 +224,6 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-	thisPlayer = _menuPool:AddSubMenu(playermanagement,"All Players")
-	
-	if permissions.teleport then
-		-- "all players" function
-		local thisItem = NativeUI.CreateItem("Teleport To Me", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
-		thisPlayer:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
-		end
-	end
 
 
 	if permissions.unban then
