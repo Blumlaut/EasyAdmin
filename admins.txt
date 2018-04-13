@@ -1,3 +1,0 @@
-steam:aabbccceeeddd
-license:examplelicence
-ip:127.0.0.1

@@ -264,6 +264,10 @@ Citizen.CreateThread(function()
 	function updateAdmins(addItem)
 		admins = {}
 		local content = LoadResourceFile(GetCurrentResourceName(), "admins.txt")
+		if not content then
+			content = ""
+			SaveResourceFile(GetCurrentResourceName(), "admins.txt", content, -1)
+		end
 		if not addItem then
 			for index,value in ipairs(mysplit(content, "\n")) do
 				admins[index] = value -- update admin list
@@ -297,6 +301,11 @@ Citizen.CreateThread(function()
 		blacklist = {}
 		blacklist.reasons = {}
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
+		if not content then
+			content = ""
+			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
+		end
+		
 		if string.find(content, "|") ~= nil then
 			content = string.gsub(content,"|","\n")
 			Citizen.Trace("Found old banlist file, converting to new format..\n")
@@ -340,7 +349,11 @@ Citizen.CreateThread(function()
 	function updateBlacklistRemove(removeItem)
 		blacklist = {}
 		blacklist.reasons = {}
-		content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
+		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
+		if not content then
+			content = ""
+			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
+		end
 		oldcontent = content
 		for index,value in ipairs(mysplit(content, "\n")) do
 			curstring = "" -- make a new string
