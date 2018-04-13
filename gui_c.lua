@@ -7,7 +7,7 @@ settings = {
 }
 
 _menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("Admin Menu", "~b~Admin Menu")
+mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu")
 _menuPool:Add(mainMenu)
 
 
