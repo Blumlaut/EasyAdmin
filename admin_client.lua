@@ -33,9 +33,8 @@ AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
 end)
 
 
-AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist,thebanlistreasons)
+AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
-	banlist.reasons = thebanlistreasons
 end)
 
 Citizen.CreateThread( function()
