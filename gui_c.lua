@@ -42,9 +42,9 @@ end
 
 function GenerateMenu() -- this is a big ass function
 	mainMenu:Clear()
-	playermanagement = _menuPool:AddSubMenu(mainMenu, "Player Management")
-	servermanagement = _menuPool:AddSubMenu(mainMenu, "Server Management")
-	settingsMenu = _menuPool:AddSubMenu(mainMenu, "Settings")
+	playermanagement = _menuPool:AddSubMenu(mainMenu, "Player Management","",true)
+	servermanagement = _menuPool:AddSubMenu(mainMenu, "Server Management","",true)
+	settingsMenu = _menuPool:AddSubMenu(mainMenu, "Settings","",true)
 	
 	-- show menu
 	
@@ -52,7 +52,7 @@ function GenerateMenu() -- this is a big ass function
 	
 	for i = 0, 256, 1 do
 		if NetworkIsPlayerActive(i) then
-			thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(i).."] "..GetPlayerName(i))
+			thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(i).."] "..GetPlayerName(i),"",true)
 			-- generate specific menu stuff, dirty but it works for now
 			if permissions.kick then
 				local thisItem = NativeUI.CreateItem("Kick Player","")
@@ -119,7 +119,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-	thisPlayer = _menuPool:AddSubMenu(playermanagement,"All Players")
+	thisPlayer = _menuPool:AddSubMenu(playermanagement,"All Players","",true)
 	
 	if permissions.teleport then
 		-- "all players" function
@@ -203,7 +203,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	if permissions.unban then
-		unbanPlayer = _menuPool:AddSubMenu(servermanagement,"Unban Player")
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,"Unban Player","",true)
 		for i,theBanned in ipairs(banlist) do
 			if showLicenses then 
 				reason = theBanned
