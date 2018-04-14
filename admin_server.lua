@@ -5,7 +5,7 @@ admins = {}
 
 strings = { -- these are the strings we use to show our players, feel free to edit to your liking
 	-- EasyAdmin Base strings
-	bannedjoin = "You are Blacklisted from joining this Server \nReason: %s, Ban Expires: %s",
+	bannedjoin = "You have been banned from this Server, \nReason: %s, Ban Expires: %s",
 	kicked = "Kicked by %s, Reason: %s",
 	banned = "You have been banned from this Server, Reason: %s, Ban Expires: %s",
 	reasonadd = " ( Nickname: %s ), Banned by: %s",
