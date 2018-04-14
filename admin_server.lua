@@ -5,9 +5,9 @@ admins = {}
 
 strings = { -- these are the strings we use to show our players, feel free to edit to your liking
 	-- EasyAdmin Base strings
-	bannedjoin = "You are Blacklisted from joining this Server \nReason: %s",
+	bannedjoin = "You are Blacklisted from joining this Server \nReason: %s, Ban Expires: %s",
 	kicked = "Kicked by %s, Reason: %s",
-	banned = "You have been banned from this Server, Reason: %s",
+	banned = "You have been banned from this Server, Reason: %s, Ban Expires: %s",
 	reasonadd = " ( Nickname: %s ), Banned by: %s",
 	bancheating = "Banned for Cheating",
 	bancheatingadd = " ( Nickname: %s )",
@@ -121,19 +121,22 @@ Citizen.CreateThread(function()
 	
 	
 	RegisterServerEvent("EasyAdmin:banPlayer")
-	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason)
+	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
 			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+			if expires < os.time() then
+				expires = os.time()+expires 
+			end
 			for i,identifier in ipairs(bannedIdentifiers) do
 				if string.find(identifier, "license:") then
 					reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
 					reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
 					reason = string.gsub(reason, ";", "")
-					updateBlacklist( {identifier = identifier, reason = reason} )
+					updateBlacklist( {identifier = identifier, reason = reason, expire = expires or 10444633200 } )
 				end
 			end
 			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason))
-			DropPlayer(playerId, string.format(strings.banned, reason ) )
+			DropPlayer(playerId, string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 		end
 	end)
 	
@@ -147,7 +150,7 @@ Citizen.CreateThread(function()
 				reason = reason..string.format(strings.bancheatingadd, GetPlayerName(playerId) )
 				reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
 				reason = string.gsub(reason, ";", "")
-				updateBlacklist( {identifier = identifier, reason = reason} )
+				updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
 			end
 		end
 		DropPlayer(playerId, strings.bancheating)
@@ -218,7 +221,7 @@ Citizen.CreateThread(function()
 						reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), GetPlayerName(source) )
 						reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
 						reason = string.gsub(reason, ";", "")
-						updateBlacklist( {identifier = identifier, reason = reason} )
+						updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
 					end
 				end
 				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason))
@@ -341,6 +344,8 @@ Citizen.CreateThread(function()
 		
 		SaveResourceFile(GetCurrentResourceName(), "admins.txt", content, -1)
 	end
+	
+	
 	function updateBlacklist(data,remove)
 		blacklist = {}
 		
@@ -361,7 +366,7 @@ Citizen.CreateThread(function()
 				end
 				local reason = string.match(value, "^.*%;(.*)" ) or strings.nongiven -- get the reason from the string or use "none given" if it's nil
 				local reason = string.gsub(reason,"\r","")
-				table.insert(blacklist, {identifier = curstring, reason = reason, expire = 10444633200 })
+				table.insert(blacklist, {identifier = curstring, reason = reason, expire = 10444633200 }) -- we need an expire time here, anything will do, lets make it christmas!
 			end
 			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", "", 0) -- overwrite banlist with emptyness, we dont even need this file, but sadly we cant delete it :(
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
@@ -372,9 +377,15 @@ Citizen.CreateThread(function()
 			blacklist = json.decode(content)
 			table.insert(blacklist, data)
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			
 		elseif not data then
 			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 			blacklist = json.decode(content)
+			for i,theBan in ipairs(blacklist) do
+				if theBan.expire < os.time() then
+					table.remove(blacklist,i)
+				end
+			end
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 		
@@ -390,76 +401,9 @@ Citizen.CreateThread(function()
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end
-	
-	if GetConvar("ea_banmethod", "json") == "txt" then
-		function updateBlacklist(data,remove)
-			blacklist = {}
-			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.txt")
-			if not content then
-				content = ""
-				SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
-			end
-			
-			if string.find(content, "|") ~= nil then
-				content = string.gsub(content,"|","\n")
-				Citizen.Trace("Found old banlist file, converting to new format..\n")
-				Citizen.Wait(50)
-			end
-			if not data then
-				for index,value in ipairs(mysplit(content, "\n")) do
-					curstring = "" -- make a new string
-					for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
-						if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
-						curstring = curstring..string.sub(value,i,i) -- add our current letter to our string
-					end
-					local reason = string.match(value, "^.*%;(.*)" ) or strings.nongiven -- get the reason from the string or use "none given" if it's nil
-					
-					table.insert(blacklist, {identifier = curstring, reason = reason, expire = 10444633200})
-				end
-			elseif data and not remove then
-				local addItem = data.identifier..";"..data.reason
-				if string.len(content) > 1 then
-					content = content.."\n"..addItem
-				else
-					content = content..""..addItem
-				end
-				for index,value in ipairs(mysplit(content, "\n")) do
-					curstring = "" -- make a new string
-					for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
-						if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
-						curstring = curstring..string.sub(value,i,i) -- add our current letter to our string
-					end
-					local reason = string.match(value, "^.*%;(.*)" ) or strings.nongiven -- get the reason from the string or use "none given" if it's nil
-					
-					table.insert(blacklist, {identifier = curstring, reason = reason, expire = 10444633200})
-				end
-			elseif addItem and remove then
-				oldcontent = content
-				for index,value in ipairs(mysplit(content, "\n")) do
-					curstring = "" -- make a new string
-					for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
-						if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
-						curstring = curstring..string.sub(value,i,i) -- add our current letter to our string
-					end
-					local reason = string.match(value, "^.*%;(.*)" ) or "" -- get the reason from the string or use "none given" if it's nil
-					value = string.gsub(value, "([^%w])", "%%%1") -- escape everything so gsub doesnt get confused
-					if data.identifier == curstring then
-						content = string.gsub(content, value.."\n", "")
-					end
-					if oldcontent == content then
-						if data.identifier == curstring then
-							content = string.gsub(content, value, "")
-						end
-					end
-				end
-			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", content, -1)
-			if remove then
-				updateBlacklist() -- lol recursively recursive
-			end
-		end
-	end
-	
+
+
+
 	
 	function IsIdentifierBanned(identifier)
 		local identifierfound = false
@@ -472,7 +416,7 @@ Citizen.CreateThread(function()
 	end
 	
 	function BanIdentifier(identifier,reason)
-		updateBlacklist( {identifier = identifier, reason = reason} )
+		updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
 	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
@@ -481,7 +425,7 @@ Citizen.CreateThread(function()
 			for i,theId in ipairs(numIds) do
 				if blacklisted.identifier == theId and useQueue == "false" then -- make sure Queue isn't used as otherwise they will conflict
 					Citizen.Trace("user is banned")
-					setKickReason(string.format( strings.bannedjoin, blacklist[bi].reason ))
+					setKickReason(string.format( strings.bannedjoin, blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 					print("Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
 					CancelEvent()
 					return

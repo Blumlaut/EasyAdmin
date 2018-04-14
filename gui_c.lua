@@ -10,14 +10,19 @@ _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", 1320, 0)
 _menuPool:Add(mainMenu)
 
-
+banLength = {
+	{label = "Permanent", time = 1924300800},
+	{label = "1 Day", time = 86400},
+	{label = "3 Days", time = 172800},
+	{label = "1 Week", time = 518400},
+	{label = "2 Weeks", time = 1123200},
+	{label = "1 Month", time = 2678400},
+	{label = "1 Year", time = 31536000},
+}
 
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:updateBanlist")
-	
-	
-	
 	while true do
 		_menuPool:ProcessMenus()
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
@@ -84,8 +89,11 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions.ban then
-			local thisItem = NativeUI.CreateItem("Ban Player","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player.")
-			thisPlayer:AddItem(thisItem)
+			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,"Ban Player","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player.",true)
+			
+			local thisItem = NativeUI.CreateItem("Reason","Add a reason to the ban.")
+			thisBanMenu:AddItem(thisItem)
+			local BanReason = "No Reason Specified"
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
 				
@@ -95,10 +103,31 @@ function GenerateMenu() -- this is a big ass function
 				
 				local result = GetOnscreenKeyboardResult()
 				
-				if result then
-					TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), result)
+				if result and result ~= "" then
+					BanReason = result
+					--thisItem.RightLabel(result) -- this is broken for now
+				else
+					BanReason = "No Reason Specified"
 				end
 			end
+			local bt = {}
+			for i,a in ipairs(banLength) do
+				table.insert(bt, a.label)
+			end
+			
+			local thisItem = NativeUI.CreateListItem("Ban Length",bt, 1,"Until when should the Player be banned?" )
+			thisBanMenu:AddItem(thisItem)
+			local BanTime = 1
+			thisItem.OnListChanged = function(sender,item,index)
+				BanTime = index
+			end
+		
+			local thisItem = NativeUI.CreateItem("Confirm Ban","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player with the specified settings.")
+			thisBanMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time)
+			end	
+			
 		end
 		
 		if permissions.spectate then
