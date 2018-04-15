@@ -267,16 +267,20 @@ function GenerateMenu() -- this is a big ass function
 	
 	if permissions.unban then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,"Unban Player","",true)
+		local reason = ""
+		local identifier = ""
 		for i,theBanned in ipairs(banlist) do
+			identifier = banlist[i].identifier
 			if showLicenses then 
 				reason = banlist[i].identifier
+				
 			else
 				reason = banlist[i].reason
 			end
 			local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:unbanPlayer", reason)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
 				TriggerServerEvent("EasyAdmin:updateBanlist")
 				mainMenu:Visible(false)
 				GenerateMenu()
