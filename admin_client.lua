@@ -7,6 +7,7 @@ permissions = {
 	spectate = false,
 	unban = false,
 	teleport = false,
+	manageserver = true,
 }
 
 RegisterNetEvent("EasyAdmin:adminresponse")
@@ -32,9 +33,8 @@ AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
 end)
 
 
-AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist,thebanlistreasons)
+AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
-	banlist.reasons = thebanlistreasons
 end)
 
 Citizen.CreateThread( function()
