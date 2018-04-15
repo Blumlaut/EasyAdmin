@@ -71,8 +71,12 @@ function GenerateMenu() -- this is a big ass function
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..GetPlayerName(thePlayer),"",true)
 		-- generate specific menu stuff, dirty but it works for now
 		if permissions.kick then
-			local thisItem = NativeUI.CreateItem("Kick Player","")
-			thisPlayer:AddItem(thisItem)
+			local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,"Kick Player","",true)
+			
+			local thisItem = NativeUI.CreateItem("Reason","Add a reason to the kick.")
+			thisKickMenu:AddItem(thisItem)
+			KickReason = "No Reason Specified"
+			thisItem:RightLabel(KickReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
 				
@@ -82,18 +86,33 @@ function GenerateMenu() -- this is a big ass function
 				
 				local result = GetOnscreenKeyboardResult()
 				
-				if result then
-					TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( thePlayer ), result)
+				if result and result ~= "" then
+					KickReason = result
+					thisItem:RightLabel(result) -- this is broken for now
+				else
+					KickReason = "No Reason Specified"
 				end
 			end
+			
+			local thisItem = NativeUI.CreateItem("Confirm Kick","~r~~h~NOTE:~h~~w~ Pressing Confirm will kick this Player with the specified settings.")
+			thisKickMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				if KickReason == "" then
+					KickReason = "No Reason Specified"
+				end
+				TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( thePlayer ), KickReason)
+				BanTime = 1
+				BanReason = ""
+			end	
 		end
 		
 		if permissions.ban then
-			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,"Ban Player","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player.",true)
+			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,"Ban Player","",true)
 			
 			local thisItem = NativeUI.CreateItem("Reason","Add a reason to the ban.")
 			thisBanMenu:AddItem(thisItem)
-			local BanReason = "No Reason Specified"
+			BanReason = "No Reason Specified"
+			thisItem:RightLabel(BanReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
 				
@@ -105,7 +124,7 @@ function GenerateMenu() -- this is a big ass function
 				
 				if result and result ~= "" then
 					BanReason = result
-					--thisItem.RightLabel(result) -- this is broken for now
+					thisItem:RightLabel(result) -- this is broken for now
 				else
 					BanReason = "No Reason Specified"
 				end
@@ -125,7 +144,12 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem("Confirm Ban","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player with the specified settings.")
 			thisBanMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
+				if BanReason == "" then
+					BanReason = "No Reason Specified"
+				end
 				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time)
+				BanTime = 1
+				BanReason = ""
 			end	
 			
 		end
