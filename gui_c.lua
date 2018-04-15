@@ -276,7 +276,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[i].identifier)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", reason)
 				TriggerServerEvent("EasyAdmin:updateBanlist")
 				mainMenu:Visible(false)
 				GenerateMenu()
