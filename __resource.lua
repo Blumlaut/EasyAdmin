@@ -4,7 +4,6 @@ dependency 'NativeUI'
 
 server_scripts {
 	"admin_server.lua",
-	"queue_server.lua",
 	"version",
 }
 
