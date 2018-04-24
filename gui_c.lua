@@ -353,6 +353,7 @@ Citizen.CreateThread( function()
 			table.insert(text,"Armor: "..GetPedArmour(targetPed))
 			-- misc info
 			table.insert(text,"Wanted level: "..GetPlayerWantedLevel(drawTarget))
+			table.insert(text,"Press E to exit spectator mode.")
 			
 			for i,theText in pairs(text) do
 				SetTextFont(0)
@@ -366,6 +367,17 @@ Citizen.CreateThread( function()
 				AddTextComponentString(theText)
 				EndTextCommandDisplayText(0.3, 0.7+(i/30))
 			end
+			
+			if IsControlJustPressed(0,103) then
+				local targetPed = PlayerPedId()
+				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
+	
+				RequestCollisionAtCoord(targetx,targety,targetz)
+				NetworkSetInSpectatorMode(false, targetPed)
+	
+				StopDrawPlayerInfo()
+				ShowNotification("Stopped Spectating.")
+			end 
 			
 		end
 	end
