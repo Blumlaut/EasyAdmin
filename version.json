@@ -1,4 +1,4 @@
 {
-    "version":"4.201",
-    "changelog":"PLEASE READ https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245/728?u=blumlaut BEFORE UPDATING TO 4.20, THIS UPDATE CHANGES HOW EASYADMIN FUNCTIONS **MAJORLY**."
+    "version":"4.202",
+    "changelog":"This Update removes the Queue system permanently and adds a button to instantly exit spectating when outside of the EasyAdmin Menu.\nIt also updates the packed version with NativeUILua to the latest version."
 }
