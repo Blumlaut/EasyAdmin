@@ -1,4 +1,4 @@
 {
-    "version":"4.202",
-    "changelog":"This Update removes the Queue system permanently and adds a button to instantly exit spectating when outside of the EasyAdmin Menu.\nIt also updates the packed version with NativeUILua to the latest version."
+    "version":"4.203",
+    "changelog":"##### THIS UPDATE IS CRITICAL, PLEASE UPDATE EASYADMIN AS SOON AS YOU SEE THIS MESSAGE #####\nThis Update fixes created bans not actually enforcing on players and as such, is a critical fix."
 }
