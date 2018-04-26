@@ -423,7 +423,7 @@ Citizen.CreateThread(function()
 		local numIds = GetPlayerIdentifiers(source)
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
-				if blacklisted.identifier == theId and useQueue == "false" then -- make sure Queue isn't used as otherwise they will conflict
+				if blacklisted.identifier == theId then
 					Citizen.Trace("user is banned")
 					setKickReason(string.format( strings.bannedjoin, blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 					print("Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
