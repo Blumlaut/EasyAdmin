@@ -5,7 +5,7 @@
 	
 	
 	"spectatingUser":"Schaue ~b~<C>%s</C> zu.",
-	"stoppedSpectating":"Spectating Aufgehört.",
+	"stoppedSpectating":"Zuschauen beendet.",
 	"oneday":"1 Tag",
 	"threedays":"3 Tage",
 	"oneweek":"1 Woche",
@@ -19,7 +19,7 @@
 	"kickplayer":"Spieler Kicken",
 	"banplayer":"Spieler Bannen",
 	"reason":"Grund",
-	"kickreasonguide":"Grund zum kick Angeben.",
+	"kickreasonguide":"Grund zum Kick Angeben.",
 	"noreason":"Keinen Grund Angegeben.",
 	"confirmkick":"Kick bestätigen",
 	"confirmkickguide":"~r~~h~ACHTUNG:~h~~w~ Bestätigen drücken wird den Spieler mit den angegebenen Daten Kicken.",
