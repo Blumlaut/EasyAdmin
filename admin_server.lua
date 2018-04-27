@@ -313,8 +313,7 @@ Citizen.CreateThread(function()
 		admins = {}
 		local content = LoadResourceFile(GetCurrentResourceName(), "admins.txt")
 		if not content then
-			content = ""
-			SaveResourceFile(GetCurrentResourceName(), "admins.txt", content, -1)
+			return -- instead of re-creating the file, just quit, we dont need to continue anyway.
 		end
 		if not addItem then
 			for index,value in ipairs(mysplit(content, "\n")) do

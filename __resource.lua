@@ -11,5 +11,4 @@ client_scripts {
 	"@NativeUI/NativeUI.lua",
 	"admin_client.lua",
 	"gui_c.lua",
-	"queue_client.lua",
 }
