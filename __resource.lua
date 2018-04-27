@@ -8,6 +8,7 @@ server_scripts {
 	"language/en.json",
 	"language/de.json",
 	"language/fr.json",
+	"language/sv.json",
 	"language/it.json",
 }
 
