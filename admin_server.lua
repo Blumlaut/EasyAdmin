@@ -3,32 +3,9 @@
 admins = {}
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 
-strings = { -- these are the strings we use to show our players, feel free to edit to your liking
-	-- EasyAdmin Base strings
-	bannedjoin = "You have been banned from this Server, \nReason: %s, Ban Expires: %s",
-	kicked = "Kicked by %s, Reason: %s",
-	banned = "You have been banned from this Server, Reason: %s, Ban Expires: %s",
-	reasonadd = " ( Nickname: %s ), Banned by: %s",
-	bancheating = "Banned for Cheating",
-	bancheatingadd = " ( Nickname: %s )",
-	nongiven = "None Provided",
-	newadmin = "You are now an Admin",
-	playernotfound = "Player could not be found.",
-	done = "Done!",
-	-- Queue Strings
-	checkforslot = "Checking for a Free Slot...",
-	serverfulldenied = "This Server is Full, please try again later!",
-	serverfulltrying = "Server Full, Your Position in Queue: %s, Disconnecting in %s tries.",
-	posinqueue = "Your Position in Queue: %s",
-	lostqueuepos = "You lost your position in the Queue, please try reconnecting",
-	adminkickedplayer = "**%s** kicked **%s**, Reason: %s",
-	adminbannedplayer = "**%s** banned **%s**, Reason: %s",
-	adminunbannedplayer = "**%s** unbanned **%s**",
-}
-
-
 
 Citizen.CreateThread(function()
+	strings = json.decode(LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json"))[1]
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	RegisterServerEvent('EasyAdmin:amiadmin')
@@ -47,23 +24,23 @@ Citizen.CreateThread(function()
 		TriggerClientEvent("EasyAdmin:adminresponse", source, "manageserver",manageserverperm)
 		
 		if banperm then
-			TriggerClientEvent('chat:addSuggestion', source, '/ban', 'ban a player', { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
+			TriggerClientEvent('chat:addSuggestion', source, '/ban', strings.chatsuggestionban, { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
 		end
 		if kickperm then
-			TriggerClientEvent('chat:addSuggestion', source, '/kick', 'kick a player', { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
+			TriggerClientEvent('chat:addSuggestion', source, '/kick', strings.chatsuggestionkick, { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
 		end
 		if spectateperm then
-			TriggerClientEvent('chat:addSuggestion', source, '/spectate', 'spectate a player', { {name='player id', help="the player's server id"} })
+			TriggerClientEvent('chat:addSuggestion', source, '/spectate', strings.chatsuggestionspectate, { {name='player id', help="the player's server id"} })
 		end
 		if unbanperm then
-			TriggerClientEvent('chat:addSuggestion', source, '/unban', 'unban an identifier', { {name='identifier', help="the identifier ( such as steamid, ip or license )"} })
+			TriggerClientEvent('chat:addSuggestion', source, '/unban', strings.chatsuggestionunban, { {name='identifier', help="the identifier ( such as steamid, ip or license )"} })
 		end
 		if teleportperm then
-			TriggerClientEvent('chat:addSuggestion', source, '/teleport', 'teleport to a player', { {name='player id', help="the player's server id"} })
+			TriggerClientEvent('chat:addSuggestion', source, '/teleport', strings.chatsuggestionteleport, { {name='player id', help="the player's server id"} })
 		end
 		if manageserverperm then
-			TriggerClientEvent('chat:addSuggestion', source, '/setgametype', 'set server game type', { {name='game type', help="the game type"} })
-			TriggerClientEvent('chat:addSuggestion', source, '/setmapname', 'set server map name', { {name='map name', help="the map name"} })
+			TriggerClientEvent('chat:addSuggestion', source, '/setgametype', strings.chatsuggestiongametype, { {name='game type', help="the game type"} })
+			TriggerClientEvent('chat:addSuggestion', source, '/setmapname', strings.chatsuggestionmapname, { {name='map name', help="the map name"} })
 		end
 		
 		-- give player the right settings to work with
@@ -73,6 +50,8 @@ Citizen.CreateThread(function()
 		else
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", false)
 		end
+		
+		TriggerClientEvent("EasyAdmin:SetLanguage", source, strings)
 		
 	end)
 	

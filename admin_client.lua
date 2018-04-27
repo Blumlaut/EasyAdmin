@@ -16,6 +16,7 @@ RegisterNetEvent("EasyAdmin:fillBanlist")
 RegisterNetEvent("EasyAdmin:requestSpectate")
 
 RegisterNetEvent("EasyAdmin:SetSetting")
+RegisterNetEvent("EasyAdmin:SetLanguage")
 
 RegisterNetEvent("EasyAdmin:TeleportRequest")
 
@@ -30,6 +31,10 @@ end)
 
 AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
 	settings[setting] = state
+end)
+
+AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
+	strings = newstrings
 end)
 
 
@@ -75,7 +80,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			ShowNotification("Spectating ~b~<C>"..name.."</C>.")
+			ShowNotification(string.format(strings.spectatingUser, name))
 	else
 
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
@@ -84,7 +89,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(false, targetPed)
 
 			StopDrawPlayerInfo()
-			ShowNotification("Stopped Spectating.")
+			ShowNotification(strings.stoppedSpectating)
 	end
 end
 

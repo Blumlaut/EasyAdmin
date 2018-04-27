@@ -5,6 +5,8 @@ dependency 'NativeUI'
 server_scripts {
 	"admin_server.lua",
 	"version",
+	"language/en.json",
+	"language/de.json",
 }
 
 client_scripts {

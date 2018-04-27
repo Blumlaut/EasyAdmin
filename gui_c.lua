@@ -10,15 +10,6 @@ _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", 1320, 0)
 _menuPool:Add(mainMenu)
 
-banLength = {
-	{label = "Permanent", time = 1924300800},
-	{label = "1 Day", time = 86400},
-	{label = "3 Days", time = 172800},
-	{label = "1 Week", time = 518400},
-	{label = "2 Weeks", time = 1123200},
-	{label = "1 Month", time = 2678400},
-	{label = "1 Year", time = 31536000},
-}
 
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
@@ -27,8 +18,23 @@ Citizen.CreateThread(function()
 		_menuPool:ProcessMenus()
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
-			GenerateMenu()
-			mainMenu:Visible(not mainMenu:Visible())
+			if strings then
+				banLength = {
+					{label = strings.permanent, time = 1924300800},
+					{label = strings.oneday, time = 86400},
+					{label = strings.threedays, time = 172800},
+					{label = strings.oneweek, time = 518400},
+					{label = strings.twoweeks, time = 1123200},
+					{label = strings.onemonth, time = 2678400},
+					{label = strings.oneyear, time = 31536000},
+				}
+				
+				
+				GenerateMenu()
+				mainMenu:Visible(not mainMenu:Visible())
+			else
+				TriggerServerEvent("EasyAdmin:amiadmin")
+			end
 		end
 		
 		Citizen.Wait(1)
@@ -47,12 +53,10 @@ end
 
 function GenerateMenu() -- this is a big ass function
 	mainMenu:Clear()
-	playermanagement = _menuPool:AddSubMenu(mainMenu, "Player Management","",true)
-	servermanagement = _menuPool:AddSubMenu(mainMenu, "Server Management","",true)
-	settingsMenu = _menuPool:AddSubMenu(mainMenu, "Settings","",true)
-	
-	-- show menu
-	
+	playermanagement = _menuPool:AddSubMenu(mainMenu, strings.playermanagement,"",true)
+	servermanagement = _menuPool:AddSubMenu(mainMenu, strings.servermanagement,"",true)
+	settingsMenu = _menuPool:AddSubMenu(mainMenu, strings.settings,"",true)
+
 	-- util stuff
 	players = {}
 	local localplayers = {}
@@ -71,11 +75,11 @@ function GenerateMenu() -- this is a big ass function
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..GetPlayerName(thePlayer),"",true)
 		-- generate specific menu stuff, dirty but it works for now
 		if permissions.kick then
-			local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,"Kick Player","",true)
+			local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,strings.kickplayer,"",true)
 			
-			local thisItem = NativeUI.CreateItem("Reason","Add a reason to the kick.")
+			local thisItem = NativeUI.CreateItem(strings.reason,strings.kickreasonguide)
 			thisKickMenu:AddItem(thisItem)
-			KickReason = "No Reason Specified"
+			KickReason = strings.noreason
 			thisItem:RightLabel(KickReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
@@ -90,15 +94,15 @@ function GenerateMenu() -- this is a big ass function
 					KickReason = result
 					thisItem:RightLabel(result) -- this is broken for now
 				else
-					KickReason = "No Reason Specified"
+					KickReason = strings.noreason
 				end
 			end
 			
-			local thisItem = NativeUI.CreateItem("Confirm Kick","~r~~h~NOTE:~h~~w~ Pressing Confirm will kick this Player with the specified settings.")
+			local thisItem = NativeUI.CreateItem(strings.confirmkick,strings.confirmkickguide)
 			thisKickMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				if KickReason == "" then
-					KickReason = "No Reason Specified"
+					KickReason = strings.noreason
 				end
 				TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( thePlayer ), KickReason)
 				BanTime = 1
@@ -107,11 +111,11 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions.ban then
-			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,"Ban Player","",true)
+			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,strings.banplayer,"",true)
 			
-			local thisItem = NativeUI.CreateItem("Reason","Add a reason to the ban.")
+			local thisItem = NativeUI.CreateItem(strings.reason,strings.banreasonguide)
 			thisBanMenu:AddItem(thisItem)
-			BanReason = "No Reason Specified"
+			BanReason = strings.noreason
 			thisItem:RightLabel(BanReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
@@ -126,7 +130,7 @@ function GenerateMenu() -- this is a big ass function
 					BanReason = result
 					thisItem:RightLabel(result) -- this is broken for now
 				else
-					BanReason = "No Reason Specified"
+					BanReason = strings.noreason
 				end
 			end
 			local bt = {}
@@ -134,18 +138,18 @@ function GenerateMenu() -- this is a big ass function
 				table.insert(bt, a.label)
 			end
 			
-			local thisItem = NativeUI.CreateListItem("Ban Length",bt, 1,"Until when should the Player be banned?" )
+			local thisItem = NativeUI.CreateListItem(strings.banlength,bt, 1,strings.banlengthguide )
 			thisBanMenu:AddItem(thisItem)
 			local BanTime = 1
 			thisItem.OnListChanged = function(sender,item,index)
 				BanTime = index
 			end
 		
-			local thisItem = NativeUI.CreateItem("Confirm Ban","~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player with the specified settings.")
+			local thisItem = NativeUI.CreateItem(strings.confirmban,strings.confirmbanguide)
 			thisBanMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				if BanReason == "" then
-					BanReason = "No Reason Specified"
+					BanReason = strings.noreason
 				end
 				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time)
 				BanTime = 1
@@ -155,7 +159,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions.spectate then
-			local thisItem = NativeUI.CreateItem("Spectate Player", "")
+			local thisItem = NativeUI.CreateItem(strings.spectateplayer, "")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				TriggerServerEvent("EasyAdmin:requestSpectate",thePlayer)
@@ -163,7 +167,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions.teleport then
-			local thisItem = NativeUI.CreateItem("Teleport to Player","")
+			local thisItem = NativeUI.CreateItem(strings.teleporttoplayer,"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer),true))
@@ -173,7 +177,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions.teleport then
-			local thisItem = NativeUI.CreateItem("Teleport Player to Me","")
+			local thisItem = NativeUI.CreateItem(strings.teleportplayertome,"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
@@ -182,11 +186,11 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-	thisPlayer = _menuPool:AddSubMenu(playermanagement,"All Players","",true)
+	thisPlayer = _menuPool:AddSubMenu(playermanagement,strings.allplayers,"",true)
 	
 	if permissions.teleport then
 		-- "all players" function
-		local thisItem = NativeUI.CreateItem("Teleport To Me", "~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.")
+		local thisItem = NativeUI.CreateItem(strings.teleporttome, strings.teleporttomeguide)
 		thisPlayer:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
@@ -195,7 +199,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	if permissions.manageserver then
-		local thisItem = NativeUI.CreateItem("Set Game Type", "~r~~h~NOTE:~h~~w~ This will set the Game Type as listed on the Serverlist.")
+		local thisItem = NativeUI.CreateItem(strings.setgametype, strings.setgametypeguide)
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
@@ -211,7 +215,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		local thisItem = NativeUI.CreateItem("Set Map Name", "~r~~h~NOTE:~h~~w~ This will set the Map Name as listed on the Serverlist.")
+		local thisItem = NativeUI.CreateItem(strings.setmapname, strings.setmapnameguide)
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
@@ -227,7 +231,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		local thisItem = NativeUI.CreateItem("Start Resource by Name", "~r~~h~NOTE:~h~~w~ This will start a resource installed on the server.")
+		local thisItem = NativeUI.CreateItem(strings.startresourcebyname, strings.startresourcebynameguide)
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
@@ -243,7 +247,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		local thisItem = NativeUI.CreateItem("Stop Resource by Name", "~r~~h~NOTE:~h~~w~ This will stop a resource installed on the server.")
+		local thisItem = NativeUI.CreateItem(strings.stopresourcebyname, strings.stopresourcebynameguide)
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
@@ -258,7 +262,7 @@ function GenerateMenu() -- this is a big ass function
 				if result ~= GetCurrentResourceName() and result ~= "NativeUI" then
 					TriggerServerEvent("EasyAdmin:StopResource", result)
 				else
-					TriggerEvent("chat:addMessage", { args = { "EasyAdmin", "Don't do that, please." } })
+					TriggerEvent("chat:addMessage", { args = { "EasyAdmin", strings.badidea } })
 				end
 			end
 		end
@@ -266,7 +270,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	if permissions.unban then
-		unbanPlayer = _menuPool:AddSubMenu(servermanagement,"Unban Player","",true)
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,strings.unbanplayer,"",true)
 		local reason = ""
 		local identifier = ""
 		for i,theBanned in ipairs(banlist) do
@@ -277,7 +281,7 @@ function GenerateMenu() -- this is a big ass function
 			else
 				reason = banlist[i].reason
 			end
-			local thisItem = NativeUI.CreateItem(reason, "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.")
+			local thisItem = NativeUI.CreateItem(reason, strings.unbanplayerguide)
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
@@ -291,8 +295,8 @@ function GenerateMenu() -- this is a big ass function
 
 
 	if permissions.unban then
-		local sl = {"Reasons", "Licenses"}
-		local thisItem = NativeUI.CreateListItem("~h~Banlist:~h~ Show Type", sl, 1,"Toggle Between Ban Reasons or Identifiers in the 'Unban Player' Menu.\nRequires Reopening.")
+		local sl = {strings.unbanreasons, strings.unbanlicenses}
+		local thisItem = NativeUI.CreateListItem(strings.banlistshowtype, sl, 1,strings.banlistshowtypeguide)
 		settingsMenu:AddItem(thisItem)
 		settingsMenu.OnListChange = function(sender, item, index)
 				if item == thisItem then
@@ -308,7 +312,7 @@ function GenerateMenu() -- this is a big ass function
 	
 	
 	if permissions.unban then
-		local thisItem = NativeUI.CreateItem("Refresh Banlist", "This Refreshes the Banlist in the 'Unban Player' Menu.\nRequires Reopening.")
+		local thisItem = NativeUI.CreateItem(strings.refreshbanlist, strings.refreshbanlistguide)
 		settingsMenu:AddItem(thisItem)
 		settingsMenu.OnItemSelect = function(sender, item, index)
 			if item == thisItem then
@@ -317,7 +321,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-	local thisItem = NativeUI.CreateItem("Refresh Permissions", "This Refreshes your current Permissions.\nRequires Reopening.")
+	local thisItem = NativeUI.CreateItem(strings.refreshpermissions, strings.refreshpermissionsguide)
 	settingsMenu:AddItem(thisItem)
 	settingsMenu.OnItemSelect = function(sender, item, index)
 		if item == thisItem then
@@ -341,19 +345,19 @@ Citizen.CreateThread( function()
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
 			if targetGod then
-				table.insert(text,"Godmode: ~r~Detected~w~")
+				table.insert(text,strings.godmodedetected)
 			else
-				table.insert(text,"Godmode: ~g~None Detected~w~")
+				table.insert(text,strings.godmodenotdetected)
 			end
 			if not CanPedRagdoll(targetPed) and not IsPedInAnyVehicle(targetPed, false) and (GetPedParachuteState(targetPed) == -1 or GetPedParachuteState(targetPed) == 0) and not IsPedInParachuteFreeFall(targetPed) then
-				table.insert(text,"~r~Anti-Ragdoll~w~")
+				table.insert(text,strings.antiragdoll)
 			end
 			-- health info
-			table.insert(text,"Health: "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed))
-			table.insert(text,"Armor: "..GetPedArmour(targetPed))
+			table.insert(text,strings.health..": "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed))
+			table.insert(text,strings.armor..": "..GetPedArmour(targetPed))
 			-- misc info
-			table.insert(text,"Wanted level: "..GetPlayerWantedLevel(drawTarget))
-			table.insert(text,"Press E to exit spectator mode.")
+			table.insert(text,strings.wantedlevel..": "..GetPlayerWantedLevel(drawTarget))
+			table.insert(text,strings.exitspectator)
 			
 			for i,theText in pairs(text) do
 				SetTextFont(0)
@@ -376,7 +380,7 @@ Citizen.CreateThread( function()
 				NetworkSetInSpectatorMode(false, targetPed)
 	
 				StopDrawPlayerInfo()
-				ShowNotification("Stopped Spectating.")
+				ShowNotification(strings.stoppedSpectating)
 			end 
 			
 		end
