@@ -119,7 +119,6 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
-	RegisterServerEvent("banCheater")
 	AddEventHandler('banCheater', function(playerId,reason)
 		if not reason then reason = "Cheating" end
 		if GetPlayerName(source) then return end
