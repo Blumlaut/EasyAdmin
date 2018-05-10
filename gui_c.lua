@@ -284,10 +284,12 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(reason, strings.unbanplayerguide)
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[i].identifier)
 				TriggerServerEvent("EasyAdmin:updateBanlist")
-				mainMenu:Visible(false)
+				unbanPlayer:Visible(false)
+				Citizen.Wait(1000)
 				GenerateMenu()
+				unbanPlayer:Visible(true)
 			end
 		end
 	end
@@ -314,10 +316,12 @@ function GenerateMenu() -- this is a big ass function
 	if permissions.unban then
 		local thisItem = NativeUI.CreateItem(strings.refreshbanlist, strings.refreshbanlistguide)
 		settingsMenu:AddItem(thisItem)
-		settingsMenu.OnItemSelect = function(sender, item, index)
-			if item == thisItem then
-				TriggerServerEvent("EasyAdmin:updateBanlist")
-			end
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:updateBanlist")
+			settingsMenu:Visible(false)
+			Wait(2000)
+			GenerateMenu()
+			settingsMenu:Visible(true)
 		end
 	end
 	
