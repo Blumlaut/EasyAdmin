@@ -78,7 +78,7 @@
 	"playernotfound":"Spelaren kunde inte hittas.",
 	"done":"Klart!",
 	"adminkickedplayer":"**%s** kickad **%s**, Anledning: %s",
-	"adminbannedplayer":"**%s** bannlyste **%s**, Anledning: %s",
+	"adminbannedplayer":"**%s** bannlyste **%s**, Anledning: %s, löper ut: %s",
 	"adminunbannedplayer":"**%s** hävde bannlysning **%s**",
 	
 	

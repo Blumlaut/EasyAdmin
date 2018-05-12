@@ -114,7 +114,7 @@ Citizen.CreateThread(function()
 					updateBlacklist( {identifier = identifier, reason = reason, expire = expires or 10444633200 } )
 				end
 			end
-			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason))
+			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 			DropPlayer(playerId, string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 		end
 	end)
@@ -202,7 +202,7 @@ Citizen.CreateThread(function()
 						updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
 					end
 				end
-				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason))
+				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 				DropPlayer(args[1], string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', 10444633200 ) ) )
 			else
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })

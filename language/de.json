@@ -79,7 +79,7 @@
 	"playernotfound":"Spieler wurde nicht gefunden.",
 	"done":"Fertig!",
 	"adminkickedplayer":"**%s** hat **%s** gekickt, Grund: %s",
-	"adminbannedplayer":"**%s** hat **%s** gebannt, Grund: %s",
+	"adminbannedplayer":"**%s** hat **%s** gebannt, Grund: %s, Ban Entfällt: %s",
 	"adminunbannedplayer":"**%s** hat **%s** entbannt.",
 	
 	
