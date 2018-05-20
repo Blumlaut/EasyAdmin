@@ -10,6 +10,12 @@ _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", 1320, 0)
 _menuPool:Add(mainMenu)
 
+-- generate "slap" table once
+local SlapAmount = {}
+for i=1,40 do
+	table.insert(SlapAmount,i)
+end
+
 
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
@@ -184,10 +190,18 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(thePlayer), px,py,pz)
 			end
 		end
+		
+		if permissions.slap then
+			local thisItem = NativeUI.CreateSliderItem("Slap Player", SlapAmount, 20, false, false)
+			thisPlayer:AddItem(thisItem)
+			thisItem.OnSliderSelected = function(index)
+				TriggerServerEvent("EasyAdmin:SlapPlayer", GetPlayerServerId(thePlayer), index*10)
+			end
+		end
 	end
 	
-	thisPlayer = _menuPool:AddSubMenu(playermanagement,strings.allplayers,"",true)
 	
+	thisPlayer = _menuPool:AddSubMenu(playermanagement,strings.allplayers,"",true)
 	if permissions.teleport then
 		-- "all players" function
 		local thisItem = NativeUI.CreateItem(strings.teleporttome, strings.teleporttomeguide)

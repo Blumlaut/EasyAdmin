@@ -10,35 +10,28 @@ Citizen.CreateThread(function()
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
-		local banperm = DoesPlayerHavePermission(source,"easyadmin.ban")
-		local kickperm = DoesPlayerHavePermission(source,"easyadmin.kick")
-		local spectateperm = DoesPlayerHavePermission(source,"easyadmin.spectate")
-		local unbanperm = DoesPlayerHavePermission(source,"easyadmin.unban")
-		local teleportperm = DoesPlayerHavePermission(source,"easyadmin.teleport")
-		local manageserverperm = DoesPlayerHavePermission(source,"easyadmin.manageserver")
-		TriggerClientEvent("EasyAdmin:adminresponse", source, "ban",banperm)
-		TriggerClientEvent("EasyAdmin:adminresponse", source, "kick",kickperm)
-		TriggerClientEvent("EasyAdmin:adminresponse", source, "spectate",spectateperm)
-		TriggerClientEvent("EasyAdmin:adminresponse", source, "unban",unbanperm)
-		TriggerClientEvent("EasyAdmin:adminresponse", source, "teleport",teleportperm)
-		TriggerClientEvent("EasyAdmin:adminresponse", source, "manageserver",manageserverperm)
 		
-		if banperm then
+		for i,perm in ipairs(permissions) do
+			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
+			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
+		end
+		
+		if DoesPlayerHavePermission(source,"easyadmin.ban") then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', strings.chatsuggestionban, { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
 		end
-		if kickperm then
+		if DoesPlayerHavePermission(source,"easyadmin.kick") then
 			TriggerClientEvent('chat:addSuggestion', source, '/kick', strings.chatsuggestionkick, { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
 		end
-		if spectateperm then
+		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			TriggerClientEvent('chat:addSuggestion', source, '/spectate', strings.chatsuggestionspectate, { {name='player id', help="the player's server id"} })
 		end
-		if unbanperm then
+		if DoesPlayerHavePermission(source,"easyadmin.unban") then
 			TriggerClientEvent('chat:addSuggestion', source, '/unban', strings.chatsuggestionunban, { {name='identifier', help="the identifier ( such as steamid, ip or license )"} })
 		end
-		if teleportperm then
+		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			TriggerClientEvent('chat:addSuggestion', source, '/teleport', strings.chatsuggestionteleport, { {name='player id', help="the player's server id"} })
 		end
-		if manageserverperm then
+		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
 			TriggerClientEvent('chat:addSuggestion', source, '/setgametype', strings.chatsuggestiongametype, { {name='game type', help="the game type"} })
 			TriggerClientEvent('chat:addSuggestion', source, '/setmapname', strings.chatsuggestionmapname, { {name='map name', help="the map name"} })
 		end
@@ -251,6 +244,13 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)
 		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
+		end
+	end)
+	
+	RegisterServerEvent("EasyAdmin:SlapPlayer")
+	AddEventHandler('EasyAdmin:SlapPlayer', function(playerId,slapAmount)
+		if DoesPlayerHavePermission(source,"easyadmin.slap") then
+			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
 		end
 	end)
 	

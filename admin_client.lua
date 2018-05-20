@@ -1,14 +1,5 @@
 players = {}
 banlist = {}
-banlist.reasons = {}
-permissions = {
-	ban = false,
-	kick = false,
-	spectate = false,
-	unban = false,
-	teleport = false,
-	manageserver = true,
-}
 
 RegisterNetEvent("EasyAdmin:adminresponse")
 RegisterNetEvent("EasyAdmin:amiadmin")
@@ -65,6 +56,10 @@ end)
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
 	SetEntityCoords(PlayerPedId(), px,py,pz,0,0,0, false)
+end)
+
+AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
+	SetEntityHealth(PlayerPedId(), GetEntityHealth(PlayerPedId())-slapAmount)
 end)
 
 function spectatePlayer(targetPed,target,name)
