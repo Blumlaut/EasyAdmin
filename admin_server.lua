@@ -8,6 +8,7 @@ Citizen.CreateThread(function()
 	strings = json.decode(LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json"))[1]
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
+	allowIpBan = GetConvar("ea_ipBanning", "false")
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
@@ -108,7 +109,8 @@ Citizen.CreateThread(function()
 					reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
 					reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
 					reason = string.gsub(reason, ";", "")
-					updateBlacklist( {identifier = identifier, reason = reason, expire = expires or 10444633200 } )
+					if GetPlayerIdentifiers(playerId)[3] then if allowIpBan then ipAddress = GetPlayerIdentifiers(playerId)[3] else ipAddress = 'IP banning disabled.' end else ipAddress = 'IP not found.' end
+					updateBlacklist( {identifier = identifier, ipAddress = tostring(ipAddress), reason = reason, expire = expires or 10444633200 } )
 				end
 			end
 			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -125,7 +127,8 @@ Citizen.CreateThread(function()
 				reason = reason..string.format(strings.bancheatingadd, GetPlayerName(playerId) )
 				reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
 				reason = string.gsub(reason, ";", "")
-				updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
+				if GetPlayerIdentifiers(playerId)[3] then if allowIpBan then ipAddress = GetPlayerIdentifiers(playerId)[3] else ipAddress = 'IP banning disabled.' end else ipAddress = 'IP not found.' end
+				updateBlacklist( {identifier = identifier, ipAddress = tostring(ipAddress), reason = reason, expire = expires or 10444633200 } )
 			end
 		end
 		DropPlayer(playerId, strings.bancheating)
@@ -196,7 +199,8 @@ Citizen.CreateThread(function()
 						reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), GetPlayerName(source) )
 						reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
 						reason = string.gsub(reason, ";", "")
-						updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
+						if GetPlayerIdentifiers(playerId)[3] then if allowIpBan then ipAddress = GetPlayerIdentifiers(playerId)[3] else ipAddress = 'IP banning disabled.' end else ipAddress = 'IP not found.' end
+						updateBlacklist( {identifier = identifier, ipAddress = tostring(ipAddress), reason = reason, expire = expires or 10444633200 } )
 					end
 				end
 				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -409,7 +413,8 @@ Citizen.CreateThread(function()
 		local numIds = GetPlayerIdentifiers(source)
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
-				if blacklisted.identifier == theId then
+				if blacklisted.ipAddress then ipAddress = blacklisted.ipAddress else ipAddress = 'No IP found.' end
+				if ipAddress == GetPlayerIdentifiers(source)[3] or blacklisted.identifier == theId then
 					Citizen.Trace("user is banned")
 					setKickReason(string.format( strings.bannedjoin, blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 					print("Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
