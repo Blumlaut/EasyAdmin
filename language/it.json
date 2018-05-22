@@ -29,6 +29,7 @@
 	"spectateplayer":"Spetta Giocatore",
 	"teleporttoplayer":"Teletrasportami al giocatore",
 	"teleportplayertome":"Teletrasporta il Giocatore da Me",
+	"slapplayer":"Slap Player",
 	"allplayers":"Tutti i Giocatori",
 	"teleporttome":"Teletrasporta Da Me",
 	"teleporttomeguide":"~r~~h~NOTA:~h~~w~ Questo Teletrasporterà ~h~tutti~h~ i giocatori da te.",
@@ -65,6 +66,7 @@
 	"chatsuggestionteleport":"teletrasportati da un giocatore",
 	"chatsuggestiongametype":"Imposta game type del server",
 	"chatsuggestionmapname":"Imposta Map Name del server",
+	"chatsuggestionmapname":"slap a player",
 	
 	"bannedjoin":"Sei stato bandito da questo server, \nRagione: %s, Il Ban Scade: %s",
 	"kicked":"Espulso da %s, Ragione: %s",

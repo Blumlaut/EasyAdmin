@@ -29,6 +29,7 @@
 	"spectateplayer":"Regarder le joueur",
 	"teleporttoplayer":"Téléportation au joueur",
 	"teleportplayertome":"Téléportation du joueur à Moi",
+	"slapplayer":"Slap Player",
 	"allplayers":"Tout les joueurs",
 	"teleporttome":"Téléporter à Moi",
 	"teleporttomeguide":"~r~~h~NOTE:~h~~w~ Cela va téléporter ~r~~h~Tout~h~~w~ les joueurs à vous.",
@@ -65,6 +66,7 @@
 	"chatsuggestionteleport":"Téléporté a un joueur",
 	"chatsuggestiongametype":"Changer le type de jeu du serveur",
 	"chatsuggestionmapname":"Changer la carte du serveur",
+	"chatsuggestionmapname":"slap a player",
 	
 	"bannedjoin":"Vous avez été banni du serveur, \nRaison: %s, Expiration du Ban: %s",
 	"kicked":"Kick par %s, Raison: %s",

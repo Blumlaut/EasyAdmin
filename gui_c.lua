@@ -192,7 +192,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions.slap then
-			local thisItem = NativeUI.CreateSliderItem("Slap Player", SlapAmount, 20, false, false)
+			local thisItem = NativeUI.CreateSliderItem(strings.slapplayer, SlapAmount, 20, false, false)
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)
 				TriggerServerEvent("EasyAdmin:SlapPlayer", GetPlayerServerId(thePlayer), index*10)

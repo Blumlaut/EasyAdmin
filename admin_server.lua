@@ -36,6 +36,10 @@ Citizen.CreateThread(function()
 			TriggerClientEvent('chat:addSuggestion', source, '/setmapname', strings.chatsuggestionmapname, { {name='map name', help="the map name"} })
 		end
 		
+		if DoesPlayerHavePermission(source,"easyadmin.slap") then
+			TriggerClientEvent('chat:addSuggestion', source, '/slap', strings.chatsuggestionslap, { {name='player id', help="the player's server id"},{name='hp', help="the hp to take"} })
+		end
+		
 		-- give player the right settings to work with
 		TriggerClientEvent("EasyAdmin:SetSetting", source, "button",GetConvarInt("ea_MenuButton", 289) )
 		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
@@ -238,7 +242,12 @@ Citizen.CreateThread(function()
 			SetMapName(args[1])
 		end
 	end, false)
-	
+
+	RegisterCommand("slap", function(source, args, rawCommand)
+		if args[1] and args[2] DoesPlayerHavePermission(source,"easyadmin.slap") then
+			TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], args[2])
+		end
+	end, false)	
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords")
 	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)

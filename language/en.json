@@ -29,6 +29,7 @@
 	"spectateplayer":"Spectate Player",
 	"teleporttoplayer":"Teleport to Player",
 	"teleportplayertome":"Teleport Player to Me",
+	"slapplayer":"Slap Player",
 	"allplayers":"All Players",
 	"teleporttome":"Teleport To Me",
 	"teleporttomeguide":"~r~~h~NOTE:~h~~w~ This will teleport ~h~all~h~ players to you.",
@@ -65,6 +66,7 @@
 	"chatsuggestionteleport":"teleport to a player",
 	"chatsuggestiongametype":"set server game type",
 	"chatsuggestionmapname":"set server map name",
+	"chatsuggestionmapname":"slap a player",
 	
 	"bannedjoin":"You have been banned from this Server, \nReason: %s, Ban Expires: %s",
 	"kicked":"Kicked by %s, Reason: %s",
