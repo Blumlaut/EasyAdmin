@@ -2,8 +2,8 @@
 	{
 	"translator":"condolent",
 	"language":"sv",
-	"on":"on",
-	"off":"off",	
+	"on":"på",
+	"off":"av",	
 
 	"spectatingUser":"Åskådar ~b~<C>%s</C>.",
 	"stoppedSpectating":"Slutade Åskåda.",
@@ -32,8 +32,8 @@
 	"spectateplayer":"Åskåda Spelare",
 	"teleporttoplayer":"Teleportera till Spelare",
 	"teleportplayertome":"Teleportera Spelare till Mig",
-	"slapplayer":"Slap Player",
-	"setplayerfrozen":"Set Player Frozen",
+	"slapplayer":"Slå Spelare",
+	"setplayerfrozen":"Frys Spelare",
 	"allplayers":"Alla Spelare",
 	"teleporttome":"Teleportera Till Mig",
 	"teleporttomeguide":"~r~~h~OBS:~h~~w~ Detta kommer teleportera ~h~alla~h~ spelare till dig.",
@@ -71,8 +71,8 @@
 	"chatsuggestionteleport":"teleportera till spelare",
 	"chatsuggestiongametype":"sätt serverns spelläge",
 	"chatsuggestionmapname":"sätt serverns bana",
-	"chatsuggestionslap":"slap a player",
-	"chatsuggestionfreeze":"freeze a player",
+	"chatsuggestionslap":"slå spelare",
+	"chatsuggestionfreeze":"frys en spelare",
 	
 	"bannedjoin":"Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s",
 	"kicked":"Kickad av %s, Anledning: %s",
@@ -87,10 +87,10 @@
 	"adminkickedplayer":"**%s** kickad **%s**, Anledning: %s",
 	"adminbannedplayer":"**%s** bannlyste **%s**, Anledning: %s, löper ut: %s",
 	"adminunbannedplayer":"**%s** hävde bannlysning **%s**",
-	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
+	"adminslappedplayer":"**%s** slog **%s** för **%s HP**",
 	
-	"adminfrozeplayer":"**%s** froze **%s**.",
-	"adminunfrozeplayer":"**%s** unfroze **%s**.",
+	"adminfrozeplayer":"**%s** frös **%s**.",
+	"adminunfrozeplayer":"**%s** avfrös **%s**.",
 	
 	
 	}
