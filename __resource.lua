@@ -3,7 +3,6 @@ resource_manifest_version "44febabe-d386-4d18-afbe-5e627f4af937"
 dependency 'NativeUI'
 
 server_scripts {
-	"shared.lua",
 	"admin_server.lua",
 	"version",
 	"language/en.json",
@@ -14,7 +13,6 @@ server_scripts {
 }
 
 client_scripts {
-	"shared.lua",
 	"@NativeUI/NativeUI.lua",
 	"admin_client.lua",
 	"gui_c.lua",

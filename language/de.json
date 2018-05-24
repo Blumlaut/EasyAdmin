@@ -2,7 +2,8 @@
 	{
 	"translator":"EasyAdmin",
 	"language":"de",
-	
+	"on":"An",
+	"off":"Aus",	
 	
 	"spectatingUser":"Schaue ~b~<C>%s</C> zu.",
 	"stoppedSpectating":"Zuschauen beendet.",
@@ -32,6 +33,7 @@
 	"teleporttoplayer":"Zu Spieler Teleportieren",
 	"teleportplayertome":"Spieler zu mir Teleportieren",
 	"slapplayer":"Spieler Slappen",
+	"setplayerfrozen":"Spieler Einfrieren",
 	"allplayers":"Alle Spieler",
 	"teleporttome":"Zu mir Teleportieren",
 	"teleporttomeguide":"~r~~h~ACHTUNG:~h~~w~ Dies wird ~h~alle~h~ Spieler zu dir Teleportieren.",
@@ -68,7 +70,8 @@
 	"chatsuggestionteleport":"zu einem spieler teleportieren",
 	"chatsuggestiongametype":"server game type setzen",
 	"chatsuggestionmapname":"server map name setzen",
-	"chatsuggestionmapname":"spieler slappen",
+	"chatsuggestionslap":"spieler slappen",
+	"chatsuggestionfreeze":"spieler einfrieren",
 	
 	"bannedjoin":"Du wurdest von diesem server gebannt, \nGrund: %s, Ban Läuft am %s ab.",
 	"kicked":"Gekickt von %s, Grund: %s",
@@ -83,6 +86,10 @@
 	"adminkickedplayer":"**%s** hat **%s** gekickt, Grund: %s",
 	"adminbannedplayer":"**%s** hat **%s** gebannt, Grund: %s, Ban Entfällt: %s",
 	"adminunbannedplayer":"**%s** hat **%s** entbannt.",
+	"adminslappedplayer":"**%s** hat **%s** geslappt **(%s HP)**.",
+	
+	"adminfrozeplayer":"**%s** hat **%s** eingefroren.",
+	"adminunfrozeplayer":"**%s** hat **%s** entfroren.",
 	
 	
 	

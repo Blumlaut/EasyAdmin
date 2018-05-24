@@ -2,6 +2,10 @@
 	{
 	"translator":"IceHax",
 	"language":"it",
+	"on":"on",
+	"off":"off",
+	
+	
 	"spectatingUser":"Spettando ~b~<C>%s</C>.",
 	"stoppedSpectating":"Non Stai Più Spettando.",
 	"oneday":"1 Giorno",
@@ -30,6 +34,7 @@
 	"teleporttoplayer":"Teletrasportami al giocatore",
 	"teleportplayertome":"Teletrasporta il Giocatore da Me",
 	"slapplayer":"Slap Player",
+	"setplayerfrozen":"Set Player Frozen",
 	"allplayers":"Tutti i Giocatori",
 	"teleporttome":"Teletrasporta Da Me",
 	"teleporttomeguide":"~r~~h~NOTA:~h~~w~ Questo Teletrasporterà ~h~tutti~h~ i giocatori da te.",
@@ -66,7 +71,8 @@
 	"chatsuggestionteleport":"teletrasportati da un giocatore",
 	"chatsuggestiongametype":"Imposta game type del server",
 	"chatsuggestionmapname":"Imposta Map Name del server",
-	"chatsuggestionmapname":"slap a player",
+	"chatsuggestionslap":"slap a player",
+	"chatsuggestionfreeze":"freeze a player",
 	
 	"bannedjoin":"Sei stato bandito da questo server, \nRagione: %s, Il Ban Scade: %s",
 	"kicked":"Espulso da %s, Ragione: %s",
@@ -81,7 +87,10 @@
 	"adminkickedplayer":"**%s** Ha espulso **%s**, Ragione: %s",
 	"adminbannedplayer":"**%s** Ha bandito **%s**, ragione: %s, finire: %s",
 	"adminunbannedplayer":"**%s** ha revocato il ban di **%s**",
+	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
 	
+	"adminfrozeplayer":"**%s** froze **%s**.",
+	"adminunfrozeplayer":"**%s** unfroze **%s**.",
 	
 	
 	}

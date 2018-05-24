@@ -6,13 +6,24 @@ settings = {
 	forceShowGUIButtons = false,
 }
 
+permissions = {
+	ban = false,
+	kick = false,
+	spectate = false,
+	unban = false,
+	teleport = false,
+	manageserver = false,
+	slap = false,
+	freeze = false,
+}
+
 _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", 1320, 0)
 _menuPool:Add(mainMenu)
 
 -- generate "slap" table once
 local SlapAmount = {}
-for i=1,40 do
+for i=1,20 do
 	table.insert(SlapAmount,i)
 end
 
@@ -20,6 +31,8 @@ end
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:updateBanlist")
+	_menuPool:ControlDisablingEnabled(false)
+	_menuPool:MouseControlsEnabled(false)
 	while true do
 		_menuPool:ProcessMenus()
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
@@ -113,6 +126,10 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( thePlayer ), KickReason)
 				BanTime = 1
 				BanReason = ""
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				playermanagement:Visible(true)
 			end	
 		end
 		
@@ -160,6 +177,10 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time)
 				BanTime = 1
 				BanReason = ""
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				playermanagement:Visible(true)
 			end	
 			
 		end
@@ -196,6 +217,23 @@ function GenerateMenu() -- this is a big ass function
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)
 				TriggerServerEvent("EasyAdmin:SlapPlayer", GetPlayerServerId(thePlayer), index*10)
+			end
+		end
+
+		if permissions.freeze then
+			local sl = {strings.on, strings.off}
+			local thisItem = NativeUI.CreateListItem(strings.setplayerfrozen, sl, 1)
+			thisPlayer:AddItem(thisItem)
+			thisPlayer.OnListSelect = function(sender, item, index)
+					if item == thisItem then
+							i = item:IndexToItem(index)
+							Citizen.Trace(i)
+							if i == strings.on then
+								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), true)
+							else
+								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), false)
+							end
+					end
 			end
 		end
 	end
@@ -300,8 +338,10 @@ function GenerateMenu() -- this is a big ass function
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
 				TriggerServerEvent("EasyAdmin:updateBanlist")
-				mainMenu:Visible(false)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
 				GenerateMenu()
+				unbanPlayer:Visible(true)
 			end
 		end
 	end
@@ -315,7 +355,7 @@ function GenerateMenu() -- this is a big ass function
 		settingsMenu.OnListChange = function(sender, item, index)
 				if item == thisItem then
 						i = item:IndexToItem(index)
-						if i == "Reasons" then
+						if i == strings.unbanreasons then
 							showLicenses = false
 						else
 							showLicenses = true

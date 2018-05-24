@@ -2,7 +2,16 @@
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 admins = {}
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
-
+permissions = {
+	ban = false,
+	kick = false,
+	spectate = false,
+	unban = false,
+	teleport = false,
+	manageserver = false,
+	slap = false,
+	freeze = false,
+}
 
 Citizen.CreateThread(function()
 	strings = json.decode(LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json"))[1]
@@ -11,7 +20,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
-		for i,perm in ipairs(permissions) do
+		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
 			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
 		end
@@ -38,6 +47,10 @@ Citizen.CreateThread(function()
 		
 		if DoesPlayerHavePermission(source,"easyadmin.slap") then
 			TriggerClientEvent('chat:addSuggestion', source, '/slap', strings.chatsuggestionslap, { {name='player id', help="the player's server id"},{name='hp', help="the hp to take"} })
+		end
+		
+		if DoesPlayerHavePermission(source,"easyadmin.freeze") then
+			TriggerClientEvent('chat:addSuggestion', source, '/freeze', strings.chatsuggestionfreeze, { {name='player id', help="the player's server id"},{name='toggle', help="either true or false"} })
 		end
 		
 		-- give player the right settings to work with
@@ -244,7 +257,8 @@ Citizen.CreateThread(function()
 	end, false)
 
 	RegisterCommand("slap", function(source, args, rawCommand)
-		if args[1] and args[2] DoesPlayerHavePermission(source,"easyadmin.slap") then
+		if args[1] and args[2] and DoesPlayerHavePermission(source,"easyadmin.slap") then
+			SendWebhookMessage(moderationNotification,string.format(strings.adminslappedplayer, GetPlayerName(source), GetPlayerName(args[1]), args[2]))
 			TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], args[2])
 		end
 	end, false)	
@@ -259,7 +273,20 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:SlapPlayer")
 	AddEventHandler('EasyAdmin:SlapPlayer', function(playerId,slapAmount)
 		if DoesPlayerHavePermission(source,"easyadmin.slap") then
+			SendWebhookMessage(moderationNotification,string.format(strings.adminslappedplayer, GetPlayerName(source), GetPlayerName(playerId), slapAmount))
 			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
+		end
+	end)
+	
+	RegisterServerEvent("EasyAdmin:FreezePlayer")
+	AddEventHandler('EasyAdmin:FreezePlayer', function(playerId,toggle)
+		if DoesPlayerHavePermission(source,"easyadmin.freeze") then
+			if toggle then
+				SendWebhookMessage(moderationNotification,string.format(strings.adminfrozeplayer, GetPlayerName(source), GetPlayerName(playerId)))
+			else
+				SendWebhookMessage(moderationNotification,string.format(strings.adminunfrozeplayer, GetPlayerName(source), GetPlayerName(playerId)))
+			end
+			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
 		end
 	end)
 	
