@@ -2,8 +2,8 @@
 	{
 	"translator":"Feared",
 	"language":"fr",
-	"on":"on",
-	"off":"off",
+	"on":"On",
+	"off":"Off",
 	
 	"spectatingUser":"Vous regardez ~b~<C>%s</C>.",
 	"stoppedSpectating":"Vous avez arrêté de regarder un joueur.",
@@ -32,8 +32,8 @@
 	"spectateplayer":"Regarder le joueur",
 	"teleporttoplayer":"Téléportation au joueur",
 	"teleportplayertome":"Téléportation du joueur à Moi",
-	"slapplayer":"Slap Player",
-	"setplayerfrozen":"Set Player Frozen",
+	"slapplayer":"Pousser le joueur",
+	"setplayerfrozen":"Bloquer le joueur",
 	"allplayers":"Tout les joueurs",
 	"teleporttome":"Téléporter à Moi",
 	"teleporttomeguide":"~r~~h~NOTE:~h~~w~ Cela va téléporter ~r~~h~Tout~h~~w~ les joueurs à vous.",
@@ -70,8 +70,8 @@
 	"chatsuggestionteleport":"Téléporté a un joueur",
 	"chatsuggestiongametype":"Changer le type de jeu du serveur",
 	"chatsuggestionmapname":"Changer la carte du serveur",
-	"chatsuggestionslap":"slap a player",
-	"chatsuggestionfreeze":"freeze a player",
+	"chatsuggestionslap":"Vous allez pousser un joueur.",
+	"chatsuggestionfreeze":"Vous allez freeze un joueur.",
 	
 	"bannedjoin":"Vous avez été banni du serveur, \nRaison: %s, Expiration du Ban: %s",
 	"kicked":"Kick par %s, Raison: %s",
@@ -86,10 +86,10 @@
 	"adminkickedplayer":"**%s** a kick **%s**, Raison: %s",
 	"adminbannedplayer":"**%s** a banni **%s**, Raison: %s, Expire: %s",
 	"adminunbannedplayer":"**%s** a débanni **%s**",
-	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
+	"adminslappedplayer":"**%s** à pousser **%s** pour **%s HP**",
 
-	"adminfrozeplayer":"**%s** froze **%s**.",
-	"adminunfrozeplayer":"**%s** unfroze **%s**.",
+	"adminfrozeplayer":"**%s** à freeze **%s**.",
+	"adminunfrozeplayer":"**%s** à défreeze **%s**.",
 	
 	
 	}
