@@ -2,8 +2,8 @@
 	{
 	"translator":"IceHax",
 	"language":"it",
-	"on":"on",
-	"off":"off",
+	"on":"acceso",
+	"off":"spento",
 	
 	
 	"spectatingUser":"Spettando ~b~<C>%s</C>.",
@@ -33,8 +33,8 @@
 	"spectateplayer":"Spetta Giocatore",
 	"teleporttoplayer":"Teletrasportami al giocatore",
 	"teleportplayertome":"Teletrasporta il Giocatore da Me",
-	"slapplayer":"Slap Player",
-	"setplayerfrozen":"Set Player Frozen",
+	"slapplayer":"Schiaffeggia il Giocatore",
+	"setplayerfrozen":"Blocca Il Giocatore",
 	"allplayers":"Tutti i Giocatori",
 	"teleporttome":"Teletrasporta Da Me",
 	"teleporttomeguide":"~r~~h~NOTA:~h~~w~ Questo Teletrasporterà ~h~tutti~h~ i giocatori da te.",
@@ -43,9 +43,9 @@
 	"setmapname":"Imposta Map Name",
 	"setmapnameguide":"~r~~h~NOTA:~h~~w~ Questo modificherà La Map Name, mostrata nella ServerList.",
 	"startresourcebyname":"Esegui Resource per nome",
-	"startresourcebynameguide":"~r~~h~NOTA:~h~~w~ This will start a resource installed on the server.",
+	"startresourcebynameguide":"~r~~h~NOTA:~h~~w~ Questo Starterà una resource installata sul server.",
 	"stopresourcebyname":"Ferma Resource per nome",
-	"stopresourcebynameguide":"~r~~h~NOTA:~h~~w~ This will stop a resource installed on the server.",
+	"stopresourcebynameguide":"~r~~h~NOTA:~h~~w~ Questo Stopperà una resource installata sul server.",
 	"badidea":"Non farlo, per piacere.",
 	"unbanplayer":"Rimuovi ban per il giocatore",
 	"unbanplayerguide":"~r~~h~NOTA:~h~~w~  Premendo Conferma Rimuoverai il Ban di questo giocatore.",
@@ -71,8 +71,8 @@
 	"chatsuggestionteleport":"teletrasportati da un giocatore",
 	"chatsuggestiongametype":"Imposta game type del server",
 	"chatsuggestionmapname":"Imposta Map Name del server",
-	"chatsuggestionslap":"slap a player",
-	"chatsuggestionfreeze":"freeze a player",
+	"chatsuggestionslap":"schiaffeggia un giocatore",
+	"chatsuggestionfreeze":"blocca un giocatore",
 	
 	"bannedjoin":"Sei stato bandito da questo server, \nRagione: %s, Il Ban Scade: %s",
 	"kicked":"Espulso da %s, Ragione: %s",
@@ -87,10 +87,10 @@
 	"adminkickedplayer":"**%s** Ha espulso **%s**, Ragione: %s",
 	"adminbannedplayer":"**%s** Ha bandito **%s**, ragione: %s, finire: %s",
 	"adminunbannedplayer":"**%s** ha revocato il ban di **%s**",
-	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
+	"adminslappedplayer":"**%s** ha schiaffeggiato **%s** togliendogli **%s HP**",
 	
-	"adminfrozeplayer":"**%s** froze **%s**.",
-	"adminunfrozeplayer":"**%s** unfroze **%s**.",
+	"adminfrozeplayer":"**%s** ha bloccato **%s**.",
+	"adminunfrozeplayer":"**%s** ha sbloccato **%s**.",
 	
 	
 	}
