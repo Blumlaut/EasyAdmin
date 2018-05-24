@@ -20,6 +20,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
+		local identifiers = GetPlayerIdentifiers(source)
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
 			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
@@ -112,18 +113,26 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
+			local playerLicense = ""
+			local playerSteamid = ""
 			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 			if expires < os.time() then
 				expires = os.time()+expires 
 			end
 			for i,identifier in ipairs(bannedIdentifiers) do
 				if string.find(identifier, "license:") then
-					reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
-					reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
-					reason = string.gsub(reason, ";", "")
-					updateBlacklist( {identifier = identifier, reason = reason, expire = expires or 10444633200 } )
+					playerLicense = identifier
+				elseif string.find(identifier, "steam:") then
+					playerSteamid = identifier
 				end
 			end
+			reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
+			local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
+			if playerSteamid then
+				ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
+			end
+			updateBlacklist( ban )
+			
 			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 			DropPlayer(playerId, string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 		end
@@ -135,12 +144,17 @@ Citizen.CreateThread(function()
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		for i,identifier in ipairs(bannedIdentifiers) do
 			if string.find(identifier, "license:") then
-				reason = reason..string.format(strings.bancheatingadd, GetPlayerName(playerId) )
-				reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
-				reason = string.gsub(reason, ";", "")
-				updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
+				playerLicense = identifier
+			elseif string.find(identifier, "steam:") then
+				playerSteamid = identifier
 			end
 		end
+		reason = reason.. string.format(strings.bancheatingadd, GetPlayerName(playerId), GetPlayerName(source) )
+		local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
+		if playerSteamid then
+			ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
+		end
+		updateBlacklist( ban )
 		DropPlayer(playerId, strings.bancheating)
 	end)
 	
@@ -204,14 +218,21 @@ Citizen.CreateThread(function()
 			end
 			if GetPlayerName(args[1]) then
 				local bannedIdentifiers = GetPlayerIdentifiers(args[1])
+				local playerLicense = ""
+				local playerSteamid = ""
 				for i,identifier in ipairs(bannedIdentifiers) do
 					if string.find(identifier, "license:") then
-						reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), GetPlayerName(source) )
-						reason = string.gsub(reason, "|", "") -- filter out any characters that could break me
-						reason = string.gsub(reason, ";", "")
-						updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
+						playerLicense = identifier
+					elseif string.find(identifier, "steam:") then
+						playerSteamid = identifier
 					end
 				end
+				reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), GetPlayerName(source) )
+				local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
+				if playerSteamid then
+					ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
+				end
+				updateBlacklist( ban )
 				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 				DropPlayer(args[1], string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', 10444633200 ) ) )
 			else
@@ -397,6 +418,8 @@ Citizen.CreateThread(function()
 			for i,theBan in ipairs(blacklist) do
 				if theBan.expire < os.time() then
 					table.remove(blacklist,i)
+				elseif theBan.expire == 1924300800 then
+					blacklist[i].expire = 10444633200
 				end
 			end
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
@@ -436,7 +459,7 @@ Citizen.CreateThread(function()
 		local numIds = GetPlayerIdentifiers(source)
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
-				if blacklisted.identifier == theId then
+				if blacklisted.identifier == theId or (blacklisted.steam and blacklisted.steam == theId) then
 					Citizen.Trace("user is banned")
 					setKickReason(string.format( strings.bannedjoin, blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 					print("Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")

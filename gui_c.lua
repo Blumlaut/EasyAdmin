@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
 			-- clear and re-create incase of permission change+player count change
 			if strings then
 				banLength = {
-					{label = strings.permanent, time = 1924300800},
+					{label = strings.permanent, time = 10444633200},
 					{label = strings.oneday, time = 86400},
 					{label = strings.threedays, time = 172800},
 					{label = strings.oneweek, time = 518400},
