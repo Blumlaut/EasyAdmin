@@ -87,10 +87,10 @@
 	"adminkickedplayer":"**%s** Ha espulso **%s**, Ragione: %s",
 	"adminbannedplayer":"**%s** Ha bandito **%s**, ragione: %s, finire: %s",
 	"adminunbannedplayer":"**%s** ha revocato il ban di **%s**",
-	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
+	"adminslappedplayer":"**%s** ha schiaffeggiato **%s** togliendogli **%s HP**",
 	
-	"adminfrozeplayer":"**%s** froze **%s**.",
-	"adminunfrozeplayer":"**%s** unfroze **%s**.",
+	"adminfrozeplayer":"**%s** ha bloccato **%s**.",
+	"adminunfrozeplayer":"**%s** ha sbloccato **%s**.",
 	
 	
 	}
