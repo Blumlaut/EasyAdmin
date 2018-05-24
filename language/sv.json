@@ -32,7 +32,7 @@
 	"spectateplayer":"Åskåda Spelare",
 	"teleporttoplayer":"Teleportera till Spelare",
 	"teleportplayertome":"Teleportera Spelare till Mig",
-	"slapplayer":"Slap Player",
+	"slapplayer":"Slå Spelare",
 	"setplayerfrozen":"Frys Spelare",
 	"allplayers":"Alla Spelare",
 	"teleporttome":"Teleportera Till Mig",
@@ -71,7 +71,7 @@
 	"chatsuggestionteleport":"teleportera till spelare",
 	"chatsuggestiongametype":"sätt serverns spelläge",
 	"chatsuggestionmapname":"sätt serverns bana",
-	"chatsuggestionslap":"slå spelre",
+	"chatsuggestionslap":"slå spelare",
 	"chatsuggestionfreeze":"frys en spelare",
 	
 	"bannedjoin":"Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s",
