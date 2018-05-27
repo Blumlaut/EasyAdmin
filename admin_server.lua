@@ -114,7 +114,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
 			local playerLicense = ""
-			local playerSteamid = ""
+			local playerSteamid = false
 			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 			if expires < os.time() then
 				expires = os.time()+expires 
@@ -219,7 +219,7 @@ Citizen.CreateThread(function()
 			if GetPlayerName(args[1]) then
 				local bannedIdentifiers = GetPlayerIdentifiers(args[1])
 				local playerLicense = ""
-				local playerSteamid = ""
+				local playerSteamid = false
 				for i,identifier in ipairs(bannedIdentifiers) do
 					if string.find(identifier, "license:") then
 						playerLicense = identifier
