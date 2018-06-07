@@ -76,7 +76,10 @@ end)
 
 AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 	frozen = toggle
-	FreezeEntityPosition(PlayerPedId(), toggle)
+	FreezeEntityPosition(PlayerPedId(), frozen)
+	if IsPedInAnyVehicle(PlayerPedId(), false) then
+		FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+	end 
 end)
 
 function spectatePlayer(targetPed,target,name)
