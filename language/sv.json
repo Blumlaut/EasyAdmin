@@ -33,6 +33,7 @@
 	"teleporttoplayer":"Teleportera till Spelare",
 	"teleportplayertome":"Teleportera Spelare till Mig",
 	"slapplayer":"Slå Spelare",
+	"shootplayer": "Skjutspelare",
 	"setplayerfrozen":"Frys Spelare",
 	"allplayers":"Alla Spelare",
 	"teleporttome":"Teleportera Till Mig",
@@ -71,6 +72,7 @@
 	"chatsuggestiongametype":"sätt serverns spelläge",
 	"chatsuggestionmapname":"sätt serverns bana",
 	"chatsuggestionslap":"slå spelare",
+	"chatsuggestionshoot": "skjut en spelare",
 	"chatsuggestionfreeze":"frys en spelare",
 	
 	"bannedjoin":"Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s",
@@ -87,6 +89,7 @@
 	"adminbannedplayer":"**%s** bannlyste **%s**, Anledning: %s, löper ut: %s",
 	"adminunbannedplayer":"**%s** hävde bannlysning **%s**",
 	"adminslappedplayer":"**%s** slog **%s** för **%s HP**",
+	"adminshotplayer": "**%s** sköt **%s** för **%s HP**",
 	
 	"adminfrozeplayer":"**%s** frös **%s**.",
 	"adminunfrozeplayer":"**%s** avfrös **%s**.",

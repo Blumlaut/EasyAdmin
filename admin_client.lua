@@ -11,6 +11,7 @@ RegisterNetEvent("EasyAdmin:SetLanguage")
 
 RegisterNetEvent("EasyAdmin:TeleportRequest")
 RegisterNetEvent("EasyAdmin:SlapPlayer")
+RegisterNetEvent("EasyAdmin:ShootPlayer")
 RegisterNetEvent("EasyAdmin:FreezePlayer")
 
 
@@ -42,7 +43,7 @@ Citizen.CreateThread( function()
 			FreezeEntityPosition(PlayerPedId(), frozen)
 			if IsPedInAnyVehicle(PlayerPedId(), true) then
 				FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
-			end 
+			end
 		end
     players = {}
     local localplayers = {}
@@ -74,12 +75,18 @@ AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
 	end
 end)
 
+AddEventHandler('EasyAdmin:ShootPlayer', function(shotDamage)
+	local offset1 = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, -0.15, 0.25)
+	local offset2 = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 0.0, 0.25)
+	ShootSingleBulletBetweenCoords(offset1, offset2, shotDamage, nil, GetHashKey("WEAPON_PISTOL"), 0, false, true, 0.25)
+end)
+
 AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 	frozen = toggle
 	FreezeEntityPosition(PlayerPedId(), frozen)
 	if IsPedInAnyVehicle(PlayerPedId(), false) then
 		FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
-	end 
+	end
 end)
 
 function spectatePlayer(targetPed,target,name)

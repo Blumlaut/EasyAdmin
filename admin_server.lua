@@ -10,6 +10,7 @@ permissions = {
 	teleport = false,
 	manageserver = false,
 	slap = false,
+	shoot = false,
 	freeze = false,
 }
 
@@ -48,6 +49,10 @@ Citizen.CreateThread(function()
 		
 		if DoesPlayerHavePermission(source,"easyadmin.slap") then
 			TriggerClientEvent('chat:addSuggestion', source, '/slap', strings.chatsuggestionslap, { {name='player id', help="the player's server id"},{name='hp', help="the hp to take"} })
+		end
+
+		if DoesPlayerHavePermission(source,"easyadmin.shoot") then
+			TriggerClientEvent('chat:addSuggestion', source, '/shoot', strings.chatsuggestionshoot, { {name='player id', help="the player's server id"},{name='hp', help="the hp to take"} })
 		end
 		
 		if DoesPlayerHavePermission(source,"easyadmin.freeze") then
@@ -280,7 +285,14 @@ Citizen.CreateThread(function()
 	RegisterCommand("slap", function(source, args, rawCommand)
 		if args[1] and args[2] and DoesPlayerHavePermission(source,"easyadmin.slap") then
 			SendWebhookMessage(moderationNotification,string.format(strings.adminslappedplayer, GetPlayerName(source), GetPlayerName(args[1]), args[2]))
-			TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], args[2])
+			TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], tonumber(args[2]))
+		end
+	end, false)	
+
+	RegisterCommand("shoot", function(source, args, rawCommand)
+		if args[1] and args[2] and DoesPlayerHavePermission(source,"easyadmin.shoot") then
+			SendWebhookMessage(moderationNotification,string.format(strings.adminshotplayer, GetPlayerName(source), GetPlayerName(args[1]), args[2]))
+			TriggerClientEvent("EasyAdmin:ShootPlayer", args[1], tonumber(args[2]))
 		end
 	end, false)	
 	
@@ -296,6 +308,14 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.slap") then
 			SendWebhookMessage(moderationNotification,string.format(strings.adminslappedplayer, GetPlayerName(source), GetPlayerName(playerId), slapAmount))
 			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:ShootPlayer")
+	AddEventHandler('EasyAdmin:ShootPlayer', function(playerId, shotDamage)
+		if DoesPlayerHavePermission(source,"easyadmin.shoot") then
+			SendWebhookMessage(moderationNotification,string.format(strings.adminshotplayer, GetPlayerName(source), GetPlayerName(playerId), shotDamage))
+			TriggerClientEvent("EasyAdmin:ShootPlayer", playerId, shotDamage)
 		end
 	end)
 	
