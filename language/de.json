@@ -75,7 +75,7 @@
 	
 	"bannedjoin":"Du wurdest von diesem server gebannt, \nGrund: %s, Ban Läuft am %s ab.",
 	"kicked":"Gekickt von %s, Grund: %s",
-	"bannedjoin":"Du wurdest von diesem server gebannt, \nGrund: %s, Ban Läuft am %s ab.",
+	"banned":"Du wurdest von diesem server gebannt, \nGrund: %s, Ban Läuft am %s ab.",
 	"reasonadd":" ( Spielername: %s ), Gebannt von: %s",
 	"bancheating":"Für Cheaten Gebannt",
 	"bancheatingadd":" ( Spielername: %s )",
