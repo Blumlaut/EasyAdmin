@@ -55,7 +55,6 @@
 	"refreshbanlist":"Uppdatera Bannlistan",
 	"refreshbanlistguide":"Detta uppdaterar Bannlistan i 'Häv Bannlysning'-menyn.\nKräver återuppöppning.",
 	"refreshpermissions":"Uppdatera Rättigheter",
-	"refreshpermissionsguide":"This Refreshes your current Permissions.\nRequires Reopening.",
 	"refreshpermissionsguide":"Detta uppdaterar dina nuvarande rättigheter.\nKräver återuppöppning.",
 	"godmodedetected":"Gudläge: ~r~Upptäckt~w~",
 	"godmodenotdetected":"Gudläge: ~g~Inget Upptäckt~w~",
