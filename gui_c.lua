@@ -38,8 +38,6 @@ end
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:updateBanlist")
-	SetResourceKvpInt("ea_menuwidth", 0)
-	SetResourceKvp("ea_menuorientation", "middle")
 	
 	if not GetResourceKvpString("ea_menuorientation") then
 		SetResourceKvp("ea_menuorientation", "right")
