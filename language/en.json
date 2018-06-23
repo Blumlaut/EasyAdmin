@@ -90,6 +90,10 @@
 	"adminfrozeplayer":"**%s** froze **%s**.",
 	"adminunfrozeplayer":"**%s** unfroze **%s**.",
 	
-	
+	"left":"Left",
+	"middle":"Middle",
+	"right":"Right",
+	"menuOrientation":"Menu Orientation",
+	"menuOrientationguide":"Set Menu Orientation ( Left, Right or Center ) \nRequires Game Restart.",
 	}
 ]

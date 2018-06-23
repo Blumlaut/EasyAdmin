@@ -91,6 +91,10 @@
 	"adminfrozeplayer":"**%s** à freeze **%s**.",
 	"adminunfrozeplayer":"**%s** à défreeze **%s**.",
 	
-	
+	"left":"La gauche",
+	"middle":"Milieu",
+	"right":"Droite",
+	"menuOrientation":"Orientation du menu",
+	"menuOrientationguide":"Réglage de l'orientation du menu ( Gauche, droite ou centre ) \nNécessite un redémarrage du jeu.",
 	}
 ]

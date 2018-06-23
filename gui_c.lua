@@ -18,8 +18,6 @@ permissions = {
 }
 
 _menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", 1320, 0)
-_menuPool:Add(mainMenu)
 
 -- generate "slap" table once
 local SlapAmount = {}
@@ -27,12 +25,40 @@ for i=1,20 do
 	table.insert(SlapAmount,i)
 end
 
+function handleOrientation(orientation)
+	if orientation == "right" then
+		return 1320
+	elseif orientation == "middle" then
+		return 730
+	elseif orientation == "left" then
+		return 0
+	end
+end
 
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:updateBanlist")
+	SetResourceKvpInt("ea_menuwidth", 0)
+	SetResourceKvp("ea_menuorientation", "middle")
+	
+	if not GetResourceKvpString("ea_menuorientation") then
+		SetResourceKvp("ea_menuorientation", "right")
+		SetResourceKvpInt("ea_menuwidth", 0)
+		menuWidth = 0
+		menuOrientation = handleOrientation("right")
+	else
+		menuWidth = GetResourceKvpInt("ea_menuwidth")
+		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+	end 
+	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
+	_menuPool:Add(mainMenu)
+	--TEMP_menuPool:WidthOffset(menuWidth)
+	
+	--TEMPmainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
+	
+		
 	while true do
 		_menuPool:ProcessMenus()
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
@@ -76,6 +102,10 @@ function GenerateMenu() -- this is a big ass function
 	servermanagement = _menuPool:AddSubMenu(mainMenu, strings.servermanagement,"",true)
 	settingsMenu = _menuPool:AddSubMenu(mainMenu, strings.settings,"",true)
 
+	--TEMPplayermanagement:SetMenuWidthOffset(menuWidth)	
+	--TEMPservermanagement:SetMenuWidthOffset(menuWidth)	
+	--TEMPsettingsMenu:SetMenuWidthOffset(menuWidth)	
+
 	-- util stuff
 	players = {}
 	local localplayers = {}
@@ -92,9 +122,11 @@ function GenerateMenu() -- this is a big ass function
 
 	for i,thePlayer in ipairs(players) do
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..GetPlayerName(thePlayer),"",true)
+		--TEMPthisPlayer:SetMenuWidthOffset(menuWidth)
 		-- generate specific menu stuff, dirty but it works for now
 		if permissions.kick then
 			local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,strings.kickplayer,"",true)
+			--TEMPthisKickMenu:SetMenuWidthOffset(menuWidth)
 			
 			local thisItem = NativeUI.CreateItem(strings.reason,strings.kickreasonguide)
 			thisKickMenu:AddItem(thisItem)
@@ -135,6 +167,7 @@ function GenerateMenu() -- this is a big ass function
 		
 		if permissions.ban then
 			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,strings.banplayer,"",true)
+			--TEMPthisBanMenu:SetMenuWidthOffset(menuWidth)
 			
 			local thisItem = NativeUI.CreateItem(strings.reason,strings.banreasonguide)
 			thisBanMenu:AddItem(thisItem)
@@ -242,6 +275,7 @@ function GenerateMenu() -- this is a big ass function
 	
 	
 	thisPlayer = _menuPool:AddSubMenu(playermanagement,strings.allplayers,"",true)
+	--TEMPthisPlayer:SetMenuWidthOffset(menuWidth)
 	if permissions.teleport then
 		-- "all players" function
 		local thisItem = NativeUI.CreateItem(strings.teleporttome, strings.teleporttomeguide)
@@ -325,6 +359,8 @@ function GenerateMenu() -- this is a big ass function
 	
 	if permissions.unban then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,strings.unbanplayer,"",true)
+		--TEMPunbanPlayer:SetMenuWidthOffset(menuWidth)
+		
 		local reason = ""
 		local identifier = ""
 		for i,theBanned in ipairs(banlist) do
@@ -383,6 +419,22 @@ function GenerateMenu() -- this is a big ass function
 		if item == thisItem then
 			TriggerServerEvent("amiadmin")
 		end
+	end
+	
+	local sl = {strings.left, strings.middle, strings.right}
+	local thisItem = NativeUI.CreateListItem(strings.menuOrientation, sl, 1, strings.menuOrientationguide)
+	settingsMenu:AddItem(thisItem)
+	settingsMenu.OnListChange = function(sender, item, index)
+			if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == strings.left then
+						SetResourceKvp("ea_menuorientation", "left")
+					elseif i == strings.middle then
+						SetResourceKvp("ea_menuorientation", "middle")
+					else
+						SetResourceKvp("ea_menuorientation", "right")
+					end
+			end
 	end
 	
 

@@ -91,7 +91,11 @@
 	"adminfrozeplayer":"**%s** hat **%s** eingefroren.",
 	"adminunfrozeplayer":"**%s** hat **%s** entfroren.",
 	
-	
+	"left":"Links",
+	"middle":"Mitte",
+	"right":"Rechts",
+	"menuOrientation":"Menü Orientation",
+	"menuOrientationguide":"Menü Orientation Setzen ( Links, Rechts or Mitte ) \nErfordert Spiel Neustart.",
 	
 	}
 ]

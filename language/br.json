@@ -87,5 +87,10 @@
 	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
 	"adminfrozeplayer":"**%s** froze **%s**.",
 	"adminunfrozeplayer":"**%s** unfroze **%s**.",
+	"left":"Esquerda",
+	"middle":"Meio",
+	"right":"Certo",
+	"menuOrientation":"Orientação do Menu",
+	"menuOrientationguide":"Definir orientação do menu ( Esquerda, Direita ou Centro ) \nRequer reinício do jogo.",
 	}
 ]

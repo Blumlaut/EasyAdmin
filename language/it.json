@@ -92,6 +92,10 @@
 	"adminfrozeplayer":"**%s** ha bloccato **%s**.",
 	"adminunfrozeplayer":"**%s** ha sbloccato **%s**.",
 	
-	
+	"left":"Sinistra",
+	"middle":"mezzo",
+	"right":"Destra",
+	"menuOrientation":"Orientamento del menu",
+	"menuOrientationguide":"Imposta l'orientamento del menu ( Sinistra, Destra o Centro ) \nRichiede il Game Restart.",
 	}
 ]
