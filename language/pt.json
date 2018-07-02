@@ -92,5 +92,8 @@
 	"right":"Certo",
 	"menuOrientation":"Orientação do Menu",
 	"menuOrientationguide":"Definir orientação do menu ( Esquerda, Direita ou Centro ) \nRequer reinício do jogo.",
+	"menuOffset":"Desvio de menu",
+	"menuOffsetguide":"Definir o deslocamento do tamanho do menu\nRequer Reabertura do Menu.",
+	"resetmenuOffset":"Reset Menu Offset",
 	}
 ]

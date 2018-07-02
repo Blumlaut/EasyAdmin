@@ -97,5 +97,8 @@
 	"right":"Destra",
 	"menuOrientation":"Orientamento del menu",
 	"menuOrientationguide":"Imposta l'orientamento del menu ( Sinistra, Destra o Centro ) \nRichiede il Game Restart.",
+	"menuOffset":"Offset menu",
+	"menuOffsetguide":"Imposta l'offset della dimensione del menu\nNécessite la réouverture du menu.",
+	"resetmenuOffset":"Reset Menu Offset",
 	}
 ]

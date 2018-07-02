@@ -95,5 +95,8 @@
 	"right":"Right",
 	"menuOrientation":"Menu Orientation",
 	"menuOrientationguide":"Set Menu Orientation ( Left, Right or Center ) \nRequires Game Restart.",
+	"menuOffset":"Menu Offset",
+	"menuOffsetguide":"Set Menu Size Offset\nRequires Re-opening of Menu.",
+	"resetmenuOffset":"Reset Menu Offset",
 	}
 ]

@@ -96,5 +96,8 @@
 	"right":"Höger",
 	"menuOrientation":"Menyorientering",
 	"menuOrientationguide":"Ställ in menyorientering ( Vänster, Höger eller Mellan ) \nKräver omstart av spel.",
+	"menuOffset":"Menyförskjutning",
+	"menuOffsetguide":"Ställ in menystorlek Offset\nKräver återåterställning av meny.",
+	"resetmenuOffset":"Reset Meny Offset",
 	}
 ]

@@ -96,5 +96,10 @@
 	"right":"Droite",
 	"menuOrientation":"Orientation du menu",
 	"menuOrientationguide":"Réglage de l'orientation du menu ( Gauche, droite ou centre ) \nNécessite un redémarrage du jeu.",
+	"menuOffset":"Définir la largeur du menu",
+	"menuOffsetguide":"Définir la taille du menu\nNécessite la réouverture du menu.",
+	"resetmenuOffset":"réinitialiser la largeur du menu",
+	
+	
 	}
 ]
