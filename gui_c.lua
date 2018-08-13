@@ -53,10 +53,13 @@ Citizen.CreateThread(function()
 		mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
+	visible = false
 	
 		
 	while true do
-		_menuPool:ProcessMenus()
+		if visible == true then
+			_menuPool:ProcessMenus()
+		end
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
 			if strings then
@@ -72,6 +75,7 @@ Citizen.CreateThread(function()
 				
 				
 				GenerateMenu()
+				visible = not visible
 				mainMenu:Visible(not mainMenu:Visible())
 			else
 				TriggerServerEvent("EasyAdmin:amiadmin")
@@ -93,7 +97,15 @@ function StopDrawPlayerInfo()
 end
 
 function GenerateMenu() -- this is a big ass function
-	mainMenu:Clear()
+	_menuPool:Clear()
+	
+	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
+	_menuPool:Add(mainMenu)
+	
+		mainMenu:SetMenuWidthOffset(menuWidth)	
+	_menuPool:ControlDisablingEnabled(false)
+	_menuPool:MouseControlsEnabled(false)
+	
 	playermanagement = _menuPool:AddSubMenu(mainMenu, strings.playermanagement,"",true)
 	servermanagement = _menuPool:AddSubMenu(mainMenu, strings.servermanagement,"",true)
 	settingsMenu = _menuPool:AddSubMenu(mainMenu, strings.settings,"",true)
@@ -450,6 +462,8 @@ function GenerateMenu() -- this is a big ass function
 		SetResourceKvpInt("ea_menuwidth", i)
 		menuWidth = i
 	end
+	thisi = nil
+	sl = nil
 
 
 	local thisItem = NativeUI.CreateItem(strings.resetmenuOffset, "")
