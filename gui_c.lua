@@ -53,15 +53,13 @@ Citizen.CreateThread(function()
 		mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
-	visible = false
 	
 		
 	while true do
-		if visible == true then
-			_menuPool:ProcessMenus()
-		end
+		_menuPool:ProcessMenus()
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
+			
 			if strings then
 				banLength = {
 					{label = strings.permanent, time = 10444633200},
@@ -72,11 +70,12 @@ Citizen.CreateThread(function()
 					{label = strings.onemonth, time = 2678400},
 					{label = strings.oneyear, time = 31536000},
 				}
-				
-				
-				GenerateMenu()
-				visible = not visible
-				mainMenu:Visible(not mainMenu:Visible())
+				if mainMenu:Visible() then
+					mainMenu:Visible(false)
+				else
+					GenerateMenu()
+					mainMenu:Visible(true)
+				end
 			else
 				TriggerServerEvent("EasyAdmin:amiadmin")
 			end
@@ -98,6 +97,15 @@ end
 
 function GenerateMenu() -- this is a big ass function
 	_menuPool:Clear()
+	if not GetResourceKvpString("ea_menuorientation") then
+		SetResourceKvp("ea_menuorientation", "right")
+		SetResourceKvpInt("ea_menuwidth", 0)
+		menuWidth = 0
+		menuOrientation = handleOrientation("right")
+	else
+		menuWidth = GetResourceKvpInt("ea_menuwidth")
+		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+	end 
 	
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
 	_menuPool:Add(mainMenu)
