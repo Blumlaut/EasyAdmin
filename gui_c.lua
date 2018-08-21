@@ -56,7 +56,9 @@ Citizen.CreateThread(function()
 	
 		
 	while true do
-		_menuPool:ProcessMenus()
+		if _menuPool then
+			_menuPool:ProcessMenus()
+		end
 		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
 			
@@ -96,7 +98,9 @@ function StopDrawPlayerInfo()
 end
 
 function GenerateMenu() -- this is a big ass function
-	_menuPool:Clear()
+	_menuPool:Remove()
+	_menuPool = NativeUI.CreatePool()
+	collectgarbage()
 	if not GetResourceKvpString("ea_menuorientation") then
 		SetResourceKvp("ea_menuorientation", "right")
 		SetResourceKvpInt("ea_menuwidth", 0)
@@ -533,7 +537,7 @@ Citizen.CreateThread( function()
 	
 				StopDrawPlayerInfo()
 				ShowNotification(strings.stoppedSpectating)
-			end 
+			end
 			
 		end
 	end
