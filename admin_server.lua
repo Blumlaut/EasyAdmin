@@ -15,7 +15,6 @@ permissions = {
 
 Citizen.CreateThread(function()
 	strings = json.decode(LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json"))[1]
-	customBanlist = GetConvar("ea_custombanlist", "false")
 	
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
@@ -399,7 +398,6 @@ Citizen.CreateThread(function()
 							TriggerEvent("ea_data:removeBan", theBan)
 						end
 					end
-				end
 					
 			elseif not data then
 				TriggerEvent('ea_data:retrieveBanlist', function(banlist)
@@ -412,7 +410,6 @@ Citizen.CreateThread(function()
 					end
 				end)
 			end
-	
 			return
 		end
 		
