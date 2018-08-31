@@ -395,7 +395,6 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(reason, strings.unbanplayerguide)
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				print(identifier)
 				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
 				TriggerServerEvent("EasyAdmin:requestBanlist")
 				_menuPool:CloseAllMenus()
@@ -429,7 +428,6 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(strings.refreshbanlist, strings.refreshbanlistguide)
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			print("ok")
 			TriggerServerEvent("EasyAdmin:updateBanlist")
 		end
 	end
