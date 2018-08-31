@@ -15,6 +15,8 @@ permissions = {
 
 Citizen.CreateThread(function()
 	strings = json.decode(LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json"))[1]
+	customBanlist = GetConvar("ea_custombanlist", "false")
+	
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	RegisterServerEvent('EasyAdmin:amiadmin')
@@ -382,6 +384,37 @@ Citizen.CreateThread(function()
 	
 	function updateBlacklist(data,remove)
 		blacklist = {}
+		
+		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
+		if GetConvar("ea_custombanlist", "false") == "true" then 
+			
+			if data and not remove then
+				table.insert(blacklist, data)
+				TriggerEvent("ea_data:addBan", data)
+				
+			elseif data and remove then
+					for i,theBan in ipairs(blacklist) do
+						if theBan.identifier == data.identifier then
+							table.remove(blacklist,i)
+							TriggerEvent("ea_data:removeBan", theBan)
+						end
+					end
+				end
+					
+			elseif not data then
+				TriggerEvent('ea_data:retrieveBanlist', function(banlist)
+					blacklist = banlist
+					for i,theBan in ipairs(blacklist) do
+						if theBan.expire < os.time() then
+							table.remove(blacklist,i)
+							TriggerEvent("ea_data:removeBan", theBan)
+						end
+					end
+				end)
+			end
+	
+			return
+		end
 		
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		if not content then
