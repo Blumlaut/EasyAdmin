@@ -395,6 +395,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(reason, strings.unbanplayerguide)
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
+				print(identifier)
 				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
 				TriggerServerEvent("EasyAdmin:requestBanlist")
 				_menuPool:CloseAllMenus()
@@ -427,19 +428,16 @@ function GenerateMenu() -- this is a big ass function
 	if permissions.unban then
 		local thisItem = NativeUI.CreateItem(strings.refreshbanlist, strings.refreshbanlistguide)
 		settingsMenu:AddItem(thisItem)
-		settingsMenu.OnItemSelect = function(sender, item, index)
-			if item == thisItem then
-				TriggerServerEvent("EasyAdmin:updateBanlist")
-			end
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			print("ok")
+			TriggerServerEvent("EasyAdmin:updateBanlist")
 		end
 	end
 	
 	local thisItem = NativeUI.CreateItem(strings.refreshpermissions, strings.refreshpermissionsguide)
 	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnItemSelect = function(sender, item, index)
-		if item == thisItem then
-			TriggerServerEvent("amiadmin")
-		end
+	thisItem.Activated = function(ParentMenu,SelectedItem)
+		TriggerServerEvent("amiadmin")
 	end
 	
 	local sl = {strings.left, strings.middle, strings.right}
@@ -480,11 +478,9 @@ function GenerateMenu() -- this is a big ass function
 
 	local thisItem = NativeUI.CreateItem(strings.resetmenuOffset, "")
 	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnItemSelect = function(sender, item, index)
-		if item == thisItem then
-			SetResourceKvpInt("ea_menuwidth", 0)
-			menuWidth = 0
-		end
+	thisItem.Activated = function(ParentMenu,SelectedItem)
+		SetResourceKvpInt("ea_menuwidth", 0)
+		menuWidth = 0
 	end
 	
 	

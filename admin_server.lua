@@ -390,8 +390,6 @@ Citizen.CreateThread(function()
 	
 	
 	function updateBlacklist(data,remove)
-		blacklist = {}
-		
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
 		if GetConvar("ea_custombanlist", "false") == "true" then 
 			
