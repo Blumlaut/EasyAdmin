@@ -37,7 +37,7 @@ end
 
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
-	TriggerServerEvent("EasyAdmin:updateBanlist")
+	TriggerServerEvent("EasyAdmin:requestBanlist")
 	if not GetResourceKvpString("ea_menuorientation") then
 		SetResourceKvp("ea_menuorientation", "right")
 		SetResourceKvpInt("ea_menuwidth", 0)
@@ -396,7 +396,7 @@ function GenerateMenu() -- this is a big ass function
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
-				TriggerServerEvent("EasyAdmin:updateBanlist")
+				TriggerServerEvent("EasyAdmin:requestBanlist")
 				_menuPool:CloseAllMenus()
 				Citizen.Wait(800)
 				GenerateMenu()

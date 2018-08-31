@@ -170,6 +170,14 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
+	RegisterServerEvent("EasyAdmin:requestBanlist")
+	AddEventHandler('EasyAdmin:requestBanlist', function(playerId)
+		local src = source
+		if DoesPlayerHavePermission(source,"easyadmin.kick") then
+			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
+		end
+	end)
+	
 	
 	------------------------------ COMMANDS
 	
