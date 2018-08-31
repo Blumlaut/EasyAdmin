@@ -200,6 +200,7 @@ Citizen.CreateThread(function()
 		end
 	end, true)
 	
+	
 	RegisterCommand("kick", function(source, args, rawCommand)
 		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.kick") then
 			local reason = ""
@@ -387,7 +388,21 @@ Citizen.CreateThread(function()
 		
 		SaveResourceFile(GetCurrentResourceName(), "admins.txt", content, -1)
 	end
-	
+
+	RegisterCommand("convertbanlist", function(source, args, rawCommand)
+		if GetConvar("ea_custombanlist", "false") == "true" then
+			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+			local ob = json.decode(content)
+			for i,theBan in ipairs(ob) do
+				if not theBan.steam then theBan.steam = "" end
+				TriggerEvent("ea_data:addBan", theBan)
+				print("processed ban: "..theBan.identifier.."\n")
+			end
+			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+		else
+			print("Custom Banlist is not enabled.")
+		end
+	end, true)
 	
 	function updateBlacklist(data,remove)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
@@ -504,7 +519,6 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
-	
 	
 	
 	---------------------------------- USEFUL
