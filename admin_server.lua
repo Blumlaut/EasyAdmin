@@ -164,6 +164,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:updateBanlist', function(playerId)
 		local src = source
 		if DoesPlayerHavePermission(source,"easyadmin.kick") then
+			updateBlacklist(false,true)
 			Citizen.Wait(300)
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
 		end
