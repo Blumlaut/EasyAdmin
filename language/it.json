@@ -34,6 +34,7 @@
 	"teleporttoplayer":"Teletrasportami al giocatore",
 	"teleportplayertome":"Teletrasporta il Giocatore da Me",
 	"slapplayer":"Schiaffeggia il Giocatore",
+	"shootplayer": "Sparare giocatore",
 	"setplayerfrozen":"Blocca Il Giocatore",
 	"allplayers":"Tutti i Giocatori",
 	"teleporttome":"Teletrasporta Da Me",
@@ -72,6 +73,7 @@
 	"chatsuggestiongametype":"Imposta game type del server",
 	"chatsuggestionmapname":"Imposta Map Name del server",
 	"chatsuggestionslap":"schiaffeggia un giocatore",
+	"chatsuggestionshoot": "Spara a un giocatore",
 	"chatsuggestionfreeze":"blocca un giocatore",
 	
 	"bannedjoin":"Sei stato bandito da questo server, \nRagione: %s, Il Ban Scade: %s",
@@ -88,6 +90,7 @@
 	"adminbannedplayer":"**%s** Ha bandito **%s**, ragione: %s, finire: %s",
 	"adminunbannedplayer":"**%s** ha revocato il ban di **%s**",
 	"adminslappedplayer":"**%s** ha schiaffeggiato **%s** togliendogli **%s HP**",
+	"adminshotplayer": "**%s** colpo **%s** per **%s HP**",
 	
 	"adminfrozeplayer":"**%s** ha bloccato **%s**.",
 	"adminunfrozeplayer":"**%s** ha sbloccato **%s**.",

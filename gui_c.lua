@@ -21,8 +21,10 @@ _menuPool = NativeUI.CreatePool()
 
 -- generate "slap" table once
 local SlapAmount = {}
+local BulletDamage = {}
 for i=1,20 do
 	table.insert(SlapAmount,i)
+	table.insert(BulletDamage,i)
 end
 
 function handleOrientation(orientation)
@@ -271,6 +273,14 @@ function GenerateMenu() -- this is a big ass function
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)
 				TriggerServerEvent("EasyAdmin:SlapPlayer", GetPlayerServerId(thePlayer), index*10)
+			end
+		end
+
+		if permissions.shoot then
+			local thisItem = NativeUI.CreateSliderItem(strings.shootplayer, BulletDamage, 20, false, false)
+			thisPlayer:AddItem(thisItem)
+			thisItem.OnSliderSelected = function(index)
+				TriggerServerEvent("EasyAdmin:ShootPlayer", GetPlayerServerId(thePlayer), index*6)
 			end
 		end
 

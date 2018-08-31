@@ -33,6 +33,7 @@
 	"teleporttoplayer":"Zu Spieler Teleportieren",
 	"teleportplayertome":"Spieler zu mir Teleportieren",
 	"slapplayer":"Spieler Slappen",
+	"shootplayer": "Spieler anschießen",
 	"setplayerfrozen":"Spieler Einfrieren",
 	"allplayers":"Alle Spieler",
 	"teleporttome":"Zu mir Teleportieren",
@@ -71,11 +72,11 @@
 	"chatsuggestiongametype":"server game type setzen",
 	"chatsuggestionmapname":"server map name setzen",
 	"chatsuggestionslap":"spieler slappen",
+	"chatsuggestionshoot": "Spieler Anschießen",
 	"chatsuggestionfreeze":"spieler einfrieren",
 	
 	"bannedjoin":"Du wurdest von diesem server gebannt, \nGrund: %s, Ban Läuft am %s ab.",
 	"kicked":"Gekickt von %s, Grund: %s",
-	"banned":"Du wurdest von diesem server gebannt, \nGrund: %s, Ban Läuft am %s ab.",
 	"reasonadd":" ( Spielername: %s ), Gebannt von: %s",
 	"bancheating":"Für Cheaten Gebannt",
 	"bancheatingadd":" ( Spielername: %s )",
@@ -87,6 +88,7 @@
 	"adminbannedplayer":"**%s** hat **%s** gebannt, Grund: %s, Ban Entfällt: %s",
 	"adminunbannedplayer":"**%s** hat **%s** entbannt.",
 	"adminslappedplayer":"**%s** hat **%s** geslappt **(%s HP)**.",
+	"adminshotplayer": "**%s** erschoss **%s** für **%s HP**",
 	
 	"adminfrozeplayer":"**%s** hat **%s** eingefroren.",
 	"adminunfrozeplayer":"**%s** hat **%s** entfroren.",

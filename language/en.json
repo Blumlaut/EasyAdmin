@@ -32,6 +32,7 @@
 	"teleporttoplayer":"Teleport to Player",
 	"teleportplayertome":"Teleport Player to Me",
 	"slapplayer":"Slap Player",
+	"shootplayer": "Shoot Player",
 	"setplayerfrozen":"Set Player Frozen",
 	"allplayers":"All Players",
 	"teleporttome":"Teleport To Me",
@@ -70,6 +71,7 @@
 	"chatsuggestiongametype":"set server game type",
 	"chatsuggestionmapname":"set server map name",
 	"chatsuggestionslap":"slap a player",
+	"chatsuggestionshoot": "shoot a player",
 	"chatsuggestionfreeze":"freeze a player",
 	
 	"bannedjoin":"You have been banned from this Server, \nReason: %s, Ban Expires: %s",
@@ -86,6 +88,7 @@
 	"adminbannedplayer":"**%s** banned **%s**, Reason: %s, Ban Expires: %s",
 	"adminunbannedplayer":"**%s** unbanned **%s**",
 	"adminslappedplayer":"**%s** slapped **%s** for **%s HP**",
+	"adminshotplayer": "**%s** shot **%s** for **%s HP**",
 	
 	"adminfrozeplayer":"**%s** froze **%s**.",
 	"adminunfrozeplayer":"**%s** unfroze **%s**.",
