@@ -1,4 +1,9 @@
-
+------------------------------------
+------------------------------------
+---- DONT TOUCH ANY OF THIS IF YOU DON'T KNOW WHAT YOU ARE DOING
+---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
+------------------------------------
+------------------------------------
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 admins = {}
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
