@@ -1,3 +1,10 @@
+------------------------------------
+------------------------------------
+---- DONT TOUCH ANY OF THIS IF YOU DON'T KNOW WHAT YOU ARE DOING
+---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
+------------------------------------
+------------------------------------
+
 isAdmin = false
 showLicenses = false
 
