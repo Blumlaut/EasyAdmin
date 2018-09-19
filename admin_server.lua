@@ -28,8 +28,13 @@ Citizen.CreateThread(function()
 		
 		local identifiers = GetPlayerIdentifiers(source)
 		for perm,val in pairs(permissions) do
-			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
-			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
+			if perm == "ban" or perm == "unban" then
+				print("Banning is Unavailable!\n")
+				TriggerClientEvent("EasyAdmin:adminresponse", source, perm,false)
+			else
+				local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
+				TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
+			end
 		end
 		
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
@@ -194,14 +199,14 @@ Citizen.CreateThread(function()
 					updateAdmins(theId)
 					TriggerClientEvent("EasyAdmin:adminresponse", args[1], true)
 					TriggerClientEvent("chat:addMessage", args[1], { args = { "EasyAdmin", strings.newadmin } })
-					Citizen.Trace("player has been added as an admin!")
+					Citizen.Trace("EasyAdmin: player has been added as an admin!")
 				end
 			end
 		elseif args[1] and string.find(args[1], "steam:") or string.find(args[1], "license:") or string.find(args[1], "ip:") then
 			updateAdmins(args[1])
-			Citizen.Trace("identifier has been added as an admin!")
+			Citizen.Trace("EasyAdmin: identifier has been added as an admin!")
 		else
-			Citizen.Trace("Unable to Add Admin ( player id invalid / invalid identifier? )\n")
+			Citizen.Trace("EasyAdmin: Unable to Add Admin ( player id invalid / invalid identifier? )\n")
 		end
 	end, true)
 	
@@ -401,11 +406,11 @@ Citizen.CreateThread(function()
 			for i,theBan in ipairs(ob) do
 				if not theBan.steam then theBan.steam = "" end
 				TriggerEvent("ea_data:addBan", theBan)
-				print("processed ban: "..theBan.identifier.."\n")
+				print("EasyAdmin: processed ban: "..theBan.identifier.."\n")
 			end
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
 		else
-			print("Custom Banlist is not enabled.")
+			print("EasyAdmin: Custom Banlist is not enabled.")
 		end
 	end, true)
 	
@@ -461,16 +466,20 @@ Citizen.CreateThread(function()
 			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", "", 0) -- overwrite banlist with emptyness, we dont even need this file, but sadly we cant delete it :(
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
+
+		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+		blacklist = json.decode(content)
+		if not blacklist then
+			print("-------------------!FATAL ERROR!------------------\n")
+			print("EasyAdmin: Failed to load Banlist!\n")
+			print("EasyAdmin: Please check this error soon, Bans *will not* work!\n")
+			print("-------------------!FATAL ERROR!------------------\n")
+		end
+
 		
 		if data and not remove then
-			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-			blacklist = json.decode(content)
 			table.insert(blacklist, data)
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-			
 		elseif not data then
-			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-			blacklist = json.decode(content)
 			for i,theBan in ipairs(blacklist) do
 				if theBan.expire < os.time() then
 					table.remove(blacklist,i)
@@ -478,20 +487,15 @@ Citizen.CreateThread(function()
 					blacklist[i].expire = 10444633200
 				end
 			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
-		
 		if data and remove then
-			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-			blacklist = json.decode(content)
-			
 			for i,theBan in ipairs(blacklist) do
 				if theBan.identifier == data.identifier then
 					table.remove(blacklist,i)
 				end
 			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
+		SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 	end
 
 
@@ -517,7 +521,7 @@ Citizen.CreateThread(function()
 			for i,theId in ipairs(numIds) do
 				if (blacklisted.identifier == theId) or (blacklisted.steam and blacklisted.steam == theId) then
 					setKickReason(string.format( strings.bannedjoin, blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
-					print("Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
+					print("EasyAdmin: Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
 					CancelEvent()
 					return
 				end
