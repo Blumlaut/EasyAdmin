@@ -28,13 +28,8 @@ Citizen.CreateThread(function()
 		
 		local identifiers = GetPlayerIdentifiers(source)
 		for perm,val in pairs(permissions) do
-			if perm == "ban" or perm == "unban" then
-				print("Banning is Unavailable!\n")
-				TriggerClientEvent("EasyAdmin:adminresponse", source, perm,false)
-			else
-				local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
-				TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
-			end
+			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
+			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
 		end
 		
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
