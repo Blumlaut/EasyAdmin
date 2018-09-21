@@ -145,6 +145,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler('banCheater', function(playerId,reason)
+		local expires = 10444633200
 		if not reason then reason = "Cheating" end
 		if GetPlayerName(source) then return end
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
@@ -161,6 +162,8 @@ Citizen.CreateThread(function()
 			ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
 		end
 		updateBlacklist( ban )
+		
+		SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, 'Console', GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 		DropPlayer(playerId, strings.bancheating)
 	end)
 	
