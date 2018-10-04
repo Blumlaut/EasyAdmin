@@ -161,6 +161,7 @@ Citizen.CreateThread(function()
 			ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
 		end
 		updateBlacklist( ban )
+		SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, 'Console', GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires or 10444633200 ) ))
 		DropPlayer(playerId, strings.bancheating)
 	end)
 	
