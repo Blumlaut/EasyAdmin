@@ -215,11 +215,19 @@ Citizen.CreateThread(function()
 					reason = reason.." "..theArg
 				end
 			end
+			
+			-- Use the function to get the "name" of source. Will return "Console" if source is 0
+			local whoKicked = getName(source)
+			
 			if GetPlayerName(args[1]) then
-				SendWebhookMessage(moderationNotification,string.format(strings.adminkickedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason))
-				DropPlayer(args[1], string.format(strings.kicked, GetPlayerName(source), reason) )
+				SendWebhookMessage(moderationNotification,string.format(strings.adminkickedplayer, whoKicked, GetPlayerName(args[1]), reason))
+				DropPlayer(args[1], string.format(strings.kicked, whoKicked, reason) )
 			else
-				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
+				if (source ~= 0) then
+					TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
+				else
+					Citizen.Trace(strings.playernotfound)
+				end
 			end
 		end
 	end, false)
@@ -243,21 +251,31 @@ Citizen.CreateThread(function()
 						playerSteamid = identifier
 					end
 				end
-				reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), GetPlayerName(source) )
+				
+				local whoBanned = getName(source)
+				reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), whoBanned )
 				local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
 				if playerSteamid then
 					ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
 				end
 				updateBlacklist( ban )
-				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(args[1]), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
+				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, whoBanned, GetPlayerName(args[1]), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 				DropPlayer(args[1], string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', 10444633200 ) ) )
 			else
-				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
+				if (source ~= 0) then
+					TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
+				else
+					Citizen.Trace(strings.playernotfound)
+				end
 			end
 		end
 	end, false)
 	
 	RegisterCommand("spectate", function(source, args, rawCommand)
+		if(source == 0) then
+			Citizen.Trace(strings.badidea) -- Maybe should be it's own string saying something like "only players can do this" or something
+		end
+		
 		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			if GetPlayerName(args[1]) then
 				TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1])
@@ -270,8 +288,12 @@ Citizen.CreateThread(function()
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
 			updateBlacklist({identifier = args[1]},true)
-			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.done } })
-			SendWebhookMessage(moderationNotification,string.format(strings.adminunbannedplayer, GetPlayerName(source), args[1]))
+			if (source ~= 0) then
+				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.done } })
+			else
+				Citizen.Trace(strings.done)
+			end
+			SendWebhookMessage(moderationNotification,string.format(strings.adminunbannedplayer, getName(source), args[1])) -- Use the "safe" getName function instead.
 		end
 	end, false)
 	
@@ -295,7 +317,7 @@ Citizen.CreateThread(function()
 
 	RegisterCommand("slap", function(source, args, rawCommand)
 		if args[1] and args[2] and DoesPlayerHavePermission(source,"easyadmin.slap") then
-			SendWebhookMessage(moderationNotification,string.format(strings.adminslappedplayer, GetPlayerName(source), GetPlayerName(args[1]), args[2]))
+			SendWebhookMessage(moderationNotification,string.format(strings.adminslappedplayer, getName(source), GetPlayerName(args[1]), args[2]))
 			TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], args[2])
 		end
 	end, false)	
@@ -338,6 +360,10 @@ Citizen.CreateThread(function()
 	
 	function DoesPlayerHavePermission(player, object)
 		local haspermission = false
+		
+		if (player == 0) then
+			return true
+		end-- Console. It's assumed this will be an admin with access. If not, why the fuck are they giving random people access?
 		
 		if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
 			haspermission = true
@@ -410,6 +436,20 @@ Citizen.CreateThread(function()
 		end
 	end, true)
 	
+	--[[
+		Very basic function that turns "source" into a useable player name.
+	]]
+	function getName(src)
+		if (src == 0) then
+			return "Console"
+		else
+			if (GetPlayerName(src)) then
+				return GetPlayerName(src)
+			else
+				return "Unknown - " .. src
+			end
+		end
+	end
 	function updateBlacklist(data,remove)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
 		if GetConvar("ea_custombanlist", "false") == "true" then 
