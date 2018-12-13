@@ -1,4 +1,4 @@
 {
-    "version":"4.5",
-    "changelog":"This Update is a fun one: Fixed Memory Leak ( as previously tested in 4.45x ) \nAdded Support for Custom Banlists ( e.g. MySQL ), see https://github.com/Bluethefurry/EasyAdmin/wiki/7.-Custom-Banlist-Plugins\nAdd a 'convertbanlist' command for the previously mentioned feature\nAdded Polish Translation\nFixed some buttons in the Settings Menu not doing anything when pressed"
+    "version":"4.51",
+    "changelog":"This is a minor update with some banlist optimisations, console support for commands, a fixed translation error and Webhook Notification for the BanCheater Event."
 }
