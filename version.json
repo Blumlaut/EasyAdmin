@@ -1,4 +1,4 @@
 {
-    "version":"4.51",
-    "changelog":"This is a minor update with some banlist optimisations, console support for commands, a fixed translation error and Webhook Notification for the BanCheater Event."
+    "version":"4.511",
+    "changelog":"This is a minor update intended for servers using OneSync as players were not displayed correctly beforehand, it will not affect normal servers."
 }
