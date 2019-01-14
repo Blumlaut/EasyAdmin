@@ -235,7 +235,7 @@ function GenerateMenu() -- this is a big ass function
 				if BanReason == "" then
 					BanReason = strings.noreason
 				end
-				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time)
+				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time, GetPlayerName( thePlayer ))
 				BanTime = 1
 				BanReason = ""
 				_menuPool:CloseAllMenus()
