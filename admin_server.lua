@@ -121,6 +121,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
 			local playerLicense = ""
 			local playerSteamid = false
+			local playerDiscordid = false
 			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 			if expires < os.time() then
 				expires = os.time()+expires 
@@ -130,13 +131,14 @@ Citizen.CreateThread(function()
 					playerLicense = identifier
 				elseif string.find(identifier, "steam:") then
 					playerSteamid = identifier
+				elseif string.find(identifier, "discord:") then
+					playerDiscordid = identifier
 				end
 			end
 			reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
 			local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
-			if playerSteamid then
-				ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
-			end
+			if playerSteamid then ban["steam"] = playerSteamid end
+			if playerDiscordid then ban["discord"] = playerDiscordid end
 			updateBlacklist( ban )
 			
 			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
