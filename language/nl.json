@@ -90,7 +90,7 @@
         "adminunbannedplayer": "**%s** Ban ongedaan gemaakt **%s**",
         "adminslappedplayer": "**%s** sloeg **%s** for **%s HP**",
         "adminfrozeplayer": "**%s** bevroor **%s**.",
-        "adminunfrozeplayer": "**%s** gestopt met bevroren **%s**.",
+        "adminunfrozeplayer": "**%s** gestopt met bevriezen **%s**.",
         
         "left": "Links",
         "middle": "Midden",
