@@ -99,5 +99,7 @@
 	"menuOffset":"Menyförskjutning",
 	"menuOffsetguide":"Ställ in menystorlek Offset\nKräver återåterställning av meny.",
 	"resetmenuOffset":"Reset Meny Offset",
+	"takescreenshot":"Take Screenshot",
+	"admintookscreenshot":"**%s** took a Screenshot of **%s**'s Screen: %s"
 	}
 ]

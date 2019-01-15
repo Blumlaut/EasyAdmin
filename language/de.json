@@ -99,6 +99,7 @@
 	"menuOffset":"Menüoffset",
 	"menuOffsetguide":"Menü Offset Setzen, dies wird das Menü Länger machen\nErfordert Neu Öffnen des Menüs.",
 	"resetmenuOffset":"Menüoffset Zurücksetzen",
-	
+	"takescreenshot":"Screenshot Erstellen",
+	"admintookscreenshot":"**%s** hat ein Screenshot von **%s**'s Bildschirm Erstellt: %s"
 	}
 ]

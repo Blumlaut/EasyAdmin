@@ -98,5 +98,7 @@
 	"menuOffset":"Przesunięcie menu",
 	"menuOffsetguide":"Ustaw Przesunięcie menu\nnWymaga Ponownego otwarcie menu.",
 	"resetmenuOffset":"Resetuj przesunięcie menu ",
+	"takescreenshot":"Take Screenshot",
+	"admintookscreenshot":"**%s** took a Screenshot of **%s**'s Screen: %s"
 	}
 ]

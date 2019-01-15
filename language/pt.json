@@ -95,5 +95,7 @@
 	"menuOffset":"Desvio de menu",
 	"menuOffsetguide":"Definir o deslocamento do tamanho do menu\nRequer Reabertura do Menu.",
 	"resetmenuOffset":"Reset Menu Offset",
+	"takescreenshot":"Take Screenshot",
+	"admintookscreenshot":"**%s** took a Screenshot of **%s**'s Screen: %s"
 	}
 ]

@@ -19,7 +19,7 @@ RegisterNetEvent("EasyAdmin:SetLanguage")
 RegisterNetEvent("EasyAdmin:TeleportRequest")
 RegisterNetEvent("EasyAdmin:SlapPlayer")
 RegisterNetEvent("EasyAdmin:FreezePlayer")
-
+RegisterNetEvent("EasyAdmin:CaptureScreenshot")
 
 
 AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
@@ -81,12 +81,22 @@ AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
 	end
 end)
 
+
+
 AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 	frozen = toggle
 	FreezeEntityPosition(PlayerPedId(), frozen)
 	if IsPedInAnyVehicle(PlayerPedId(), false) then
 		FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
 	end 
+end)
+
+
+AddEventHandler('EasyAdmin:CaptureScreenshot', function(toggle)
+	exports['screenshot-basic']:requestScreenshotUpload('https://wew.wtf/upload.php', 'files[]', function(data)
+			local resp = json.decode(data)
+			TriggerServerEvent("EasyAdmin:TookScreenshot", resp.files[1].url)
+	end)
 end)
 
 function spectatePlayer(targetPed,target,name)

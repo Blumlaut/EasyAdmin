@@ -16,6 +16,7 @@ permissions = {
 	manageserver = false,
 	slap = false,
 	freeze = false,
+	screenshot = false,
 }
 
 Citizen.CreateThread(function()
@@ -29,6 +30,9 @@ Citizen.CreateThread(function()
 		local identifiers = GetPlayerIdentifiers(source)
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
+			if perm == "screenshot" and not screenshots then
+				thisPerm = false
+			end
 			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
 		end
 		
@@ -351,6 +355,25 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
+	RegisterServerEvent("EasyAdmin:TookScreenshot")
+	
+	RegisterServerEvent("EasyAdmin:TakeScreenshot")
+	AddEventHandler('EasyAdmin:TakeScreenshot', function(playerId)
+		local src=source
+		local imgdata = nil
+		local playerId = playerId
+
+		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
+			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(resultURL)
+				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { resultURL } })
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", 'Image is also available here: '.. resultURL } })
+				SendWebhookMessage(moderationNotification,string.format(strings.admintookscreenshot, GetPlayerName(source), GetPlayerName(playerId), resultURL))
+				RemoveEventHandler(thistemporaryevent)
+			end)
+			
+			TriggerClientEvent("EasyAdmin:CaptureScreenshot", playerId)
+		end
+	end)
 	
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
 	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
@@ -615,8 +638,21 @@ Citizen.CreateThread(function()
 			print("\nhttps://github.com/FrazzIe/NativeUILua")
 			print("\n--------------------------------------------------------------------------")
 		else
+			StartResource("NativeUI")
 			SaveResourceFile("NativeUI", "__resource.lua", nativeuitest, -1)
 		end
+		local screenshottest = LoadResourceFile("screenshot-basic", "__resource.lua")
+		if not screenshottest then
+			print("\n--------------------------------------------------------------------------")
+			print("\nscreenshot-basic is not installed on this Server, this means that the screenshot feature will not be available, please download and install it from:")
+			print("\nhttps://github.com/citizenfx/screenshot-basic")
+			print("\n--------------------------------------------------------------------------")
+		else
+			StartResource("screenshot-basic")
+			screenshots = true
+			SaveResourceFile("screenshot-basic", "__resource.lua", screenshottest, -1)
+		end
+		
 		SetTimeout(3600000, checkVersionHTTPRequest)
 	end
 	

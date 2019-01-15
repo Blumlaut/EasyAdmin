@@ -22,6 +22,7 @@ permissions = {
 	manageserver = false,
 	slap = false,
 	freeze = false,
+	screenshot = false,
 }
 
 _menuPool = NativeUI.CreatePool()
@@ -300,6 +301,14 @@ function GenerateMenu() -- this is a big ass function
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
 	end
+	
+	if permissions.screenshot then
+		local thisItem = NativeUI.CreateItem(strings.takescreenshot,"")
+		thisPlayer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:TakeScreenshot", GetPlayerServerId(thePlayer))
+		end
+end
 	
 	
 	thisPlayer = _menuPool:AddSubMenu(playermanagement,strings.allplayers,"",true)

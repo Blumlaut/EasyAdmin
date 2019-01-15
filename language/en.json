@@ -98,5 +98,7 @@
 	"menuOffset":"Menu Offset",
 	"menuOffsetguide":"Set Menu Size Offset\nRequires Re-opening of Menu.",
 	"resetmenuOffset":"Reset Menu Offset",
+	"takescreenshot":"Take Screenshot",
+	"admintookscreenshot":"**%s** took a Screenshot of **%s**'s Screen: %s"
 	}
 ]
