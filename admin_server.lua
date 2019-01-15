@@ -639,7 +639,6 @@ Citizen.CreateThread(function()
 			print("\n--------------------------------------------------------------------------")
 		else
 			StartResource("NativeUI")
-			SaveResourceFile("NativeUI", "__resource.lua", nativeuitest, -1)
 		end
 		local screenshottest = LoadResourceFile("screenshot-basic", "__resource.lua")
 		if not screenshottest then
@@ -650,7 +649,6 @@ Citizen.CreateThread(function()
 		else
 			StartResource("screenshot-basic")
 			screenshots = true
-			SaveResourceFile("screenshot-basic", "__resource.lua", screenshottest, -1)
 		end
 		
 		SetTimeout(3600000, checkVersionHTTPRequest)
