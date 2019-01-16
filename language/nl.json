@@ -101,6 +101,8 @@
         "menuOffsetguide": "Stel Menu Grootte in\nVereist menu Heropenen",
         "resetmenuOffset": "Reset Menu Grootte",
         "takescreenshot": "Neem Schermafbeelding",
-        "admintookscreenshot": "**%s** nam een Schermafbeelding van **%s** zijn Scherm: %s"
+        "admintookscreenshot": "**%s** Nam een Schermafbeelding van **%s** zijn Scherm: %s",
+        "screenshotinprogress": "een Schermafbeelding is is al aan de gang, even geduld aub!",
+        "screenshotlink": "De schermafbeeldingen is beschikbaar hier: %s"
     }
 ]
