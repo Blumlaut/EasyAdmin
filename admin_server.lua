@@ -359,15 +359,20 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:TakeScreenshot")
 	AddEventHandler('EasyAdmin:TakeScreenshot', function(playerId)
+		if scrinprogress then
+			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.screenshotinprogress } })
+			return
+		end
+		scrinprogress = true
 		local src=source
-		local imgdata = nil
 		local playerId = playerId
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(resultURL)
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { resultURL } })
-				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", 'Image is also available here: '.. resultURL } })
-				SendWebhookMessage(moderationNotification,string.format(strings.admintookscreenshot, GetPlayerName(source), GetPlayerName(playerId), resultURL))
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(strings.screenshotlink, resultURL) } })
+				SendWebhookMessage(moderationNotification, string.format(strings.admintookscreenshot, GetPlayerName(source), GetPlayerName(playerId), resultURL))
+				scrinprogress = false
 				RemoveEventHandler(thistemporaryevent)
 			end)
 			

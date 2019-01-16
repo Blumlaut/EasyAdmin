@@ -99,6 +99,8 @@
 	"menuOffsetguide":"Ustaw Przesunięcie menu\nnWymaga Ponownego otwarcie menu.",
 	"resetmenuOffset":"Resetuj przesunięcie menu ",
 	"takescreenshot":"Take Screenshot",
-	"admintookscreenshot":"**%s** took a Screenshot of **%s**'s Screen: %s"
+	"admintookscreenshot":"**%s** took a Screenshot of **%s**'s Screen: %s",
+	"screenshotinprogress":"a Screenshot is already in progress, please wait!",
+	"screenshotlink":"The Screenshot is available here: %s",
 	}
 ]
