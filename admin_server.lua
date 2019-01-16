@@ -377,6 +377,16 @@ Citizen.CreateThread(function()
 			end)
 			
 			TriggerClientEvent("EasyAdmin:CaptureScreenshot", playerId)
+			local timeoutwait = 0
+			repeat
+				timeoutwait=timeoutwait+1
+				Wait(5000)
+				if timeoutwait == 5 then
+					RemoveEventHandler(thistemporaryevent)
+					scrinprogress = false -- cancel screenshot, seems like it failed
+					TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", "Screenshot Failed!" } })
+				end
+			until not scrinprogress
 		end
 	end)
 	
