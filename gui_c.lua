@@ -289,7 +289,6 @@ function GenerateMenu() -- this is a big ass function
 			thisPlayer.OnListSelect = function(sender, item, index)
 					if item == thisItem then
 							i = item:IndexToItem(index)
-							Citizen.Trace(i)
 							if i == strings.on then
 								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), true)
 							else
