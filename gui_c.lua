@@ -310,8 +310,6 @@ function GenerateMenu() -- this is a big ass function
 		_menuPool:MouseControlsEnabled(false)
 	end
 	
-end
-	
 	
 	thisPlayer = _menuPool:AddSubMenu(playermanagement,strings.allplayers,"",true)
 	thisPlayer:SetMenuWidthOffset(menuWidth)
