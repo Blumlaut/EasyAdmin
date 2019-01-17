@@ -371,7 +371,7 @@ Citizen.CreateThread(function()
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(resultURL)
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { resultURL } })
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(strings.screenshotlink, resultURL) } })
-				SendWebhookMessage(moderationNotification, string.format(strings.admintookscreenshot, GetPlayerName(source), GetPlayerName(playerId), resultURL))
+				SendWebhookMessage(moderationNotification, string.format(strings.admintookscreenshot, GetPlayerName(src), GetPlayerName(playerId), resultURL))
 				scrinprogress = false
 				RemoveEventHandler(thistemporaryevent)
 			end)
