@@ -82,6 +82,32 @@ AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
 end)
 
 
+RegisterCommand("kick", function(source, args, rawCommand)
+	local source=source
+	local reason = ""
+	for i,theArg in pairs(args) do
+		if i ~= 1 then -- make sure we are not adding the kicked player as a reason
+			reason = reason.." "..theArg
+		end
+	end
+	if args[1] and tonumber(args[1]) then
+		TriggerServerEvent("EasyAdmin:kickPlayer", tonumber(args[1]), reason)
+	end
+end, false)
+
+RegisterCommand("ban", function(source, args, rawCommand)
+	if args[1] and tonumber(args[1]) then
+		local reason = ""
+		for i,theArg in pairs(args) do
+			if i ~= 1 then
+				reason = reason.." "..theArg
+			end
+		end
+		if args[1] and tonumber(args[1]) then
+			TriggerServerEvent("EasyAdmin:banPlayer", tonumber(args[1]), reason, false, GetPlayerName(args[1]))
+		end
+	end
+end, false)
 
 AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 	frozen = toggle

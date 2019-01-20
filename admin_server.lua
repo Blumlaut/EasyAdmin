@@ -78,7 +78,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer")
 	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
-		if DoesPlayerHavePermission(source,"easyadmin.kick") then
+		if DoesPlayerHavePermission(source,"easyadmin.kick") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 			SendWebhookMessage(moderationNotification,string.format(strings.adminkickedplayer, GetPlayerName(source), GetPlayerName(playerId), reason))
 			DropPlayer(playerId, string.format(strings.kicked, GetPlayerName(source), reason) )
 		end
@@ -122,7 +122,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
-		if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username then
+		if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then then
 			local playerLicense = ""
 			local playerSteamid = ""
 			local playerDiscordid = ""
@@ -212,70 +212,6 @@ Citizen.CreateThread(function()
 		end
 	end, true)
 	
-	
-	RegisterCommand("kick", function(source, args, rawCommand)
-		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.kick") then
-			local reason = ""
-			for i,theArg in pairs(args) do
-				if i ~= 1 then -- make sure we are not adding the kicked player as a reason
-					reason = reason.." "..theArg
-				end
-			end
-			
-			-- Use the function to get the "name" of source. Will return "Console" if source is 0
-			local whoKicked = getName(source)
-			
-			if GetPlayerName(args[1]) then
-				SendWebhookMessage(moderationNotification,string.format(strings.adminkickedplayer, whoKicked, GetPlayerName(args[1]), reason))
-				DropPlayer(args[1], string.format(strings.kicked, whoKicked, reason) )
-			else
-				if (source ~= 0) then
-					TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
-				else
-					Citizen.Trace(strings.playernotfound)
-				end
-			end
-		end
-	end, false)
-	
-	RegisterCommand("ban", function(source, args, rawCommand)
-		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.ban") then
-			local reason = ""
-			for i,theArg in pairs(args) do
-				if i ~= 1 then
-					reason = reason.." "..theArg
-				end
-			end
-			if GetPlayerName(args[1]) then
-				local bannedIdentifiers = GetPlayerIdentifiers(args[1])
-				local playerLicense = ""
-				local playerSteamid = false
-				for i,identifier in ipairs(bannedIdentifiers) do
-					if string.find(identifier, "license:") then
-						playerLicense = identifier
-					elseif string.find(identifier, "steam:") then
-						playerSteamid = identifier
-					end
-				end
-				
-				local whoBanned = getName(source)
-				reason = reason.. string.format(strings.reasonadd, GetPlayerName(args[1]), whoBanned )
-				local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
-				if playerSteamid then
-					ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
-				end
-				updateBlacklist( ban )
-				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, whoBanned, GetPlayerName(args[1]), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
-				DropPlayer(args[1], string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', 10444633200 ) ) )
-			else
-				if (source ~= 0) then
-					TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", strings.playernotfound } })
-				else
-					Citizen.Trace(strings.playernotfound)
-				end
-			end
-		end
-	end, false)
 	
 	RegisterCommand("spectate", function(source, args, rawCommand)
 		if(source == 0) then
