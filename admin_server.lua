@@ -17,6 +17,7 @@ permissions = {
 	slap = false,
 	freeze = false,
 	screenshot = false,
+	immune = false,
 }
 
 Citizen.CreateThread(function()

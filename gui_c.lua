@@ -23,6 +23,7 @@ permissions = {
 	slap = false,
 	freeze = false,
 	screenshot = false,
+	immune = false,
 }
 
 _menuPool = NativeUI.CreatePool()
