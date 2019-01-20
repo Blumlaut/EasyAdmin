@@ -123,7 +123,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
-		if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then then
+		if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 			local playerLicense = ""
 			local playerSteamid = ""
 			local playerDiscordid = ""
