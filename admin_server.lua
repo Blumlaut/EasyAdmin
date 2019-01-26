@@ -571,7 +571,7 @@ Citizen.CreateThread(function()
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		
-		if err ~= 200 then
+		if err == 200 then
 			local data = json.decode(response)
 			if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
 				print("\n--------------------------------------------------------------------------")
