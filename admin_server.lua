@@ -570,18 +570,21 @@ Citizen.CreateThread(function()
 	local updatePath = "/Bluethefurry/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
-		local data = json.decode(response)
 		
-		
-		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-			print("\n--------------------------------------------------------------------------")
-			print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
-			print("\nUpdate Changelog:\n"..data.changelog)
-			print("\n--------------------------------------------------------------------------")
-		elseif tonumber(curVersion) > tonumber(data.version) then
-			print("Your version of "..resourceName.." seems to be higher than the current version.")
+		if err ~= 200 then
+			local data = json.decode(response)
+			if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
+				print("\n--------------------------------------------------------------------------")
+				print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+				print("\nUpdate Changelog:\n"..data.changelog)
+				print("\n--------------------------------------------------------------------------")
+			elseif tonumber(curVersion) > tonumber(data.version) then
+				print("Your version of "..resourceName.." seems to be higher than the current version.")
+			else
+				print(resourceName.." is up to date!")
+			end
 		else
-			print(resourceName.." is up to date!")
+			print("EasyAdmin Version Check failed!")
 		end
 		local nativeuitest = LoadResourceFile("NativeUI", "__resource.lua")
 		if not nativeuitest then
