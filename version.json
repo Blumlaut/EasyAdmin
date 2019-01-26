@@ -1,4 +1,4 @@
 {
-    "version":"4.6",
-    "changelog":"Unofficial Update 4.6."
+    "version":"4.511",
+    "changelog":"This is a minor update intended for servers using OneSync as players were not displayed correctly beforehand, it will not affect normal servers."
 }
