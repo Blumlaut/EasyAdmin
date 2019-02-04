@@ -75,7 +75,7 @@ Citizen.CreateThread(function()
 				banLength = {
 					{label = strings.permanent, time = 10444633200},
 					{label = strings.oneday, time = 86400},
-					{label = strings.threedays, time = 172800},
+					{label = strings.threedays, time = 259200},
 					{label = strings.oneweek, time = 518400},
 					{label = strings.twoweeks, time = 1123200},
 					{label = strings.onemonth, time = 2678400},
