@@ -10,4 +10,4 @@
 
 **you are not allowed to:**
 
-**Copy, re-release, re-distribute it without my written permission.**
+**Copy, re-release, re-distribute it without my written permission ( unless it is a fork on GitHub )**
