@@ -4,4 +4,4 @@
 
 ### If you get any errors or issues, please create an [Issue](https://github.com/Bluethefurry/EasyAdmin/issues/new)
 
-**Note: this script is licensed under "[AGPL 3.0](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))"
+**Note: this script is licensed under "[AGPL 3.0](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))"**
