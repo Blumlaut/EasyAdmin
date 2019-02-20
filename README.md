@@ -4,10 +4,4 @@
 
 ### If you get any errors or issues, please create an [Issue](https://github.com/Bluethefurry/EasyAdmin/issues/new)
 
-**Note: this script is licensed under "[No License](https://choosealicense.com/no-license/)", you are allowed to:**
-
-**Download, Use and Edit the Script.**
-
-**you are not allowed to:**
-
-**Copy, re-release, re-distribute it without my written permission ( unless it is a fork on GitHub )**
+**Note: this script is licensed under "[AGPL 3.0](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))"
