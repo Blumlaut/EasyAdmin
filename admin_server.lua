@@ -586,15 +586,6 @@ Citizen.CreateThread(function()
 		else
 			print("EasyAdmin Version Check failed!")
 		end
-		local nativeuitest = LoadResourceFile("NativeUI", "__resource.lua")
-		if not nativeuitest then
-			print("\n--------------------------------------------------------------------------")
-			print("\nNativeUI is not installed on this Server, this means that EasyAdmin will not work *at all*, please download and install it from:")
-			print("\nhttps://github.com/FrazzIe/NativeUILua")
-			print("\n--------------------------------------------------------------------------")
-		else
-			StartResource("NativeUI")
-		end
 		local screenshottest = LoadResourceFile("screenshot-basic", "__resource.lua")
 		if not screenshottest then
 			print("\n--------------------------------------------------------------------------")
