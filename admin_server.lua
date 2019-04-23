@@ -123,31 +123,33 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
-		if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-			local playerLicense = ""
-			local playerSteamid = ""
-			local playerDiscordid = ""
-			local bannedIdentifiers = GetPlayerIdentifiers(playerId)
-			if expires < os.time() then
-				expires = os.time()+expires 
-			end
-			for i,identifier in ipairs(bannedIdentifiers) do
-				if string.find(identifier, "license:") then
-					playerLicense = identifier
-				elseif string.find(identifier, "steam:") then
-					playerSteamid = identifier
-				elseif string.find(identifier, "discord:") then
-					playerDiscordid = identifier
+		if playerId ~= nil then
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				local playerLicense = ""
+				local playerSteamid = ""
+				local playerDiscordid = ""
+				local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+				if expires < os.time() then
+					expires = os.time()+expires 
 				end
+				for i,identifier in ipairs(bannedIdentifiers) do
+					if string.find(identifier, "license:") then
+						playerLicense = identifier
+					elseif string.find(identifier, "steam:") then
+						playerSteamid = identifier
+					elseif string.find(identifier, "discord:") then
+						playerDiscordid = identifier
+					end
+				end
+				reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
+				local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
+				ban["steam"] = playerSteamid
+				ban["discord"] = playerDiscordid
+				updateBlacklist( ban )
+
+				SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
+				DropPlayer(playerId, string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 			end
-			reason = reason.. string.format(strings.reasonadd, GetPlayerName(playerId), GetPlayerName(source) )
-			local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
-			ban["steam"] = playerSteamid
-			ban["discord"] = playerDiscordid
-			updateBlacklist( ban )
-			
-			SendWebhookMessage(moderationNotification,string.format(strings.adminbannedplayer, GetPlayerName(source), GetPlayerName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
-			DropPlayer(playerId, string.format(strings.banned, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 		end
 	end)
 	
