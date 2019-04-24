@@ -126,7 +126,7 @@ Citizen.CreateThread(function()
 		if playerId ~= nil then
 			local playerName = GetPlayerName(playerId)
 			if playerName ~= nil then		
-				if DoesPlayerHavePermission(source,"easyadmin.ban") and GetPlayerName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				if DoesPlayerHavePermission(source,"easyadmin.ban") and playerName == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 					local playerLicense = ""
 					local playerSteamid = ""
 					local playerDiscordid = ""
