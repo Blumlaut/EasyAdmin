@@ -24,6 +24,7 @@ permissions = {
 	freeze = false,
 	screenshot = false,
 	immune = false,
+	anon = false,
 }
 
 _menuPool = NativeUI.CreatePool()
@@ -83,6 +84,8 @@ Citizen.CreateThread(function()
 				}
 				if mainMenu:Visible() then
 					mainMenu:Visible(false)
+					_menuPool:Remove()
+					collectgarbage()
 				else
 					GenerateMenu()
 					mainMenu:Visible(true)
@@ -496,6 +499,17 @@ function GenerateMenu() -- this is a big ass function
 	thisItem.Activated = function(ParentMenu,SelectedItem)
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
+	end
+	
+	if permissions.anon then
+		local thisItem = NativeUI.CreateCheckboxItem(strings.anonymous, false, strings.anonymousguide)
+		settingsMenu:AddItem(thisItem)
+		settingsMenu.OnCheckboxChange = function(sender, item, checked_)
+			if item == thisItem then
+				anonymous = checked_
+				TriggerServerEvent("EasyAdmin:SetAnonymous", checked_)
+			end
+		end
 	end
 	
 	

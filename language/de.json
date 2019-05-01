@@ -103,5 +103,7 @@
 	"admintookscreenshot":"**%s** hat ein Screenshot von **%s**'s Bildschirm Erstellt: %s",
 	"screenshotinprogress":"Ein Screenshot wird bereits erstellt, bitte warten!",
 	"screenshotlink":"Das Screenshot ist hier verfügbar: %s",
+	"anonymous":"Anonymer Admin",
+	"anonymousguide":"Blendet Ihren Namen aus, wenn Sie die EasyAdmin-Funktionen verwenden.",
 	}
 ]
