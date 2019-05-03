@@ -459,7 +459,7 @@ Citizen.CreateThread(function()
 		Very basic function that turns "source" into a useable player name.
 	]]
 	function getName(src)
-		if (src == 0) then
+		if (src == 0 or src == "") then
 			return "Console"
 		else
 			if AnonymousAdmins[src] then
