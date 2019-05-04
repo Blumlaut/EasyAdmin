@@ -138,7 +138,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			ShowNotification(string.format(strings.spectatingUser, name))
+			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
 	else
 
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
@@ -147,7 +147,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(false, targetPed)
 
 			StopDrawPlayerInfo()
-			ShowNotification(strings.stoppedSpectating)
+			ShowNotification(GetLocalisedText(stoppedSpectating))
 	end
 end
 
