@@ -1,4 +1,4 @@
 {
-    "version":"4.7",
-    "changelog":"Change License, NativeUI is no longer an external requirement, fix a bug in temporary bans."
+    "version":"4.8",
+    "changelog":"Anonymous Admin Feature, Localisation Improvements, Performance Improvements, addBan event."
 }
