@@ -22,7 +22,7 @@ permissions = {
 	mute = false,
 }
 -- Muted Players Table
-muted = {} 
+MutedPlayers = {} 
 
 
 AnonymousAdmins = {}
@@ -378,11 +378,11 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:mutePlayer', function(playerId)
 		local src = source
 		if DoesPlayerHavePermission(src,"easyadmin.mute") then
-			if not has_value(muted, playerId) then 
-				table.insert(muted, playerId)
+			if not MutedPlayers[playerId] then 
+				MutedPlayers[playerId] = true
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", GetPlayerName(playerId) .. " " .. GetLocalisedText("playermuted") } })
 			else 
-				table.remove(muted, playerId)
+				MutedPlayers[playerId] = nil
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", GetPlayerName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
 			end
 		end
@@ -612,7 +612,7 @@ Citizen.CreateThread(function()
 
 
 	AddEventHandler('chatMessage', function(Source, Name, Msg)
-		if has_value(muted, Source) then
+		if MutedPlayers[Source] then
 			CancelEvent()
 			TriggerClientEvent("chat:addMessage", Source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
 		end
@@ -621,16 +621,6 @@ Citizen.CreateThread(function()
 	
 	---------------------------------- USEFUL
 	
-	function has_value (tab, val)
-		for index, value in ipairs(tab) do
-			if value == val then
-				return true
-			end
-		end
-	
-		return false
-	end
-
 	function SendWebhookMessage(webhook,message)
 		if webhook ~= "false" then
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
