@@ -17,7 +17,7 @@
 	"playermanagement":"Gestion des joueurs",
 	"servermanagement":"Gestion du serveur",
 	"settings":"Paramètres",
-	"kickplayer":"Kick le joueur",
+	"kickplayer":"Expulser le joueur",
 	"banplayer":"Bannir le joueur",
 	"reason":"Raison",
 	"kickreasonguide":"Ajouter une raison pour le kick.",
