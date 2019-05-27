@@ -141,7 +141,7 @@ Citizen.CreateThread(function()
 					expires = os.time()+expires 
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), getName(source) )
-				local ban = {identifiers = bannedIdentifiers, reason = reason, expire = expires or 10444633200 }
+				local ban = {identifiers = bannedIdentifiers, banner = GetPlayerName(source), reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
 
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -155,7 +155,7 @@ Citizen.CreateThread(function()
 		if getName(source) ~= "Console" then return end
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		reason = reason.. string.format(GetLocalisedText("bancheatingadd"), getName(playerId), getName(source) )
-		local ban = {identifiers = bannedIdentifiers, reason = reason, expire = expires or 10444633200 }
+		local ban = {identifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
 		
 		updateBlacklist( ban )
 		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), 'Console', getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires or 10444633200 ) ))
@@ -171,7 +171,7 @@ Citizen.CreateThread(function()
 			expires = os.time()+expires 
 		end
 		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), "Console" )
-		local ban = {identifiers = bannedIdentifiers, reason = reason, expire = expires or 10444633200 }
+		local ban = {identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
 		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -573,11 +573,11 @@ Citizen.CreateThread(function()
 	end
 	
 	function BanIdentifier(identifier,reason)
-		updateBlacklist( {identifiers = {identifier} , reason = reason, expire = 10444633200} )
+		updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 	end
 	
 	function BanIdentifiers(identifier,reason)
-		updateBlacklist( {identifiers = identifier , reason = reason, expire = 10444633200} )
+		updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
 	end
 	
 	function UnbanIdentifier(identifier)
