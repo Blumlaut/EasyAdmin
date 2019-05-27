@@ -506,10 +506,10 @@ Citizen.CreateThread(function()
 		
 		blacklist = json.decode(content)
 		if not blacklist then
-			print("-------------------!FATAL ERROR!------------------\n")
-			print("EasyAdmin: Failed to load Banlist!\n")
-			print("EasyAdmin: Please check this error soon, Bans *will not* work!\n")
-			print("-------------------!FATAL ERROR!------------------\n")
+			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
+			print("EasyAdmin: Please check this error soon, ^1Bans *will not* work!^7\n")
+			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 		end
 		
 		if blacklist[1] and blacklist[1].identifier and not blacklist[1].identifiers then -- more compat
