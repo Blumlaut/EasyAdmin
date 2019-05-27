@@ -140,19 +140,8 @@ Citizen.CreateThread(function()
 				if expires < os.time() then
 					expires = os.time()+expires 
 				end
-				for i,identifier in ipairs(bannedIdentifiers) do
-					if string.find(identifier, "license:") then
-						playerLicense = identifier
-					elseif string.find(identifier, "steam:") then
-						playerSteamid = identifier
-					elseif string.find(identifier, "discord:") then
-						playerDiscordid = identifier
-					end
-				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), getName(source) )
-				local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
-				ban["steam"] = playerSteamid
-				ban["discord"] = playerDiscordid
+				local ban = {identifiers = bannedIdentifiers, reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
 
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -165,18 +154,9 @@ Citizen.CreateThread(function()
 		if not reason then reason = "Cheating" end
 		if getName(source) ~= "Console" then return end
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
-		for i,identifier in ipairs(bannedIdentifiers) do
-			if string.find(identifier, "license:") then
-				playerLicense = identifier
-			elseif string.find(identifier, "steam:") then
-				playerSteamid = identifier
-			end
-		end
 		reason = reason.. string.format(GetLocalisedText("bancheatingadd"), getName(playerId), getName(source) )
-		local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
-		if playerSteamid then
-			ban = {identifier = playerLicense, steam = playerSteamid, reason = reason, expire = expires or 10444633200 }
-		end
+		local ban = {identifiers = bannedIdentifiers, reason = reason, expire = expires or 10444633200 }
+		
 		updateBlacklist( ban )
 		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), 'Console', getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires or 10444633200 ) ))
 		DropPlayer(playerId, GetLocalisedText("bancheating"))
@@ -190,19 +170,8 @@ Citizen.CreateThread(function()
 		if expires < os.time() then
 			expires = os.time()+expires 
 		end
-		for i,identifier in ipairs(bannedIdentifiers) do
-			if string.find(identifier, "license:") then
-				playerLicense = identifier
-			elseif string.find(identifier, "steam:") then
-				playerSteamid = identifier
-			elseif string.find(identifier, "discord:") then
-				playerDiscordid = identifier
-			end
-		end
 		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), "Console" )
-		local ban = {identifier = playerLicense, reason = reason, expire = expires or 10444633200 }
-		ban["steam"] = playerSteamid
-		ban["discord"] = playerDiscordid
+		local ban = {identifiers = bannedIdentifiers, reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
 		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -266,7 +235,7 @@ Citizen.CreateThread(function()
 	
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
-			updateBlacklist({identifier = args[1]},true)
+			UnbanIdentifier(args[1])
 			if (source ~= 0) then
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("done") } })
 			else
@@ -366,7 +335,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
 	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
-			updateBlacklist({identifier = playerId},true)
+			UnbanIdentifier(playerId)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), playerId))
 		end
 	end)
@@ -490,6 +459,7 @@ Citizen.CreateThread(function()
 					for i,theBan in ipairs(blacklist) do
 						if theBan.identifier == data.identifier then
 							table.remove(blacklist,i)
+							print("removed ban as per custombanlist remove")
 							TriggerEvent("ea_data:removeBan", theBan)
 						end
 					end
@@ -500,6 +470,7 @@ Citizen.CreateThread(function()
 					for i,theBan in ipairs(blacklist) do
 						if theBan.expire < os.time() then
 							table.remove(blacklist,i)
+							print("removing old ban custom banlist")
 							TriggerEvent("ea_data:removeBan", theBan)
 						end
 					end
@@ -532,12 +503,31 @@ Citizen.CreateThread(function()
 		end
 
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+		
 		blacklist = json.decode(content)
 		if not blacklist then
 			print("-------------------!FATAL ERROR!------------------\n")
 			print("EasyAdmin: Failed to load Banlist!\n")
 			print("EasyAdmin: Please check this error soon, Bans *will not* work!\n")
 			print("-------------------!FATAL ERROR!------------------\n")
+		end
+		
+		if blacklist[1] and blacklist[1].identifier and not blacklist[1].identifiers then -- more compat
+			Citizen.Trace("Upgrading Banlist...\n")
+			for i,ban in ipairs(blacklist) do
+				ban.identifiers = {}
+				if ban.identifier then
+					table.insert(ban.identifiers, ban.identifier)
+					ban.identifier = nil
+				elseif ban.steam then
+					table.insert(ban.identifiers, ban.steam)
+					ban.steam = nil
+				elseif ban.discord then
+					table.insert(ban.identifiers, ban.discord)
+					ban.discord = nil
+				end
+			end
+			Citizen.Trace("Banlist Upgraded! No Further Action is necesarry.\n")
 		end
 
 		
@@ -547,6 +537,7 @@ Citizen.CreateThread(function()
 			for i,theBan in ipairs(blacklist) do
 				if theBan.expire < os.time() then
 					table.remove(blacklist,i)
+					print("removing old ban no custom banlist")
 				elseif theBan.expire == 1924300800 then
 					blacklist[i].expire = 10444633200
 				end
@@ -554,8 +545,12 @@ Citizen.CreateThread(function()
 		end
 		if data and remove then
 			for i,theBan in ipairs(blacklist) do
-				if theBan.identifier == data.identifier then
-					table.remove(blacklist,i)
+				for index,identifier in ipairs(theBan.identifiers) do
+					if data.identifier == identifier then
+						table.remove(blacklist,i)
+						print("removing ban as ordered by remove param")
+						break
+					end
 				end
 			end
 		end
@@ -565,29 +560,49 @@ Citizen.CreateThread(function()
 
 
 	
-	function IsIdentifierBanned(identifier)
+	function IsIdentifierBanned(theIndentifier)
 		local identifierfound = false
 		for index,value in ipairs(blacklist) do
-			if identifier == value.identifier then
-				identifierfound = true
+			for i,identifier in ipairs(value.identifiers) do
+				if theIndentifier == identifier then
+					identifierfound = true
+				end
 			end
 		end
 		return identifierfound
 	end
 	
 	function BanIdentifier(identifier,reason)
-		updateBlacklist( {identifier = identifier, reason = reason, expire = 10444633200} )
+		updateBlacklist( {identifiers = {identifier} , reason = reason, expire = 10444633200} )
+	end
+	
+	function BanIdentifiers(identifier,reason)
+		updateBlacklist( {identifiers = identifier , reason = reason, expire = 10444633200} )
+	end
+	
+	function UnbanIdentifier(identifier)
+		for i,ban in ipairs(blacklist) do
+			for index,id in ipairs(ban.identifiers) do
+				if identifier == id then
+					table.remove(blacklist,i)
+					print("removed ban as per unbanidentifier func")
+					return
+				end 
+			end
+		end
 	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
-				if (blacklisted.identifier == theId) or (blacklisted.steam and blacklisted.steam == theId) then
-					setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
-					print("EasyAdmin: Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
-					CancelEvent()
-					return
+				for ci,identifier in ipairs(blacklisted.identifiers) do
+					if identifier == theId then
+						setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
+						print("EasyAdmin: Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
+						CancelEvent()
+						return
+					end
 				end
 			end
 		end
