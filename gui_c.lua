@@ -25,6 +25,7 @@ permissions = {
 	screenshot = false,
 	immune = false,
 	anon = false,
+	mute = false,
 }
 
 _menuPool = NativeUI.CreatePool()
@@ -251,6 +252,14 @@ function GenerateMenu() -- this is a big ass function
 			
 		end
 		
+		if permissions.mute then			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("mute"),GetLocalisedText("muteguide"))
+			thisPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				TriggerServerEvent("EasyAdmin:mutePlayer", GetPlayerServerId( thePlayer ))
+			end
+		end
+
 		if permissions.spectate then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
 			thisPlayer:AddItem(thisItem)

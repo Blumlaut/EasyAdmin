@@ -19,7 +19,10 @@ permissions = {
 	screenshot = false,
 	immune = false,
 	anon = false,
+	mute = false,
 }
+-- Muted Players Table
+MutedPlayers = {} 
 
 
 AnonymousAdmins = {}
@@ -339,7 +342,21 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), playerId))
 		end
 	end)
-	
+
+	RegisterServerEvent("EasyAdmin:mutePlayer")
+	AddEventHandler('EasyAdmin:mutePlayer', function(playerId)
+		local src = source
+		if DoesPlayerHavePermission(src,"easyadmin.mute") then
+			if not MutedPlayers[playerId] then 
+				MutedPlayers[playerId] = true
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", GetPlayerName(playerId) .. " " .. GetLocalisedText("playermuted") } })
+			else 
+				MutedPlayers[playerId] = nil
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", GetPlayerName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
+			end
+		end
+	end)
+
 	RegisterServerEvent("EasyAdmin:SetAnonymous")
 	AddEventHandler('EasyAdmin:SetAnonymous', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.anon") then
@@ -607,10 +624,17 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
+
+
+	AddEventHandler('chatMessage', function(Source, Name, Msg)
+		if MutedPlayers[Source] then
+			CancelEvent()
+			TriggerClientEvent("chat:addMessage", Source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
+		end
+	end)
 	
 	
 	---------------------------------- USEFUL
-	
 	
 	function SendWebhookMessage(webhook,message)
 		if webhook ~= "false" then
