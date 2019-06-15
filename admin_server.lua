@@ -144,7 +144,7 @@ Citizen.CreateThread(function()
 					expires = os.time()+expires 
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), getName(source) )
-				local ban = {identifiers = bannedIdentifiers, banner = GetPlayerName(source), reason = reason, expire = expires or 10444633200 }
+				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
 
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -349,10 +349,10 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(src,"easyadmin.mute") then
 			if not MutedPlayers[playerId] then 
 				MutedPlayers[playerId] = true
-				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", GetPlayerName(playerId) .. " " .. GetLocalisedText("playermuted") } })
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playermuted") } })
 			else 
 				MutedPlayers[playerId] = nil
-				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", GetPlayerName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
 			end
 		end
 	end)
@@ -449,11 +449,11 @@ Citizen.CreateThread(function()
 	--[[
 		Very basic function that turns "source" into a useable player name.
 	]]
-	function getName(src)
+	function getName(src,anonymousdisabled)
 		if (src == 0 or src == "") then
 			return "Console"
 		else
-			if AnonymousAdmins[src] then
+			if AnonymousAdmins[src] and not anonymousdisabled then
 				return GetLocalisedText("anonymous")
 			elseif (GetPlayerName(src)) then
 				return GetPlayerName(src)

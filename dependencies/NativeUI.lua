@@ -2843,6 +2843,7 @@ function UIMenu:Visible(bool)
             SetCursorLocation(W / 2, H / 2)
             SetCursorSprite(1)
         end
+				collectgarbage()
     else
         return self._Visible
     end
@@ -3630,10 +3631,12 @@ function MenuPool:Clear()
 	self = {
 		Menus = {}
 	 }
+	 collectgarbage()
 end
 
 function MenuPool:Remove()
 	self = nil
+	collectgarbage()
 end
 
 function MenuPool:MouseEdgeEnabled(bool)
