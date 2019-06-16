@@ -496,8 +496,8 @@ Citizen.CreateThread(function()
 						table.insert(theBan.identifiers, theBan.discord)
 						theBan.steam=nil
 					end
-					updateBlacklist(theBan)
 				end
+				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 			end)
 		end
 	end, true)
