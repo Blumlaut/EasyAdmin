@@ -484,6 +484,7 @@ Citizen.CreateThread(function()
 				blacklist = banlist
 				for i,theBan in ipairs(blacklist) do
 					if not theBan.identifiers then theBan.identifiers = {} end
+					theBan.banid = nil
 					if theBan.steam then
 						table.insert(theBan.identifiers, theBan.steam)
 						theBan.steam=nil
