@@ -36,6 +36,14 @@ Citizen.CreateThread(function()
 	
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
+	if GetConvar("ea_enableDebugging", "false") == "true" then
+		enableDebugging = true
+		PrintDebugMessage("^1Debug Messages Enabled, Anonymous Admins may not be anonymous!")
+	else
+		enableDebugging = false
+	end
+	minimumMatchingIdentifiers = GetConvarInt("ea_minIdentifierMatches", 2)
+	
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
@@ -466,13 +474,31 @@ Citizen.CreateThread(function()
 			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 			local ob = json.decode(content)
 			for i,theBan in ipairs(ob) do
-				if not theBan.steam then theBan.steam = "" end
 				TriggerEvent("ea_data:addBan", theBan)
-				PrintDebugMessage("processed ban: "..theBan.identifier.."\n")
+				print("processed ban: "..i.."\n")
 			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+			content=nil
 		else
-			PrintDebugMessage("Custom Banlist is not enabled.")
+			print("Custom Banlist is not enabled, converting back to json.")
+			TriggerEvent('ea_data:retrieveBanlist', function(banlist)
+				blacklist = banlist
+				for i,theBan in ipairs(blacklist) do
+					if not theBan.identifiers then theBan.identifiers = {} end
+					if theBan.steam then
+						table.insert(theBan.identifiers, theBan.steam)
+						theBan.steam=nil
+					end
+					if theBan.identifier then
+						table.insert(theBan.identifiers, theBan.identifier)
+						theBan.steam=nil
+					end
+					if theBan.discord then
+						table.insert(theBan.identifiers, theBan.discord)
+						theBan.steam=nil
+					end
+					updateBlacklist(theBan)
+				end
+			end)
 		end
 	end, true)
 	
@@ -530,6 +556,7 @@ Citizen.CreateThread(function()
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		if not content then
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+			content = json.encode({})
 		end
 		
 				
@@ -549,8 +576,6 @@ Citizen.CreateThread(function()
 			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", "", 0) -- overwrite banlist with emptyness, we dont even need this file, but sadly we cant delete it :(
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
-
-		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		
 		blacklist = json.decode(content)
 		PrintDebugMessage("updated banlist")
@@ -643,14 +668,18 @@ Citizen.CreateThread(function()
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
+		local matchingIdentifiers = 0
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
 				for ci,identifier in ipairs(blacklisted.identifiers) do
 					if identifier == theId then
-						setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
-						print("EasyAdmin: Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
-						CancelEvent()
-						return
+						matchingIdentifiers = matchingIdentifiers+1
+						if matchingIdentifiers >= minimumMatchingIdentifiers then
+							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
+							print("EasyAdmin: Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
+							CancelEvent()
+							return
+						end
 					end
 				end
 			end
@@ -727,12 +756,6 @@ Citizen.CreateThread(function()
 		else
 			StartResource("screenshot-basic")
 			screenshots = true
-		end
-		if GetConvar("ea_enableDebugging", "false") == "true" then
-			enableDebugging = true
-			PrintDebugMessage("^1Debug Messages Enabled, Anonymous Admins may not be anonymous!")
-		else
-			enableDebugging = false
 		end
 		
 		SetTimeout(3600000, checkVersionHTTPRequest)
