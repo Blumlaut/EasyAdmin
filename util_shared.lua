@@ -8,3 +8,14 @@ function GetLocalisedText(string)
 		return "String "..string.." not found in "..strings.language
 	end
 end
+
+function PrintDebugMessage(msg)
+	if enableDebugging then -- make sure debugging is enabled before Proceding
+		Citizen.Trace("^1"..GetCurrentResourceName().."^7: "..msg.."^7\n")
+	else
+		if GetConvar("ea_enableDebugging", "false") == "true" then
+			enableDebugging = true
+			PrintDebugMessage(msg) -- recursion?
+		end
+	end
+end
