@@ -490,11 +490,11 @@ Citizen.CreateThread(function()
 					end
 					if theBan.identifier then
 						table.insert(theBan.identifiers, theBan.identifier)
-						theBan.steam=nil
+						theBan.identifier=nil
 					end
 					if theBan.discord then
 						table.insert(theBan.identifiers, theBan.discord)
-						theBan.steam=nil
+						theBan.discord=nil
 					end
 				end
 				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
