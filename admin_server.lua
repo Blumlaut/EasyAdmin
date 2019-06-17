@@ -678,9 +678,10 @@ Citizen.CreateThread(function()
 				for ci,identifier in ipairs(blacklisted.identifiers) do
 					if identifier == theId then
 						matchingIdentifiers = matchingIdentifiers+1
+						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifiers.."/"..minimumMatchingIdentifiers)
 						if matchingIdentifiers >= minimumMatchingIdentifiers then
 							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
-							print("EasyAdmin: Connection Refused, Blacklisted for "..blacklist[bi].reason.."!\n")
+							PrintDebugMessage("EasyAdmin: Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason.." \n")
 							CancelEvent()
 							return
 						end
