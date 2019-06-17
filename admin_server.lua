@@ -42,7 +42,7 @@ Citizen.CreateThread(function()
 	else
 		enableDebugging = false
 	end
-	minimumMatchingIdentifiers = GetConvarInt("ea_minIdentifierMatches", 2)
+	minimumMatchingIdentifiers = GetConvarInt("ea_minIdentifierMatches", 1)
 	
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
@@ -562,6 +562,7 @@ Citizen.CreateThread(function()
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
 			content = json.encode({})
 		end
+		blacklist = json.decode(content)
 		
 				
 		local txtcontent = LoadResourceFile(GetCurrentResourceName(), "banlist.txt") -- compat
@@ -581,7 +582,7 @@ Citizen.CreateThread(function()
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 		
-		blacklist = json.decode(content)
+
 		PrintDebugMessage("updated banlist")
 		if not blacklist then
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
