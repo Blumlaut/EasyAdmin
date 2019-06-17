@@ -531,10 +531,13 @@ Citizen.CreateThread(function()
 				
 			elseif data and remove then
 					for i,theBan in ipairs(blacklist) do
-						if theBan.identifier == data.identifier then
-							table.remove(blacklist,i)
-							PrintDebugMessage("removed ban as per custombanlist remove")
-							TriggerEvent("ea_data:removeBan", theBan)
+						for index,identifier in ipairs(theBan.identifiers) do
+							if data.identifier == identifier then
+								table.remove(blacklist,i)
+								PrintDebugMessage("removed ban as per custombanlist remove")
+								TriggerEvent("ea_data:removeBan", theBan)
+								break
+							end
 						end
 					end
 					
