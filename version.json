@@ -1,4 +1,4 @@
 {
-    "version":"4.8",
-    "changelog":"Anonymous Admin Feature, Localisation Improvements, Performance Improvements, addBan event."
+    "version":"4.9",
+    "changelog":"^1IMPORTANT! Database Features MAY not work correctly, banlist.json works fine, USE AT YOUR OWN RISK!^7\nCheck the Forum Topic for Changelogs!"
 }
