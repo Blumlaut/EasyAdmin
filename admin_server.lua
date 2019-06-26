@@ -605,7 +605,7 @@ Citizen.CreateThread(function()
 					table.insert(ban.identifiers, ban.steam)
 					ban.steam = nil
 				end
-				if ban.discord then
+				if ban.discord and ban.discord ~= "" then
 					table.insert(ban.identifiers, ban.discord)
 					ban.discord = nil
 				end
