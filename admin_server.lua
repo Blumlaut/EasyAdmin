@@ -591,10 +591,12 @@ Citizen.CreateThread(function()
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 		end
 		
-		if blacklist[1] and blacklist[1].identifier and not blacklist[1].identifiers then -- more compat
+		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then -- more compat
 			Citizen.Trace("Upgrading Banlist...\n")
 			for i,ban in ipairs(blacklist) do
-				ban.identifiers = {}
+				if not ban.identifiers then
+					ban.identifiers = {}
+				end
 				if ban.identifier then
 					table.insert(ban.identifiers, ban.identifier)
 					ban.identifier = nil
