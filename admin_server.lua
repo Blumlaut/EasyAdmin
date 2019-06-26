@@ -598,10 +598,12 @@ Citizen.CreateThread(function()
 				if ban.identifier then
 					table.insert(ban.identifiers, ban.identifier)
 					ban.identifier = nil
-				elseif ban.steam then
+				end
+				if ban.steam then
 					table.insert(ban.identifiers, ban.steam)
 					ban.steam = nil
-				elseif ban.discord then
+				end
+				if ban.discord then
 					table.insert(ban.identifiers, ban.discord)
 					ban.discord = nil
 				end
