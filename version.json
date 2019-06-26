@@ -1,4 +1,4 @@
 {
-    "version":"4.9",
-    "changelog":"^1IMPORTANT! Database Features MAY not work correctly, banlist.json works fine, USE AT YOUR OWN RISK!^7\nCheck the Forum Topic for Changelogs!"
+    "version":"4.91",
+    "changelog":"^1IMPORTANT! HOTFIX!! Update 4.9 Introduced a bug which caused the banlist.json not to upgrade correctly, this hotfix fixes this issue!"
 }
