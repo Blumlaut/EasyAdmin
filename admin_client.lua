@@ -51,17 +51,6 @@ Citizen.CreateThread( function()
 				FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
 			end 
 		end
-    players = {}
-    local localplayers = {}
-    for i = 0, 255 do -- infinite sluts!!!
-      if NetworkIsPlayerActive( i ) then
-        table.insert( localplayers, GetPlayerServerId(i) )
-      end
-    end
-    table.sort(localplayers)
-    for i,thePlayer in ipairs(localplayers) do
-      table.insert(players,GetPlayerFromServerId(thePlayer))
-    end
   end
 end)
 
@@ -147,7 +136,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(false, targetPed)
 
 			StopDrawPlayerInfo()
-			ShowNotification(GetLocalisedText(stoppedSpectating))
+			ShowNotification(GetLocalisedText("stoppedSpectating"))
 	end
 end
 
