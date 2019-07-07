@@ -408,8 +408,7 @@ Citizen.CreateThread(function()
 	
 	function DoesPlayerHavePermission(player, object)
 		local haspermission = false
-		
-		if (player == 0) then
+		if (player == 0 or player == "") then
 			return true
 		end-- Console. It's assumed this will be an admin with access. If not, why the fuck are they giving random people access?
 		
