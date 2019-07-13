@@ -142,15 +142,12 @@ function GenerateMenu() -- this is a big ass function
 
 	-- util stuff
 	players = {}
-	local localplayers = {}
-	for i = 0, 255 do
-		if NetworkIsPlayerActive( i ) then
-			table.insert( localplayers, GetPlayerServerId(i) )
-		end
+	local localplayers = GetActivePlayers()
+	for _,player in pairs(localplayers) do
+		table.insert( localplayers, GetPlayerServerId(i) )
 	end
 	table.sort(localplayers)
 	for i,thePlayer in ipairs(localplayers) do
-		--Citizen.Trace(thePlayer)
 		table.insert(players,GetPlayerFromServerId(thePlayer))
 	end
 
