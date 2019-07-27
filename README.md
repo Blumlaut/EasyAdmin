@@ -1,6 +1,8 @@
-# [EasyAdmin](https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245)
+## [EasyAdmin](https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245)
+## Need Help? Join the Support Discord: https://discord.gg/UbsYrKx
 
 ## NOTE: BEFORE INSTALLING THIS ON YOUR SERVER, PLEASE READ THE [WIKI](https://github.com/Bluethefurry/EasyAdmin/wiki)
+
 
 ### If you get any errors or issues, please create an [Issue](https://github.com/Bluethefurry/EasyAdmin/issues/new)
 
