@@ -61,11 +61,11 @@ Citizen.CreateThread(function()
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
 	_menuPool:Add(mainMenu)
 	
-		mainMenu:SetMenuWidthOffset(menuWidth)	
+	mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
-		
+	
 	while true do
 		if _menuPool then
 			_menuPool:ProcessMenus()
@@ -127,32 +127,38 @@ function GenerateMenu() -- this is a big ass function
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
 	_menuPool:Add(mainMenu)
 	
-		mainMenu:SetMenuWidthOffset(menuWidth)	
+	mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
 	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true)
 	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true)
 	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true)
-
+	
 	mainMenu:SetMenuWidthOffset(menuWidth)	
 	playermanagement:SetMenuWidthOffset(menuWidth)	
 	servermanagement:SetMenuWidthOffset(menuWidth)	
 	settingsMenu:SetMenuWidthOffset(menuWidth)	
-
+	
 	-- util stuff
 	players = {}
-	local localplayers = GetActivePlayers()
-	for _,player in pairs(localplayers) do
-		table.insert( localplayers, GetPlayerServerId(player) )
+	local localplayers = {}
+	for i = 0, 255 do
+		if NetworkIsPlayerActive( i ) then
+			table.insert( localplayers, GetPlayerServerId(i) )
+		end
 	end
 	table.sort(localplayers)
 	for i,thePlayer in ipairs(localplayers) do
+		--Citizen.Trace(thePlayer)
 		table.insert(players,GetPlayerFromServerId(thePlayer))
 	end
+	
+	local name = GetPlayerName(thePlayer)
+	name = htmlEscape(name)
 
 	for i,thePlayer in ipairs(players) do
-		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..GetPlayerName(thePlayer),"",true)
+		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..name,"",true)
 		thisPlayer:SetMenuWidthOffset(menuWidth)
 		-- generate specific menu stuff, dirty but it works for now
 		if permissions.kick then
@@ -231,7 +237,7 @@ function GenerateMenu() -- this is a big ass function
 			thisItem.OnListChanged = function(sender,item,index)
 				BanTime = index
 			end
-		
+			
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
 			thisBanMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -256,7 +262,7 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:mutePlayer", GetPlayerServerId( thePlayer ))
 			end
 		end
-
+		
 		if permissions.spectate then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
 			thisPlayer:AddItem(thisItem)
@@ -291,23 +297,23 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:SlapPlayer", GetPlayerServerId(thePlayer), index*10)
 			end
 		end
-
+		
 		if permissions.freeze then
 			local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
 			local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
 			thisPlayer:AddItem(thisItem)
 			thisPlayer.OnListSelect = function(sender, item, index)
-					if item == thisItem then
-							i = item:IndexToItem(index)
-							if i == GetLocalisedText("on") then
-								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), true)
-							else
-								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), false)
-							end
+				if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == GetLocalisedText("on") then
+						TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), true)
+					else
+						TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), false)
 					end
+				end
 			end
 		end
-	
+		
 		if permissions.screenshot then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("takescreenshot"),"")
 			thisPlayer:AddItem(thisItem)
@@ -332,7 +338,7 @@ function GenerateMenu() -- this is a big ass function
 			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
 		end
 	end
-
+	
 	if permissions.manageserver then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("setgametype"), GetLocalisedText("setgametypeguide"))
 		servermanagement:AddItem(thisItem)
@@ -431,21 +437,21 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-
-
+	
+	
 	if permissions.unban then
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlistshowtype"), sl, 1,GetLocalisedText("banlistshowtypeguide"))
 		settingsMenu:AddItem(thisItem)
 		settingsMenu.OnListChange = function(sender, item, index)
-				if item == thisItem then
-						i = item:IndexToItem(index)
-						if i == GetLocalisedText(unbanreasons) then
-							showLicenses = false
-						else
-							showLicenses = true
-						end
+			if item == thisItem then
+				i = item:IndexToItem(index)
+				if i == GetLocalisedText(unbanreasons) then
+					showLicenses = false
+				else
+					showLicenses = true
 				end
+			end
 		end
 	end
 	
@@ -468,16 +474,16 @@ function GenerateMenu() -- this is a big ass function
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
 	settingsMenu.OnListChange = function(sender, item, index)
-			if item == thisItem then
-					i = item:IndexToItem(index)
-					if i == GetLocalisedText("left") then
-						SetResourceKvp("ea_menuorientation", "left")
-					elseif i == GetLocalisedText("middle") then
-						SetResourceKvp("ea_menuorientation", "middle")
-					else
-						SetResourceKvp("ea_menuorientation", "right")
-					end
+		if item == thisItem then
+			i = item:IndexToItem(index)
+			if i == GetLocalisedText("left") then
+				SetResourceKvp("ea_menuorientation", "left")
+			elseif i == GetLocalisedText("middle") then
+				SetResourceKvp("ea_menuorientation", "middle")
+			else
+				SetResourceKvp("ea_menuorientation", "right")
 			end
+		end
 	end
 	local sl = {}
 	for i=0,150,10 do
@@ -498,8 +504,8 @@ function GenerateMenu() -- this is a big ass function
 	end
 	thisi = nil
 	sl = nil
-
-
+	
+	
 	local thisItem = NativeUI.CreateItem(GetLocalisedText("resetmenuOffset"), "")
 	settingsMenu:AddItem(thisItem)
 	thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -522,6 +528,20 @@ function GenerateMenu() -- this is a big ass function
 	_menuPool:RefreshIndex() -- refresh indexes
 end
 
+function htmlEscape(playerName) 
+
+	if string.match(playerName, '<script') or string.match(playerName, 'http:') or string.match(playerName, 'https:') or string.match(playerName, '>') then
+		playerName = string.gsub(playerName,'<script','')
+		playerName = string.gsub(playerName,'http:','')
+		playerName = string.gsub(playerName,'https:','')
+		playerName = string.gsub(playerName,'>','')
+		playerName = string.gsub(playerName,'src=','')
+		return playerName
+	else
+		return playerName
+	end
+	
+end
 
 Citizen.CreateThread( function()
 	while true do
@@ -562,10 +582,10 @@ Citizen.CreateThread( function()
 			if IsControlJustPressed(0,103) then
 				local targetPed = PlayerPedId()
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-	
+				
 				RequestCollisionAtCoord(targetx,targety,targetz)
 				NetworkSetInSpectatorMode(false, targetPed)
-	
+				
 				StopDrawPlayerInfo()
 				ShowNotification(GetLocalisedText("stoppedSpectating"))
 			end
