@@ -222,27 +222,6 @@ Citizen.CreateThread(function()
 	
 	------------------------------ COMMANDS
 	
-	RegisterCommand("addadmin", function(source, args, rawCommand)
-		if args[1] and tonumber(args[1]) then
-			local numIds = GetPlayerIdentifiers(args[1])
-			for i,theId in ipairs(numIds) do
-				if string.find(theId, "license:") then
-					updateAdmins(theId)
-					TriggerClientEvent("EasyAdmin:adminresponse", args[1], true)
-					TriggerClientEvent("chat:addMessage", args[1], { args = { "EasyAdmin", GetLocalisedText("newadmin") } })
-					PrintDebugMessage("Player "..getName(source,true).." added "..getName(args[1],true).." as legacy admin.")
-					Citizen.Trace("EasyAdmin: player has been added as an admin!")
-				end
-			end
-		elseif args[1] and string.find(args[1], "steam:") or string.find(args[1], "license:") or string.find(args[1], "ip:") then
-			updateAdmins(args[1])
-			Citizen.Trace("EasyAdmin: identifier has been added as an admin!")
-		else
-			Citizen.Trace("EasyAdmin: Unable to Add Admin ( player id invalid / invalid identifier? )\n")
-		end
-	end, true)
-	
-	
 	RegisterCommand("spectate", function(source, args, rawCommand)
 		if(source == 0) then
 			Citizen.Trace(GetLocalisedText("badidea")) -- Maybe should be it's own string saying something like "only players can do this" or something
@@ -439,33 +418,15 @@ Citizen.CreateThread(function()
 		if not content then
 			return -- instead of re-creating the file, just quit, we dont need to continue anyway.
 		end
-		if not addItem then
-			for index,value in ipairs(mysplit(content, "\n")) do
-				admins[index] = value -- update admin list
-			end
-		else
-			if string.len(content) > 1 then
-				content = content.."\n"..addItem
-			else
-				content = content..""..addItem
-			end
-			for index,value in ipairs(mysplit(content, "\n")) do
-				admins[index] = value -- update admin list
-			end
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^3The following SteamIDs are added to your admins.txt file, this method is **OUTDATED** and **DOES NOT WORK**^7\n")
+		Citizen.Trace("Add these admins using ACE:\n")
+		for index,value in ipairs(mysplit(content, "\n")) do
+			Citizen.Trace(value.."\n")
 		end
-		
-		for i,theKey in ipairs(GetPlayers()) do
-			local numIds = GetPlayerIdentifiers(theKey)
-			for i,admin in ipairs(admins) do
-				for i,theId in ipairs(numIds) do
-					if admin == theId .. '\r' or admin == theId then -- is the player an admin?
-						TriggerClientEvent("EasyAdmin:adminresponse", theKey, true)
-					end
-				end
-			end
-		end
-		
-		SaveResourceFile(GetCurrentResourceName(), "admins.txt", content, -1)
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
 	end
 
 	RegisterCommand("convertbanlist", function(source, args, rawCommand)
@@ -767,14 +728,11 @@ Citizen.CreateThread(function()
 		updateBlacklist()
 		SetTimeout(300000, loopUpdateBlacklist)
 	end
-	
-	function loopUpdateAdmins()
-		updateAdmins()
-		SetTimeout(300000, loopUpdateAdmins)
-	end
+
+
 	
 	---------------------------------- END USEFUL
 	loopUpdateBlacklist()
-	loopUpdateAdmins()
+	updateAdmins()
 	checkVersionHTTPRequest()
 end)
