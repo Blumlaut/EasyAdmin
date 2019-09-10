@@ -1,4 +1,4 @@
 {
-    "version":"4.91",
-    "changelog":"^1IMPORTANT! HOTFIX!! Update 4.9 Introduced a bug which caused the banlist.json not to upgrade correctly, this hotfix fixes this issue!"
+    "version":"4.95",
+    "changelog":"This update fixes a 'no string' error, fixes some console usage, improves performance and fixes a bug in discord identifiers in bans" 
 }
