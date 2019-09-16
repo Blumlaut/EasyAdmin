@@ -583,6 +583,8 @@ Citizen.CreateThread(function()
 					PrintDebugMessage("removing old ban no custom banlist")
 				elseif theBan.expire == 1924300800 then
 					blacklist[i].expire = 10444633200
+				elseif not theBan.identifiers[1] then -- make sure 1 identifier is given, otherwise its a broken ban
+					table.remove(blacklist,i)
 				end
 			end
 		end
