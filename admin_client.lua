@@ -7,6 +7,7 @@
 
 players = {}
 banlist = {}
+cachedplayers = {}
 
 RegisterNetEvent("EasyAdmin:adminresponse")
 RegisterNetEvent("EasyAdmin:amiadmin")
@@ -20,6 +21,7 @@ RegisterNetEvent("EasyAdmin:TeleportRequest")
 RegisterNetEvent("EasyAdmin:SlapPlayer")
 RegisterNetEvent("EasyAdmin:FreezePlayer")
 RegisterNetEvent("EasyAdmin:CaptureScreenshot")
+RegisterNetEvent("EasyAdmin:fillCachedPlayers")
 
 
 AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
@@ -40,6 +42,10 @@ end)
 
 AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
+end)
+
+AddEventHandler("EasyAdmin:fillCachedPlayers", function(thecached)
+	cachedplayers = thecached
 end)
 
 Citizen.CreateThread( function()

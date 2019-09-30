@@ -49,6 +49,7 @@ end
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
+	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if not GetResourceKvpString("ea_menuorientation") then
 		SetResourceKvp("ea_menuorientation", "right")
 		SetResourceKvpInt("ea_menuwidth", 0)
@@ -111,6 +112,7 @@ function StopDrawPlayerInfo()
 end
 
 function GenerateMenu() -- this is a big ass function
+	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	_menuPool:Remove()
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
@@ -335,6 +337,66 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	CachedList = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("cachedplayers"),"",true)
+	CachedList:SetMenuWidthOffset(menuWidth)
+	if permissions.ban then
+		for i, cachedplayer in pairs(cachedplayers) do
+			if cachedplayer.droppedTime then
+				thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
+				thisPlayer:SetMenuWidthOffset(menuWidth)
+				local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
+				thisBanMenu:SetMenuWidthOffset(menuWidth)
+				
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
+				thisBanMenu:AddItem(thisItem)
+				BanReason = GetLocalisedText("noreason")
+				thisItem:RightLabel(BanReason)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+					
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+					
+					if result and result ~= "" then
+						BanReason = result
+						thisItem:RightLabel(result) -- this is broken for now
+					else
+						BanReason = GetLocalisedText("noreason")
+					end
+				end
+				local bt = {}
+				for i,a in ipairs(banLength) do
+					table.insert(bt, a.label)
+				end
+				
+				local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
+				thisBanMenu:AddItem(thisItem)
+				local BanTime = 1
+				thisItem.OnListChanged = function(sender,item,index)
+					BanTime = index
+				end
+			
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
+				thisBanMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if BanReason == "" then
+						BanReason = GetLocalisedText("noreason")
+					end
+					TriggerServerEvent("EasyAdmin:offlinebanPlayer", cachedplayer.id, BanReason, banLength[BanTime].time, cachedplayer.name)
+					BanTime = 1
+					BanReason = ""
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					playermanagement:Visible(true)
+				end	
+			end
+		end
+	end
+
 	if permissions.manageserver then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("setgametype"), GetLocalisedText("setgametypeguide"))
 		servermanagement:AddItem(thisItem)
@@ -457,6 +519,14 @@ function GenerateMenu() -- this is a big ass function
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			TriggerServerEvent("EasyAdmin:updateBanlist")
+		end
+	end
+
+	if permissions.ban then
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshcachedplayers"), GetLocalisedText("refreshcachedplayersguide"))
+		settingsMenu:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 		end
 	end
 	

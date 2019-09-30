@@ -26,12 +26,14 @@ MutedPlayers = {}
 -- cached players, for offline banning
 CachedPlayers = {}
 
+CachedPlayers[500] = {id = 500, name = "demo player", identifiers = {"steam:a", "discord:b", "license:c"}, droppedTime=os.time()}
+
 
 Citizen.CreateThread(function()
 	while true do 
 		Wait(5000)
 		for i, player in pairs(CachedPlayers) do 
-			if os.time() > player.cachedTime+300 then
+			if player.droppedTime and os.time() > player.droppedTime+300 then
 				CachedPlayers[player]=nil
 			end
 		end
@@ -43,8 +45,17 @@ AddEventHandler('playerDropped', function (reason)
 end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
-	if not CachedPlayers[source] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+	if not CachedPlayers[source] and not DoesPlayerHavePermission(source,"easyadmin.immune") then
 		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source)}
+	end
+end)
+
+RegisterServerEvent("EasyAdmin:requestCachedPlayers")
+AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
+	local src = source
+	if DoesPlayerHavePermission(source,"easyadmin.ban") then
+		TriggerClientEvent("EasyAdmin:fillCachedPlayers", src, CachedPlayers)
+		PrintDebugMessage("Cached Players requested by "..getName(src,true))
 	end
 end)
 
