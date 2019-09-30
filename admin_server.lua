@@ -23,7 +23,30 @@ permissions = {
 }
 -- Muted Players Table
 MutedPlayers = {} 
+-- cached players, for offline banning
+CachedPlayers = {}
 
+
+Citizen.CreateThread(function()
+	while true do 
+		Wait(5000)
+		for i, player in pairs(CachedPlayers) do 
+			if os.time() > player.cachedTime+300 then
+				CachedPlayers[player]=nil
+			end
+		end
+	end
+end)
+
+AddEventHandler('playerDropped', function (reason)
+	CachedPlayers[source].droppedTime = os.time()
+end)
+
+AddEventHandler("EasyAdmin:amiadmin", function()
+	if not CachedPlayers[source] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source)}
+	end
+end)
 
 AnonymousAdmins = {}
 Citizen.CreateThread(function()
@@ -164,6 +187,23 @@ Citizen.CreateThread(function()
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..getName(playerId,true).." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+			end
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:offlinebanPlayer")
+	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
+		if playerId ~= nil then
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers
+				if expires < os.time() then
+					expires = os.time()+expires 
+				end
+				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
+				updateBlacklist( ban )
+				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 			end
 		end
 	end)

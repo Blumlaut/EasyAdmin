@@ -110,6 +110,7 @@
 	"screenshotlink":"La capture d'écran est disponible ici : %s",
 	"anonymous":"Administration anonyme",
 	"anonymousguide":"Masque votre nom lorsque vous utilisez les fonctions EasyAdmin.",
+	"adminofflinebannedplayer":"**%s** offline banned **%s**, Reason: %s, Ban Expires: %s"
 	
 	}
 ]

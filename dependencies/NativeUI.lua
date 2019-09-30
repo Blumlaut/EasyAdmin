@@ -1954,7 +1954,7 @@ function UIMenuGridPanel:Functions()
     end
 
     if IsMouseInBounds(self.Grid.X + 20 + SafeZone.X, self.Grid.Y + 20 + SafeZone.Y, self.Grid.Width - 40, self.Grid.Height - 40) then
-        if IsDisabledControlJustPressed(0, 24) then
+        if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
             if not self.Pressed then
                 self.Pressed = true
                 Citizen.CreateThread(function()
@@ -2155,7 +2155,7 @@ function UIMenuColourPanel:Functions()
 
 
     if IsMouseInBounds(self.LeftArrow.X + SafeZone.X, self.LeftArrow.Y + SafeZone.Y, self.LeftArrow.Width, self.LeftArrow.Height) then
-        if IsDisabledControlJustPressed(0, 24) then
+        if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
             if #self.Data.Items > self.Data.Pagination.Total + 1 then
                 if self:CurrentSelection() <= self.Data.Pagination.Min + 1 then
                     if self:CurrentSelection() == 1 then
@@ -2182,7 +2182,7 @@ function UIMenuColourPanel:Functions()
     end
 
     if IsMouseInBounds(self.RightArrow.X + SafeZone.X, self.RightArrow.Y + SafeZone.Y, self.RightArrow.Width, self.RightArrow.Height) then
-        if IsDisabledControlJustPressed(0, 24) then
+        if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
             if #self.Data.Items > self.Data.Pagination.Total + 1 then
                 if self:CurrentSelection() >= self.Data.Pagination.Max then
                     if self:CurrentSelection() == #self.Data.Items then
@@ -2209,7 +2209,7 @@ function UIMenuColourPanel:Functions()
 
     for Index = 1, #self.Bar do
         if IsMouseInBounds(self.Bar[Index].X + SafeZone.X, self.Bar[Index].Y + SafeZone.Y, self.Bar[Index].Width, self.Bar[Index].Height) then
-            if IsDisabledControlJustPressed(0, 24) then
+            if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
                 self:CurrentSelection(self.Data.Pagination.Min + Index - 1)
             end
         end
@@ -2339,7 +2339,7 @@ function UIMenuPercentagePanel:Functions()
     end
 
     if IsMouseInBounds(self.BackgroundBar.X + SafeZone.X, self.BackgroundBar.Y - 4 + SafeZone.Y, self.BackgroundBar.Width, self.BackgroundBar.Height + 8) then
-        if IsDisabledControlJustPressed(0, 24) then
+        if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
             if not self.Pressed then
                 self.Pressed = true
                 Citizen.CreateThread(function()
@@ -2859,7 +2859,7 @@ function UIMenu:ProcessControl()
         return
     end
 
-    if self.Controls.Back.Enabled and (IsDisabledControlJustReleased(0, 177) or IsDisabledControlJustReleased(1, 177) or IsDisabledControlJustReleased(2, 177) or IsDisabledControlJustReleased(0, 199) or IsDisabledControlJustReleased(1, 199) or IsDisabledControlJustReleased(2, 199)) then
+    if self.Controls.Back.Enabled and (IsDisabledControlJustReleased(2, 177) or IsDisabledControlJustReleased(2, 199) ) and IsInputDisabled(0) then
         self:GoBack()
     end
     
@@ -2868,7 +2868,7 @@ function UIMenu:ProcessControl()
     end
 
     if not self.UpPressed then
-        if self.Controls.Up.Enabled and (IsDisabledControlJustPressed(0, 172) or IsDisabledControlJustPressed(1, 172) or IsDisabledControlJustPressed(2, 172) or IsDisabledControlJustPressed(0, 241) or IsDisabledControlJustPressed(1, 241) or IsDisabledControlJustPressed(2, 241) or IsDisabledControlJustPressed(2, 241)) then
+        if self.Controls.Up.Enabled and (IsDisabledControlJustPressed(1, 172) or IsDisabledControlJustPressed(1, 241)) and IsInputDisabled(0) then
             Citizen.CreateThread(function()
                 self.UpPressed = true
                 if #self.Items > self.Pagination.Total + 1 then
@@ -2878,7 +2878,7 @@ function UIMenu:ProcessControl()
                 end
                 self:UpdateScaleform()
                 Citizen.Wait(175)
-                while self.Controls.Up.Enabled and (IsDisabledControlPressed(0, 172) or IsDisabledControlPressed(1, 172) or IsDisabledControlPressed(2, 172) or IsDisabledControlPressed(0, 241) or IsDisabledControlPressed(1, 241) or IsDisabledControlPressed(2, 241) or IsDisabledControlPressed(2, 241)) do
+                while self.Controls.Up.Enabled and (IsDisabledControlPressed(2, 172) or IsDisabledControlPressed(2, 241)) and IsInputDisabled(0) do
                     if #self.Items > self.Pagination.Total + 1 then
                         self:GoUpOverflow()
                     else
@@ -2893,7 +2893,7 @@ function UIMenu:ProcessControl()
     end
 
     if not self.DownPressed then
-        if self.Controls.Down.Enabled and (IsDisabledControlJustPressed(0, 173) or IsDisabledControlJustPressed(1, 173) or IsDisabledControlJustPressed(2, 173) or IsDisabledControlJustPressed(0, 242) or IsDisabledControlJustPressed(1, 242) or IsDisabledControlJustPressed(2, 242)) then
+        if self.Controls.Down.Enabled and (IsDisabledControlJustPressed(1, 173) or IsDisabledControlJustPressed(1, 242)) and IsInputDisabled(0) then
             Citizen.CreateThread(function()
                 self.DownPressed = true
                 if #self.Items > self.Pagination.Total + 1 then
@@ -2903,7 +2903,7 @@ function UIMenu:ProcessControl()
                 end
                 self:UpdateScaleform()
                 Citizen.Wait(175)
-                while self.Controls.Down.Enabled and (IsDisabledControlPressed(0, 173) or IsDisabledControlPressed(1, 173) or IsDisabledControlPressed(2, 173) or IsDisabledControlPressed(0, 242) or IsDisabledControlPressed(1, 242) or IsDisabledControlPressed(2, 242)) do
+                while self.Controls.Down.Enabled and (IsDisabledControlPressed(2, 173) or IsDisabledControlPressed(2, 242)) and IsInputDisabled(0) do
                     if #self.Items > self.Pagination.Total + 1 then
                         self:GoDownOverflow()
                     else
@@ -2918,12 +2918,12 @@ function UIMenu:ProcessControl()
     end
 
     if not self.LeftPressed then
-        if self.Controls.Left.Enabled and (IsDisabledControlPressed(0, 174) or IsDisabledControlPressed(1, 174) or IsDisabledControlPressed(2, 174)) then
+        if self.Controls.Left.Enabled and (IsDisabledControlPressed(2, 174)) and IsInputDisabled(0) then
             Citizen.CreateThread(function()
                 self.LeftPressed = true
                 self:GoLeft()
                 Citizen.Wait(175)
-                while self.Controls.Left.Enabled and (IsDisabledControlPressed(0, 174) or IsDisabledControlPressed(1, 174) or IsDisabledControlPressed(2, 174)) do
+                while self.Controls.Left.Enabled and (IsDisabledControlPressed(2, 174)) and IsInputDisabled(0) do
                     self:GoLeft()
                     Citizen.Wait(125)
                 end
@@ -2933,12 +2933,12 @@ function UIMenu:ProcessControl()
     end
 
     if not self.RightPressed then
-        if self.Controls.Right.Enabled and (IsDisabledControlPressed(0, 175) or IsDisabledControlPressed(1, 175) or IsDisabledControlPressed(2, 175)) then
+        if self.Controls.Right.Enabled and (IsDisabledControlPressed(2, 175)) and IsInputDisabled(0) then
             Citizen.CreateThread(function()
                 self.RightPressed = true
                 self:GoRight()
                 Citizen.Wait(175)
-                while self.Controls.Right.Enabled and (IsDisabledControlPressed(0, 175) or IsDisabledControlPressed(1, 175) or IsDisabledControlPressed(2, 175)) do
+                while self.Controls.Right.Enabled and (IsDisabledControlPressed(2, 175)) and IsInputDisabled(0) do
                     self:GoRight()
                     Citizen.Wait(125)
                 end
@@ -2947,7 +2947,7 @@ function UIMenu:ProcessControl()
         end
     end
 
-    if self.Controls.Select.Enabled and (IsDisabledControlJustPressed(0, 201) or IsDisabledControlJustPressed(1, 201) or IsDisabledControlJustPressed(2, 201)) then
+    if self.Controls.Select.Enabled and (IsDisabledControlJustPressed(1, 201) and IsInputDisabled(0)) then
         self:SelectItem()
     end
 end
@@ -3340,7 +3340,7 @@ function UIMenu:ProcessMouse()
         if IsMouseInBounds(X, Y, Width, Height) then
             Item:Hovered(true)
             if not self.Controls.MousePressed then
-                if IsDisabledControlJustPressed(0, 24) then
+                if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
                     Citizen.CreateThread(function()
                         local _X, _Y, _Width, _Height = X, Y, Width, Height
                         self.Controls.MousePressed = true
@@ -3441,7 +3441,7 @@ function UIMenu:ProcessMouse()
     if IsMouseInBounds(ExtraX, ExtraY, 431 + self.WidthOffset, 18) then
         self.Extra.Up:Colour(30, 30, 30, 255)
         if not self.Controls.MousePressed then
-            if IsDisabledControlJustPressed(0, 24) then
+            if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
                 Citizen.CreateThread(function()
                     local _ExtraX, _ExtraY = ExtraX, ExtraY
                     self.Controls.MousePressed = true
@@ -3470,7 +3470,7 @@ function UIMenu:ProcessMouse()
     if IsMouseInBounds(ExtraX, ExtraY + 18, 431 + self.WidthOffset, 18) then
         self.Extra.Down:Colour(30, 30, 30, 255)
         if not self.Controls.MousePressed then
-            if IsDisabledControlJustPressed(0, 24) then
+            if IsDisabledControlJustPressed(1, 24) and IsInputDisabled(0) then
                 Citizen.CreateThread(function()
                     local _ExtraX, _ExtraY = ExtraX, ExtraY
                     self.Controls.MousePressed = true

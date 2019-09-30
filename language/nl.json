@@ -109,8 +109,9 @@
         "admintookscreenshot": "**%s** Nam een Schermafbeelding van **%s** zijn Scherm: %s",
         "screenshotinprogress": "een Schermafbeelding is is al aan de gang, even geduld aub!",
         "screenshotlink": "De schermafbeelding is beschikbaar hier: %s",
-				"anonymous":"Anonymous Admin",
-				"anonymousguide":"Hides your Name when using EasyAdmin Features.",
+		"anonymous":"Anonymous Admin",
+		"anonymousguide":"Hides your Name when using EasyAdmin Features.",
+		"adminofflinebannedplayer":"**%s** offline banned **%s**, Reason: %s, Ban Expires: %s"
 				
     }
 ]
