@@ -25,10 +25,6 @@ permissions = {
 MutedPlayers = {} 
 -- cached players, for offline banning
 CachedPlayers = {}
-
-CachedPlayers[500] = {id = 500, name = "demo player", identifiers = {"steam:a", "discord:b", "license:c"}, droppedTime=os.time()}
-
-
 Citizen.CreateThread(function()
 	while true do 
 		Wait(5000)
