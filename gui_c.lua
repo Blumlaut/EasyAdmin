@@ -589,7 +589,8 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 	end
-	
+	_menuPool:ControlDisablingEnabled(false)
+	_menuPool:MouseControlsEnabled(false)
 	
 	_menuPool:RefreshIndex() -- refresh indexes
 end
