@@ -29,8 +29,8 @@ Citizen.CreateThread(function()
 	while true do 
 		Wait(5000)
 		for i, player in pairs(CachedPlayers) do 
-			if player.droppedTime and os.time() > player.droppedTime+300 then
-				CachedPlayers[player]=nil
+			if player.droppedTime and (os.time() > player.droppedTime+300) then
+				CachedPlayers[i]=nil
 			end
 		end
 	end
