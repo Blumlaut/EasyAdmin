@@ -37,7 +37,9 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler('playerDropped', function (reason)
-	CachedPlayers[source].droppedTime = os.time()
+	if CachedPlayers[source] then
+		CachedPlayers[source].droppedTime = os.time()
+	end
 end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
