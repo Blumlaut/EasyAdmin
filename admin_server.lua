@@ -397,11 +397,12 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
-	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
+	AddEventHandler('EasyAdmin:unbanPlayer', function(banId)
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
-			UnbanIdentifier(playerId)
-			PrintDebugMessage("Player "..getName(source,true).." unbanned "..playerId)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), playerId))
+			UnbanId(banId)
+			PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId))
+			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end)
 
@@ -675,14 +676,27 @@ Citizen.CreateThread(function()
 	end
 	
 	function UnbanIdentifier(identifier)
-		for i,ban in ipairs(blacklist) do
-			for index,id in ipairs(ban.identifiers) do
-				if identifier == id then
-					table.remove(blacklist,i)
-					PrintDebugMessage("removed ban as per unbanidentifier func")
-					return
-				end 
+		if banid then 
+			if blacklist[banid] then 
+				table.remove(blacklist,banid)
 			end
+		elseif identifier then
+			for i,ban in ipairs(blacklist) do
+				for index,id in ipairs(ban.identifiers) do
+					if identifier == id then
+						table.remove(blacklist,i)
+						PrintDebugMessage("removed ban as per unbanidentifier func")
+						return
+					end 
+				end
+			end
+		end
+	end
+
+	function UnbanId(banId)
+		print(blacklist[banId])
+		if blacklist[banId] then 
+			table.remove(blacklist,banId)
 		end
 	end
 	

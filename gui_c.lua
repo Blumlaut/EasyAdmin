@@ -111,6 +111,7 @@ function StopDrawPlayerInfo()
 	drawTarget = 0
 end
 
+local banlistPage = 1
 function GenerateMenu() -- this is a big ass function
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	_menuPool:Remove()
@@ -471,28 +472,51 @@ function GenerateMenu() -- this is a big ass function
 	if permissions.unban then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("unbanplayer"),"",true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
-		
+
 		local reason = ""
 		local identifier = ""
+
 		for i,theBanned in ipairs(banlist) do
-			identifier = banlist[i].identifier
-			if showLicenses then 
-				reason = banlist[i].identifier
-				
-			else
-				reason = banlist[i].reason
-			end
-			local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
-			unbanPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
-				TriggerServerEvent("EasyAdmin:requestBanlist")
-				_menuPool:CloseAllMenus()
-				Citizen.Wait(800)
-				GenerateMenu()
-				unbanPlayer:Visible(true)
+			if i<(banlistPage*10) and i>(banlistPage*10)-10 then
+				if theBanned then
+					reason = theBanned.reason or "No Reason"
+					local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
+					unbanPlayer:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						TriggerServerEvent("EasyAdmin:unbanPlayer", i)
+						TriggerServerEvent("EasyAdmin:requestBanlist")
+						_menuPool:CloseAllMenus()
+						Citizen.Wait(800)
+						GenerateMenu()
+						unbanPlayer:Visible(true)
+					end	
+				end
 			end
 		end
+		if banlistPage>1 then 
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("lastpage"), GetLocalisedText("lastpage"))
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage=banlistPage-1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end
+		if #banlist > (banlistPage*10) then
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("nextpage"), GetLocalisedText("nextpage"))
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage=banlistPage+1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end 
+
+
 	end
 	
 
