@@ -49,6 +49,7 @@ end
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
+	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if not GetResourceKvpString("ea_menuorientation") then
 		SetResourceKvp("ea_menuorientation", "right")
 		SetResourceKvpInt("ea_menuwidth", 0)
@@ -110,7 +111,9 @@ function StopDrawPlayerInfo()
 	drawTarget = 0
 end
 
+local banlistPage = 1
 function GenerateMenu() -- this is a big ass function
+	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	_menuPool:Remove()
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
@@ -335,6 +338,66 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	CachedList = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("cachedplayers"),"",true)
+	CachedList:SetMenuWidthOffset(menuWidth)
+	if permissions.ban then
+		for i, cachedplayer in pairs(cachedplayers) do
+			if cachedplayer.droppedTime then
+				thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
+				thisPlayer:SetMenuWidthOffset(menuWidth)
+				local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
+				thisBanMenu:SetMenuWidthOffset(menuWidth)
+				
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
+				thisBanMenu:AddItem(thisItem)
+				BanReason = GetLocalisedText("noreason")
+				thisItem:RightLabel(BanReason)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+					
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+					
+					if result and result ~= "" then
+						BanReason = result
+						thisItem:RightLabel(result) -- this is broken for now
+					else
+						BanReason = GetLocalisedText("noreason")
+					end
+				end
+				local bt = {}
+				for i,a in ipairs(banLength) do
+					table.insert(bt, a.label)
+				end
+				
+				local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
+				thisBanMenu:AddItem(thisItem)
+				local BanTime = 1
+				thisItem.OnListChanged = function(sender,item,index)
+					BanTime = index
+				end
+			
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
+				thisBanMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if BanReason == "" then
+						BanReason = GetLocalisedText("noreason")
+					end
+					TriggerServerEvent("EasyAdmin:offlinebanPlayer", cachedplayer.id, BanReason, banLength[BanTime].time, cachedplayer.name)
+					BanTime = 1
+					BanReason = ""
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					playermanagement:Visible(true)
+				end	
+			end
+		end
+	end
+
 	if permissions.manageserver then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("setgametype"), GetLocalisedText("setgametypeguide"))
 		servermanagement:AddItem(thisItem)
@@ -409,28 +472,51 @@ function GenerateMenu() -- this is a big ass function
 	if permissions.unban then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("unbanplayer"),"",true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
-		
+
 		local reason = ""
 		local identifier = ""
+
 		for i,theBanned in ipairs(banlist) do
-			identifier = banlist[i].identifier
-			if showLicenses then 
-				reason = banlist[i].identifier
-				
-			else
-				reason = banlist[i].reason
-			end
-			local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
-			unbanPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:unbanPlayer", identifier)
-				TriggerServerEvent("EasyAdmin:requestBanlist")
-				_menuPool:CloseAllMenus()
-				Citizen.Wait(800)
-				GenerateMenu()
-				unbanPlayer:Visible(true)
+			if i<(banlistPage*10) and i>(banlistPage*10)-10 then
+				if theBanned then
+					reason = theBanned.reason or "No Reason"
+					local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
+					unbanPlayer:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						TriggerServerEvent("EasyAdmin:unbanPlayer", i)
+						TriggerServerEvent("EasyAdmin:requestBanlist")
+						_menuPool:CloseAllMenus()
+						Citizen.Wait(800)
+						GenerateMenu()
+						unbanPlayer:Visible(true)
+					end	
+				end
 			end
 		end
+		if banlistPage>1 then 
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("lastpage"), GetLocalisedText("lastpage"))
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage=banlistPage-1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end
+		if #banlist > (banlistPage*10) then
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("nextpage"), GetLocalisedText("nextpage"))
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage=banlistPage+1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end 
+
+
 	end
 	
 
@@ -457,6 +543,14 @@ function GenerateMenu() -- this is a big ass function
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			TriggerServerEvent("EasyAdmin:updateBanlist")
+		end
+	end
+
+	if permissions.ban then
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshcachedplayers"), GetLocalisedText("refreshcachedplayersguide"))
+		settingsMenu:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 		end
 	end
 	
@@ -519,7 +613,8 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 	end
-	
+	_menuPool:ControlDisablingEnabled(false)
+	_menuPool:MouseControlsEnabled(false)
 	
 	_menuPool:RefreshIndex() -- refresh indexes
 end

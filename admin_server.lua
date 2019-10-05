@@ -23,7 +23,39 @@ permissions = {
 }
 -- Muted Players Table
 MutedPlayers = {} 
+-- cached players, for offline banning
+CachedPlayers = {}
+Citizen.CreateThread(function()
+	while true do 
+		Wait(20000)
+		for i, player in pairs(CachedPlayers) do 
+			if player.droppedTime and (os.time() > player.droppedTime+600) then
+				CachedPlayers[i]=nil
+			end
+		end
+	end
+end)
 
+AddEventHandler('playerDropped', function (reason)
+	if CachedPlayers[source] then
+		CachedPlayers[source].droppedTime = os.time()
+	end
+end)
+
+AddEventHandler("EasyAdmin:amiadmin", function()
+	if not CachedPlayers[source] and not DoesPlayerHavePermission(source,"easyadmin.immune") then
+		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source)}
+	end
+end)
+
+RegisterServerEvent("EasyAdmin:requestCachedPlayers")
+AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
+	local src = source
+	if DoesPlayerHavePermission(source,"easyadmin.ban") then
+		TriggerClientEvent("EasyAdmin:fillCachedPlayers", src, CachedPlayers)
+		PrintDebugMessage("Cached Players requested by "..getName(src,true))
+	end
+end)
 
 AnonymousAdmins = {}
 Citizen.CreateThread(function()
@@ -150,20 +182,34 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and getName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				local playerLicense = ""
-				local playerSteamid = ""
-				local playerDiscordid = ""
-				local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers
 				if expires < os.time() then
 					expires = os.time()+expires 
 				end
-				reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), getName(source) )
+				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
-				PrintDebugMessage("Player "..getName(source,true).." banned player "..getName(playerId,true).." for "..reason)
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
+				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+			end
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:offlinebanPlayer")
+	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
+		if playerId ~= nil then
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers
+				if expires < os.time() then
+					expires = os.time()+expires 
+				end
+				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
+				updateBlacklist( ban )
+				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 			end
 		end
 	end)
@@ -182,9 +228,6 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
-		local playerLicense = ""
-		local playerSteamid = ""
-		local playerDiscordid = ""
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		if expires < os.time() then
 			expires = os.time()+expires 
@@ -348,11 +391,12 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
-	AddEventHandler('EasyAdmin:unbanPlayer', function(playerId)
+	AddEventHandler('EasyAdmin:unbanPlayer', function(banId)
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
-			UnbanIdentifier(playerId)
-			PrintDebugMessage("Player "..getName(source,true).." unbanned "..playerId)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), playerId))
+			UnbanId(banId)
+			PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId))
+			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end)
 
@@ -626,14 +670,27 @@ Citizen.CreateThread(function()
 	end
 	
 	function UnbanIdentifier(identifier)
-		for i,ban in ipairs(blacklist) do
-			for index,id in ipairs(ban.identifiers) do
-				if identifier == id then
-					table.remove(blacklist,i)
-					PrintDebugMessage("removed ban as per unbanidentifier func")
-					return
-				end 
+		if banid then 
+			if blacklist[banid] then 
+				table.remove(blacklist,banid)
 			end
+		elseif identifier then
+			for i,ban in ipairs(blacklist) do
+				for index,id in ipairs(ban.identifiers) do
+					if identifier == id then
+						table.remove(blacklist,i)
+						PrintDebugMessage("removed ban as per unbanidentifier func")
+						return
+					end 
+				end
+			end
+		end
+	end
+
+	function UnbanId(banId)
+		print(blacklist[banId])
+		if blacklist[banId] then 
+			table.remove(blacklist,banId)
 		end
 	end
 	
@@ -711,7 +768,7 @@ Citizen.CreateThread(function()
 		local screenshottest = LoadResourceFile("screenshot-basic", "__resource.lua")
 		if not screenshottest then
 			print("\n--------------------------------------------------------------------------")
-			print("\nscreenshot-basic is not installed on this Server, this means that the screenshot feature will not be available, please download and install it from:")
+			print("\nscreenshot-basic is not installed on this Server, this means that the screenshot feature will not be available, download and install it from:")
 			print("\nhttps://github.com/citizenfx/screenshot-basic")
 			print("\n--------------------------------------------------------------------------")
 		else
