@@ -228,9 +228,6 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
-		local playerLicense = ""
-		local playerSteamid = ""
-		local playerDiscordid = ""
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		if expires < os.time() then
 			expires = os.time()+expires 
