@@ -768,7 +768,7 @@ Citizen.CreateThread(function()
 		local screenshottest = LoadResourceFile("screenshot-basic", "__resource.lua")
 		if not screenshottest then
 			print("\n--------------------------------------------------------------------------")
-			print("\nscreenshot-basic is not installed on this Server, this means that the screenshot feature will not be available, please download and install it from:")
+			print("\nscreenshot-basic is not installed on this Server, this means that the screenshot feature will not be available, download and install it from:")
 			print("\nhttps://github.com/citizenfx/screenshot-basic")
 			print("\n--------------------------------------------------------------------------")
 		else
