@@ -182,19 +182,16 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and getName(playerId) == username and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				local playerLicense = ""
-				local playerSteamid = ""
-				local playerDiscordid = ""
-				local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers
 				if expires < os.time() then
 					expires = os.time()+expires 
 				end
-				reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), getName(source) )
+				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
-				PrintDebugMessage("Player "..getName(source,true).." banned player "..getName(playerId,true).." for "..reason)
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
+				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
 				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 			end
 		end
