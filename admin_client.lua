@@ -61,6 +61,7 @@ Citizen.CreateThread( function()
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
+	local playerId = GetPlayerFromServerId(playerId)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 end)
 

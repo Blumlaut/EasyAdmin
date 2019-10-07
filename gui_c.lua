@@ -266,7 +266,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:requestSpectate",thePlayer)
+				TriggerServerEvent("EasyAdmin:requestSpectate",GetPlayerServerId(thePlayer))
 			end
 		end
 		
