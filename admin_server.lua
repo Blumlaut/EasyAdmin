@@ -322,6 +322,69 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], args[2])
 		end
 	end, false)	
+
+
+	--- Commands for Normal Users
+
+	RegisterCommand("calladmin", function(source, args, rawCommand)
+		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
+			local reason = string.gsub(rawCommand, "admin ", "")
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playercalledforadmin"), getName(source), source, reason))
+			TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "Successfully called an Admin!")
+		end
+	end, false)
+	local PlayerReports = {}
+	RegisterCommand("report", function(source, args, rawCommand)
+		if GetConvar("ea_enableReportCommand", "false") == "true" then
+			local source = source
+			local id = args[1]
+			local valid = false
+			local minimumreports = GetConvarInt("ea_defaultMinReports", 3)
+			if GetConvar("ea_MinReportModifierEnabled", "true") == "true" then
+				if #GetPlayers() > GetConvarInt("ea_MinReportPlayers", 12) then
+					minimumreports = math.round(#GetPlayers()/GetConvarInt("ea_MinReportModifier", 4),0)
+				end
+			end
+			if not GetPlayerIdentifier(id, 1) then
+				for i, player in pairs(GetPlayers()) do
+					if string.find(string.lower(GetPlayerName(player)), string.lower(id)) then
+						id = player
+						valid = true
+						break
+					end
+				end
+			else
+				valid = true
+			end
+			
+			
+			if id and valid then
+				local reason = string.gsub(rawCommand, "report " ..args[1].." ", "")
+				if not PlayerReports[id] then
+					PlayerReports[id] = { }
+				end
+				local addReport = true
+				for i, report in pairs(PlayerReports[id]) do
+					if report.source == source or report.sourceName == GetPlayerName(source) then
+						addReport = false
+					end
+				end
+				if addReport then
+					table.insert(PlayerReports[id], {source = source, sourceName = GetPlayerName(source), reason = reason, time = os.time()})
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports))
+					-- "playerreportedplayer":"```\nUser %s (ID: %a) reported a player!\n%s (%a), Reason: %s\nReport %a/%a\n```",
+					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "Successfully reported the player!")
+					if #PlayerReports[id] >= minimumreports then
+						TriggerEvent("EasyAdmin:banPlayer", id, "Reported by "..minimumreports.." Players in short time.", os.time()+86400)
+					end
+				else
+					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "You already reported this player!")
+				end
+			else
+				TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "Error! Usage: /report name reason")
+			end
+		end
+	end, false)
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords")
 	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)

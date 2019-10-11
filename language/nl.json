@@ -119,6 +119,7 @@
 	"firstpage":"««First Page",
 		"lastpage":"Last Page»»",
 	"previouspage":"«Previous Page",
-				
+	"playercalledforadmin":"```\nUser %s (ID: %a) calls for an admin!\nReason: %s\n```",
+	"playerreportedplayer":"```\nUser %s (ID: %a) reported a player!\n%s (%a), Reason: %s\nReport %a/%a\n```",
     }
 ]
