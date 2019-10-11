@@ -121,5 +121,10 @@
 	"previouspage":"«Previous Page",
 	"playercalledforadmin":"```\nUser %s (ID: %s) calls for an admin!\nReason: %s\n```",
 	"playerreportedplayer":"```\nUser %s (ID: %s) reported a player!\n%s (%s), Reason: %s\nReport %s/%s\n```",
+	"successfullyreported":"Successfully reported the player!",
+	"reportbantext":"Reported by %s Players in short time.",
+	"alreadyreported":"You already reported this player!",
+	"reportedusageerror":"Error! Usage: /report name reason",
+	"admincalled":"Successfully called an Admin!",
 	}
 ]

@@ -330,7 +330,7 @@ Citizen.CreateThread(function()
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
 			local reason = string.gsub(rawCommand, "calladmin ", "")
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playercalledforadmin"), getName(source), source, reason))
-			TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "Successfully called an Admin!")
+			TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 		end
 	end, false)
 	local PlayerReports = {}
@@ -345,7 +345,7 @@ Citizen.CreateThread(function()
 					minimumreports = math.round(#GetPlayers()/GetConvarInt("ea_MinReportModifier", 4),0)
 				end
 			end
-			if not GetPlayerIdentifier(id, 1) then
+			if id and not GetPlayerIdentifier(id, 1) then
 				for i, player in pairs(GetPlayers()) do
 					if string.find(string.lower(GetPlayerName(player)), string.lower(id)) then
 						id = player
@@ -373,15 +373,15 @@ Citizen.CreateThread(function()
 					table.insert(PlayerReports[id], {source = source, sourceName = GetPlayerName(source), reason = reason, time = os.time()})
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports))
 					-- "playerreportedplayer":"```\nUser %s (ID: %a) reported a player!\n%s (%a), Reason: %s\nReport %a/%a\n```",
-					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "Successfully reported the player!")
+					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("successfullyreported"))
 					if #PlayerReports[id] >= minimumreports then
-						TriggerEvent("EasyAdmin:banPlayer", id, "Reported by "..minimumreports.." Players in short time.", os.time()+86400)
+						TriggerEvent("EasyAdmin:banPlayer", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
 					end
 				else
-					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "You already reported this player!")
+					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("alreadyreported"))
 				end
 			else
-				TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, "Error! Usage: /report name reason")
+				TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("reportedusageerror"))
 			end
 		end
 	end, false)
