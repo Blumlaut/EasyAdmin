@@ -685,13 +685,15 @@ Citizen.CreateThread(function()
 			table.insert(blacklist, data)
 		elseif not data then
 			for i,theBan in ipairs(blacklist) do
-				if theBan.expire < os.time() then
+				if not theBan.expire then 
+					table.remove(blacklist,i)
+				elseif not theBan.identifiers[1] then -- make sure 1 identifier is given, otherwise its a broken ban
+					table.remove(blacklist,i)
+				elseif theBan.expire < os.time() then
 					table.remove(blacklist,i)
 					PrintDebugMessage("removing old ban no custom banlist")
 				elseif theBan.expire == 1924300800 then
 					blacklist[i].expire = 10444633200
-				elseif not theBan.identifiers[1] then -- make sure 1 identifier is given, otherwise its a broken ban
-					table.remove(blacklist,i)
 				end
 			end
 		end
