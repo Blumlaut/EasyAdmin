@@ -115,6 +115,8 @@
 	"refreshcachedplayers":"frühere Spielerliste erneuern",
 	"adminrequestedofflineinfo":"**%s** hat die Nutzerdaten des Spielers **%s** angefordert",
 	"nextpage":"Nächste Seite»",
-	"lastpage":"«Vorherige Seite",
+	"firstpage":"««Erste Seite",
+	"lastpage":"Letzte Seite»»",
+	"previouspage":"«Vorherige Seite",
 	}
 ]

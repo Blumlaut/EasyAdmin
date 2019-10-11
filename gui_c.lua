@@ -470,12 +470,11 @@ function GenerateMenu() -- this is a big ass function
 	if permissions.unban then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("unbanplayer"),"",true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
-
 		local reason = ""
 		local identifier = ""
 
 		for i,theBanned in ipairs(banlist) do
-			if i<(banlistPage*10) and i>(banlistPage*10)-10 then
+			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
 				if theBanned then
 					reason = theBanned.reason or "No Reason"
 					local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
@@ -491,8 +490,31 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 		end
+
+
+		if #banlist > (banlistPage*10) then 
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("lastpage"), "")
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage = math.ceil(#banlist/10)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end
+
 		if banlistPage>1 then 
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("lastpage"), GetLocalisedText("lastpage"))
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("firstpage"), "")
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage = 1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("previouspage"), "")
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				banlistPage=banlistPage-1
@@ -503,7 +525,7 @@ function GenerateMenu() -- this is a big ass function
 			end	
 		end
 		if #banlist > (banlistPage*10) then
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("nextpage"), GetLocalisedText("nextpage"))
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("nextpage"), "")
 			unbanPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				banlistPage=banlistPage+1

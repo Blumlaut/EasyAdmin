@@ -111,6 +111,8 @@
 	"refreshcachedplayers":"Refresh Cached Players",
 	"adminrequestedofflineinfo":"**%s** requested User Data of Offline User **%s**",
 	"nextpage":"Next Page»",
-	"lastpage":"«Last Page",
+	"firstpage":"««First Page",
+	"lastpage":"Last Page»»",
+	"previouspage":"«Previous Page",
 	}
 ]
