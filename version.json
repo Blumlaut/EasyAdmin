@@ -1,4 +1,4 @@
 {
-    "version":"5.0",
-    "changelog":"Offline Banning, Fixed Unban Menu, Removed Controller Support, Removed Mouse Controls, Infinite Slots" 
+    "version":"5.1",
+    "changelog":"Unban Menu QOL Improvements, report and calladmin commands, banlist user friendlyness improvements" 
 }
