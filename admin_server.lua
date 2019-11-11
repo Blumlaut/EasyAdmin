@@ -762,6 +762,13 @@ Citizen.CreateThread(function()
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
 		local matchingIdentifiers = 0
+		if not blacklist then
+			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
+			print("EasyAdmin: Please check this error soon, ^1Bans *will not* work!^7\n")
+			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+		 	return
+		end
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
 				for ci,identifier in ipairs(blacklisted.identifiers) do
