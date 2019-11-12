@@ -87,12 +87,6 @@ function CreatePage(FAQ, data, add)
         {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
 	}))
 
-
-	local form = FAQ.Form("settings", {resource=GetCurrentResourceName()}, FAQ.Button("primary", {
-		"Settings ", FAQ.Icon("cog")
-	}, {type = "submit"}))
-	add(form)
-
 	-- add(FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"}))
 	add(FAQ.Node("h3", {}, "<br>Player List"))
 
@@ -168,6 +162,12 @@ function CreatePage(FAQ, data, add)
 	}
 
 	end))
+
+	local form = FAQ.Form("settings", {resource=GetCurrentResourceName()}, FAQ.Button("primary", {
+		"Settings ", FAQ.Icon("cog")
+	}, {type = "submit"}))
+	add(form)
+
     return true, "OK"
 end
 -- Automatically sets up a page and sidebar option based on the above configurations
