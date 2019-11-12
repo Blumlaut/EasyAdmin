@@ -87,37 +87,6 @@ function CreatePage(FAQ, data, add)
         {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
 	}))
 
-	--add(FAQ.Button("primary", "text", {type="button", ["data-toggle"]="modal", ["data-target"]="#exampleModal"}))
-
-	add( 
-		FAQ.Node("div", {class="modal fade", id="exampleModal", tabindex="-1", role="dialog", ["aria-labelledby"]="exampleModalLabel", ["aria-hidden"]="true"}, 
-		{
-			FAQ.Node("div", {class="modal-dialog", role="document"}, 
-			{
-				FAQ.Node("div", {class="modal-content"}, 
-				{
-					FAQ.Node("div", {class="modal-header"}, 
-					{
-						FAQ.Node("h5", {}, "This Sure Looks like a Bag of Dicks")
-					}),
-	
-					FAQ.Node("div", {class="modal-body"}, 
-					{
-						FAQ.Form(PAGE_NAME, {}, GenerateInputGroup(FAQ, FAQ.Node("input", {
-							class = "form-control",
-							name = "reason",
-							value = "Reason",
-							placeholder = default or "",
-						}, ""), FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title), FAQ.Button("primary", {
-							"Do the Thing"
-						}, {type = "submit"})))
-					})
-
-				})
-
-			})
-		})
-	)
 
 	local form = FAQ.Form("settings", {resource=GetCurrentResourceName()}, FAQ.Button("primary", {
 		"Settings ", FAQ.Icon("cog")
@@ -127,8 +96,8 @@ function CreatePage(FAQ, data, add)
 	-- add(FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"}))
 	add(FAQ.Node("h3", {}, "<br>Player List"))
 
-	add(FAQ.Table({"#", "Name", "Ping", "GUID", "Action"}, GetPlayers(), function(source)
-		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), GetPlayerGuid(source), 
+	add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, GetPlayers(), function(source)
+		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), (PlayerReports[source]) and #PlayerReports[source] or "0", 
 
 		FAQ.Form(PAGE_NAME, {source = source}, FAQ.Nodes({
 			FAQ.ButtonToolbar({

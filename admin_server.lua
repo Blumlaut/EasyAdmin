@@ -333,7 +333,7 @@ Citizen.CreateThread(function()
 			TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 		end
 	end, false)
-	local PlayerReports = {}
+	PlayerReports = {}
 	RegisterCommand("report", function(source, args, rawCommand)
 		if GetConvar("ea_enableReportCommand", "false") == "true" then
 			local source = source
