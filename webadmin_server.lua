@@ -44,7 +44,6 @@ local CONVARS = {
 }
 
 
-
 -- temporarily build settings on resource start in case i change anything remove this when done
 SaveResourceFile(GetCurrentResourceName(), "settings.json", json.encode(CONVARS, {indent = true}), -1)
 
@@ -56,19 +55,46 @@ local function GenerateInputGroup(FAQ, input, left, right)
         right and FAQ.Node("div", {class = "input-group-append"}, right) or "",
     })
 end
+local function GenerateCustomSelect(FAQ, name, list)
+    local options = {}
+    for _, entry in next, list do
+        table.insert(options, FAQ.Node("option", {value = entry[2]}, entry[1]))
+    end
+    return FAQ.Node("select", {class = "custom-select", name = name}, options)
+end
+
+local function GenerateBanOptions(FAQ)
+	banLength = {
+		{label = GetLocalisedText("permanent"), time = 10444633200},
+		{label = GetLocalisedText("oneday"), time = 86400},
+		{label = GetLocalisedText("threedays"), time = 259200},
+		{label = GetLocalisedText("oneweek"), time = 518400},
+		{label = GetLocalisedText("twoweeks"), time = 1123200},
+		{label = GetLocalisedText("onemonth"), time = 2678400},
+		{label = GetLocalisedText("oneyear"), time = 31536000},
+	}
+	local t = {}
+	for i, info in ipairs(banLength) do 
+		table.insert(t, {info.label, info.time})
+	end
+	return t
+end
 
 function CreatePage(FAQ, data, add)
 	if data.action == "kick" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.kick") then 
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
 		end 
-		TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
+		--TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
+		print(json.encode(data))
 	end
 	if data.action == "ban" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.ban") then 
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
 		end 
-		TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
+		--TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
+
+		print(json.encode(data))
 	end
 	if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
 		TriggerEvent("EasyAdmin:mutePlayer", data.source)
@@ -82,12 +108,11 @@ function CreatePage(FAQ, data, add)
 		SHOW_PAGE_BADGE = false
 	end
 
-    -- add(FAQ.Alert("info", "aaaaaaaaaaaaaaaaaaaa"))
+	
     add(FAQ.InfoCard("Statistics", {
         {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
 	}))
 
-	-- add(FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"}))
 	add(FAQ.Node("h3", {}, "<br>Player List"))
 
 	add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, GetPlayers(), function(source)
@@ -146,8 +171,15 @@ function CreatePage(FAQ, data, add)
 												value = "",
 												placeholder = "No Reason Provided",
 											}, ""), 
-										FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title),
-										FAQ.Node("br", {}, ""),
+										
+										FAQ.Node("h3", {}, ""),
+										
+
+										GenerateInputGroup(FAQ, 
+											GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()), 
+											FAQ.Node("span", {class = "input-group-text", style = "min-width: 30px;"}, "Ban Length")
+										),
+
 										FAQ.Button("danger", {"Ban User"}, {type = "submit", value=value, expires = expires or 10444633200}) 
 
 										})
@@ -156,9 +188,11 @@ function CreatePage(FAQ, data, add)
 							})
 						})
 				}),
-				FAQ.ButtonGroup({
-					FAQ.Button("secondary", (MutedPlayers[tonumber(source)]) and "Unmute" or "Mute", {type = "submit", name = "action", value = "mute", disabled = (not exports['webadmin']:isInRole("easyadmin.mute") and "disabled" or nil)}),
-				}),
+				FAQ.Form(PAGE_NAME, {source=source, action="mute"}, {
+					FAQ.ButtonGroup({
+						FAQ.Button("secondary", (MutedPlayers[tonumber(source)]) and "Unmute" or "Mute", {type = "submit", name = "action", value = "mute", disabled = (not exports['webadmin']:isInRole("easyadmin.mute") and "disabled" or nil)}),
+					}),
+				})
 			})
 		}))
 
