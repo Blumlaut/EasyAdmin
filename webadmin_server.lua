@@ -48,21 +48,79 @@ local CONVARS = {
 -- temporarily build settings on resource start in case i change anything remove this when done
 SaveResourceFile(GetCurrentResourceName(), "settings.json", json.encode(CONVARS, {indent = true}), -1)
 
+-- Input group builder
+local function GenerateInputGroup(FAQ, input, left, right)
+    return FAQ.Node("div", {class = "input-group mb-3"}, {
+        left and FAQ.Node("div", {class = "input-group-prepend"}, left) or "",
+        input,
+        right and FAQ.Node("div", {class = "input-group-append"}, right) or "",
+    })
+end
+
 function CreatePage(FAQ, data, add)
-	if data.action == "kick" and data.source and exports['webadmin']:isInRole("easyadmin.kick") then 
-		print("JESUS")
+	if data.action == "kick" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.kick") then 
+		if data.reason == "" then 
+			data.reason = "No Reason Provided"
+		end 
+		TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
 	end
-	if data.action == "ban" and data.source and exports['webadmin']:isInRole("easyadmin.ban") then 
-		print("CHRIST")
+	if data.action == "ban" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.ban") then 
+		if data.reason == "" then 
+			data.reason = "No Reason Provided"
+		end 
+		TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
 	end
 	if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
 		TriggerEvent("EasyAdmin:mutePlayer", data.source)
 	end
+	if not blacklist then 
+		add(FAQ.Alert("danger", "Banlist file could not be loaded! This means bans <b>WILL NOT WORK</b>, please check this and fix the banlist.json!"))
+		SHOW_PAGE_BADGE = true
+		PAGE_BADGE_TEXT = "ERROR!"
+		PAGE_BADGE_TYPE = "danger"
+	else
+		SHOW_PAGE_BADGE = false
+	end
+
     add(FAQ.Alert("info", "aaaaaaaaaaaaaaaaaaaa"))
     add(FAQ.InfoCard("fun things", {
-        {"Banlist Entries", #blacklist},
+        {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
 		{"wowie"},
 	}))
+
+	add(
+		FAQ.Button("primary", "text", {type="button", ["data-toggle"]="modal", ["data-target"]="#exampleModal"})
+	)
+
+	add( 
+		FAQ.Node("div", {class="modal fade", id="exampleModal", tabindex="-1", role="dialog", ["aria-labelledby"]="exampleModalLabel", ["aria-hidden"]="true"}, 
+		{
+			FAQ.Node("div", {class="modal-dialog", role="document"}, 
+			{
+				FAQ.Node("div", {class="modal-content"}, 
+				{
+					FAQ.Node("div", {class="modal-header"}, 
+					{
+						FAQ.Node("h5", {}, "This Sure Looks like a Bag of Dicks")
+					}),
+	
+					FAQ.Node("div", {class="modal-body"}, 
+					{
+						FAQ.Form(PAGE_NAME, {}, GenerateInputGroup(FAQ, FAQ.Node("input", {
+							class = "form-control",
+							name = "reason",
+							value = "Reason",
+							placeholder = default or "",
+						}, ""), FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title), FAQ.Button("primary", {
+							"Do the Thing"
+						}, {type = "submit"})))
+					})
+
+				})
+
+			})
+		})
+	)
 
 	local form = FAQ.Form("settings", {resource=GetCurrentResourceName()}, FAQ.Button("primary", {
 		"Settings ", FAQ.Icon("cog")
@@ -71,13 +129,67 @@ function CreatePage(FAQ, data, add)
 	local car = FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"})
 	add(car)
 	add(FAQ.Table({"#", "Name", "Ping", "GUID", "Action"}, GetPlayers(), function(source)
-		return {source, GetPlayerName(source), GetPlayerPing(source), GetPlayerGuid(source), 
+		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), GetPlayerGuid(source), 
 
 		FAQ.Form(PAGE_NAME, {source = source}, FAQ.Nodes({
 			FAQ.ButtonToolbar({
 				FAQ.ButtonGroup({
-					FAQ.Button("primary", "Kick", {type = "submit", name = "action", value = "kick", disabled = (not exports['webadmin']:isInRole("easyadmin.kick") and "disabled" or nil)}),
-					FAQ.Button("danger", "Ban", {type = "submit", name = "action", value = "ban", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
+					FAQ.Button("primary", "Kick", {type = "button", ["data-toggle"]="modal", ["data-target"]="#kickModal", name = "action", disabled = (not exports['webadmin']:isInRole("easyadmin.kick") and "disabled" or nil)}),
+						FAQ.Node("div", {class="modal fade", id="kickModal", tabindex="-1", role="dialog", ["aria-labelledby"]="kickModalLabel", ["aria-hidden"]="true"}, 
+						{
+							FAQ.Node("div", {class="modal-dialog", role="document"}, 
+							{
+								FAQ.Node("div", {class="modal-content"}, 
+								{
+									FAQ.Node("div", {class="modal-header"}, 
+									{
+										FAQ.Node("h5", {}, "Kick Player")
+									}),
+					
+									FAQ.Node("div", {class="modal-body"}, 
+									{
+										FAQ.Form(PAGE_NAME, {source=source, action="kick"}, GenerateInputGroup(FAQ, FAQ.Node("input", {
+											class = "form-control",
+											name = "reason",
+											value = "",
+											placeholder = "No Reason Provided",
+										}, ""), FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title), FAQ.Button("danger", {
+											"Kick User"
+										}, {type = "submit"})))
+									})
+				
+								})
+				
+							})
+						}),
+					FAQ.Button("danger", "Ban", {type = "button", ["data-toggle"]="modal", ["data-target"]="#banModal", name = "action", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
+						FAQ.Node("div", {class="modal fade", id="banModal", tabindex="-1", role="dialog", ["aria-labelledby"]="banModalLabel", ["aria-hidden"]="true"}, 
+						{
+							FAQ.Node("div", {class="modal-dialog", role="document"}, 
+							{
+								FAQ.Node("div", {class="modal-content"}, 
+								{
+									FAQ.Node("div", {class="modal-header"}, 
+									{
+										FAQ.Node("h5", {}, "This Sure Looks like a Bag of Dicks")
+									}),
+					
+									FAQ.Node("div", {class="modal-body"}, 
+									{
+										FAQ.Form(PAGE_NAME, {source=source, action="ban"}, GenerateInputGroup(FAQ, FAQ.Node("input", {
+											class = "form-control",
+											name = "reason",
+											value = "",
+											placeholder = "No Reason Provided",
+										}, ""), FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title), FAQ.Button("danger", {
+											"Ban User"
+										}, {type = "submit"})))
+									})
+				
+								})
+				
+							})
+						})
 				}),
 				FAQ.ButtonGroup({
 					FAQ.Button("secondary", (MutedPlayers[tonumber(source)]) and "Unmute" or "Mute", {type = "submit", name = "action", value = "mute", disabled = (not exports['webadmin']:isInRole("easyadmin.mute") and "disabled" or nil)}),
@@ -90,7 +202,6 @@ function CreatePage(FAQ, data, add)
 	end))
     return true, "OK"
 end
-
 -- Automatically sets up a page and sidebar option based on the above configurations
 -- This should not need to be altered, and serves as the foundation of the plugin
 -- lol watch this *edits*
@@ -111,6 +222,11 @@ Citizen.CreateThread(function()
 		return
 	else
 		StartResource("wap-settings")
+	end
+	if not blacklist then 
+		SHOW_PAGE_BADGE = true
+		PAGE_BADGE_TEXT = "ERROR!"
+		PAGE_BADGE_TYPE = "danger"
 	end
     local FAQ = exports['webadmin-lua']:getFactory()
     exports['webadmin']:registerPluginOutlet("nav/sideList", function(data) --[[R]]--
