@@ -19,12 +19,12 @@ local CONVARS = {
     -- MULTI: name, convar, type, items[{name, value}] (first is default)
 
     {"EasyAdmin", "General Settings"},
-    {"Language",         "ea_LanguageName",          "CV_STRING",  "en"},
+    {"Language",         "ea_LanguageName",          "CV_STRING_R",  "en"},
 	{"Moderation Notification Webhook", "ea_moderationNotification", "CV_STRING", "https://discordapp.com/api/webhooks/000000/AAAA"},
 	{"Enable Debugging", "ea_enableDebugging", "CV_BOOL", false},
 
 	{"", "Menu Settings"},
-	{"Menu Button",      "ea_MenuButton",      "CV_INT",    289},
+	{"Menu Button",      "ea_MenuButton",      "CV_INT_R",    289},
 	{"Show All Buttons", "ea_alwaysShowButtons", "CV_BOOL", false},
 	{"", "Banlist Settings"},
 	{"Minimum Matching Identifiers",        "ea_minIdentifierMatches",        "CV_INT",   2,1,3},
