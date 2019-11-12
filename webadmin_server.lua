@@ -85,14 +85,14 @@ function CreatePage(FAQ, data, add)
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
 		end 
-		--TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
+		TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
 		print(json.encode(data))
 	end
 	if data.action == "ban" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.ban") then 
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
 		end 
-		--TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
+		TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
 
 		print(json.encode(data))
 	end
