@@ -133,7 +133,7 @@ function CreatePage(FAQ, data, add)
 								{
 									FAQ.Node("div", {class="modal-header"}, 
 									{
-										FAQ.Node("h5", {}, "This Sure Looks like a Bag of Dicks")
+										FAQ.Node("h5", {}, "Ban Player")
 									}),
 					
 									FAQ.Node("div", {class="modal-body"}, 
