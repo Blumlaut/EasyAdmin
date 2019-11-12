@@ -83,13 +83,11 @@ function CreatePage(FAQ, data, add)
 	end
 
     -- add(FAQ.Alert("info", "aaaaaaaaaaaaaaaaaaaa"))
-    add(FAQ.InfoCard("fun things", {
+    add(FAQ.InfoCard("Statistics", {
         {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
 	}))
 
-	add(
-		FAQ.Button("primary", "text", {type="button", ["data-toggle"]="modal", ["data-target"]="#exampleModal"})
-	)
+	--add(FAQ.Button("primary", "text", {type="button", ["data-toggle"]="modal", ["data-target"]="#exampleModal"}))
 
 	add( 
 		FAQ.Node("div", {class="modal fade", id="exampleModal", tabindex="-1", role="dialog", ["aria-labelledby"]="exampleModalLabel", ["aria-hidden"]="true"}, 
@@ -127,6 +125,8 @@ function CreatePage(FAQ, data, add)
 	add(form)
 
 	-- add(FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"}))
+	add(FAQ.Node("h3", {}, "<br>Player List"))
+
 	add(FAQ.Table({"#", "Name", "Ping", "GUID", "Action"}, GetPlayers(), function(source)
 		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), GetPlayerGuid(source), 
 
