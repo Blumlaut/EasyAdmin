@@ -138,18 +138,21 @@ function CreatePage(FAQ, data, add)
 					
 									FAQ.Node("div", {class="modal-body"}, 
 									{
-										FAQ.Form(PAGE_NAME, {source=source, action="ban"}, GenerateInputGroup(FAQ, FAQ.Node("input", {
-											class = "form-control",
-											name = "reason",
-											value = "",
-											placeholder = "No Reason Provided",
-										}, ""), FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title), FAQ.Button("danger", {
-											"Ban User"
-										}, {type = "submit"})))
+										FAQ.Form(PAGE_NAME, {source=source, action="ban"}, 
+										{
+											FAQ.Node("input", {
+												class = "form-control",
+												name = "reason",
+												value = "",
+												placeholder = "No Reason Provided",
+											}, ""), 
+										FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title),
+										FAQ.Node("br", {}, ""),
+										FAQ.Button("danger", {"Ban User"}, {type = "submit", value=value, expires = expires or 10444633200}) 
+
+										})
 									})
-				
 								})
-				
 							})
 						})
 				}),
