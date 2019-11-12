@@ -82,10 +82,9 @@ function CreatePage(FAQ, data, add)
 		SHOW_PAGE_BADGE = false
 	end
 
-    add(FAQ.Alert("info", "aaaaaaaaaaaaaaaaaaaa"))
+    -- add(FAQ.Alert("info", "aaaaaaaaaaaaaaaaaaaa"))
     add(FAQ.InfoCard("fun things", {
         {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
-		{"wowie"},
 	}))
 
 	add(
@@ -126,8 +125,8 @@ function CreatePage(FAQ, data, add)
 		"Settings ", FAQ.Icon("cog")
 	}, {type = "submit"}))
 	add(form)
-	local car = FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"})
-	add(car)
+
+	-- add(FAQ.CardText({"RIDDLE ME THIS<br>RIDDLE ME THAT<br>WHO'S AFRAID OF THE BIG BLACK?"}))
 	add(FAQ.Table({"#", "Name", "Ping", "GUID", "Action"}, GetPlayers(), function(source)
 		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), GetPlayerGuid(source), 
 
