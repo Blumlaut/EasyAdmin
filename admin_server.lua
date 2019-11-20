@@ -434,11 +434,17 @@ Citizen.CreateThread(function()
 		local playerId = playerId
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
-			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(resultURL)
-				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { resultURL } })
-				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), resultURL) } })
-				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..resultURL.." requsted by"..getName(src,true))
-				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), resultURL))
+			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
+
+				if not json.encode(result) or not json.encode(result).files or not json.encode(result).files[1] or not json.encode(result).files[1].url then
+					response = json.encode(result)[1].url
+				else
+					response = result
+				end
+				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { response } })
+				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), response) } })
+				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..response.." requsted by"..getName(src,true))
+				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), response))
 				scrinprogress = false
 				RemoveEventHandler(thistemporaryevent)
 			end)
