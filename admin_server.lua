@@ -184,13 +184,11 @@ Citizen.CreateThread(function()
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers
-				if expires and expires < os.time() then
+				if expires < os.time() then
 					expires = os.time()+expires 
-				elseif not expires then 
-					expires = 10444633200
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -204,13 +202,11 @@ Citizen.CreateThread(function()
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers
-				if expires and expires < os.time() then
+				if expires < os.time() then
 					expires = os.time()+expires 
-				elseif not expires then 
-					expires = 10444633200
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+				local ban = {identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires or 10444633200 }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -435,16 +431,13 @@ Citizen.CreateThread(function()
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
-
-				if not json.encode(result) or not json.encode(result).files or not json.encode(result).files[1] or not json.encode(result).files[1].url then
-					response = json.encode(result)[1].url
-				else
-					response = result
-				end
+				response2 = result
+				print(result)
+				res = tostring(result)
+				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), res))
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { response } })
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), response) } })
 				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..response.." requsted by"..getName(src,true))
-				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), response))
 				scrinprogress = false
 				RemoveEventHandler(thistemporaryevent)
 			end)
@@ -454,10 +447,12 @@ Citizen.CreateThread(function()
 			repeat
 				timeoutwait=timeoutwait+1
 				Wait(5000)
-				if timeoutwait == 5 then
+				if timeoutwait == 2 then
+				    response2 = result
 					RemoveEventHandler(thistemporaryevent)
 					scrinprogress = false -- cancel screenshot, seems like it failed
 					TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", "Screenshot Failed!" } })
+
 				end
 			until not scrinprogress
 		end

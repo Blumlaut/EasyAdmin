@@ -115,9 +115,9 @@ end)
 
 
 AddEventHandler('EasyAdmin:CaptureScreenshot', function(toggle, url, field)
-	exports['screenshot-basic']:requestScreenshotUpload(GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'), GetConvar("ea_screenshotfield", 'files[]'), json.decode(GetConvar("ea_screenshotOptions", "{}")) , function(data)
+	exports['screenshot-basic']:requestScreenshotUpload(GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'), GetConvar("ea_screenshotfield", 'files[]'), function(data)
 			local resp = json.decode(data)
-			TriggerServerEvent("EasyAdmin:TookScreenshot", resp)
+			TriggerServerEvent("EasyAdmin:TookScreenshot", data)
 	end)
 end)
 
