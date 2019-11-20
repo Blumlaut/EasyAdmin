@@ -449,7 +449,7 @@ Citizen.CreateThread(function()
 			repeat
 				timeoutwait=timeoutwait+1
 				Wait(5000)
-				if timeoutwait == 2 then
+				if timeoutwait == 5 then
 					RemoveEventHandler(thistemporaryevent)
 					scrinprogress = false -- cancel screenshot, seems like it failed
 					TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", "Screenshot Failed!" } })
