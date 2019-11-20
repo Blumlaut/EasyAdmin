@@ -435,7 +435,6 @@ Citizen.CreateThread(function()
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
-				response2 = result
 				res = tostring(result)
 				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), res))
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
