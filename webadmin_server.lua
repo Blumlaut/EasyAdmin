@@ -81,6 +81,67 @@ local function GenerateBanOptions(FAQ)
 end
 
 function CreatePage(FAQ, data, add)
+
+	if data.action == "kickModal" and data.source then
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h2", {}, "<b>Kick User</b>"))
+	
+
+		add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+		add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+		add(FAQ.Form(PAGE_NAME, {source=data.source, action="kick"}, { FAQ.Node("input", {
+			class = "form-control",
+			type = "text",
+			name = "reason",
+			value = "",
+			placeholder = "No Reason Provided",
+		}, ""),FAQ.Node("div", {}, "&nbsp;"), FAQ.Button("danger", {
+			"Kick User"
+		}, {type = "submit"})}))
+
+
+
+		return true, "OK" -- dont render any further
+	end
+
+	if data.action == "banModal" and data.source then
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h2", {}, "<b>Ban User</b>"))
+	
+
+		add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+		add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+		add(FAQ.Form(PAGE_NAME, {source=data.source, action="ban"}, 
+		{
+			FAQ.Node("input", {
+				class = "form-control",
+				name = "reason",
+				value = "",
+				placeholder = "No Reason Provided",
+			}, ""),
+		
+		FAQ.Node("h3", {}, ""),
+		FAQ.Node("div", {}, "&nbsp;"),
+		
+		FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
+		GenerateInputGroup(FAQ, 
+			GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()), 
+			FAQ.Node("span", {class = "input-group-text", style = "min-width: 30px;"}, "Ban Length")
+		),
+
+		FAQ.Button("danger", {"Ban User"}, {type = "submit", value=value, expires = expires or 10444633200}) 
+
+		}))
+
+
+		return true, "OK" -- dont render any further
+	end
+
+
 	if data.action == "kick" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.kick") then 
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
@@ -97,6 +158,7 @@ function CreatePage(FAQ, data, add)
 		print(json.encode(data))
 	end
 	if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
+		print(json.encode(data))
 		TriggerEvent("EasyAdmin:mutePlayer", data.source)
 	end
 	if not blacklist then 
@@ -118,75 +180,20 @@ function CreatePage(FAQ, data, add)
 	add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, GetPlayers(), function(source)
 		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), (PlayerReports[source]) and #PlayerReports[source] or "0", 
 
-		FAQ.Form(PAGE_NAME, {source = source}, FAQ.Nodes({
+		FAQ.Form(PAGE_NAME, {source = source, action=action}, FAQ.Nodes({
 			FAQ.ButtonToolbar({
 				FAQ.ButtonGroup({
-					FAQ.Button("primary", "Kick", {type = "button", ["data-toggle"]="modal", ["data-target"]="#kickModal", name = "action", disabled = (not exports['webadmin']:isInRole("easyadmin.kick") and "disabled" or nil)}),
-						FAQ.Node("div", {class="modal fade", id="kickModal", tabindex="-1", role="dialog", ["aria-labelledby"]="kickModalLabel", ["aria-hidden"]="true"}, 
-						{
-							FAQ.Node("div", {class="modal-dialog", role="document"}, 
-							{
-								FAQ.Node("div", {class="modal-content"}, 
-								{
-									FAQ.Node("div", {class="modal-header"}, 
-									{
-										FAQ.Node("h5", {}, "Kick Player")
-									}),
-					
-									FAQ.Node("div", {class="modal-body"}, 
-									{
-										FAQ.Form(PAGE_NAME, {source=source, action="kick"}, GenerateInputGroup(FAQ, FAQ.Node("input", {
-											class = "form-control",
-											name = "reason",
-											value = "",
-											placeholder = "No Reason Provided",
-										}, ""), FAQ.Node("span", {class = "input-group-text", style = "min-width: 148px;"}, title), FAQ.Button("danger", {
-											"Kick User"
-										}, {type = "submit"})))
-									})
-				
-								})
-				
-							})
+					FAQ.Form(PAGE_NAME,{action="kickModal"}, {
+						FAQ.ButtonGroup({
+							FAQ.Button("primary", "Kick", {type = "submit", action="kickModal", disabled = (not exports['webadmin']:isInRole("easyadmin.kick") and "disabled" or nil)}),
 						}),
-					FAQ.Button("danger", "Ban", {type = "button", ["data-toggle"]="modal", ["data-target"]="#banModal", name = "action", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
-						FAQ.Node("div", {class="modal fade", id="banModal", tabindex="-1", role="dialog", ["aria-labelledby"]="banModalLabel", ["aria-hidden"]="true"}, 
-						{
-							FAQ.Node("div", {class="modal-dialog", role="document"}, 
-							{
-								FAQ.Node("div", {class="modal-content"}, 
-								{
-									FAQ.Node("div", {class="modal-header"}, 
-									{
-										FAQ.Node("h5", {}, "Ban Player")
-									}),
-					
-									FAQ.Node("div", {class="modal-body"}, 
-									{
-										FAQ.Form(PAGE_NAME, {source=source, action="ban"}, 
-										{
-											FAQ.Node("input", {
-												class = "form-control",
-												name = "reason",
-												value = "",
-												placeholder = "No Reason Provided",
-											}, ""), 
-										
-										FAQ.Node("h3", {}, ""),
-										
+					}),
 
-										GenerateInputGroup(FAQ, 
-											GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()), 
-											FAQ.Node("span", {class = "input-group-text", style = "min-width: 30px;"}, "Ban Length")
-										),
-
-										FAQ.Button("danger", {"Ban User"}, {type = "submit", value=value, expires = expires or 10444633200}) 
-
-										})
-									})
-								})
-							})
-						})
+					FAQ.Form(PAGE_NAME,{source=source, action="banModal"}, {
+						FAQ.ButtonGroup({
+							FAQ.Button("danger", "Ban", {type = "submit", source=source, action="banModal", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
+						}),
+					}),
 				}),
 				FAQ.Form(PAGE_NAME, {source=source, action="mute"}, {
 					FAQ.ButtonGroup({
