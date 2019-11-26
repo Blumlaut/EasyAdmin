@@ -146,6 +146,7 @@ function CreatePage(FAQ, data, add)
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
 		end 
+		add(FAQ.Alert("primary", "Kicking Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
 		TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
 		print(json.encode(data))
 	end
@@ -153,11 +154,13 @@ function CreatePage(FAQ, data, add)
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
 		end 
+		add(FAQ.Alert("primary", "Banning Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
 		TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
 
 		print(json.encode(data))
 	end
 	if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
+		add(FAQ.Alert("primary", "Muting Player "..GetPlayerName(data.source).."..."))
 		print(json.encode(data))
 		TriggerEvent("EasyAdmin:mutePlayer", data.source)
 	end
@@ -172,7 +175,10 @@ function CreatePage(FAQ, data, add)
 
 	
     add(FAQ.InfoCard("Statistics", {
-        {"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
+		{"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
+		{"Screenshots Module", (screenshots) and "Enabled" or "Disabled"},
+		{"WebAdmin Module", "Enabled"}, --duh
+		{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
 	}))
 
 	add(FAQ.Node("h3", {}, "<br>Player List"))
@@ -231,9 +237,9 @@ Citizen.CreateThread(function()
 	end
 	if GetResourceState("wap-settings") == "missing" then 
 		print("\nEasyAdmin: wap-settings is not installed on this Server, webadmin settings page not available")
-		return
 	else
 		StartResource("wap-settings")
+		wap_settings = true
 	end
 	if not blacklist then 
 		SHOW_PAGE_BADGE = true
