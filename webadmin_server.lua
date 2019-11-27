@@ -248,12 +248,12 @@ Citizen.CreateThread(function()
 	end
     local FAQ = exports['webadmin-lua']:getFactory()
     exports['webadmin']:registerPluginOutlet("nav/sideList", function(data) --[[R]]--
-        if not exports['webadmin']:isInRole("webadmin."..PAGE_NAME..".view") then return "" end
+        if not exports['webadmin']:isInRole("easyadmin.web") then return "" end
         local _PAGE_ACTIVE = PAGE_ACTIVE PAGE_ACTIVE = false
         return FAQ.SidebarOption(PAGE_NAME, PAGE_ICON, PAGE_TITLE, SHOW_PAGE_BADGE and PAGE_BADGE_TEXT or false, PAGE_BADGE_TYPE, _PAGE_ACTIVE) --[[R]]--
     end)
     exports['webadmin']:registerPluginPage(PAGE_NAME, function(data) --[[E]]--
-        if not exports['webadmin']:isInRole("webadmin."..PAGE_NAME..".view") then return "" end
+        if not exports['webadmin']:isInRole("easyadmin.web") then return "" end
         PAGE_ACTIVE = true
         return FAQ.Nodes({ --[[R]]--
             FAQ.PageTitle(PAGE_TITLE),

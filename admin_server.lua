@@ -823,15 +823,16 @@ Citizen.CreateThread(function()
 	
 	
 	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-	local curVersion = json.decode(verFile).version
+	local verContent = json.decode(verFile)
+	local curVersion = (verContent.fivem.version or verContent.version)
 	local updatePath = "/Bluethefurry/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
-			if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
+			if curVersion ~= data.fivem.version and tonumber(curVersion) < tonumber(data.fivem.version) then
 				print("\n--------------------------------------------------------------------------")
-				print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+				print("\n"..resourceName.." is outdated.\nNewest Version: "..data.fivem.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
 				print("\nUpdate Changelog:\n"..data.changelog)
 				print("\n--------------------------------------------------------------------------")
 			elseif tonumber(curVersion) > tonumber(data.version) then
