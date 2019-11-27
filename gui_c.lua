@@ -71,7 +71,7 @@ Citizen.CreateThread(function()
 		if _menuPool then
 			_menuPool:ProcessMenus()
 		end
-		if IsControlJustReleased(0, GetConvarInt("ea_MenuButton", 289)) and isAdmin == true then --M by default
+		if IsControlJustReleased(0, settings.button) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
 			
 			if strings then
