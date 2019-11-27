@@ -45,7 +45,6 @@ local CONVARS = {
 
 
 -- temporarily build settings on resource start in case i change anything remove this when done
-SaveResourceFile(GetCurrentResourceName(), "settings.json", json.encode(CONVARS, {indent = true}), -1)
 
 -- Input group builder
 local function GenerateInputGroup(FAQ, input, left, right)
@@ -239,6 +238,7 @@ Citizen.CreateThread(function()
 		print("\nEasyAdmin: wap-settings is not installed on this Server, webadmin settings page not available")
 	else
 		StartResource("wap-settings")
+		SaveResourceFile(GetCurrentResourceName(), "settings.json", json.encode(CONVARS, {indent = true}), -1)
 		wap_settings = true
 	end
 	if not blacklist then 
