@@ -1,12 +1,12 @@
 {
-    "version":"5.1",
+    "version":"5.12",
 	"changelog":"WebAdmin Implementation, Version Checker Changes, Bugfixes & More",
 	
 
 	"_comment":"The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 	
 	"fivem": {
-		"version":"5.1",
+		"version":"5.12",
 		"changelog":"",
 	},
 	"redm": {
