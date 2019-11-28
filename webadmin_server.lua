@@ -276,7 +276,8 @@ function CreatePage(FAQ, data, add)
 		add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {site="managebans"}))
 		return true, "OK"
 	elseif data.site == "managebans" and not exports['webadmin']:isInRole("easyadmin.unban") then
-		add(FAQ.Node("h3", {}, "ur think u sneaky lmao"))
+		add(FAQ.Node("h3", {}, "u think u sneaky lmao"))
+		return true, "OK"
 	end
 
 
@@ -299,7 +300,7 @@ function CreatePage(FAQ, data, add)
 
 	local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
 		"Manage Banlist ", FAQ.Icon("cog")
-	}, {type = "submit"}))
+	}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}))
 	add(form)
 
 	add(FAQ.Node("h3", {}, "<br>Player List"))
