@@ -377,21 +377,42 @@ function CreatePage(FAQ, data, add)
 		SHOW_PAGE_BADGE = false
 	end
 
+	if not data.hidestats then
+		add(FAQ.InfoCard("Statistics", {
+			{"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
+			{"Screenshots Module", (screenshots) and "Enabled" or "Disabled"},
+			{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
+		}))
 	
-    add(FAQ.InfoCard("Statistics", {
-		{"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
-		{"Screenshots Module", (screenshots) and "Enabled" or "Disabled"},
-		{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
-	}))
+		local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
+			"Manage Banlist ", FAQ.Icon("cog")
+		}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}))
+		add(form)
 
-	local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
-		"Manage Banlist ", FAQ.Icon("cog")
-	}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}))
-	add(form)
+		add(FAQ.Node("h3", {}, "<br>Player List"))
 
-	add(FAQ.Node("h3", {}, "<br>Player List"))
+	end
 
-	add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, GetPlayers(), function(source)
+	if not data.page then data.page = 1 end -- set a page value if none exist
+	local pageEntries = 15
+	local PlayerList = GetPlayers()
+	if (#PlayerList/pageEntries) <1 then 
+		maxpages = 1
+	else
+		maxpages = math.ceil(#PlayerList/pageEntries)
+	end
+
+	local thisPage = {}
+
+	for i,thePlayer in ipairs(PlayerList) do
+		if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
+			if thePlayer then
+				table.insert(thisPage, thePlayer)
+			end
+		end
+	end
+
+	add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, thisPage, function(source)
 		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), (PlayerReports[source]) and #PlayerReports[source] or "0", 
 
 		FAQ.Form(PAGE_NAME, {source = source, action=action}, FAQ.Nodes({
@@ -424,6 +445,8 @@ function CreatePage(FAQ, data, add)
 	}
 
 	end))
+	add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {hidestats=true}))
+
 
     return true, "OK"
 end
