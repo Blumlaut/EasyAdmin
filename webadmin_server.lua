@@ -170,6 +170,25 @@ function CreatePage(FAQ, data, add)
 	end
 
 
+	if data.action == "viewidentifiers" and data.source then
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h2", {}, "<b>User Info</b>"))
+	
+
+		add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+		add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+		add(FAQ.Node("h5", {}, "<b>Identifiers:</b>"))
+
+		add(FAQ.Node("ul", {class="list-group"}, ""))
+
+		for i, identifier in ipairs(GetPlayerIdentifiers(data.source)) do 
+			add(FAQ.Node("li", {class="list-group-item"}, identifier))
+		end
+		return true, "OK" -- dont render any further
+	end
+
+
+
 	if data.action == "kick" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.kick") then 
 		if data.reason == "" then 
 			data.reason = "No Reason Provided"
@@ -218,12 +237,61 @@ function CreatePage(FAQ, data, add)
 		add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
 		
 		add(FAQ.Node("div", {}, "&nbsp;"))
+
+		
+		add(FAQ.Node("h5", {}, "<b>Identifiers</b>"))
+		add(FAQ.Node("ul", {class="list-group"}, ""))
+
+		for i, identifier in ipairs(blacklist[data.banid].identifiers) do 
+			add(FAQ.Node("li", {class="list-group-item"}, identifier))
+		end
 		
 
 		local form = FAQ.Form(PAGE_NAME, {site="managebans", action="removeBan", banid=data.banid}, FAQ.Button("danger", {
 			"Unban User"
 		}, {type = "submit"}))
 		add(form)
+
+		return true, "OK" -- dont render any further
+	end
+
+	if data.site == "managebans" and data.action=="addBanModal" and exports['webadmin']:isInRole("easyadmin.ban")  then
+		add(FAQ.Node("h2", {}, "<b>Add Ban</b>"))
+	
+
+	--	add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
+
+		add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+		add(FAQ.Form(PAGE_NAME, {action="addBan", site="managebans"}, 
+		{
+			FAQ.Node("input", {
+				class = "form-control",
+				name = "reason",
+				reason = "",
+				placeholder = "No Reason Provided",
+			}, ""),
+		
+		FAQ.Node("h3", {}, ""),
+		FAQ.Node("div", {}, "&nbsp;"),
+		
+		FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
+		GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()),
+		FAQ.Node("div", {}, "&nbsp;"),
+
+		FAQ.Node("h5", {}, "<b>Identifiers:</b>"),
+		FAQ.Node("h6", {}, "(seperated by commas)"),
+		FAQ.Node("input", {
+			class = "form-control",
+			name = "identifiers",
+			identifiers = "",
+			placeholder = "steam:123,license:abc,fivem:567",
+		}, ""),
+		FAQ.Node("div", {}, "&nbsp;"),
+
+		FAQ.Button("danger", {"Ban User"}, {type = "submit", reason=reason, identifiers=identifiers, expires = expires or 10444633200}) 
+
+		}))
+		
 
 		return true, "OK" -- dont render any further
 	end
@@ -249,8 +317,15 @@ function CreatePage(FAQ, data, add)
 				end
 			end
 		end
-
 		add(FAQ.Node("h3", {}, "<br>Banlist"))
+
+		local form = FAQ.Form(PAGE_NAME, {site="managebans", action="addBanModal"}, FAQ.Button("primary", {
+			"Add New Ban ", FAQ.Icon("cog")
+		}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}))
+		add(form)
+		add(FAQ.Node("div", {}, "&nbsp;"))
+
+
 		add(FAQ.Table({"#", "Reason", "Banner", "Expires","Actions"}, thisPage, function(data)
 			return {data.id, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
 	
@@ -294,7 +369,6 @@ function CreatePage(FAQ, data, add)
     add(FAQ.InfoCard("Statistics", {
 		{"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
 		{"Screenshots Module", (screenshots) and "Enabled" or "Disabled"},
-		{"WebAdmin Module", "Enabled"}, --duh
 		{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
 	}))
 
@@ -326,6 +400,11 @@ function CreatePage(FAQ, data, add)
 				FAQ.Form(PAGE_NAME, {source=source, action="mute"}, {
 					FAQ.ButtonGroup({
 						FAQ.Button("secondary", (MutedPlayers[tonumber(source)]) and "Unmute" or "Mute", {type = "submit", name = "action", value = "mute", disabled = (not exports['webadmin']:isInRole("easyadmin.mute") and "disabled" or nil)}),
+					}),
+				}),
+				FAQ.Form(PAGE_NAME, {source=source, action="viewidentifiers"}, {
+					FAQ.ButtonGroup({
+						FAQ.Button("info", "Info", {type = "submit"}),
 					}),
 				})
 			})
