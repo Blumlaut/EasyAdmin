@@ -79,7 +79,36 @@ local function GenerateBanOptions(FAQ)
 	return t
 end
 
+
+-- Generate a paginator widget to navigate between pages
+GeneratePaginatorExceptWithMoreData = function(FAQ, pageName, currentPage, maxPages, align, extraSauce)
+	local paginatorList = {}
+	local data = extraSauce or {}
+    if maxPages > 0 then
+		if currentPage > maxPages or currentPage < 0 then currentPage = 1 end
+		local backData = data
+		backData.page = 1
+        table.insert(paginatorList, {"First", FAQ.GenerateDataUrl(pageName, backData), false, currentPage == 1})
+		for i = 1, maxPages do
+			if (i>currentPage-5 and i<currentPage+20) then
+				data["page"] = i
+				table.insert(paginatorList, {i, FAQ.GenerateDataUrl(pageName, data), i == currentPage})
+			end
+		end
+		local nextData = data
+		nextData.page = maxPages
+        table.insert(paginatorList, {"Last", FAQ.GenerateDataUrl(pageName, nextData), false, currentPage == maxPages})
+        return FAQ.Pagination(paginatorList, align or "center")
+    end
+    return FAQ.Pagination({
+        {"Previous", "#", false, true},
+        {"-", "#", true, true},
+        {"Next", "#", false, true},
+    }, "center")
+end
+
 function CreatePage(FAQ, data, add)
+
 
 	if data.action == "kickModal" and data.source then
 		add(FAQ.Node("div", {}, "&nbsp;"))
@@ -163,6 +192,94 @@ function CreatePage(FAQ, data, add)
 		print(json.encode(data))
 		TriggerEvent("EasyAdmin:mutePlayer", data.source)
 	end
+
+
+	if data.site == "managebans" and data.action=="removeBan" and exports['webadmin']:isInRole("easyadmin.unban") then 
+		add(FAQ.Alert("primary", "Removing Ban "..data.banid.."..."))
+		print(json.encode(data))
+		TriggerEvent("EasyAdmin:unbanPlayer", data.banid)
+	end
+
+	if data.site == "managebans" and data.action=="editBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
+		add(FAQ.Alert("warning", "Editing Bans is not currently supported, sorry!"))
+	end
+
+
+	if data.site == "managebans" and data.action=="removeBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
+		add(FAQ.Alert("danger", "Removing this ban will remove it <b>permanently</b>!"))
+
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h2", {}, "<b>Remove Ban</b>"))
+	
+
+		add(FAQ.Node("h5", {}, "<b>Reason:</b> "..blacklist[data.banid].reason))
+		add(FAQ.Node("h5", {}, "<b>Banner:</b> "..(blacklist[data.banid].banner or "N/A")))
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
+		
+		add(FAQ.Node("div", {}, "&nbsp;"))
+		
+
+		local form = FAQ.Form(PAGE_NAME, {site="managebans", action="removeBan", banid=data.banid}, FAQ.Button("danger", {
+			"Unban User"
+		}, {type = "submit"}))
+		add(form)
+
+		return true, "OK" -- dont render any further
+	end
+
+	if data.site == "managebans" and exports['webadmin']:isInRole("easyadmin.unban")  then 
+
+
+		if not data.page then data.page = 1 end -- set a page value if none exist
+		local pageEntries = 20
+		if (#blacklist/pageEntries) <1 then 
+			maxpages = 1
+		else
+			maxpages = math.ceil(#blacklist/pageEntries)
+		end
+
+		local thisPage = {}
+
+		for i,theBanned in ipairs(blacklist) do
+			if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
+				if theBanned then
+					theBanned.id = i
+					table.insert(thisPage, theBanned)
+				end
+			end
+		end
+
+	
+		add(FAQ.Table({"#", "Reason", "Banner", "Expires","Actions"}, thisPage, function(data)
+			return {data.id, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
+	
+			FAQ.Form(PAGE_NAME, {source = source, site="managebans", action=action}, FAQ.Nodes({
+				FAQ.ButtonToolbar({
+					FAQ.ButtonGroup({
+
+						FAQ.Form(PAGE_NAME,{source=source, action="editBanModal"}, {
+							FAQ.ButtonGroup({
+								FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+							}),
+						}),
+						FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.id, site="managebans"}, {
+							FAQ.ButtonGroup({
+								FAQ.Button("danger", "Unban", {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+							}),
+						}),
+	
+					}),
+				})
+			}))
+		} end) )
+		add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {site="managebans"}))
+		return true, "OK"
+	elseif data.site == "managebans" and not exports['webadmin']:isInRole("easyadmin.unban") then
+		add(FAQ.Node("h3", {}, "ur think u sneaky lmao"))
+	end
+
+
 	if not blacklist then 
 		add(FAQ.Alert("danger", "Banlist file could not be loaded! This means bans <b>WILL NOT WORK</b>, please check this and fix the banlist.json!"))
 		SHOW_PAGE_BADGE = true
@@ -179,6 +296,11 @@ function CreatePage(FAQ, data, add)
 		{"WebAdmin Module", "Enabled"}, --duh
 		{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
 	}))
+
+	local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
+		"Manage Banlist ", FAQ.Icon("cog")
+	}, {type = "submit"}))
+	add(form)
 
 	add(FAQ.Node("h3", {}, "<br>Player List"))
 
@@ -207,15 +329,9 @@ function CreatePage(FAQ, data, add)
 				})
 			})
 		}))
-
 	}
 
 	end))
-
-	local form = FAQ.Form("settings", {resource=GetCurrentResourceName()}, FAQ.Button("primary", {
-		"Settings ", FAQ.Icon("cog")
-	}, {type = "submit"}))
-	add(form)
 
     return true, "OK"
 end
@@ -229,10 +345,6 @@ Citizen.CreateThread(function()
 		return
 	else
 		StartResource("webadmin-lua")
-		repeat
-			Wait(100)
-			local yes = (GetResourceState("webadmin-lua") == "started")
-		until yes
 	end
 	if GetResourceState("wap-settings") == "missing" then 
 		print("\nEasyAdmin: wap-settings is not installed on this Server, webadmin settings page not available")
