@@ -231,8 +231,12 @@ Citizen.CreateThread(function()
 		DropPlayer(playerId, GetLocalisedText("bancheating"))
 	end)
 	
-	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
-		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires, offline)
+		if offline then 
+			bannedIdentifiers = playerId 
+		else 
+			bannedIdentifiers = GetPlayerIdentifiers(playerId)
+		end
 		if expires < os.time() then
 			expires = os.time()+expires 
 		end
