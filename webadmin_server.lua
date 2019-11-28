@@ -219,6 +219,18 @@ function CreatePage(FAQ, data, add)
 		TriggerEvent("EasyAdmin:unbanPlayer", data.banid)
 	end
 
+	if data.site == "managebans" and data.action=="addBan" and exports['webadmin']:isInRole("easyadmin.ban") then 
+		add(FAQ.Alert("primary", "Adding Ban..."))
+		print(json.encode(data))
+		local identifiers = mysplit(data.identifiers, ",")
+
+		for i, identifier in ipairs(identifiers) do 
+			print(identifier)
+		end
+		--EasyAdmin:addBan", function(playerId,reason,expires)
+		TriggerEvent("EasyAdmin:addBan", identifiers, data.reason, data.expires,true)
+	end
+
 	if data.site == "managebans" and data.action=="editBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
 		add(FAQ.Alert("warning", "Editing Bans is not currently supported, sorry!"))
 	end
