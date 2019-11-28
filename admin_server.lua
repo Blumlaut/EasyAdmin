@@ -240,14 +240,16 @@ Citizen.CreateThread(function()
 		if expires < os.time() then
 			expires = os.time()+expires 
 		end
-		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(playerId), "Console" )
+		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
 		local ban = {identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
 		
 		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason)
-		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(playerId), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
-		DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
+		if not offline then
+			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+		end
 	end)
 	
 	RegisterServerEvent("EasyAdmin:updateBanlist")
