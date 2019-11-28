@@ -250,7 +250,7 @@ function CreatePage(FAQ, data, add)
 			end
 		end
 
-	
+		add(FAQ.Node("h3", {}, "<br>Banlist"))
 		add(FAQ.Table({"#", "Reason", "Banner", "Expires","Actions"}, thisPage, function(data)
 			return {data.id, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
 	
