@@ -107,349 +107,420 @@ GeneratePaginatorExceptWithMoreData = function(FAQ, pageName, currentPage, maxPa
     }, "center")
 end
 
-function CreatePage(FAQ, data, add)
+	function TakeWebScreenshot(playerId)
+		Citizen.CreateThread(function()
+			if scrinprogress then
+				currentScreenshotURL="error"
+				return
+			end
+			scrinprogress = true
+			local src=source
+			local playerId = playerId
+			local scrResult = false
 
-
-	if data.action == "kickModal" and data.source then
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h2", {}, "<b>Kick User</b>"))
-	
-
-		add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
-		add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
-		add(FAQ.Form(PAGE_NAME, {source=data.source, action="kick"}, { FAQ.Node("input", {
-			class = "form-control",
-			type = "text",
-			name = "reason",
-			value = "",
-			placeholder = "No Reason Provided",
-		}, ""),FAQ.Node("div", {}, "&nbsp;"), FAQ.Button("danger", {
-			"Kick User"
-		}, {type = "submit"})}))
-
-
-
-		return true, "OK" -- dont render any further
+			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
+				res = tostring(result)
+				--SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), "Console", getName(playerId), res))
+				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..res.." requsted by".."Console")
+				currentScreenshotURL = res
+				scrinprogress = false
+				RemoveEventHandler(thistemporaryevent)
+			end)
+			
+			TriggerClientEvent("EasyAdmin:CaptureScreenshot", playerId)
+			local timeoutwait = 0
+			repeat
+				timeoutwait=timeoutwait+1
+				Wait(1000)
+				if timeoutwait == 5 then
+					RemoveEventHandler(thistemporaryevent)
+					scrinprogress = false -- cancel screenshot, seems like it failed
+					currentScreenshotURL="error"
+				end
+			until not scrinprogress
+		end)
 	end
 
-	if data.action == "banModal" and data.source then
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h2", {}, "<b>Ban User</b>"))
-	
+Citizen.CreateThread(function()
 
-		add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
-		add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
-		add(FAQ.Form(PAGE_NAME, {source=data.source, action="ban"}, 
-		{
-			FAQ.Node("input", {
+	function CreatePage(FAQ, data, add)
+
+
+		if data.action == "kickModal" and data.source then
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h2", {}, "<b>Kick User</b>"))
+		
+
+			add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+			add(FAQ.Form(PAGE_NAME, {source=data.source, action="kick"}, { FAQ.Node("input", {
 				class = "form-control",
+				type = "text",
 				name = "reason",
 				value = "",
 				placeholder = "No Reason Provided",
-			}, ""),
+			}, ""),FAQ.Node("div", {}, "&nbsp;"), FAQ.Button("danger", {
+				"Kick User"
+			}, {type = "submit"})}))
+
+
+
+			return true, "OK" -- dont render any further
+		end
+
+		if data.action == "banModal" and data.source then
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h2", {}, "<b>Ban User</b>"))
 		
-		FAQ.Node("h3", {}, ""),
-		FAQ.Node("div", {}, "&nbsp;"),
-		
-		FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
-		GenerateInputGroup(FAQ, 
-			GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()), 
-			FAQ.Node("span", {class = "input-group-text", style = "min-width: 30px;"}, "Ban Length")
-		),
 
-		FAQ.Button("danger", {"Ban User"}, {type = "submit", value=value, expires = expires or 10444633200}) 
+			add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+			add(FAQ.Form(PAGE_NAME, {source=data.source, action="ban"}, 
+			{
+				FAQ.Node("input", {
+					class = "form-control",
+					name = "reason",
+					value = "",
+					placeholder = "No Reason Provided",
+				}, ""),
+			
+			FAQ.Node("h3", {}, ""),
+			FAQ.Node("div", {}, "&nbsp;"),
+			
+			FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
+			GenerateInputGroup(FAQ, 
+				GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()), 
+				FAQ.Node("span", {class = "input-group-text", style = "min-width: 30px;"}, "Ban Length")
+			),
 
-		}))
+			FAQ.Button("danger", {"Ban User"}, {type = "submit", value=value, expires = expires or 10444633200}) 
+
+			}))
 
 
-		return true, "OK" -- dont render any further
-	end
+			return true, "OK" -- dont render any further
+		end
 
+		if data.action == "takeScreenshot" then
 
-	if data.action == "viewidentifiers" and data.source then
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h2", {}, "<b>User Info</b>"))
+			if currentScreenshotURL then 
+				data.action="viewidentifiers"
+			else
+				if not data.started then 
+					TakeWebScreenshot(data.source)
+				end
+				add(FAQ.Node("h3", {}, "One Moment, Please."))
+				add(FAQ.Node("h5", {}, "(your screenshot is being created)"))
+				add(FAQ.Node("script", {type="text/javascript"}, 'setTimeout(function(){ window.location = "/webadmin/Plugin/Page?name=easyadmin_settings&started=true&action=takeScreenshot&source='..data.source..'";}, 2000);'))
+					return true, "OK" -- dont render any further
+			end
 	
 
-		add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
-		add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
-		add(FAQ.Node("h5", {}, "<b>Identifiers:</b>"))
-
-		add(FAQ.Node("ul", {class="list-group"}, ""))
-
-		for i, identifier in ipairs(GetPlayerIdentifiers(data.source)) do 
-			add(FAQ.Node("li", {class="list-group-item"}, identifier))
 		end
-		return true, "OK" -- dont render any further
-	end
 
 
-
-	if data.action == "kick" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.kick") then 
-		if data.reason == "" then 
-			data.reason = "No Reason Provided"
-		end 
-		add(FAQ.Alert("primary", "Kicking Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
-		TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
-		print(json.encode(data))
-	end
-	if data.action == "ban" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.ban") then 
-		if data.reason == "" then 
-			data.reason = "No Reason Provided"
-		end 
-		add(FAQ.Alert("primary", "Banning Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
-		TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
-
-		print(json.encode(data))
-	end
-	if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
-		add(FAQ.Alert("primary", "Muting Player "..GetPlayerName(data.source).."..."))
-		print(json.encode(data))
-		TriggerEvent("EasyAdmin:mutePlayer", data.source)
-	end
-
-
-	if data.site == "managebans" and data.action=="removeBan" and exports['webadmin']:isInRole("easyadmin.unban") then 
-		add(FAQ.Alert("primary", "Removing Ban "..data.banid.."..."))
-		print(json.encode(data))
-		TriggerEvent("EasyAdmin:unbanPlayer", data.banid)
-	end
-
-	if data.site == "managebans" and data.action=="addBan" and exports['webadmin']:isInRole("easyadmin.ban") then 
-		add(FAQ.Alert("primary", "Adding Ban..."))
-		print(json.encode(data))
-		local identifiers = mysplit(data.identifiers, ",")
-
-		for i, identifier in ipairs(identifiers) do 
-			print(identifier)
-		end
-		--EasyAdmin:addBan", function(playerId,reason,expires)
-		TriggerEvent("EasyAdmin:addBan", identifiers, data.reason, data.expires,true)
-	end
-
-	if data.site == "managebans" and data.action=="editBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
-		add(FAQ.Alert("warning", "Editing Bans is not currently supported, sorry!"))
-	end
-
-
-	if data.site == "managebans" and data.action=="removeBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
-		add(FAQ.Alert("danger", "Removing this ban will remove it <b>permanently</b>!"))
-
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h2", {}, "<b>Remove Ban</b>"))
-	
-
-		add(FAQ.Node("h5", {}, "<b>Reason:</b> "..blacklist[data.banid].reason))
-		add(FAQ.Node("h5", {}, "<b>Banner:</b> "..(blacklist[data.banid].banner or "N/A")))
-		add(FAQ.Node("div", {}, "&nbsp;"))
-		add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
-		
-		add(FAQ.Node("div", {}, "&nbsp;"))
-
-		
-		add(FAQ.Node("h5", {}, "<b>Identifiers</b>"))
-		add(FAQ.Node("ul", {class="list-group"}, ""))
-
-		for i, identifier in ipairs(blacklist[data.banid].identifiers) do 
-			add(FAQ.Node("li", {class="list-group-item"}, identifier))
-		end
+		if data.action == "viewidentifiers" and data.source then
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h2", {}, "<b>User Info</b>"))
 		
 
-		local form = FAQ.Form(PAGE_NAME, {site="managebans", action="removeBan", banid=data.banid}, FAQ.Button("danger", {
-			"Unban User"
-		}, {type = "submit"}))
-		add(form)
+			add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+			add(FAQ.Node("h5", {}, "<b>Identifiers:</b>"))
 
-		return true, "OK" -- dont render any further
-	end
+			add(FAQ.Node("ul", {class="list-group"}, ""))
 
-	if data.site == "managebans" and data.action=="addBanModal" and exports['webadmin']:isInRole("easyadmin.ban")  then
-		add(FAQ.Node("h2", {}, "<b>Add Ban</b>"))
-	
+			for i, identifier in ipairs(GetPlayerIdentifiers(data.source)) do 
+				add(FAQ.Node("li", {class="list-group-item"}, identifier))
+			end
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			if screenshots and not currentScreenshotURL then
+				local form = FAQ.Form(PAGE_NAME, {action="takeScreenshot", source=data.source}, FAQ.Button("info", {
+					"Take Screenshot "}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.screenshot") and "disabled" or nil)}))
+				add(form)
+			end
 
-	--	add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
+			if currentScreenshotURL then 
+				add(FAQ.Node("div", {}, "&nbsp;"))
+				add(FAQ.Node("h5", {}, "<b>Screenshot</b>"))
+				add(FAQ.Node("img", {src=currentScreenshotURL, width=1600}, ""))
+				add(FAQ.Node("a", {href=currentScreenshotURL}, "<br>"..currentScreenshotURL))
+				currentScreenshotURL=nil
+				add(FAQ.Node("br", {}, ""))
+				add(FAQ.Node("br", {}, ""))
+			end
+			
+			return true, "OK" -- dont render any further
+		end
 
-		add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
-		add(FAQ.Form(PAGE_NAME, {action="addBan", site="managebans"}, 
-		{
+
+
+		if data.action == "kick" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.kick") then 
+			if data.reason == "" then 
+				data.reason = "No Reason Provided"
+			end 
+			add(FAQ.Alert("primary", "Kicking Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
+			TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
+			print(json.encode(data))
+		end
+		if data.action == "ban" and data.source and data.reason and exports['webadmin']:isInRole("easyadmin.ban") then 
+			if data.reason == "" then 
+				data.reason = "No Reason Provided"
+			end 
+			add(FAQ.Alert("primary", "Banning Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
+			TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
+
+			print(json.encode(data))
+		end
+		if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
+			add(FAQ.Alert("primary", "Muting Player "..GetPlayerName(data.source).."..."))
+			print(json.encode(data))
+			TriggerEvent("EasyAdmin:mutePlayer", data.source)
+		end
+
+
+		if data.site == "managebans" and data.action=="removeBan" and exports['webadmin']:isInRole("easyadmin.unban") then 
+			add(FAQ.Alert("primary", "Removing Ban "..data.banid.."..."))
+			print(json.encode(data))
+			TriggerEvent("EasyAdmin:unbanPlayer", data.banid)
+		end
+
+		if data.site == "managebans" and data.action=="addBan" and exports['webadmin']:isInRole("easyadmin.ban") then 
+			add(FAQ.Alert("primary", "Adding Ban..."))
+			print(json.encode(data))
+			local identifiers = mysplit(data.identifiers, ",")
+
+			for i, identifier in ipairs(identifiers) do 
+				print(identifier)
+			end
+			--EasyAdmin:addBan", function(playerId,reason,expires)
+			TriggerEvent("EasyAdmin:addBan", identifiers, data.reason, data.expires,true)
+		end
+
+		if data.site == "managebans" and data.action=="editBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
+			add(FAQ.Alert("warning", "Editing Bans is not currently supported, sorry!"))
+		end
+
+
+		if data.site == "managebans" and data.action=="removeBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
+			add(FAQ.Alert("danger", "Removing this ban will remove it <b>permanently</b>!"))
+
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h2", {}, "<b>Remove Ban</b>"))
+		
+
+			add(FAQ.Node("h5", {}, "<b>Reason:</b> "..blacklist[data.banid].reason))
+			add(FAQ.Node("h5", {}, "<b>Banner:</b> "..(blacklist[data.banid].banner or "N/A")))
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
+			
+			add(FAQ.Node("div", {}, "&nbsp;"))
+
+			
+			add(FAQ.Node("h5", {}, "<b>Identifiers</b>"))
+			add(FAQ.Node("ul", {class="list-group"}, ""))
+
+			for i, identifier in ipairs(blacklist[data.banid].identifiers) do 
+				add(FAQ.Node("li", {class="list-group-item"}, identifier))
+			end
+			
+
+			local form = FAQ.Form(PAGE_NAME, {site="managebans", action="removeBan", banid=data.banid}, FAQ.Button("danger", {
+				"Unban User"
+			}, {type = "submit"}))
+			add(form)
+
+			return true, "OK" -- dont render any further
+		end
+
+		if data.site == "managebans" and data.action=="addBanModal" and exports['webadmin']:isInRole("easyadmin.ban")  then
+			add(FAQ.Node("h2", {}, "<b>Add Ban</b>"))
+		
+
+		--	add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
+
+			add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+			add(FAQ.Form(PAGE_NAME, {action="addBan", site="managebans"}, 
+			{
+				FAQ.Node("input", {
+					class = "form-control",
+					name = "reason",
+					reason = "",
+					placeholder = "No Reason Provided",
+				}, ""),
+			
+			FAQ.Node("h3", {}, ""),
+			FAQ.Node("div", {}, "&nbsp;"),
+			
+			FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
+			GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()),
+			FAQ.Node("div", {}, "&nbsp;"),
+
+			FAQ.Node("h5", {}, "<b>Identifiers:</b>"),
+			FAQ.Node("h6", {}, "(seperated by commas)"),
 			FAQ.Node("input", {
 				class = "form-control",
-				name = "reason",
-				reason = "",
-				placeholder = "No Reason Provided",
+				name = "identifiers",
+				identifiers = "",
+				placeholder = "steam:123,license:abc,fivem:567",
 			}, ""),
+			FAQ.Node("div", {}, "&nbsp;"),
+
+			FAQ.Button("danger", {"Ban User"}, {type = "submit", reason=reason, identifiers=identifiers, expires = expires or 10444633200})
+
+			}))
+			
+
+			return true, "OK" -- dont render any further
+		end
+
+		if data.site == "managebans" and exports['webadmin']:isInRole("easyadmin.unban")  then 
+
+
+			if not data.page then data.page = 1 end -- set a page value if none exist
+			local pageEntries = 20
+			if (#blacklist/pageEntries) <1 then 
+				maxpages = 1
+			else
+				maxpages = math.ceil(#blacklist/pageEntries)
+			end
+
+			local thisPage = {}
+
+			for i,theBanned in ipairs(blacklist) do
+				if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
+					if theBanned then
+						theBanned.id = i
+						table.insert(thisPage, theBanned)
+					end
+				end
+			end
+			add(FAQ.Node("h3", {}, "<br>Banlist"))
+
+			local form = FAQ.Form(PAGE_NAME, {site="managebans", action="addBanModal"}, FAQ.Button("primary", {
+				"Add New Ban ", FAQ.Icon("cog")
+			}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}))
+			add(form)
+			add(FAQ.Node("div", {}, "&nbsp;"))
+
+
+			add(FAQ.Table({"#", "Reason", "Banner", "Expires","Actions"}, thisPage, function(data)
+				return {data.id, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
 		
-		FAQ.Node("h3", {}, ""),
-		FAQ.Node("div", {}, "&nbsp;"),
+				FAQ.Form(PAGE_NAME, {source = source, site="managebans", action=action}, FAQ.Nodes({
+					FAQ.ButtonToolbar({
+						FAQ.ButtonGroup({
+
+							FAQ.Form(PAGE_NAME,{source=source, action="editBanModal"}, {
+								FAQ.ButtonGroup({
+									FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+								}),
+							}),
+							FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.id, site="managebans"}, {
+								FAQ.ButtonGroup({
+									FAQ.Button("danger", "Unban", {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+								}),
+							}),
 		
-		FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
-		GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()),
-		FAQ.Node("div", {}, "&nbsp;"),
+						}),
+					})
+				}))
+			} end) )
+			add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {site="managebans"}))
+			return true, "OK"
+		elseif data.site == "managebans" and not exports['webadmin']:isInRole("easyadmin.unban") then
+			add(FAQ.Node("h3", {}, "u think u sneaky lmao"))
+			return true, "OK"
+		end
 
-		FAQ.Node("h5", {}, "<b>Identifiers:</b>"),
-		FAQ.Node("h6", {}, "(seperated by commas)"),
-		FAQ.Node("input", {
-			class = "form-control",
-			name = "identifiers",
-			identifiers = "",
-			placeholder = "steam:123,license:abc,fivem:567",
-		}, ""),
-		FAQ.Node("div", {}, "&nbsp;"),
 
-		FAQ.Button("danger", {"Ban User"}, {type = "submit", reason=reason, identifiers=identifiers, expires = expires or 10444633200}) 
+		if not blacklist then 
+			add(FAQ.Alert("danger", "Banlist file could not be loaded! This means bans <b>WILL NOT WORK</b>, please check this and fix the banlist.json!"))
+			SHOW_PAGE_BADGE = true
+			PAGE_BADGE_TEXT = "ERROR!"
+			PAGE_BADGE_TYPE = "danger"
+		else
+			SHOW_PAGE_BADGE = false
+		end
 
-		}))
+		if not data.hidestats then
+			add(FAQ.InfoCard("Statistics", {
+				{"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
+				{"Screenshots Module", (screenshots) and "Enabled" or "Disabled"},
+				{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
+			}))
 		
+			local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
+				"Manage Banlist ", FAQ.Icon("cog")
+			}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}))
+			add(form)
 
-		return true, "OK" -- dont render any further
-	end
+			add(FAQ.Node("h3", {}, "<br>Player List"))
 
-	if data.site == "managebans" and exports['webadmin']:isInRole("easyadmin.unban")  then 
-
+		end
 
 		if not data.page then data.page = 1 end -- set a page value if none exist
-		local pageEntries = 20
-		if (#blacklist/pageEntries) <1 then 
+		local pageEntries = 15
+		local PlayerList = GetPlayers()
+		if (#PlayerList/pageEntries) <1 then 
 			maxpages = 1
 		else
-			maxpages = math.ceil(#blacklist/pageEntries)
+			maxpages = math.ceil(#PlayerList/pageEntries)
 		end
 
 		local thisPage = {}
 
-		for i,theBanned in ipairs(blacklist) do
+		for i,thePlayer in ipairs(PlayerList) do
 			if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
-				if theBanned then
-					theBanned.id = i
-					table.insert(thisPage, theBanned)
+				if thePlayer then
+					table.insert(thisPage, thePlayer)
 				end
 			end
 		end
-		add(FAQ.Node("h3", {}, "<br>Banlist"))
 
-		local form = FAQ.Form(PAGE_NAME, {site="managebans", action="addBanModal"}, FAQ.Button("primary", {
-			"Add New Ban ", FAQ.Icon("cog")
-		}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}))
-		add(form)
-		add(FAQ.Node("div", {}, "&nbsp;"))
+		add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, thisPage, function(source)
+			return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), (PlayerReports[source]) and #PlayerReports[source] or "0", 
 
-
-		add(FAQ.Table({"#", "Reason", "Banner", "Expires","Actions"}, thisPage, function(data)
-			return {data.id, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
-	
-			FAQ.Form(PAGE_NAME, {source = source, site="managebans", action=action}, FAQ.Nodes({
+			FAQ.Form(PAGE_NAME, {source = source, action=action}, FAQ.Nodes({
 				FAQ.ButtonToolbar({
 					FAQ.ButtonGroup({
+						FAQ.Form(PAGE_NAME,{action="kickModal"}, {
+							FAQ.ButtonGroup({
+								FAQ.Button("primary", "Kick", {type = "submit", action="kickModal", disabled = (not exports['webadmin']:isInRole("easyadmin.kick") and "disabled" or nil)}),
+							}),
+						}),
 
-						FAQ.Form(PAGE_NAME,{source=source, action="editBanModal"}, {
+						FAQ.Form(PAGE_NAME,{source=source, action="banModal"}, {
 							FAQ.ButtonGroup({
-								FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+								FAQ.Button("danger", "Ban", {type = "submit", source=source, action="banModal", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
 							}),
 						}),
-						FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.id, site="managebans"}, {
-							FAQ.ButtonGroup({
-								FAQ.Button("danger", "Unban", {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
-							}),
-						}),
-	
 					}),
+					FAQ.Form(PAGE_NAME, {source=source, action="mute"}, {
+						FAQ.ButtonGroup({
+							FAQ.Button("secondary", (MutedPlayers[tonumber(source)]) and "Unmute" or "Mute", {type = "submit", name = "action", value = "mute", disabled = (not exports['webadmin']:isInRole("easyadmin.mute") and "disabled" or nil)}),
+						}),
+					}),
+					FAQ.Form(PAGE_NAME, {source=source, action="viewidentifiers"}, {
+						FAQ.ButtonGroup({
+							FAQ.Button("info", "More", {type = "submit"}),
+						}),
+					})
 				})
 			}))
-		} end) )
-		add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {site="managebans"}))
+		}
+
+		end))
+		add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {hidestats=true}))
+
+
 		return true, "OK"
-	elseif data.site == "managebans" and not exports['webadmin']:isInRole("easyadmin.unban") then
-		add(FAQ.Node("h3", {}, "u think u sneaky lmao"))
-		return true, "OK"
 	end
-
-
-	if not blacklist then 
-		add(FAQ.Alert("danger", "Banlist file could not be loaded! This means bans <b>WILL NOT WORK</b>, please check this and fix the banlist.json!"))
-		SHOW_PAGE_BADGE = true
-		PAGE_BADGE_TEXT = "ERROR!"
-		PAGE_BADGE_TYPE = "danger"
-	else
-		SHOW_PAGE_BADGE = false
-	end
-
-	if not data.hidestats then
-		add(FAQ.InfoCard("Statistics", {
-			{"Banlist Entries", (blacklist) and #blacklist or "ERROR"},
-			{"Screenshots Module", (screenshots) and "Enabled" or "Disabled"},
-			{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
-		}))
-	
-		local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
-			"Manage Banlist ", FAQ.Icon("cog")
-		}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}))
-		add(form)
-
-		add(FAQ.Node("h3", {}, "<br>Player List"))
-
-	end
-
-	if not data.page then data.page = 1 end -- set a page value if none exist
-	local pageEntries = 15
-	local PlayerList = GetPlayers()
-	if (#PlayerList/pageEntries) <1 then 
-		maxpages = 1
-	else
-		maxpages = math.ceil(#PlayerList/pageEntries)
-	end
-
-	local thisPage = {}
-
-	for i,thePlayer in ipairs(PlayerList) do
-		if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
-			if thePlayer then
-				table.insert(thisPage, thePlayer)
-			end
-		end
-	end
-
-	add(FAQ.Table({"#", "Name", "Ping", "Reports", "Action"}, thisPage, function(source)
-		return {source, {GetPlayerName(source).." ", (DoesPlayerHavePermission(source,"easyadmin.kick")) and FAQ.Badge("info", "Staff") or ""	}, GetPlayerPing(source), (PlayerReports[source]) and #PlayerReports[source] or "0", 
-
-		FAQ.Form(PAGE_NAME, {source = source, action=action}, FAQ.Nodes({
-			FAQ.ButtonToolbar({
-				FAQ.ButtonGroup({
-					FAQ.Form(PAGE_NAME,{action="kickModal"}, {
-						FAQ.ButtonGroup({
-							FAQ.Button("primary", "Kick", {type = "submit", action="kickModal", disabled = (not exports['webadmin']:isInRole("easyadmin.kick") and "disabled" or nil)}),
-						}),
-					}),
-
-					FAQ.Form(PAGE_NAME,{source=source, action="banModal"}, {
-						FAQ.ButtonGroup({
-							FAQ.Button("danger", "Ban", {type = "submit", source=source, action="banModal", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
-						}),
-					}),
-				}),
-				FAQ.Form(PAGE_NAME, {source=source, action="mute"}, {
-					FAQ.ButtonGroup({
-						FAQ.Button("secondary", (MutedPlayers[tonumber(source)]) and "Unmute" or "Mute", {type = "submit", name = "action", value = "mute", disabled = (not exports['webadmin']:isInRole("easyadmin.mute") and "disabled" or nil)}),
-					}),
-				}),
-				FAQ.Form(PAGE_NAME, {source=source, action="viewidentifiers"}, {
-					FAQ.ButtonGroup({
-						FAQ.Button("info", "Info", {type = "submit"}),
-					}),
-				})
-			})
-		}))
-	}
-
-	end))
-	add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {hidestats=true}))
-
-
-    return true, "OK"
-end
+end)
 -- Automatically sets up a page and sidebar option based on the above configurations
 -- This should not need to be altered, and serves as the foundation of the plugin
 -- lol watch this *edits*
