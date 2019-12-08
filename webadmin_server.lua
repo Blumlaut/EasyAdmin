@@ -120,7 +120,7 @@ end
 
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
 				res = tostring(result)
-				--SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), "Console", getName(playerId), res))
+				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), "Console", getName(playerId), res))
 				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..res.." requsted by".."Console")
 				currentScreenshotURL = res
 				scrinprogress = false
