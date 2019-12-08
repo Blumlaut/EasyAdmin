@@ -598,9 +598,9 @@ Citizen.CreateThread(function()
 		end
 	end
 	
-	function updateBan(newData)
-		if banid and newData and newData.identifiers and newData.banid and newData.reason and newData.expires then 
-			blacklist[newData.banid] = newData
+	function updateBan(id,newData)
+		if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then 
+			blacklist[id] = newData
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end
