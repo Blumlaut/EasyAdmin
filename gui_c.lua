@@ -11,7 +11,6 @@ showLicenses = false
 settings = {
 	button = 289,
 	forceShowGUIButtons = false,
-	showPlayerIDType = "local",
 }
 
 permissions = {
@@ -151,13 +150,10 @@ function GenerateMenu() -- this is a big ass function
 		table.insert( localplayers, GetPlayerServerId(i) )
 	end
 	table.sort(localplayers)
-	if settings.showPlayerIDType == "local" then
-		for i,thePlayer in ipairs(localplayers) do
-			table.insert(players,GetPlayerFromServerId(thePlayer))
-		end
-	else
-		players = localplayers
+	for i,thePlayer in ipairs(localplayers) do
+		table.insert(players,GetPlayerFromServerId(thePlayer))
 	end
+
 	for i,thePlayer in ipairs(players) do
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..GetPlayerName(thePlayer),"",true)
 		thisPlayer:SetMenuWidthOffset(menuWidth)

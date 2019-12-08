@@ -124,7 +124,6 @@ Citizen.CreateThread(function()
 		else
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", false)
 		end
-		TriggerClientEvent("EasyAdmin:SetSetting", source, "showPlayerIDType",GetConvar("ea_playerIdType", "local") )
 		
 		TriggerClientEvent("EasyAdmin:SetLanguage", source, strings)
 		
