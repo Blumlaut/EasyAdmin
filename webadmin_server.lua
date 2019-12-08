@@ -298,11 +298,74 @@ Citizen.CreateThread(function()
 				print(identifier)
 			end
 			--EasyAdmin:addBan", function(playerId,reason,expires)
-			TriggerEvent("EasyAdmin:addBan", identifiers, data.reason, data.expires,true)
+			TriggerEvent("EasyAdmin:addBan", identifiers, data.reason, os.time()+data.expires,true)
 		end
 
-		if data.site == "managebans" and data.action=="editBanModal" and exports['webadmin']:isInRole("easyadmin.unban")  then
-			add(FAQ.Alert("warning", "Editing Bans is not currently supported, sorry!"))
+		if data.site == "managebans" and data.action=="editBan" and exports['webadmin']:isInRole("easyadmin.editban")  then 
+			add(FAQ.Alert("primary", "Editing Ban..."))
+			print(json.encode(data))
+			local identifiers = mysplit(data.identifiers, ",")
+
+			for i, identifier in ipairs(identifiers) do 
+				print(identifier)
+			end
+			updateBan(data.source,{banid=blacklist[data.source].banid, banner=data.banner,reason=data.reason, identifiers=identifiers, expire=os.time()+data.expires })
+		end
+
+		if data.site == "managebans" and data.action=="editBanModal" and exports['webadmin']:isInRole("easyadmin.editban")  then
+			add(FAQ.Alert("danger", "Changing any informations in this ban will change them <b>permanently</b>!"))
+
+			add(FAQ.Node("div", {}, "&nbsp;"))
+			add(FAQ.Node("h2", {}, "<b>Edit Ban</b>"))
+		
+			local identifiers = ""
+			for i,id in ipairs(blacklist[data.banid].identifiers) do 
+				if id ~= "" and i ~= #blacklist[data.banid].identifiers then
+					identifiers = identifiers..id..","
+				elseif id ~= "" and i == #blacklist[data.banid].identifiers then
+					identifiers = identifiers..id
+				end	
+			end
+
+			add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
+			add(FAQ.Form(PAGE_NAME, {source=data.banid, site="managebans", action="editBan"}, 
+			{
+				FAQ.Node("input", {
+					class = "form-control",
+					name = "reason",
+					value = blacklist[data.banid].reason,
+					placeholder = "No Reason Provided",
+				}, ""),
+
+				FAQ.Node("h5", {}, "<b>Banner:</b>"),
+				FAQ.Node("input", {
+					class = "form-control",
+					name = "banner",
+					value = (blacklist[data.banid].banner or "Console"),
+					placeholder = "Console",
+				}, ""),
+							
+				FAQ.Node("h5", {}, "<b>Ban Length:</b>"),
+				GenerateInputGroup(FAQ, 
+					GenerateCustomSelect(FAQ, "expires", GenerateBanOptions()), 
+					FAQ.Node("span", {class = "input-group-text", style = "min-width: 30px;"}, "Ban Length")
+				),
+
+				FAQ.Node("h5", {}, "<b>Identiifers:</b>"),
+				FAQ.Node("input", {
+					class = "form-control",
+					name = "identifiers",
+					value = (identifiers),
+					placeholder = "steam:123,license:abc,fivem:567",
+				}, ""),
+			
+
+			FAQ.Button("danger", {"Edit Ban"}, {type = "submit", value="editBan", expires = expires or 10444633200}) 
+
+			}))
+
+			return true, "OK" -- dont render any further
+
 		end
 
 
@@ -394,8 +457,9 @@ Citizen.CreateThread(function()
 			for i,theBanned in ipairs(blacklist) do
 				if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
 					if theBanned then
-						theBanned.id = i
-						table.insert(thisPage, theBanned)
+						local t = theBanned
+						t.id = i
+						table.insert(thisPage, t)
 					end
 				end
 			end
@@ -415,9 +479,9 @@ Citizen.CreateThread(function()
 					FAQ.ButtonToolbar({
 						FAQ.ButtonGroup({
 
-							FAQ.Form(PAGE_NAME,{source=source, action="editBanModal"}, {
+							FAQ.Form(PAGE_NAME,{source=source, banid=data.id, action="editBanModal"}, {
 								FAQ.ButtonGroup({
-									FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+									FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.editban") and "disabled" or nil)}),
 								}),
 							}),
 							FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.id, site="managebans"}, {
