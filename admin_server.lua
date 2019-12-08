@@ -598,6 +598,12 @@ Citizen.CreateThread(function()
 		end
 	end
 	
+	function updateBan(newData)
+		if banid and newData and newData.identifiers and newData.banid and newData.reason and newData.expires then 
+			blacklist[newData.banid] = newData
+			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+		end
+	end
 	
 	function updateBlacklist(data,remove)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
@@ -696,6 +702,7 @@ Citizen.CreateThread(function()
 			table.insert(blacklist, data)
 		elseif not data then
 			for i,theBan in ipairs(blacklist) do
+				theBan.id = nil
 				if not theBan.expire then 
 					table.remove(blacklist,i)
 				elseif not theBan.identifiers[1] then -- make sure 1 identifier is given, otherwise its a broken ban
