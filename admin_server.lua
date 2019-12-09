@@ -293,6 +293,8 @@ Citizen.CreateThread(function()
 	
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
+			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", "Please use the WebAdmin Interface, if possible." } })
+		--[[
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1])
 			UnbanIdentifier(args[1])
 			if (source ~= 0) then
@@ -301,6 +303,7 @@ Citizen.CreateThread(function()
 				Citizen.Trace(GetLocalisedText("done"))
 			end
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), args[1])) -- Use the "safe" getName function instead.
+		]]
 		end
 	end, false)
 	
@@ -615,17 +618,14 @@ Citizen.CreateThread(function()
 				TriggerEvent("ea_data:addBan", data)
 				
 			elseif data and remove then
-					for i,theBan in ipairs(blacklist) do
-						for index,identifier in ipairs(theBan.identifiers) do
-							if data.identifier == identifier then
-								table.remove(blacklist,i)
-								PrintDebugMessage("removed ban as per custombanlist remove")
-								TriggerEvent("ea_data:removeBan", theBan)
-								break
-							end
-						end
+				for i,theBan in ipairs(blacklist) do
+					if theBan.banid == data.banid then
+						table.remove(blacklist,i)
+						PrintDebugMessage("removed ban as per custombanlist remove")
+						TriggerEvent("ea_data:removeBan", theBan)
+						break
 					end
-					
+				end
 			elseif not data then
 				TriggerEvent('ea_data:retrieveBanlist', function(banlist)
 					blacklist = banlist
@@ -727,13 +727,11 @@ Citizen.CreateThread(function()
 		end
 		if data and remove then
 			for i,theBan in ipairs(blacklist) do
-				for index,identifier in ipairs(theBan.identifiers) do
-					if data.identifier == identifier then
-						table.remove(blacklist,i)
-						PrintDebugMessage("removing ban as ordered by remove param")
-						change=true
-						break
-					end
+				if data.banid == theBan.banid then
+					table.remove(blacklist,i)
+					PrintDebugMessage("removing ban as ordered by remove param")
+					change=true
+					break
 				end
 			end
 		end
@@ -783,10 +781,14 @@ Citizen.CreateThread(function()
 		end
 	end
 
-	function UnbanId(banId)
-		print(blacklist[banId])
-		if blacklist[banId] then 
-			table.remove(blacklist,banId)
+	function UnbanId(id)
+		for i,ban in ipairs(blacklist) do 
+			if ban.banid == id then
+				table.remove(blacklist,i)
+				if GetConvar("ea_custombanlist", "false") == "true" then 
+					TriggerEvent("ea_data:removeBan", ban)
+				end
+			end
 		end
 	end
 	

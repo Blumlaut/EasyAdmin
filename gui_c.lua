@@ -480,7 +480,7 @@ function GenerateMenu() -- this is a big ass function
 					local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
 					unbanPlayer:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
-						TriggerServerEvent("EasyAdmin:unbanPlayer", i)
+						TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned.banid)
 						TriggerServerEvent("EasyAdmin:requestBanlist")
 						_menuPool:CloseAllMenus()
 						Citizen.Wait(800)
