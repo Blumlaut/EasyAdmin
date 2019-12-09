@@ -605,9 +605,13 @@ Citizen.CreateThread(function()
 		if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then 
 			blacklist[id] = newData
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			if GetConvar("ea_custombanlist", "false") == "true" then 
+				TriggerEvent("ea_data:updateBan", ban)
+			end
 		end
 	end
-	
+
+
 	function updateBlacklist(data,remove)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
 		local change=false --mark if file was changed to save up on disk writes.
@@ -754,6 +758,13 @@ Citizen.CreateThread(function()
 		end
 		return identifierfound
 	end
+
+	AddEventHandler("EasyAdmin:GetVersion", function(cb)
+		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+		local verContent = json.decode(verFile)
+		print(verContent.fivem.version)
+		cb(verContent.fivem.version)
+	end)
 	
 	function BanIdentifier(identifier,reason)
 		updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )

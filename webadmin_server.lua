@@ -473,7 +473,7 @@ Citizen.CreateThread(function()
 
 
 			add(FAQ.Table({"#", "Reason", "Banner", "Expires","Actions"}, thisPage, function(data)
-				return {data.id, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
+				return {data.banid, data.reason, (data.banner or "N/A"), os.date('%Y-%m-%d %H:%M:%S', data.expire), 
 		
 				FAQ.Form(PAGE_NAME, {source = source, site="managebans", action=action}, FAQ.Nodes({
 					FAQ.ButtonToolbar({
@@ -484,7 +484,7 @@ Citizen.CreateThread(function()
 									FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.editban") and "disabled" or nil)}),
 								}),
 							}),
-							FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.id, site="managebans"}, {
+							FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.banid, site="managebans"}, {
 								FAQ.ButtonGroup({
 									FAQ.Button("danger", "Unban", {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
 								}),
