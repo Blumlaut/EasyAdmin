@@ -607,6 +607,7 @@ Citizen.CreateThread(function()
 	
 	function updateBlacklist(data,remove)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
+		local change=false --mark if file was changed to save up on disk writes.
 		if GetConvar("ea_custombanlist", "false") == "true" then 
 			
 			if data and not remove then
@@ -680,18 +681,22 @@ Citizen.CreateThread(function()
 			for i,ban in ipairs(blacklist) do
 				if not ban.identifiers then
 					ban.identifiers = {}
+					change=true
 				end
 				if ban.identifier then
 					table.insert(ban.identifiers, ban.identifier)
 					ban.identifier = nil
+					change=true
 				end
 				if ban.steam then
 					table.insert(ban.identifiers, ban.steam)
 					ban.steam = nil
+					change=true
 				end
 				if ban.discord and ban.discord ~= "" then
 					table.insert(ban.identifiers, ban.discord)
 					ban.discord = nil
+					change=true
 				end
 			end
 			Citizen.Trace("Banlist Upgraded! No Further Action is necesarry.\n")
@@ -700,18 +705,23 @@ Citizen.CreateThread(function()
 		
 		if data and not remove then
 			table.insert(blacklist, data)
+			change=true
 		elseif not data then
 			for i,theBan in ipairs(blacklist) do
 				theBan.id = nil
 				if not theBan.expire then 
 					table.remove(blacklist,i)
+					change=true
 				elseif not theBan.identifiers[1] then -- make sure 1 identifier is given, otherwise its a broken ban
 					table.remove(blacklist,i)
+					change=true
 				elseif theBan.expire < os.time() then
 					table.remove(blacklist,i)
 					PrintDebugMessage("removing old ban no custom banlist")
+					change=true
 				elseif theBan.expire == 1924300800 then
 					blacklist[i].expire = 10444633200
+					change=true
 				end
 			end
 		end
@@ -721,12 +731,15 @@ Citizen.CreateThread(function()
 					if data.identifier == identifier then
 						table.remove(blacklist,i)
 						PrintDebugMessage("removing ban as ordered by remove param")
+						change=true
 						break
 					end
 				end
 			end
 		end
-		SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+		if change then
+			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+		end
 	end
 
 
