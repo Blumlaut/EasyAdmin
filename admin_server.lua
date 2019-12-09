@@ -606,7 +606,7 @@ Citizen.CreateThread(function()
 			blacklist[id] = newData
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 			if GetConvar("ea_custombanlist", "false") == "true" then 
-				TriggerEvent("ea_data:updateBan", ban)
+				TriggerEvent("ea_data:updateBan", newData)
 			end
 		end
 	end
