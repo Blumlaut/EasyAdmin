@@ -190,7 +190,7 @@ Citizen.CreateThread(function()
 					expires = 10444633200
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-				local ban = {banid = blacklist[#blacklist].banid+1, identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+				local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -210,7 +210,7 @@ Citizen.CreateThread(function()
 					expires = 10444633200
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-				local ban = {banid = blacklist[#blacklist].banid+1, identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+				local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ))
@@ -223,7 +223,7 @@ Citizen.CreateThread(function()
 		if getName(source) ~= "Console" then return end
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		reason = reason.. string.format(GetLocalisedText("bancheatingadd"), getName(playerId), getName(source) )
-		local ban = {banid = blacklist[#blacklist].banid+1, banididentifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), banididentifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
 		
 		updateBlacklist( ban )
 		PrintDebugMessage("Console banned player "..getName(playerId,true).." for "..reason)
@@ -241,7 +241,7 @@ Citizen.CreateThread(function()
 			expires = os.time()+expires 
 		end
 		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
-		local ban = {banid = blacklist[#blacklist].banid+1, identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
 		
@@ -533,6 +533,14 @@ Citizen.CreateThread(function()
 	
 	blacklist = {}
 	
+
+	function GetFreshBanId()
+		if blacklist[#blacklist] then 
+			return blacklist[#blacklist].banid+1
+		else
+			return 1
+		end
+	end
 	function updateAdmins(addItem)
 		admins = {}
 		local content = LoadResourceFile(GetCurrentResourceName(), "admins.txt")
