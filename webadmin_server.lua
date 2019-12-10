@@ -376,10 +376,10 @@ Citizen.CreateThread(function()
 			add(FAQ.Node("h2", {}, "<b>Remove Ban</b>"))
 		
 
-			add(FAQ.Node("h5", {}, "<b>Reason:</b> "..blacklist[data.banid].reason))
-			add(FAQ.Node("h5", {}, "<b>Banner:</b> "..(blacklist[data.banid].banner or "N/A")))
+			add(FAQ.Node("h5", {}, "<b>Reason:</b> "..blacklist[data.index].reason))
+			add(FAQ.Node("h5", {}, "<b>Banner:</b> "..(blacklist[data.index].banner or "N/A")))
 			add(FAQ.Node("div", {}, "&nbsp;"))
-			add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.banid].expire)))
+			add(FAQ.Node("h5", {}, "<b>Ban (would) Expire</b> "..os.date('%Y-%m-%d %H:%M:%S', blacklist[data.index].expire)))
 			
 			add(FAQ.Node("div", {}, "&nbsp;"))
 
@@ -387,12 +387,12 @@ Citizen.CreateThread(function()
 			add(FAQ.Node("h5", {}, "<b>Identifiers</b>"))
 			add(FAQ.Node("ul", {class="list-group"}, ""))
 
-			for i, identifier in ipairs(blacklist[data.banid].identifiers) do 
+			for i, identifier in ipairs(blacklist[data.index].identifiers) do 
 				add(FAQ.Node("li", {class="list-group-item"}, identifier))
 			end
 			
 
-			local form = FAQ.Form(PAGE_NAME, {site="managebans", action="removeBan", banid=data.banid}, FAQ.Button("danger", {
+			local form = FAQ.Form(PAGE_NAME, {site="managebans", action="removeBan", banid=blacklist[data.index].banid}, FAQ.Button("danger", {
 				"Unban User"
 			}, {type = "submit"}))
 			add(form)
@@ -484,7 +484,7 @@ Citizen.CreateThread(function()
 									FAQ.Button("primary", "Edit Ban", {type = "submit", source=source, action="editBanModal", disabled = (not exports['webadmin']:isInRole("easyadmin.editban") and "disabled" or nil)}),
 								}),
 							}),
-							FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.banid, site="managebans"}, {
+							FAQ.Form(PAGE_NAME,{action="removeBanModal", banid=data.id, site="managebans"}, {
 								FAQ.ButtonGroup({
 									FAQ.Button("danger", "Unban", {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
 								}),
