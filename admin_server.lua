@@ -731,7 +731,10 @@ Citizen.CreateThread(function()
 				if not theBan.expire then 
 					table.remove(blacklist,i)
 					change=true
-				elseif not theBan.identifiers[1] then -- make sure 1 identifier is given, otherwise its a broken ban
+				elseif not theBan.identifiers then -- make sure 1 identifier is given, otherwise its a broken ban
+					table.remove(blacklist,i)
+					change=true
+				elseif not theBan.identifiers[1] then 
 					table.remove(blacklist,i)
 					change=true
 				elseif theBan.expire < os.time() then
