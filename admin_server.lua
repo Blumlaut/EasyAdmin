@@ -183,7 +183,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				local bannedIdentifiers = CachedPlayers[playerId].identifiers
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
 				elseif not expires then 
@@ -203,7 +203,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				local bannedIdentifiers = CachedPlayers[playerId].identifiers
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
 				elseif not expires then 
@@ -223,7 +223,7 @@ Citizen.CreateThread(function()
 		if getName(source) ~= "Console" then return end
 		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
 		reason = reason.. string.format(GetLocalisedText("bancheatingadd"), getName(playerId), getName(source) )
-		local ban = {banid = GetFreshBanId(), banididentifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
 		
 		updateBlacklist( ban )
 		PrintDebugMessage("Console banned player "..getName(playerId,true).." for "..reason)
