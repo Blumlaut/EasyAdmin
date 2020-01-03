@@ -1,5 +1,5 @@
 ## [EasyAdmin](https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245)
-## Need Help or want to follow my releases? Join the Support Discord: https://discord.gg/UbsYrKx
+## Need Help or want to follow my releases? Join the Support Discord: https://discord.gg/GugyRU8
 
 ## NOTE: BEFORE INSTALLING THIS ON YOUR SERVER, PLEASE READ THE [WIKI](https://github.com/Bluethefurry/EasyAdmin/wiki)
 
