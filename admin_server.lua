@@ -861,6 +861,7 @@ Citizen.CreateThread(function()
 	---------------------------------- USEFUL
 	
 	function SendWebhookMessage(webhook,message)
+		moderationNotification = GetConvar("ea_moderationNotification", "false")
 		if webhook ~= "false" then
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
 		end
