@@ -25,6 +25,9 @@ permissions = {
 MutedPlayers = {} 
 -- cached players, for offline banning
 CachedPlayers = {}
+OnlineAdmins = {}
+
+
 Citizen.CreateThread(function()
 	while true do 
 		Wait(20000)
@@ -39,6 +42,9 @@ end)
 AddEventHandler('playerDropped', function (reason)
 	if CachedPlayers[source] then
 		CachedPlayers[source].droppedTime = os.time()
+	end
+	if OnlineAdmins[source] then
+		OnlineAdmins[source] = nil
 	end
 end)
 
@@ -84,6 +90,9 @@ Citizen.CreateThread(function()
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
+			end
+			if thisPerm == true then
+				OnlineAdmins[source] = true 
 			end
 			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
 			PrintDebugMessage("Processed Perm "..perm.." for "..getName(source)..", result: "..tostring(thisPerm))
@@ -386,6 +395,9 @@ Citizen.CreateThread(function()
 					table.insert(PlayerReports[id], {source = source, sourceName = GetPlayerName(source), reason = reason, time = os.time()})
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports))
 					-- "playerreportedplayer":"```\nUser %s (ID: %a) reported a player!\n%s (%a), Reason: %s\nReport %a/%a\n```",
+					for i,_ in pairs(OnlineAdmins) do 
+						TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports))
+					end
 					TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("successfullyreported"))
 					if #PlayerReports[id] >= minimumreports then
 						TriggerEvent("EasyAdmin:banPlayer", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
