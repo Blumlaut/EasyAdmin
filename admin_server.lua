@@ -26,6 +26,7 @@ MutedPlayers = {}
 -- cached players, for offline banning
 CachedPlayers = {}
 OnlineAdmins = {}
+ChatReminders = {}
 
 
 Citizen.CreateThread(function()
@@ -35,6 +36,55 @@ Citizen.CreateThread(function()
 			if player.droppedTime and (os.time() > player.droppedTime+600) then
 				CachedPlayers[i]=nil
 			end
+		end
+	end
+end)
+
+
+-- Chat Reminder Code
+function sendRandomReminder()
+	reminderTime = GetConvarInt("ea_chatReminderTime", 0)
+	if reminderTime ~= 0 and #ChatReminders > 0 then
+		local reminder = ChatReminders[ math.random( #ChatReminders ) ] -- select random reminder from table
+		local adminNames = ""
+		local t = {}
+		for i,_ in pairs(OnlineAdmins) do
+			table.insert(t, getName(i))
+		end
+		for i,n in ipairs(t) do 
+			if i == 1 then
+				adminNames = n
+			elseif i == #t then
+				adminNames = adminNames.." "..n
+			else
+				adminNames = adminNames.." "..n..","
+			end
+		end
+		t=nil
+
+		if adminNames == "" then adminNames = "@admins" end -- if no admins are online just print @admins
+		reminder = string.gsub(reminder, "@admins", adminNames)
+
+		reminder = string.gsub(reminder, "@bancount", #blacklist)
+
+		reminder = string.gsub(reminder, "@time", os.date("%X", os.time()))
+		reminder = string.gsub(reminder, "@date", os.date("%x", os.time()))
+		TriggerClientEvent("chat:addMessage", -1, { args = { "EasyAdmin", reminder } })
+	end
+end
+
+Citizen.CreateThread(function()
+	--Wait(10000)
+	reminderTime = GetConvarInt("ea_chatReminderTime", 0)
+	if reminderTime ~= 0 then
+		while true do 
+			Wait(reminderTime*60000)
+			sendRandomReminder()
+		end
+	else
+		while true do
+			Wait(20000)
+			sendRandomReminder() -- check for changes in the convar
 		end
 	end
 end)
@@ -334,6 +384,17 @@ Citizen.CreateThread(function()
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
 			PrintDebugMessage("Player "..getName(source,true).." set Map Name to "..args[1])
 			SetMapName(args[1])
+		end
+	end, false)
+
+
+	RegisterCommand("ea_addReminder", function(source, args, rawCommand)
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+			local text = string.gsub(rawCommand, "ea_addReminder ", "")
+			local text = string.gsub(text, '"', '')
+
+			PrintDebugMessage("added '"..text.."' as a Chat Reminder")
+			table.insert(ChatReminders, text)
 		end
 	end, false)
 
