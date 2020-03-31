@@ -351,6 +351,9 @@ Citizen.CreateThread(function()
 	RegisterCommand("calladmin", function(source, args, rawCommand)
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
 			local reason = string.gsub(rawCommand, "calladmin ", "")
+			for i,_ in pairs(OnlineAdmins) do 
+				TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason))
+			end
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playercalledforadmin"), getName(source), source, reason))
 			TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 		end
