@@ -1,13 +1,13 @@
 {
-    "version":"5.133",
-	"changelog":"Fix an issue where the webhook does not work for some configurations",
+    "version":"5.2",
+	"changelog":"Reports/CallAdmin in Chat, Chat Reminders, GUI Fixes",
 	
 
 	"_comment":"The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 	
 	"fivem": {
-		"version":"5.133",
-		"changelog":"Fix an issue where the webhook does not work for some configurations",
+		"version":"5.2",
+		"changelog":"Reports/CallAdmin in Chat, Chat Reminders, GUI Fixes",
 	},
 	"redm": {
 		"version":"0.1",
