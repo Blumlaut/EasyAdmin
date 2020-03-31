@@ -113,6 +113,42 @@ AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
 	end
 end)
 
+function DoesPlayerHavePermission(player, object)
+	local haspermission = false
+	if (player == 0 or player == "") then
+		return true
+	end-- Console. It's assumed this will be an admin with access. If not, why the fuck are they giving random people access?
+	
+	if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
+		haspermission = true
+	else
+		haspermission = false
+	end
+	
+	if not haspermission then -- if not, check if they are admin using the legacy method.
+		local numIds = GetPlayerIdentifiers(player)
+		for i,admin in pairs(admins) do
+			for i,theId in pairs(numIds) do
+				if admin == theId then
+					haspermission = true
+				end
+			end
+		end
+	end
+	return haspermission
+end
+
+
+RegisterCommand("ea_addReminder", function(source, args, rawCommand)
+	if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+		local text = string.gsub(rawCommand, "ea_addReminder ", "")
+		local text = string.gsub(text, '"', '')
+
+		PrintDebugMessage("added '"..text.."' as a Chat Reminder")
+		table.insert(ChatReminders, text)
+	end
+end, false)
+
 AnonymousAdmins = {}
 Citizen.CreateThread(function()
 	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
@@ -387,17 +423,6 @@ Citizen.CreateThread(function()
 		end
 	end, false)
 
-
-	RegisterCommand("ea_addReminder", function(source, args, rawCommand)
-		if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
-			local text = string.gsub(rawCommand, "ea_addReminder ", "")
-			local text = string.gsub(text, '"', '')
-
-			PrintDebugMessage("added '"..text.."' as a Chat Reminder")
-			table.insert(ChatReminders, text)
-		end
-	end, false)
-
 	RegisterCommand("slap", function(source, args, rawCommand)
 		if args[1] and args[2] and DoesPlayerHavePermission(source,"easyadmin.slap") then
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminslappedplayer"), getName(source), getName(args[1]), args[2]))
@@ -581,31 +606,7 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
-	
-	function DoesPlayerHavePermission(player, object)
-		local haspermission = false
-		if (player == 0 or player == "") then
-			return true
-		end-- Console. It's assumed this will be an admin with access. If not, why the fuck are they giving random people access?
-		
-		if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
-			haspermission = true
-		else
-			haspermission = false
-		end
-		
-		if not haspermission then -- if not, check if they are admin using the legacy method.
-			local numIds = GetPlayerIdentifiers(player)
-			for i,admin in pairs(admins) do
-				for i,theId in pairs(numIds) do
-					if admin == theId then
-						haspermission = true
-					end
-				end
-			end
-		end
-		return haspermission
-	end
+
 	
 	blacklist = {}
 	
