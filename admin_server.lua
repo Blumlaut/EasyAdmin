@@ -978,8 +978,7 @@ Citizen.CreateThread(function()
 		else
 			print("EasyAdmin Version Check failed!")
 		end
-		local screenshottest = LoadResourceFile("screenshot-basic", "__resource.lua")
-		if not screenshottest then
+		if GetResourceState("screenshot-basic") == "missing" then 
 			print("\nEasyAdmin: screenshot-basic is not installed on this Server, screenshots unavailable")
 		else
 			StartResource("screenshot-basic")
