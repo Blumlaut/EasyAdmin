@@ -758,11 +758,9 @@ Citizen.CreateThread(function()
 
 		PrintDebugMessage("updated banlist")
 		if not blacklist then
-			local error = json.encode(content, { exception = json.encodeexception })
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
-			print("EasyAdmin: Please check this error below, ^1Bans *will not* work!^7\n")
-			print("EasyAdmin: Errors Provided by JSON Parser:\n^7"+error+"^7")
+			print("EasyAdmin: Please check your banlist file for errors, ^1Bans *will not* work!^7\n")
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 		end
 		
