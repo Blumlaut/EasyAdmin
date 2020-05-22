@@ -104,6 +104,7 @@ AddEventHandler("EasyAdmin:amiadmin", function()
 	end
 end)
 
+RegisterServerEvent("EasyAdmin:GetPlayerList")
 AddEventHandler("EasyAdmin:GetPlayerList", function()
 	if IsPlayerAdmin(source) then
 		TriggerClientEvent("EasyAdmin:GetPlayerList", source, GetPlayers()) 
