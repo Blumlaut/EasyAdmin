@@ -46,6 +46,8 @@ function handleOrientation(orientation)
 	end
 end
 
+playlist = nil
+
 Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
@@ -73,7 +75,12 @@ Citizen.CreateThread(function()
 		end
 		if (IsControlJustReleased(0, settings.button) and GetLastInputMethod( 0 ) ) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
-			
+			playerlist = nil
+			TriggerServerEvent("EasyAdmin:GetPlayerList") -- shitty fix for bigmode
+			repeat
+				Wait(100)
+			until playerlist
+
 			if strings then
 				banLength = {
 					{label = GetLocalisedText("permanent"), time = 10444633200},
@@ -145,10 +152,7 @@ function GenerateMenu() -- this is a big ass function
 
 	-- util stuff
 	players = {}
-	local localplayers = {}
-	for _, i in ipairs(GetActivePlayers()) do
-		table.insert( localplayers, GetPlayerServerId(i) )
-	end
+	local localplayers = playerlist
 	table.sort(localplayers)
 	for i,thePlayer in ipairs(localplayers) do
 		table.insert(players,GetPlayerFromServerId(thePlayer))

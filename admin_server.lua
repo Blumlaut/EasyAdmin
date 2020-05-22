@@ -104,6 +104,13 @@ AddEventHandler("EasyAdmin:amiadmin", function()
 	end
 end)
 
+AddEventHandler("EasyAdmin:GetPlayerList", function()
+	if IsPlayerAdmin(source) then
+		TriggerClientEvent("EasyAdmin:GetPlayerList", source, GetPlayers()) 
+	end
+end)
+
+
 RegisterServerEvent("EasyAdmin:requestCachedPlayers")
 AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
 	local src = source
@@ -112,6 +119,15 @@ AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
 		PrintDebugMessage("Cached Players requested by "..getName(src,true))
 	end
 end)
+
+function GetOnlineAdmins()
+	return OnlineAdmins
+end
+
+function IsPlayerAdmin(pid)
+	return OnlineAdmins[pid]
+end
+
 
 function DoesPlayerHavePermission(player, object)
 	local haspermission = false
