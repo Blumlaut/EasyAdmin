@@ -154,9 +154,7 @@ function GenerateMenu() -- this is a big ass function
 	players = {}
 	local localplayers = playerlist
 	--table.sort(localplayers)
-	print("test")
 	for i,thePlayer in pairs(localplayers) do
-		print("hi")
 		--table.insert(players,GetPlayerFromServerId(i))
 	end
 
