@@ -1,13 +1,13 @@
 {
-    "version":"5.2",
-	"changelog":"Reports/CallAdmin in Chat, Chat Reminders, GUI Fixes",
+    "version":"5.21",
+	"changelog":"Update EasyAdmin for Infinity/Bigmode",
 	
 
 	"_comment":"The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 	
 	"fivem": {
-		"version":"5.2",
-		"changelog":"Reports/CallAdmin in Chat, Chat Reminders, GUI Fixes",
+		"version":"5.21",
+		"changelog":"Update EasyAdmin for Infinity/Bigmode",
 	},
 	"redm": {
 		"version":"0.1",
