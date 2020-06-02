@@ -21,6 +21,8 @@ RegisterNetEvent("EasyAdmin:TeleportRequest")
 RegisterNetEvent("EasyAdmin:SlapPlayer")
 RegisterNetEvent("EasyAdmin:FreezePlayer")
 RegisterNetEvent("EasyAdmin:CaptureScreenshot")
+RegisterNetEvent("EasyAdmin:GetPlayerList")
+RegisterNetEvent("EasyAdmin:GetInfinityPlayerList")
 RegisterNetEvent("EasyAdmin:fillCachedPlayers")
 
 
@@ -46,6 +48,14 @@ end)
 
 AddEventHandler("EasyAdmin:fillCachedPlayers", function(thecached)
 	cachedplayers = thecached
+end)
+
+AddEventHandler("EasyAdmin:GetPlayerList", function(players)
+	playerlist = players
+end)
+
+AddEventHandler("EasyAdmin:GetInfinityPlayerList", function(players)
+	playerlist = players
 end)
 
 Citizen.CreateThread( function()

@@ -99,10 +99,44 @@ AddEventHandler('playerDropped', function (reason)
 end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
-	if not CachedPlayers[source] and not DoesPlayerHavePermission(source,"easyadmin.immune") then
-		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source)}
+	if not CachedPlayers[source] then
+		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
 	end
 end)
+
+RegisterServerEvent("EasyAdmin:GetPlayerList")
+AddEventHandler("EasyAdmin:GetPlayerList", function()
+	if IsPlayerAdmin(source) then
+		local l = {}
+		local players = GetPlayers()
+		for i, player in pairs(players) do
+			if CachedPlayers[player] then
+				table.insert(l, CachedPlayers[player])
+			end
+		end
+		TriggerClientEvent("EasyAdmin:GetPlayerList", source, l) 
+	end
+end)
+
+
+RegisterServerEvent("EasyAdmin:GetInfinityPlayerList")
+AddEventHandler("EasyAdmin:GetInfinityPlayerList", function()
+	if IsPlayerAdmin(source) then
+		local l = {}
+		local players = GetPlayers()
+
+		for i, player in pairs(players) do
+			local player = tonumber(player)
+			for i, cached in pairs(CachedPlayers) do
+				if (cached.id == player) then
+					table.insert(l, CachedPlayers[i])
+				end
+			end
+		end
+		TriggerClientEvent("EasyAdmin:GetInfinityPlayerList", source, l) 
+	end
+end)
+
 
 RegisterServerEvent("EasyAdmin:requestCachedPlayers")
 AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
@@ -112,6 +146,15 @@ AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
 		PrintDebugMessage("Cached Players requested by "..getName(src,true))
 	end
 end)
+
+function GetOnlineAdmins()
+	return OnlineAdmins
+end
+
+function IsPlayerAdmin(pid)
+	return OnlineAdmins[pid]
+end
+
 
 function DoesPlayerHavePermission(player, object)
 	local haspermission = false
@@ -177,6 +220,9 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
+			if (perm == "teleport" or perm == "spectate") and infinity then
+				thisPerm = false
+			end 
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
 			end
@@ -296,7 +342,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:offlinebanPlayer")
 	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
-		if playerId ~= nil then
+		if playerId ~= nil and not CachedPlayers[playerId].immune then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
@@ -983,6 +1029,10 @@ Citizen.CreateThread(function()
 		else
 			StartResource("screenshot-basic")
 			screenshots = true
+		end
+
+		if GetConvar("onesync_enableInfinity", "false") == "true" or GetConvarInt("onesync_enableInfinity", 0) == 1 then 
+			infinity = true
 		end
 		
 		SetTimeout(3600000, checkVersionHTTPRequest)
