@@ -100,7 +100,6 @@ end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
 	if not CachedPlayers[source] then
-		print("added cached player,"..source)
 		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
 	end
 end)
@@ -128,11 +127,8 @@ AddEventHandler("EasyAdmin:GetInfinityPlayerList", function()
 
 		for i, player in pairs(players) do
 			local player = tonumber(player)
-			print("checking playerid "..i..", "..player)
 			for i, cached in pairs(CachedPlayers) do
-				print("checking cached id ".. cached.id, player)
 				if (cached.id == player) then
-					print("matched")
 					table.insert(l, CachedPlayers[i])
 				end
 			end
