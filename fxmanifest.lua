@@ -1,4 +1,8 @@
-resource_manifest_version "44febabe-d386-4d18-afbe-5e627f4af937"
+fx_version 'bodacious' 
+games { 'gta5' } 
+ 
+description 'EasyAdmin 5.21'
+author ' Bluethefurry'
 
 server_scripts {
 	"util_shared.lua",
