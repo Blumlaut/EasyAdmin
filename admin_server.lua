@@ -342,7 +342,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:offlinebanPlayer")
 	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
-		if playerId ~= nil then
+		if playerId ~= nil and not CachedPlayers[playerId].immune then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
