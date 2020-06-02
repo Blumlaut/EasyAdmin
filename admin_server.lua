@@ -221,7 +221,7 @@ Citizen.CreateThread(function()
 				thisPerm = false
 			end
 			if (perm == "teleport" or perm == "spectate") and infinity then
-				thisPerm == false
+				thisPerm = false
 			end 
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
