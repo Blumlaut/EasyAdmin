@@ -345,7 +345,7 @@ function GenerateMenu() -- this is a big ass function
 	CachedList:SetMenuWidthOffset(menuWidth)
 	if permissions.ban then
 		for i, cachedplayer in pairs(cachedplayers) do
-			if cachedplayer.droppedTime then
+			if cachedplayer.droppedTime and not cachedplayer.immune then
 				thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
 				thisPlayer:SetMenuWidthOffset(menuWidth)
 				local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
