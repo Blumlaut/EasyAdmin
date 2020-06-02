@@ -1031,7 +1031,7 @@ Citizen.CreateThread(function()
 			screenshots = true
 		end
 
-		if GetConvarInt("onesync_enableInfinity", 0) == 1 then 
+		if GetConvar("onesync_enableInfinity", "false") == "true" or GetConvarInt("onesync_enableInfinity", 0) == 1 then 
 			infinity = true
 		end
 		
