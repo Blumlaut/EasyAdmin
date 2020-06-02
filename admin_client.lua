@@ -22,6 +22,7 @@ RegisterNetEvent("EasyAdmin:SlapPlayer")
 RegisterNetEvent("EasyAdmin:FreezePlayer")
 RegisterNetEvent("EasyAdmin:CaptureScreenshot")
 RegisterNetEvent("EasyAdmin:GetPlayerList")
+RegisterNetEvent("EasyAdmin:GetInfinityPlayerList")
 RegisterNetEvent("EasyAdmin:fillCachedPlayers")
 
 
@@ -51,6 +52,15 @@ end)
 
 AddEventHandler("EasyAdmin:GetPlayerList", function(players)
 	playerlist = players
+	print("got playerlist")
+end)
+
+AddEventHandler("EasyAdmin:GetInfinityPlayerList", function(players)
+	playerlist = players
+	print("got infinity playerlist, result:")
+	for i,o in pairs(playerlist) do
+		print(i,o)
+	end
 end)
 
 Citizen.CreateThread( function()

@@ -99,15 +99,45 @@ AddEventHandler('playerDropped', function (reason)
 end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
-	if not CachedPlayers[source] and not DoesPlayerHavePermission(source,"easyadmin.immune") then
-		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source)}
+	if not CachedPlayers[source] then
+		print("added cached player,"..source)
+		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
 	end
 end)
 
 RegisterServerEvent("EasyAdmin:GetPlayerList")
 AddEventHandler("EasyAdmin:GetPlayerList", function()
 	if IsPlayerAdmin(source) then
-		TriggerClientEvent("EasyAdmin:GetPlayerList", source, GetPlayers()) 
+		local l = {}
+		local players = GetPlayers()
+		for i, player in pairs(players) do
+			if CachedPlayers[player] then
+				table.insert(l, CachedPlayers[player])
+			end
+		end
+		TriggerClientEvent("EasyAdmin:GetPlayerList", source, l) 
+	end
+end)
+
+
+RegisterServerEvent("EasyAdmin:GetInfinityPlayerList")
+AddEventHandler("EasyAdmin:GetInfinityPlayerList", function()
+	if IsPlayerAdmin(source) then
+		local l = {}
+		local players = GetPlayers()
+
+		for i, player in pairs(players) do
+			local player = tonumber(player)
+			print("checking playerid "..i..", "..player)
+			for i, cached in pairs(CachedPlayers) do
+				print("checking cached id ".. cached.id, player)
+				if (cached.id == player) then
+					print("matched")
+					table.insert(l, CachedPlayers[i])
+				end
+			end
+		end
+		TriggerClientEvent("EasyAdmin:GetInfinityPlayerList", source, l) 
 	end
 end)
 
@@ -194,6 +224,9 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
+			if (perm == "teleport" or perm == "spectate") and infinity then
+				thisPerm == false
+			end 
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
 			end
@@ -1000,6 +1033,10 @@ Citizen.CreateThread(function()
 		else
 			StartResource("screenshot-basic")
 			screenshots = true
+		end
+
+		if GetConvarInt("onesync_enableInfinity", 0) == 1 then 
+			infinity = true
 		end
 		
 		SetTimeout(3600000, checkVersionHTTPRequest)

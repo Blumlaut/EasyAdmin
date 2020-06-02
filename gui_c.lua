@@ -76,7 +76,7 @@ Citizen.CreateThread(function()
 		if (IsControlJustReleased(0, settings.button) and GetLastInputMethod( 0 ) ) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
 			playerlist = nil
-			TriggerServerEvent("EasyAdmin:GetPlayerList") -- shitty fix for bigmode
+			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 			repeat
 				Wait(100)
 			until playerlist
@@ -153,13 +153,16 @@ function GenerateMenu() -- this is a big ass function
 	-- util stuff
 	players = {}
 	local localplayers = playerlist
-	table.sort(localplayers)
+	--table.sort(localplayers)
+	print("test")
 	for i,thePlayer in pairs(localplayers) do
-		table.insert(players,GetPlayerFromServerId(i))
+		print("hi")
+		--table.insert(players,GetPlayerFromServerId(i))
 	end
 
-	for i,thePlayer in ipairs(players) do
-		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..GetPlayerServerId(thePlayer).."] "..GetPlayerName(thePlayer),"",true)
+	for i,thePlayer in pairs(playerlist) do
+
+		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
 		thisPlayer:SetMenuWidthOffset(menuWidth)
 		-- generate specific menu stuff, dirty but it works for now
 		if permissions.kick then
@@ -193,7 +196,7 @@ function GenerateMenu() -- this is a big ass function
 				if KickReason == "" then
 					KickReason = GetLocalisedText("noreason")
 				end
-				TriggerServerEvent("EasyAdmin:kickPlayer", GetPlayerServerId( thePlayer ), KickReason)
+				TriggerServerEvent("EasyAdmin:kickPlayer", thePlayer.id, KickReason)
 				BanTime = 1
 				BanReason = ""
 				_menuPool:CloseAllMenus()
@@ -245,7 +248,7 @@ function GenerateMenu() -- this is a big ass function
 				if BanReason == "" then
 					BanReason = GetLocalisedText("noreason")
 				end
-				TriggerServerEvent("EasyAdmin:banPlayer", GetPlayerServerId( thePlayer ), BanReason, banLength[BanTime].time, GetPlayerName( thePlayer ))
+				TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, banLength[BanTime].time, GetPlayerName( thePlayer ))
 				BanTime = 1
 				BanReason = ""
 				_menuPool:CloseAllMenus()
@@ -260,7 +263,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("mute"),GetLocalisedText("muteguide"))
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:mutePlayer", GetPlayerServerId( thePlayer ))
+				TriggerServerEvent("EasyAdmin:mutePlayer", thePlayer.id)
 			end
 		end
 
@@ -268,7 +271,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:requestSpectate",GetPlayerServerId(thePlayer))
+				TriggerServerEvent("EasyAdmin:requestSpectate",thePlayer.id)
 			end
 		end
 		
@@ -287,7 +290,7 @@ function GenerateMenu() -- this is a big ass function
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", GetPlayerServerId(thePlayer), px,py,pz)
+				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, px,py,pz)
 			end
 		end
 		
@@ -295,7 +298,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)
-				TriggerServerEvent("EasyAdmin:SlapPlayer", GetPlayerServerId(thePlayer), index*10)
+				TriggerServerEvent("EasyAdmin:SlapPlayer", thePlayer.id, index*10)
 			end
 		end
 
@@ -307,9 +310,9 @@ function GenerateMenu() -- this is a big ass function
 					if item == thisItem then
 							i = item:IndexToItem(index)
 							if i == GetLocalisedText("on") then
-								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), true)
+								TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, true)
 							else
-								TriggerServerEvent("EasyAdmin:FreezePlayer", GetPlayerServerId(thePlayer), false)
+								TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, false)
 							end
 					end
 			end
@@ -319,7 +322,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("takescreenshot"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:TakeScreenshot", GetPlayerServerId(thePlayer))
+				TriggerServerEvent("EasyAdmin:TakeScreenshot", thePlayer.id)
 			end
 		end
 		
