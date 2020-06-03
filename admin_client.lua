@@ -41,6 +41,11 @@ AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
 end)
 
+RegisterNetEvent('EasyAdmin:teleportUser')
+AddEventHandler('EasyAdmin:teleportUser', function(x, y, z)
+	SetEntityCoords(PlayerPedId(), x, y, z)
+end)
+
 
 AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
