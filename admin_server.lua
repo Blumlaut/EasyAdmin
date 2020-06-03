@@ -281,12 +281,32 @@ Citizen.CreateThread(function()
 			
 	RegisterServerEvent("EasyAdmin:tpGoto")
 	AddEventHandler('EasyAdmin:tpGoto', function(playerId)
+		local essentialsmode = GetConvarInt("ea_essentialsorextended", '1')
+
 		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
-			TriggerEvent("es:getPlayerFromId", playerId, function(target)
-				if(target)then
-					riggerClientEvent('EasyAdmin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
+			if essentialsmode == 1 then	
+							
+				TriggerEvent("es:getPlayerFromId", playerId, function(target)
+									
+					if(target)then
+										
+						TriggerClientEvent('EasyAdmin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
+					
+									end
+									
+				end)
+							
+			elseif essentialsmode == 2 then
+							
+				local player = ESX.GetPlayerFromId(playerId)
+							
+				if(player) then
+								
+					TriggerClientEvent('EasyAdmin:teleportUser', source, player.getCoords().x, player.getCoords().y, player.getCoords().z)
+				
 				end
-			end)		
+							
+			end
 		end
 	end)
 	
