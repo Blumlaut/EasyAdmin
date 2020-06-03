@@ -273,13 +273,11 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions.teleport then
+	 	if permissions.teleport then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer),true))
-				local heading = GetEntityHeading(GetPlayerPed(player))
-				SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+				TriggerServerEvent('EasyAdmin:tpGoto', thePlayer.id)
 			end
 		end
 		
