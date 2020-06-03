@@ -220,7 +220,7 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
-			if (perm == "teleport" or perm == "spectate") and infinity then
+			if perm == "spectate" and infinity then
 				thisPerm = false
 			end 
 			if thisPerm == true then
