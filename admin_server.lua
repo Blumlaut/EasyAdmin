@@ -278,6 +278,17 @@ Citizen.CreateThread(function()
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
 		end
 	end)
+			
+	RegisterServerEvent("EasyAdmin:tpGoto")
+	AddEventHandler('EasyAdmin:tpGoto', function(playerId)
+		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
+			TriggerEvent("es:getPlayerFromId", playerId, function(target)
+				if(target)then
+					riggerClientEvent('EasyAdmin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
+				end
+			end)		
+		end
+	end)
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate")
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
