@@ -4,6 +4,11 @@
 ---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
 ------------------------------------
 ------------------------------------
+
+ESX = nil
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+
+
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 admins = {}
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
@@ -21,6 +26,7 @@ permissions = {
 	anon = false,
 	mute = false,
 }
+
 -- Muted Players Table
 MutedPlayers = {} 
 -- cached players, for offline banning
