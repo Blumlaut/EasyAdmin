@@ -246,7 +246,7 @@ function GenerateMenu() -- this is a big ass function
 				if BanReason == "" then
 					BanReason = GetLocalisedText("noreason")
 				end
-				TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, banLength[BanTime].time, GetPlayerName( thePlayer ))
+				TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, banLength[BanTime].time, thePlayer.name )
 				BanTime = 1
 				BanReason = ""
 				_menuPool:CloseAllMenus()
