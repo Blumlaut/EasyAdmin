@@ -277,7 +277,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer),true))
+				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
 				local heading = GetEntityHeading(GetPlayerPed(player))
 				SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
 			end
