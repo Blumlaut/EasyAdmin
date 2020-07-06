@@ -6,8 +6,8 @@
 	"_comment":"The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 	
 	"fivem": {
-		"version":"5.211",
-		"changelog":"Fix Bans not working through GUI",
+		"version":"5.212",
+		"changelog":"Fix Bans not working through GUI"
 	},
 	"redm": {
 		"version":"0.1",
