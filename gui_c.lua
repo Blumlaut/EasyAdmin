@@ -153,12 +153,23 @@ function GenerateMenu() -- this is a big ass function
 	-- util stuff
 	players = {}
 	local localplayers = playerlist
+	local temp = {}
 	--table.sort(localplayers)
 	for i,thePlayer in pairs(localplayers) do
-		--table.insert(players,GetPlayerFromServerId(i))
+		table.insert(temp, thePlayer.id)
 	end
+	table.sort(temp)
+	for i, thePlayerId in pairs(temp) do
+		for _, thePlayer in pairs(localplayers) do
+			if thePlayerId == thePlayer.id then
+				players[i] = thePlayer
+			end
+		end
+	end
+	temp=nil
+		
 
-	for i,thePlayer in pairs(playerlist) do
+	for i,thePlayer in pairs(players) do
 
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
 		thisPlayer:SetMenuWidthOffset(menuWidth)
