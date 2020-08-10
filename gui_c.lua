@@ -593,7 +593,7 @@ function GenerateMenu() -- this is a big ass function
 	local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshpermissions"), GetLocalisedText("refreshpermissionsguide"))
 	settingsMenu:AddItem(thisItem)
 	thisItem.Activated = function(ParentMenu,SelectedItem)
-		TriggerServerEvent("amiadmin")
+		TriggerServerEvent("EasyAdmin:amiadmin")
 	end
 	
 	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
