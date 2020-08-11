@@ -151,7 +151,7 @@ Citizen.CreateThread(function()
 			add(FAQ.Node("h2", {}, "<b>Kick User</b>"))
 		
 
-			add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
+			add(FAQ.Node("h5", {}, "<b>Name:</b> "..getName(data.source, true)))
 			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
 			add(FAQ.Node("div", {}, "&nbsp;"))
 			add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
@@ -175,8 +175,8 @@ Citizen.CreateThread(function()
 			add(FAQ.Node("h2", {}, "<b>Ban User</b>"))
 		
 
-			add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
-			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+			add(FAQ.Node("h5", {}, "<b>Name:</b> "..getName(data.source, true)))
+			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[data.source] and #PlayerReports[data.source] or "0")))
 			add(FAQ.Node("div", {}, "&nbsp;"))
 			add(FAQ.Node("h5", {}, "<b>Reason:</b>"))
 			add(FAQ.Form(PAGE_NAME, {source=data.source, action="ban"}, 
@@ -227,18 +227,38 @@ Citizen.CreateThread(function()
 			add(FAQ.Node("div", {}, "&nbsp;"))
 			add(FAQ.Node("h2", {}, "<b>User Info</b>"))
 		
+			print("-----\n")
 
-			add(FAQ.Node("h5", {}, "<b>Name:</b> "..GetPlayerName(data.source)))
-			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[source] and #PlayerReports[source] or "0")))
+			for i, a in pairs(CachedPlayers[data.source]) do
+				print(i, a)
+			end
+			print("----\n")
+
+			local name
+			if CachedPlayers[data.source] then
+				name = CachedPlayers[data.source].name
+			else
+				name = getName(data.source, true)
+			end
+			add(FAQ.Node("h5", {}, "<b>Name:</b> "..name))
+			add(FAQ.Node("h5", {}, "<b>Reports:</b> "..(PlayerReports[data.source] and #PlayerReports[data.source] or "0")))
 			add(FAQ.Node("h5", {}, "<b>Identifiers:</b>"))
 
 			add(FAQ.Node("ul", {class="list-group"}, ""))
 
-			for i, identifier in ipairs(GetPlayerIdentifiers(data.source)) do 
+			local identifiers = {}
+			if CachedPlayers[data.source] and CachedPlayers[data.source].identifiers then
+				identifiers = CachedPlayers[data.source].identifiers
+			else
+				identifiers = GetPlayerIdentifiers(data.source)
+			end
+
+			for i, identifier in ipairs(identifiers) do 
 				add(FAQ.Node("li", {class="list-group-item"}, identifier))
 			end
+			
 			add(FAQ.Node("div", {}, "&nbsp;"))
-			if screenshots and not currentScreenshotURL then
+			if not CachedPlayers[data.source] and screenshots and not currentScreenshotURL then
 				local form = FAQ.Form(PAGE_NAME, {action="takeScreenshot", source=data.source}, FAQ.Button("info", {
 					"Take Screenshot "}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.screenshot") and "disabled" or nil)}))
 				add(form)
@@ -263,7 +283,7 @@ Citizen.CreateThread(function()
 			if data.reason == "" then 
 				data.reason = "No Reason Provided"
 			end 
-			add(FAQ.Alert("primary", "Kicking Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
+			add(FAQ.Alert("primary", "Kicking Player "..getName(data.source, true).." for "..data.reason.."..."))
 			TriggerEvent("EasyAdmin:kickPlayer", data.source, data.reason) 
 			print(json.encode(data))
 		end
@@ -271,13 +291,13 @@ Citizen.CreateThread(function()
 			if data.reason == "" then 
 				data.reason = "No Reason Provided"
 			end 
-			add(FAQ.Alert("primary", "Banning Player "..GetPlayerName(data.source).." for "..data.reason.."..."))
+			add(FAQ.Alert("primary", "Banning Player "..getName(data.source, true).." for "..data.reason.."..."))
 			TriggerEvent("EasyAdmin:banPlayer", data.source, data.reason, data.expires or 10444633200) 
 
 			print(json.encode(data))
 		end
 		if data.action == "mute" and data.source and exports['webadmin']:isInRole("easyadmin.mute") then 
-			add(FAQ.Alert("primary", "Muting Player "..GetPlayerName(data.source).."..."))
+			add(FAQ.Alert("primary", "Muting Player "..getName(data.source, true).."..."))
 			print(json.encode(data))
 			TriggerEvent("EasyAdmin:mutePlayer", data.source)
 		end
@@ -502,6 +522,54 @@ Citizen.CreateThread(function()
 		end
 
 
+		if data.site == "cachedplayers" then 
+			if not data.page then data.page = 1 end -- set a page value if none exist
+			local pageEntries = 15
+			local PlayerList = CachedPlayers
+			if (#PlayerList/pageEntries) <1 then 
+				maxpages = 1
+			else
+				maxpages = math.ceil(#PlayerList/pageEntries)
+			end
+	
+			local thisPage = {}
+	
+			for i,thePlayer in pairs(PlayerList) do
+				if i<(data.page*pageEntries)+1 and i>(data.page*pageEntries)-pageEntries then
+					if thePlayer then
+						table.insert(thisPage, thePlayer)
+					end
+				end
+			end
+			add(FAQ.Node("h3", {}, "<br>Cached Players"))
+	
+			add(FAQ.Table({"#", "Name", "Action"}, thisPage, function(source)
+				return {source.id, {source.name.." ", (source.immune) and FAQ.Badge("info", "Staff") or ""	}, 
+	
+				FAQ.Form(PAGE_NAME, {source = source.id, action=action}, FAQ.Nodes({
+					FAQ.ButtonToolbar({
+						FAQ.ButtonGroup({
+							FAQ.Form(PAGE_NAME,{source=source.id, action="banModal"}, {
+								FAQ.ButtonGroup({
+									FAQ.Button("danger", "Ban", {type = "submit", source=source.id, action="banModal", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)}),
+								}),
+							}),
+						}),
+						FAQ.Form(PAGE_NAME, {source=source.id, action="viewidentifiers"}, {
+							FAQ.ButtonGroup({
+								FAQ.Button("info", "More", {type = "submit"}),
+							}),
+						})
+					})
+				}))
+			}
+	
+			end))
+			add(GeneratePaginatorExceptWithMoreData(FAQ,PAGE_NAME, data.page, maxpages, "center", {hidestats=true}))
+			return true, "OK"
+		end
+
+
 		if not blacklist then 
 			add(FAQ.Alert("danger", "Banlist file could not be loaded! This means bans <b>WILL NOT WORK</b>, please check this and fix the banlist.json!"))
 			SHOW_PAGE_BADGE = true
@@ -518,10 +586,29 @@ Citizen.CreateThread(function()
 				{"WebAdmin Settings Module", (wap_settings) and "Enabled" or "Disabled"}
 			}))
 		
-			local form = FAQ.Form(PAGE_NAME, {site="managebans"}, FAQ.Button("primary", {
-				"Manage Banlist ", FAQ.Icon("cog")
-			}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}))
+
+
+			local form = FAQ.Form(PAGE_NAME, {source = source, action=action}, FAQ.Nodes({
+				FAQ.ButtonToolbar({
+					FAQ.ButtonGroup({
+						FAQ.Form(PAGE_NAME,{site="managebans"}, {
+							FAQ.ButtonGroup({
+								FAQ.Button("primary",{ "Manage Banlist", FAQ.Icon("cog")}, {type = "submit", site="managebans", disabled = (not exports['webadmin']:isInRole("easyadmin.unban") and "disabled" or nil)}),
+							}),
+						}),
+
+						FAQ.Form(PAGE_NAME, {site="cachedplayers"}, {
+							FAQ.ButtonGroup({
+								FAQ.Button("primary", {
+									"Cached Players ", FAQ.Icon("cog")
+								}, {type = "submit", disabled = (not exports['webadmin']:isInRole("easyadmin.ban") and "disabled" or nil)})
+							}),
+						}),
+					})
+				})
+			}))
 			add(form)
+
 
 			add(FAQ.Node("h3", {}, "<br>Player List"))
 
