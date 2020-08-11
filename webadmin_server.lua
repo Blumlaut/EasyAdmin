@@ -227,13 +227,6 @@ Citizen.CreateThread(function()
 			add(FAQ.Node("div", {}, "&nbsp;"))
 			add(FAQ.Node("h2", {}, "<b>User Info</b>"))
 		
-			print("-----\n")
-
-			for i, a in pairs(CachedPlayers[data.source]) do
-				print(i, a)
-			end
-			print("----\n")
-
 			local name
 			if CachedPlayers[data.source] then
 				name = CachedPlayers[data.source].name
