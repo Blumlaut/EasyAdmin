@@ -723,7 +723,7 @@ Citizen.CreateThread(function()
 		else
 			if AnonymousAdmins[src] and not anonymousdisabled then
 				return GetLocalisedText("anonymous")
-			elseif CachedPlayers[src].name then
+			elseif CachedPlayers[src] and CachedPlayers[src].name then
 				return CachedPlayers[src].name
 			elseif (GetPlayerName(src)) then
 				return GetPlayerName(src)
