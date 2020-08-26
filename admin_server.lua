@@ -616,10 +616,17 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:unbanPlayer")
 	AddEventHandler('EasyAdmin:unbanPlayer', function(banId)
+		local thisBan = nil
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
+			for i,ban in ipairs(blacklist) do 
+				if ban.banid == banId then
+					thisBan = ban
+					break
+				end
+			end
 			UnbanId(banId)
 			PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId))
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId, ban.reason))
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end)
