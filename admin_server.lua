@@ -209,7 +209,7 @@ Citizen.CreateThread(function()
 	else
 		enableDebugging = false
 	end
-	minimumMatchingIdentifiers = GetConvarInt("ea_minIdentifierMatches", 1)
+	minimumMatchingIdentifiers = GetConvarInt("ea_minIdentifierMatches", 2)
 	
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
