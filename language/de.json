@@ -90,7 +90,7 @@
 	"done":"Fertig!",
 	"adminkickedplayer":"**%s** hat **%s** gekickt, Grund: %s",
 	"adminbannedplayer":"**%s** hat **%s** gebannt, Grund: %s, Ban Entfällt: %s",
-	"adminunbannedplayer":"**%s** hat **%s** entbannt.",
+	"adminunbannedplayer":"**%s** hat **%s** entbannt. [ %s ]",
 	"adminslappedplayer":"**%s** hat **%s** geslappt **(%s HP)**.",
 	
 	"adminfrozeplayer":"**%s** hat **%s** eingefroren.",

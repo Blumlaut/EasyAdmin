@@ -92,7 +92,7 @@
 
         "adminkickedplayer": "**%s** Gekickt **%s**, Reden: %s",
         "adminbannedplayer": "**%s** banned **%s**, Reden: %s, Ban Vervalt: %s",
-        "adminunbannedplayer": "**%s** Ban ongedaan gemaakt **%s**",
+        "adminunbannedplayer": "**%s** Ban ongedaan gemaakt **%s** [ %s ]",
         "adminslappedplayer": "**%s** sloeg **%s** for **%s HP**",
         "adminfrozeplayer": "**%s** bevroor **%s**.",
         "adminunfrozeplayer": "**%s** gestopt met bevriezen **%s**.",

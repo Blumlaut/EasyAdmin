@@ -90,7 +90,7 @@
 	"done":"Klart!",
 	"adminkickedplayer":"**%s** kickad **%s**, Anledning: %s",
 	"adminbannedplayer":"**%s** bannlyste **%s**, Anledning: %s, löper ut: %s",
-	"adminunbannedplayer":"**%s** hävde bannlysning **%s**",
+	"adminunbannedplayer":"**%s** hävde bannlysning **%s** [ %s ]",
 	"adminslappedplayer":"**%s** slog **%s** för **%s HP**",
 	
 	"adminfrozeplayer":"**%s** frös **%s**.",

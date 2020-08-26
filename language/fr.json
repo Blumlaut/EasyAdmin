@@ -90,7 +90,7 @@
 	"done":"Fait!",
 	"adminkickedplayer":"**%s** a expulser **%s**, Raison: %s",
 	"adminbannedplayer":"**%s** a banni **%s**, Raison: %s, Expire: %s",
-	"adminunbannedplayer":"**%s** a débanni **%s**",
+	"adminunbannedplayer":"**%s** a débanni **%s** [ %s ]",
 	"adminslappedplayer":"**%s** à pousser **%s** pour **%s HP**",
 
 	"adminfrozeplayer":"**%s** à geler **%s**.",

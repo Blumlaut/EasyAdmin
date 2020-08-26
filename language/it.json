@@ -91,7 +91,7 @@
 	"done":"Fatto!",
 	"adminkickedplayer":"**%s** Ha espulso **%s**, Ragione: %s",
 	"adminbannedplayer":"**%s** Ha bandito **%s**, ragione: %s, finire: %s",
-	"adminunbannedplayer":"**%s** ha revocato il ban di **%s**",
+	"adminunbannedplayer":"**%s** ha revocato il ban di **%s** [ %s ]",
 	"adminslappedplayer":"**%s** ha schiaffeggiato **%s** togliendogli **%s HP**",
 	
 	"adminfrozeplayer":"**%s** ha bloccato **%s**.",

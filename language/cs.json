@@ -89,7 +89,7 @@
 	"done":"Hotovo!",
 	"adminkickedplayer":"**%s** vyhodil **%s**, Duvod: %s",
 	"adminbannedplayer":"**%s** zabanoval **%s**, Duvod: %s, Ban vyprsi: %s",
-	"adminunbannedplayer":"**%s** odbanoval **%s**",
+	"adminunbannedplayer":"**%s** odbanoval **%s** [ %s ]",
 	"adminslappedplayer":"**%s** profackoval **%s** za **%s HP**",
 	
 	"adminfrozeplayer":"**%s** zmrazil **%s**.",

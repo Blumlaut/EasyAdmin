@@ -89,7 +89,7 @@
 	"done":"Zrobione!",
 	"adminkickedplayer":"**%s** wyrzucony **%s**, Powód: %s",
 	"adminbannedplayer":"**%s** zablokowany **%s**, Powód: %s, Czas trwania: %s",
-	"adminunbannedplayer":"**%s** odblokowany **%s**",
+	"adminunbannedplayer":"**%s** odblokowany **%s** [ %s ]",
 	"adminslappedplayer":"**%s** jebnięty **%s** za **%s HP**",
 	
 	"adminfrozeplayer":"**%s** zamrożony **%s**.",
