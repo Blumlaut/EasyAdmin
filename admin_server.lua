@@ -626,7 +626,7 @@ Citizen.CreateThread(function()
 			end
 			UnbanId(banId)
 			PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId, ban.reason))
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId, thisBan.reason))
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end)
