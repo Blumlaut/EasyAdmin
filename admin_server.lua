@@ -206,7 +206,7 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
-			if (perm == "teleport" or perm == "spectate") and infinity then
+			if (perm == "teleport.player" or perm == "spectate") and infinity then
 				thisPerm = false
 			end 
 			if thisPerm == true then
@@ -228,7 +228,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
 			TriggerClientEvent('chat:addSuggestion', source, '/unban', GetLocalisedText("chatsuggestionunban"), { {name='identifier', help="the identifier ( such as steamid, ip or license )"} })
 		end
-		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
+		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
 			TriggerClientEvent('chat:addSuggestion', source, '/teleport', GetLocalisedText("chatsuggestionteleport"), { {name='player id', help="the player's server id"} })
 		end
 		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
@@ -435,7 +435,7 @@ Citizen.CreateThread(function()
 	end, false)
 	
 	RegisterCommand("teleport", function(source, args, rawCommand)
-		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport") then
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
 			PrintDebugMessage("Player Requested Teleport something")
 			-- not yet
 		end
@@ -534,7 +534,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords")
 	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)
-		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
+		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..px..", "..py..", "..pz)
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
 		end

@@ -269,7 +269,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions["teleport"] then
+		if permissions["teleport.player"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -279,7 +279,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions["teleport"] then
+		if permissions["teleport.player"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleportplayertome"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
