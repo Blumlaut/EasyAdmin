@@ -1,3 +1,19 @@
+permissions = {
+	["ban"] = false,
+	["kick"] = false,
+	["spectate"] = false,
+	["unban"] = false,
+	["teleport"] = false,
+	["manageserver"] = false,
+	["slap"] = false,
+	["freeze"] = false,
+	["screenshot"] = false,
+	["immune"] = false,
+	["anon"] = false,
+	["mute"] = false,
+	["teleport.everyone"] = false,
+}
+
 
 function GetLocalisedText(string)
 	if not strings then return "Strings not Loaded yet!" end
