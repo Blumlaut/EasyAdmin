@@ -674,13 +674,16 @@ Citizen.CreateThread(function()
 		print("\nEasyAdmin: webadmin-lua is not installed on this Server, webadmin features unavailable")
 		return
 	else
-		StartResource("webadmin-lua")
+		if GetResourceState("webadmin") ~= "stopped" and GetResourceState("webadmin-lua") == "stopped" then
+			StartResource("webadmin-lua")
+		end
 	end
+	Wait(5000) -- wait a bit for webadmin to initialise
 	if GetResourceState("wap-settings") == "missing" then 
 		print("\nEasyAdmin: wap-settings is not installed on this Server, webadmin settings page not available")
 	else
-		StartResource("wap-settings")
 		SaveResourceFile(GetCurrentResourceName(), "settings.json", json.encode(CONVARS, {indent = true}), -1)
+		StartResource("wap-settings")
 		wap_settings = true
 	end
 	if not blacklist then 
@@ -688,6 +691,7 @@ Citizen.CreateThread(function()
 		PAGE_BADGE_TEXT = "ERROR!"
 		PAGE_BADGE_TYPE = "danger"
 	end
+	Wait(3000) -- wait another bit
     local FAQ = exports['webadmin-lua']:getFactory()
     exports['webadmin']:registerPluginOutlet("nav/sideList", function(data) --[[R]]--
         if not exports['webadmin']:isInRole("easyadmin.web") then return "" end
