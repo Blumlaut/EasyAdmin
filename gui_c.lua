@@ -200,8 +200,53 @@ function GenerateMenu() -- this is a big ass function
 			end	
 		end
 		
+		-- Permanent Banning
 		if permissions["ban"] then
 			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
+			thisBanMenu:SetMenuWidthOffset(menuWidth)
+			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
+			thisBanMenu:AddItem(thisItem)
+			BanReason = GetLocalisedText("noreason")
+			thisItem:RightLabel(BanReason)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+				
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+				
+				local result = GetOnscreenKeyboardResult()
+				
+				if result and result ~= "" then
+					BanReason = result
+					thisItem:RightLabel(result) -- this is broken for now
+				else
+					BanReason = GetLocalisedText("noreason")
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
+			thisBanMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				if BanReason == "" then
+					BanReason = GetLocalisedText("noreason")
+				end
+				local PermBanTime = 10444633200
+				TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, PermBanTime, thePlayer.name )
+				BanTime = 1
+				BanReason = ""
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				playermanagement:Visible(true)
+			end	
+			
+		end
+
+		-- Temporary Banning
+		if permissions["tempban"] then
+			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("tempbanplayer"),"",true)
 			thisBanMenu:SetMenuWidthOffset(menuWidth)
 			
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))

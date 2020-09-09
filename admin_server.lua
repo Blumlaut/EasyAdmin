@@ -219,6 +219,9 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.ban") then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
 		end
+		if DoesPlayerHavePermission(source,"easyadmin.tempban") then
+			TriggerClientEvent('chat:addSuggestion', source, '/tempban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
+		end
 		if DoesPlayerHavePermission(source,"easyadmin.kick") then
 			TriggerClientEvent('chat:addSuggestion', source, '/kick', GetLocalisedText("chatsuggestionkick"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
 		end
@@ -309,7 +312,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+			if DoesPlayerHavePermission(source,"easyadmin.ban")  or DoesPlayerHavePermission(source,"easyadmin.tempban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
