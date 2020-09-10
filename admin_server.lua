@@ -194,7 +194,7 @@ end, false)
 
 AnonymousAdmins = {}
 Citizen.CreateThread(function()
-	local strfile = LoadResourceFile(GetCurrentResourceName(), "ea/language/"..GetConvar("ea_LanguageName", "en")..".json")
+	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
 	if strfile then
 		strings = json.decode(strfile)[1]
 	else
@@ -911,7 +911,7 @@ Citizen.CreateThread(function()
 	end
 
 	AddEventHandler("EasyAdmin:GetVersion", function(cb)
-		local verFile = LoadResourceFile(GetCurrentResourceName(), "ea/version.json")
+		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 		local verContent = json.decode(verFile)
 		print(verContent.fivem.version)
 		cb(verContent.fivem.version)
@@ -1013,7 +1013,7 @@ Citizen.CreateThread(function()
 	end
 	
 	
-	local verFile = LoadResourceFile(GetCurrentResourceName(), "ea/version.json")
+	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	local verContent = json.decode(verFile)
 	local curVersion = (verContent.fivem.version or verContent.version)
 	local updatePath = "/Bluethefurry/EasyAdmin"
