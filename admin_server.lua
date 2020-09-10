@@ -7,6 +7,20 @@
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
 admins = {}
 -- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
+permissions = {
+	ban = false,
+	kick = false,
+	spectate = false,
+	unban = false,
+	teleport = false,
+	manageserver = false,
+	slap = false,
+	freeze = false,
+	screenshot = false,
+	immune = false,
+	anon = false,
+	mute = false,
+}
 -- Muted Players Table
 MutedPlayers = {} 
 -- cached players, for offline banning
@@ -180,7 +194,7 @@ end, false)
 
 AnonymousAdmins = {}
 Citizen.CreateThread(function()
-	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
+	local strfile = LoadResourceFile(GetCurrentResourceName(), "ea/language/"..GetConvar("ea_LanguageName", "en")..".json")
 	if strfile then
 		strings = json.decode(strfile)[1]
 	else
@@ -206,7 +220,7 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
-			if (perm == "teleport.player" or perm == "spectate") and infinity then
+			if (perm == "teleport" or perm == "spectate") and infinity then
 				thisPerm = false
 			end 
 			if thisPerm == true then
@@ -228,7 +242,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.unban") then
 			TriggerClientEvent('chat:addSuggestion', source, '/unban', GetLocalisedText("chatsuggestionunban"), { {name='identifier', help="the identifier ( such as steamid, ip or license )"} })
 		end
-		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
+		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			TriggerClientEvent('chat:addSuggestion', source, '/teleport', GetLocalisedText("chatsuggestionteleport"), { {name='player id', help="the player's server id"} })
 		end
 		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
@@ -259,7 +273,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:kickPlayer")
 	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
 		if DoesPlayerHavePermission(source,"easyadmin.kick") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source), getName(playerId), reason))
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source).." ("..GetPlayerIdentifier(source, 0)..")", getName(playerId).." ("..GetPlayerIdentifier(playerId, 0)..")", reason))
 			PrintDebugMessage("Kicking Player "..getName(source).." for "..reason)
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
 		end
@@ -270,6 +284,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
 			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminspectateplayer"), getName(source).." ("..GetPlayerIdentifier(source, 0)..")", getName(playerId).." ("..GetPlayerIdentifier(playerId, 0)..")"))
 		end
 	end)
 	
@@ -435,7 +450,7 @@ Citizen.CreateThread(function()
 	end, false)
 	
 	RegisterCommand("teleport", function(source, args, rawCommand)
-		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
+		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			PrintDebugMessage("Player Requested Teleport something")
 			-- not yet
 		end
@@ -534,7 +549,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords")
 	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)
-		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
+		if DoesPlayerHavePermission(source,"easyadmin.teleport") then
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..px..", "..py..", "..pz)
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
 		end
@@ -896,7 +911,7 @@ Citizen.CreateThread(function()
 	end
 
 	AddEventHandler("EasyAdmin:GetVersion", function(cb)
-		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+		local verFile = LoadResourceFile(GetCurrentResourceName(), "ea/version.json")
 		local verContent = json.decode(verFile)
 		print(verContent.fivem.version)
 		cb(verContent.fivem.version)
@@ -998,7 +1013,7 @@ Citizen.CreateThread(function()
 	end
 	
 	
-	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+	local verFile = LoadResourceFile(GetCurrentResourceName(), "ea/version.json")
 	local verContent = json.decode(verFile)
 	local curVersion = (verContent.fivem.version or verContent.version)
 	local updatePath = "/Bluethefurry/EasyAdmin"
@@ -1048,4 +1063,25 @@ Citizen.CreateThread(function()
 	loopUpdateBlacklist()
 	updateAdmins()
 	checkVersionHTTPRequest()
+end)
+
+RegisterServerEvent("EasyAdmin:stopSpectating")
+AddEventHandler("EasyAdmin:stopSpectating", function(playerId)
+	print(playerId)
+	SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminstopspectateplayer"), getName(source).." ("..GetPlayerIdentifier(source, 0)..")"))
+end)
+
+RegisterServerEvent('EasyAdmin:teleportoplayerdc')
+AddEventHandler('EasyAdmin:teleportoplayerdc', function(playerId)
+	SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminteleporttoplayer"), getName(source).." ("..GetPlayerIdentifier(source, 0)..")", getName(playerId).." ("..GetPlayerIdentifier(playerId, 0)..")"))
+end)
+
+RegisterServerEvent("EasyAdmin:AllTp")
+AddEventHandler("EasyAdmin:AllTp", function()
+	SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("alltp"), getName(source).." ("..GetPlayerIdentifier(source, 0)..")"))
+end)
+
+RegisterServerEvent("EasyAdmin:teleportomedc")
+AddEventHandler("EasyAdmin:teleportomedc", function(playerId)
+	SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminteleporttome"), getName(source).." ("..GetPlayerIdentifier(source, 0)..")", getName(playerId).." ("..GetPlayerIdentifier(source, 0)..")"))
 end)
