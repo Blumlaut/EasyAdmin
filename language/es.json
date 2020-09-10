@@ -1,6 +1,6 @@
 [
 	{
-	"translator":"Aleelpalmero",
+	"translator":"Javiito_32",
 	"language":"es",
 	"on":"On",
 	"off":"Off",
@@ -80,7 +80,7 @@
 	"bannedjoin":"Has sido baneado del servidor, \nRazón: %s, Expira: %s",
 	"kicked":"Kickeado por %s, Razón: %s",
 	"banned":"Has sido baneado del servidor, Razón: %s, Expira: %s",
-	"reasonadd":" ( El jugador: %s ), ha sido baneado por: %s",
+	"reasonadd":"%s has sido baneado por: ",
 	"bancheating":"Baneado por usar hacks",
 	"bancheatingadd":" ( El jugador: %s )",
 	"nongiven":"No se ha proporcionado",
@@ -89,7 +89,7 @@
 	"done":"Hecho!",
 	"adminkickedplayer":"**%s** a kickeado a **%s**, Razón: %s",
 	"adminbannedplayer":"**%s** a baneado a **%s**, Razón: %s, Expira: %s",
-	"adminunbannedplayer":"**%s** a desbaneado a **%s** [ %s ]",
+	"adminunbannedplayer":"**%s** a desbaneado a **%s**",
 	"adminslappedplayer":"**%s** a abofeteado a **%s** por **%s HP**",
 	
 	"adminfrozeplayer":"**%s** a congelado a **%s**.",
@@ -123,7 +123,12 @@
 	"reportbantext":"Reportado por %s jugadores en poco tiempo.",
 	"alreadyreported":"Ya has reportado a este jugador!",
 	"reportedusageerror":"Error! Usa: /report nombre razón",
-	"admincalled":"Se ha avisado a un administrador correctamente!"
+	"admincalled":"Se ha avisado a un administrador correctamente!",
+	"adminspectateplayer":"**%s** ha empezado a espectear a **%s**",
+	"adminstopspectateplayer":"**%s** ha parado de espectear",
+	"adminteleporttoplayer":"**%s** se hizo TP a **%s**",
+	"alltp":"**%s** la CAGO y hizo un TP a todo el servidor, enhorabuena por su retraso c:",
+	"adminteleporttome":"**%s** trajo a el a **%s** mediante un TP"
 
 	}
 ]
