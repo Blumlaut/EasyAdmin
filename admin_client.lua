@@ -161,22 +161,3 @@ function ShowNotification(text)
 	AddTextComponentString(text)
 	DrawNotification(0,1)
 end
-
--- Mensajes
-local ChatReminders = {
-	"Es obligatorio el uso del /entorno al cometer un acto delictivo",
-	"Se recuerda la importancia de cumplir la normativa, sino, podrás ser sancionado",
-	"Nunca te desconectes en medio de un rol"
-}
-
-Citizen.CreateThread(function()
-	while true do
-		TriggerEvent('chat:addMessage', {
-			color = { 255, 0, 0},
-			multiline = true,
-			args = {"MapachesRP: ", ChatReminders[math.random(#ChatReminders)]}
-		  })
-		  
-		Citizen.Wait(600000)
-	end
-end)
