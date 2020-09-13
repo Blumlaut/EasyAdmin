@@ -578,6 +578,9 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
 				res = tostring(result)
+				if string.find(moderationNotification, "discordapp") then
+					res = json.encode(res).attachments[1].url
+				end
 				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), res))
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
