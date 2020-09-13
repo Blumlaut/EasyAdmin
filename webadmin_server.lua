@@ -674,17 +674,46 @@ Citizen.CreateThread(function()
 		print("\nEasyAdmin: webadmin-lua is not installed on this Server, webadmin features unavailable")
 		return
 	else
-		if GetResourceState("webadmin") ~= "stopped" and GetResourceState("webadmin-lua") == "stopped" then
-			StartResource("webadmin-lua")
+		if GetResourceState("webadmin") ~= "missing" and GetResourceState("webadmin-lua") == "stopped" then
+			local tries = 0
+			local webadminActive = false 
+			repeat
+				if GetResourceState("webadmin") == "started" then
+					webadminActive = true
+					break
+				else
+					tries=tries+1
+				end
+				if tries >= 10 then
+					print("\nEasyAdmin: Webadmin didn't initialise for 50 seconds, aborting Webadmin support")
+					break
+				end
+				Wait(5000)
+			end
+			if not webadminActive then
+				return
+			end
 		end
 	end
-	Wait(5000) -- wait a bit for webadmin to initialise
 	if GetResourceState("wap-settings") == "missing" then 
 		print("\nEasyAdmin: wap-settings is not installed on this Server, webadmin settings page not available")
 	else
 		SaveResourceFile(GetCurrentResourceName(), "settings.json", json.encode(CONVARS, {indent = true}), -1)
-		StartResource("wap-settings")
-		wap_settings = true
+		local tries = 0
+		local wapsettingsActive = false 
+		repeat
+			if GetResourceState("wap-settings") == "started" then
+				wapsettingsActive = true
+				wap_settings = true
+				break
+			else
+				tries=tries+1
+			end
+			if tries >= 10 then
+				break
+			end
+			Wait(5000)
+		end
 	end
 	if not blacklist then 
 		SHOW_PAGE_BADGE = true
