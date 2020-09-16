@@ -506,8 +506,8 @@ Citizen.CreateThread(function()
 			else
 				valid = true
 			end
-			
-			
+
+
 			if id and valid then
 				local reason = string.gsub(rawCommand, "report " ..args[1].." ", "")
 				if not PlayerReports[id] then
