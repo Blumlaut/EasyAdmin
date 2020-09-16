@@ -124,6 +124,9 @@
 	"reportbantext":"Reported by %s Players in short time.",
 	"alreadyreported":"You already reported this player!",
 	"reportedusageerror":"Error! Usage: /report name reason",
-	"admincalled":"Successfully called an Admin!"
+	"admincalled":"Successfully called an Admin!",
+
+	"spectatedplayer":"%s a regardé %s",
+	"teleportedtoplayer":"**%s** téléporté vers **%s**"
 	}
 ]
