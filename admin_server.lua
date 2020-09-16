@@ -274,7 +274,7 @@ Citizen.CreateThread(function()
 		end
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
-			SendWebhookMessage(detailedNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)))
+			SendWebhookMessage(detailedNotification ~= 'false' and detailedNotification or moderationNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)))
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
 			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
 		end
@@ -556,7 +556,7 @@ Citizen.CreateThread(function()
 			if tgtPlayer == source then
 				return
 			end
-			SendWebhookMessage(detailedNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)))
+			SendWebhookMessage(detailedNotification ~= 'false' and detailedNotification or moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)))
 			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtCoords.x, tgtCoords.y, tgtCoords.z)
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
@@ -576,10 +576,10 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:FreezePlayer', function(playerId,toggle)
 		if DoesPlayerHavePermission(source,"easyadmin.freeze") then
 			if toggle then
-				SendWebhookMessage(detailedNotification,string.format(GetLocalisedText("adminfrozeplayer"), getName(source), getName(playerId)))
+				SendWebhookMessage(detailedNotification ~= 'false' and detailedNotification or moderationNotification,string.format(GetLocalisedText("adminfrozeplayer"), getName(source), getName(playerId)))
 				PrintDebugMessage("Player "..getName(source,true).." froze "..getName(playerId,true))
 			else
-				SendWebhookMessage(detailedNotification,string.format(GetLocalisedText("adminunfrozeplayer"), getName(source), getName(playerId)))
+				SendWebhookMessage(detailedNotification ~= 'false' and detailedNotification or moderationNotification,string.format(GetLocalisedText("adminunfrozeplayer"), getName(source), getName(playerId)))
 				PrintDebugMessage("Player "..getName(source,true).." unfroze "..getName(playerId,true))
 			end
 			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
