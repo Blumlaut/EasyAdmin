@@ -268,6 +268,9 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate")
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
+		if playerId == source then
+			return
+		end
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)))
@@ -546,16 +549,19 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
 	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
 		if GetPlayerName(id) and DoesPlayerHavePermission(source, "easyadmin.teleport") then
-			local tgtPlayer = id
+			local tgtPlayer = id 
 			local tgtPed = GetPlayerPed(tgtPlayer)
 			local tgtCoords = GetEntityCoords(tgtPed)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)))
+			if tgtPlayer == source then
+				return
+			end
+			SendWebhookMessage(detailedNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)))
 			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtCoords.x, tgtCoords.y, tgtCoords.z)
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
 	end)
-	
+
 	RegisterServerEvent("EasyAdmin:SlapPlayer")
 	AddEventHandler('EasyAdmin:SlapPlayer', function(playerId,slapAmount)
 		if DoesPlayerHavePermission(source,"easyadmin.slap") then
@@ -564,7 +570,7 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
 		end
 	end)
-	
+
 	RegisterServerEvent("EasyAdmin:FreezePlayer")
 	AddEventHandler('EasyAdmin:FreezePlayer', function(playerId,toggle)
 		if DoesPlayerHavePermission(source,"easyadmin.freeze") then

@@ -71,15 +71,25 @@ Citizen.CreateThread( function()
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
+	-- Store the admin player's current coords
 	local oldCoords = GetEntityCoords(PlayerPedId())
+	-- Freeze admin player temporarily
 	frozen = true
-	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-	Wait(500)
-	local playerId = GetPlayerFromServerId(playerId)
-	local adminPed = GetPlayerPed(-1)
-	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
-	Wait(500)
+
+	-- Only TP if the target is not in your infinity bubble
+	if GetDistanceBetweenCoords(oldCoords.x, oldCoords.y, oldCoords.z, tgtCoords.x, tgtCoords.y, tgtCoords.z, true) >= 50.0 then
+
+		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+		Wait(500)
+		local playerId = GetPlayerFromServerId(playerId)
+		local adminPed = GetPlayerPed(-1)
+		local playerPed = GetPlayerPed(playerId)
+		spectatePlayer(playerPed, playerId, GetPlayerName(playerId))
+
+	end
+
 	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+	frozen = false
 end)
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
