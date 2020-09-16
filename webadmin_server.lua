@@ -689,7 +689,7 @@ Citizen.CreateThread(function()
 					break
 				end
 				Wait(5000)
-			end
+			until webadminActive
 			if not webadminActive then
 				return
 			end
@@ -713,7 +713,7 @@ Citizen.CreateThread(function()
 				break
 			end
 			Wait(5000)
-		end
+		until webadminActive
 	end
 	if not blacklist then 
 		SHOW_PAGE_BADGE = true
