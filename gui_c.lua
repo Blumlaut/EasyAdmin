@@ -273,9 +273,10 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
-				local heading = GetEntityHeading(GetPlayerPed(player))
-				SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+				--local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
+				--local heading = GetEntityHeading(GetPlayerPed(player))
+				--SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+				TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 			end
 		end
 		
@@ -683,6 +684,8 @@ Citizen.CreateThread( function()
 	
 				RequestCollisionAtCoord(targetx,targety,targetz)
 				NetworkSetInSpectatorMode(false, targetPed)
+				TriggerEvent('EasyAdmin:FreezePlayer', false)
+				--SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 	
 				StopDrawPlayerInfo()
 				ShowNotification(GetLocalisedText("stoppedSpectating"))
