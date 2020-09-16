@@ -206,9 +206,10 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
-			if (perm == "teleport.player" or perm == "spectate") and infinity then
-				thisPerm = false
-			end 
+			--if (perm == "teleport" or perm == "spectate") and infinity then
+			--if (perm == "spectate") and infinity then
+			--	thisPerm = false
+			--end 
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
 			end
@@ -269,7 +270,9 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
-			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
+			SendWebhookMessage(moderationNotification,string.format("%s has spectated %s", getName(source), getName(playerId)))
+			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
+			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
 		end
 	end)
 	
@@ -537,6 +540,19 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..px..", "..py..", "..pz)
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
+	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
+		if GetPlayerName(id) and DoesPlayerHavePermission(source, "easyadmin.teleport") then
+			local tgtPlyr = id
+			local tgtPed = GetPlayerPed(tgtPlyr)
+			local tgtCoords = GetEntityCoords(tgtPed)
+			SendWebhookMessage(moderationNotification,string.format("**%s has teleported to %s**", getName(source), getName(id)))
+			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtCoords.x, tgtCoords.y, tgtCoords.z)
+		else
+			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
 	end)
 	

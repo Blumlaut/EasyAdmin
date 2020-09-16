@@ -70,9 +70,16 @@ Citizen.CreateThread( function()
   end
 end)
 
-AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
+AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
+	local oldCoords = GetEntityCoords(PlayerPedId())
+	frozen = true
+	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+	Wait(500)
 	local playerId = GetPlayerFromServerId(playerId)
+	local adminPed = GetPlayerPed(-1)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+	Wait(500)
+	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
@@ -153,6 +160,8 @@ function spectatePlayer(targetPed,target,name)
 
 			StopDrawPlayerInfo()
 			ShowNotification(GetLocalisedText("stoppedSpectating"))
+			frozen = false
+
 	end
 end
 
