@@ -1020,7 +1020,7 @@ Citizen.CreateThread(function()
 	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	local verContent = json.decode(verFile)
 	local curVersion = (verContent.fivem.version or verContent.version)
-	local updatePath = "/Bluethefurry/EasyAdmin"
+	local updatePath = "/Blumlaut/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then
