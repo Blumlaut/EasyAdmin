@@ -174,7 +174,7 @@ function GenerateMenu() -- this is a big ass function
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
 		thisPlayer:SetMenuWidthOffset(menuWidth)
 		-- generate specific menu stuff, dirty but it works for now
-		if permissions.kick then
+		if permissions["kick"] then
 			local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("kickplayer"),"",true)
 			thisKickMenu:SetMenuWidthOffset(menuWidth)
 			
@@ -215,7 +215,7 @@ function GenerateMenu() -- this is a big ass function
 			end	
 		end
 		
-		if permissions.ban then
+		if permissions["ban"] then
 			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
 			thisBanMenu:SetMenuWidthOffset(menuWidth)
 			
@@ -268,7 +268,7 @@ function GenerateMenu() -- this is a big ass function
 			
 		end
 		
-		if permissions.mute then			
+		if permissions["mute"] then			
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("mute"),GetLocalisedText("muteguide"))
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -276,7 +276,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 
-		if permissions.spectate then
+		if permissions["spectate"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -284,7 +284,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions.teleport then
+		if permissions["teleport.player"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -295,7 +295,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions.teleport then
+		if permissions["teleport.player"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleportplayertome"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -305,7 +305,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions.slap then
+		if permissions["slap"] then
 			local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)
@@ -313,7 +313,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 
-		if permissions.freeze then
+		if permissions["freeze"] then
 			local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
 			local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
 			thisPlayer:AddItem(thisItem)
@@ -329,7 +329,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 	
-		if permissions.screenshot then
+		if permissions["screenshot"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("takescreenshot"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -344,7 +344,7 @@ function GenerateMenu() -- this is a big ass function
 	
 	thisPlayer = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("allplayers"),"",true)
 	thisPlayer:SetMenuWidthOffset(menuWidth)
-	if permissions.teleport then
+	if permissions["teleport.everyone"] then
 		-- "all players" function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttome"), GetLocalisedText("teleporttomeguide"))
 		thisPlayer:AddItem(thisItem)
@@ -357,7 +357,7 @@ function GenerateMenu() -- this is a big ass function
 
 	CachedList = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("cachedplayers"),"",true)
 	CachedList:SetMenuWidthOffset(menuWidth)
-	if permissions.ban then
+	if permissions["ban"] then
 		for i, cachedplayer in pairs(cachedplayers) do
 			if cachedplayer.droppedTime and not cachedplayer.immune then
 				thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
@@ -415,7 +415,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	if permissions.manageserver then
+	if permissions["manageserver"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("setgametype"), GetLocalisedText("setgametypeguide"))
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -486,7 +486,7 @@ function GenerateMenu() -- this is a big ass function
 		
 	end
 	
-	if permissions.unban then
+	if permissions["unban"] then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("unbanplayer"),"",true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
 		local reason = ""
@@ -560,7 +560,7 @@ function GenerateMenu() -- this is a big ass function
 	
 
 
-	if permissions.unban then
+	if permissions["unban"] then
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlistshowtype"), sl, 1,GetLocalisedText("banlistshowtypeguide"))
 		settingsMenu:AddItem(thisItem)
@@ -577,7 +577,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	
-	if permissions.unban then
+	if permissions["unban"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshbanlist"), GetLocalisedText("refreshbanlistguide"))
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -585,7 +585,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	if permissions.ban then
+	if permissions["ban"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshcachedplayers"), GetLocalisedText("refreshcachedplayersguide"))
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -642,7 +642,7 @@ function GenerateMenu() -- this is a big ass function
 		menuWidth = 0
 	end
 	
-	if permissions.anon then
+	if permissions["anon"] then
 		local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("anonymous"), anonymous or false, GetLocalisedText("anonymousguide"))
 		settingsMenu:AddItem(thisItem)
 		settingsMenu.OnCheckboxChange = function(sender, item, checked_)
