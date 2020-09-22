@@ -123,6 +123,9 @@
 	"reportbantext":"Zreportował %s Graczy w krótkim czasie.",
 	"alreadyreported":"Już zreportowałeś tego gracza!",
 	"reportedusageerror":"Błąd! Użyj: /report nick powód",
-	"admincalled":"Pomyślnie zawiadomiono Administratora!"
+	"admincalled":"Pomyślnie zawiadomiono Administratora!",
+
+	"spectatedplayer":"%s ogląda %s",
+	"teleportedtoplayer":"**%s** teleportowany do **%s**"
 	}
 ]

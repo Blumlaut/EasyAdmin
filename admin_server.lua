@@ -205,9 +205,10 @@ Citizen.CreateThread(function()
 			if perm == "screenshot" and not screenshots then
 				thisPerm = false
 			end
-			if (perm == "teleport.player" or perm == "spectate") and infinity then
-				thisPerm = false
-			end 
+			--if (perm == "teleport" or perm == "spectate") and infinity then
+			--if (perm == "spectate") and infinity then
+			--	thisPerm = false
+			--end 
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
 			end
@@ -539,6 +540,19 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
 		end
 	end)
+
+	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
+	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
+		if GetPlayerName(id) and DoesPlayerHavePermission(source, "easyadmin.teleport") then
+			local tgtPlayer = id
+			local tgtPed = GetPlayerPed(tgtPlayer)
+			local tgtCoords = GetEntityCoords(tgtPed)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)))
+			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtCoords.x, tgtCoords.y, tgtCoords.z)
+		else
+			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
+		end
+	end)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer")
 	AddEventHandler('EasyAdmin:SlapPlayer', function(playerId,slapAmount)
@@ -578,6 +592,9 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
 				res = tostring(result)
+				if (moderationNotification == GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php')) then
+					res = ""
+				end
 				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), res))
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
@@ -1001,7 +1018,7 @@ Citizen.CreateThread(function()
 	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	local verContent = json.decode(verFile)
 	local curVersion = (verContent.fivem.version or verContent.version)
-	local updatePath = "/Bluethefurry/EasyAdmin"
+	local updatePath = "/Blumlaut/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then

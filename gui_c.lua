@@ -701,6 +701,8 @@ Citizen.CreateThread( function()
 	
 				RequestCollisionAtCoord(targetx,targety,targetz)
 				NetworkSetInSpectatorMode(false, targetPed)
+				TriggerEvent('EasyAdmin:FreezePlayer', false)
+				--SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 	
 				StopDrawPlayerInfo()
 				ShowNotification(GetLocalisedText("stoppedSpectating"))
