@@ -1,13 +1,13 @@
 {
     "version": "5.3",
-    "changelog": "https://github.com/Bluethefurry/EasyAdmin/releases/tag/5.301",
+    "changelog": "https://github.com/Blumlaut/EasyAdmin/releases/tag/5.301",
 
 
     "_comment": "The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 
     "fivem": {
         "version": "5.3",
-        "changelog": "https://github.com/Bluethefurry/EasyAdmin/releases/tag/5.301"
+        "changelog": "https://github.com/Blumlaut/EasyAdmin/releases/tag/5.301"
     },
     "redm": {
         "version": "0.1",
