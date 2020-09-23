@@ -1044,8 +1044,8 @@ Citizen.CreateThread(function()
 			StartResource("screenshot-basic")
 			screenshots = true
 		end
-
-		if GetConvar("onesync_enableInfinity", "false") == "true" or GetConvarInt("onesync_enableInfinity", 0) == 1 then 
+		local onesync = GetConvar("onesync", "off")
+		if (onesync ~= "off" and onesync ~= "legacy") then 
 			infinity = true
 		end
 		
