@@ -1053,7 +1053,7 @@ Citizen.CreateThread(function()
 	end
 	
 	function checkVersionHTTPRequest()
-		PerformHttpRequest("https://raw.githubusercontent.com/Bluethefurry/EasyAdmin/master/version.json", checkVersion, "GET")
+		PerformHttpRequest("https://raw.githubusercontent.com/"..updatePath.."/master/version.json", checkVersion, "GET")
 	end
 	
 	function loopUpdateBlacklist()
