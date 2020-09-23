@@ -423,7 +423,7 @@ Citizen.CreateThread(function()
 	
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
-			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", "Please use the WebAdmin Interface, if possible." } })
+			--TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", "Please use the WebAdmin Interface, if possible." } })
 		--[[
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1])
 			UnbanIdentifier(args[1])
