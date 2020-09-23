@@ -178,6 +178,13 @@ RegisterCommand("ea_addReminder", function(source, args, rawCommand)
 	end
 end, false)
 
+RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
+	if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+		SendWebhookMessage(moderationNotification, "EasyAdmin: **WEBHOOK TEST**")
+		PrintDebugMessage("Webhook Message Sent")
+	end
+end, false)
+
 AnonymousAdmins = {}
 Citizen.CreateThread(function()
 	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
