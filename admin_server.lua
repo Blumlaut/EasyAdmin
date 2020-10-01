@@ -189,12 +189,9 @@ RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
 	end
 end, false)
 
-RegisterCommand("ea_excludeWebhook", function(source, args, rawCommand)
+RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
     if DoesPlayerHavePermission(source, "easyadmin.manageserver") then
-        for i, exclude in pairs(args) do
-            excludedWebhookFeatures = {}
-            table.insert(excludedWebhookFeatures, exclude)
-        end
+        ExcludedWebhookFeatures = Set(args)
         PrintDebugMessage("Webhook excludes set")
     end
 end, false)
@@ -1020,7 +1017,7 @@ Citizen.CreateThread(function()
 	
 	function SendWebhookMessage(webhook,message,feature)
 		moderationNotification = GetConvar("ea_moderationNotification", "false")
-		if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= nil then
+		if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= true then
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
 		end
 	end
