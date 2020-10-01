@@ -16,9 +16,6 @@ ChatReminders = {}
 
 ExcludedWebhookFeatures = {}
 
-
-
-
 Citizen.CreateThread(function()
 	while true do 
 		Wait(20000)
