@@ -43,3 +43,10 @@ function math.round(num, numDecimalPlaces)
 	end
 	return math.floor(num + 0.5)
 end
+
+--- http://www.lua.org/pil/11.5.html
+function Set (list)
+	local set = {}
+	for _, l in ipairs(list) do set[l] = true end
+	return set
+end
