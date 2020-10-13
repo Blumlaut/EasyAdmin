@@ -9,7 +9,7 @@ isAdmin = false
 showLicenses = false
 
 settings = {
-	button = "PhotoModePc",
+	button = 289,
 	forceShowGUIButtons = false,
 }
 
@@ -58,7 +58,7 @@ Citizen.CreateThread(function()
 		if _menuPool then
 			_menuPool:ProcessMenus()
 		end
-		if (IsControlJustReleased(0, Controls[settings.button]) and GetLastInputMethod( 0 ) ) and isAdmin == true then --M by default
+		if (IsControlJustReleased(0, settings.button) and GetLastInputMethod( 0 ) ) and isAdmin == true then --M by default
 			-- clear and re-create incase of permission change+player count change
 			playerlist = nil
 			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
