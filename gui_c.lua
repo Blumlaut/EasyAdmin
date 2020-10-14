@@ -5,8 +5,10 @@
 ------------------------------------
 ------------------------------------
 
+
 isAdmin = false
 showLicenses = false
+RedM = false
 
 settings = {
 	button = 289,
@@ -34,6 +36,10 @@ end
 playlist = nil
 
 Citizen.CreateThread(function()
+	if CompendiumHorseObserved then -- https://www.youtube.com/watch?v=r7qovpFAGrQ
+		RedM = true
+	end
+
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")

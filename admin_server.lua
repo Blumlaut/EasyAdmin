@@ -13,6 +13,10 @@ MutedPlayers = {}
 CachedPlayers = {}
 OnlineAdmins = {}
 ChatReminders = {}
+RedM = false
+if GetConvar("gamename", "not-rdr3") == "rdr3" then 
+	RedM = true
+end
 
 ExcludedWebhookFeatures = {}
 
@@ -261,7 +265,11 @@ Citizen.CreateThread(function()
 		end
 		
 		-- give player the right settings to work with
-		TriggerClientEvent("EasyAdmin:SetSetting", source, "button",GetConvarInt("ea_MenuButton", 289) )
+		local key = GetConvar("ea_MenuButton", 289)
+		if RedM then
+			key = GetConvar("ea_MenuButton", "PhotoModePc")
+		end
+		TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
 		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
 		else
