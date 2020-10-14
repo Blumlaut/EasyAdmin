@@ -1055,10 +1055,16 @@ Citizen.CreateThread(function()
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
-			if curVersion ~= data.[variant].version and tonumber(curVersion) < tonumber(data.[variant].version) then
+			local remoteVersion = data.version
+			local changelog = data.changelog
+			if RedM then
+				remoteVersion = data.redm.version
+				changelog = data.redm.changelog
+			end
+			if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
 				print("\n--------------------------------------------------------------------------")
-				print("\n"..resourceName.." is outdated.\nNewest Version: "..data.[variant].version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
-				print("\nUpdate Changelog:\n"..data.changelog)
+				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+				print("\nUpdate Changelog:\n"..changelog)
 				print("\n--------------------------------------------------------------------------")
 			elseif tonumber(curVersion) > tonumber(data.version) then
 				print("Your version of "..resourceName.." seems to be higher than the current version.")
