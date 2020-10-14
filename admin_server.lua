@@ -556,10 +556,10 @@ Citizen.CreateThread(function()
 	end, false)
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords")
-	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,px,py,pz)
+	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,tgtCoords)
 		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
-			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..px..", "..py..", "..pz)
-			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, px,py,pz)
+			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..tgtCoords.x..", "..tgtCoords.y..", "..tgtCoords.z)
+			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, tgtCoords)
 		end
 	end)
 

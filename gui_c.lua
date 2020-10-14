@@ -330,7 +330,7 @@ function GenerateMenu() -- this is a big ass function
 				if not RedM then
 					TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 				else
-					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer.id),true))
+					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
 					local heading = GetEntityHeading(GetPlayerPed(player))
 					SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
 				end
@@ -341,12 +341,12 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleportplayertome"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, px,py,pz)
+				local coords = GetEntityCoords(PlayerPedId(),true)
+				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
 			end
 		end
 		
-		if permissions["slap"] and not RedM then
+		if permissions["slap"] then
 			local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)

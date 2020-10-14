@@ -1965,7 +1965,7 @@ function UIMenuGridPanel:Functions()
                 self.Pressed = true
                 Citizen.CreateThread(function()
                     self.Audio.Id = GetSoundId()
-                    --PlaySoundFrontend(self.Audio.Id, self.Audio.Slider, self.Audio.Library, 1)
+                    PlaySoundFrontend(self.Audio.Id, self.Audio.Slider, self.Audio.Library, 1)
                     while IsDisabledControlPressed(0, "INPUT_ATTACK") and IsMouseInBounds(self.Grid.X + 20 + SafeZone.X, self.Grid.Y + 20 + SafeZone.Y, self.Grid.Width - 40, self.Grid.Height - 40) do
                         Citizen.Wait(0)
                         local CursorX, CursorY = math.round(GetControlNormal(0, "INPUT_CURSOR_X") * 1920) - SafeZone.X - (self.Circle.Width/2), math.round(GetControlNormal(0, "INPUT_CURSOR_Y") * 1080) - SafeZone.Y - (self.Circle.Height/2)
@@ -2260,7 +2260,7 @@ function UIMenuPercentagePanel.New(MinText, MaxText)
             Max = UIResText.New("100%", 0, 0, 0.35, 255, 255, 255, 255, 0, "Centre"),
             Title = UIResText.New(MaxText or "Opacity", 0, 0, 0.35, 255, 255, 255, 255, 0, "Centre"),
         },
-        Audio = {Slider = "CONTINUOUS_SLIDER", Library = "HUD_FRONTEND_DEFAULT_SOUNDSET", Id = nil},
+        Audio = {Slider = "BET_AMOUNT", Library = "HUD_POKER", Id = nil},
         ParentItem = nil,
     }
 
@@ -2350,7 +2350,7 @@ function UIMenuPercentagePanel:Functions()
                 self.Pressed = true
                 Citizen.CreateThread(function()
                     self.Audio.Id = GetSoundId()
-                    --PlaySoundFrontend(self.Audio.Id, self.Audio.Slider, self.Audio.Library, 1)
+                    PlaySoundFrontend(self.Audio.Id, self.Audio.Slider, self.Audio.Library, 1)
                     while IsDisabledControlPressed(0, "INPUT_ATTACK") and IsMouseInBounds(self.BackgroundBar.X + SafeZone.X, self.BackgroundBar.Y - 4 + SafeZone.Y, self.BackgroundBar.Width, self.BackgroundBar.Height + 8) do
                         Citizen.Wait(0)
                         local Progress = (math.round(GetControlNormal(0, "INPUT_CURSOR_X") * 1920) - SafeZone.X) - self.ActiveBar.X
@@ -2459,12 +2459,12 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
             MouseEdgeEnabled = true,
             ControlDisablingEnabled = true,
             Audio = {
-                Library = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-                UpDown = "NAV_UP_DOWN",
-                LeftRight = "NAV_LEFT_RIGHT",
-                Select = "SELECT",
-                Back = "BACK",
-                Error = "ERROR",
+                Library = "HUD_DOMINOS_SOUNDSET",
+                UpDown = "NAV_DOWN",
+                LeftRight = "NAV_LEFT",
+                Select = "YES",
+                Back = "NO",
+                Error = "READ",
             },
             EnabledControls = {
                 Controller = {
@@ -2987,7 +2987,7 @@ function UIMenu:GoUpOverflow()
         self.ActiveItem = self.ActiveItem - 1
         self.Items[self:CurrentSelection()]:Selected(true)
     end
-    --PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+    --PlaySoundFrontend(self.Settings.Audio.UpDown, self.Settings.Audio.Library, true, 0)
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -2999,7 +2999,7 @@ function UIMenu:GoUp()
     self.Items[self:CurrentSelection()]:Selected(false)
     self.ActiveItem = self.ActiveItem - 1
     self.Items[self:CurrentSelection()]:Selected(true)
-    --PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+    --PlaySoundFrontend(self.Settings.Audio.UpDown, self.Settings.Audio.Library, true, 0)
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -3028,7 +3028,7 @@ function UIMenu:GoDownOverflow()
         self.ActiveItem = self.ActiveItem + 1
         self.Items[self:CurrentSelection()]:Selected(true)
     end
-    --PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+    --PlaySoundFrontend(self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -3041,7 +3041,7 @@ function UIMenu:GoDown()
     self.Items[self:CurrentSelection()]:Selected(false)
     self.ActiveItem = self.ActiveItem + 1
     self.Items[self:CurrentSelection()]:Selected(true) 
-    --PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+    --PlaySoundFrontend(self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -3053,7 +3053,7 @@ function UIMenu:GoLeft()
     end
 
     if not self.Items[self:CurrentSelection()]:Enabled() then
-        --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
         return
     end
     
@@ -3062,19 +3062,19 @@ function UIMenu:GoLeft()
         Item:Index(Item._Index - 1)
         self.OnListChange(self, Item, Item._Index)
         Item.OnListChanged(self, Item, Item._Index)
-        --PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     elseif subtype == "UIMenuSliderItem" then
         local Item = self.Items[self:CurrentSelection()]
         Item:Index(Item._Index - 1)
         self.OnSliderChange(self, Item, Item:Index())
         Item.OnSliderChanged(self, Item, Item._Index)
-        --PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     elseif subtype == "UIMenuProgressItem" then
         local Item = self.Items[self:CurrentSelection()]
         Item:Index(Item.Data.Index - 1)
         self.OnProgressChange(self, Item, Item.Data.Index)
         Item.OnProgressChanged(self, Item, Item.Data.Index)
-        --PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     end
 end
 
@@ -3085,7 +3085,7 @@ function UIMenu:GoRight()
     end
 
     if not self.Items[self:CurrentSelection()]:Enabled() then
-        --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
         return
     end
 
@@ -3094,48 +3094,50 @@ function UIMenu:GoRight()
         Item:Index(Item._Index + 1)
         self.OnListChange(self, Item, Item._Index)
         Item.OnListChanged(self, Item, Item._Index)
-        --PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     elseif subtype == "UIMenuSliderItem" then
         local Item = self.Items[self:CurrentSelection()]
         Item:Index(Item._Index + 1)
         self.OnSliderChange(self, Item, Item:Index())
         Item.OnSliderChanged(self, Item, Item._Index)
-        --PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     elseif subtype == "UIMenuProgressItem" then
         local Item = self.Items[self:CurrentSelection()]
         Item:Index(Item.Data.Index + 1)
         self.OnProgressChange(self, Item, Item.Data.Index)
         Item.OnProgressChanged(self, Item, Item.Data.Index)
-        --PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     end
 end
 
 function UIMenu:SelectItem()
     if not self.Items[self:CurrentSelection()]:Enabled() then
-        --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
         return
     end
     local Item = self.Items[self:CurrentSelection()]
     local type, subtype = Item()
     if subtype == "UIMenuCheckboxItem" then
         Item.Checked = not Item.Checked
-        --PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnCheckboxChange(self, Item, Item.Checked)
         Item.CheckboxEvent(self, Item, Item.Checked)
     elseif subtype == "UIMenuListItem" then
-        --PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnListSelect(self, Item, Item._Index)
         Item.OnListSelected(self, Item, Item._Index)
     elseif subtype == "UIMenuSliderItem" then
-        --PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        print("slider selected")
+        PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnSliderSelect(self, Item, Item._Index)
         Item.OnSliderSelected(Item._Index)
+        print("should be triggered")
     elseif subtype == "UIMenuProgressItem" then
-        --PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnProgressSelect(self, Item, Item.Data.Index)
         Item.OnProgressSelected(Item.Data.Index)        
     else
-        --PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnItemSelect(self, Item, self:CurrentSelection())
         Item.Activated(self, Item)
         if not self.Children[Item] then
@@ -3148,7 +3150,7 @@ function UIMenu:SelectItem()
 end
 
 function UIMenu:GoBack()
-    --PlaySoundFrontend(-1, self.Settings.Audio.Back, self.Settings.Audio.Library, true)
+    PlaySoundFrontend(self.Settings.Audio.Back, self.Settings.Audio.Library, true)
 	self:Visible(false)
 	print("goback")
     if self.ParentMenu ~= nil then
@@ -3396,12 +3398,12 @@ function UIMenu:ProcessMouse()
                             end
                         elseif not Item:Selected() then
                             self:CurrentSelection(i-1)
-                            --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+                            PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
                             self.OnIndexChange(self, self:CurrentSelection())
                             self.ReDraw = true
                             self:UpdateScaleform()
                         elseif not Item:Enabled() and Item:Selected() then
-                            --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+                            PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
                         end
                         Citizen.Wait(175)
                         while IsDisabledControlPressed(0, "INPUT_ATTACK") and IsMouseInBounds(_X, _Y, _Width, _Height) do
@@ -3431,12 +3433,12 @@ function UIMenu:ProcessMouse()
                                 end
                             elseif not Item:Selected() then
                                 self:CurrentSelection(i-1)
-                                --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+                                PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
                                 self.OnIndexChange(self, self:CurrentSelection())
                                 self.ReDraw = true
                                 self:UpdateScaleform()
                             elseif not Item:Enabled() and Item:Selected() then
-                                --PlaySoundFrontend(-1, self.Settings.Audio.Error, self.Settings.Audio.Library, true)
+                                PlaySoundFrontend(self.Settings.Audio.Error, self.Settings.Audio.Library, true)
                             end
                             Citizen.Wait(125)                       
                         end
