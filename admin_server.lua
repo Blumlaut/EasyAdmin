@@ -1043,15 +1043,21 @@ Citizen.CreateThread(function()
 	
 	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	local verContent = json.decode(verFile)
-	local curVersion = (verContent.fivem.version or verContent.version)
+	local variant = "fivem"
+	if RedM then
+		curVersion = verContent.redm.version
+		variant = "redm"
+	else
+		curVersion = verContent.fivem.version
+	end
 	local updatePath = "/Blumlaut/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
-			if curVersion ~= data.fivem.version and tonumber(curVersion) < tonumber(data.fivem.version) then
+			if curVersion ~= data.[variant].version and tonumber(curVersion) < tonumber(data.[variant].version) then
 				print("\n--------------------------------------------------------------------------")
-				print("\n"..resourceName.." is outdated.\nNewest Version: "..data.fivem.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+				print("\n"..resourceName.." is outdated.\nNewest Version: "..data.[variant].version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
 				print("\nUpdate Changelog:\n"..data.changelog)
 				print("\n--------------------------------------------------------------------------")
 			elseif tonumber(curVersion) > tonumber(data.version) then
