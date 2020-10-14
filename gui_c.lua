@@ -89,11 +89,7 @@ Citizen.CreateThread(function()
 		if _menuPool then
 			_menuPool:ProcessMenus()
 		end
-		print(settings.button)
-		print(RedM)
-		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) 
-		or 
-		(not RedM and IsControlJustReleased(0, settings.button) and GetLastInputMethod( 0 )) and isAdmin == true then
+		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) and isAdmin == true then
 			-- clear and re-create incase of permission change+player count change
 			
 			if not RedM then
