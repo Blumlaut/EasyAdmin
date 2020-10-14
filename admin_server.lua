@@ -1039,10 +1039,8 @@ Citizen.CreateThread(function()
 	
 	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	local verContent = json.decode(verFile)
-	local variant = "fivem"
 	if RedM then
 		curVersion = verContent.redm.version
-		variant = "redm"
 	else
 		curVersion = verContent.fivem.version
 	end
@@ -1062,7 +1060,7 @@ Citizen.CreateThread(function()
 				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
 				print("\nUpdate Changelog:\n"..changelog)
 				print("\n--------------------------------------------------------------------------")
-			elseif tonumber(curVersion) > tonumber(data.version) then
+			elseif tonumber(curVersion) > tonumber(remoteVersion) then
 				print("Your version of "..resourceName.." seems to be higher than the current version.")
 			else
 				print(resourceName.." is up to date!")
