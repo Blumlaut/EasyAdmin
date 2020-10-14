@@ -62,36 +62,36 @@ Citizen.CreateThread( function()
   while true do
     Citizen.Wait(0)
 		if frozen then
-			FreezeEntityPosition(PlayerPedId(), frozen)
-			if IsPedInAnyVehicle(PlayerPedId(), true) then
-				FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+			FreezeEntityPosition(GetPlayerPed(-1), frozen)
+			if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+				FreezeEntityPosition(GetVehiclePedIsIn(GetPlayerPed(-1), false), frozen)
 			end 
 		end
   end
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
-	if GetPlayerPed(playerId) == PlayerPedId() then return end
-	local oldCoords = GetEntityCoords(PlayerPedId())
+	if GetPlayerPed(playerId) == GetPlayerPed(-1) then return end
+	local oldCoords = GetEntityCoords(GetPlayerPed(-1))
 	frozen = true
-	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+	SetEntityCoords(GetPlayerPed(-1), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	Wait(500)
 	local playerId = GetPlayerFromServerId(playerId)
 	local adminPed = GetPlayerPed(-1)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 	Wait(500)
-	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+	SetEntityCoords(GetPlayerPed(-1), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
-	SetEntityCoords(PlayerPedId(), px,py,pz,0,0,0, false)
+	SetEntityCoords(GetPlayerPed(-1), px,py,pz,0,0,0, false)
 end)
 
 AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
-	if slapAmount > GetEntityHealth(PlayerPedId()) then
-		SetEntityHealth(PlayerPedId(), 0)
+	if slapAmount > GetEntityHealth(GetPlayerPed(-1)) then
+		SetEntityHealth(GetPlayerPed(-1), 0, false)
 	else
-		SetEntityHealth(PlayerPedId(), GetEntityHealth(PlayerPedId())-slapAmount)
+		SetEntityHealth(GetPlayerPed(-1), GetEntityHealth(GetPlayerPed(-1))-slapAmount, false)
 	end
 end)
 
@@ -125,9 +125,9 @@ end, false)
 
 AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 	frozen = toggle
-	FreezeEntityPosition(PlayerPedId(), frozen)
-	if IsPedInAnyVehicle(PlayerPedId(), false) then
-		FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+	FreezeEntityPosition(GetPlayerPed(-1), frozen)
+	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+		FreezeEntityPosition(GetVehiclePedIsIn(GetPlayerPed(-1), false), frozen)
 	end 
 end)
 
@@ -139,7 +139,7 @@ AddEventHandler('EasyAdmin:CaptureScreenshot', function(toggle, url, field)
 end)
 
 function spectatePlayer(targetPed,target,name)
-	local playerPed = PlayerPedId() -- yourself
+	local playerPed = GetPlayerPed(-1) -- yourself
 	if targetPed == playerPed then enable = false end
 
 	if(enable)then

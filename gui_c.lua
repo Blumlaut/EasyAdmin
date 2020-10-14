@@ -330,7 +330,7 @@ function GenerateMenu() -- this is a big ass function
 				if not RedM then
 					TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 				else
-					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer),true))
+					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(thePlayer.id),true))
 					local heading = GetEntityHeading(GetPlayerPed(player))
 					SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
 				end
@@ -346,7 +346,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 		
-		if permissions["slap"] then
+		if permissions["slap"] and not RedM then
 			local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnSliderSelected = function(index)
@@ -354,7 +354,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 
-		if permissions["freeze"] then
+		if permissions["freeze"] and not RedM then
 			local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
 			local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
 			thisPlayer:AddItem(thisItem)
