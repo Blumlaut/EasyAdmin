@@ -62,35 +62,39 @@ Citizen.CreateThread( function()
   while true do
     Citizen.Wait(0)
 		if frozen then
-			FreezeEntityPosition(PlayerPedId(), frozen)
-			if IsPedInAnyVehicle(PlayerPedId(), true) then
-				FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+			FreezeEntityPosition(GetPlayerPed(-1), frozen)
+			if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+				FreezeEntityPosition(GetVehiclePedIsIn(GetPlayerPed(-1), false), frozen)
 			end 
 		end
   end
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
-	local oldCoords = GetEntityCoords(PlayerPedId())
-	frozen = true
-	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-	Wait(500)
+	local oldCoords = GetEntityCoords(GetPlayerPed(-1))
 	local playerId = GetPlayerFromServerId(playerId)
+	if tgtCoords.z == 0 then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	if GetPlayerPed(playerId) == GetPlayerPed(-1) then return end
+	frozen = true
+	SetEntityCoords(GetPlayerPed(-1), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+	Wait(500)
 	local adminPed = GetPlayerPed(-1)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 	Wait(500)
-	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+	SetEntityCoords(GetPlayerPed(-1), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
-AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
-	SetEntityCoords(PlayerPedId(), px,py,pz,0,0,0, false)
+AddEventHandler('EasyAdmin:TeleportRequest', function(playerId,tgtCoords)
+	local playerId = GetPlayerFromServerId(playerId)
+	if tgtCoords.z == 0 then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	SetEntityCoords(GetPlayerPed(-1), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
 end)
 
 AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
-	if slapAmount > GetEntityHealth(PlayerPedId()) then
-		SetEntityHealth(PlayerPedId(), 0)
+	if slapAmount > GetEntityHealth(GetPlayerPed(-1)) then
+		SetEntityHealth(GetPlayerPed(-1), 0, false)
 	else
-		SetEntityHealth(PlayerPedId(), GetEntityHealth(PlayerPedId())-slapAmount)
+		SetEntityHealth(GetPlayerPed(-1), GetEntityHealth(GetPlayerPed(-1))-slapAmount, false)
 	end
 end)
 
@@ -124,9 +128,9 @@ end, false)
 
 AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 	frozen = toggle
-	FreezeEntityPosition(PlayerPedId(), frozen)
-	if IsPedInAnyVehicle(PlayerPedId(), false) then
-		FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+	FreezeEntityPosition(GetPlayerPed(-1), frozen)
+	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+		FreezeEntityPosition(GetVehiclePedIsIn(GetPlayerPed(-1), false), frozen)
 	end 
 end)
 
@@ -138,8 +142,7 @@ AddEventHandler('EasyAdmin:CaptureScreenshot', function(toggle, url, field)
 end)
 
 function spectatePlayer(targetPed,target,name)
-	local playerPed = PlayerPedId() -- yourself
-	enable = true
+	local playerPed = GetPlayerPed(-1) -- yourself
 	if targetPed == playerPed then enable = false end
 
 	if(enable)then
@@ -150,17 +153,21 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+			if not RedM then
+				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+			end
+			enable = true
 	else
-
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, targetPed)
-
 			StopDrawPlayerInfo()
-			ShowNotification(GetLocalisedText("stoppedSpectating"))
+			if not RedM then
+				ShowNotification(GetLocalisedText("stoppedSpectating"))
+			end
 			frozen = false
+			enable = false
 
 	end
 end

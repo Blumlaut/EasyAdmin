@@ -13,6 +13,10 @@ MutedPlayers = {}
 CachedPlayers = {}
 OnlineAdmins = {}
 ChatReminders = {}
+RedM = false
+if GetConvar("gamename", "not-rdr3") == "rdr3" then 
+	RedM = true
+end
 
 ExcludedWebhookFeatures = {}
 
@@ -261,7 +265,11 @@ Citizen.CreateThread(function()
 		end
 		
 		-- give player the right settings to work with
-		TriggerClientEvent("EasyAdmin:SetSetting", source, "button",GetConvarInt("ea_MenuButton", 289) )
+		local key = GetConvar("ea_MenuButton", 289)
+		if RedM then
+			key = GetConvar("ea_MenuButton", "PhotoModePc")
+		end
+		TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
 		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
 		else
@@ -285,9 +293,9 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)), "spectate")
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
 			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)), "spectate")
 		end
 	end)
 	
@@ -438,8 +446,6 @@ Citizen.CreateThread(function()
 	
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
-			--TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", "Please use the WebAdmin Interface, if possible." } })
-		--[[
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1])
 			UnbanIdentifier(args[1])
 			if (source ~= 0) then
@@ -448,7 +454,6 @@ Citizen.CreateThread(function()
 				Citizen.Trace(GetLocalisedText("done"))
 			end
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), args[1])) -- Use the "safe" getName function instead.
-		]]
 		end
 	end, false)
 	
@@ -565,7 +570,7 @@ Citizen.CreateThread(function()
 			local tgtPed = GetPlayerPed(tgtPlayer)
 			local tgtCoords = GetEntityCoords(tgtPed)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
-			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtCoords.x, tgtCoords.y, tgtCoords.z)
+			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtPlayer,tgtCoords)
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
@@ -1034,16 +1039,28 @@ Citizen.CreateThread(function()
 	
 	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	local verContent = json.decode(verFile)
-	local curVersion = (verContent.fivem.version or verContent.version)
+	local variant = "fivem"
+	if RedM then
+		curVersion = verContent.redm.version
+		variant = "redm"
+	else
+		curVersion = verContent.fivem.version
+	end
 	local updatePath = "/Blumlaut/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
-			if curVersion ~= data.fivem.version and tonumber(curVersion) < tonumber(data.fivem.version) then
+			local remoteVersion = data.version
+			local changelog = data.changelog
+			if RedM then
+				remoteVersion = data.redm.version
+				changelog = data.redm.changelog
+			end
+			if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
 				print("\n--------------------------------------------------------------------------")
-				print("\n"..resourceName.." is outdated.\nNewest Version: "..data.fivem.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
-				print("\nUpdate Changelog:\n"..data.changelog)
+				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+				print("\nUpdate Changelog:\n"..changelog)
 				print("\n--------------------------------------------------------------------------")
 			elseif tonumber(curVersion) > tonumber(data.version) then
 				print("Your version of "..resourceName.." seems to be higher than the current version.")
