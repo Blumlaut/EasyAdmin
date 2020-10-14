@@ -204,7 +204,10 @@ function GenerateMenu() -- this is a big ass function
 
 	for i,thePlayer in pairs(players) do
 		if RedM then
-			local thePlayer = {id = GetPlayerServerId(thePlayer), name = GetPlayerName(thePlayer)}
+			thePlayer = {
+				id = GetPlayerServerId(thePlayer), 
+				name = GetPlayerName(thePlayer)
+			}
 		end
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
 

@@ -293,12 +293,8 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
-			if RedM then
-				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
-			else
-				local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
-				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
-			end
+			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
+			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)), "spectate")
 		end
 	end)
@@ -1066,7 +1062,7 @@ Citizen.CreateThread(function()
 				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
 				print("\nUpdate Changelog:\n"..changelog)
 				print("\n--------------------------------------------------------------------------")
-			elseif tonumber(curVersion) > tonumber(remoteVersion) then
+			elseif tonumber(curVersion) > tonumber(data.version) then
 				print("Your version of "..resourceName.." seems to be higher than the current version.")
 			else
 				print(resourceName.." is up to date!")

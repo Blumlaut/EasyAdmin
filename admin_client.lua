@@ -71,6 +71,7 @@ Citizen.CreateThread( function()
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
+	if GetPlayerPed(playerId) == PlayerPedId() then return end
 	local oldCoords = GetEntityCoords(PlayerPedId())
 	frozen = true
 	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
@@ -139,7 +140,6 @@ end)
 
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
-	enable = true
 	if targetPed == playerPed then enable = false end
 
 	if(enable)then
@@ -150,17 +150,21 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+			if not RedM then
+				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+			end
+			enable = true
 	else
-
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, targetPed)
-
 			StopDrawPlayerInfo()
-			ShowNotification(GetLocalisedText("stoppedSpectating"))
+			if not RedM then
+				ShowNotification(GetLocalisedText("stoppedSpectating"))
+			end
 			frozen = false
+			enable = false
 
 	end
 end
