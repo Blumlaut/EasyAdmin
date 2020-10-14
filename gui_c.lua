@@ -10,11 +10,10 @@ showLicenses = false
 RedM = false
 
 settings = {
-	button = "PhotoModePc",
+	button = 289,
 	forceShowGUIButtons = false,
 }
 
-_menuPool = NativeUI.CreatePool()
 
 -- generate "slap" table once
 local SlapAmount = {}
@@ -56,11 +55,15 @@ RegisterCommand('easyadmin', function(source, args)
 	end)
 end)
 
--Citizen.CreateThread(function()
+Citizen.CreateThread(function()
 	if CompendiumHorseObserved then -- https://www.youtube.com/watch?v=r7qovpFAGrQ
 		RedM = true
 		settings.button = "PhotoModePc"
 	end
+	repeat
+		Wait(100)
+	until NativeUI
+	_menuPool = NativeUI.CreatePool()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
@@ -82,12 +85,15 @@ end)
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
-		
 	while true do
 		if _menuPool then
 			_menuPool:ProcessMenus()
 		end
-		if (RedM && IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM && IsControlJustReleased(0, settings.button) and GetLastInputMethod( 0 )) and isAdmin == true then
+		print(settings.button)
+		print(RedM)
+		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) 
+		or 
+		(not RedM and IsControlJustReleased(0, settings.button) and GetLastInputMethod( 0 )) and isAdmin == true then
 			-- clear and re-create incase of permission change+player count change
 			
 			if not RedM then
