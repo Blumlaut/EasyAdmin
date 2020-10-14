@@ -71,20 +71,23 @@ Citizen.CreateThread( function()
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
-	if GetPlayerPed(playerId) == GetPlayerPed(-1) then return end
 	local oldCoords = GetEntityCoords(GetPlayerPed(-1))
+	local playerId = GetPlayerFromServerId(playerId)
+	if tgtCoords.z == 0 then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	if GetPlayerPed(playerId) == GetPlayerPed(-1) then return end
 	frozen = true
 	SetEntityCoords(GetPlayerPed(-1), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	Wait(500)
-	local playerId = GetPlayerFromServerId(playerId)
 	local adminPed = GetPlayerPed(-1)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 	Wait(500)
 	SetEntityCoords(GetPlayerPed(-1), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
-AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
-	SetEntityCoords(GetPlayerPed(-1), px,py,pz,0,0,0, false)
+AddEventHandler('EasyAdmin:TeleportRequest', function(playerId,tgtCoords)
+	local playerId = GetPlayerFromServerId(playerId)
+	if tgtCoords.z == 0 then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	SetEntityCoords(GetPlayerPed(-1), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
 end)
 
 AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
