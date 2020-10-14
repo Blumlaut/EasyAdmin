@@ -293,9 +293,13 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
+			if RedM then
+				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId)
+			else
+				local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
+				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
+			end
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('spectatedplayer'), getName(source), getName(playerId)), "spectate")
-			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
-			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
 		end
 	end)
 	
@@ -446,8 +450,6 @@ Citizen.CreateThread(function()
 	
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.unban") then
-			--TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", "Please use the WebAdmin Interface, if possible." } })
-		--[[
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1])
 			UnbanIdentifier(args[1])
 			if (source ~= 0) then
@@ -456,7 +458,6 @@ Citizen.CreateThread(function()
 				Citizen.Trace(GetLocalisedText("done"))
 			end
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), args[1])) -- Use the "safe" getName function instead.
-		]]
 		end
 	end, false)
 	
