@@ -92,9 +92,9 @@ end)
 
 AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
 	if slapAmount > GetEntityHealth(GetPlayerPed(-1)) then
-		SetEntityHealth(GetPlayerPed(-1), 0, false)
+		ApplyDamageToPed(GetPlayerPed(-1), 5000, false, true,true)
 	else
-		SetEntityHealth(GetPlayerPed(-1), GetEntityHealth(GetPlayerPed(-1))-slapAmount, false)
+		ApplyDamageToPed(GetPlayerPed(-1), slapAmount, false, true,true)
 	end
 end)
 
