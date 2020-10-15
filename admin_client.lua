@@ -143,6 +143,7 @@ end)
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
 	if targetPed == playerPed then enable = false end
+	enable = true
 
 	if(enable)then
 
@@ -155,7 +156,6 @@ function spectatePlayer(targetPed,target,name)
 			if not RedM then
 				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
 			end
-			enable = true
 	else
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
@@ -166,7 +166,6 @@ function spectatePlayer(targetPed,target,name)
 				ShowNotification(GetLocalisedText("stoppedSpectating"))
 			end
 			frozen = false
-			enable = false
 
 	end
 end
