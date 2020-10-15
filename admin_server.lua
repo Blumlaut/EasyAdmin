@@ -570,7 +570,7 @@ Citizen.CreateThread(function()
 			local tgtPed = GetPlayerPed(tgtPlayer)
 			local tgtCoords = GetEntityCoords(tgtPed)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
-			TriggerClientEvent('EasyAdmin:TeleportRequest', source, tgtPlayer,tgtCoords)
+			TriggerClientEvent('EasyAdmin:TeleportRequest', source,tgtCoords)
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
