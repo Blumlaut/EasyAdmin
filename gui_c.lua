@@ -109,7 +109,7 @@ Citizen.CreateThread(function()
 
 				repeat 
 					Wait(100)
-					waitTime+1
+					waitTime=waitTime+1
 					print("waited "..waitTime)
 				until (isAdmin or waitTime==10)
 				print("isadmin "..tostring(isAdmin))
