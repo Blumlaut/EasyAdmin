@@ -110,15 +110,11 @@ Citizen.CreateThread(function()
 				repeat 
 					Wait(100)
 					waitTime=waitTime+1
-					print("waited "..waitTime)
 				until (isAdmin or waitTime==10)
-				print("isadmin "..tostring(isAdmin))
 				if not isAdmin then
-					print("wasnt admin, break")
 					break
 				end
 			end
-			print("continue")
 			if not RedM then
 				playerlist = nil
 				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
