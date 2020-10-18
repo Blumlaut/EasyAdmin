@@ -35,22 +35,34 @@ playlist = nil
 
 RegisterCommand('easyadmin', function(source, args)
 	CreateThread(function()
-		banLength = {
-			{label = GetLocalisedText("permanent"), time = 10444633200},
-			{label = GetLocalisedText("oneday"), time = 86400},
-			{label = GetLocalisedText("threedays"), time = 259200},
-			{label = GetLocalisedText("oneweek"), time = 518400},
-			{label = GetLocalisedText("twoweeks"), time = 1123200},
-			{label = GetLocalisedText("onemonth"), time = 2678400},
-			{label = GetLocalisedText("oneyear"), time = 31536000},
-		}
-		if mainMenu:Visible() then
-			mainMenu:Visible(false)
-			_menuPool:Remove()
-			collectgarbage()
+		if not RedM then
+			playerlist = nil
+			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
+			repeat
+				Wait(100)
+			until playerlist
+		end
+
+		if strings then
+			banLength = {
+				{label = GetLocalisedText("permanent"), time = 10444633200},
+				{label = GetLocalisedText("oneday"), time = 86400},
+				{label = GetLocalisedText("threedays"), time = 259200},
+				{label = GetLocalisedText("oneweek"), time = 518400},
+				{label = GetLocalisedText("twoweeks"), time = 1123200},
+				{label = GetLocalisedText("onemonth"), time = 2678400},
+				{label = GetLocalisedText("oneyear"), time = 31536000},
+			}
+			if mainMenu:Visible() then
+				mainMenu:Visible(false)
+				_menuPool:Remove()
+				collectgarbage()
+			else
+				GenerateMenu()
+				mainMenu:Visible(true)
+			end
 		else
-			GenerateMenu()
-			mainMenu:Visible(true)
+			TriggerServerEvent("EasyAdmin:amiadmin")
 		end
 	end)
 end)
@@ -89,9 +101,24 @@ Citizen.CreateThread(function()
 		if _menuPool then
 			_menuPool:ProcessMenus()
 		end
-		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) and isAdmin == true then
+		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
 			-- clear and re-create incase of permission change+player count change
-			
+			if not isAdmin == true then
+				TriggerServerEvent("EasyAdmin:amiadmin")
+				local waitTime = 0
+
+				repeat 
+					Wait(100)
+					waitTime+1
+					print("waited "..waitTime)
+				until (isAdmin or waitTime==10)
+				print("isadmin "..tostring(isAdmin))
+				if not isAdmin then
+					print("wasnt admin, break")
+					break
+				end
+			end
+			print("continue")
 			if not RedM then
 				playerlist = nil
 				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
