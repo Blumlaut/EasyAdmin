@@ -4,18 +4,10 @@
 ---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
 ------------------------------------
 ------------------------------------
--- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
-admins = {}
--- THIS IS OBSOLETE NOW, PLEASE USE THE WIKI TO ADD ADMINS
--- Muted Players Table
-MutedPlayers = {} 
--- cached players, for offline banning
-CachedPlayers = {}
-OnlineAdmins = {}
-ChatReminders = {}
-RedM = false
 if GetConvar("gamename", "not-rdr3") == "rdr3" then 
 	RedM = true
+else
+	RedM = false
 end
 
 ExcludedWebhookFeatures = {}
@@ -1049,8 +1041,8 @@ Citizen.CreateThread(function()
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
-			local remoteVersion = data.version
-			local changelog = data.changelog
+			local remoteVersion = data.fivem.version
+			local changelog = data.fivem.changelog
 			if RedM then
 				remoteVersion = data.redm.version
 				changelog = data.redm.changelog
@@ -1098,3 +1090,18 @@ Citizen.CreateThread(function()
 	updateAdmins()
 	checkVersionHTTPRequest()
 end)
+
+
+-- DO NOT TOUCH THESE
+-- DO NOT TOUCH THESE
+-- DO NOT TOUCH THESE
+-- DO NOT TOUCH THESE
+admins = {} -- DO NOT TOUCH THIS
+MutedPlayers = {} -- DO NOT TOUCH THIS
+CachedPlayers = {} -- DO NOT TOUCH THIS
+OnlineAdmins = {} -- DO NOT TOUCH THIS
+ChatReminders = {} -- DO NOT TOUCH THIS
+-- DO NOT TOUCH THESE
+-- DO NOT TOUCH THESE
+-- DO NOT TOUCH THESE
+-- DO NOT TOUCH THESE

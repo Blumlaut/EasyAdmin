@@ -110,12 +110,14 @@ Citizen.CreateThread(function()
 				repeat 
 					Wait(100)
 					waitTime=waitTime+1
-				until (isAdmin or waitTime==10)
+				until (isAdmin or waitTime==60)
 				if not isAdmin then
-					break
 				end
 			end
-			if not RedM then
+			
+
+			
+			if not RedM and isAdmin then
 				playerlist = nil
 				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 				repeat
@@ -123,7 +125,7 @@ Citizen.CreateThread(function()
 				until playerlist
 			end
 
-			if strings then
+			if strings and isAdmin then
 				banLength = {
 					{label = GetLocalisedText("permanent"), time = 10444633200},
 					{label = GetLocalisedText("oneday"), time = 86400},
