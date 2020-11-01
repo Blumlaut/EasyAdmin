@@ -47,7 +47,7 @@ AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 end)
 
 AddEventHandler("EasyAdmin:fillCachedPlayers", function(thecached)
-	if permission.ban then
+	if permissions.ban then
 		cachedplayers = thecached
 	end
 end)
