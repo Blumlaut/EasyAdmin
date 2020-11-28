@@ -47,7 +47,9 @@ AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 end)
 
 AddEventHandler("EasyAdmin:fillCachedPlayers", function(thecached)
-	cachedplayers = thecached
+	if permissions.ban then
+		cachedplayers = thecached
+	end
 end)
 
 AddEventHandler("EasyAdmin:GetPlayerList", function(players)
@@ -71,36 +73,29 @@ Citizen.CreateThread( function()
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
-	-- Store the admin player's current coords
 	local oldCoords = GetEntityCoords(PlayerPedId())
-	-- Freeze admin player temporarily
+	local playerId = GetPlayerFromServerId(playerId)
+	if not tgtCoords or tgtCoords.z == 0 then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	if GetPlayerPed(playerId) == PlayerPedId() then return end
 	frozen = true
-
-	-- Only TP if the target is not in your infinity bubble
-	if GetDistanceBetweenCoords(oldCoords.x, oldCoords.y, oldCoords.z, tgtCoords.x, tgtCoords.y, tgtCoords.z, true) >= 50.0 then
-
-		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-		Wait(1000)
-		local playerId = GetPlayerFromServerId(playerId)
-		local adminPed = GetPlayerPed(-1)
-		local playerPed = GetPlayerPed(playerId)
-		spectatePlayer(playerPed, playerId, GetPlayerName(playerId))
-
-	end
-
+	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+	Wait(500)
+	local adminPed = PlayerPedId()
+	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+	Wait(500)
 	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
-	frozen = false
 end)
 
-AddEventHandler('EasyAdmin:TeleportRequest', function(px,py,pz)
-	SetEntityCoords(PlayerPedId(), px,py,pz,0,0,0, false)
+AddEventHandler('EasyAdmin:TeleportRequest', function(tgtCoords)
+	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
 end)
 
 AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
-	if slapAmount > GetEntityHealth(PlayerPedId()) then
-		SetEntityHealth(PlayerPedId(), 0)
+	local ped = PlayerPedId()
+	if slapAmount > GetEntityHealth(ped) then
+		ApplyDamageToPed(ped, 5000, false, true,true)
 	else
-		SetEntityHealth(PlayerPedId(), GetEntityHealth(PlayerPedId())-slapAmount)
+		ApplyDamageToPed(ped, slapAmount, false, true,true)
 	end
 end)
 
@@ -149,8 +144,8 @@ end)
 
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
-	enable = true
 	if targetPed == playerPed then enable = false end
+	enable = true
 
 	if(enable)then
 
@@ -160,16 +155,18 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+			if not RedM then
+				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+			end
 	else
-
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, targetPed)
-
 			StopDrawPlayerInfo()
-			ShowNotification(GetLocalisedText("stoppedSpectating"))
+			if not RedM then
+				ShowNotification(GetLocalisedText("stoppedSpectating"))
+			end
 			frozen = false
 
 	end
