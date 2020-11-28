@@ -284,6 +284,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate")
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
+		if tostring(playerId) == tostring(source) then return end
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))

@@ -75,8 +75,8 @@ end)
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
 	local oldCoords = GetEntityCoords(PlayerPedId())
 	local playerId = GetPlayerFromServerId(playerId)
-	if not tgtCoords or tgtCoords.z == 0 then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
-	if GetPlayerPed(playerId) == PlayerPedId() then return end
+	if not tgtCoords then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	--if GetPlayerPed(playerId) == PlayerPedId() then return end
 	frozen = true
 	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	Wait(500)
