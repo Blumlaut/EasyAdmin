@@ -74,14 +74,22 @@ end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
 	local oldCoords = GetEntityCoords(PlayerPedId())
-	local playerId = GetPlayerFromServerId(playerId)
-	if not tgtCoords then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+
 	--if GetPlayerPed(playerId) == PlayerPedId() then return end
 	frozen = true
 	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	Wait(500)
-	local adminPed = PlayerPedId()
-	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+	local playerId = GetPlayerFromServerId(playerId)
+	if not tgtCoords then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
+	Wait(1000)
+	local attempts = 0
+	repeat
+		attempts = attempts + 1
+		print('SPECTATE ATTEMPT '..attempts)
+		spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+		Wait(10)
+		if not NetworkIsInSpectatorMode() then print('FAILED TO SPECTATE AFTER 10 ATTEMPTS') end
+	until NetworkIsInSpectatorMode() or attempts >= 10
 	Wait(500)
 	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
