@@ -431,7 +431,7 @@ Citizen.CreateThread(function()
 		
 		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			if getName(args[1]) then
-				TriggerClientEvent("EasyAdmin:requestSpectate", source, tonumber(args[1]), GetEntityCoords(GetPlayerPed(tonumber(args[1]))))
+				TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1], GetEntityCoords(GetPlayerPed(tonumber(args[1]))))
 			else
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("playernotfound") } })
 			end
