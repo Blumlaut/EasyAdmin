@@ -558,11 +558,10 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
 	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
 		if GetPlayerName(id) and DoesPlayerHavePermission(source, "easyadmin.teleport") then
-			local tgtPlayer = id
-			local tgtPed = GetPlayerPed(tgtPlayer)
+			local tgtPed = GetPlayerPed(id)
 			local tgtCoords = GetEntityCoords(tgtPed)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
-			TriggerClientEvent('EasyAdmin:TeleportRequest', source,tgtCoords)
+			TriggerClientEvent('EasyAdmin:TeleportRequest', source, id,tgtCoords)
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
