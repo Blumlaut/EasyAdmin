@@ -330,6 +330,9 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+				if exports['sacrp_banlist'] then
+					exports['sacrp_banlist']['banPlayer'](source, playerId, reason, expires)
+				end
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
