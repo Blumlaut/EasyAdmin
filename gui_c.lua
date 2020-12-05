@@ -760,7 +760,7 @@ Citizen.CreateThread( function()
 				EndTextCommandDisplayText(0.3, 0.7+(i/30))
 			end
 			
-			if IsControlJustPressed(0,103) then
+			if (not RedM && IsControlJustPressed(0,103) or (RedM && IsControlJustReleased(0, Controls["VehExit"]))) then
 				local targetPed = PlayerPedId()
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 	
