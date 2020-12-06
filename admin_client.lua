@@ -76,7 +76,11 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
 	local localPlayerPed = PlayerPedId()
 	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerId))) end
 	if playerId == GetPlayerServerId(PlayerId()) then 
-		spectatePlayer(GetPlayerPed(GetPlayerFromServerId(playerId)),GetPlayerFromServerId(playerId),GetPlayerName(playerId))
+		if oldCoords then
+			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+		end
+		spectatePlayer(GetPlayerPed(PlayerId()),GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
 		frozen = false
 		return 
 	else
@@ -157,8 +161,7 @@ end)
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
 	enable = true
-	if target == PlayerId() then enable = false end	
-
+	if (target == PlayerId() or target == -1) then enable = false end
 	if(enable)then
 			if targetPed == playerPed then
 				Wait(500)
@@ -175,8 +178,8 @@ function spectatePlayer(targetPed,target,name)
 			end
 	else
 			if oldCoords then
-				SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 				RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+				SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 			end
 			NetworkSetInSpectatorMode(false, targetPed)
 			StopDrawPlayerInfo()

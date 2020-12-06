@@ -415,8 +415,8 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttome"), GetLocalisedText("teleporttomeguide"))
 		thisPlayer:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
+			local pCoords = GetEntityCoords(PlayerPedId(),true)
+			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, pCoords)
 		end
 	end
 
@@ -764,8 +764,7 @@ Citizen.CreateThread( function()
 				local targetPed = PlayerPedId()
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 	
-				RequestCollisionAtCoord(targetx,targety,targetz)
-				NetworkSetInSpectatorMode(false, targetPed)
+				spectatePlayer(GetPlayerPed(PlayerId()),GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
 				TriggerEvent('EasyAdmin:FreezePlayer', false)
 				--SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 				if not RedM then
