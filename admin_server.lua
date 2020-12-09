@@ -4,13 +4,6 @@
 ---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
 ------------------------------------
 ------------------------------------
-if GetConvar("gamename", "not-rdr3") == "rdr3" then 
-	RedM = true
-else
-	RedM = false
-end
-
-ExcludedWebhookFeatures = {}
 
 Citizen.CreateThread(function()
 	while true do 
@@ -68,6 +61,19 @@ Citizen.CreateThread(function()
 		while true do
 			Wait(20000)
 			sendRandomReminder() -- check for changes in the convar
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	local lastBackupTime = LoadResourceFile(GetCurrentResourceName(), "backups/.lastbackup")
+	if not lastBackupTime then lastBackupTime = 0 end
+	while true do 
+		Wait(10000)
+		if (GetConvarInt("ea_backupFrequency", 336) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 336)*3600) < os.time()) then
+			createBanlistBackup()
+			lastBackupTime = os.time()
+			SaveResourceFile(GetCurrentResourceName(), "backups/.lastbackup", lastBackupTime)
 		end
 	end
 end)
@@ -189,8 +195,22 @@ RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
     end
 end, false)
 
-AnonymousAdmins = {}
+RegisterCommand("ea_createBackup", function(source, args, rawCommand)
+	if DoesPlayerHavePermission(source, "easyadmin.manageserver") then
+		createBanlistBackup()
+    end
+end, false)
+
 Citizen.CreateThread(function()
+	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
+		RedM = true
+	else
+		RedM = false
+	end
+	
+	ExcludedWebhookFeatures = {}
+	AnonymousAdmins = {}
+
 	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
 	if strfile then
 		strings = json.decode(strfile)[1]
@@ -767,24 +787,26 @@ Citizen.CreateThread(function()
 	end
 
 
+	function addBan(data)
+		if data then
+			table.insert(blacklist, data)
+		end
+	end
+
+
+
+
 	function updateBlacklist(data,remove)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
 		local change=false --mark if file was changed to save up on disk writes.
 		if GetConvar("ea_custombanlist", "false") == "true" then 
 			
 			if data and not remove then
-				table.insert(blacklist, data)
+				addBan(data)
 				TriggerEvent("ea_data:addBan", data)
 				
 			elseif data and remove then
-				for i,theBan in ipairs(blacklist) do
-					if theBan.banid == data.banid then
-						table.remove(blacklist,i)
-						PrintDebugMessage("removed ban as per custombanlist remove")
-						TriggerEvent("ea_data:removeBan", theBan)
-						break
-					end
-				end
+				UnbanId(data.banid)
 			elseif not data then
 				TriggerEvent('ea_data:retrieveBanlist', function(banlist)
 					blacklist = banlist
@@ -807,25 +829,6 @@ Citizen.CreateThread(function()
 			content = json.encode({})
 		end
 		blacklist = json.decode(content)
-		
-				
-		local txtcontent = LoadResourceFile(GetCurrentResourceName(), "banlist.txt") -- compat
-		if not txtcontent then txtcontent = "" end
-		if string.len(txtcontent) > 5 then
-			for index,value in ipairs(mysplit(txtcontent, "\n")) do
-				curstring = "" -- make a new string
-				for i = 1, #value do -- loop trough every character of "value" to determine if it's part of the identifier or reason
-					if string.sub(value,i,i) == ";" then break end -- end the loop if we reached the "reason" part
-					curstring = curstring..string.sub(value,i,i) -- add our current letter to our string
-				end
-				local reason = string.match(value, "^.*%;(.*)" ) or GetLocalisedText("nongiven") -- get the reason from the string or use "none given" if it's nil
-				local reason = string.gsub(reason,"\r","")
-				table.insert(blacklist, {identifier = curstring, reason = reason, expire = 10444633200 }) -- we need an expire time here, anything will do, lets make it christmas!
-			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.txt", "", 0) -- overwrite banlist with emptyness, we dont even need this file, but sadly we cant delete it :(
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-		end
-		
 
 		PrintDebugMessage("updated banlist")
 		if not blacklist then
@@ -835,35 +838,10 @@ Citizen.CreateThread(function()
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 		end
 		
-		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then -- more compat
-			Citizen.Trace("Upgrading Banlist...\n")
-			for i,ban in ipairs(blacklist) do
-				if not ban.identifiers then
-					ban.identifiers = {}
-					change=true
-				end
-				if ban.identifier then
-					table.insert(ban.identifiers, ban.identifier)
-					ban.identifier = nil
-					change=true
-				end
-				if ban.steam then
-					table.insert(ban.identifiers, ban.steam)
-					ban.steam = nil
-					change=true
-				end
-				if ban.discord and ban.discord ~= "" then
-					table.insert(ban.identifiers, ban.discord)
-					ban.discord = nil
-					change=true
-				end
-			end
-			Citizen.Trace("Banlist Upgraded! No Further Action is necesarry.\n")
-		end
-
+		performBanlistUpgrades(blacklist)
 		
 		if data and not remove then
-			table.insert(blacklist, data)
+			addBan(data)
 			change=true
 		elseif not data then
 			for i,theBan in ipairs(blacklist) do
@@ -896,42 +874,14 @@ Citizen.CreateThread(function()
 			end
 		end
 		if data and remove then
-			for i,theBan in ipairs(blacklist) do
-				if data.banid == theBan.banid then
-					table.remove(blacklist,i)
-					PrintDebugMessage("removing ban as ordered by remove param")
-					change=true
-					break
-				end
-			end
+			UnbanId(data.banid)
+			change = true
 		end
 		if change then
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end
 
-
-
-	
-	function IsIdentifierBanned(theIndentifier)
-		local identifierfound = false
-		for index,value in ipairs(blacklist) do
-			for i,identifier in ipairs(value.identifiers) do
-				if theIndentifier == identifier then
-					identifierfound = true
-				end
-			end
-		end
-		return identifierfound
-	end
-
-	AddEventHandler("EasyAdmin:GetVersion", function(cb)
-		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-		local verContent = json.decode(verFile)
-		print(verContent.fivem.version)
-		cb(verContent.fivem.version)
-	end)
-	
 	function BanIdentifier(identifier,reason)
 		updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 	end
@@ -968,6 +918,55 @@ Citizen.CreateThread(function()
 			end
 		end
 	end
+
+	function performBanlistUpgrades(blacklist)
+		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then -- more compat
+			Citizen.Trace("Upgrading Banlist...\n")
+			for i,ban in ipairs(blacklist) do
+				if not ban.identifiers then
+					ban.identifiers = {}
+					change=true
+				end
+				if ban.identifier then
+					table.insert(ban.identifiers, ban.identifier)
+					ban.identifier = nil
+					change=true
+				end
+				if ban.steam then
+					table.insert(ban.identifiers, ban.steam)
+					ban.steam = nil
+					change=true
+				end
+				if ban.discord and ban.discord ~= "" then
+					table.insert(ban.identifiers, ban.discord)
+					ban.discord = nil
+					change=true
+				end
+			end
+			Citizen.Trace("Banlist Upgraded! No Further Action is necesarry.\n")
+		end
+	end
+
+
+	
+	function IsIdentifierBanned(theIndentifier)
+		local identifierfound = false
+		for index,value in ipairs(blacklist) do
+			for i,identifier in ipairs(value.identifiers) do
+				if theIndentifier == identifier then
+					identifierfound = true
+				end
+			end
+		end
+		return identifierfound
+	end
+
+	AddEventHandler("EasyAdmin:GetVersion", function(cb)
+		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+		local verContent = json.decode(verFile)
+		print(verContent.fivem.version)
+		cb(verContent.fivem.version)
+	end)
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
@@ -1004,6 +1003,17 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("chat:addMessage", Source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
 		end
 	end)
+
+
+	function createBanlistBackup()
+		local backupName = "banlist_"..os.date("%H_%M_%d_%m_%Y")..".json"
+		PrintDebugMessage("Creating Banlist Backup to "..backupName)
+
+		SaveResourceFile(GetCurrentResourceName(), "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
+	end
+
+
+	
 	
 	
 	---------------------------------- USEFUL
