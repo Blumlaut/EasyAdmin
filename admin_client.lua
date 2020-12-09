@@ -72,28 +72,33 @@ Citizen.CreateThread( function()
   end
 end)
 
-AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
+AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	local localPlayerPed = PlayerPedId()
-	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerId))) end
-	if playerId == GetPlayerServerId(PlayerId()) then 
+	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId))) end
+	if playerServerId == GetPlayerServerId(PlayerId()) then 
 		if oldCoords then
 			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+			Wait(500)
 			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+			oldCoords=nil
 		end
 		spectatePlayer(GetPlayerPed(PlayerId()),GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
 		frozen = false
 		return 
 	else
-		oldCoords = GetEntityCoords(PlayerPedId())
+		if not oldCoords then
+			oldCoords = GetEntityCoords(PlayerPedId())
+		end
 	end
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	frozen = true
-	Wait(500)
-	local playerId = GetPlayerFromServerId(playerId)
 	local adminPed = localPlayerPed
+	local playerId = GetPlayerFromServerId(playerServerId)
+	repeat
+		Wait(200)
+		playerId = GetPlayerFromServerId(playerServerId)
+	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1))
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
-	--Wait(500)
-	--SetEntityCoords(localPlayerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(playerId, tgtCoords)
@@ -179,7 +184,9 @@ function spectatePlayer(targetPed,target,name)
 	else
 			if oldCoords then
 				RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+				Wait(500)
 				SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+				oldCoords=nil
 			end
 			NetworkSetInSpectatorMode(false, targetPed)
 			StopDrawPlayerInfo()
