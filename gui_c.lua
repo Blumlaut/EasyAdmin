@@ -556,12 +556,14 @@ function GenerateMenu() -- this is a big ass function
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
 		local reason = ""
 		local identifier = ""
+		local thebanid = ""
 
 		for i,theBanned in ipairs(banlist) do
 			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
 				if theBanned then
 					reason = theBanned.reason or "No Reason"
-					local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
+					thebanid = theBanned.banid
+					local thisItem = NativeUI.CreateItem('Ban #'..thebanid, reason)
 					unbanPlayer:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 						TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned.banid)
