@@ -1,3 +1,5 @@
 banlist.json
 banlist.txt
 settings.json
+backups/*.json
+backups/.lastbackup
