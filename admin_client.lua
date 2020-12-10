@@ -72,16 +72,30 @@ Citizen.CreateThread( function()
   end
 end)
 
-AddEventHandler('EasyAdmin:requestSpectate', function(playerId, tgtCoords)
+AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
+	local localPlayerPed = PlayerPedId()
 	local oldCoords = GetEntityCoords(PlayerPedId())
 
-	--if GetPlayerPed(playerId) == PlayerPedId() then return end
+	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then
+		tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId)))
+	end
+
+	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+	local playerId = GetPlayerFromServerId(playerServerId)
+	local attempts = 0
 	frozen = true
-	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-	Wait(500)
-	local playerId = GetPlayerFromServerId(playerId)
-	if not tgtCoords then tgtCoords = GetEntityCoords(GetPlayerPed(playerId)) end
-	Wait(1000)
+	repeat
+		Wait(200)
+		playerId = GetPlayerFromServerId(playerServerId)
+		attempts = attempts + 1
+		print('spectate attempt #'..attempts)
+	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1)) or attempts == 10
+	if playerId == 0 or playerId == -1 then
+		SetEntityCoords(localPlayerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+		ShowNotification("~r~Failed to spectate")
+		return
+	end
+		
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 	Wait(500)
 	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
