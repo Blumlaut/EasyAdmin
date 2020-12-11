@@ -970,7 +970,7 @@ Citizen.CreateThread(function()
 		for i,ban in ipairs(blacklist) do 
 			if ban.banid == id then
 				table.remove(blacklist,i)
-				TiggerEvent('ea_data:removeBan', ban)
+				TriggerEvent('ea_data:removeBan', ban)
 				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
