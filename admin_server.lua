@@ -67,7 +67,6 @@ end)
 
 Citizen.CreateThread(function()
 	while true do 
-		Wait(10000)
 		local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 		if backupInfos == nil then 
 			lastBackupTime = 0
@@ -75,9 +74,10 @@ Citizen.CreateThread(function()
 			backupInfos = json.decode(backupInfos)
 			lastBackupTime = backupInfos.lastBackup
 		end
-		if (GetConvarInt("ea_backupFrequency", 336) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 336)*3600) < os.time()) then
+		if (GetConvarInt("ea_backupFrequency", 72) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 72)*3600) < os.time()) then
 			createBackup()
 		end
+		Wait(120000)
 	end
 end)
 
@@ -87,9 +87,24 @@ function loadBackupName(name)
 	if backup then
 		local backupJson = json.decode(backup)
 		if backupJson then
-			-- TODO
+			print("Loading Backup..")
+			for i,ban in pairs(blacklist) do
+				UnbanId(ban.banid)
+				PrintDebugMessage("removing ban "..ban.banid)
+				Wait(50)
+			end
+
+			for i,ban in pairs(backupJson) do
+				addBan(ban)
+				PrintDebugMessage("adding ban "..ban.banid)
+				TriggerEvent("ea_data:addBan", ban)
+				Wait(50)
+			end
+			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			updateBlacklist()
+			print("Backup should be loaded!")
 		else
-			print("^1EasyAdmin:^7 Backup Could not be loaded, does the file have an error?")
+			print("^1EasyAdmin:^7 Backup Could not be loaded, in most cases this comes from there being a formatting error, please use a JSON Validator on the file and fix the errors!")
 		end
 
 	else
@@ -273,6 +288,12 @@ RegisterCommand("ea_createBackup", function(source, args, rawCommand)
 		createBackup()
     end
 end, false)
+
+RegisterCommand("ea_loadBackup", function(source,args,rawCommand)
+	if DoesPlayerHavePermission(source, "easyadmin.manageserver") and args[1] then
+		loadBackupName(args[1])
+	end
+end,false)
 
 Citizen.CreateThread(function()
 	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
@@ -881,9 +902,9 @@ Citizen.CreateThread(function()
 
 
 
-	function updateBlacklist(data,remove)
+	function updateBlacklist(data,remove, forceChange)
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
-		local change=false --mark if file was changed to save up on disk writes.
+		local change= (forceChange or false) --mark if file was changed to save up on disk writes.
 		if GetConvar("ea_custombanlist", "false") == "true" then 
 			
 			if data and not remove then
@@ -976,15 +997,14 @@ Citizen.CreateThread(function()
 	end
 	
 	function UnbanIdentifier(identifier)
-		if banid then 
-			if blacklist[banid] then 
-				table.remove(blacklist,banid)
-			end
-		elseif identifier then
+		if identifier then
 			for i,ban in ipairs(blacklist) do
 				for index,id in ipairs(ban.identifiers) do
 					if identifier == id then
 						table.remove(blacklist,i)
+						if GetConvar("ea_custombanlist", "false") == "true" then 
+							TriggerEvent("ea_data:removeBan", ban)
+						end
 						PrintDebugMessage("removed ban as per unbanidentifier func")
 						return
 					end 
@@ -994,7 +1014,7 @@ Citizen.CreateThread(function()
 	end
 
 	function UnbanId(id)
-		for i,ban in ipairs(blacklist) do 
+		for i,ban in ipairs(blacklist) do
 			if ban.banid == id then
 				table.remove(blacklist,i)
 				if GetConvar("ea_custombanlist", "false") == "true" then 
