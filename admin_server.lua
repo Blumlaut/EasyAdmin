@@ -66,17 +66,90 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	local lastBackupTime = LoadResourceFile(GetCurrentResourceName(), "backups/.lastbackup")
-	if not lastBackupTime then lastBackupTime = 0 end
 	while true do 
 		Wait(10000)
+		local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+		if backupInfos == nil then 
+			lastBackupTime = 0
+		else
+			backupInfos = json.decode(backupInfos)
+			lastBackupTime = backupInfos.lastBackup
+		end
 		if (GetConvarInt("ea_backupFrequency", 336) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 336)*3600) < os.time()) then
-			createBanlistBackup()
-			lastBackupTime = os.time()
-			SaveResourceFile(GetCurrentResourceName(), "backups/.lastbackup", lastBackupTime)
+			createBackup()
 		end
 	end
 end)
+
+
+function loadBackupName(name)
+	local backup = LoadResourceFile(GetCurrentResourceName(), "backups/"..name)
+	if backup then
+		local backupJson = json.decode(backup)
+		if backupJson then
+			-- TODO
+		else
+			print("^1EasyAdmin:^7 Backup Could not be loaded, does the file have an error?")
+		end
+
+	else
+		print("^1EasyAdmin:^7 Backup Name Invalid or missing from Backups.")
+	end
+end
+
+
+function createBackup()
+	local backupTime = os.time()
+	local backupDate = os.date("%H_%M_%d_%m_%Y")
+	local backupName = "banlist_"..backupDate..".json"
+	PrintDebugMessage("Creating Banlist Backup to "..backupName)
+
+	SaveResourceFile(GetCurrentResourceName(), "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
+
+	local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+	if backupInfos then
+		backupInfos = json.decode(backupInfos)
+		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
+
+		if #backupInfos.backups > GetConvarInt("ea_maxBackupCount", 10) then
+			deleteBackup(backupInfos,1)
+		end
+		backupInfos.lastBackup = backupTime
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos))
+
+	else
+		local backupInfos = {lastBackup = backupTime, backups = {}}
+		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos))
+	end
+
+	return id,timestamp
+end
+
+function deleteBackup(backupInfos,id)
+	local expiredBackup = backupInfos.backups[id]
+	table.remove(backupInfos.backups, id)
+
+	local backupFileName = expiredBackup.backupFile
+
+	local fullResourcePath = GetResourcePath(GetCurrentResourceName())
+	os.remove(fullResourcePath.."/backups/"..backupFileName)
+	PrintDebugMessage("Removed Backup "..backupFileName)
+
+end
+
+function getNewBackupid(backupInfos)
+	if backupInfos then
+		local lastBackup = backupInfos.lastbackup
+		local backups = backupInfos.backups
+		return #backups+1
+	else
+		return 0
+	end
+end
+
+
+
 
 AddEventHandler('playerDropped', function (reason)
 	if CachedPlayers[source] then
@@ -197,7 +270,7 @@ end, false)
 
 RegisterCommand("ea_createBackup", function(source, args, rawCommand)
 	if DoesPlayerHavePermission(source, "easyadmin.manageserver") then
-		createBanlistBackup()
+		createBackup()
     end
 end, false)
 
@@ -208,6 +281,18 @@ Citizen.CreateThread(function()
 		RedM = false
 	end
 	
+	local resourcemeta = LoadResourceFile(GetCurrentResourceName(), "__resource.lua")
+	if resourcemeta then
+		os.remove(GetResourcePath(GetCurrentResourceName()).."/__resource.lua")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		print("^1EasyAdmin^7: You didn't follow the Updating Instructions! I fixed it myself this time, please restart me using the 'ensure EasyAdmin' command.")
+		print("^1EasyAdmin^7: For the next time, please read the update instructions and remove the __resource.lua!!")
+		print("^1EasyAdmin^7: If this message does not dissapear after typing the ensure command, please manually remove the __resource.lua from my Folder.")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+	end
+
 	ExcludedWebhookFeatures = {}
 	AnonymousAdmins = {}
 
@@ -1004,13 +1089,6 @@ Citizen.CreateThread(function()
 		end
 	end)
 
-
-	function createBanlistBackup()
-		local backupName = "banlist_"..os.date("%H_%M_%d_%m_%Y")..".json"
-		PrintDebugMessage("Creating Banlist Backup to "..backupName)
-
-		SaveResourceFile(GetCurrentResourceName(), "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
-	end
 
 
 	
