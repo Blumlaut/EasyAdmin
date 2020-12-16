@@ -130,12 +130,12 @@ function createBackup()
 			deleteBackup(backupInfos,1)
 		end
 		backupInfos.lastBackup = backupTime
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos))
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos, {indent = true}))
 
 	else
 		local backupInfos = {lastBackup = backupTime, backups = {}}
 		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos))
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos, {indent = true}))
 	end
 
 	return id,timestamp
