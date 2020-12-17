@@ -492,6 +492,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler('banCheater', function(playerId,reason)
+		Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and will be removed soon! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 		if not reason then reason = "Cheating" end
 		if getName(source) ~= "Console" then return end
 		local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
