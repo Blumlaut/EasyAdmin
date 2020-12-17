@@ -128,5 +128,6 @@
 
     "spectatedplayer": "%s is aan het kijken %s",
     "teleportedtoplayer": "**%s** geteleporteerd naar **%s**",
-    "searchbans": "Search Bans"
+    "searchbans": "Search Bans",
+    "identifier": "Identifier %s"
 }]

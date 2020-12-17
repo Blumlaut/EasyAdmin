@@ -126,5 +126,6 @@
     "admincalled": "Ein Admin wurde erfolgreich Gerufen!",
     "spectatedplayer": "%s hat zugesehen %s",
     "teleportedtoplayer": "**%s** teleportiert nach **%s**",
-    "searchbans": "Ban Suchen"
+    "searchbans": "Ban Suchen",
+    "identifier": "%s Identifier"
 }]

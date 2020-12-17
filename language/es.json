@@ -126,6 +126,7 @@
 
     "spectatedplayer": "%s espectado %s",
     "teleportedtoplayer": "**%s** se teletransporta a **%s**",
-    "searchbans": "Search Bans"
+    "searchbans": "Search Bans",
+    "identifier": "Identifier %s"
 
 }]

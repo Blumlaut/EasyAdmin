@@ -125,5 +125,6 @@
     "admincalled": "Successfully called an Admin!",
     "spectatedplayer": "**%s** has Spectated **%s**",
     "teleportedtoplayer": "**%s** has Teleported to **%s**",
-    "searchbans": "Search Bans"
+    "searchbans": "Search Bans",
+    "identifier": "%s Identifier"
 }]

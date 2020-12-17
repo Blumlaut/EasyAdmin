@@ -122,5 +122,6 @@
     "admincalled": "Successfully called an Admin!",
     "spectatedplayer": "%s está vendo %s",
     "teleportedtoplayer": "**%s** teletransportado para **%s**",
-    "searchbans": "Search Bans"
+    "searchbans": "Search Bans",
+    "identifier": "Identifier %s"
 }]

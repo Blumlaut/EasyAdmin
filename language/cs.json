@@ -125,6 +125,7 @@
     "admincalled": "Uspesne jsi zavolal admina!",
     "spectatedplayer": "%s je divácký %s",
     "teleportedtoplayer": "**%s** teleportuje se do **%s**",
-    "searchbans": "Search Bans"
+    "searchbans": "Search Bans",
+    "identifier": "Identifier %s"
 
 }]
