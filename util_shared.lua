@@ -44,6 +44,18 @@ function math.round(num, numDecimalPlaces)
 	return math.floor(num + 0.5)
 end
 
+function string.split(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t={} ; i=1
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+		t[i] = str
+		i = i + 1
+	end
+	return t
+end
+
 --- http://www.lua.org/pil/11.5.html
 function Set (list)
 	local set = {}

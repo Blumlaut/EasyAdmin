@@ -828,7 +828,7 @@ Citizen.CreateThread(function()
 		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
 		Citizen.Trace("^3The following SteamIDs are added to your admins.txt file, this method is **OUTDATED** and **DOES NOT WORK**^7\n")
 		Citizen.Trace("Add these admins using ACE:\n")
-		for index,value in ipairs(mysplit(content, "\n")) do
+		for index,value in ipairs(string.split(content, "\n")) do
 			Citizen.Trace(value.."\n")
 		end
 		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
@@ -1126,18 +1126,6 @@ Citizen.CreateThread(function()
 		if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= true then
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
 		end
-	end
-	
-	function mysplit(inputstr, sep)
-		if sep == nil then
-			sep = "%s"
-		end
-		local t={} ; i=1
-		for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-			t[i] = str
-			i = i + 1
-		end
-		return t
 	end
 	
 	
