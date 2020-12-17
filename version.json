@@ -1,16 +1,16 @@
 {
-    "version": "5.503",
+    "version": "5.6",
     "changelog": "https://github.com/Bluethefurry/EasyAdmin/releases/latest",
 
 
     "_comment": "The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 
     "fivem": {
-        "version": "5.503",
-        "changelog": "Fix for Onesync Spectating & Teleport To Features"
+        "version": "5.6",
+        "changelog": "Spectate Fixes, Banlist Backups, Banlist Search, API Changes"
     },
     "redm": {
-        "version": "5.503",
-        "changelog": "Spectating Button Fix"
+        "version": "5.6",
+        "changelog": "Spectate Fixes, Banlist Backups, Banlist Search, API Changes"
     }
 }
