@@ -1029,7 +1029,17 @@ Citizen.CreateThread(function()
 		end
 	end
 
-	function performBanlistUpgrades(blacklist)
+	function performBanlistUpgrades()
+		for i,ban in ipairs(blacklist) do
+			if ban.identifiers then
+				for k, identifier in pairs(ban.identifiers) do
+					if identifier == "" then
+						ban.identifiers[k] = nil
+						change = true 
+					end
+				end
+			end
+		end
 		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then -- more compat
 			Citizen.Trace("Upgrading Banlist...\n")
 			for i,ban in ipairs(blacklist) do
