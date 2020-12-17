@@ -126,5 +126,6 @@
     "spectatedplayer": "**%s** has Spectated **%s**",
     "teleportedtoplayer": "**%s** has Teleported to **%s**",
     "searchbans": "Search Bans",
+    "searchbansfail": "No Ban with the Search Criteria was found.",
     "identifier": "%s Identifier"
 }]

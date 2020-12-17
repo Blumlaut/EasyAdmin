@@ -123,5 +123,6 @@
     "spectatedplayer": "%s está vendo %s",
     "teleportedtoplayer": "**%s** teletransportado para **%s**",
     "searchbans": "Search Bans",
+    "searchbansfail": "No Ban with the Search Criteria was found.",
     "identifier": "Identifier %s"
 }]

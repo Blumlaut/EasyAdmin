@@ -654,7 +654,12 @@ function GenerateMenu() -- this is a big ass function
 
 
 				mainMenu:Visible(true)
+			else
+				ShowNotification(GetLocalisedText("searchbansfail"))
+				GenerateMenu()
+				unbanPlayer:Visible(true)
 			end
+
 		end	
 
 		for i,theBanned in ipairs(banlist) do

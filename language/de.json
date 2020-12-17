@@ -127,5 +127,6 @@
     "spectatedplayer": "%s hat zugesehen %s",
     "teleportedtoplayer": "**%s** teleportiert nach **%s**",
     "searchbans": "Ban Suchen",
+    "searchbansfail": "Es wurde kein Ban gefunden.",
     "identifier": "%s Identifier"
 }]

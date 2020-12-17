@@ -128,5 +128,6 @@
     "spectatedplayer": "%s a regardé %s",
     "teleportedtoplayer": "**%s** téléporté vers **%s**",
     "searchbans": "Search Bans",
+    "searchbansfail": "No Ban with the Search Criteria was found.",
     "identifier": "Identifier %s"
 }]

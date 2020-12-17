@@ -127,5 +127,6 @@
     "spectatedplayer": "%s tittar %s",
     "teleportedtoplayer": "**%s** teleporteras till **%s**",
     "searchbans": "Search Bans",
+    "searchbansfail": "No Ban with the Search Criteria was found.",
     "identifier": "Identifier %s"
 }]

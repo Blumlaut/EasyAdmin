@@ -129,5 +129,6 @@
     "spectatedplayer": "%s sta guardando %s",
     "teleportedtoplayer": "**%s** teletrasportato a **%s**",
     "searchbans": "Search Bans",
+    "searchbansfail": "No Ban with the Search Criteria was found.",
     "identifier": "Identifier %s"
 }]
