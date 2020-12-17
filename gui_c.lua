@@ -580,6 +580,13 @@ function GenerateMenu() -- this is a big ass function
 						foundBanid=i
 						break
 					end 
+					if theBanned.name then
+						if string.find(theBanned.name, result) then
+							foundBan=true
+							foundBanid=i
+							break
+						end
+					end
 					if string.find((theBanned.reason or "No Reason"), result) then
 						foundBan=true
 						foundBanid=i
