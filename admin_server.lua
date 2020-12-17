@@ -455,13 +455,14 @@ Citizen.CreateThread(function()
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+				local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
 				elseif not expires then 
 					expires = 10444633200
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-				local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
@@ -475,13 +476,14 @@ Citizen.CreateThread(function()
 		if playerId ~= nil and not CachedPlayers[playerId].immune then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+				local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
 				elseif not expires then 
 					expires = 10444633200
 				end
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-				local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
@@ -492,9 +494,10 @@ Citizen.CreateThread(function()
 	AddEventHandler('banCheater', function(playerId,reason)
 		if not reason then reason = "Cheating" end
 		if getName(source) ~= "Console" then return end
-		local bannedIdentifiers = GetPlayerIdentifiers(playerId)
+		local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+		local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 		reason = reason.. string.format(GetLocalisedText("bancheatingadd"), getName(playerId), getName(source) )
-		local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
 		
 		updateBlacklist( ban )
 		PrintDebugMessage("Console banned player "..getName(playerId,true).." for "..reason)
@@ -505,14 +508,16 @@ Citizen.CreateThread(function()
 	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires, offline)
 		if offline then 
 			bannedIdentifiers = playerId 
+			bannedUsername = "Unknown"
 		else 
-			bannedIdentifiers = GetPlayerIdentifiers(playerId)
+			bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+			bannedUsername = CachedPlayers[playerId].name or GetPlayerName(playerId)
 		end
 		if expires < os.time() then
 			expires = os.time()+expires 
 		end
 		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
-		local ban = {banid = GetFreshBanId(), identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
 		
