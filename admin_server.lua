@@ -706,7 +706,7 @@ Citizen.CreateThread(function()
 		if GetConvar("ea_custombanlist", "false") == "true" then
 			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 			local ob = json.decode(content)
-			for i,theBan in ipairs(ob) do
+			for i,theBan in pairs(ob) do
 				TriggerEvent("ea_data:addBan", theBan)
 				print("processed ban: "..i.."\n")
 			end
