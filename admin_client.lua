@@ -105,7 +105,7 @@ AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)
 	if id then
 		if (tgtCoords.x == 0.0 and tgtCoords.y == 0.0 and tgtCoords.z == 0.0) then
 			local tgtPed = GetPlayerPed(GetPlayerFromServerId(id))
-			local tgtCoords = GetEntityCoords(tgtPed)
+			tgtCoords = GetEntityCoords(tgtPed)
 		end
 		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
 	else
