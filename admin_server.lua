@@ -514,8 +514,10 @@ Citizen.CreateThread(function()
 			bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 			bannedUsername = CachedPlayers[playerId].name or GetPlayerName(playerId)
 		end
-		if expires < os.time() then
+		if expires and expires < os.time() then
 			expires = os.time()+expires 
+		elseif not expires then 
+			expires = 10444633200
 		end
 		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
 		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
