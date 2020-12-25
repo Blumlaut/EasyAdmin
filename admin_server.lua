@@ -332,7 +332,7 @@ Citizen.CreateThread(function()
 	else
 		enableDebugging = false
 	end
-	minimumMatchingIdentifiers = GetConvarInt("ea_minIdentifierMatches", 2)
+	minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
 	
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
@@ -1093,7 +1093,8 @@ Citizen.CreateThread(function()
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = GetPlayerIdentifiers(source)
-		local matchingIdentifiers = 0
+		local matchingIdentifierCount = 0
+		local matchingIdentifiers = {}
 		if not blacklist then
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
@@ -1104,10 +1105,11 @@ Citizen.CreateThread(function()
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
 				for ci,identifier in ipairs(blacklisted.identifiers) do
-					if identifier == theId then
-						matchingIdentifiers = matchingIdentifiers+1
-						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifiers.."/"..minimumMatchingIdentifiers)
-						if matchingIdentifiers >= minimumMatchingIdentifiers then
+					if identifier == theId and matchingIdentifiers[theId] == false then
+						matchingIdentifierCount = matchingIdentifierCount+1
+						matchingIdentifiers[theId] = true
+						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount)
+						if matchingIdentifierCount >= minimumMatchingIdentifierCount then
 							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 							PrintDebugMessage("EasyAdmin: Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason.." \n")
 							CancelEvent()
