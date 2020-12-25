@@ -1105,7 +1105,7 @@ Citizen.CreateThread(function()
 		for bi,blacklisted in ipairs(blacklist) do
 			for i,theId in ipairs(numIds) do
 				for ci,identifier in ipairs(blacklisted.identifiers) do
-					if identifier == theId and matchingIdentifiers[theId] == false then
+					if identifier == theId and matchingIdentifiers[theId] ~= true then
 						matchingIdentifierCount = matchingIdentifierCount+1
 						matchingIdentifiers[theId] = true
 						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount)
