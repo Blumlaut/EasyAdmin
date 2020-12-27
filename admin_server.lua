@@ -9,7 +9,7 @@ Citizen.CreateThread(function()
 	while true do 
 		Wait(20000)
 		for i, player in pairs(CachedPlayers) do 
-			if player.droppedTime and (os.time() > player.droppedTime+600) then
+			if player.droppedTime and (os.time() > player.droppedTime+GetConvarInt("ea_playerCacheExpiryTime", 900)) then
 				CachedPlayers[i]=nil
 			end
 		end
