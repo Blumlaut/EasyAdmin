@@ -168,7 +168,10 @@ end)
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
 	enable = true
-	if (target == PlayerId() or target == -1) then enable = false end
+	if (target == PlayerId() or target == -1) then 
+		enable = false
+		print("Target Player is ourselves, disabling spectate.")
+	end
 	if(enable)then
 			if targetPed == playerPed then
 				Wait(500)
