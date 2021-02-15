@@ -874,9 +874,10 @@ Citizen.CreateThread( function()
 			
 			if (not RedM and IsControlJustPressed(0,103) or (RedM and IsControlJustReleased(0, Controls["VehExit"]))) then
 				local targetPed = PlayerPedId()
+				local targetPlayer = -1
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-	
-				spectatePlayer(GetPlayerPed(PlayerId()),GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
+				print("pressed E")
+				spectatePlayer(targetPed,targetPlayer,GetPlayerName(targetPlayer))
 				TriggerEvent('EasyAdmin:FreezePlayer', false)
 				--SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 				if not RedM then
