@@ -947,7 +947,7 @@ Citizen.CreateThread(function()
 		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
 		local change= (forceChange or false) --mark if file was changed to save up on disk writes.
 		if GetConvar("ea_custombanlist", "false") == "true" then 
-			
+			print("^1EasyAdmin:^7 You are using a Custom Banlist System, this is ^3not currently supported^7 and WILL cause issues! Only use this if you know what you are doing, otherwise, disable ea_custombanlist.")
 			if data and not remove then
 				addBan(data)
 				TriggerEvent("ea_data:addBan", data)
