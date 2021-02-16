@@ -163,21 +163,37 @@ function getNewBackupid(backupInfos)
 	end
 end
 
+function mergeTables(t1, t2)
+	local t = t1
+	for i,v in pairs(t2) do
+		table.insert(t, v)
+	end
+	return t
+end
 
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
-	local function mergeTables(t1, t2)
-		local t = t1
-		for i,v in pairs(t2) do
-			table.insert(t, v)
-		end
-		return t
-	end
 	local identifiers = GetPlayerIdentifiers(playerId)
 	local tokens = {}
 	for i=0,GetNumPlayerTokens(playerId) do
 		table.insert(tokens, GetPlayerToken(playerId, i))
 	end
 	return mergeTables(identifiers, tokens)
+end
+
+function checkForChangedIdentifiers(playerIds, bannedIds)
+	local unbannedIds = {}
+	for _,playerId in pairs(playerIds) do
+		local thisIdBanned = false
+		for _,bannedId in pairs(bannedIds) do
+			if playerId == bannedId then
+				thisIdBanned = true
+			end
+		end
+		if not thisIdBanned then --They have a new/changed identifier
+			table.insert(unbannedIds, playerId)
+		end
+	end
+	return unbannedIds
 end
 
 
@@ -1124,6 +1140,12 @@ Citizen.CreateThread(function()
 						matchingIdentifierCount = matchingIdentifierCount+1
 						matchingIdentifiers[theId] = true
 						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount)
+						local notBannedIds = checkForChangedIdentifiers(numIds, blacklisted.identifiers)
+						if #notBannedIds > 0 then --Has an identifier that is changed and not banned on the current ban
+							local newBanData = blacklisted
+							newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds)
+							updateBan(blacklisted.banid,newBanData)
+						end
 						if matchingIdentifierCount >= minimumMatchingIdentifierCount then
 							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 							PrintDebugMessage("EasyAdmin: Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason.." \n")
