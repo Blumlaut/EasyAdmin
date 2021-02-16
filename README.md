@@ -1,3 +1,5 @@
+A version of EasyAdmin with support for HWID bans and some other cool stuff
+
 ## [EasyAdmin](https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245)
 ## Need Help or want to follow my releases? Join the Support Discord: https://discord.gg/GugyRU8
 
