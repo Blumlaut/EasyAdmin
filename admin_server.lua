@@ -174,8 +174,10 @@ end
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
 	local identifiers = GetPlayerIdentifiers(playerId)
 	local tokens = {}
-	for i=0,GetNumPlayerTokens(playerId) do
-		table.insert(tokens, GetPlayerToken(playerId, i))
+	if GetConvar("ea_useTokenIdentifiers", "true") == "true" then
+		for i=0,GetNumPlayerTokens(playerId) do
+			table.insert(tokens, GetPlayerToken(playerId, i))
+		end
 	end
 	return mergeTables(identifiers, tokens)
 end
