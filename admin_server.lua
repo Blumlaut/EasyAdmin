@@ -164,6 +164,21 @@ function getNewBackupid(backupInfos)
 end
 
 
+function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
+	local function mergeTables(t1, t2)
+		local t = t1
+		for i,v in pairs(t2) do
+			table.insert(t, v)
+		end
+		return t
+	end
+	local identifiers = GetPlayerIdentifiers(playerId)
+	local tokens = {}
+	for i=0,GetNumPlayerTokens(playerId) do
+		table.insert(tokens, GetPlayerToken(playerId, i))
+	end
+	return mergeTables(identifiers, tokens)
+end
 
 
 AddEventHandler('playerDropped', function (reason)
@@ -177,7 +192,7 @@ end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
 	if not CachedPlayers[source] then
-		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = GetPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
+		CachedPlayers[source] = {id = source, name = GetPlayerName(source), identifiers = getAllPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
 	end
 end)
 
@@ -246,7 +261,7 @@ function DoesPlayerHavePermission(player, object)
 	end
 	
 	if not haspermission then -- if not, check if they are admin using the legacy method.
-		local numIds = GetPlayerIdentifiers(player)
+		local numIds = getAllPlayerIdentifiers(player)
 		for i,admin in pairs(admins) do
 			for i,theId in pairs(numIds) do
 				if admin == theId then
@@ -337,7 +352,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent('EasyAdmin:amiadmin')
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
-		local identifiers = GetPlayerIdentifiers(source)
+		local identifiers = getAllPlayerIdentifiers(source)
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
 			if perm == "screenshot" and not screenshots then
@@ -454,7 +469,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
@@ -475,7 +490,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
 		if playerId ~= nil and not CachedPlayers[playerId].immune then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
@@ -490,12 +505,12 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
-	
+
 	AddEventHandler('banCheater', function(playerId,reason)
 		Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and will be removed soon! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 		if not reason then reason = "Cheating" end
 		if getName(source) ~= "Console" then return end
-		local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+		local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 		local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 		reason = reason.. string.format(GetLocalisedText("bancheatingadd"), getName(playerId), getName(source) )
 		local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = "Anticheat", reason = reason, expire = expires or 10444633200 }
@@ -511,7 +526,7 @@ Citizen.CreateThread(function()
 			bannedIdentifiers = playerId 
 			bannedUsername = "Unknown"
 		else 
-			bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
+			bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 			bannedUsername = CachedPlayers[playerId].name or GetPlayerName(playerId)
 		end
 		if expires and expires < os.time() then
@@ -1092,7 +1107,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
-		local numIds = GetPlayerIdentifiers(source)
+		local numIds = getAllPlayerIdentifiers(source)
 		local matchingIdentifierCount = 0
 		local matchingIdentifiers = {}
 		if not blacklist then
