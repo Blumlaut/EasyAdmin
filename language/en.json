@@ -76,7 +76,7 @@
     "chatsuggestionslap": "slap a player",
     "chatsuggestionfreeze": "freeze a player",
 
-    "bannedjoin": "You have been banned from this Server, \nReason: %s, Ban Expires: %s",
+    "bannedjoin": "\nYou have been banned from this Server\n\nReason: %s\n\nBan Expires: %s",
     "kicked": "Kicked by %s, Reason: %s",
     "banned": "You have been banned from this Server, Reason: %s, Ban Expires: %s",
     "reasonadd": " ( Nickname: %s ), Banned by: %s",
@@ -127,5 +127,13 @@
     "teleportedtoplayer": "**%s** has Teleported to **%s**",
     "searchbans": "Search Bans",
     "searchbansfail": "No Ban with the Search Criteria was found.",
-    "identifier": "%s Identifier"
+    "identifier": "%s Identifier",
+    "warnplayer": "Warn Player",
+    "warnreasonguide": "Add a reason to the Warn.",
+    "confirmwarn": "Confirm Warn",
+    "confirmwarnguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will Warn this Player with the specified settings.",
+    "warned": "You have been warned, Reason: %s Warning %s/%s",
+    "warnkicked": "You have been kicked due to getting Warned too many times.",
+    "warnbanned": "Warned too many times.",
+    "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s"
 }]

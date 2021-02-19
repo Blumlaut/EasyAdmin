@@ -1065,6 +1065,43 @@ Citizen.CreateThread(function()
 		end
 	end
 
+
+	RegisterServerEvent("EasyAdmin:warnPlayer")
+	AddEventHandler('EasyAdmin:warnPlayer', function(id, reason)
+		local src = source
+		if DoesPlayerHavePermission(src,"easyadmin.warn") and not DoesPlayerHavePermission(id,"easyadmin.immune") then
+			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
+			if not WarnedPlayers[id] then
+				WarnedPlayers[id] = {name = getName(id), identifiers = getAllPlayerIdentifiers(id), warns = 1}
+				TriggerClientEvent("chat:addMessage", id, { args = { "EasyAdmin", string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) } })
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
+			else
+				WarnedPlayers[id].warns = WarnedPlayers[id].warns+1
+				TriggerClientEvent("chat:addMessage", id, { args = { "EasyAdmin", string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) } })
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
+			end
+			if WarnedPlayers[id].warns >= maxWarnings then
+				if GetConvar("ea_warnAction", "kick") == "kick" then
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src), getName(id), reason), "kick")
+					DropPlayer(id, GetLocalisedText("warnkicked"))
+					WarnedPlayers[id] = nil
+				elseif GetConvar("ea_warnAction", "kick") == "ban" then
+					local bannedIdentifiers = CachedPlayers[id].identifiers or getAllPlayerIdentifiers(id)
+					local username = CachedPlayers[id].name or GetPlayerName(id)
+					local expires = GetConvarInt("ea_warningBanTime", 604800)
+					
+					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), CachedPlayers[id].name, getName(source) )
+					local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
+					updateBlacklist( ban )
+					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..CachedPlayers[id].name.." for "..reason)
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[id].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
+					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+					WarnedPlayers[id] = nil
+				end
+			end
+		end
+	end)
+
 	function performBanlistUpgrades()
 		for i,ban in pairs(blacklist) do
 			if type(i) == "string" then
@@ -1271,6 +1308,7 @@ MutedPlayers = {} -- DO NOT TOUCH THIS
 CachedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
+WarnedPlayers = {}
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE

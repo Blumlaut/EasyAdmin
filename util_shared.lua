@@ -12,6 +12,7 @@ permissions = {
 	["anon"] = false,
 	["mute"] = false,
 	["teleport.everyone"] = false,
+	["warn"] = false,
 }
 
 

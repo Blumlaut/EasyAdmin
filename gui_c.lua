@@ -402,6 +402,47 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:TakeScreenshot", thePlayer.id)
 			end
 		end
+
+		if permissions["warn"] then
+			local thisWarnMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("warnplayer"),"",true)
+			thisWarnMenu:SetMenuWidthOffset(menuWidth)
+			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("warnreasonguide"))
+			thisWarnMenu:AddItem(thisItem)
+			WarnReason = GetLocalisedText("noreason")
+			thisItem:RightLabel(WarnReason)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+				
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+				
+				local result = GetOnscreenKeyboardResult()
+				
+				if result and result ~= "" then
+					WarnReason = result
+					thisItem:RightLabel(result) -- this is broken for now
+				else
+					WarnReason = GetLocalisedText("noreason")
+				end
+			end
+			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmwarn"),GetLocalisedText("confirmwarnguide"))
+			thisWarnMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				if WarnReason == "" then
+					WarnReason = GetLocalisedText("noreason")
+				end
+				TriggerServerEvent("EasyAdmin:warnPlayer", thePlayer.id, WarnReason)
+				BanTime = 1
+				BanReason = ""
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				playermanagement:Visible(true)
+			end	
+		end
 		
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
