@@ -976,6 +976,13 @@ Citizen.CreateThread(function()
 			content = json.encode({})
 		end
 		blacklist = json.decode(content)
+		for i,p in pairs(blacklist) do
+			if type(i) == "string" then
+				blacklist[i] = nil
+				table.insert(blacklist,p) 
+				change = true
+			end
+		end
 
 		PrintDebugMessage("updated banlist")
 		if not blacklist then
