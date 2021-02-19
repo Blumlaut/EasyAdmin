@@ -1143,7 +1143,7 @@ Citizen.CreateThread(function()
 						matchingIdentifiers[theId] = true
 						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount)
 						local notBannedIds = checkForChangedIdentifiers(numIds, blacklisted.identifiers)
-						if #notBannedIds > 0 then --Has an identifier that is changed and not banned on the current ban
+						if #notBannedIds > minimumMatchingIdentifierCount then --Has an identifier that is changed and not banned on the current ban
 							local newBanData = blacklisted
 							newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds)
 							updateBan(blacklisted.banid,newBanData)
