@@ -185,14 +185,16 @@ end
 function checkForChangedIdentifiers(playerIds, bannedIds)
 	local unbannedIds = {}
 	for _,playerId in pairs(playerIds) do
-		local thisIdBanned = false
-		for _,bannedId in pairs(bannedIds) do
-			if playerId == bannedId then
-				thisIdBanned = true
+		if playerId:sub(1,3) ~= "ip:" then -- Exclude IPs for reverse proxies
+			local thisIdBanned = false
+			for _,bannedId in pairs(bannedIds) do
+				if playerId == bannedId then
+					thisIdBanned = true
+				end
 			end
-		end
-		if not thisIdBanned then --They have a new/changed identifier
-			table.insert(unbannedIds, playerId)
+			if not thisIdBanned then --They have a new/changed identifier
+				table.insert(unbannedIds, playerId)
+			end
 		end
 	end
 	return unbannedIds
