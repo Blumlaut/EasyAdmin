@@ -1130,6 +1130,12 @@ Citizen.CreateThread(function()
 		print(verContent.fivem.version)
 		cb(verContent.fivem.version)
 	end)
+
+	function GetVersion()
+		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+		local verContent = json.decode(verFile)
+		return verContent.fivem.version
+	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
 		local numIds = getAllPlayerIdentifiers(source)
@@ -1216,7 +1222,7 @@ Citizen.CreateThread(function()
 			elseif tonumber(curVersion) > tonumber(remoteVersion) then
 				print("Your version of "..resourceName.." seems to be higher than the current version.")
 			else
-				print(resourceName.." is up to date!")
+				--print(resourceName.." is up to date!")
 			end
 		else
 			print("EasyAdmin Version Check failed!")
@@ -1250,6 +1256,9 @@ Citizen.CreateThread(function()
 	loopUpdateBlacklist()
 	updateAdmins()
 	checkVersionHTTPRequest()
+	if GetConvar("ea_enableSplash", "true") == "true" then
+		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                     Version ^3"..GetVersion().."^7")
+	end
 end)
 
 
