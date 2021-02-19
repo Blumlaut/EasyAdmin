@@ -1144,8 +1144,10 @@ Citizen.CreateThread(function()
 						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount)
 						local notBannedIds = checkForChangedIdentifiers(numIds, blacklisted.identifiers)
 						if matchingIdentifierCount >= minimumMatchingIdentifierCount then
-							local newBanData = blacklisted
-							newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds)
+							if #notBannedIds > 0 then
+								local newBanData = blacklisted
+								newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds)
+							end
 							updateBan(blacklisted.banid,newBanData)
 							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
 							PrintDebugMessage("EasyAdmin: Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason.." \n")
