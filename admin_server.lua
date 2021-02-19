@@ -1257,7 +1257,7 @@ Citizen.CreateThread(function()
 	updateAdmins()
 	checkVersionHTTPRequest()
 	if GetConvar("ea_enableSplash", "true") == "true" then
-		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                     Version ^3"..GetVersion().."^7")
+		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..GetVersion().."^7")
 	end
 end)
 
