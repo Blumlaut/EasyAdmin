@@ -128,5 +128,13 @@
     "teleportedtoplayer": "**%s** teleportiert nach **%s**",
     "searchbans": "Ban Suchen",
     "searchbansfail": "Es wurde kein Ban gefunden.",
-    "identifier": "%s Identifier"
+    "identifier": "%s Identifier",
+    "warnplayer": "Spieler warnen",
+    "warnreasonguide": "Einen Grund zur Warnung hinzufügen.",
+    "confirmwarn": "Warnung bestätigen",
+    "confirmwarnguide": "~r~~h~HINWEIS:~h~~w~ Durch Drücken von Bestätigen wird dieser Player mit den angegebenen Einstellungen gewarnt.",
+    "warned": "Du wurdest verwarnt, Grund: %s Warnung %s/%s",
+    "warnkicked": "Du wurdest gekickt, weil du zu oft verwarnt wurdest.",
+    "warnbanned": "Zu oft verwarnt worden.",
+    "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s"
 }]

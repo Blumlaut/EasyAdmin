@@ -128,5 +128,13 @@
     "teleportedtoplayer": "**%s** teleporteras till **%s**",
     "searchbans": "Search Bans",
     "searchbansfail": "No Ban with the Search Criteria was found.",
-    "identifier": "Identifier %s"
+    "identifier": "Identifier %s",
+    "warnplayer": "Warn Player",
+    "warnreasonguide": "Add a reason to the Warn.",
+    "confirmwarn": "Confirm Warn",
+    "confirmwarnguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will Warn this Player with the specified settings.",
+    "warned": "You have been warned, Reason: %s Warning %s/%s",
+    "warnkicked": "You have been kicked due to getting Warned too many times.",
+    "warnbanned": "Warned too many times.",
+    "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s"
 }]

@@ -126,8 +126,16 @@
 
     "spectatedplayer": "%s espectado %s",
     "teleportedtoplayer": "**%s** se teletransporta a **%s**",
-    "searchbans": "Search Bans",
-    "searchbansfail": "No Ban with the Search Criteria was found.",
-    "identifier": "Identifier %s"
+    "searchbans": "Prohibiciones de búsqueda",
+    "searchbansfail": "No se ha encontrado ninguna prohibición con los criterios de búsqueda.",
+    "identifier": "Identifier %s",
+    "warnplayer": "Advertir al jugador",
+    "warnreasonguide": "Añade un motivo al aviso.",
+    "confirmwarn": "Confirmar Aviso",
+    "confirmwarnguide": "~r~~h~NOTA:~h~~w~ Al pulsar Confirmar, se advertirá a este reproductor con los ajustes especificados.",
+    "warned": "Ha sido advertido, Razón: %s Advertencia %s/%s",
+    "warnkicked": "Has sido expulsado por recibir demasiados avisos.",
+    "warnbanned": "Advertido demasiadas veces.",
+    "adminwarnedplayer": "**%s** advirtió **%s**, Razón: %s, Advertencia %s/%s"
 
 }]
