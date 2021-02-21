@@ -612,7 +612,7 @@ Citizen.CreateThread(function()
 			else
 				Citizen.Trace(GetLocalisedText("done"))
 			end
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), args[1])) -- Use the "safe" getName function instead.
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), args[1], "Unbanned via Command")) -- Use the "safe" getName function instead.
 		end
 	end, false)
 	
