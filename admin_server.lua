@@ -775,7 +775,12 @@ Citizen.CreateThread(function()
 				if (moderationNotification == GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php')) then
 					res = ""
 				elseif string.find(moderationNotification, "discordapp") then
-					res = json.encode(res).attachments[1].url
+					res = json.decode(res)
+					if not res.attachments then
+						res = "An Error occured and the screenshot was not uploaded, here is the raw json data: "..tostring(result)
+					else
+						res = res.attachments[1].url
+					end
 				end
 				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId), res), "screenshot")
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
