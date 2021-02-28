@@ -1194,16 +1194,17 @@ Citizen.CreateThread(function()
 	end
 
 	AddEventHandler("EasyAdmin:GetVersion", function(cb)
-		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-		local verContent = json.decode(verFile)
-		print(verContent.fivem.version)
-		cb(verContent.fivem.version)
+		cb(GetVersion())
 	end)
 
 	function GetVersion()
 		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 		local verContent = json.decode(verFile)
-		return verContent.fivem.version
+		if RedM then
+			return verContent.redm.version
+		else
+			return verContent.fivem.version
+		end
 	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
