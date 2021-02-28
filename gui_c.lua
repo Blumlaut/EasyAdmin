@@ -89,6 +89,11 @@ Citizen.CreateThread(function()
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
+	local subtitle = "~b~Admin Menu"
+	if settings.updateAvailable then
+		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
+	end
+
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
 	
 	_menuPool:Add(mainMenu)
@@ -177,8 +182,11 @@ function GenerateMenu() -- this is a big ass function
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
-	
-	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
+	local subtitle = "~b~Admin Menu"
+	if settings.updateAvailable then
+		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
+	end
+	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
 	_menuPool:Add(mainMenu)
 	
 		mainMenu:SetMenuWidthOffset(menuWidth)	

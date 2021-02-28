@@ -270,7 +270,7 @@ function DoesPlayerHavePermission(player, object)
 	local haspermission = false
 	if (player == 0 or player == "") then
 		return true
-	end-- Console. It's assumed this will be an admin with access. If not, why the fuck are they giving random people access?
+	end-- Console. It's assumed this will be an admin with access.
 	
 	if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
 		haspermission = true
@@ -425,6 +425,9 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
 		else
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", false)
+		end
+		if updateAvailable then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "updateAvailable", updateAvailable)
 		end
 		
 		TriggerClientEvent("EasyAdmin:SetLanguage", source, strings)
@@ -975,7 +978,6 @@ Citizen.CreateThread(function()
 
 
 	function updateBlacklist(data,remove, forceChange)
-		-- life is pain, if you think this code sucks, SUCK MY DICK and make it better
 		local change= (forceChange or false) --mark if file was changed to save up on disk writes.
 		if GetConvar("ea_custombanlist", "false") == "true" then 
 			print("^1EasyAdmin:^7 You are using a Custom Banlist System, this is ^3not currently supported^7 and WILL cause issues! Only use this if you know what you are doing, otherwise, disable ea_custombanlist.")
@@ -1152,7 +1154,7 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then -- more compat
+		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then 
 			Citizen.Trace("Upgrading Banlist...\n")
 			for i,ban in ipairs(blacklist) do
 				if not ban.identifiers then
@@ -1268,13 +1270,7 @@ Citizen.CreateThread(function()
 	end
 	
 	
-	local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-	local verContent = json.decode(verFile)
-	if RedM then
-		curVersion = verContent.redm.version
-	else
-		curVersion = verContent.fivem.version
-	end
+	curVersion = GetVersion()
 	local updatePath = "/Blumlaut/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
@@ -1291,6 +1287,7 @@ Citizen.CreateThread(function()
 				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
 				print("\nUpdate Changelog:\n"..changelog)
 				print("\n--------------------------------------------------------------------------")
+				updateAvailable = remoteVersion
 			elseif tonumber(curVersion) > tonumber(remoteVersion) then
 				print("Your version of "..resourceName.." seems to be higher than the current version.")
 			else
