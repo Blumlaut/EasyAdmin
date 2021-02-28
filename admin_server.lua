@@ -1014,6 +1014,7 @@ Citizen.CreateThread(function()
 			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
 			print("EasyAdmin: Please check your banlist file for errors, ^1Bans *will not* work!^7\n")
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+			return
 		end
 		
 		performBanlistUpgrades(blacklist)
@@ -1214,6 +1215,8 @@ Citizen.CreateThread(function()
 			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
 			print("EasyAdmin: Please check this error soon, ^1Bans *will not* work!^7\n")
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+			setKickReason("\nEasyAdmin: A fatal error occured and the Banlist could not be loaded, please contact a Server Administrator to resolve this issue.\n\nIf you are a Server Admin: Please check your banlist.json file, it could not be loaded.")
+			CancelEvent()
 		 	return
 		end
 		for bi,blacklisted in ipairs(blacklist) do
