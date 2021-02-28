@@ -1107,11 +1107,17 @@ Citizen.CreateThread(function()
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
 				WarnedPlayers[id] = {name = getName(id), identifiers = getAllPlayerIdentifiers(id), warns = 1}
-				TriggerClientEvent("chat:addMessage", id, { args = { "EasyAdmin", string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) } })
+				TriggerClientEvent('chat:addMessage', id, { 
+				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
+				    args = {  string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) }, color = { 255, 255, 255 } 
+				})
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
 			else
 				WarnedPlayers[id].warns = WarnedPlayers[id].warns+1
-				TriggerClientEvent("chat:addMessage", id, { args = { "EasyAdmin", string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) } })
+				TriggerClientEvent('chat:addMessage', id, { 
+				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
+				    args = {  string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) }, color = { 255, 255, 255 } 
+				})
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
 			end
 			if WarnedPlayers[id].warns >= maxWarnings then
