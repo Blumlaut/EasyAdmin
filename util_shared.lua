@@ -57,6 +57,15 @@ function string.split(inputstr, sep)
 	return t
 end
 
+function string.reverse(s)
+	local r = ""
+	for p,c in utf8.codes(s) do
+		r = utf8.char(c)..r
+	end
+	return r
+end
+
+
 --- http://www.lua.org/pil/11.5.html
 function Set (list)
 	local set = {}

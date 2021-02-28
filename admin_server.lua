@@ -328,6 +328,67 @@ RegisterCommand("ea_loadBackup", function(source,args,rawCommand)
 	end
 end,false)
 
+
+RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
+	if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+		Citizen.Trace("^1EasyAdmin^7: Creating Support File....^7\n")
+
+		local supportData = {}
+
+		Citizen.Trace("^1EasyAdmin^7: Collecting EasyAdmin Config....^7\n")
+
+		supportData.config = {
+			gamename = GetConvar("gamename", "not-rdr3"),
+			ea_LanguageName = GetConvar("ea_LanguageName", "en"),
+			ea_moderationNotification = GetConvar("ea_moderationNotification", "false"),
+			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
+			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
+			ea_MenuButton = GetConvar("ea_MenuButton", 289),
+			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
+			ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
+			ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),
+			ea_defaultMinReports = GetConvarInt("ea_defaultMinReports", 3),
+			ea_MinReportPlayers = GetConvarInt("ea_MinReportPlayers", 12),
+			ea_MinReportModifierEnabled = GetConvar("ea_MinReportModifierEnabled", "true"),
+			ea_ReportBanTime = GetConvarInt("ea_ReportBanTime", 86400),
+			ea_screenshoturl = GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'),
+			ea_custombanlist = GetConvar("ea_custombanlist", "false"),
+			ea_maxWarnings = GetConvarInt("ea_maxWarnings", 3),
+			ea_warnAction = GetConvar("ea_warnAction", "kick"),
+			ea_warningBanTime = GetConvarInt("ea_warningBanTime", 604800),
+			onesync = GetConvar("onesync", "off"),
+			ea_enableSplash = GetConvar("ea_enableSplash", "true"),
+			ea_playerCacheExpiryTime = GetConvarInt("ea_playerCacheExpiryTime", 900),
+			ea_chatReminderTime = GetConvarInt("ea_chatReminderTime", 0),
+			ea_backupFrequency = GetConvarInt("ea_backupFrequency", 72),
+			ea_maxBackupCount = GetConvarInt("ea_maxBackupCount", 10),
+			ea_useTokenIdentifiers = GetConvar("ea_useTokenIdentifiers", "true")
+		}
+
+		Citizen.Trace("^1EasyAdmin^7: Collecting Server Config....^7\n")
+
+		local path = GetResourcePath(GetCurrentResourceName())
+		local occurance = string.find(path, "/resources")
+		local path = string.reverse(string.sub(string.reverse(path), -occurance))
+
+		local servercfg = io.open(path.."server.cfg")
+		if servercfg then
+			supportData.serverconfig = servercfg:read( "*a")
+		end
+
+		Citizen.Trace("^1EasyAdmin^7: Collecting Banlist....^7\n")
+
+		supportData.banlist = blacklist
+
+		Citizen.Trace("^1EasyAdmin^7: Saving to support.json....^7\n")
+
+		SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
+
+
+		Citizen.Trace("^1EasyAdmin^7: Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n")
+	end
+end, false)
+
 Citizen.CreateThread(function()
 	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
 		RedM = true
