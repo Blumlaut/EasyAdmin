@@ -1,16 +1,16 @@
 {
-    "version": "5.603",
+    "version": "5.7",
     "changelog": "https://github.com/Bluethefurry/EasyAdmin/releases/latest",
 
 
     "_comment": "The Version Check above is outdated, below is the new system, supporting both gta and rdr",
 
     "fivem": {
-        "version": "5.603",
-        "changelog": "Fixed an issue with reverse-proxies causing users to be falsely banned."
+        "version": "5.7",
+        "changelog": "Warning System, Better Chat Messages, Spectate Fixes, better Ban Reliability, Screenshot Uploader Improvements, Bugfixes&Improvements"
     },
     "redm": {
-        "version": "5.603",
-        "changelog": "Fixed an issue with reverse-proxies causing users to be falsely banned."
+        "version": "5.7",
+        "changelog": "Warning System, Better Chat Messages, Spectate Fixes, better Ban Reliability, Screenshot Uploader Improvements, Bugfixes&Improvements"
     }
 }
