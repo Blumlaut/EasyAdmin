@@ -378,7 +378,16 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 
 		Citizen.Trace("^1EasyAdmin^7: Collecting Banlist....^7\n")
 
-		supportData.banlist = blacklist
+		supportData.banlist = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+
+		Citizen.Trace("^1EasyAdmin^7: Collecting Players....^7\n")
+
+		local players = {}
+		for i, player in pairs(GetPlayers()) do
+			players[player] = GetPlayerIdentifiers(player)
+		end
+
+		supportData.players = players
 
 		Citizen.Trace("^1EasyAdmin^7: Saving to support.json....^7\n")
 
