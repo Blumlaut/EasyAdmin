@@ -1414,7 +1414,7 @@ Citizen.CreateThread(function()
 			return -- stop telemetry if it gets disabled at runtime
 		end
 		sendTelemetry()
-		SetTimeout(math.random(3300000, 4000000), loopTelemetryUpdate)
+		SetTimeout(math.random(6600000, 12000000), loopTelemetryUpdate)
 	end
 
 	
@@ -1422,7 +1422,7 @@ Citizen.CreateThread(function()
 	loopUpdateBlacklist()
 	updateAdmins()
 	checkVersionHTTPRequest()
-	if GetConvar("ea_enableTelemetry", "true") then
+	if GetConvar("ea_enableTelemetry", "true") == "true" then
 		loopTelemetryUpdate()
 	end
 	if GetConvar("ea_enableSplash", "true") == "true" then
