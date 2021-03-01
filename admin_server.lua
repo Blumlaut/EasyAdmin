@@ -362,7 +362,8 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			ea_chatReminderTime = GetConvarInt("ea_chatReminderTime", 0),
 			ea_backupFrequency = GetConvarInt("ea_backupFrequency", 72),
 			ea_maxBackupCount = GetConvarInt("ea_maxBackupCount", 10),
-			ea_useTokenIdentifiers = GetConvar("ea_useTokenIdentifiers", "true")
+			ea_useTokenIdentifiers = GetConvar("ea_useTokenIdentifiers", "true"),
+			ea_enableTelemetry = GetConvar("ea_enableTelemetry", "true"),
 		}
 
 		Citizen.Trace("^1EasyAdmin^7: Collecting Server Config....^7\n")
