@@ -46,7 +46,12 @@ RegisterCommand('easyadmin', function(source, args)
 		if strings then
 			banLength = {
 				{label = GetLocalisedText("permanent"), time = 10444633200},
+				{label = GetLocalisedText("halfhour"), time = 1800},
+				{label = GetLocalisedText("onehour"), time = 3600},
+				{label = GetLocalisedText("twohour"), time = 7200},
+				{label = GetLocalisedText("threehour"), time = 10800},
 				{label = GetLocalisedText("oneday"), time = 86400},
+				{label = GetLocalisedText("twodays"), time = 172800},
 				{label = GetLocalisedText("threedays"), time = 259200},
 				{label = GetLocalisedText("oneweek"), time = 518400},
 				{label = GetLocalisedText("twoweeks"), time = 1123200},
@@ -132,13 +137,18 @@ Citizen.CreateThread(function()
 
 			if strings and isAdmin then
 				banLength = {
-					{label = GetLocalisedText("permanent"), time = 10444633200},
-					{label = GetLocalisedText("oneday"), time = 86400},
-					{label = GetLocalisedText("threedays"), time = 259200},
-					{label = GetLocalisedText("oneweek"), time = 518400},
-					{label = GetLocalisedText("twoweeks"), time = 1123200},
-					{label = GetLocalisedText("onemonth"), time = 2678400},
-					{label = GetLocalisedText("oneyear"), time = 31536000},
+				{label = GetLocalisedText("permanent"), time = 10444633200},
+				{label = GetLocalisedText("halfhour"), time = 1800},
+				{label = GetLocalisedText("onehour"), time = 3600},
+				{label = GetLocalisedText("twohour"), time = 7200},
+				{label = GetLocalisedText("threehour"), time = 10800},
+				{label = GetLocalisedText("oneday"), time = 86400},
+				{label = GetLocalisedText("twodays"), time = 172800},
+				{label = GetLocalisedText("threedays"), time = 259200},
+				{label = GetLocalisedText("oneweek"), time = 518400},
+				{label = GetLocalisedText("twoweeks"), time = 1123200},
+				{label = GetLocalisedText("onemonth"), time = 2678400},
+				{label = GetLocalisedText("oneyear"), time = 31536000},
 				}
 				if mainMenu:Visible() then
 					mainMenu:Visible(false)
