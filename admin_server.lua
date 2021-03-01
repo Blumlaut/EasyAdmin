@@ -1396,11 +1396,35 @@ Citizen.CreateThread(function()
 	end
 
 
+	function sendTelemetry()
+		local data = {}
+		data.version = GetVersion()
+		data.servername = GetConvar("sv_hostname", "Default FXServer")
+		data.usercount = #GetPlayers()
+		data.bancount = #blacklist
+		data.time = os.time()
+		data.os = os.getenv('OS')
+		data.zap = GetConvar("is_zap", "false")
+		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
+	end
+
+
+	function loopTelemetryUpdate()
+		if GetConvar("ea_enableTelemetry", "true") == "false" then
+			return -- stop telemetry if it gets disabled at runtime
+		end
+		sendTelemetry()
+		SetTimeout(math.random(3300000, 4000000), loopTelemetryUpdate)
+	end
+
 	
 	---------------------------------- END USEFUL
 	loopUpdateBlacklist()
 	updateAdmins()
 	checkVersionHTTPRequest()
+	if GetConvar("ea_enableTelemetry", "true") then
+		loopTelemetryUpdate()
+	end
 	if GetConvar("ea_enableSplash", "true") == "true" then
 		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..GetVersion().."^7")
 	end
