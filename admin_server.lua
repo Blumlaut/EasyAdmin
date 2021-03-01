@@ -1403,7 +1403,8 @@ Citizen.CreateThread(function()
 		data.usercount = #GetPlayers()
 		data.bancount = #blacklist
 		data.time = os.time()
-		data.os = os.getenv('OS')
+		data.os = os.getenv('OS') or "Linux"
+		
 		data.zap = GetConvar("is_zap", "false")
 		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
 	end
