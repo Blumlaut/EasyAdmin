@@ -374,7 +374,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 
 		local servercfg = io.open(path.."server.cfg")
 		if servercfg then
-			supportData.serverconfig = servercfg:read( "*a")
+			supportData.serverconfig = servercfg:read("*a")
 		end
 
 		Citizen.Trace("^1EasyAdmin^7: Collecting Banlist....^7\n")
@@ -1404,7 +1404,21 @@ Citizen.CreateThread(function()
 		data.usercount = #GetPlayers()
 		data.bancount = #blacklist
 		data.time = os.time()
-		data.os = os.getenv('OS') or "Linux"
+		if os.getenv('OS') then
+			data.os = os.getenv('OS')
+		else
+			local os_release = io.open("/etc/os-release")
+			if os_release then
+				data.os = string.split(os_release:read("*a"), '"')[2]
+			else
+				local issue = io.open("/etc/issue")
+				if issue then
+					data.os = issue:read("*a")
+				else 
+					data.os = "unknown"
+				end
+			end
+		end
 		
 		data.zap = GetConvar("is_zap", "false")
 		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
