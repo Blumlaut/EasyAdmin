@@ -6,7 +6,12 @@
 
     "spectatingUser": "Vous regardez ~b~<C>%s</C>.",
     "stoppedSpectating": "Vous avez arrêté de regarder un joueur.",
+    "halfhour": "30 minutes",
+    "onehour": "1 heure",
+    "twohour": "2 heures",
+    "threehour": "3 heures",
     "oneday": "1 jour",
+    "twodays": "2 jours",
     "threedays": "3 jours",
     "oneweek": "1 semaine",
     "twoweeks": "2 semaines",
