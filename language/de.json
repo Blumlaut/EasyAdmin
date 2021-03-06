@@ -6,7 +6,12 @@
 
     "spectatingUser": "Schaue ~b~<C>%s</C> zu.",
     "stoppedSpectating": "Zuschauen beendet.",
+    "halfhour": "30 minuten",
+    "onehour": "1 Stunden",
+    "twohour": "2 Stunden",
+    "threehour": "3 Stunden",
     "oneday": "1 Tag",
+    "twodays": "2 Tage",
     "threedays": "3 Tage",
     "oneweek": "1 Woche",
     "twoweeks": "2 Wochen",
