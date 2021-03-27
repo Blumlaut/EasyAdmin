@@ -789,7 +789,7 @@ Citizen.CreateThread(function()
 						})
 					end
 					--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("successfullyreported"))
-					TriggerClientEvent('chat:addMessage', -1, { 
+					TriggerClientEvent('chat:addMessage', source, { 
 						template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0}:<br> {1}</div>',
 						args = { "^3EasyAdmin^7", GetLocalisedText("successfullyreported") }, color = { 255, 255, 255 } 
 					})
