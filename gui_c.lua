@@ -360,7 +360,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				if not RedM then
+				if settings.infinity and not RedM then
 					TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 				else
 					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
