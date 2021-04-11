@@ -211,6 +211,7 @@ end
 AddEventHandler('playerDropped', function (reason)
 	if CachedPlayers[source] then
 		CachedPlayers[source].droppedTime = os.time()
+		CachedPlayers[source].dropped = true
 	end
 	if OnlineAdmins[source] then
 		OnlineAdmins[source] = nil
@@ -832,7 +833,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
 	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
-		if GetPlayerName(id) and DoesPlayerHavePermission(source, "easyadmin.teleport") then
+		if not CachedPlayers[source].dropped and DoesPlayerHavePermission(source, "easyadmin.teleport") then
 			local tgtPed = GetPlayerPed(id)
 			local tgtCoords = GetEntityCoords(tgtPed)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
