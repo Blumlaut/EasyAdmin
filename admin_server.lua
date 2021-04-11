@@ -833,7 +833,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
 	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
-		if not CachedPlayers[source].dropped and DoesPlayerHavePermission(source, "easyadmin.teleport") then
+		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "easyadmin.teleport") then
 			local tgtPed = GetPlayerPed(id)
 			local tgtCoords = GetEntityCoords(tgtPed)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
