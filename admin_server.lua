@@ -511,6 +511,10 @@ Citizen.CreateThread(function()
 		if updateAvailable then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "updateAvailable", updateAvailable)
 		end
+
+		if (infinity) then 
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
+		end
 		
 		TriggerClientEvent("EasyAdmin:SetLanguage", source, strings)
 		
