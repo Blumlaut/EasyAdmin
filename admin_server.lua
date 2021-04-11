@@ -174,6 +174,15 @@ end
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
 	local identifiers = GetPlayerIdentifiers(playerId)
 	local tokens = {}
+	if not GetNumPlayerTokens then
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		print("^1EasyAdmin^7: You didn't follow the Updating Instructions! Please make sure you Update your FXServer to *at least* 3335.")
+		print("^1EasyAdmin^7: For the next time, please read the update instructions and keep your Server updated!!")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		return identifiers
+	end
 	if GetConvar("ea_useTokenIdentifiers", "true") == "true" then
 		for i=0,GetNumPlayerTokens(playerId) do
 			table.insert(tokens, GetPlayerToken(playerId, i))
