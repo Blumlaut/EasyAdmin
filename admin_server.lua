@@ -330,7 +330,6 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
-				TriggerEvent('banlist:add', source, playerId, reason, expires, GLOBAL_KEY)
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or GetPlayerIdentifiers(playerId)
 				if expires and expires < os.time() then
 					expires = os.time()+expires 
@@ -807,7 +806,7 @@ Citizen.CreateThread(function()
 					end
 				end)
 			end
-			return
+			return true
 		end
 		
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
@@ -958,7 +957,9 @@ Citizen.CreateThread(function()
 						table.remove(blacklist,i)
 						TriggerEvent("ea_data:removeBan", ban)
 						PrintDebugMessage("removed ban as per unbanidentifier func")
-						SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+						if GetConvar("ea_custombanlist", "false") == "false" then
+							SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+						end
 						return
 					end 
 				end
@@ -971,9 +972,10 @@ Citizen.CreateThread(function()
 			if ban.banid == id then
 				table.remove(blacklist,i)
 				TriggerEvent('ea_data:removeBan', ban)
-				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
+				else
+					SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 				end
 			end
 		end
