@@ -1214,7 +1214,7 @@ Citizen.CreateThread(function()
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
 					local bannedIdentifiers = CachedPlayers[id].identifiers or getAllPlayerIdentifiers(id)
 					local username = CachedPlayers[id].name or GetPlayerName(id)
-					local expires = GetConvarInt("ea_warningBanTime", 604800)
+					local expires = os.time()+GetConvarInt("ea_warningBanTime", 604800)
 					
 					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), CachedPlayers[id].name, getName(source) )
 					local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
