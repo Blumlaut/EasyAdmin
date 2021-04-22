@@ -111,6 +111,7 @@
     "adminofflinebannedplayer": "**%s** baneado desconectado **%s**, Razón: %s, Expira: %s",
     "cachedplayers": "Jugadores en caché",
     "refreshcachedplayers": "Actualizar jugadores en caché",
+    "refreshcachedplayersguide": "Refreshes List of Cached Players, requires reopening.",
     "adminrequestedofflineinfo": "**%s** datos solicitados del usuario sin conexión **%s**",
     "nextpage": "Siguiente página»",
     "firstpage": "««Primera página",

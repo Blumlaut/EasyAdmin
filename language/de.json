@@ -112,6 +112,7 @@
     "adminofflinebannedplayer": "**%s** hat Offline-Spieler **%s** gebannt, Grund: %s, Ban Läuft am %s aus.",
     "cachedplayers": "Frühere Spieler",
     "refreshcachedplayers": "Frühere Spielerliste erneuern",
+    "refreshcachedplayersguide": "Refreshes List of Cached Players, requires reopening.",
     "adminrequestedofflineinfo": "**%s** hat die Nutzerdaten des Spielers **%s** angefordert",
     "nextpage": "Nächste Seite»",
     "firstpage": "««Erste Seite",
