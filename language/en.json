@@ -139,5 +139,7 @@
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
     "searchbyid": "Search by ID",
-    "searchbyidguide": "Jump to a player menu using their ID"
+    "searchbyidguide": "Jump to a player menu using their ID",
+    "searchbyname": "Search by Name",
+    "searchbynameguide": "Search for players by name"
 }]

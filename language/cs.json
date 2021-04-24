@@ -140,5 +140,7 @@
 
     
     "searchbyid": "Hledání podle ID",
-    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID"
+    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID",
+    "searchbyname": "Search by Name",
+    "searchbynameguide": "Search for players by name"
 }]

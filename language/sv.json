@@ -140,5 +140,7 @@
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
     
     "searchbyid": "Sök efter ID",
-    "searchbyidguide": "Hoppa till en spelarmeny med deras ID"
+    "searchbyidguide": "Hoppa till en spelarmeny med deras ID",
+    "searchbyname": "Search by Name",
+    "searchbynameguide": "Search for players by name"
 }]

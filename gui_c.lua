@@ -235,9 +235,9 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	local searchButton = NativeUI.CreateItem(GetLocalisedText("searchbyid"), GetLocalisedText("searchbyidguide"))
-	playermanagement:AddItem(searchButton)
-	searchButton.Activated = function(ParentMenu, SelectedItem)
+	local idSearch = NativeUI.CreateItem(GetLocalisedText("searchbyid"), GetLocalisedText("searchbyidguide"))
+	playermanagement:AddItem(idSearch)
+	idSearch.Activated = function(ParentMenu, SelectedItem)
 		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 6)
 
 		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -245,9 +245,9 @@ function GenerateMenu() -- this is a big ass function
 		end
 
 		local result = GetOnscreenKeyboardResult()
-					
+
 		if result and result ~= "" then
-			local found = playerMenus[result] or false
+			local found = playerMenus[result] and playerMenus[result].menu or false
 			if found then
 				_menuPool:CloseAllMenus()
 				Citizen.Wait(300)
@@ -256,6 +256,52 @@ function GenerateMenu() -- this is a big ass function
 		end
 
 	end
+
+	local nameSearch = NativeUI.CreateItem(GetLocalisedText("searchbyname"), GetLocalisedText("searchbynameguide"))
+	playermanagement:AddItem(nameSearch)
+	nameSearch.Activated = function(ParentMenu, SelectedItem)
+		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 6)
+
+		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+			Citizen.Wait( 0 )
+		end
+
+		local result = GetOnscreenKeyboardResult()
+
+		if result and result ~= "" then
+			local found = false
+			local temp = {}
+			for k,v in pairs(playerMenus) do
+				if string.find(v.name, result) then
+					found = true
+					table.insert(temp, {id = v.id, name = v.name, menu = v.menu})
+				end
+			end
+			if found then
+				local searchsubtitle = "Found "..tostring(#temp).." results!"
+				found = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
+				_menuPool:Add(found)
+				_menuPool:ControlDisablingEnabled(false)
+				_menuPool:MouseControlsEnabled(false)
+
+				for i,thePlayer in ipairs(temp) do
+					local thisItem = NativeUI.CreateItem("["..thePlayer.id.."] "..thePlayer.name, "")
+					found:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu, SelectedItem)
+						_menuPool:CloseAllMenus()
+						Citizen.Wait(300)
+						local thisMenu = thePlayer.menu
+						thisMenu:Visible(true)
+					end
+				end
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				found:Visible(true)
+			end
+		end
+
+	end
+
 	playerMenus = {}
 	for i,thePlayer in pairs(players) do
 		if RedM then
@@ -266,14 +312,14 @@ function GenerateMenu() -- this is a big ass function
 		end
 
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
-		playerMenus[tostring(thePlayer.id)] = thisPlayer
+		playerMenus[tostring(thePlayer.id)] = {menu = thisPlayer, name = thePlayer.name, id = thePlayer.id }
 
 		thisPlayer:SetMenuWidthOffset(menuWidth)
 		-- generate specific menu stuff, dirty but it works for now
 		if permissions["kick"] then
 			local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("kickplayer"),"",true)
 			thisKickMenu:SetMenuWidthOffset(menuWidth)
-			
+
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("kickreasonguide"))
 			thisKickMenu:AddItem(thisItem)
 			KickReason = GetLocalisedText("noreason")
@@ -321,11 +367,11 @@ function GenerateMenu() -- this is a big ass function
 			thisItem:RightLabel(BanReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-				
+
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
 					Citizen.Wait( 0 )
 				end
-				
+
 				local result = GetOnscreenKeyboardResult()
 				
 				if result and result ~= "" then
