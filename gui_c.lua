@@ -168,6 +168,7 @@ function StopDrawPlayerInfo()
 end
 
 local banlistPage = 1
+local playerMenus = {}
 function GenerateMenu() -- this is a big ass function
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	_menuPool:Remove()
@@ -234,7 +235,28 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	local searchButton = NativeUI.CreateItem(GetLocalisedText("searchbyid"), GetLocalisedText("searchbyidguide"))
+	playermanagement:AddItem(searchButton)
+	searchButton.Activated = function(ParentMenu, SelectedItem)
+		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 6)
 
+		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+			Citizen.Wait( 0 )
+		end
+
+		local result = GetOnscreenKeyboardResult()
+					
+		if result and result ~= "" then
+			local found = playerMenus[result] or false
+			if found then
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				found:Visible(true)
+			end
+		end
+
+	end
+	playerMenus = {}
 	for i,thePlayer in pairs(players) do
 		if RedM then
 			thePlayer = {
@@ -242,7 +264,9 @@ function GenerateMenu() -- this is a big ass function
 				name = GetPlayerName(thePlayer)
 			}
 		end
+
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
+		playerMenus[tostring(thePlayer.id)] = thisPlayer
 
 		thisPlayer:SetMenuWidthOffset(menuWidth)
 		-- generate specific menu stuff, dirty but it works for now
