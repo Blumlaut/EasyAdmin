@@ -111,6 +111,7 @@
     "adminofflinebannedplayer": "**%s** zbanowany offline **%s**, Powód: %s, Ban wygaśnie: %s",
     "cachedplayers": "Ostatni gracze",
     "refreshcachedplayers": "Odświerz ostatnich graczy",
+    "refreshcachedplayersguide": "Refreshes List of Cached Players, requires reopening.",
     "adminrequestedofflineinfo": "**%s** zarządał informacji gracza Offline **%s**",
     "nextpage": "Następna strona»",
     "firstpage": "««Pierwsza strona",

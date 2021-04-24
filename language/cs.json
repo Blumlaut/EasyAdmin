@@ -111,6 +111,7 @@
     "adminofflinebannedplayer": "**%s** byl offline zabanovan **%s**, Duvod: %s, Ban vyprsi: %s",
     "cachedplayers": "Hraci v mezipameti",
     "refreshcachedplayers": "Obnovit hrace v mezipameti",
+    "refreshcachedplayersguide": "Refreshes List of Cached Players, requires reopening.",
     "adminrequestedofflineinfo": "**%s** si vyzadal offline data hrace **%s**",
     "nextpage": "Dalsi stranka»",
     "firstpage": "««Prvni stranka",
