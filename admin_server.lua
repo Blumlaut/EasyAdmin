@@ -441,7 +441,6 @@ Citizen.CreateThread(function()
 	
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
-	detailedNotification = GetConvar("ea_detailedNotification", "false")
 	if GetConvar("ea_enableDebugging", "false") == "true" then
 		enableDebugging = true
 		PrintDebugMessage("^1Debug Messages Enabled, Anonymous Admins may not be anonymous!")
@@ -1036,7 +1035,7 @@ Citizen.CreateThread(function()
 			local tgtPlayer = id
 			local tgtPed = GetPlayerPed(tgtPlayer)
 			local tgtCoords = GetEntityCoords(tgtPed)
-			SendWebhookMessage(detailedNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
 			TriggerClientEvent('EasyAdmin:TeleportRequest', source,tgtCoords)
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
