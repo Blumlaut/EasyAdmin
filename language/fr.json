@@ -138,5 +138,8 @@
     "warned": "Vous avez été averti, Raison : %s Avertissement %s/%s",
     "warnkicked": "Vous avez reçu un coup de pied parce que vous avez été averti trop souvent.",
     "warnbanned": "Averti trop souvent.",
-    "adminwarnedplayer": "**%s** averti **%s**, Raison : %s, Avertissement %s/%s"
+    "adminwarnedplayer": "**%s** averti **%s**, Raison : %s, Avertissement %s/%s",
+    
+    "searchbyid": "Recherche par ID",
+    "searchbyidguide": "Accéder au menu d'un joueur en utilisant son identifiant"
 }]
