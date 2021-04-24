@@ -216,6 +216,9 @@ AddEventHandler('playerDropped', function (reason)
 	if OnlineAdmins[source] then
 		OnlineAdmins[source] = nil
 	end
+	if cooldowns[source] then
+		cooldowns[source] = nil
+	end
 end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
