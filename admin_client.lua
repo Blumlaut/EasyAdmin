@@ -74,31 +74,31 @@ end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	local localPlayerPed = PlayerPedId()
-	local oldCoords = GetEntityCoords(PlayerPedId())
-
-	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then
-		tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId)))
+	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId))) end
+	if playerServerId == GetPlayerServerId(PlayerId()) then 
+		if oldCoords then
+			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+			Wait(500)
+			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+			oldCoords=nil
+		end
+		spectatePlayer(GetPlayerPed(PlayerId()),GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
+		frozen = false
+		return 
+	else
+		if not oldCoords then
+			oldCoords = GetEntityCoords(PlayerPedId())
+		end
 	end
-
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-	local playerId = GetPlayerFromServerId(playerServerId)
-	local attempts = 0
 	frozen = true
+	local adminPed = localPlayerPed
+	local playerId = GetPlayerFromServerId(playerServerId)
 	repeat
 		Wait(200)
 		playerId = GetPlayerFromServerId(playerServerId)
-		attempts = attempts + 1
-		print('spectate attempt #'..attempts)
-	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1)) or attempts == 10
-	if playerId == 0 or playerId == -1 then
-		SetEntityCoords(localPlayerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
-		ShowNotification("~r~Failed to spectate")
-		return
-	end
-		
+	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1))
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
-	Wait(500)
-	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)

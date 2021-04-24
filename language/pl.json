@@ -140,5 +140,7 @@
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
     
     "searchbyid": "Szukaj według identyfikatora",
-    "searchbyidguide": "Przejdź do menu gracza, używając jego identyfikatora"
+    "searchbyidguide": "Przejdź do menu gracza, używając jego identyfikatora",
+    "searchbyname": "Search by Name",
+    "searchbynameguide": "Search for players by name"
 }]

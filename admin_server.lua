@@ -531,7 +531,6 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate")
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
-		if tostring(playerId) == tostring(source) then return end
 		if DoesPlayerHavePermission(source,"easyadmin.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true))
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
@@ -571,7 +570,8 @@ Citizen.CreateThread(function()
 			StopResource(text)
 		end
 	end)
-
+	
+	
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
 		if playerId ~= nil then
@@ -680,15 +680,12 @@ Citizen.CreateThread(function()
 		if(source == 0) then
 			Citizen.Trace(GetLocalisedText("badidea")) -- Maybe should be it's own string saying something like "only players can do this" or something
 		end
-		if tostring(source) == tostring(args[1]) then
-			return
-		end
-
+		
 		PrintDebugMessage("Player "..getName(source,true).." Requested Spectate on "..getName(args[1],true))
 		
 		if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source,"easyadmin.spectate") then
-			if GetPlayerName(args[1]) then
-				TriggerClientEvent("EasyAdmin:requestSpectate", source, tonumber(args[1]), GetEntityCoords(GetPlayerPed(tonumber(args[1]))))
+			if getName(args[1]) then
+				TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1])
 			else
 				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("playernotfound") } })
 			end
@@ -710,7 +707,8 @@ Citizen.CreateThread(function()
 	
 	RegisterCommand("teleport", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
-			teleportToPlayer(source, args[1])
+			PrintDebugMessage("Player Requested Teleport something")
+			-- not yet
 		end
 	end, false)
 	
@@ -847,11 +845,6 @@ Citizen.CreateThread(function()
 		else
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
-	end)
-
-	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer")
-	AddEventHandler("EasyAdmin:TeleportAdminToPlayer", function(id)
-		teleportToPlayer(source, id)
 	end)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer")
@@ -1002,7 +995,7 @@ Citizen.CreateThread(function()
 		if GetConvar("ea_custombanlist", "false") == "true" then
 			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 			local ob = json.decode(content)
-			for i,theBan in pairs(ob) do
+			for i,theBan in ipairs(ob) do
 				TriggerEvent("ea_data:addBan", theBan)
 				print("processed ban: "..i.."\n")
 			end
@@ -1030,18 +1023,7 @@ Citizen.CreateThread(function()
 			end)
 		end
 	end, true)
-	function teleportToPlayer(source, id)
-		if GetPlayerName(id) and DoesPlayerHavePermission(source, "easyadmin.teleport") then
-			local tgtPlayer = id
-			local tgtPed = GetPlayerPed(tgtPlayer)
-			local tgtCoords = GetEntityCoords(tgtPed)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("teleportedtoplayer"), getName(source), getName(id)), "teleport")
-			TriggerClientEvent('EasyAdmin:TeleportRequest', source,tgtCoords)
-		else
-			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
-		end
-	end
-
+	
 	--[[
 		Very basic function that turns "source" into a useable player name.
 	]]
@@ -1104,7 +1086,7 @@ Citizen.CreateThread(function()
 					end
 				end)
 			end
-			return true
+			return
 		end
 		
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
@@ -1185,9 +1167,6 @@ Citizen.CreateThread(function()
 							TriggerEvent("ea_data:removeBan", ban)
 						end
 						PrintDebugMessage("removed ban as per unbanidentifier func")
-						if GetConvar("ea_custombanlist", "false") == "false" then
-							SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-						end
 						return
 					end 
 				end
@@ -1199,11 +1178,8 @@ Citizen.CreateThread(function()
 		for i,ban in ipairs(blacklist) do
 			if ban.banid == id then
 				table.remove(blacklist,i)
-				TriggerEvent('ea_data:removeBan', ban)
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
-				else
-					SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 				end
 			end
 		end
