@@ -89,6 +89,11 @@ Citizen.CreateThread(function()
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
+	local subtitle = "~b~Admin Menu"
+	if settings.updateAvailable then
+		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
+	end
+
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
 	
 	_menuPool:Add(mainMenu)
@@ -177,8 +182,11 @@ function GenerateMenu() -- this is a big ass function
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
-	
-	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
+	local subtitle = "~b~Admin Menu"
+	if settings.updateAvailable then
+		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
+	end
+	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
 	_menuPool:Add(mainMenu)
 	
 		mainMenu:SetMenuWidthOffset(menuWidth)	
@@ -352,7 +360,7 @@ function GenerateMenu() -- this is a big ass function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
 			thisPlayer:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				if not RedM then
+				if settings.infinity and not RedM then
 					TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 				else
 					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
@@ -402,6 +410,47 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:TakeScreenshot", thePlayer.id)
 			end
 		end
+
+		if permissions["warn"] then
+			local thisWarnMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("warnplayer"),"",true)
+			thisWarnMenu:SetMenuWidthOffset(menuWidth)
+			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("warnreasonguide"))
+			thisWarnMenu:AddItem(thisItem)
+			WarnReason = GetLocalisedText("noreason")
+			thisItem:RightLabel(WarnReason)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+				
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+				
+				local result = GetOnscreenKeyboardResult()
+				
+				if result and result ~= "" then
+					WarnReason = result
+					thisItem:RightLabel(result) -- this is broken for now
+				else
+					WarnReason = GetLocalisedText("noreason")
+				end
+			end
+			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmwarn"),GetLocalisedText("confirmwarnguide"))
+			thisWarnMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				if WarnReason == "" then
+					WarnReason = GetLocalisedText("noreason")
+				end
+				TriggerServerEvent("EasyAdmin:warnPlayer", thePlayer.id, WarnReason)
+				BanTime = 1
+				BanReason = ""
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				playermanagement:Visible(true)
+			end	
+		end
 		
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
@@ -415,8 +464,8 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttome"), GetLocalisedText("teleporttomeguide"))
 		thisPlayer:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			local px,py,pz = table.unpack(GetEntityCoords(PlayerPedId(),true))
-			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, px,py,pz)
+			local pCoords = GetEntityCoords(PlayerPedId(),true)
+			TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, pCoords)
 		end
 	end
 
@@ -557,6 +606,118 @@ function GenerateMenu() -- this is a big ass function
 		local reason = ""
 		local identifier = ""
 		local thebanid = ""
+
+
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("searchbans"), "")
+		unbanPlayer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			-- TODO
+			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
+				
+			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+				Citizen.Wait( 0 )
+			end
+			
+			local result = GetOnscreenKeyboardResult()
+			local foundBan = false
+			if result then
+				for i,theBanned in ipairs(banlist) do
+					if foundBan then
+						break
+					end
+					if theBanned.banid == result then
+						foundBan=true
+						foundBanid=i
+						break
+					end 
+					if theBanned.name then
+						if string.find(theBanned.name, result) then
+							foundBan=true
+							foundBanid=i
+							break
+						end
+					end
+					if string.find((theBanned.reason or "No Reason"), result) then
+						foundBan=true
+						foundBanid=i
+						break
+					end
+					for _, identifier in pairs(theBanned.identifiers) do
+						if string.find(identifier, result) then
+							foundBan=true
+							foundBanid=i
+							break
+						end
+					end
+				end
+			end
+			_menuPool:CloseAllMenus()
+			Citizen.Wait(300)
+			if foundBan then
+				_menuPool:Remove()
+				_menuPool = NativeUI.CreatePool()
+				collectgarbage()
+				if not GetResourceKvpString("ea_menuorientation") then
+					SetResourceKvp("ea_menuorientation", "right")
+					SetResourceKvpInt("ea_menuwidth", 0)
+					menuWidth = 0
+					menuOrientation = handleOrientation("right")
+				else
+					menuWidth = GetResourceKvpInt("ea_menuwidth")
+					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+				end 
+				
+				mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+				_menuPool:Add(mainMenu)
+				
+					mainMenu:SetMenuWidthOffset(menuWidth)	
+				_menuPool:ControlDisablingEnabled(false)
+				_menuPool:MouseControlsEnabled(false)
+
+
+				
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[foundBanid].reason)
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					--nothing
+				end	
+
+				if banlist[foundBanid].name then
+					local thisItem = NativeUI.CreateItem("Name: "..banlist[foundBanid].name)
+					mainMenu:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						--nothing
+					end	
+				end
+				
+				for _, identifier in pairs(banlist[foundBanid].identifiers) do
+					local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+					mainMenu:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						--nothing
+					end	
+				end
+
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[foundBanid].banid)
+					TriggerServerEvent("EasyAdmin:requestBanlist")
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					unbanPlayer:Visible(true)
+				end	
+
+
+				mainMenu:Visible(true)
+			else
+				ShowNotification(GetLocalisedText("searchbansfail"))
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end
+
+		end	
 
 		for i,theBanned in ipairs(banlist) do
 			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
@@ -762,12 +923,12 @@ Citizen.CreateThread( function()
 				EndTextCommandDisplayText(0.3, 0.7+(i/30))
 			end
 			
-			if IsControlJustPressed(0,103) then
+			if (not RedM and IsControlJustPressed(0,103) or (RedM and IsControlJustReleased(0, Controls["VehExit"]))) then
 				local targetPed = PlayerPedId()
+				local targetPlayer = -1
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-	
-				RequestCollisionAtCoord(targetx,targety,targetz)
-				NetworkSetInSpectatorMode(false, targetPed)
+				print("pressed E")
+				spectatePlayer(targetPed,targetPlayer,GetPlayerName(targetPlayer))
 				TriggerEvent('EasyAdmin:FreezePlayer', false)
 				--SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 				if not RedM then

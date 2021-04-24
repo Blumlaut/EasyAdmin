@@ -101,8 +101,16 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 end)
 
-AddEventHandler('EasyAdmin:TeleportRequest', function(tgtCoords)
-	SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
+AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)
+	if id then
+		if (tgtCoords.x == 0.0 and tgtCoords.y == 0.0 and tgtCoords.z == 0.0) then
+			local tgtPed = GetPlayerPed(GetPlayerFromServerId(id))
+			tgtCoords = GetEntityCoords(tgtPed)
+		end
+		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
+	else
+		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
+	end
 end)
 
 AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
@@ -159,11 +167,16 @@ end)
 
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
-	if targetPed == playerPed then enable = false end
 	enable = true
-
+	if (target == PlayerId() or target == -1) then 
+		enable = false
+		print("Target Player is ourselves, disabling spectate.")
+	end
 	if(enable)then
-
+			if targetPed == playerPed then
+				Wait(500)
+				targetPed = GetPlayerPed(target)
+			end
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 
 			RequestCollisionAtCoord(targetx,targety,targetz)
@@ -174,9 +187,12 @@ function spectatePlayer(targetPed,target,name)
 				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
 			end
 	else
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-
-			RequestCollisionAtCoord(targetx,targety,targetz)
+			if oldCoords then
+				RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+				Wait(500)
+				SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+				oldCoords=nil
+			end
 			NetworkSetInSpectatorMode(false, targetPed)
 			StopDrawPlayerInfo()
 			if not RedM then

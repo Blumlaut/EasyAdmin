@@ -12,6 +12,7 @@ permissions = {
 	["anon"] = false,
 	["mute"] = false,
 	["teleport.everyone"] = false,
+	["warn"] = false,
 }
 
 
@@ -43,6 +44,27 @@ function math.round(num, numDecimalPlaces)
 	end
 	return math.floor(num + 0.5)
 end
+
+function string.split(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t={} ; i=1
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+		t[i] = str
+		i = i + 1
+	end
+	return t
+end
+
+function string.reverse(s)
+	local r = ""
+	for p,c in utf8.codes(s) do
+		r = utf8.char(c)..r
+	end
+	return r
+end
+
 
 --- http://www.lua.org/pil/11.5.html
 function Set (list)
