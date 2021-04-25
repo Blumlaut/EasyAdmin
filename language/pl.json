@@ -49,6 +49,7 @@
     "stopresourcebyname": "Zatrzymaj zasoby według nazwy",
     "stopresourcebynameguide": "~r~~h~UWAGA:~h~~w~ Spowoduje to zatrzymanie zasobu zainstalowanego na serwerze.",
     "badidea": "Nie rób tego, proszę.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Odblokuj Gracza",
     "unbanplayerguide": "~r~~h~UWAGA:~h~~w~ Naciśnięcie Potwierdź spowoduje odblokowanie tego Gracza.",
     "banlistshowtype": "~h~Lista blokad:~h~ pokaż Typ",

@@ -49,6 +49,7 @@
     "stopresourcebyname": "Zastavit skript podle názvu",
     "stopresourcebynameguide": "~r~~h~POZNÁMKA:~h~~w~ Toto zastaví skript nainstalovaný na serveru.",
     "badidea": "Tohle nedel, prosím.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Odbanovat hráce",
     "unbanplayerguide": "~r~~h~POZNÁMKA:~h~~w~ Stisknutím POVRDIT odbanujes tohoto hrace.",
     "banlistshowtype": "~h~Seznam zabanovaných:~h~ Ukázat typ",

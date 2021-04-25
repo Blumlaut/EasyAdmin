@@ -50,6 +50,7 @@
     "stopresourcebyname": "Stop Resource met Naam",
     "stopresourcebynameguide": "~r~~h~NOTE:~h~~w~ Dit zal een resource stoppen geinstalleerd op de server.",
     "badidea": "Doe dat alsjeblieft niet.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Unban Speler",
     "unbanplayerguide": "~r~~h~NOTE:~h~~w~ Als je op bevestigen drukt wordt deze Speler zijn ban ongedaan gemaakt.",
     "banlistshowtype": "~h~Banlijst:~h~ Show Type",

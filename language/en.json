@@ -49,6 +49,7 @@
     "stopresourcebyname": "Stop Resource by Name",
     "stopresourcebynameguide": "~r~~h~NOTE:~h~~w~ This will stop a resource installed on the server.",
     "badidea": "Don't do that, please.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Unban Player",
     "unbanplayerguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will unban this Player.",
     "banlistshowtype": "~h~Banlist:~h~ Show Type",

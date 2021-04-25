@@ -50,6 +50,7 @@
     "stopresourcebyname": "Arrêter la ressource par son nom",
     "stopresourcebynameguide": "~r~~h~NOTE :~h~~w~ Cela va arrêter une ressource sur votre serveur.",
     "badidea": "Ne faites pas cela, s'il vous plaît.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Débannir un joueur",
     "unbanplayerguide": "~r~~h~NOTE :~h~~w~ Confirmer le débannissement du joueur.",
     "banlistshowtype": "~h~Liste des bans :~h~ voir le type",

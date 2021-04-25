@@ -50,6 +50,7 @@
     "stopresourcebyname": "Stoppa resurs efter namn",
     "stopresourcebynameguide": "~r~~h~NOTE:~h~~w~ Detta kommer stoppa en resurs på servern.",
     "badidea": "Gör inte det där, tack.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Ta bort bannlysning",
     "unbanplayerguide": "~r~~h~OBS:~h~~w~ Genom att klicka på Konfirmera så kommer du ta bort bannlysningen på denna spelare.",
     "banlistshowtype": "~h~Bannlista:~h~ Visa Typ",

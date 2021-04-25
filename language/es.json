@@ -49,6 +49,7 @@
     "stopresourcebyname": "Para un script por nombre",
     "stopresourcebynameguide": "~r~~h~NOTA:~h~~w~ Esto detendrá un script instalado en el servidor.",
     "badidea": "No hagas eso, por favor.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Desbanear jugador",
     "unbanplayerguide": "~r~~h~NOTA:~h~~w~ Presiona confirmar para desbanearlo.",
     "banlistshowtype": "~h~Lista negra:~h~ Mostrar tipo",

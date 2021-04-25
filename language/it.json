@@ -51,6 +51,7 @@
     "stopresourcebyname": "Ferma Resource per nome",
     "stopresourcebynameguide": "~r~~h~NOTA:~h~~w~ Questo Stopperà una resource installata sul server.",
     "badidea": "Non farlo, per piacere.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Rimuovi ban per il giocatore",
     "unbanplayerguide": "~r~~h~NOTA:~h~~w~  Premendo Conferma Rimuoverai il Ban di questo giocatore.",
     "banlistshowtype": "~h~Banlist:~h~ Mostra tipo",

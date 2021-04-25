@@ -49,6 +49,7 @@
     "stopresourcebyname": "Parar recurso por nome",
     "stopresourcebynameguide": "~r~~h~NOTA:~h~~w~ Isso interromperá um recurso instalado no servidor.",
     "badidea": "Não faça isso, por favor.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Jogador Unban",
     "unbanplayerguide": "~r~~h~NOTA:~h~~w~ Pressionar Confirmar irá cancelar o uso deste jogador.",
     "banlistshowtype": "~h~Jogadores Banidos:~h~ Mostrar tipo",

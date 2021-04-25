@@ -658,7 +658,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	if permissions["unban"] then
-		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("unbanplayer"),"",true)
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
 		local reason = ""
 		local identifier = ""
@@ -779,15 +779,67 @@ function GenerateMenu() -- this is a big ass function
 			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
 				if theBanned then
 					reason = theBanned.reason or "No Reason"
-					local thisItem = NativeUI.CreateItem(reason, GetLocalisedText("unbanplayerguide"))
+					local thisItem = NativeUI.CreateItem(reason, "")
 					unbanPlayer:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
-						TriggerServerEvent("EasyAdmin:unbanPlayer", theBanned.banid)
-						TriggerServerEvent("EasyAdmin:requestBanlist")
-						_menuPool:CloseAllMenus()
-						Citizen.Wait(800)
-						GenerateMenu()
-						unbanPlayer:Visible(true)
+
+						_menuPool:Remove()
+						_menuPool = NativeUI.CreatePool()
+						collectgarbage()
+						if not GetResourceKvpString("ea_menuorientation") then
+							SetResourceKvp("ea_menuorientation", "right")
+							SetResourceKvpInt("ea_menuwidth", 0)
+							menuWidth = 0
+							menuOrientation = handleOrientation("right")
+						else
+							menuWidth = GetResourceKvpInt("ea_menuwidth")
+							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+						end 
+						
+						mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+						_menuPool:Add(mainMenu)
+						
+							mainMenu:SetMenuWidthOffset(menuWidth)	
+						_menuPool:ControlDisablingEnabled(false)
+						_menuPool:MouseControlsEnabled(false)
+		
+		
+						
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[i].reason)
+						mainMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							--nothing
+						end	
+		
+						if banlist[i].name then
+							local thisItem = NativeUI.CreateItem("Name: "..banlist[i].name)
+							mainMenu:AddItem(thisItem)
+							thisItem.Activated = function(ParentMenu,SelectedItem)
+								--nothing
+							end	
+						end
+						
+						for _, identifier in pairs(banlist[i].identifiers) do
+							local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+							mainMenu:AddItem(thisItem)
+							thisItem.Activated = function(ParentMenu,SelectedItem)
+								--nothing
+							end	
+						end
+		
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+						mainMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[i].banid)
+							TriggerServerEvent("EasyAdmin:requestBanlist")
+							_menuPool:CloseAllMenus()
+							Citizen.Wait(800)
+							GenerateMenu()
+							unbanPlayer:Visible(true)
+						end	
+		
+		
+						mainMenu:Visible(true)
 					end	
 				end
 			end
