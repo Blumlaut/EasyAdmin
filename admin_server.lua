@@ -444,6 +444,7 @@ Citizen.CreateThread(function()
 	
 	
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
+	reportNotification = GetConvar("ea_reportNotification", "false")
 	if GetConvar("ea_enableDebugging", "false") == "true" then
 		enableDebugging = true
 		PrintDebugMessage("^1Debug Messages Enabled, Anonymous Admins may not be anonymous!")
@@ -761,7 +762,8 @@ Citizen.CreateThread(function()
 				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason) }, color = { 255, 255, 255 } 
 				})
 			end
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playercalledforadmin"), getName(source), source, reason), "calladmin")
+			local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
+			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source), source, reason), "calladmin")
 			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 			TriggerClientEvent('chat:addMessage', source, { 
 				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
@@ -810,7 +812,8 @@ Citizen.CreateThread(function()
 				end
 				if addReport then
 					table.insert(PlayerReports[id], {source = source, sourceName = GetPlayerName(source), reason = reason, time = os.time()})
-					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports), "report")
+					local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
+					SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports), "report")
 					-- "playerreportedplayer":"```\nUser %s (ID: %a) reported a player!\n%s (%a), Reason: %s\nReport %a/%a\n```",
 					for i,_ in pairs(OnlineAdmins) do 
 						--TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source), source, GetPlayerName(id), id, reason, #PlayerReports[id], minimumreports))
@@ -1377,6 +1380,7 @@ Citizen.CreateThread(function()
 	
 	function SendWebhookMessage(webhook,message,feature)
 		moderationNotification = GetConvar("ea_moderationNotification", "false")
+		reportNotification = GetConvar("ea_reportNotification", "false")
 		if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= true then
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
 		end
