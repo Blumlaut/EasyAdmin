@@ -739,7 +739,6 @@ Citizen.CreateThread(function()
 
 
 	--- Commands for Normal Users
-	local cooldowns = {}
 	RegisterCommand("calladmin", function(source, args, rawCommand)
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
 			local time = os.time()
@@ -1488,6 +1487,7 @@ CachedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {}
+cooldowns = {}
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
