@@ -736,9 +736,19 @@ Citizen.CreateThread(function()
 
 
 	--- Commands for Normal Users
-
+	local cooldowns = {}
 	RegisterCommand("calladmin", function(source, args, rawCommand)
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
+			local time = os.time()
+			local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
+			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
+				TriggerClientEvent('chat:addMessage', source, { 
+					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
+					args = { "^3!!EasyAdmin!!^7", "You must wait before using this again!" }, color = { 255, 255, 255 } 
+				})
+				return
+			end
+
 			local reason = string.gsub(rawCommand, "calladmin ", "")
 			for i,_ in pairs(OnlineAdmins) do 
 				--TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason))
@@ -753,6 +763,9 @@ Citizen.CreateThread(function()
 				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
 				args = { "^3!!EasyAdmin!!^7", GetLocalisedText("admincalled") }, color = { 255, 255, 255 } 
 			})
+
+			time = os.time()
+			cooldowns[source] = time
 		end
 	end, false)
 	PlayerReports = {}
