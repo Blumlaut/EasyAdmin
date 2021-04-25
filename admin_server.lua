@@ -528,7 +528,6 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.kick") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source), getName(playerId), reason), "kick")
 			PrintDebugMessage("Kicking Player "..getName(source).." for "..reason)
-			TriggerEvent("EasyAdmin:kickedPlayer", id, GetLocalisedText("kicked"))
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
 		end
 	end)
@@ -1227,7 +1226,6 @@ Citizen.CreateThread(function()
 			if WarnedPlayers[id].warns >= maxWarnings then
 				if GetConvar("ea_warnAction", "kick") == "kick" then
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src), getName(id), reason), "kick")
-					TriggerEvent("EasyAdmin:kickedPlayer", id, GetLocalisedText("warnkicked"))
 					DropPlayer(id, GetLocalisedText("warnkicked"))
 					WarnedPlayers[id] = nil
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
