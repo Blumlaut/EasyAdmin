@@ -241,7 +241,12 @@ function GenerateMenu() -- this is a big ass function
 
 		if result and result ~= "" then
 			local found = false
+			local foundbyid = playerMenus[result] or false
 			local temp = {}
+			if foundbyid then
+				found = true
+				table.insert(temp, {id = foundbyid.id, name = foundbyid.name, menu = foundbyid.menu})
+			end
 			for k,v in pairs(playerMenus) do
 				if string.find(v.name, result) then
 					found = true
@@ -249,16 +254,16 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			if found then
+			if found and (#temp > 1) then
 				local searchsubtitle = "Found "..tostring(#temp).." results!"
-				found = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
-				_menuPool:Add(found)
+				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
+				_menuPool:Add(resultMenu)
 				_menuPool:ControlDisablingEnabled(false)
 				_menuPool:MouseControlsEnabled(false)
 
 				for i,thePlayer in ipairs(temp) do
 					local thisItem = NativeUI.CreateItem("["..thePlayer.id.."] "..thePlayer.name, "")
-					found:AddItem(thisItem)
+					resultMenu:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu, SelectedItem)
 						_menuPool:CloseAllMenus()
 						Citizen.Wait(300)
@@ -268,17 +273,17 @@ function GenerateMenu() -- this is a big ass function
 				end
 				_menuPool:CloseAllMenus()
 				Citizen.Wait(300)
-				found:Visible(true)
+				resultMenu:Visible(true)
 				return
 			end
-
-			local found = playerMenus[result] and playerMenus[result].menu or false
-			if found then
+			if found and (#temp == 1) then
+				local thisMenu = temp[1].menu
 				_menuPool:CloseAllMenus()
 				Citizen.Wait(300)
-				found:Visible(true)
+				thisMenu:Visible(true)
 				return
 			end
+			ShowNotification("~r~No results found!")
 		end
 	end
 
