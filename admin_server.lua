@@ -1231,8 +1231,8 @@ Citizen.CreateThread(function()
 					DropPlayer(id, GetLocalisedText("warnkicked"))
 					WarnedPlayers[id] = nil
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
-					local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
-					local bannedUsername = CachedPlayers[playerId].name or getName(playerId)
+					local bannedIdentifiers = CachedPlayers[id].identifiers or getAllPlayerIdentifiers(id)
+					local bannedUsername = CachedPlayers[id].name or getName(id)
 					local expires = os.time()+GetConvarInt("ea_warningBanTime", 604800)
 
 					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), CachedPlayers[id].name, getName(source) )
@@ -1243,7 +1243,7 @@ Citizen.CreateThread(function()
 
 					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..CachedPlayers[id].name.." for "..reason)
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, true), bannedUsername, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
-					DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 					WarnedPlayers[id] = nil
 					
 				end
