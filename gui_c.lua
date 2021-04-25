@@ -53,7 +53,7 @@ RegisterCommand('easyadmin', function(source, args)
 				{label = GetLocalisedText("onemonth"), time = 2678400},
 				{label = GetLocalisedText("oneyear"), time = 31536000},
 			}
-			if mainMenu:Visible() then
+			if mainMenu and mainMenu:Visible() then
 				mainMenu:Visible(false)
 				_menuPool:Remove()
 				collectgarbage()
@@ -75,7 +75,6 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(100)
 	until NativeUI
-	_menuPool = NativeUI.CreatePool()
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
@@ -94,14 +93,6 @@ Citizen.CreateThread(function()
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
 	end
 
-	mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Admin Menu", menuOrientation, 0)
-	
-	_menuPool:Add(mainMenu)
-	
-	mainMenu:SetMenuWidthOffset(menuWidth)	
-	_menuPool:ControlDisablingEnabled(false)
-	_menuPool:MouseControlsEnabled(false)
-	
 	while true do
 		if _menuPool then
 			_menuPool:ProcessMenus()
@@ -140,7 +131,7 @@ Citizen.CreateThread(function()
 					{label = GetLocalisedText("onemonth"), time = 2678400},
 					{label = GetLocalisedText("oneyear"), time = 31536000},
 				}
-				if mainMenu:Visible() then
+				if mainMenu and mainMenu:Visible() then
 					mainMenu:Visible(false)
 					_menuPool:Remove()
 					collectgarbage()
@@ -171,7 +162,9 @@ local banlistPage = 1
 local playerMenus = {}
 function GenerateMenu() -- this is a big ass function
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
-	_menuPool:Remove()
+	if _menuPool then
+		_menuPool:Remove()
+	end
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
 	if not GetResourceKvpString("ea_menuorientation") then
