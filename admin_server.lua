@@ -547,6 +547,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
 			PrintDebugMessage("Player "..getName(source,true).." set Gametype to "..text)
 			SetGameType(text)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('adminchangedconvar'), getName(source), "gametype", text), "settings")
 		end
 	end)
 	
@@ -555,6 +556,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
 			PrintDebugMessage("Player "..getName(source,true).." set Map Name to "..text)
 			SetMapName(text)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('adminchangedconvar'), getName(source), "mapname", text), "settings")
 		end
 	end)
 	
@@ -563,6 +565,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
 			PrintDebugMessage("Player "..getName(source,true).." started Resource "..text)
 			StartResource(text)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('adminstartedresource'), getName(source), text), "settings")
 		end
 	end)
 	
@@ -571,6 +574,16 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
 			PrintDebugMessage("Player "..getName(source,true).." stopped Resource "..text)
 			StopResource(text)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('adminstoppedresource'), getName(source), text), "settings")
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:SetConvar")
+	AddEventHandler('EasyAdmin:SetConvar', function(convarname, convarvalue)
+		if DoesPlayerHavePermission(source,"easyadmin.manageserver") then
+			PrintDebugMessage("Player "..getName(source,true).." set convar "..convarname.. " to "..convarvalue)
+			SetConvar(convarname, convarvalue)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText('adminchangedconvar'), getName(source), convarname, convarvalue), "settings")
 		end
 	end)
 	

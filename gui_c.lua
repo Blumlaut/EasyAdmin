@@ -654,7 +654,35 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 		end
-		
+
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("setconvar"), GetLocalisedText("setconvarguide"))
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			AddTextEntry("EA_SETCONVAR_1", GetLocalisedText("convarname"))
+			AddTextEntry("EA_SETCONVAR_2", GetLocalisedText("convarvalue"))
+			DisplayOnscreenKeyboard(1, "EA_SETCONVAR_1", "", "", "", "", "", 64 + 1)
+			
+			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+				Citizen.Wait( 0 )
+			end
+			
+			local result = GetOnscreenKeyboardResult()
+			
+			if result then
+				DisplayOnscreenKeyboard(1, "EA_SETCONVAR_2", "", "", "", "", "", 64 + 1)
+			
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+				
+				local result2 = GetOnscreenKeyboardResult()
+
+				if result2 then
+					TriggerServerEvent("EasyAdmin:SetConvar", result, result2)
+				end
+			end
+		end
+
 	end
 	
 	if permissions["unban"] then
