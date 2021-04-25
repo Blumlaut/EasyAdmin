@@ -137,5 +137,8 @@
     "warned": "Du wurdest verwarnt, Grund: %s Warnung %s/%s",
     "warnkicked": "Du wurdest gekickt, weil du zu oft verwarnt wurdest.",
     "warnbanned": "Zu oft verwarnt worden.",
-    "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s"
+    "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s",
+
+    "searchuser": "Spieler suchen",
+    "searchuserguide": "Spieler mit Usernamen oder ID finden."
 }]

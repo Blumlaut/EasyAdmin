@@ -137,6 +137,9 @@
     "warned": "Ha sido advertido, Razón: %s Advertencia %s/%s",
     "warnkicked": "Has sido expulsado por recibir demasiados avisos.",
     "warnbanned": "Advertido demasiadas veces.",
-    "adminwarnedplayer": "**%s** advirtió **%s**, Razón: %s, Advertencia %s/%s"
+    "adminwarnedplayer": "**%s** advirtió **%s**, Razón: %s, Advertencia %s/%s",
+
+    "searchuser": "Buscar usuario",
+    "searchuserguide": "Encuentra un jugador usando su nombre de usuario o ID"
 
 }]
