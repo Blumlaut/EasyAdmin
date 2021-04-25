@@ -49,6 +49,7 @@
     "stopresourcebyname": "Para un script por nombre",
     "stopresourcebynameguide": "~r~~h~NOTA:~h~~w~ Esto detendrá un script instalado en el servidor.",
     "badidea": "No hagas eso, por favor.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Desbanear jugador",
     "unbanplayerguide": "~r~~h~NOTA:~h~~w~ Presiona confirmar para desbanearlo.",
     "banlistshowtype": "~h~Lista negra:~h~ Mostrar tipo",
@@ -138,10 +139,8 @@
     "warnkicked": "Has sido expulsado por recibir demasiados avisos.",
     "warnbanned": "Advertido demasiadas veces.",
     "adminwarnedplayer": "**%s** advirtió **%s**, Razón: %s, Advertencia %s/%s",
-    
-    "searchbyid": "Buscar por ID",
-    "searchbyidguide": "Ir al menú de un jugador usando su ID",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Buscar usuario",
+    "searchuserguide": "Encuentra un jugador usando su nombre de usuario o ID"
 
 }]

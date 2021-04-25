@@ -49,6 +49,7 @@
     "stopresourcebyname": "Zastavit skript podle názvu",
     "stopresourcebynameguide": "~r~~h~POZNÁMKA:~h~~w~ Toto zastaví skript nainstalovaný na serveru.",
     "badidea": "Tohle nedel, prosím.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Odbanovat hráce",
     "unbanplayerguide": "~r~~h~POZNÁMKA:~h~~w~ Stisknutím POVRDIT odbanujes tohoto hrace.",
     "banlistshowtype": "~h~Seznam zabanovaných:~h~ Ukázat typ",
@@ -138,9 +139,7 @@
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
-    
-    "searchbyid": "Hledání podle ID",
-    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Hledat uživatele ",
+    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID"
 }]

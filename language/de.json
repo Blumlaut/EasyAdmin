@@ -50,6 +50,7 @@
     "stopresourcebyname": "Resource mit Namen stoppen",
     "stopresourcebynameguide": "~r~~h~ACHTUNG:~h~~w~ Dies wird eine Resource die auf dem server installiert ist stoppen.",
     "badidea": "Das würde ich lieber nicht tuhen.",
+    "viewbanlist": "Banliste Ansehen",
     "unbanplayer": "Spieler Entbannen",
     "unbanplayerguide": "~r~~h~ACHTUNG:~h~~w~ Bestätigen drücken wird den Spieler entbannen.",
     "banlistshowtype": "~h~Banlist:~h~ Typ Anzeigen",
@@ -139,8 +140,6 @@
     "warnbanned": "Zu oft verwarnt worden.",
     "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s",
 
-    "searchbyid": "Suche nach ID",
-    "searchbyidguide": "Springe mit ihrer ID zu einem Spielermenü",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+    "searchuser": "Spieler suchen",
+    "searchuserguide": "Spieler mit Usernamen oder ID finden."
 }]

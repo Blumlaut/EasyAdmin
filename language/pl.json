@@ -49,6 +49,7 @@
     "stopresourcebyname": "Zatrzymaj zasoby według nazwy",
     "stopresourcebynameguide": "~r~~h~UWAGA:~h~~w~ Spowoduje to zatrzymanie zasobu zainstalowanego na serwerze.",
     "badidea": "Nie rób tego, proszę.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Odblokuj Gracza",
     "unbanplayerguide": "~r~~h~UWAGA:~h~~w~ Naciśnięcie Potwierdź spowoduje odblokowanie tego Gracza.",
     "banlistshowtype": "~h~Lista blokad:~h~ pokaż Typ",
@@ -138,9 +139,7 @@
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
-    
-    "searchbyid": "Szukaj według identyfikatora",
-    "searchbyidguide": "Przejdź do menu gracza, używając jego identyfikatora",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Wyszukaj użytkownika",
+    "searchuserguide": "Znajdź gracza, używając jego nazwy użytkownika lub identyfikatora"
 }]

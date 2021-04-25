@@ -50,6 +50,7 @@
     "stopresourcebyname": "Arrêter la ressource par son nom",
     "stopresourcebynameguide": "~r~~h~NOTE :~h~~w~ Cela va arrêter une ressource sur votre serveur.",
     "badidea": "Ne faites pas cela, s'il vous plaît.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Débannir un joueur",
     "unbanplayerguide": "~r~~h~NOTE :~h~~w~ Confirmer le débannissement du joueur.",
     "banlistshowtype": "~h~Liste des bans :~h~ voir le type",
@@ -139,9 +140,7 @@
     "warnkicked": "Vous avez reçu un coup de pied parce que vous avez été averti trop souvent.",
     "warnbanned": "Averti trop souvent.",
     "adminwarnedplayer": "**%s** averti **%s**, Raison : %s, Avertissement %s/%s",
-    
-    "searchbyid": "Recherche par ID",
-    "searchbyidguide": "Accéder au menu d'un joueur en utilisant son identifiant",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Rechercher un utilisateur",
+    "searchuserguide": "Trouver un joueur à l'aide de son nom d'utilisateur ou de son identifiant"
 }]

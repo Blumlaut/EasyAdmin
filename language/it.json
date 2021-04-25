@@ -51,6 +51,7 @@
     "stopresourcebyname": "Ferma Resource per nome",
     "stopresourcebynameguide": "~r~~h~NOTA:~h~~w~ Questo Stopperà una resource installata sul server.",
     "badidea": "Non farlo, per piacere.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Rimuovi ban per il giocatore",
     "unbanplayerguide": "~r~~h~NOTA:~h~~w~  Premendo Conferma Rimuoverai il Ban di questo giocatore.",
     "banlistshowtype": "~h~Banlist:~h~ Mostra tipo",
@@ -140,9 +141,7 @@
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
-    
-    "searchbyid": "Cerca per ID",
-    "searchbyidguide": "Passa al menu di un giocatore utilizzando il loro ID",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Cerca utente ",
+    "searchuserguide": "Trova un giocatore utilizzando il suo nome utente o ID"
 }]

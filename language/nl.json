@@ -50,6 +50,7 @@
     "stopresourcebyname": "Stop Resource met Naam",
     "stopresourcebynameguide": "~r~~h~NOTE:~h~~w~ Dit zal een resource stoppen geinstalleerd op de server.",
     "badidea": "Doe dat alsjeblieft niet.",
+    "viewbanlist": "View Banlist",
     "unbanplayer": "Unban Speler",
     "unbanplayerguide": "~r~~h~NOTE:~h~~w~ Als je op bevestigen drukt wordt deze Speler zijn ban ongedaan gemaakt.",
     "banlistshowtype": "~h~Banlijst:~h~ Show Type",
@@ -140,9 +141,7 @@
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
-    
-    "searchbyid": "Zoek op ID",
-    "searchbyidguide": "Spring naar een spelersmenu met hun ID",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Zoek gebruiker",
+    "searchuserguide": "Zoek een speler met behulp van zijn gebruikersnaam of ID"
 }]

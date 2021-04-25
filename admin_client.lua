@@ -64,9 +64,10 @@ Citizen.CreateThread( function()
   while true do
     Citizen.Wait(0)
 		if frozen then
-			FreezeEntityPosition(PlayerPedId(), frozen)
-			if IsPedInAnyVehicle(PlayerPedId(), true) then
-				FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+			local localPlayerPedId = PlayerPedId()
+			FreezeEntityPosition(localPlayerPedId, frozen)
+			if IsPedInAnyVehicle(localPlayerPedId, true) then
+				FreezeEntityPosition(GetVehiclePedIsIn(localPlayerPedId, false), frozen)
 			end 
 		end
   end
