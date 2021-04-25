@@ -139,8 +139,6 @@
     "warnbanned": "Zu oft verwarnt worden.",
     "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s",
 
-    "searchbyid": "Suche nach ID",
-    "searchbyidguide": "Springe mit ihrer ID zu einem Spielermenü",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+    "searchuser": "Spieler suchen",
+    "searchuserguide": "Spieler mit Usernamen oder ID finden."
 }]

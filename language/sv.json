@@ -138,9 +138,7 @@
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
-    
-    "searchbyid": "Sök efter ID",
-    "searchbyidguide": "Hoppa till en spelarmeny med deras ID",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Sök användare",
+    "searchuserguide": "Hitta en spelare med deras användarnamn eller ID "
 }]

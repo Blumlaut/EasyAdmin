@@ -235,31 +235,9 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	local idSearch = NativeUI.CreateItem(GetLocalisedText("searchbyid"), GetLocalisedText("searchbyidguide"))
-	playermanagement:AddItem(idSearch)
-	idSearch.Activated = function(ParentMenu, SelectedItem)
-		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 6)
-
-		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-			Citizen.Wait( 0 )
-		end
-
-		local result = GetOnscreenKeyboardResult()
-
-		if result and result ~= "" then
-			local found = playerMenus[result] and playerMenus[result].menu or false
-			if found then
-				_menuPool:CloseAllMenus()
-				Citizen.Wait(300)
-				found:Visible(true)
-			end
-		end
-
-	end
-
-	local nameSearch = NativeUI.CreateItem(GetLocalisedText("searchbyname"), GetLocalisedText("searchbynameguide"))
-	playermanagement:AddItem(nameSearch)
-	nameSearch.Activated = function(ParentMenu, SelectedItem)
+	local userSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
+	playermanagement:AddItem(userSearch)
+	userSearch.Activated = function(ParentMenu, SelectedItem)
 		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 6)
 
 		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -277,6 +255,7 @@ function GenerateMenu() -- this is a big ass function
 					table.insert(temp, {id = v.id, name = v.name, menu = v.menu})
 				end
 			end
+
 			if found then
 				local searchsubtitle = "Found "..tostring(#temp).." results!"
 				found = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
@@ -297,9 +276,17 @@ function GenerateMenu() -- this is a big ass function
 				_menuPool:CloseAllMenus()
 				Citizen.Wait(300)
 				found:Visible(true)
+				return
+			end
+
+			local found = playerMenus[result] and playerMenus[result].menu or false
+			if found then
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				found:Visible(true)
+				return
 			end
 		end
-
 	end
 
 	playerMenus = {}

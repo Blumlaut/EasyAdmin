@@ -138,9 +138,7 @@
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
-    
-    "searchbyid": "Hledání podle ID",
-    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID",
-    "searchbyname": "Search by Name",
-    "searchbynameguide": "Search for players by name"
+
+    "searchuser": "Hledat uživatele ",
+    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID"
 }]
