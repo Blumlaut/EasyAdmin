@@ -138,6 +138,6 @@
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
-    "searchuser": "Search User",
+    "searchuser": "Search for User",
     "searchuserguide": "Find a Player using their Username or ID"
 }]
