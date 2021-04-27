@@ -1,6 +1,6 @@
 ## [EasyAdmin](https://forum.fivem.net/t/release-easyadmin-its-as-easy-as-it-gets/42245)
 
-EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is feature-rich and highly customisable, EasyAdmin includes features such as
+EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is feature-rich and highly customisable, it includes features such as
 
 - Basic Administration (Kicking,Temp/PermaBanning,Mute,Teleport To/From,Slapping,Freeze Player,Warnings)
 - Ability to Screenshot other Players' Game (requires screenshot-basic)
