@@ -102,6 +102,25 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 end)
 
+
+
+Citizen.CreateThread( function()
+	while true do
+		Citizen.Wait(500)
+		if drawInfo then
+			local localPlayerPed = PlayerPedId()
+			local targetPed = GetPlayerPed(drawTarget)
+			local targetGod = GetPlayerInvincible(drawTarget)
+
+			local tgtCoords = GetEntityCoords(targetPed)
+			if tgtCoords and tgtCoords.x ~= 0 then
+				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+			end
+		end
+	end
+end)
+
+
 AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)
 	if id then
 		if (tgtCoords.x == 0.0 and tgtCoords.y == 0.0 and tgtCoords.z == 0.0) then
