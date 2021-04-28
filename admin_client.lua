@@ -93,6 +93,7 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	end
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	frozen = true
+	stopSpectateUpdate = true
 	local adminPed = localPlayerPed
 	local playerId = GetPlayerFromServerId(playerServerId)
 	repeat
@@ -100,6 +101,7 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 		playerId = GetPlayerFromServerId(playerServerId)
 	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1))
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+	stopSpectateUpdate = false 
 end)
 
 
@@ -107,7 +109,7 @@ end)
 Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(500)
-		if drawInfo then
+		if drawInfo and not stopSpectateUpdate then
 			local localPlayerPed = PlayerPedId()
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
