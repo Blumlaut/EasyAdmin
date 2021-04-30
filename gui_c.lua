@@ -96,7 +96,13 @@ Citizen.CreateThread(function()
 	while true do
 		if _menuPool then
 			_menuPool:ProcessMenus()
+			if not _menuPool:IsAnyMenuOpen() then 
+				_menuPool:Remove()
+				_menuPool = nil
+				collectgarbage()
+			end
 		end
+		
 		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
 			-- clear and re-create incase of permission change+player count change
 			if not isAdmin == true then
@@ -164,6 +170,7 @@ function GenerateMenu() -- this is a big ass function
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
+		collectgarbage()
 	end
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
@@ -295,7 +302,6 @@ function GenerateMenu() -- this is a big ass function
 				name = GetPlayerName(thePlayer)
 			}
 		end
-
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
 		playerMenus[tostring(thePlayer.id)] = {menu = thisPlayer, name = thePlayer.name, id = thePlayer.id }
 
@@ -506,6 +512,8 @@ function GenerateMenu() -- this is a big ass function
 				playermanagement:Visible(true)
 			end	
 		end
+
+		TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 		
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
@@ -580,6 +588,7 @@ function GenerateMenu() -- this is a big ass function
 					GenerateMenu()
 					playermanagement:Visible(true)
 				end	
+				TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
 			end
 		end
 	end
@@ -680,6 +689,8 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 		end
+
+		TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 
 	end
 	
@@ -1013,6 +1024,8 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 	end
+
+	TriggerEvent("EasyAdmin:BuildSettingsOptions")
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
