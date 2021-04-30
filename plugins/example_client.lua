@@ -4,7 +4,7 @@
 AddEventHandler("EasyAdmin:BuildPlayerOptions", function(playerId) -- BuildPlayerOptions is triggered after building options like kick, ban.. Passes a Player ServerId
 	
 	-- comment this out if you want to see it in action
-	return
+	if false then return end
 
 
 	local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId) -- create our new item
