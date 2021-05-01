@@ -235,6 +235,8 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	TriggerEvent("EasyAdmin:BuildMainMenuOptions")
+
 	local userSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
 	playermanagement:AddItem(userSearch)
 	userSearch.Activated = function(ParentMenu, SelectedItem)
