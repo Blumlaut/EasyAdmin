@@ -525,7 +525,6 @@ Citizen.CreateThread(function()
 		elseif os.date("%d/%m") == "01/03" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
 		end
-		TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
 
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
