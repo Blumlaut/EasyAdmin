@@ -518,6 +518,14 @@ Citizen.CreateThread(function()
 		if updateAvailable then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "updateAvailable", updateAvailable)
 		end
+		if os.date("%d/%m") == "31/03" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Trans Rights = Human Rights!")
+		elseif os.date("%d/%m") == "22/08" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Happy Birthday to me!")
+		elseif os.date("%d/%m") == "01/03" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
+		end
+		TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
 
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
