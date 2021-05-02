@@ -521,6 +521,11 @@ function GenerateMenu() -- this is a big ass function
 
 		TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 		
+		if GetResourceState("es_extended") == "started" and not ESX then
+			local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+			thisPlayer:AddItem(thisItem)
+		end
+		
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
 	end
