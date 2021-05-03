@@ -56,6 +56,7 @@ RegisterCommand('easyadmin', function(source, args)
 			if mainMenu and mainMenu:Visible() then
 				mainMenu:Visible(false)
 				_menuPool:Remove()
+				TriggerEvent("EasyAdmin:MenuRemoved")
 				collectgarbage()
 			else
 				GenerateMenu()
@@ -100,6 +101,7 @@ Citizen.CreateThread(function()
 			_menuPool:ProcessMenus()
 			if not _menuPool:IsAnyMenuOpen() then 
 				_menuPool:Remove()
+				TriggerEvent("EasyAdmin:MenuRemoved")
 				_menuPool = nil
 				collectgarbage()
 			end
@@ -142,6 +144,7 @@ Citizen.CreateThread(function()
 				if mainMenu and mainMenu:Visible() then
 					mainMenu:Visible(false)
 					_menuPool:Remove()
+					TriggerEvent("EasyAdmin:MenuRemoved")
 					collectgarbage()
 				else
 					GenerateMenu()
@@ -172,6 +175,7 @@ function GenerateMenu() -- this is a big ass function
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
+		TriggerEvent("EasyAdmin:MenuRemoved")
 		collectgarbage()
 	end
 	_menuPool = NativeUI.CreatePool()
@@ -759,6 +763,7 @@ function GenerateMenu() -- this is a big ass function
 			Citizen.Wait(300)
 			if foundBan then
 				_menuPool:Remove()
+				TriggerEvent("EasyAdmin:MenuRemoved")
 				_menuPool = NativeUI.CreatePool()
 				collectgarbage()
 				if not GetResourceKvpString("ea_menuorientation") then
@@ -832,6 +837,7 @@ function GenerateMenu() -- this is a big ass function
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 
 						_menuPool:Remove()
+						TriggerEvent("EasyAdmin:MenuRemoved")
 						_menuPool = NativeUI.CreatePool()
 						collectgarbage()
 						if not GetResourceKvpString("ea_menuorientation") then

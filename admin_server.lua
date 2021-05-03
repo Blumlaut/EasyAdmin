@@ -262,7 +262,7 @@ end)
 
 
 RegisterServerEvent("EasyAdmin:requestCachedPlayers")
-AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
+AddEventHandler('EasyAdmin:requestCachedPlayers', function()
 	local src = source
 	if DoesPlayerHavePermission(source,"easyadmin.ban") then
 		TriggerClientEvent("EasyAdmin:fillCachedPlayers", src, CachedPlayers)
@@ -613,7 +613,7 @@ Citizen.CreateThread(function()
 	
 	
 	RegisterServerEvent("EasyAdmin:banPlayer")
-	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
+	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
@@ -694,7 +694,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:requestBanlist")
-	AddEventHandler('EasyAdmin:requestBanlist', function(playerId)
+	AddEventHandler('EasyAdmin:requestBanlist', function()
 		local src = source
 		if DoesPlayerHavePermission(source,"easyadmin.kick") then
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
