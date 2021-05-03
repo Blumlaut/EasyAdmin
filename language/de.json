@@ -144,5 +144,14 @@
     "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s",
 
     "searchuser": "Spieler suchen",
-    "searchuserguide": "Spieler mit Usernamen oder ID finden."
+    "searchuserguide": "Spieler mit Usernamen oder ID finden.",
+
+    "setconvar": "Convar Setzen",
+    "setconvarguide": "~r~ACHTUNG: Wenn du nicht weißt was hier zu tun ist, nicht anfassen!~w~\nÄndert eine Conar.",
+    "adminchangedconvar": "**%s** hat die Convar **%s** zu **%s** geändert.",
+    "adminstartedresource": "**%s** hat die Resource **%s** gestartet",
+    "adminstoppedresource": "**%s** hat die Resource **%s** gestoppt",
+
+    "convarname": "Convar Name",
+    "convarvalue": "Convar Inhalt"
 }]

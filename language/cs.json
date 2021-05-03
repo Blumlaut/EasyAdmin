@@ -144,5 +144,14 @@
 
 
     "searchuser": "Hledat uživatele ",
-    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID"
+    "searchbyidguide": "Přeskočte do nabídky hráče pomocí jeho ID",
+
+    "setconvar": "Set Convar",
+    "setconvarguide": "~r~NOTE: If you don't know what you are doing, don't touch this!~w~\nChanges a Convar",
+    "adminchangedconvar": "**%s** changed convar **%s** to **%s**",
+    "adminstartedresource": "**%s** started resource **%s**",
+    "adminstoppedresource": "**%s** stopped resource **%s**",
+
+    "convarname": "Convar Name",
+    "convarvalue": "Convar Value"
 }]

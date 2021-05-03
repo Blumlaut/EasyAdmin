@@ -146,5 +146,14 @@
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
     "searchuser": "Cerca utente ",
-    "searchuserguide": "Trova un giocatore utilizzando il suo nome utente o ID"
+    "searchuserguide": "Trova un giocatore utilizzando il suo nome utente o ID",
+
+    "setconvar": "Set Convar",
+    "setconvarguide": "~r~NOTE: If you don't know what you are doing, don't touch this!~w~\nChanges a Convar",
+    "adminchangedconvar": "**%s** changed convar **%s** to **%s**",
+    "adminstartedresource": "**%s** started resource **%s**",
+    "adminstoppedresource": "**%s** stopped resource **%s**",
+
+    "convarname": "Convar Name",
+    "convarvalue": "Convar Value"
 }]
