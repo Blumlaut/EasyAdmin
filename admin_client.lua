@@ -205,9 +205,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			if not RedM then
-				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
-			end
+			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
 	else
 			if oldCoords then
 				RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
@@ -217,22 +215,27 @@ function spectatePlayer(targetPed,target,name)
 			end
 			NetworkSetInSpectatorMode(false, targetPed)
 			StopDrawPlayerInfo()
-			if not RedM then
-				ShowNotification(GetLocalisedText("stoppedSpectating"))
-			end
+			ShowNotification(GetLocalisedText("stoppedSpectating"))
 			frozen = false
 
 	end
 end
 
 function ShowNotification(text)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawNotification(0,1)
+	if not RedM then
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString(text)
+		DrawNotification(0,1)
+	else
+		-- someone who has RedM installed please write some code for this
+
+	end
 end
 RegisterNetEvent("EasyAdmin:showNotification")
 AddEventHandler("EasyAdmin:showNotification", function(text, important)
-	BeginTextCommandThefeedPost("STRING")
-	AddTextComponentString(text)
-	EndTextCommandThefeedPostTicker(important,0)
+	if not RedM then
+		BeginTextCommandThefeedPost("STRING")
+		AddTextComponentString(text)
+		EndTextCommandThefeedPostTicker(important,0)
+	end
 end)
