@@ -25,7 +25,7 @@ function sendRandomReminder()
 		local adminNames = ""
 		local t = {}
 		for i,_ in pairs(OnlineAdmins) do
-			table.insert(t, getName(i))
+			table.insert(t, getName(i, false, true))
 		end
 		for i,n in ipairs(t) do 
 			if i == 1 then
@@ -174,16 +174,12 @@ end
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
 	local identifiers = GetPlayerIdentifiers(playerId)
 	local tokens = {}
-	if not GetNumPlayerTokens or not GetPlayerToken then
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		print("^1EasyAdmin^7: You didn't follow the Updating Instructions! Please make sure you Update your FXServer to ^3*at least*^7 Build 3335.")
-		print("^1EasyAdmin^7: For the next time, please read the update instructions and ^1keep your Server updated!!")
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		return identifiers
-	end
 	if GetConvar("ea_useTokenIdentifiers", "true") == "true" then
+		if not GetNumPlayerTokens or not GetPlayerToken then
+			print("^1EasyAdmin^7: Server Version is below artifact 3335, disabling Token identifiers, please consider updating your FXServer!")
+			SetConvar("ea_useTokenIdentifiers", "false")
+			return identifiers
+		end
 		for i=0,GetNumPlayerTokens(playerId) do
 			table.insert(tokens, GetPlayerToken(playerId, i))
 		end
@@ -262,7 +258,7 @@ end)
 
 
 RegisterServerEvent("EasyAdmin:requestCachedPlayers")
-AddEventHandler('EasyAdmin:requestCachedPlayers', function(playerId)
+AddEventHandler('EasyAdmin:requestCachedPlayers', function()
 	local src = source
 	if DoesPlayerHavePermission(source,"easyadmin.ban") then
 		TriggerClientEvent("EasyAdmin:fillCachedPlayers", src, CachedPlayers)
@@ -518,6 +514,20 @@ Citizen.CreateThread(function()
 		if updateAvailable then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "updateAvailable", updateAvailable)
 		end
+		if os.date("%d/%m") == "31/03" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Trans Rights = Human Rights!")
+		elseif os.date("%d/%m") == "22/08" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Happy Birthday to me!")
+		elseif os.date("%d/%m") == "01/03" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
+		elseif os.date("%d/%m") == "01/06" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🏳️‍🌈🏳️‍🌈🏳️‍🌈")
+		elseif os.date("%d/%m") == "29/07" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎂")
+		elseif os.date("%d/%m") == "09/11" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🇩🇪  💞")
+		end
+
 
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
@@ -599,7 +609,7 @@ Citizen.CreateThread(function()
 	
 	
 	RegisterServerEvent("EasyAdmin:banPlayer")
-	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires,username)
+	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if playerId ~= nil then
 			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
@@ -680,7 +690,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:requestBanlist")
-	AddEventHandler('EasyAdmin:requestBanlist', function(playerId)
+	AddEventHandler('EasyAdmin:requestBanlist', function()
 		local src = source
 		if DoesPlayerHavePermission(source,"easyadmin.kick") then
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
@@ -1060,16 +1070,41 @@ Citizen.CreateThread(function()
 	--[[
 		Very basic function that turns "source" into a useable player name.
 	]]
-	function getName(src,anonymousdisabled)
+	function getName(src,anonymousdisabled,identifierdisabled)
+		local identifierPref = GetConvar("ea_logIdentifier", "false")
+		if identifierPref == "false" then identifierdisabled = true end;
+		local identifiers, identifier = {}, "~No Identifier~"
 		if (src == 0 or src == "") then
 			return "Console"
 		else
 			if AnonymousAdmins[src] and not anonymousdisabled then
 				return GetLocalisedText("anonymous")
 			elseif CachedPlayers[src] and CachedPlayers[src].name then
-				return CachedPlayers[src].name
+				if CachedPlayers[src].identifiers then
+					identifiers = CachedPlayers[src].identifiers
+					for i = 1, #identifiers do
+						if identifiers[i]:match(identifierPref) then
+							identifier = identifiers[i]
+						end
+					end
+				end
+				if identifierdisabled then
+					return CachedPlayers[src].name
+				else
+					return (CachedPlayers[src].name.." ["..identifier.."]")
+				end
 			elseif (GetPlayerName(src)) then
-				return GetPlayerName(src)
+				identifiers = getAllPlayerIdentifiers(src)
+				for i = 1, #identifiers do
+					if identifiers[i]:match(identifierPref) then
+						identifier = identifiers[i]
+					end
+				end
+				if identifierdisabled then
+					return GetPlayerName(src)
+				else
+					return (GetPlayerName(src).." ["..identifier.."]")
+				end
 			else
 				return "Unknown - " .. src
 			end
@@ -1225,20 +1260,15 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(src,"easyadmin.warn") and not DoesPlayerHavePermission(id,"easyadmin.immune") then
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
-				WarnedPlayers[id] = {name = getName(id), identifiers = getAllPlayerIdentifiers(id), warns = 1}
-				TriggerClientEvent('chat:addMessage', id, { 
-				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-				    args = {  string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) }, color = { 255, 255, 255 } 
-				})
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
-			else
-				WarnedPlayers[id].warns = WarnedPlayers[id].warns+1
-				TriggerClientEvent('chat:addMessage', id, { 
-				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-				    args = {  string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) }, color = { 255, 255, 255 } 
-				})
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
+				WarnedPlayers[id] = {name = getName(id), identifiers = getAllPlayerIdentifiers(id), warns = 0}
 			end
+			WarnedPlayers[id].warns = WarnedPlayers[id].warns+1
+			TriggerClientEvent('chat:addMessage', id, { 
+				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
+				args = {  string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) }, color = { 255, 255, 255 } 
+			})
+			TriggerClientEvent("txAdminClient:warn", id, getName(src), string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings), GetLocalisedText("warnedtitle"), GetLocalisedText("warnedby"),GetLocalisedText("warndismiss"))
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src), getName(id), reason, WarnedPlayers[id].warns, maxWarnings), "warn")
 			if WarnedPlayers[id].warns >= maxWarnings then
 				if GetConvar("ea_warnAction", "kick") == "kick" then
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src), getName(id), reason), "kick")

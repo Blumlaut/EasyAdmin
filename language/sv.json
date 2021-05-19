@@ -135,11 +135,23 @@
     "warnreasonguide": "Add a reason to the Warn.",
     "confirmwarn": "Confirm Warn",
     "confirmwarnguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will Warn this Player with the specified settings.",
-    "warned": "You have been warned, Reason: %s Warning %s/%s",
+    "warnedtitle": "Warning",
+    "warnedby": "warned by",
+    "warndismiss": "Hold Spacebar for 10 Seconds to dismiss.",
+    "warned": "You have been warned, Reason: %s, Warning %s/%s",
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
     "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
     "searchuser": "Sök användare",
-    "searchuserguide": "Hitta en spelare med deras användarnamn eller ID "
+    "searchuserguide": "Hitta en spelare med deras användarnamn eller ID ",
+
+    "setconvar": "Set Convar",
+    "setconvarguide": "~r~NOTE: If you don't know what you are doing, don't touch this!~w~\nChanges a Convar",
+    "adminchangedconvar": "**%s** changed convar **%s** to **%s**",
+    "adminstartedresource": "**%s** started resource **%s**",
+    "adminstoppedresource": "**%s** stopped resource **%s**",
+
+    "convarname": "Convar Name",
+    "convarvalue": "Convar Value"
 }]

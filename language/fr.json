@@ -136,11 +136,23 @@
     "warnreasonguide": "Ajouter une raison à l'avertissement.",
     "confirmwarn": "Confirmer Avertir",
     "confirmwarnguide": "~r~~h~NOTE:~h~~w~ Appuyer sur Confirmer avertira ce lecteur avec les paramètres spécifiés.",
-    "warned": "Vous avez été averti, Raison : %s Avertissement %s/%s",
+    "warned": "Vous avez été averti, Raison : %s, Avertissement %s/%s",
+    "warnedtitle": "Warning",
+    "warnedby": "warned by",
+    "warndismiss": "Hold Spacebar for 10 Seconds to dismiss.",
     "warnkicked": "Vous avez reçu un coup de pied parce que vous avez été averti trop souvent.",
     "warnbanned": "Averti trop souvent.",
     "adminwarnedplayer": "**%s** averti **%s**, Raison : %s, Avertissement %s/%s",
 
     "searchuser": "Rechercher un utilisateur",
-    "searchuserguide": "Trouver un joueur à l'aide de son nom d'utilisateur ou de son identifiant"
+    "searchuserguide": "Trouver un joueur à l'aide de son nom d'utilisateur ou de son identifiant",
+
+    "setconvar": "Set Convar",
+    "setconvarguide": "~r~NOTE: If you don't know what you are doing, don't touch this!~w~\nChanges a Convar",
+    "adminchangedconvar": "**%s** changed convar **%s** to **%s**",
+    "adminstartedresource": "**%s** started resource **%s**",
+    "adminstoppedresource": "**%s** stopped resource **%s**",
+
+    "convarname": "Convar Name",
+    "convarvalue": "Convar Value"
 }]

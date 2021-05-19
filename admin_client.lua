@@ -93,6 +93,7 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	end
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	frozen = true
+	stopSpectateUpdate = true
 	local adminPed = localPlayerPed
 	local playerId = GetPlayerFromServerId(playerServerId)
 	repeat
@@ -100,7 +101,27 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 		playerId = GetPlayerFromServerId(playerServerId)
 	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1))
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
+	stopSpectateUpdate = false 
 end)
+
+
+
+Citizen.CreateThread( function()
+	while true do
+		Citizen.Wait(500)
+		if drawInfo and not stopSpectateUpdate then
+			local localPlayerPed = PlayerPedId()
+			local targetPed = GetPlayerPed(drawTarget)
+			local targetGod = GetPlayerInvincible(drawTarget)
+
+			local tgtCoords = GetEntityCoords(targetPed)
+			if tgtCoords and tgtCoords.x ~= 0 then
+				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+			end
+		end
+	end
+end)
+
 
 AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)
 	if id then
@@ -184,9 +205,7 @@ function spectatePlayer(targetPed,target,name)
 			NetworkSetInSpectatorMode(true, targetPed)
 
 			DrawPlayerInfo(target)
-			if not RedM then
-				ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
-			end
+			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
 	else
 			if oldCoords then
 				RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
@@ -196,16 +215,27 @@ function spectatePlayer(targetPed,target,name)
 			end
 			NetworkSetInSpectatorMode(false, targetPed)
 			StopDrawPlayerInfo()
-			if not RedM then
-				ShowNotification(GetLocalisedText("stoppedSpectating"))
-			end
+			ShowNotification(GetLocalisedText("stoppedSpectating"))
 			frozen = false
 
 	end
 end
 
 function ShowNotification(text)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawNotification(0,1)
+	if not RedM then
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString(text)
+		DrawNotification(0,1)
+	else
+		-- someone who has RedM installed please write some code for this
+
+	end
 end
+RegisterNetEvent("EasyAdmin:showNotification")
+AddEventHandler("EasyAdmin:showNotification", function(text, important)
+	if not RedM then
+		BeginTextCommandThefeedPost("STRING")
+		AddTextComponentString(text)
+		EndTextCommandThefeedPostTicker(important,0)
+	end
+end)
