@@ -25,7 +25,7 @@ function sendRandomReminder()
 		local adminNames = ""
 		local t = {}
 		for i,_ in pairs(OnlineAdmins) do
-			table.insert(t, getName(i))
+			table.insert(t, getName(i, false, true))
 		end
 		for i,n in ipairs(t) do 
 			if i == 1 then
@@ -1070,16 +1070,41 @@ Citizen.CreateThread(function()
 	--[[
 		Very basic function that turns "source" into a useable player name.
 	]]
-	function getName(src,anonymousdisabled)
+	function getName(src,anonymousdisabled,identifierdisabled)
+		local identifierPref = GetConvar("ea_logIdentifier", "false")
+		if identifierPref == "false" then identifierdisabled = true end;
+		local identifiers, identifier = {}, "~No Identifier~"
 		if (src == 0 or src == "") then
 			return "Console"
 		else
 			if AnonymousAdmins[src] and not anonymousdisabled then
 				return GetLocalisedText("anonymous")
 			elseif CachedPlayers[src] and CachedPlayers[src].name then
-				return CachedPlayers[src].name
+				if CachedPlayers[src].identifiers then
+					identifiers = CachedPlayers[src].identifiers
+					for i = 1, #identifiers do
+						if identifiers[i]:match(identifierPref) then
+							identifier = identifiers[i]
+						end
+					end
+				end
+				if identifierdisabled then
+					return CachedPlayers[src].name
+				else
+					return (CachedPlayers[src].name.." ["..identifier.."]")
+				end
 			elseif (GetPlayerName(src)) then
-				return GetPlayerName(src)
+				identifiers = getAllPlayerIdentifiers(src)
+				for i = 1, #identifiers do
+					if identifiers[i]:match(identifierPref) then
+						identifier = identifiers[i]
+					end
+				end
+				if identifierdisabled then
+					return GetPlayerName(src)
+				else
+					return (GetPlayerName(src).." ["..identifier.."]")
+				end
 			else
 				return "Unknown - " .. src
 			end
