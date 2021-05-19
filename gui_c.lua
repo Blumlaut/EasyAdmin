@@ -56,6 +56,7 @@ RegisterCommand('easyadmin', function(source, args)
 			if mainMenu and mainMenu:Visible() then
 				mainMenu:Visible(false)
 				_menuPool:Remove()
+				TriggerEvent("EasyAdmin:MenuRemoved")
 				collectgarbage()
 			else
 				GenerateMenu()
@@ -91,12 +92,21 @@ Citizen.CreateThread(function()
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
+	elseif settings.alternativeTitle then
+		subtitle = settings.alternativeTitle
 	end
 
 	while true do
 		if _menuPool then
 			_menuPool:ProcessMenus()
+			if not _menuPool:IsAnyMenuOpen() then 
+				_menuPool:Remove()
+				TriggerEvent("EasyAdmin:MenuRemoved")
+				_menuPool = nil
+				collectgarbage()
+			end
 		end
+		
 		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
 			-- clear and re-create incase of permission change+player count change
 			if not isAdmin == true then
@@ -134,6 +144,7 @@ Citizen.CreateThread(function()
 				if mainMenu and mainMenu:Visible() then
 					mainMenu:Visible(false)
 					_menuPool:Remove()
+					TriggerEvent("EasyAdmin:MenuRemoved")
 					collectgarbage()
 				else
 					GenerateMenu()
@@ -164,6 +175,8 @@ function GenerateMenu() -- this is a big ass function
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
+		TriggerEvent("EasyAdmin:MenuRemoved")
+		collectgarbage()
 	end
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
@@ -179,6 +192,8 @@ function GenerateMenu() -- this is a big ass function
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
+	elseif settings.alternativeTitle then
+		subtitle = settings.alternativeTitle
 	end
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
 	_menuPool:Add(mainMenu)
@@ -227,6 +242,8 @@ function GenerateMenu() -- this is a big ass function
 			table.insert(players,GetPlayerFromServerId(thePlayer))
 		end
 	end
+
+	TriggerEvent("EasyAdmin:BuildMainMenuOptions")
 
 	local userSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
 	playermanagement:AddItem(userSearch)
@@ -295,7 +312,6 @@ function GenerateMenu() -- this is a big ass function
 				name = GetPlayerName(thePlayer)
 			}
 		end
-
 		thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
 		playerMenus[tostring(thePlayer.id)] = {menu = thisPlayer, name = thePlayer.name, id = thePlayer.id }
 
@@ -506,6 +522,13 @@ function GenerateMenu() -- this is a big ass function
 				playermanagement:Visible(true)
 			end	
 		end
+
+		TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
+		
+		if GetResourceState("es_extended") == "started" and not ESX then
+			local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+			thisPlayer:AddItem(thisItem)
+		end
 		
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
@@ -580,6 +603,7 @@ function GenerateMenu() -- this is a big ass function
 					GenerateMenu()
 					playermanagement:Visible(true)
 				end	
+				TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
 			end
 		end
 	end
@@ -681,6 +705,8 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 
+		TriggerEvent("EasyAdmin:BuildServerManagementOptions")
+
 	end
 	
 	if permissions["unban"] then
@@ -737,6 +763,7 @@ function GenerateMenu() -- this is a big ass function
 			Citizen.Wait(300)
 			if foundBan then
 				_menuPool:Remove()
+				TriggerEvent("EasyAdmin:MenuRemoved")
 				_menuPool = NativeUI.CreatePool()
 				collectgarbage()
 				if not GetResourceKvpString("ea_menuorientation") then
@@ -810,6 +837,7 @@ function GenerateMenu() -- this is a big ass function
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 
 						_menuPool:Remove()
+						TriggerEvent("EasyAdmin:MenuRemoved")
 						_menuPool = NativeUI.CreatePool()
 						collectgarbage()
 						if not GetResourceKvpString("ea_menuorientation") then
@@ -1013,6 +1041,8 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 	end
+
+	TriggerEvent("EasyAdmin:BuildSettingsOptions")
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
