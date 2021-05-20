@@ -16,6 +16,32 @@ permissions = {
 }
 
 
+function PrintDebugMessage(msg,level)
+	loglevel = (GetConvarInt("ea_logLevel", 1))
+	if not level or not tonumber(level) then level = 3 end
+
+	if level == 1 and loglevel >= level then -- ERROR Loglevel
+		Citizen.Trace("^1"..GetCurrentResourceName().."^7: "..msg.."^7\n")
+	elseif level == 2 and loglevel >= level then -- WARN Loglevel
+		Citizen.Trace("^3"..GetCurrentResourceName().."^7: "..msg.."^7\n")
+	elseif level == 3 and loglevel >= level then -- INFO Loglevel 
+		Citizen.Trace("^0"..GetCurrentResourceName().."^7: "..msg.."^7\n")
+	elseif level == 4 and loglevel >= level then -- DEV Loglevel
+		Citizen.Trace("^7"..GetCurrentResourceName().."^7: "..msg.."^7\n")
+	elseif level > 4 and loglevel >= level then -- anything above 4 shouldn't exist, but kept just in case
+		Citizen.Trace("^5"..GetCurrentResourceName().."^7: "..msg.."^7\n")
+	end
+end
+
+
+if GetConvar("ea_enableDebugging", "false") ~= "false" then
+	enableDebugging = GetConvar("ea_enableDebugging", "false")
+	SetConvar("ea_logLevel", 3)
+	PrintDebugMessage("Debug Messages Enabled, Verbosity is ^2"..GetConvarInt("ea_logLevel", 1).."^7.", 3)
+else
+	enableDebugging = false
+end
+
 function GetLocalisedText(string)
 	if not strings then return "Strings not Loaded yet!" end
 	if not string then return "No String!" end
@@ -26,9 +52,6 @@ function GetLocalisedText(string)
 	end
 end
 
-function PrintDebugMessage(msg)
-	if enableDebugging then -- make sure debugging is enabled before Proceding
-		Citizen.Trace("^1"..GetCurrentResourceName().."^7: "..msg.."^7\n")
 	else
 		if GetConvar("ea_enableDebugging", "false") == "true" then
 			enableDebugging = true
