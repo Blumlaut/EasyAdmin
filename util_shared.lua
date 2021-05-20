@@ -52,13 +52,11 @@ function GetLocalisedText(string)
 	end
 end
 
-	else
-		if GetConvar("ea_enableDebugging", "false") == "true" then
-			enableDebugging = true
-			PrintDebugMessage(msg) -- recursion?
-		end
-	end
+function formatDateString(string)
+	local dateFormat = GetConvar("ea_dateFormat", '%d/%m/%Y 	%H:%M:%S')
+	return os.date(dateFormat, string)
 end
+
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then

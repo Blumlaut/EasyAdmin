@@ -616,7 +616,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if playerId ~= nil then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 				if expires and expires < os.time() then
@@ -627,9 +627,9 @@ Citizen.CreateThread(function()
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
-				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban")
+				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 			end
 		end
 	end)
@@ -648,8 +648,8 @@ Citizen.CreateThread(function()
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
 				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban")
 			end
 		end
 	end)
@@ -676,10 +676,10 @@ Citizen.CreateThread(function()
 		updateBlacklist( ban )
 		
 		
-		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
 		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
+		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?"), reason, formatDateString( expires ) ), "ban")
 		if not offline then
-			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
+			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 		end
 	end)
 	
@@ -1268,9 +1268,9 @@ Citizen.CreateThread(function()
 					
 
 
-					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, true), bannedUsername, reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ), "ban")
-					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, os.date('%d/%m/%Y 	%H:%M:%S', expires ) ) )
 					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..CachedPlayers[id].name.." for "..reason, 3)
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, true), bannedUsername, reason, formatDateString( expires ) ), "ban")
+					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 					WarnedPlayers[id] = nil
 					
 				end
@@ -1378,7 +1378,7 @@ Citizen.CreateThread(function()
 								newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds)
 							end
 							updateBan(blacklisted.banid,newBanData)
-							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, os.date('%d/%m/%Y 	%H:%M:%S', blacklist[bi].expire )))
+							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, formatDateString(blacklist[bi].expire)))
 							PrintDebugMessage("Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason.." \n", 1)
 							CancelEvent()
 							return
