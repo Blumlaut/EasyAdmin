@@ -616,7 +616,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if playerId ~= nil then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or GetPlayerName(playerId)
 				if expires and expires < os.time() then
