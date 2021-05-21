@@ -34,10 +34,14 @@ function PrintDebugMessage(msg,level)
 end
 
 
-if GetConvar("ea_enableDebugging", "false") ~= "false" then
-	enableDebugging = GetConvar("ea_enableDebugging", "false")
-	SetConvar("ea_logLevel", 3)
-	PrintDebugMessage("Debug Messages Enabled, Verbosity is ^2"..GetConvarInt("ea_logLevel", 1).."^7.", 3)
+if GetConvar("ea_enableDebugging", "false") ~= "false" or GetConvarInt("ea_logLevel", 1) ~= 1 then
+	SetConvar("ea_enableDebugging", "false")
+	if GetConvarInt("ea_logLevel", 1) == 1 then
+		SetConvar("ea_logLevel", 3)
+	end
+	if GetConvarInt("ea_logLevel", 1) > 1 then
+		PrintDebugMessage("Debug Messages Enabled, Verbosity is ^2"..GetConvarInt("ea_logLevel", 1).."^7.", 2)
+	end
 else
 	enableDebugging = false
 end
@@ -92,4 +96,30 @@ function Set (list)
 	local set = {}
 	for _, l in ipairs(list) do set[l] = true end
 	return set
+end
+
+-- Convert a lua table into a lua syntactically correct string
+function table_to_string(tbl)
+    local result = "{"
+    for k, v in pairs(tbl) do
+        -- Check the key type (ignore any numerical keys - assume its an array)
+        if type(k) == "string" then
+            result = result.."[\""..k.."\"]".."="
+        end
+
+        -- Check the value type
+        if type(v) == "table" then
+            result = result..table_to_string(v)
+        elseif type(v) == "boolean" then
+            result = result..tostring(v)
+        else
+            result = result.."\""..v.."\""
+        end
+        result = result..","
+    end
+    -- Remove leading commas from the result
+    if result ~= "" then
+        result = result:sub(1, result:len()-1)
+    end
+    return result.."}"
 end

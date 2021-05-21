@@ -366,6 +366,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			steam_webApiKey = GetConvar("steam_webApiKey", "none"),
 			ea_LanguageName = GetConvar("ea_LanguageName", "en"),
 			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
+			ea_logLevel = GetConvar("ea_logLevel", 1),
 			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
 			ea_MenuButton = GetConvar("ea_MenuButton", 289),
 			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
@@ -981,7 +982,6 @@ Citizen.CreateThread(function()
 			UnbanId(banId)
 			PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId, 3)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source), banId, thisBan.reason), "ban")
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
 	end)
 
@@ -1031,15 +1031,8 @@ Citizen.CreateThread(function()
 		if not content then
 			return -- instead of re-creating the file, just quit, we dont need to continue anyway.
 		end
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		Citizen.Trace("^3The following SteamIDs are added to your admins.txt file, this method is **OUTDATED** and **DOES NOT WORK**^7\n")
-		Citizen.Trace("Add these admins using ACE:\n")
-		for index,value in ipairs(string.split(content, "\n")) do
-			Citizen.Trace(value.."\n")
-		end
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
-		Citizen.Trace("^1EasyAdmin: WARNING!!!!^7\n")
+		PrintDebugMessage("Found Legacy admins.txt.", 2)
+		PrintDebugMessage("It seems you still use an admins.txt, please add them according to the Wiki and delete this file!\n")
 	end
 
 	RegisterCommand("convertbanlist", function(source, args, rawCommand)
@@ -1142,12 +1135,12 @@ Citizen.CreateThread(function()
 		
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		if not content then
+			PrintDebugMessage("banlist.json file was missing, we created a new one.")
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
 			content = json.encode({})
 		end
 		blacklist = json.decode(content)
 
-		PrintDebugMessage("updated banlist", 4)
 		if not blacklist then
 			PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 			PrintDebugMessage("^1Failed^7 to load Banlist!\n")
@@ -1160,6 +1153,7 @@ Citizen.CreateThread(function()
 		
 		if data and not remove then
 			addBan(data)
+			PrintDebugMessage("Added the following data to banlist:\n"..table_to_string(data), 4)
 			change=true
 		elseif not data then
 			for i,theBan in ipairs(blacklist) do
@@ -1170,34 +1164,42 @@ Citizen.CreateThread(function()
 					else
 						theBan.banid = blacklist[i].banid or i
 					end
+					PrintDebugMessage("Ban "..theBan.banid.." did not have an ID, assigned one.", 4)
 					change=true
 				end
 				if not theBan.expire then 
+					PrintDebugMessage("Ban "..theBan.banid.." did not have an expiry time, removing..", 4)
 					table.remove(blacklist,i)
 					change=true
 				elseif not theBan.identifiers then -- make sure 1 identifier is given, otherwise its a broken ban
+					PrintDebugMessage("Ban "..theBan.banid.." did not have any identifiers, removing..", 4)
 					table.remove(blacklist,i)
 					change=true
 				elseif not theBan.identifiers[1] then 
+					PrintDebugMessage("Ban "..theBan.banid.." did not have one identifier, removing..", 4)
 					table.remove(blacklist,i)
 					change=true
 				elseif theBan.expire < os.time() then
+					PrintDebugMessage("Ban "..theBan.banid.." expired, removing..", 4)
 					table.remove(blacklist,i)
-					PrintDebugMessage("removing old ban no custom banlist", 4)
 					change=true
 				elseif theBan.expire == 1924300800 then
+					PrintDebugMessage("Ban "..theBan.banid.." had legacy expiry time, we fixed it", 4)
 					blacklist[i].expire = 10444633200
 					change=true
 				end
 			end
 		end
 		if data and remove then
+			PrintDebugMessage("Removed the following data from banlist:\n"..table_to_string(data), 4)
 			UnbanId(data.banid)
 			change = true
 		end
 		if change then
+			PrintDebugMessage("Banlist changed, saving..", 4)
 			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 		end
+		PrintDebugMessage("Completed Banlist Update.", 4)
 	end
 
 	function BanIdentifier(identifier,reason)
@@ -1214,6 +1216,7 @@ Citizen.CreateThread(function()
 				for index,id in ipairs(ban.identifiers) do
 					if identifier == id then
 						table.remove(blacklist,i)
+						SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 						if GetConvar("ea_custombanlist", "false") == "true" then 
 							TriggerEvent("ea_data:removeBan", ban)
 						end
@@ -1229,6 +1232,7 @@ Citizen.CreateThread(function()
 		for i,ban in ipairs(blacklist) do
 			if ban.banid == id then
 				table.remove(blacklist,i)
+				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
 				end
@@ -1281,6 +1285,7 @@ Citizen.CreateThread(function()
 	function performBanlistUpgrades()
 		for i,ban in pairs(blacklist) do
 			if type(i) == "string" then
+				PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 4)
 				blacklist[i] = nil
 				table.insert(blacklist,ban) 
 				change = true
@@ -1290,6 +1295,7 @@ Citizen.CreateThread(function()
 			if ban.identifiers then
 				for k, identifier in pairs(ban.identifiers) do
 					if identifier == "" then
+						PrintDebugMessage("Ban "..ban.banid.." had an empty identifier, removed it.", 4)
 						ban.identifiers[k] = nil
 						change = true 
 					end
@@ -1297,29 +1303,33 @@ Citizen.CreateThread(function()
 			end
 		end
 		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then 
-			Citizen.Trace("Upgrading Banlist...\n")
+			Citizen.Trace("Upgrading Banlist...\n", 4)
 			for i,ban in ipairs(blacklist) do
 				if not ban.identifiers then
 					ban.identifiers = {}
+					PrintDebugMessage("Ban "..ban.banid.." had no identifiers, added one.", 4)
 					change=true
 				end
 				if ban.identifier then
 					table.insert(ban.identifiers, ban.identifier)
+					PrintDebugMessage("Ban "..ban.banid.." had identifier, converted to identifiers table", 4)
 					ban.identifier = nil
 					change=true
 				end
 				if ban.steam then
 					table.insert(ban.identifiers, ban.steam)
+					PrintDebugMessage("Ban "..ban.banid.." had seperate steam identifier, converted to identifiers table", 4)
 					ban.steam = nil
 					change=true
 				end
 				if ban.discord and ban.discord ~= "" then
 					table.insert(ban.identifiers, ban.discord)
+					PrintDebugMessage("Ban "..ban.banid.." had seperate discord identifier, converted to identifiers table", 4)
 					ban.discord = nil
 					change=true
 				end
 			end
-			Citizen.Trace("Banlist Upgraded! No Further Action is necesarry.\n")
+			Citizen.Trace("Banlist Upgraded.\n", 4)
 		end
 	end
 
@@ -1379,7 +1389,7 @@ Citizen.CreateThread(function()
 							end
 							updateBan(blacklisted.banid,newBanData)
 							setKickReason(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, formatDateString(blacklist[bi].expire)))
-							PrintDebugMessage("Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason.." \n", 1)
+							PrintDebugMessage("Connection of "..GetPlayerName(source).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 1)
 							CancelEvent()
 							return
 						end
@@ -1439,16 +1449,17 @@ Citizen.CreateThread(function()
 				--print(resourceName.." is up to date!")
 			end
 		else
-			print("EasyAdmin Version Check failed!")
+			PrintDebugMessage("EasyAdmin Version Check failed, please make sure its updated!")
 		end
 		if GetResourceState("screenshot-basic") == "missing" then 
-			print("\nEasyAdmin: screenshot-basic is not installed on this Server, screenshots unavailable")
+			PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
 		else
 			StartResource("screenshot-basic")
 			screenshots = true
 		end
 		local onesync = GetConvar("onesync", "off")
 		if (onesync ~= "off" and onesync ~= "legacy") then 
+			PrintDebugMessage("Onesync is Infinity", 3)
 			infinity = true
 		end
 		
@@ -1490,7 +1501,7 @@ Citizen.CreateThread(function()
 		
 		data.zap = GetConvar("is_zap", "false")
 		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
-		PrintDebugMessage("Sent Telemetry Update.", 4)
+		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
 	end
 
 
