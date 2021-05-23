@@ -1343,11 +1343,11 @@ Citizen.CreateThread(function()
 
 
 	
-	function IsIdentifierBanned(theIndentifier)
+	function IsIdentifierBanned(theIdentifier)
 		local identifierfound = false
 		for index,value in ipairs(blacklist) do
 			for i,identifier in ipairs(value.identifiers) do
-				if theIndentifier == identifier then
+				if theIdentifier == identifier then
 					identifierfound = true
 				end
 			end
