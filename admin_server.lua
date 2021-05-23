@@ -1092,7 +1092,7 @@ Citizen.CreateThread(function()
 				if identifierdisabled then
 					return CachedPlayers[src].name
 				else
-					return (CachedPlayers[src].name.." ["..identifier.."]")
+					return (string.format("%s [ %s ]", CachedPlayers[src].name, identifier))
 				end
 			elseif (GetPlayerName(src)) then
 				identifiers = getAllPlayerIdentifiers(src)
@@ -1104,7 +1104,7 @@ Citizen.CreateThread(function()
 				if identifierdisabled then
 					return GetPlayerName(src)
 				else
-					return (GetPlayerName(src).." ["..identifier.."]")
+					return (string.format("%s [ %s ]", GetPlayerName(src), identifier))
 				end
 			else
 				return "Unknown - " .. src
