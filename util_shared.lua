@@ -1,5 +1,6 @@
 permissions = {
-	["ban"] = false,
+	["ban.temporary"] = false,
+	["ban.permanent"] = false,
 	["kick"] = false,
 	["spectate"] = false,
 	["unban"] = false,

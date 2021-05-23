@@ -268,7 +268,7 @@ RegisterServerEvent("EasyAdmin:requestCachedPlayers")
 AddEventHandler('EasyAdmin:requestCachedPlayers', function()
 	PrintDebugMessage(getName(source, true).." requested Cache.", 4)
 	local src = source
-	if DoesPlayerHavePermission(source,"easyadmin.ban") then
+	if DoesPlayerHavePermission(source,"easyadmin.ban.temporary") then
 		TriggerClientEvent("EasyAdmin:fillCachedPlayers", src, CachedPlayers)
 		PrintDebugMessage("Cached Players requested by "..getName(src,true), 4)
 	end
@@ -478,7 +478,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Processed Perm "..perm.." for "..getName(source, true)..", result: "..tostring(thisPerm), 3)
 		end
 		
-		if DoesPlayerHavePermission(source,"easyadmin.ban") then
+		if DoesPlayerHavePermission(source,"easyadmin.ban.temporary") then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
 		end
 		if DoesPlayerHavePermission(source,"easyadmin.kick") then
@@ -617,7 +617,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:banPlayer")
 	AddEventHandler('EasyAdmin:banPlayer', function(playerId,reason,expires)
 		if playerId ~= nil then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+			if DoesPlayerHavePermission(source,"easyadmin.ban.temporary") and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or getName(playerId, true)
 				if expires and expires < os.time() then
@@ -625,6 +625,10 @@ Citizen.CreateThread(function()
 				elseif not expires then 
 					expires = 10444633200
 				end
+				if expires >= 10444633200 and not DoesPlayerHavePermission(source,"easyadmin.ban.permanent") then
+					return false
+				end
+
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
@@ -638,7 +642,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:offlinebanPlayer")
 	AddEventHandler('EasyAdmin:offlinebanPlayer', function(playerId,reason,expires)
 		if playerId ~= nil and not CachedPlayers[playerId].immune then
-			if DoesPlayerHavePermission(source,"easyadmin.ban") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+			if DoesPlayerHavePermission(source,"easyadmin.ban.temporary") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or getName(playerId, true)
 				if expires and expires < os.time() then
@@ -646,6 +650,10 @@ Citizen.CreateThread(function()
 				elseif not expires then 
 					expires = 10444633200
 				end
+				if expires >= 10444633200 and not DoesPlayerHavePermission(source,"easyadmin.ban.permanent") then
+					return false
+				end
+
 				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires }
 				updateBlacklist( ban )
