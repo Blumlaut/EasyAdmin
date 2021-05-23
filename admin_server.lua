@@ -223,7 +223,7 @@ end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
 	if not CachedPlayers[source] then
-		CachedPlayers[source] = {id = source, name = getName(source), identifiers = getAllPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
+		CachedPlayers[source] = {id = source, name = getName(source, true, true), identifiers = getAllPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source,"easyadmin.immune")}
 		PrintDebugMessage(getName(source).." has been added to cache.", 4)
 	end
 end)
