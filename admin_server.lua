@@ -953,7 +953,7 @@ Citizen.CreateThread(function()
 					end
 				end
 				PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
-				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src, false, true), getName(playerId, true, true), res), "screenshot", 16777214)
+				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
 				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..res.." requsted by"..getName(src,true), 3)
@@ -1447,7 +1447,7 @@ Citizen.CreateThread(function()
 	
 	---------------------------------- USEFUL
 	
-	function SendWebhookMessage(webhook,message,feature,colour,title)
+	function SendWebhookMessage(webhook,message,feature,colour,title,image)
 		moderationNotification = GetConvar("ea_moderationNotification", "false")
 		reportNotification = GetConvar("ea_reportNotification", "false")
 		detailNotification = GetConvar("ea_detailNotification", "false")
@@ -1462,7 +1462,9 @@ Citizen.CreateThread(function()
 				},
 			}
 		}
-
+		if image then
+			embed[1]["image"] = { ["url"] = image }
+		end
 
 		if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= true then
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({embeds = embed}), { ['Content-Type'] = 'application/json' })
