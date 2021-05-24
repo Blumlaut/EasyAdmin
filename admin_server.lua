@@ -776,7 +776,7 @@ Citizen.CreateThread(function()
 
 
 	--- Commands for Normal Users
-	RegisterCommand("calladmin", function(source, args, rawCommand)
+	RegisterCommand(GetConvar("ea_callAdminCommandName", "calladmin"), function(source, args, rawCommand)
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
 			local time = os.time()
 			local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
@@ -809,7 +809,7 @@ Citizen.CreateThread(function()
 		end
 	end, false)
 	PlayerReports = {}
-	RegisterCommand("report", function(source, args, rawCommand)
+	RegisterCommand(GetConvar("ea_reportCommandName", "report"), function(source, args, rawCommand)
 		if GetConvar("ea_enableReportCommand", "false") == "true" then
 			local source = source
 			local id = args[1]
