@@ -132,15 +132,25 @@ Citizen.CreateThread(function()
 			end
 
 			if strings and isAdmin then
-				banLength = {
-					{label = GetLocalisedText("permanent"), time = 10444633200},
-					{label = GetLocalisedText("oneday"), time = 86400},
-					{label = GetLocalisedText("threedays"), time = 259200},
-					{label = GetLocalisedText("oneweek"), time = 518400},
-					{label = GetLocalisedText("twoweeks"), time = 1123200},
-					{label = GetLocalisedText("onemonth"), time = 2678400},
-					{label = GetLocalisedText("oneyear"), time = 31536000},
-				}
+				banLength = {}
+				
+				if permissions["ban.permanent"] then
+					table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+				end
+
+				if permissions["ban.temporary"] then
+					table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
+					table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
+					table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
+					table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
+					table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
+					table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
+					table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
+					table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+				end
+				
+				
+
 				if mainMenu and mainMenu:Visible() then
 					mainMenu:Visible(false)
 					_menuPool:Remove()
@@ -358,7 +368,7 @@ function GenerateMenu() -- this is a big ass function
 			end	
 		end
 		
-		if permissions["ban"] then
+		if permissions["ban.temporary"] or permissions["ban.permanent"] then
 			local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
 			thisBanMenu:SetMenuWidthOffset(menuWidth)
 			
@@ -549,7 +559,7 @@ function GenerateMenu() -- this is a big ass function
 
 	CachedList = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("cachedplayers"),"",true)
 	CachedList:SetMenuWidthOffset(menuWidth)
-	if permissions["ban"] then
+	if permissions["ban.temporary"] or permissions["ban.permanent"] then
 		for i, cachedplayer in pairs(cachedplayers) do
 			if cachedplayer.droppedTime and not cachedplayer.immune then
 				thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
@@ -974,7 +984,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	if permissions["ban"] then
+	if permissions["ban.temporary"] or permissions["ban.permanent"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshcachedplayers"), GetLocalisedText("refreshcachedplayersguide"))
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
