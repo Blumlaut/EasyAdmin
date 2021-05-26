@@ -810,11 +810,13 @@ function GenerateMenu() -- this is a big ass function
 				end
 				
 				for _, identifier in pairs(banlist[foundBanid].identifiers) do
-					local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						--nothing
-					end	
+					if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
+						local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+						mainMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							--nothing
+						end	
+					end
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
@@ -884,11 +886,13 @@ function GenerateMenu() -- this is a big ass function
 						end
 						
 						for _, identifier in pairs(banlist[i].identifiers) do
-							local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
-							mainMenu:AddItem(thisItem)
-							thisItem.Activated = function(ParentMenu,SelectedItem)
-								--nothing
-							end	
+							if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
+								local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+								mainMenu:AddItem(thisItem)
+								thisItem.Activated = function(ParentMenu,SelectedItem)
+									--nothing
+								end	
+							end
 						end
 		
 						local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
