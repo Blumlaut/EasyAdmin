@@ -9,7 +9,7 @@ Citizen.CreateThread(function()
 	while true do 
 		Wait(20000)
 		for i, player in pairs(CachedPlayers) do 
-			if player.droppedTime and (os.time() > player.droppedTime+GetConvarInt("ea_playerCacheExpiryTime", 900)) then
+			if player.droppedTime and (os.time() > player.droppedTime+GetConvarInt("ea_playerCacheExpiryTime", 1800)) then
 				PrintDebugMessage("Cache for "..player.id.." expired, removing from cache.", 3)
 				CachedPlayers[i]=nil
 			end
