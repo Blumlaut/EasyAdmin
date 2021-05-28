@@ -148,7 +148,7 @@
     "searchuser": "Wyszukaj użytkownika",
     "searchuserguide": "Znajdź gracza, używając jego nazwy użytkownika lub identyfikatora",
 
-    "setconvar": "Set Convar",
+    "setconvar": "Ustaw convar-a",
     "setconvarguide": "~r~NOTE: Jeżeli nie wiesz co robisz, nie dotykaj tego!~w~\nZmienia convar-a",
     "adminchangedconvar": "**%s** zmieniono convar-a **%s** na **%s**",
     "adminstartedresource": "**%s** uruchomiono skrypt **%s**",
