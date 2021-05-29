@@ -1083,7 +1083,7 @@ Citizen.CreateThread(function()
 		Very basic function that turns "source" into a useable player name.
 	]]
 	function getName(src,anonymousdisabled,identifierenabled)
-		local identifierPref = GetConvar("ea_logIdentifier", "false")
+		local identifierPref = GetConvar("ea_logIdentifier", "steam")
 		if identifierPref == "false" then identifierenabled = false end;
 		local identifiers, identifier = {}, "~No Identifier~"
 		if (src == 0 or src == "") then
