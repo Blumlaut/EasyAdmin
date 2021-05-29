@@ -14,6 +14,8 @@ permissions = {
 	["mute"] = false,
 	["teleport.everyone"] = false,
 	["warn"] = false,
+	["noclip.self"] = false,
+	["noclip.player"] = false,
 }
 
 
