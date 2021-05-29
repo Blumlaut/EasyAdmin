@@ -1006,6 +1006,7 @@ Citizen.CreateThread(function()
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
 				PrintDebugMessage("Player "..getName(source,true).." unmuted "..getName(playerId,true), 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, false), getName(playerId, false, true)), "mute", 16777214)
 			end
 		end
 	end)
