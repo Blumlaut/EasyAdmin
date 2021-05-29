@@ -30,7 +30,9 @@
     "confirmban": "Potwierdź bana",
     "confirmbanguide": "~r~~h~UWAGA:~h~~w~ Naciśnięcie potwierdź spowoduje zablokowanie tego gracza z określonymi ustawieniami.",
     "mute": "Niemy Gracz",
-    "muteguide": "~r~~h~UWAGA:~h~~w~ Uniemożliwi to graczowi korzystanie z czatu tekstowego",
+    "muteguide": "~r~~h~NOTE:~h~~w~ Uniemożliwi to graczowi korzystanie z czatu tekstowego",
+    "adminmutedplayer": "**%s** wyciszył **%s**",
+    "adminunmutedplayer": "**%s** odciszył **%s**",
     "playermuted": "został wyciszony!",
     "playerunmuted": "został bez wyciszenia!",
     "playermute": "Jesteś ^8wyciszony^7!",
@@ -154,6 +156,16 @@
     "adminstartedresource": "**%s** uruchomiono skrypt **%s**",
     "adminstoppedresource": "**%s** zatrzymano skrypt **%s**",
 
-    "convarname": "Nazwa convar-a",
-    "convarvalue": "Wartość convar-a"
+    "convarname": "Convar Name",
+    "convarvalue": "Convar Value",
+
+    "noclip": "Noclip",
+    "noclipplayer": "Przełącz Noclipa dla gracza",
+    "adminnoclippedplayer": "**%s** przełączył noclipa dla **%s**",
+    "noclipchangespeed": "Zmień prędkość (%s)",
+    "noclipturn": "Skręć Lewo/Prawo",
+    "noclipmove": "Rusz się",
+    "noclipdown": "Do dołu",
+    "noclipup": "Do góry",
+    "noclipdisable": "Wyłącz noclipa"
 }]

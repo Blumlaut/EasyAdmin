@@ -31,6 +31,8 @@
     "confirmbanguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player with the specified settings.",
     "mute": "Mute Player",
     "muteguide": "~r~~h~NOTE:~h~~w~ This will prevent the player from using the text chat.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "has been muted!",
     "playerunmuted": "has been un-muted!",
     "playermute": "You are ^8muted^7!",
@@ -154,7 +156,17 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value"
+    "convarvalue": "Convar Value",
+
+    "noclip": "Noclip",
+    "noclipplayer": "Toggle Noclip for Player",
+    "adminnoclippedplayer": "**%s** toggled Noclip for **%s**",
+    "noclipchangespeed": "Change Speed (%s)",
+    "noclipturn": "Turn Left/Right",
+    "noclipmove": "Move",
+    "noclipdown": "Down",
+    "noclipup": "Up",
+    "noclipdisable": "Disable Noclip"
 
 
 }]

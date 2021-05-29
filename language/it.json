@@ -33,6 +33,8 @@
     "confirmbanguide": "~r~~h~NOTA:~h~~w~ Premendo conferma bandirai il giocatore con le impostazioni correnti.",
     "mute": "Giocatore muto",
     "muteguide": "~r~~h~NOTE:~h~~w~ Ciò impedirà al giocatore di utilizzare la chat di testo.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "è stato disattivato!",
     "playerunmuted": "è stato un-muted!",
     "playermute": "Sei ^8disattivato^7!",
@@ -157,5 +159,15 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value"
+    "convarvalue": "Convar Value",
+
+    "noclip": "Noclip",
+    "noclipplayer": "Toggle Noclip for Player",
+    "adminnoclippedplayer": "**%s** toggled Noclip for **%s**",
+    "noclipchangespeed": "Change Speed (%s)",
+    "noclipturn": "Turn Left/Right",
+    "noclipmove": "Move",
+    "noclipdown": "Down",
+    "noclipup": "Up",
+    "noclipdisable": "Disable Noclip"
 }]

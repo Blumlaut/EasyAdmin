@@ -32,6 +32,8 @@
     "confirmbanguide": "~r~~h~ACHTUNG:~h~~w~ Bestätigen drücken wird den Spieler mit den angegebenen Daten Bannen.",
     "mute": "Spieler stumm schalten",
     "muteguide": "~r~~h~NOTE:~h~~w~ Dadurch wird verhindert, dass der Player den Text-Chat verwendet.",
+    "adminmutedplayer": "**%s** hat **%s** gemuted",
+    "adminunmutedplayer": "**%s** hat **%s** entmuted",
     "playermuted": "wurde stumm geschaltet!",
     "playerunmuted": "wurde freigeschaltet!",
     "playermute": "Du bist ^8stummgeschaltet^7!",
@@ -155,5 +157,15 @@
     "adminstoppedresource": "**%s** hat die Resource **%s** gestoppt",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Inhalt"
+    "convarvalue": "Convar Inhalt",
+
+    "noclip": "Noclip",
+    "noclipplayer": "Noclip für Spieler Toggeln",
+    "adminnoclippedplayer": "**%s** hat Noclip für **%s** getoggelt",
+    "noclipchangespeed": "Geschwindigkeit Ändern (%s)",
+    "noclipturn": "Links/Rechts drehen",
+    "noclipmove": "Bewegen",
+    "noclipdown": "Runter",
+    "noclipup": "Hoch",
+    "noclipdisable": "Noclip Deaktivieren"
 }]

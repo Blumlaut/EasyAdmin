@@ -27,6 +27,8 @@
     "confirmkickguide": "~r~~h~NOTE:~h~~w~ Als je op bevestigen drukt wordt deze Speler gekickt.",
     "mute": "Demp speler",
     "muteguide": "~r~~h~NOTE:~h~~w~ Dit voorkomt dat de speler de tekstchat gebruikt.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "is gedempt!",
     "playerunmuted": "is niet-gedempt!",
     "playermute": "Je bent ^8gedempt^7!",
@@ -157,5 +159,15 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value"
+    "convarvalue": "Convar Value",
+
+    "noclip": "Noclip",
+    "noclipplayer": "Toggle Noclip for Player",
+    "adminnoclippedplayer": "**%s** toggled Noclip for **%s**",
+    "noclipchangespeed": "Change Speed (%s)",
+    "noclipturn": "Turn Left/Right",
+    "noclipmove": "Move",
+    "noclipdown": "Down",
+    "noclipup": "Up",
+    "noclipdisable": "Disable Noclip"
 }]

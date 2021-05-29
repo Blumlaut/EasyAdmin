@@ -31,6 +31,8 @@
     "confirmbanguide": "~r~~h~NOTA:~h~~w~ Pressionar Confirmar banirá este Player com as configurações especificadas.",
     "mute": "Mudo Jogador",
     "muteguide": "~r~~h~NOTE:~h~~w~ Isso impedirá que o jogador use o bate-papo de texto.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "foi silenciado!",
     "playerunmuted": "foi un-silenciado!",
     "playermute": "tu es ^8silenciado^7!",
@@ -151,5 +153,15 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value"
+    "convarvalue": "Convar Value",
+
+    "noclip": "Noclip",
+    "noclipplayer": "Toggle Noclip for Player",
+    "adminnoclippedplayer": "**%s** toggled Noclip for **%s**",
+    "noclipchangespeed": "Change Speed (%s)",
+    "noclipturn": "Turn Left/Right",
+    "noclipmove": "Move",
+    "noclipdown": "Down",
+    "noclipup": "Up",
+    "noclipdisable": "Disable Noclip"
 }]
