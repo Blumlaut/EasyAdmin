@@ -31,6 +31,8 @@
     "confirmbanguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player with the specified settings.",
     "mute": "Mute Player",
     "muteguide": "~r~~h~NOTE:~h~~w~ This will prevent the player from using the text chat.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "has been muted!",
     "playerunmuted": "has been un-muted!",
     "playermute": "You are ^8muted^7!",
@@ -142,7 +144,7 @@
     "warned": "You have been warned, Reason: %s, Warning %s/%s",
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
-    "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
+    "adminwarnedplayer": "**%s** warned **%s**\nReason: %s\nWarning %s/%s",
 
     "searchuser": "Search for User",
     "searchuserguide": "Find a Player using their Username or ID",
@@ -154,7 +156,6 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value"
 
 
 }]

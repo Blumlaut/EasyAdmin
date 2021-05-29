@@ -1000,10 +1000,12 @@ Citizen.CreateThread(function()
 				MutedPlayers[playerId] = true
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playermuted") } })
 				PrintDebugMessage("Player "..getName(source,true).." muted "..getName(playerId,true), 3)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
 			else 
 				MutedPlayers[playerId] = nil
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
 				PrintDebugMessage("Player "..getName(source,true).." unmuted "..getName(playerId,true), 3)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
 			end
 		end
 	end)
@@ -1014,9 +1016,11 @@ Citizen.CreateThread(function()
 			if AnonymousAdmins[source] then
 				AnonymousAdmins[source] = nil
 				PrintDebugMessage("Player "..getName(source,true).." un-anoned himself", 3)
+				PrintDebugMessage("Player "..getName(source,true).." un-anoned themself", 3)
 			else
 				AnonymousAdmins[source] = true
 				PrintDebugMessage("Player "..getName(source,true).." anoned himself", 3)
+				PrintDebugMessage("Player "..getName(source,true).." anoned themself", 3)
 			end
 		end
 	end)
