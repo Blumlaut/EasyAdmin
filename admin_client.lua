@@ -61,8 +61,8 @@ AddEventHandler("EasyAdmin:GetInfinityPlayerList", function(players)
 end)
 
 Citizen.CreateThread( function()
-  while true do
-    Citizen.Wait(0)
+	while true do
+		Citizen.Wait(0)
 		if frozen then
 			local localPlayerPedId = PlayerPedId()
 			FreezeEntityPosition(localPlayerPedId, frozen)
@@ -70,7 +70,6 @@ Citizen.CreateThread( function()
 				FreezeEntityPosition(GetVehiclePedIsIn(localPlayerPedId, false), frozen)
 			end 
 		end
-  end
 end)
 
 AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
@@ -113,7 +112,7 @@ Citizen.CreateThread( function()
 			local localPlayerPed = PlayerPedId()
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
-
+			
 			local tgtCoords = GetEntityCoords(targetPed)
 			if tgtCoords and tgtCoords.x ~= 0 then
 				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
@@ -183,7 +182,7 @@ end)
 
 AddEventHandler('EasyAdmin:CaptureScreenshot', function(toggle, url, field)
 	exports['screenshot-basic']:requestScreenshotUpload(GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'), GetConvar("ea_screenshotfield", 'files[]'), function(data)
-			TriggerServerEvent("EasyAdmin:TookScreenshot", data)
+		TriggerServerEvent("EasyAdmin:TookScreenshot", data)
 	end)
 end)
 
@@ -195,29 +194,29 @@ function spectatePlayer(targetPed,target,name)
 		print("Target Player is ourselves, disabling spectate.")
 	end
 	if(enable)then
-			if targetPed == playerPed then
-				Wait(500)
-				targetPed = GetPlayerPed(target)
-			end
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-
-			RequestCollisionAtCoord(targetx,targety,targetz)
-			NetworkSetInSpectatorMode(true, targetPed)
-
-			DrawPlayerInfo(target)
-			ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+		if targetPed == playerPed then
+			Wait(500)
+			targetPed = GetPlayerPed(target)
+		end
+		local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
+		
+		RequestCollisionAtCoord(targetx,targety,targetz)
+		NetworkSetInSpectatorMode(true, targetPed)
+		
+		DrawPlayerInfo(target)
+		ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
 	else
-			if oldCoords then
-				RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
-				Wait(500)
-				SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
-				oldCoords=nil
-			end
-			NetworkSetInSpectatorMode(false, targetPed)
-			StopDrawPlayerInfo()
-			ShowNotification(GetLocalisedText("stoppedSpectating"))
-			frozen = false
-
+		if oldCoords then
+			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+			Wait(500)
+			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+			oldCoords=nil
+		end
+		NetworkSetInSpectatorMode(false, targetPed)
+		StopDrawPlayerInfo()
+		ShowNotification(GetLocalisedText("stoppedSpectating"))
+		frozen = false
+		
 	end
 end
 
@@ -228,7 +227,7 @@ function ShowNotification(text)
 		DrawNotification(0,1)
 	else
 		-- someone who has RedM installed please write some code for this
-
+		
 	end
 end
 RegisterNetEvent("EasyAdmin:showNotification")
