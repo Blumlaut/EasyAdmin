@@ -759,7 +759,7 @@ function GenerateMenu() -- this is a big ass function
 					if foundBan then
 						break
 					end
-					if theBanned.banid == result then
+					if tostring(theBanned.banid) == result then
 						foundBan=true
 						foundBanid=i
 						break
