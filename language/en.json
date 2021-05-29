@@ -144,7 +144,7 @@
     "warned": "You have been warned, Reason: %s, Warning %s/%s",
     "warnkicked": "You have been kicked due to getting Warned too many times.",
     "warnbanned": "Warned too many times.",
-    "adminwarnedplayer": "**%s** warned **%s**\nReason: %s\nWarning %s/%s",
+    "adminwarnedplayer": "**%s** warned **%s**, Reason: %s, Warning %s/%s",
 
     "searchuser": "Search for User",
     "searchuserguide": "Find a Player using their Username or ID",

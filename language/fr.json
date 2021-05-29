@@ -31,6 +31,8 @@
     "confirmban": "Confirmer le bannissement",
     "mute": "Joueur muet",
     "muteguide": "~r~~h~NOTE:~h~~w~ Cela empêchera le joueur d’utiliser le chat textuel.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "a été mis en sourdine!",
     "playerunmuted": "a été mis en sans sourdine!",
     "playermute": "Vous êtes ^8muet^7!",

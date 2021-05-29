@@ -31,6 +31,8 @@
     "confirmbanguide": "~r~~h~NOTA:~h~~w~ Presionando confirmar banearás a este jugador con la configuración especificada.",
     "mute": "Mutear jugador",
     "muteguide": "~r~~h~NOTA:~h~~w~ Previene el uso de chat al jugador.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "ha sido muteado!",
     "playerunmuted": "ha sido desmuteado!",
     "playermute": "Ha sido ^8muteado^7!",

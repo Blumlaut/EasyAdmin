@@ -32,6 +32,8 @@
     "confirmbanguide": "~r~~h~ACHTUNG:~h~~w~ Bestätigen drücken wird den Spieler mit den angegebenen Daten Bannen.",
     "mute": "Spieler stumm schalten",
     "muteguide": "~r~~h~NOTE:~h~~w~ Dadurch wird verhindert, dass der Player den Text-Chat verwendet.",
+    "adminmutedplayer": "**%s** hat **%s** gemuted",
+    "adminunmutedplayer": "**%s** hat **%s** entmuted",
     "playermuted": "wurde stumm geschaltet!",
     "playerunmuted": "wurde freigeschaltet!",
     "playermute": "Du bist ^8stummgeschaltet^7!",

@@ -27,6 +27,8 @@
     "confirmkickguide": "~r~~h~NOTE:~h~~w~ Als je op bevestigen drukt wordt deze Speler gekickt.",
     "mute": "Demp speler",
     "muteguide": "~r~~h~NOTE:~h~~w~ Dit voorkomt dat de speler de tekstchat gebruikt.",
+    "adminmutedplayer": "**%s** muted **%s**",
+    "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "is gedempt!",
     "playerunmuted": "is niet-gedempt!",
     "playermute": "Je bent ^8gedempt^7!",
