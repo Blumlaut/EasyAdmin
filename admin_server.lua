@@ -884,6 +884,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:TeleportPlayerToCoords', function(playerId,tgtCoords)
 		if DoesPlayerHavePermission(source,"easyadmin.teleport.player") then
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..tgtCoords.x..", "..tgtCoords.y..", "..tgtCoords.z, 3)
+			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("teleportedtoplayer"), getName(playerId, true, true), getName(source, false, true)), "teleport", 16777214)
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, false, tgtCoords)
 		end
