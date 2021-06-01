@@ -157,15 +157,5 @@
     "adminstoppedresource": "**%s** zatrzymano skrypt **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value",
-
-    "noclip": "Noclip",
-    "noclipplayer": "Przełącz Noclipa dla gracza",
-    "adminnoclippedplayer": "**%s** przełączył noclipa dla **%s**",
-    "noclipchangespeed": "Zmień prędkość (%s)",
-    "noclipturn": "Skręć Lewo/Prawo",
-    "noclipmove": "Rusz się",
-    "noclipdown": "Do dołu",
-    "noclipup": "Do góry",
-    "noclipdisable": "Wyłącz noclipa"
+    "convarvalue": "Convar Value"
 }]

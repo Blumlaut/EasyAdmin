@@ -159,15 +159,5 @@
     "adminstoppedresource": "**%s** stopte resource **%s**",
 
     "convarname": "Convar Naam",
-    "convarvalue": "Convar Waarde",
-
-    "noclip": "Noclip",
-    "noclipplayer": "Schakel Noclip in voor een Speler",
-    "adminnoclippedplayer": "**%s** schakelde Noclip in voor **%s**",
-    "noclipchangespeed": "Veranderde de snelheid (%s)",
-    "noclipturn": "Naar links/rechts",
-    "noclipmove": "Beweeg",
-    "noclipdown": "Naar beneden",
-    "noclipup": "Naar boven",
-    "noclipdisable": "Schakel Noclip Uit"
+    "convarvalue": "Convar Waarde"
 }]

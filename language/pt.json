@@ -153,15 +153,5 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value",
-
-    "noclip": "Noclip",
-    "noclipplayer": "Toggle Noclip for Player",
-    "adminnoclippedplayer": "**%s** toggled Noclip for **%s**",
-    "noclipchangespeed": "Change Speed (%s)",
-    "noclipturn": "Turn Left/Right",
-    "noclipmove": "Move",
-    "noclipdown": "Down",
-    "noclipup": "Up",
-    "noclipdisable": "Disable Noclip"
+    "convarvalue": "Convar Value"
 }]

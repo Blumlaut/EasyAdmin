@@ -1024,20 +1024,6 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
-
-	RegisterServerEvent("EasyAdmin:toggleNoclip")
-	AddEventHandler("EasyAdmin:toggleNoclip", function(target)
-		if not target and DoesPlayerHavePermission(source, "easyadmin.noclip.self") then
-			TriggerClientEvent("EasyAdmin:toggleNoclip", source)
-			PrintDebugMessage("Player "..getName(source,true).." toggled Noclip on themselves", 3)
-		elseif target and DoesPlayerHavePermission(source, "easyadmin.noclip.player") then
-			TriggerClientEvent("EasyAdmin:toggleNoclip", target)
-			PrintDebugMessage("Player "..getName(source,true).." toggled Noclip on "..getName(target,true), 3)
-			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
-			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminnoclippedplayer"), getName(source, false, false), getName(target, false, true)), "noclip", 16777214)
-		end
-	end)
-
 	
 	blacklist = {}
 	

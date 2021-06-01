@@ -253,14 +253,6 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	if permissions["noclip.self"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("noclip"),"")
-		mainMenu:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:toggleNoclip")
-		end
-	end
-
 	TriggerEvent("EasyAdmin:BuildMainMenuOptions")
 
 	local userSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
@@ -541,13 +533,6 @@ function GenerateMenu() -- this is a big ass function
 			end	
 		end
 
-		if permissions["noclip.player"] then
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("noclipplayer"),"")
-			thisPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:toggleNoclip", thePlayer.id)
-			end
-		end
 
 		TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 		
