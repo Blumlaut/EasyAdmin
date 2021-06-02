@@ -520,6 +520,8 @@ Citizen.CreateThread(function()
 		if updateAvailable then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "updateAvailable", updateAvailable)
 		end
+
+		-- if you remove this code then you're a killjoy, can't we have nice things? just once? it's not like this changes the whole admin menu or how it behaves, its a single subtitle.
 		if os.date("%d/%m") == "31/03" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Trans Rights = Human Rights!")
 		elseif os.date("%d/%m") == "22/08" then

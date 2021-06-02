@@ -93,6 +93,7 @@ Citizen.CreateThread(function()
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
 	elseif settings.alternativeTitle then
+		-- if you remove this code then you're a killjoy, can't we have nice things? just once? it's not like this changes the whole admin menu or how it behaves, its a single subtitle.
 		subtitle = settings.alternativeTitle
 	end
 
