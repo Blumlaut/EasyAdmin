@@ -523,17 +523,16 @@ Citizen.CreateThread(function()
 
 		-- if you remove this code then you're a killjoy, can't we have nice things? just once? it's not like this changes the whole admin menu or how it behaves, its a single subtitle.
 		if os.date("%d/%m") == "31/03" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Trans Rights = Human Rights!")
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "~b~Trans Rights = Human Rights!")
 		elseif os.date("%d/%m") == "22/08" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "Happy Birthday to me!")
+			local age = tonumber(os.date("%Y"))-2017 local ordinal = "th" last_digit = age % 10 if last_digit == 1 and age ~= 11 then ordinal = 'st' elseif last_digit == 2 and age ~= 12 then ordinal = 'nd' elseif last_digit == 3 and age ~= 13 then ordinal = 'rd' end
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "~b~Today is EasyAdmin's "..age..""..ordinal.." birthday! :)")
 		elseif os.date("%d/%m") == "01/03" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
 		elseif os.date("%d/%m") == "01/06" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🏳️‍🌈🏳️‍🌈🏳️‍🌈")
 		elseif os.date("%d/%m") == "29/07" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎂")
-		elseif os.date("%d/%m") == "09/11" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🇩🇪  💞")
 		end
 
 
