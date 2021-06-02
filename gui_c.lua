@@ -202,9 +202,7 @@ function GenerateMenu() -- this is a big ass function
 	end 
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
-		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
-	elseif settings.alternativeTitle then
-		subtitle = settings.alternativeTitle
+		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
 	end
 	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
 	_menuPool:Add(mainMenu)
