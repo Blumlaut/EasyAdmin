@@ -62,18 +62,16 @@ end)
 
 
 Citizen.CreateThread( function()
-	local sleepTimeFrozen = 200
 	while true do
-		Citizen.Wait(sleepTimeFrozen)
+		Citizen.Wait(0)
 		if frozen then
-			sleepTimeFrozen = 0
 			local localPlayerPedId = PlayerPedId()
 			FreezeEntityPosition(localPlayerPedId, frozen)
 			if IsPedInAnyVehicle(localPlayerPedId, true) then
 				FreezeEntityPosition(GetVehiclePedIsIn(localPlayerPedId, false), frozen)
 			end 
 		else
-			sleepTimeFrozen = 200
+			Citizen.Wait(200)
 		end
 	end
 end)
@@ -96,7 +94,7 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 			oldCoords = GetEntityCoords(PlayerPedId())
 		end
 	end
-	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z, 0, 0, 0, false)
+	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	frozen = true
 	stopSpectateUpdate = true
 	local adminPed = localPlayerPed
@@ -110,21 +108,19 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 end)
 
 Citizen.CreateThread( function()
-	local sleepTimePos = 1000
 	while true do
-		Citizen.Wait(sleepTimePos)
+		Citizen.Wait(100)
 		if drawInfo and not stopSpectateUpdate then
-			sleepTime = 100
 			local localPlayerPed = PlayerPedId()
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
 			
 			local tgtCoords = GetEntityCoords(targetPed)
 			if tgtCoords and tgtCoords.x ~= 0 then
-				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z, 0, 0, 0, false)
+				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 			end
 		else
-			sleepTimePos = 1000
+			Citizen.Wait(1000)
 		end
 	end
 end)
