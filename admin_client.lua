@@ -109,7 +109,7 @@ end)
 
 Citizen.CreateThread( function()
 	while true do
-		Citizen.Wait(100)
+		Citizen.Wait(500)
 		if drawInfo and not stopSpectateUpdate then
 			local localPlayerPed = PlayerPedId()
 			local targetPed = GetPlayerPed(drawTarget)
