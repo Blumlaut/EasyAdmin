@@ -204,6 +204,7 @@ function spectatePlayer(targetPed,target,name)
 	if(enable)then
 		SetEntityVisible(playerPed, false, 0)
 		SetEntityCollision(playerPed, false, false)
+		SetEntityInvincible(playerPed, true)
 		Citizen.Wait(200) -- to prevent target player seeing you
 		if targetPed == playerPed then
 			Wait(500)
@@ -229,6 +230,7 @@ function spectatePlayer(targetPed,target,name)
 		Citizen.Wait(200) -- to prevent staying invisible
 		SetEntityVisible(playerPed, true, 0)
 		SetEntityCollision(playerPed, true, true)
+		SetEntityInvincible(playerPed, false)
 	end
 end
 
