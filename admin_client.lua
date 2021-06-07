@@ -62,14 +62,18 @@ end)
 
 
 Citizen.CreateThread( function()
+	local sleepTimeFrozen = 200
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(sleepTimeFrozen)
 		if frozen then
+			sleepTimeFrozen = 0
 			local localPlayerPedId = PlayerPedId()
 			FreezeEntityPosition(localPlayerPedId, frozen)
 			if IsPedInAnyVehicle(localPlayerPedId, true) then
 				FreezeEntityPosition(GetVehiclePedIsIn(localPlayerPedId, false), frozen)
 			end 
+		else
+			sleepTimeFrozen = 200
 		end
 	end
 end)
@@ -92,7 +96,7 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 			oldCoords = GetEntityCoords(PlayerPedId())
 		end
 	end
-	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z, 0, 0, 0, false)
 	frozen = true
 	stopSpectateUpdate = true
 	local adminPed = localPlayerPed
@@ -105,20 +109,22 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	stopSpectateUpdate = false 
 end)
 
-
-
 Citizen.CreateThread( function()
+	local sleepTimePos = 1000
 	while true do
-		Citizen.Wait(500)
+		Citizen.Wait(sleepTimePos)
 		if drawInfo and not stopSpectateUpdate then
+			sleepTime = 100
 			local localPlayerPed = PlayerPedId()
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
 			
 			local tgtCoords = GetEntityCoords(targetPed)
 			if tgtCoords and tgtCoords.x ~= 0 then
-				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
+				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z, 0, 0, 0, false)
 			end
+		else
+			sleepTimePos = 1000
 		end
 	end
 end)
@@ -196,12 +202,14 @@ function spectatePlayer(targetPed,target,name)
 		print("Target Player is ourselves, disabling spectate.")
 	end
 	if(enable)then
+		SetEntityVisible(playerPed, false, 0)
+		SetEntityCollision(playerPed, false, false)
+		Citizen.Wait(200) -- to prevent target player seeing you
 		if targetPed == playerPed then
 			Wait(500)
 			targetPed = GetPlayerPed(target)
 		end
 		local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-		
 		RequestCollisionAtCoord(targetx,targety,targetz)
 		NetworkSetInSpectatorMode(true, targetPed)
 		
@@ -218,7 +226,9 @@ function spectatePlayer(targetPed,target,name)
 		StopDrawPlayerInfo()
 		ShowNotification(GetLocalisedText("stoppedSpectating"))
 		frozen = false
-		
+		Citizen.Wait(200) -- to prevent staying invisible
+		SetEntityVisible(playerPed, true, 0)
+		SetEntityCollision(playerPed, true, true)
 	end
 end
 
