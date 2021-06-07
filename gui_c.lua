@@ -1065,9 +1065,11 @@ end
 
 
 Citizen.CreateThread( function()
+	local sleepTimeGui = 1000
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(sleepTimeGui)
 		if drawInfo then
+			sleepTimeGui = 0
 			local text = {}
 			-- cheat checks
 			local targetPed = GetPlayerPed(drawTarget)
@@ -1115,7 +1117,8 @@ Citizen.CreateThread( function()
 				StopDrawPlayerInfo()
 				ShowNotification(GetLocalisedText("stoppedSpectating"))
 			end
-			
+		else
+			sleepTimeGui = 1000
 		end
 	end
 end)
