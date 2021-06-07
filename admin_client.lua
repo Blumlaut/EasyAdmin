@@ -205,6 +205,7 @@ function spectatePlayer(targetPed,target,name)
 		SetEntityVisible(playerPed, false, 0)
 		SetEntityCollision(playerPed, false, false)
 		SetEntityInvincible(playerPed, true)
+		NetworkSetEntityInvisibleToNetwork(playerPed, true)
 		Citizen.Wait(200) -- to prevent target player seeing you
 		if targetPed == playerPed then
 			Wait(500)
@@ -231,6 +232,7 @@ function spectatePlayer(targetPed,target,name)
 		SetEntityVisible(playerPed, true, 0)
 		SetEntityCollision(playerPed, true, true)
 		SetEntityInvincible(playerPed, false)
+		NetworkSetEntityInvisibleToNetwork(playerPed, false)
 	end
 end
 
