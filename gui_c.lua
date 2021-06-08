@@ -1115,7 +1115,8 @@ Citizen.CreateThread( function()
 				StopDrawPlayerInfo()
 				ShowNotification(GetLocalisedText("stoppedSpectating"))
 			end
-			
+		else
+			Citizen.Wait(1000)
 		end
 	end
 end)
