@@ -34,17 +34,18 @@ function PrintDebugMessage(msg,level)
 	end
 end
 
-
-if GetConvar("ea_enableDebugging", "false") ~= "false" or GetConvarInt("ea_logLevel", 1) ~= 1 then
-	SetConvar("ea_enableDebugging", "false")
-	if GetConvarInt("ea_logLevel", 1) == 1 then
-		SetConvar("ea_logLevel", 3)
+if IsDuplicityVersion() then
+	if GetConvar("ea_enableDebugging", "false") ~= "false" or GetConvarInt("ea_logLevel", 1) ~= 1 then
+		SetConvar("ea_enableDebugging", "false")
+		if GetConvarInt("ea_logLevel", 1) == 1 then
+			SetConvar("ea_logLevel", 3)
+		end
+		if GetConvarInt("ea_logLevel", 1) > 1 then
+			PrintDebugMessage("Debug Messages Enabled, Verbosity is ^2"..GetConvarInt("ea_logLevel", 1).."^7.", 2)
+		end
+	else
+		enableDebugging = false
 	end
-	if GetConvarInt("ea_logLevel", 1) > 1 then
-		PrintDebugMessage("Debug Messages Enabled, Verbosity is ^2"..GetConvarInt("ea_logLevel", 1).."^7.", 2)
-	end
-else
-	enableDebugging = false
 end
 
 function GetLocalisedText(string)
