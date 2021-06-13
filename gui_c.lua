@@ -33,6 +33,8 @@ end
 
 playlist = nil
 
+RegisterKeyMapping('easyadmin', 'EasyAdmin', 'keyboard', 'M')	-- User-defined key (in the Fivem settings) default = M every admin can bind it to a key himself
+
 RegisterCommand('easyadmin', function(source, args)
 	CreateThread(function()
 		if not RedM then
