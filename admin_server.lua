@@ -954,6 +954,20 @@ Citizen.CreateThread(function()
 					else
 						res = res.attachments[1].url
 					end
+				else
+					if json.decode(res) then
+						if res.attachments then
+							if res.attachments[1].url then
+								res = res.attachments[1].url
+							end
+						elseif res.url then
+							res = res.url
+						elseif res.data.link then
+							res = res.data.link
+						elseif res.link then
+							res = res.link
+						end
+					end 
 				end
 				PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
 				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
