@@ -946,7 +946,7 @@ Citizen.CreateThread(function()
 				res = tostring(result)
 				if (moderationNotification == GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php')) then
 					res = ""
-				elseif string.find(moderationNotification, "discordapp") or string.find(moderationNotification, "discord.com") then
+				elseif string.find(GetConvar("ea_screenshoturl", ''), "discordapp") or string.find(GetConvar("ea_screenshoturl", ''), "discord.com") then
 					res = json.decode(res)
 					if not res.attachments then
 						res = "An Error occured and the screenshot was not uploaded, here is the raw json data: "..tostring(result)
