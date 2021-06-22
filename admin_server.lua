@@ -964,6 +964,8 @@ Citizen.CreateThread(function()
 							res = res.url
 						elseif res.data.link then
 							res = res.data.link
+						elseif res.data.url then
+							res = res.data.url
 						elseif res.link then
 							res = res.link
 						end
