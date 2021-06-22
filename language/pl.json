@@ -130,7 +130,7 @@
     "reportedusageerror": "Błąd! Użyj: /report nick powód",
     "admincalled": "Pomyślnie zawiadomiono Administratora!",
 
-    "spectatedplayer": "%s ogląda %s",
+    "spectatedplayer": "**%s** ogląda **%s**",
     "teleportedtoplayer": "**%s** teleportowany do **%s**",
     "searchbans": "Wyszukaj bana",
     "searchbansfail": "Nie znaleziono bana z wprowadzonymi parametrami.",

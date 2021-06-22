@@ -130,7 +130,7 @@
     "reportedusageerror": "Error! Usa: /report nombre razón",
     "admincalled": "Se ha avisado a un administrador correctamente!",
 
-    "spectatedplayer": "%s espectado %s",
+    "spectatedplayer": "**%s** espectado **%s**",
     "teleportedtoplayer": "**%s** se teletransporta a **%s**",
     "searchbans": "Prohibiciones de búsqueda",
     "searchbansfail": "No se ha encontrado ninguna prohibición con los criterios de búsqueda.",

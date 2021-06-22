@@ -131,7 +131,7 @@
     "reportedusageerror": "Error! Usage: /report name reason",
     "admincalled": "Successfully called an Admin!",
 
-    "spectatedplayer": "%s a regardé %s",
+    "spectatedplayer": "**%s** a regardé **%s**",
     "teleportedtoplayer": "**%s** téléporté vers **%s**",
     "searchbans": "Interdictions de recherche",
     "searchbansfail": "Aucune interdiction avec les critères de recherche n'a été trouvée.",

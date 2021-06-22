@@ -126,7 +126,7 @@
     "alreadyreported": "You already reported this player!",
     "reportedusageerror": "Error! Usage: /report name reason",
     "admincalled": "Successfully called an Admin!",
-    "spectatedplayer": "%s está vendo %s",
+    "spectatedplayer": "**%s** está vendo **%s**",
     "teleportedtoplayer": "**%s** teletransportado para **%s**",
     "searchbans": "Search Bans",
     "searchbansfail": "No Ban with the Search Criteria was found.",

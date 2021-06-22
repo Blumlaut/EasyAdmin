@@ -132,7 +132,7 @@
     "reportedusageerror": "Error! Usage: /report name reason",
     "admincalled": "Successfully called an Admin!",
 
-    "spectatedplayer": "%s sta guardando %s",
+    "spectatedplayer": "**%s** sta guardando **%s**",
     "teleportedtoplayer": "**%s** teletrasportato a **%s**",
     "searchbans": "Search Bans",
     "searchbansfail": "No Ban with the Search Criteria was found.",

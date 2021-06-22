@@ -132,7 +132,7 @@
     "reportedusageerror": "Error! Gebruik: /report naam reden",
     "admincalled": "Succesvol hulp gevraagd aan een admin!",
 
-    "spectatedplayer": "%s is aan het kijken %s",
+    "spectatedplayer": "**%s** is aan het kijken **%s**",
     "teleportedtoplayer": "**%s** geteleporteerd naar **%s**",
     "searchbans": "Zoek Bans",
     "searchbansfail": "Geen vergelijkbare ban gevonden.",

@@ -130,7 +130,7 @@
     "alreadyreported": "Du hast diesen Spieler schon Gemeldet!",
     "reportedusageerror": "Fehler! Nutzung: /report name grund",
     "admincalled": "Ein Admin wurde erfolgreich Gerufen!",
-    "spectatedplayer": "%s hat zugesehen %s",
+    "spectatedplayer": "**%s** hat **%s** zugesehen",
     "teleportedtoplayer": "**%s** teleportiert nach **%s**",
     "searchbans": "Ban Suchen",
     "searchbansfail": "Es wurde kein Ban gefunden.",
