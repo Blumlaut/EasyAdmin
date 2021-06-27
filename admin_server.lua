@@ -291,10 +291,10 @@ function DoesPlayerHavePermission(player, object)
 	
 	if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
 		haspermission = true
-		PrintDebugMessage(getName(source, true).." has Permissions for "..object..".", 4)
+		PrintDebugMessage(getName(player, true).." has Permissions for "..object..".", 4)
 	else
 		haspermission = false
-		PrintDebugMessage(getName(source, true).." does not have Permissions for "..object..".", 4)
+		PrintDebugMessage(getName(player, true).." does not have Permissions for "..object..".", 4)
 	end
 	
 	if not haspermission then -- if not, check if they are admin using the legacy method.
