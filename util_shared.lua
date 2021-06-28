@@ -63,6 +63,14 @@ function formatDateString(string)
 	return os.date(dateFormat, string)
 end
 
+function formatKeyWords(thisstring)
+	for keyword,value in pairs(MessageKeywords) do
+		if string.lower(keyword) == thisstring then
+			thisstring = value
+		end
+	end
+	return thisstring
+end
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then
