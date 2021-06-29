@@ -63,9 +63,10 @@ function formatDateString(string)
 	return os.date(dateFormat, string)
 end
 
-function formatKeyWords(thisstring)
-	for keyword,value in pairs(MessageKeywords) do
-		if string.lower(keyword) == thisstring then
+function formatShortcuts(thisstring)
+	local cleanString = string.gsub(string.lower(thisstring), " ", "")
+	for keyword,value in pairs(MessageShortcuts) do
+		if string.lower(keyword) == cleanString then
 			thisstring = value
 		end
 	end
