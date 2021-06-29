@@ -312,11 +312,11 @@ end
 
 RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
 	if args[2] and DoesPlayerHavePermission(source, "easyadmin.manageserver") then
-		local keyword = args[1]
+		local shortcut = args[1]
 		local text = table.concat(args, " ", 2)
 
-		PrintDebugMessage("added '"..keyword.." -> "..text.."' as a Keyword", 3)
-		MessageShortcuts[keyword] = text
+		PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
+		MessageShortcuts[shortcut] = text
 	end
 end)
 

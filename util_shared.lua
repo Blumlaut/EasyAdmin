@@ -65,8 +65,8 @@ end
 
 function formatShortcuts(thisstring)
 	local cleanString = string.gsub(string.lower(thisstring), " ", "")
-	for keyword,value in pairs(MessageShortcuts) do
-		if string.lower(keyword) == cleanString then
+	for shortcut,value in pairs(MessageShortcuts) do
+		if string.lower(shortcut) == cleanString then
 			thisstring = value
 		end
 	end
