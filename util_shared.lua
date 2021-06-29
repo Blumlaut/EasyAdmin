@@ -63,6 +63,15 @@ function formatDateString(string)
 	return os.date(dateFormat, string)
 end
 
+function formatShortcuts(thisstring)
+	local cleanString = string.gsub(string.lower(thisstring), " ", "")
+	for shortcut,value in pairs(MessageShortcuts) do
+		if string.lower(shortcut) == cleanString then
+			thisstring = value
+		end
+	end
+	return thisstring
+end
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then

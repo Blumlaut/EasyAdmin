@@ -310,6 +310,15 @@ function DoesPlayerHavePermission(player, object)
 	return haspermission
 end
 
+RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
+	if args[2] and DoesPlayerHavePermission(source, "easyadmin.manageserver") then
+		local shortcut = args[1]
+		local text = table.concat(args, " ", 2)
+
+		PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
+		MessageShortcuts[shortcut] = text
+	end
+end)
 
 RegisterCommand("ea_addReminder", function(source, args, rawCommand)
 	if args[1] and DoesPlayerHavePermission(source,"easyadmin.manageserver") then
@@ -547,6 +556,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:kickPlayer")
 	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
 		if DoesPlayerHavePermission(source,"easyadmin.kick") and not DoesPlayerHavePermission(playerId,"easyadmin.immune") then
+			reason = formatShortcuts(reason)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
@@ -630,7 +640,7 @@ Citizen.CreateThread(function()
 					return false
 				end
 
-				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+				reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
@@ -655,7 +665,7 @@ Citizen.CreateThread(function()
 					return false
 				end
 
-				reason = reason.. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+				reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
 				local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires }
 				updateBlacklist( ban )
 				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
@@ -681,7 +691,7 @@ Citizen.CreateThread(function()
 		elseif not expires then 
 			expires = 10444633200
 		end
-		reason = reason.. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
+		reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
 		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
@@ -1297,6 +1307,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:warnPlayer', function(id, reason)
 		local src = source
 		if DoesPlayerHavePermission(src,"easyadmin.warn") and not DoesPlayerHavePermission(id,"easyadmin.immune") then
+			reason = formatShortcuts(reason)
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
 				WarnedPlayers[id] = {name = getName(id, true), identifiers = getAllPlayerIdentifiers(id), warns = 0}
@@ -1605,6 +1616,7 @@ MutedPlayers = {} -- DO NOT TOUCH THIS
 CachedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
+MessageShortcuts = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {}
 cooldowns = {}
 -- DO NOT TOUCH THESE
