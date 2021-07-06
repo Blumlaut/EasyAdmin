@@ -499,7 +499,6 @@ function GetByteCount(str)
 end
 
 function AddLongStringForAscii(str)
-	print("ascii")
     local maxbytelength = 99
     for i = 0, GetCharacterCount(str), 99 do
 		Citizen.InvokeNative(0x6C188BE134E074AA, string.sub(str, i, math.min(maxbytelength, GetCharacterCount(str) - i)))
@@ -507,7 +506,6 @@ function AddLongStringForAscii(str)
 end
 
 function AddLongStringForUtf8(str)
-	print("ascii")
     local maxbytelength = 99
     local bytecount = GetByteCount(str)
 
@@ -2849,7 +2847,6 @@ function UIMenu:Visible(bool)
         end
         if self.Settings.ResetCursorOnOpen then
 			local W, H = 1920, 1080
-			print(W,H)
 			--SetCursorLocation(W / 2, H / 2)
 			--Citizen.InvokeNative(0xFC695459D4D0E219, W / 2, H / 2)
             --SetCursorSprite(1)
@@ -3127,11 +3124,9 @@ function UIMenu:SelectItem()
         self.OnListSelect(self, Item, Item._Index)
         Item.OnListSelected(self, Item, Item._Index)
     elseif subtype == "UIMenuSliderItem" then
-        print("slider selected")
         PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnSliderSelect(self, Item, Item._Index)
         Item.OnSliderSelected(Item._Index)
-        print("should be triggered")
     elseif subtype == "UIMenuProgressItem" then
         PlaySoundFrontend(self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnProgressSelect(self, Item, Item.Data.Index)
@@ -3152,7 +3147,6 @@ end
 function UIMenu:GoBack()
     PlaySoundFrontend(self.Settings.Audio.Back, self.Settings.Audio.Library, true)
 	self:Visible(false)
-	print("goback")
     if self.ParentMenu ~= nil then
         self.ParentMenu:Visible(true)
         self.OnMenuChanged(self, self.ParentMenu, false)
