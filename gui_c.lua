@@ -1071,33 +1071,56 @@ Citizen.CreateThread( function()
 			local text = {}
 			-- cheat checks
 			local targetPed = GetPlayerPed(drawTarget)
-			local targetGod = GetPlayerInvincible(drawTarget)
-			if targetGod then
-				table.insert(text,GetLocalisedText("godmodedetected"))
-			else
-				table.insert(text,GetLocalisedText("godmodenotdetected"))
-			end
-			if not CanPedRagdoll(targetPed) and not IsPedInAnyVehicle(targetPed, false) and (GetPedParachuteState(targetPed) == -1 or GetPedParachuteState(targetPed) == 0) and not IsPedInParachuteFreeFall(targetPed) then
-				table.insert(text,GetLocalisedText("antiragdoll"))
-			end
-			-- health info
-			table.insert(text,GetLocalisedText("health")..": "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed))
-			table.insert(text,GetLocalisedText("armor")..": "..GetPedArmour(targetPed))
-			-- misc info
-			table.insert(text,GetLocalisedText("wantedlevel")..": "..GetPlayerWantedLevel(drawTarget))
-			table.insert(text,GetLocalisedText("exitspectator"))
+			if (not RedM) then 
+				local targetGod = GetPlayerInvincible(drawTarget)
+				if targetGod then
+					table.insert(text,GetLocalisedText("godmodedetected"))
+				else
+					table.insert(text,GetLocalisedText("godmodenotdetected"))
+				end
+				if not CanPedRagdoll(targetPed) and not IsPedInAnyVehicle(targetPed, false) and (GetPedParachuteState(targetPed) == -1 or GetPedParachuteState(targetPed) == 0) and not IsPedInParachuteFreeFall(targetPed) then
+					table.insert(text,GetLocalisedText("antiragdoll"))
+				end
+				-- health info
+				table.insert(text,GetLocalisedText("health")..": "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed))
 			
-			for i,theText in pairs(text) do
-				SetTextFont(0)
-				SetTextProportional(1)
-				SetTextScale(0.0, 0.30)
-				SetTextDropshadow(0, 0, 0, 0, 255)
-				SetTextEdge(1, 0, 0, 0, 255)
-				SetTextDropShadow()
-				SetTextOutline()
-				SetTextEntry("STRING")
-				AddTextComponentString(theText)
-				EndTextCommandDisplayText(0.3, 0.7+(i/30))
+				table.insert(text,GetLocalisedText("armor")..": "..GetPedArmour(targetPed))
+				
+				-- misc info
+				table.insert(text,GetLocalisedText("wantedlevel")..": "..GetPlayerWantedLevel(drawTarget))
+				table.insert(text,GetLocalisedText("exitspectator"))
+			
+				for i,theText in pairs(text) do
+					SetTextFont(0)
+					SetTextProportional(1)
+					SetTextScale(0.0, 0.30)
+					SetTextDropshadow(0, 0, 0, 0, 255)
+					SetTextEdge(1, 0, 0, 0, 255)
+					SetTextDropShadow()
+					SetTextOutline()
+					SetTextEntry("STRING")
+					AddTextComponentString(theText)
+					EndTextCommandDisplayText(0.3, 0.7+(i/30))
+				end
+			elseif (RedM) then
+				local targetGod = GetPlayerInvincible(drawTarget)
+				if targetGod then
+					table.insert(text,GetLocalisedText("godmodedetected"))
+				else
+					table.insert(text,GetLocalisedText("godmodenotdetected"))
+				end
+				
+				table.insert(text,GetLocalisedText("health")..": "..GetEntityHealth(targetPed).."/"..GetEntityMaxHealth(targetPed))
+				table.insert(text,GetLocalisedText("exitspectator"))
+
+				for i,theText in pairs(text) do
+					Citizen.InvokeNative(0xADA9255D,0)
+					SetTextScale(0.0, 0.30)
+					SetTextDropshadow(0, 0, 0, 0, 255)
+
+					local str = CreateVarString(10, "LITERAL_STRING",Text)
+					DisplayText(theText, 0.3, 0.7+(i/30))
+				end
 			end
 			
 			if (not RedM and IsControlJustPressed(0,103) or (RedM and IsControlJustReleased(0, Controls["VehExit"]))) then
