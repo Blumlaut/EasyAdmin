@@ -1123,7 +1123,7 @@ Citizen.CreateThread( function()
 				end
 			end
 			
-			if (not RedM and IsControlJustPressed(0,103) or (RedM and IsControlJustReleased(0, Controls["VehExit"]))) then
+			if (not RedM and IsControlJustPressed(0,103) or (RedM and IsControlJustReleased(0, Controls["Enter"]))) then
 				local targetPed = PlayerPedId()
 				local targetPlayer = -1
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
