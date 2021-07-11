@@ -2927,14 +2927,16 @@ function UIMenu:ProcessControl()
     if not self.LeftPressed then
         if self.Controls.Left.Enabled and (IsDisabledControlPressed(0, "INPUT_FRONTEND_LEFT")) and IsInputDisabled(0) then
             Citizen.CreateThread(function()
-                self.LeftPressed = true
-                self:GoLeft()
-                Citizen.Wait(175)
-                while self.Controls.Left.Enabled and (IsDisabledControlPressed(0, "INPUT_FRONTEND_LEFT")) and IsInputDisabled(0) do
+                if not self.LeftPressed then
+                    self.LeftPressed = true
                     self:GoLeft()
-                    Citizen.Wait(125)
+                    Citizen.Wait(150)
+                    while self.Controls.Left.Enabled and (IsDisabledControlPressed(0, "INPUT_FRONTEND_LEFT")) and IsInputDisabled(0) do
+                        self:GoLeft()
+                        Citizen.Wait(200)
+                    end
+                    self.LeftPressed = false
                 end
-                self.LeftPressed = false
             end)
         end
     end
@@ -2942,14 +2944,16 @@ function UIMenu:ProcessControl()
     if not self.RightPressed then
         if self.Controls.Right.Enabled and (IsDisabledControlPressed(0, "INPUT_FRONTEND_RIGHT")) and IsInputDisabled(0) then
             Citizen.CreateThread(function()
-                self.RightPressed = true
-                self:GoRight()
-                Citizen.Wait(175)
-                while self.Controls.Right.Enabled and (IsDisabledControlPressed(0, "INPUT_FRONTEND_RIGHT")) and IsInputDisabled(0) do
+                if not self.RightPressed then
+                    self.RightPressed = true
                     self:GoRight()
-                    Citizen.Wait(125)
+                    Citizen.Wait(150)
+                    while self.Controls.Right.Enabled and (IsDisabledControlPressed(0, "INPUT_FRONTEND_RIGHT")) and IsInputDisabled(0) do
+                        self:GoRight()
+                        Citizen.Wait(200)
+                    end
+                    self.RightPressed = false
                 end
-                self.RightPressed = false
             end)
         end
     end
