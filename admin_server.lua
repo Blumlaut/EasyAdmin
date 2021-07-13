@@ -953,6 +953,7 @@ Citizen.CreateThread(function()
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
+				if result == "ERROR" then return false end
 				res = tostring(result)
 				if (moderationNotification == GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php')) then
 					res = ""
