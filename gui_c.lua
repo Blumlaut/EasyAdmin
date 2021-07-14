@@ -962,6 +962,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 
+	TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 
 	if permissions["unban"] then
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
