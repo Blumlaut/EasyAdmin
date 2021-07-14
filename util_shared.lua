@@ -13,7 +13,10 @@ permissions = {
 	["anon"] = false,
 	["mute"] = false,
 	["teleport.everyone"] = false,
-	["warn"] = false
+	["warn"] = false,
+	["cleanup.cars"] = false,
+	["cleanup.props"] = false,
+	["cleanup.peds"] = false,
 }
 
 

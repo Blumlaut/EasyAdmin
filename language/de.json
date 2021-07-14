@@ -159,8 +159,13 @@
     "convarname": "Convar Name",
     "convarvalue": "Convar Inhalt",
 
-    "cleanarea": "Cleanup Area",
-    "cleanareaguide": "Cleans up nearby peds and cars.",
-    "cleanareaaggressive": "Cleanup Area (Aggressive)",
-    "cleanareaaggressiveguide": "Cleans up EVERYTHING, good in case of modders spamming objects. SLOW!"
+    "cleancars": "Cleanup Cars",
+    "cleancarsguide": "Cleans up nearby cars.",
+    "cleaningcar":"Deleting Vehicle %s",
+    "cleanpeds": "Cleanup Peds",
+    "cleanareaaggressiveguide": "Cleans up nearby peds.",
+    "cleaningped":"Deleting Ped %s",
+    "cleanprops": "Cleanup Props",
+    "cleanpropsguide": "Cleans up nearby props spawned by cheaters.",
+    "cleaningprop":"Deleting Object %s"
 }]
