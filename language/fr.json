@@ -158,5 +158,10 @@
     "adminstoppedresource": "**%s** stopped resource **%s**",
 
     "convarname": "Convar Name",
-    "convarvalue": "Convar Value"
+    "convarvalue": "Convar Value",
+
+    "cleanarea": "Cleanup Area",
+    "cleanareaguide": "Cleans up nearby peds and cars.",
+    "cleanareaaggressive": "Cleanup Area (Aggressive)",
+    "cleanareaaggressiveguide": "Cleans up EVERYTHING, good in case of modders spamming objects. SLOW!"
 }]

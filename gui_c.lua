@@ -715,8 +715,6 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 
-		TriggerEvent("EasyAdmin:BuildServerManagementOptions")
-
 	end
 	
 	if permissions["unban"] then
@@ -961,6 +959,112 @@ function GenerateMenu() -- this is a big ass function
 
 	end
 	
+	if permissions["manageserver"] then
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanarea"), GetLocalisedText("cleanareaguide"))
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			local handle, veh = FindFirstVehicle()
+			local finished = false
+			repeat
+				if not NetworkHasControlOfEntity(veh) then
+					PrintDebugMessage("taking control of "..veh, 3)
+					NetworkRequestControlOfEntity(veh)
+					Wait(300)
+				end
+				PrintDebugMessage("deleting "..veh, 3)
+				DeleteEntity(veh)
+				Wait(1)
+				finished, veh = FindNextVehicle(handle)
+			until not finished
+			EndFindVehicle(handle)
+			
+			local handle, ped = FindFirstPed()
+			local finished = false
+			repeat
+				if not IsPedAPlayer(ped) then
+					if not NetworkHasControlOfEntity(ped) then
+						PrintDebugMessage("taking control of "..ped, 3)
+						NetworkRequestControlOfEntity(ped)
+						Wait(300)
+					end
+					PrintDebugMessage("deleting "..ped, 3)
+					DeleteEntity(ped)
+				end
+				Wait(1)
+				finished, ped = FindNextPed(handle) 
+			until not finished
+			EndFindPed(handle)
+		end
+
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanareaaggressive"), GetLocalisedText("cleanareaaggressiveguide"))
+		servermanagement:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			local handle, veh = FindFirstVehicle()
+			local finished = false
+			repeat
+				if veh ~= 0 then
+					if not NetworkHasControlOfEntity(veh) then
+						PrintDebugMessage("taking control of "..veh, 3)
+						local i=0
+						repeat 
+							Wait(200)
+							NetworkRequestControlOfEntity(veh)
+							i=i+1
+						until (NetworkHasControlOfEntity(veh) or i==500)
+					end
+					PrintDebugMessage("deleting veh "..veh, 3)
+					DeleteEntity(veh)
+				end
+				Wait(1)
+				finished, veh = FindNextVehicle(handle)
+			until not finished
+			EndFindVehicle(handle)
+			
+			local handle, ped = FindFirstPed()
+			local finished = false
+			repeat
+				if ped ~= 0 and not IsPedAPlayer(ped) then
+					if not NetworkHasControlOfEntity(ped) then
+						PrintDebugMessage("taking control of "..ped, 3)
+						local i=0
+						repeat 
+							Wait(200)
+							NetworkRequestControlOfEntity(ped)
+							i=i+1
+						until (NetworkHasControlOfEntity(ped) or i==500)
+					end
+					PrintDebugMessage("deleting ped "..ped, 3)
+					DeleteEntity(ped)
+				end
+				Wait(1)
+				finished, ped = FindNextPed(handle) 
+			until not finished
+			EndFindPed(handle)
+
+			local handle, object = FindFirstObject()
+			local finished = false -- FindNextPed will turn the first variable to false when it fails to find another ped in the index
+			repeat
+				if object ~= 0 then
+					if not NetworkHasControlOfEntity(object) then
+						PrintDebugMessage("taking control of "..object, 3)
+						local i=0
+						repeat 
+							Wait(200)
+							NetworkRequestControlOfEntity(object)
+							i=i+1
+						until (NetworkHasControlOfEntity(object) or i==500)
+					end
+					PrintDebugMessage("deleting object "..object, 3)
+					DeleteObject(object)
+				end
+				Wait(1)
+				finished, object = FindNextObject(handle) -- first param returns true while entities are found
+			until not finished
+
+			EndFindObject(handle)
+		end
+
+	end
 
 	TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 
