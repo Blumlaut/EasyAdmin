@@ -971,9 +971,9 @@ function GenerateMenu() -- this is a big ass function
 						PrintDebugMessage("taking control of "..veh, 3)
 						local i=0
 						repeat 
-							Wait(200)
 							NetworkRequestControlOfEntity(veh)
 							i=i+1
+							Wait(150)
 						until (NetworkHasControlOfEntity(veh) or i==500)
 					end
 					PrintDebugMessage("deleting veh "..veh, 3)
@@ -1013,9 +1013,9 @@ function GenerateMenu() -- this is a big ass function
 						PrintDebugMessage("taking control of "..ped, 3)
 						local i=0
 						repeat 
-							Wait(200)
 							NetworkRequestControlOfEntity(ped)
 							i=i+1
+							Wait(150)
 						until (NetworkHasControlOfEntity(ped) or i==500)
 					end
 					PrintDebugMessage("deleting ped "..ped, 3)
@@ -1055,9 +1055,9 @@ function GenerateMenu() -- this is a big ass function
 						PrintDebugMessage("taking control of "..object, 3)
 						local i=0
 						repeat 
-							Wait(200)
 							NetworkRequestControlOfEntity(object)
 							i=i+1
+							Wait(150)
 						until (NetworkHasControlOfEntity(object) or i==500)
 					end
 					PrintDebugMessage("deleting object "..object, 3)
