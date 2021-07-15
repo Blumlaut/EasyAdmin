@@ -573,6 +573,17 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('spectatedplayer'), getName(source, false, true), getName(playerId, true, true)), "spectate", 16777214)
 		end
 	end)
+
+
+	RegisterServerEvent("EasyAdmin:requestCleanup")
+	AddEventHandler('EasyAdmin:requestCleanup', function(type)
+		if DoesPlayerHavePermission(source,"easyadmin.cleanup."..type) then
+			PrintDebugMessage("Player "..getName(source,true).." Requested Cleanup for "..type, 3)
+			TriggerClientEvent("EasyAdmin:requestCleanup", source, type)
+			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('admincleanedup'), getName(source, false, true), type), "cleanup", 16777214)
+		end
+	end)
 	
 	RegisterServerEvent("EasyAdmin:SetGameType")
 	AddEventHandler('EasyAdmin:SetGameType', function(text)

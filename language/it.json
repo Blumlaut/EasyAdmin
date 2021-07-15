@@ -163,11 +163,13 @@
 
     "cleancars": "Cleanup Cars",
     "cleancarsguide": "Cleans up nearby cars.",
-    "cleaningcar":"Deleting Vehicle %s",
+    "cleaningcar": "Deleting Vehicle %s",
     "cleanpeds": "Cleanup Peds",
     "cleanpedsguide": "Cleans up nearby peds.",
-    "cleaningped":"Deleting Ped %s",
+    "cleaningped": "Deleting Ped %s",
     "cleanprops": "Cleanup Props",
     "cleanpropsguide": "Cleans up nearby props spawned by cheaters.",
-    "cleaningprop":"Deleting Object %s"
+    "cleaningprop": "Deleting Object %s",
+    "finishedcleaning": "Finished cleaning %s",
+    "admincleanedup": "**%s** Cleaned up all **%s** in their area."
 }]

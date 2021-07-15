@@ -13,6 +13,7 @@ RegisterNetEvent("EasyAdmin:adminresponse")
 RegisterNetEvent("EasyAdmin:amiadmin")
 RegisterNetEvent("EasyAdmin:fillBanlist")
 RegisterNetEvent("EasyAdmin:requestSpectate")
+RegisterNetEvent("EasyAdmin:requestCleanup")
 
 RegisterNetEvent("EasyAdmin:SetSetting")
 RegisterNetEvent("EasyAdmin:SetLanguage")
@@ -107,6 +108,120 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 	stopSpectateUpdate = false 
 end)
 
+Citizen.CreateThread(function()
+	AddEventHandler('EasyAdmin:requestCleanup', function(type)
+		if type == "cars" then
+			local handle, veh = FindFirstVehicle()
+			local finished = false
+			repeat
+				if veh ~= 0 then
+					if not NetworkHasControlOfEntity(veh) then
+						PrintDebugMessage("taking control of "..veh, 3)
+						local i=0
+						repeat 
+							NetworkRequestControlOfEntity(veh)
+							i=i+1
+							Wait(150)
+						until (NetworkHasControlOfEntity(veh) or i==500)
+					end
+					PrintDebugMessage("deleting veh "..veh, 3)
+					
+					-- draw
+					SetTextFont(2)
+					SetTextColour(255, 255, 255, 200)
+					SetTextProportional(1)
+					SetTextScale(0.0, 0.6)
+					SetTextDropshadow(0, 0, 0, 0, 255)
+					SetTextEdge(1, 0, 0, 0, 255)
+					SetTextDropShadow()
+					SetTextOutline()
+					SetTextEntry("STRING")
+					AddTextComponentString(string.format(GetLocalisedText("cleaningcar"), veh))
+					EndTextCommandDisplayText(0.45, 0.95)
+					
+					DeleteEntity(veh)
+				end
+				Wait(1)
+				finished, veh = FindNextVehicle(handle)
+			until not finished
+			EndFindVehicle(handle)
+		elseif type == "peds" then
+			local handle, ped = FindFirstPed()
+			local finished = false
+			repeat
+				if ped ~= 0 and not IsPedAPlayer(ped) then
+					if not NetworkHasControlOfEntity(ped) then
+						PrintDebugMessage("taking control of "..ped, 3)
+						local i=0
+						repeat 
+							NetworkRequestControlOfEntity(ped)
+							i=i+1
+							Wait(150)
+						until (NetworkHasControlOfEntity(ped) or i==500)
+					end
+					PrintDebugMessage("deleting ped "..ped, 3)
+					
+					-- draw
+					SetTextFont(2)
+					SetTextColour(255, 255, 255, 200)
+					SetTextProportional(1)
+					SetTextScale(0.0, 0.6)
+					SetTextDropshadow(0, 0, 0, 0, 255)
+					SetTextEdge(1, 0, 0, 0, 255)
+					SetTextDropShadow()
+					SetTextOutline()
+					SetTextEntry("STRING")
+					AddTextComponentString(string.format(GetLocalisedText("cleaningped"), ped))
+					EndTextCommandDisplayText(0.45, 0.95)
+					
+					DeleteEntity(ped)
+				end
+				Wait(1)
+				finished, ped = FindNextPed(handle) 
+			until not finished
+			EndFindPed(handle)
+		elseif type == "props" then
+			local handle, object = FindFirstObject()
+			local finished = false -- FindNextPed will turn the first variable to false when it fails to find another ped in the index
+			repeat
+				if object ~= 0 then
+					if not NetworkHasControlOfEntity(object) then
+						PrintDebugMessage("taking control of "..object, 3)
+						local i=0
+						repeat 
+							NetworkRequestControlOfEntity(object)
+							i=i+1
+							Wait(150)
+						until (NetworkHasControlOfEntity(object) or i==500)
+					end
+					PrintDebugMessage("deleting object "..object, 3)
+					
+					-- draw
+					SetTextFont(2)
+					SetTextColour(255, 255, 255, 200)
+					SetTextProportional(1)
+					SetTextScale(0.0, 0.6)
+					SetTextDropshadow(0, 0, 0, 0, 255)
+					SetTextEdge(1, 0, 0, 0, 255)
+					SetTextDropShadow()
+					SetTextOutline()
+					SetTextEntry("STRING")
+					AddTextComponentString(string.format(GetLocalisedText("cleaningprop"), object))
+					EndTextCommandDisplayText(0.45, 0.95)
+					
+					
+					EndTextCommandDisplayText(0.3, 0.7+(i/30))
+					DeleteObject(object)
+				end
+				Wait(1)
+				finished, object = FindNextObject(handle) -- first param returns true while entities are found
+			until not finished
+			
+			EndFindObject(handle)
+		end
+		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), type))
+	end)
+end)
 Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(500)
@@ -247,6 +362,6 @@ AddEventHandler("EasyAdmin:showNotification", function(text, important)
 	if not RedM then
 		BeginTextCommandThefeedPost("STRING")
 		AddTextComponentString(text)
-		EndTextCommandThefeedPostTicker(important,0)
+		EndTextCommandThefeedPostTicker(important or false,0)
 	end
 end)
