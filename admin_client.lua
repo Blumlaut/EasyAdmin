@@ -111,12 +111,28 @@ end)
 Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestCleanup', function(type)
 		if type == "cars" then
+			
+			local toDelete = {}
 			local handle, veh = FindFirstVehicle()
 			local finished = false
 			repeat
 				if veh ~= 0 then
 					if not NetworkHasControlOfEntity(veh) then
 						PrintDebugMessage("taking control of "..veh, 3)
+						NetworkRequestControlOfEntity(veh)
+					end
+					print("saving veh "..veh.." for deletion.")
+					table.insert(toDelete,veh)
+				end
+				Wait(1)
+				finished, veh = FindNextVehicle(handle)
+			until not finished
+			EndFindVehicle(handle)
+			
+			for i,veh in pairs(toDelete) do
+				print("starting deletion for veh "..veh)
+				if DoesEntityExist(veh) then
+					if not NetworkHasControlOfEntity(veh) then
 						local i=0
 						repeat 
 							NetworkRequestControlOfEntity(veh)
@@ -138,20 +154,35 @@ Citizen.CreateThread(function()
 					SetTextEntry("STRING")
 					AddTextComponentString(string.format(GetLocalisedText("cleaningcar"), veh))
 					EndTextCommandDisplayText(0.45, 0.95)
-					
 					DeleteEntity(veh)
+					Wait(1)
 				end
-				Wait(1)
-				finished, veh = FindNextVehicle(handle)
-			until not finished
-			EndFindVehicle(handle)
+				toDelete[i] = nil
+			end
+			
+			
 		elseif type == "peds" then
+			local toDelete = {}
 			local handle, ped = FindFirstPed()
 			local finished = false
 			repeat
 				if ped ~= 0 and not IsPedAPlayer(ped) then
 					if not NetworkHasControlOfEntity(ped) then
 						PrintDebugMessage("taking control of "..ped, 3)
+						NetworkRequestControlOfEntity(ped)
+					end
+					print("saving ped "..ped.." for deletion.")
+					table.insert(toDelete,ped)
+				end
+				Wait(1)
+				finished, ped = FindNextPed(handle)
+			until not finished
+			EndFindPed(handle)
+			
+			for i,ped in pairs(toDelete) do
+				print("starting deletion for ped "..ped)
+				if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
+					if not NetworkHasControlOfEntity(ped) then
 						local i=0
 						repeat 
 							NetworkRequestControlOfEntity(ped)
@@ -173,20 +204,36 @@ Citizen.CreateThread(function()
 					SetTextEntry("STRING")
 					AddTextComponentString(string.format(GetLocalisedText("cleaningped"), ped))
 					EndTextCommandDisplayText(0.45, 0.95)
-					
 					DeleteEntity(ped)
+					Wait(1)
 				end
-				Wait(1)
-				finished, ped = FindNextPed(handle) 
-			until not finished
-			EndFindPed(handle)
+				toDelete[i] = nil
+			end
+			
 		elseif type == "props" then
+			
+			
+			local toDelete = {}
 			local handle, object = FindFirstObject()
-			local finished = false -- FindNextPed will turn the first variable to false when it fails to find another ped in the index
+			local finished = false
 			repeat
 				if object ~= 0 then
 					if not NetworkHasControlOfEntity(object) then
 						PrintDebugMessage("taking control of "..object, 3)
+						NetworkRequestControlOfEntity(object)
+					end
+					print("saving object "..object.." for deletion.")
+					table.insert(toDelete,object)
+				end
+				Wait(1)
+				finished, object = FindNextObject(handle)
+			until not finished
+			EndFindObject(handle)
+			
+			for i,object in pairs(toDelete) do
+				print("starting deletion for object "..object)
+				if DoesEntityExist(object) then
+					if not NetworkHasControlOfEntity(object) then
 						local i=0
 						repeat 
 							NetworkRequestControlOfEntity(object)
@@ -208,16 +255,11 @@ Citizen.CreateThread(function()
 					SetTextEntry("STRING")
 					AddTextComponentString(string.format(GetLocalisedText("cleaningprop"), object))
 					EndTextCommandDisplayText(0.45, 0.95)
-					
-					
-					EndTextCommandDisplayText(0.3, 0.7+(i/30))
-					DeleteObject(object)
+					DeleteEntity(object)
+					Wait(1)
 				end
-				Wait(1)
-				finished, object = FindNextObject(handle) -- first param returns true while entities are found
-			until not finished
-			
-			EndFindObject(handle)
+				toDelete[i] = nil
+			end
 		end
 		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), type))
 	end)
