@@ -161,7 +161,7 @@
     "cleancarsguide": "Cleans up nearby cars.",
     "cleaningcar":"Deleting Vehicle %s",
     "cleanpeds": "Cleanup Peds",
-    "cleanareaaggressiveguide": "Cleans up nearby peds.",
+    "cleanpedsguide": "Cleans up nearby peds.",
     "cleaningped":"Deleting Ped %s",
     "cleanprops": "Cleanup Props",
     "cleanpropsguide": "Cleans up nearby props spawned by cheaters.",
