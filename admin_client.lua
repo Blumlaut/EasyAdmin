@@ -121,7 +121,7 @@ Citizen.CreateThread(function()
 						PrintDebugMessage("taking control of "..veh, 3)
 						NetworkRequestControlOfEntity(veh)
 					end
-					print("saving veh "..veh.." for deletion.")
+					PrintDebugMessage("saving veh "..veh.." for deletion.", 4)
 					table.insert(toDelete,veh)
 				end
 				Wait(1)
@@ -130,7 +130,7 @@ Citizen.CreateThread(function()
 			EndFindVehicle(handle)
 			
 			for i,veh in pairs(toDelete) do
-				print("starting deletion for veh "..veh)
+				PrintDebugMessage("starting deletion for veh "..veh, 4)
 				if DoesEntityExist(veh) then
 					if not NetworkHasControlOfEntity(veh) then
 						local i=0
@@ -168,10 +168,10 @@ Citizen.CreateThread(function()
 			repeat
 				if ped ~= 0 and not IsPedAPlayer(ped) then
 					if not NetworkHasControlOfEntity(ped) then
-						PrintDebugMessage("taking control of "..ped, 3)
+						PrintDebugMessage("taking control of ped "..ped, 3)
 						NetworkRequestControlOfEntity(ped)
 					end
-					print("saving ped "..ped.." for deletion.")
+					PrintDebugMessage("saving ped "..ped.." for deletion.", 4)
 					table.insert(toDelete,ped)
 				end
 				Wait(1)
@@ -180,7 +180,7 @@ Citizen.CreateThread(function()
 			EndFindPed(handle)
 			
 			for i,ped in pairs(toDelete) do
-				print("starting deletion for ped "..ped)
+				PrintDebugMessage("starting deletion for ped "..ped, 4)
 				if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
 					if not NetworkHasControlOfEntity(ped) then
 						local i=0
@@ -219,10 +219,10 @@ Citizen.CreateThread(function()
 			repeat
 				if object ~= 0 then
 					if not NetworkHasControlOfEntity(object) then
-						PrintDebugMessage("taking control of "..object, 3)
+						PrintDebugMessage("taking control of object "..object, 3)
 						NetworkRequestControlOfEntity(object)
 					end
-					print("saving object "..object.." for deletion.")
+					PrintDebugMessage("saving object "..object.." for deletion.", 4)
 					table.insert(toDelete,object)
 				end
 				Wait(1)
@@ -231,7 +231,7 @@ Citizen.CreateThread(function()
 			EndFindObject(handle)
 			
 			for i,object in pairs(toDelete) do
-				print("starting deletion for object "..object)
+				PrintDebugMessage("starting deletion for object "..object, 4)
 				if DoesEntityExist(object) then
 					if not NetworkHasControlOfEntity(object) then
 						local i=0
