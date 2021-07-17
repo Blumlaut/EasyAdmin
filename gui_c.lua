@@ -88,7 +88,6 @@ Citizen.CreateThread(function()
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
-		print(GetResourceKvpString("ea_menuorientation"))
 	end 
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
@@ -200,9 +199,7 @@ function GenerateMenu() -- this is a big ass function
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
-		print(GetResourceKvpString("ea_menuorientation"))
 	end 
-	print(menuOrientation)
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
