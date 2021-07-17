@@ -139,3 +139,11 @@ function table_to_string(tbl)
     end
     return result.."}"
 end
+
+function mergeTables(t1, t2)
+	local t = t1
+	for i,v in pairs(t2) do
+		table.insert(t, v)
+	end
+	return t
+end
