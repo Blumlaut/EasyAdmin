@@ -61,7 +61,7 @@
     "banlistshowtype": "~h~Banlist:~h~ Mostra tipo",
     "unbanreasons": "Ragioni",
     "unbanlicenses": "Licenze",
-    "banlistshowtypeguide": "Cambia tra Licenza e Ragioni per il ban Nel menu 'Rimuovi Ban per il giocatore'.\nRichiede una riapertura del menu.",
+    "banlistshowtypeguide": "Cambia tra Identificatore e Ragioni per il ban Nel menu 'Rimuovi Ban per il giocatore'.\nRichiede una riapertura del menu.",
     "refreshbanlist": "Aggiorna La lista dei ban",
     "refreshbanlistguide": "Questo aggiorna la lista de ban per il menu 'Rimuovi ban per il giocatore'.\nRichiede una riapertura del menu.",
     "refreshpermissions": "Aggiorna Permessi",
@@ -76,7 +76,7 @@
     "chatsuggestionban": "bandisci un giocatore",
     "chatsuggestionkick": "espelli un giocatore",
     "chatsuggestionspectate": "spetta un giocatore",
-    "chatsuggestionunban": "bandisci una licenza",
+    "chatsuggestionunban": "bandisci un identificatore",
     "chatsuggestionteleport": "teletrasportati da un giocatore",
     "chatsuggestiongametype": "Imposta game type del server",
     "chatsuggestionmapname": "Imposta Map Name del server",
@@ -136,7 +136,7 @@
     "teleportedtoplayer": "**%s** teletrasportato a **%s**",
     "searchbans": "Cerca Ban",
     "searchbansfail": "Non è stato trovato nessun Ban con questo criterio di ricerca.",
-    "identifier": "Licenza %s",
+    "identifier": "Identificatore %s",
     "warnplayer": "Warna un giocatore",
     "warnreasonguide": "Aggiungi il motivo dell' Warn.",
     "confirmwarn": "Conferma Warn",
@@ -171,5 +171,5 @@
     "cleanpropsguide": "Rimuove gli oggetti vicini spawnati dai cheater.",
     "cleaningprop": "Rimuovendo oggetto %s",
     "finishedcleaning": "Ho finito di rimuovere %s",
-    "admincleanedup": "**%s** Ha cancellato tutti  **%s** in their area."
+    "admincleanedup": "**%s** Ha cancellato tutti i **%s** intorno a sé."
 }]
