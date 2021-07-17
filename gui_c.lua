@@ -88,6 +88,7 @@ Citizen.CreateThread(function()
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+		print(GetResourceKvpString("ea_menuorientation"))
 	end 
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
@@ -199,7 +200,9 @@ function GenerateMenu() -- this is a big ass function
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+		print(GetResourceKvpString("ea_menuorientation"))
 	end 
+	print(menuOrientation)
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
@@ -992,7 +995,7 @@ function GenerateMenu() -- this is a big ass function
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlistshowtype"), sl, 1,GetLocalisedText("banlistshowtypeguide"))
 		settingsMenu:AddItem(thisItem)
-		settingsMenu.OnListChange = function(sender, item, index)
+		settingsMenu.OnListSelect = function(sender, item, index)
 				if item == thisItem then
 						i = item:IndexToItem(index)
 						if i == GetLocalisedText(unbanreasons) then
@@ -1030,7 +1033,7 @@ function GenerateMenu() -- this is a big ass function
 	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnListChange = function(sender, item, index)
+	settingsMenu.OnListSelect = function(sender, item, index)
 			if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == GetLocalisedText("left") then
