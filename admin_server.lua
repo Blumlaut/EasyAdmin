@@ -165,13 +165,6 @@ function getNewBackupid(backupInfos)
 	end
 end
 
-function mergeTables(t1, t2)
-	local t = t1
-	for i,v in pairs(t2) do
-		table.insert(t, v)
-	end
-	return t
-end
 
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
 	local identifiers = GetPlayerIdentifiers(playerId)
