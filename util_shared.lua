@@ -126,7 +126,9 @@ function table_to_string(tbl)
             result = result..table_to_string(v)
         elseif type(v) == "boolean" then
             result = result..tostring(v)
-        else
+		elseif type(v) == "function" then
+			result = result..tostring(v)
+		else
             result = result.."\""..v.."\""
         end
         result = result..","
