@@ -958,11 +958,11 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("screenshotinprogress") } })
 			return
 		end
-		scrinprogress = true
 		local src=source
 		local playerId = playerId
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
+			scrinprogress = true
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
 				if result == "ERROR" then return false end
 				res = tostring(result)
