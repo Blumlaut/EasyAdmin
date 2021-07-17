@@ -412,6 +412,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 		local servercfg = io.open(path.."server.cfg")
 		if servercfg then
 			supportData.serverconfig = servercfg:read("*a")
+			servercfg:close()
 		end
 
 		PrintDebugMessage("Collecting Banlist....^7\n", 1)
