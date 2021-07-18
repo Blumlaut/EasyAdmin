@@ -81,10 +81,10 @@ Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 
 	if not GetResourceKvpString("ea_menuorientation") then
-		SetResourceKvp("ea_menuorientation", "right")
+		SetResourceKvp("ea_menuorientation", "left")
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
-		menuOrientation = handleOrientation("right")
+		menuOrientation = handleOrientation("left")
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -192,10 +192,10 @@ function GenerateMenu() -- this is a big ass function
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
 	if not GetResourceKvpString("ea_menuorientation") then
-		SetResourceKvp("ea_menuorientation", "right")
+		SetResourceKvp("ea_menuorientation", "left")
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
-		menuOrientation = handleOrientation("right")
+		menuOrientation = handleOrientation("left")
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -775,10 +775,10 @@ function GenerateMenu() -- this is a big ass function
 				_menuPool = NativeUI.CreatePool()
 				collectgarbage()
 				if not GetResourceKvpString("ea_menuorientation") then
-					SetResourceKvp("ea_menuorientation", "right")
+					SetResourceKvp("ea_menuorientation", "left")
 					SetResourceKvpInt("ea_menuwidth", 0)
 					menuWidth = 0
-					menuOrientation = handleOrientation("right")
+					menuOrientation = handleOrientation("left")
 				else
 					menuWidth = GetResourceKvpInt("ea_menuwidth")
 					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -851,10 +851,10 @@ function GenerateMenu() -- this is a big ass function
 						_menuPool = NativeUI.CreatePool()
 						collectgarbage()
 						if not GetResourceKvpString("ea_menuorientation") then
-							SetResourceKvp("ea_menuorientation", "right")
+							SetResourceKvp("ea_menuorientation", "left")
 							SetResourceKvpInt("ea_menuwidth", 0)
 							menuWidth = 0
-							menuOrientation = handleOrientation("right")
+							menuOrientation = handleOrientation("left")
 						else
 							menuWidth = GetResourceKvpInt("ea_menuwidth")
 							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -1316,7 +1316,7 @@ function GenerateMenu() -- this is a big ass function
 		TriggerServerEvent("EasyAdmin:amiadmin")
 	end
 	
-	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
+	local sl = {GetLocalisedText("left"), GetLocalisedText("middle")}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
 	settingsMenu.OnListSelect = function(sender, item, index)
@@ -1332,7 +1332,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 	end
 	local sl = {}
-	for i=0,150,10 do
+	for i=0,250,10 do
 		table.insert(sl,i)
 	end
 	local thisi = 0
