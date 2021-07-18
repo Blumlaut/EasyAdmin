@@ -1089,13 +1089,15 @@ Citizen.CreateThread(function()
 	
 		PrintDebugMessage("reading "..filename, 4)
 		
-		local file = io.open(filename, "a+")
+		local file = io.open(filename, "r")
 		if file then
 			line = file:read("*line")
 			while line do
 				table.insert(lines,line)
 				line = file:read("*line")
 			end
+			file:close()
+			local file = io.open(filename, "a+") -- reopen in read mode
 	
 			for i, line in pairs(lines) do 
 				if filename == "server.cfg" then
