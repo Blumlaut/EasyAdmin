@@ -61,6 +61,20 @@ AddEventHandler("EasyAdmin:GetInfinityPlayerList", function(players)
 	playerlist = players
 end)
 
+RegisterNetEvent("EasyAdmin:getServerAces")
+AddEventHandler("EasyAdmin:getServerAces", function(aces,principals)
+	add_aces = aces
+	add_principals = principals
+	PrintDebugMessage("Recieved Permissions list", 4)
+end)
+
+RegisterNetEvent("EasyAdmin:SetLanguage")
+AddEventHandler("EasyAdmin:SetLanguage", function()
+	if permissions["permissions.view"] then
+		TriggerServerEvent("EasyAdmin:getServerAces")
+	end
+end)
+
 
 Citizen.CreateThread( function()
 	while true do

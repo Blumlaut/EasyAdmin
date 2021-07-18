@@ -986,6 +986,294 @@ function GenerateMenu() -- this is a big ass function
 
 	end
 
+
+	if permissions["permissions.view"] then
+		permissionEditor = _menuPool:AddSubMenu(servermanagement, "Permission Editor","~r~PRERELEASE CONTENT AHEAD, MIGHT BE BUGGY!",true)
+		permissionEditor:SetMenuWidthOffset(menuWidth)
+
+		editAces = _menuPool:AddSubMenu(permissionEditor, "ACEs","",true)
+		editAces:SetMenuWidthOffset(menuWidth)
+
+
+		if permissions["permissions.write"] then 
+			local thisMenu = _menuPool:AddSubMenu(editAces, "~g~Add ACE", "", true)
+			thisMenu:SetMenuWidthOffset(menuWidth)
+			local tempAce = {}
+			local thisItem = NativeUI.CreateItem("Group", "")
+			thisItem:RightLabel(tempAce[1] or "")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", "Enter group name (e.g. group.admin)")
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempAce[1] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = result
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("Permission", "")
+			thisItem:RightLabel(tempAce[2])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPERM", "Enter Permission name (e.g. easyadmin.kick)")
+				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", "", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempAce[2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem:RightLabel(result)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("State", "Denying permissions does not work properly, only allow permissions you want the player to have.")
+			thisItem:RightLabel("allow")
+			tempAce[3] = "allow"
+			thisMenu:AddItem(thisItem)
+			thisItem:Enabled(false)
+			
+
+			local thisItem = NativeUI.CreateItem("~g~Add ACE", "You have the opportunity to edit this before saving.")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				table.insert(add_aces, tempAce)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				editAces:Visible(true)
+				collectgarbage()
+			end
+		end
+
+		for i, ace in pairs(add_aces) do
+			local thisMenu = _menuPool:AddSubMenu(editAces, ace[1].." "..ace[2], "", true)
+			thisMenu:SetMenuWidthOffset(menuWidth)
+			thisMenu.ParentItem:RightLabel(ace[3])
+
+			local thisItem = NativeUI.CreateItem("Group", "")
+			thisItem:RightLabel(ace[1])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", "Enter group name (e.g. group.admin)")
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", ace[1], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_aces[i][1] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = add_aces[i][1].." "..add_aces[i][2]
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("Permission", "")
+			thisItem:RightLabel(ace[2])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPERM", "Enter Permission name (e.g. easyadmin.kick)")
+				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", ace[2], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_aces[i][2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = add_aces[i][1].." "..add_aces[i][2]
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("State", "Denying permissions does not work properly, only allow permissions you want the player to have.")
+			thisItem:RightLabel(ace[3])
+			thisMenu:AddItem(thisItem)
+			thisItem:Enabled(false)
+			
+			if (ace.file) then
+				local thisItem = NativeUI.CreateItem("Location", "This value cannot be edited.")
+				thisItem:RightLabel(ace.file)
+				thisMenu:AddItem(thisItem)
+				thisItem:Enabled(false)
+			end
+
+
+			local thisItem = NativeUI.CreateItem("~r~Delete Permission", "~r~Warning! This will do what it says it does")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				thisMenu.ParentItem:Enabled(false)
+				thisMenu.ParentItem._Description = "~r~This Item has been deleted."
+				add_aces[i] = nil
+				thisMenu:GoBack()
+			end
+		end
+
+
+		editPrincipals = _menuPool:AddSubMenu(permissionEditor, "Principals","",true)
+		editPrincipals:SetMenuWidthOffset(menuWidth)	
+
+		if permissions["permissions.write"] then
+			local thisMenu = _menuPool:AddSubMenu(editPrincipals, "~g~Add Principal", "", true)
+			thisMenu:SetMenuWidthOffset(menuWidth)
+			local tempPrincipal = {}
+			local thisItem = NativeUI.CreateItem("Principal", "")
+			thisItem:RightLabel(tempPrincipal[1] or "")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPRINCIPAL", "Enter principal (e.g. identifier.steam:aabbccddeefff)")
+				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", "identifier.", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempPrincipal[1] = result
+					thisItem:RightLabel(result)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("Group", "")
+			thisItem:RightLabel(tempPrincipal[2] or "")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempPrincipal[2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem:RightLabel(result)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("~g~Add Principal", "You have the opportunity to edit this before saving.")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				table.insert(add_principals, tempPrincipal)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				editPrincipals:Visible(true)
+				collectgarbage()
+			end
+		end
+
+		for i, principal in pairs(add_principals) do
+
+			local thisMenu = _menuPool:AddSubMenu(editPrincipals, principal[1], "", true)
+			thisMenu:SetMenuWidthOffset(menuWidth)
+			thisMenu.ParentItem:RightLabel(principal[2])
+
+			local thisItem = NativeUI.CreateItem("Principal", "")
+			thisItem:RightLabel(principal[1])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPRINCIPAL", "Enter principal (e.g. identifier.steam:aabbccddeefff)")
+				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", principal[1], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_principals[i][1] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = add_principals[i][1]
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem("Group", "")
+			thisItem:RightLabel(principal[2])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", principal[2], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_principals[i][2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem:RightLabel(result)
+				end
+			end
+
+			if (principal.file) then
+				local thisItem = NativeUI.CreateItem("Location", "This value cannot be edited.")
+				thisItem:RightLabel(principal.file)
+				thisMenu:AddItem(thisItem)
+				thisItem:Enabled(false)
+			end
+
+			local thisItem = NativeUI.CreateItem("~r~Delete Principal", "~r~Warning! This will do what it says it does")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				thisMenu.ParentItem:Enabled(false)
+				thisMenu.ParentItem._Description = "~r~This Item has been deleted."
+				add_principals[i] = nil
+				thisMenu:GoBack()
+			end
+
+		end
+	end
+	if permissions["permissions.view"] then
+		local thisItem = NativeUI.CreateItem("Refresh Permissions", "")
+		permissionEditor:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:getServerAces")
+			_menuPool:CloseAllMenus()
+			Citizen.Wait(800)
+			GenerateMenu()
+			permissionEditor:Visible(true)
+			collectgarbage()
+		end
+	end
+
+	if permissions["permissions.write"] then
+		local thisItem = NativeUI.CreateItem("~g~Save Changes", "~r~Warning! ~w~This cannot be undone!")
+		permissionEditor:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:setServerAces",add_aces, add_principals)
+			_menuPool:CloseAllMenus()
+			Citizen.Wait(800)
+			GenerateMenu()
+			permissionEditor:Visible(true)
+			collectgarbage()
+		end
+	end
+
+
 	TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 
 	if permissions["unban"] then

@@ -17,6 +17,8 @@ permissions = {
 	["cleanup.cars"] = false,
 	["cleanup.props"] = false,
 	["cleanup.peds"] = false,
+	["permissions.view"] = false,
+	["permissions.write"] = false
 }
 
 
