@@ -955,37 +955,38 @@ function GenerateMenu() -- this is a big ass function
 				unbanPlayer:Visible(true)
 			end	
 		end 
-
-
 	end
 	
+
+
+
+	local sl = {}
 	if permissions["cleanup.cars"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleancars"), GetLocalisedText("cleancarsguide"))
-		servermanagement:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:requestCleanup", "cars")
-		end
-
+		table.insert(sl, GetLocalisedText('cars'))
 	end
-
 	if permissions["cleanup.peds"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanpeds"), GetLocalisedText("cleanpedsguide"))
-		servermanagement:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:requestCleanup", "peds")
-		end
+		table.insert(sl, GetLocalisedText('peds'))
 	end
-
-
 	if permissions["cleanup.props"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanprops"), GetLocalisedText("cleanpropsguide"))
-		servermanagement:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:requestCleanup", "props")
-		end
-
+		table.insert(sl, GetLocalisedText('props'))
 	end
 
+	if #sl > 0 then
+		local thisItem = NativeUI.CreateListItem(GetLocalisedText("cleanarea"), sl, 1, GetLocalisedText("cleanareaguide"))
+		servermanagement:AddItem(thisItem)
+		servermanagement.OnListSelect = function(sender, item, index)
+			if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == GetLocalisedText('cars') then
+						TriggerServerEvent("EasyAdmin:requestCleanup", "cars")
+					elseif i == GetLocalisedText('peds') then
+						TriggerServerEvent("EasyAdmin:requestCleanup", "peds")
+					else
+						TriggerServerEvent("EasyAdmin:requestCleanup", "props")
+					end
+			end
+		end
+	end
 
 	if permissions["permissions.view"] then
 		permissionEditor = _menuPool:AddSubMenu(servermanagement, "Permission Editor","~r~PRERELEASE CONTENT AHEAD, MIGHT BE BUGGY!",true)

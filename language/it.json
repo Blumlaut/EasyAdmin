@@ -161,15 +161,14 @@
     "convarname": "Convar Name",
     "convarvalue": "Convar Value",
 
-    "cleancars": "Rimuovi i veicoli",
-    "cleancarsguide": "Rimuove i veicoli vicino a te.",
-    "cleaningcar": "Rimuovendo veicolo %s",
-    "cleanpeds": "Rimuovi peds",
-    "cleanpedsguide": "Sto rimuovendo i peds.",
-    "cleaningped": "Rimuovendo Ped %s",
-    "cleanprops": "Rimuovi Props",
-    "cleanpropsguide": "Rimuove gli oggetti vicini spawnati dai cheater.",
-    "cleaningprop": "Rimuovendo oggetto %s",
-    "finishedcleaning": "Ho finito di rimuovere %s",
-    "admincleanedup": "**%s** Ha cancellato tutti i **%s** intorno a sé."
+    "cleanarea": "Cleanup Area",
+    "cleanareaguide": "Cleans up all nearby entities of selected type",
+    "cars": "Cars",
+    "peds": "Peds",
+    "props": "Props",
+    "cleaningcar": "Deleting Vehicle %s",
+    "cleaningped": "Deleting Ped %s",
+    "cleaningprop": "Deleting Object %s",
+    "finishedcleaning": "Finished cleaning %s",
+    "admincleanedup": "**%s** Cleaned up all **%s** in their area."
 }]
