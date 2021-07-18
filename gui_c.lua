@@ -990,15 +990,21 @@ function GenerateMenu() -- this is a big ass function
 
 	if permissions["permissions.view"] then
 		permissionEditor = _menuPool:AddSubMenu(servermanagement, "Permission Editor","~r~PRERELEASE CONTENT AHEAD, MIGHT BE BUGGY!",true)
-		permissionEditor:SetMenuWidthOffset(menuWidth)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		permissionEditor:SetMenuWidthOffset(thisMenuWidth)
 
 		editAces = _menuPool:AddSubMenu(permissionEditor, "ACEs","",true)
-		editAces:SetMenuWidthOffset(menuWidth)
+		editAces:SetMenuWidthOffset(thisMenuWidth)
 
 
 		if permissions["permissions.write"] then 
 			local thisMenu = _menuPool:AddSubMenu(editAces, "~g~Add ACE", "", true)
-			thisMenu:SetMenuWidthOffset(menuWidth)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			local tempAce = {}
 			local thisItem = NativeUI.CreateItem("Group", "")
 			thisItem:RightLabel(tempAce[1] or "")
@@ -1061,7 +1067,7 @@ function GenerateMenu() -- this is a big ass function
 
 		for i, ace in pairs(add_aces) do
 			local thisMenu = _menuPool:AddSubMenu(editAces, ace[1].." "..ace[2], "", true)
-			thisMenu:SetMenuWidthOffset(menuWidth)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(ace[3])
 
 			local thisItem = NativeUI.CreateItem("Group", "")
@@ -1129,11 +1135,11 @@ function GenerateMenu() -- this is a big ass function
 
 
 		editPrincipals = _menuPool:AddSubMenu(permissionEditor, "Principals","",true)
-		editPrincipals:SetMenuWidthOffset(menuWidth)	
+		editPrincipals:SetMenuWidthOffset(thisMenuWidth)	
 
 		if permissions["permissions.write"] then
 			local thisMenu = _menuPool:AddSubMenu(editPrincipals, "~g~Add Principal", "", true)
-			thisMenu:SetMenuWidthOffset(menuWidth)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			local tempPrincipal = {}
 			local thisItem = NativeUI.CreateItem("Principal", "")
 			thisItem:RightLabel(tempPrincipal[1] or "")
@@ -1188,7 +1194,7 @@ function GenerateMenu() -- this is a big ass function
 		for i, principal in pairs(add_principals) do
 
 			local thisMenu = _menuPool:AddSubMenu(editPrincipals, principal[1], "", true)
-			thisMenu:SetMenuWidthOffset(menuWidth)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(principal[2])
 
 			local thisItem = NativeUI.CreateItem("Principal", "")
