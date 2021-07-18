@@ -269,6 +269,8 @@ Citizen.CreateThread(function()
 					SetTextEntry("STRING")
 					AddTextComponentString(string.format(GetLocalisedText("cleaningprop"), object))
 					EndTextCommandDisplayText(0.45, 0.95)
+					DetachEntity(object, false, false)
+					SetEntityAsNoLongerNeeded(object)
 					DeleteEntity(object)
 					Wait(1)
 				end
