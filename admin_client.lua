@@ -275,7 +275,7 @@ Citizen.CreateThread(function()
 				toDelete[i] = nil
 			end
 		end
-		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), type))
+		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), GetLocalisedText(type)))
 	end)
 end)
 Citizen.CreateThread( function()
