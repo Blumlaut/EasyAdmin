@@ -81,10 +81,10 @@ Citizen.CreateThread(function()
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 
 	if not GetResourceKvpString("ea_menuorientation") then
-		SetResourceKvp("ea_menuorientation", "left")
+		SetResourceKvp("ea_menuorientation", "middle")
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
-		menuOrientation = handleOrientation("left")
+		menuOrientation = handleOrientation("middle")
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -192,10 +192,10 @@ function GenerateMenu() -- this is a big ass function
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
 	if not GetResourceKvpString("ea_menuorientation") then
-		SetResourceKvp("ea_menuorientation", "left")
+		SetResourceKvp("ea_menuorientation", "middle")
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
-		menuOrientation = handleOrientation("left")
+		menuOrientation = handleOrientation("middle")
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -775,10 +775,10 @@ function GenerateMenu() -- this is a big ass function
 				_menuPool = NativeUI.CreatePool()
 				collectgarbage()
 				if not GetResourceKvpString("ea_menuorientation") then
-					SetResourceKvp("ea_menuorientation", "left")
+					SetResourceKvp("ea_menuorientation", "middle")
 					SetResourceKvpInt("ea_menuwidth", 0)
 					menuWidth = 0
-					menuOrientation = handleOrientation("left")
+					menuOrientation = handleOrientation("middle")
 				else
 					menuWidth = GetResourceKvpInt("ea_menuwidth")
 					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -851,10 +851,10 @@ function GenerateMenu() -- this is a big ass function
 						_menuPool = NativeUI.CreatePool()
 						collectgarbage()
 						if not GetResourceKvpString("ea_menuorientation") then
-							SetResourceKvp("ea_menuorientation", "left")
+							SetResourceKvp("ea_menuorientation", "middle")
 							SetResourceKvpInt("ea_menuwidth", 0)
 							menuWidth = 0
-							menuOrientation = handleOrientation("left")
+							menuOrientation = handleOrientation("middle")
 						else
 							menuWidth = GetResourceKvpInt("ea_menuwidth")
 							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
