@@ -1189,6 +1189,10 @@ Citizen.CreateThread(function()
 	
 			return aces, principals, execs
 		else 
+			if filename == "easyadmin_permissions.cfg" then
+				local file = io.open(filename, "w")
+				file:close()
+			end
 			PrintDebugMessage(filename.." cannot be read, bailing.", 4)
 			return {}, {}, {}
 		end
