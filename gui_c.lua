@@ -76,6 +76,13 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(100)
 	until NativeUI
+
+	-- load menu textures
+	local txd = CreateRuntimeTxd("easyadmin")
+	local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo.png')
+	local tx = CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/banner-gradient.png')
+
+	
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
@@ -204,16 +211,16 @@ function GenerateMenu() -- this is a big ass function
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
 	end
-	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
+	mainMenu = NativeUI.CreateMenu("", subtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 	_menuPool:Add(mainMenu)
 	
 		mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
-	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true)
-	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true)
-	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true)
+	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true, true)
+	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true, true)
+	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true, true)
 
 	mainMenu:SetMenuWidthOffset(menuWidth)	
 	playermanagement:SetMenuWidthOffset(menuWidth)	
@@ -282,7 +289,7 @@ function GenerateMenu() -- this is a big ass function
 
 			if found and (#temp > 1) then
 				local searchsubtitle = "Found "..tostring(#temp).." results!"
-				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
+				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(resultMenu)
 				_menuPool:ControlDisablingEnabled(false)
 				_menuPool:MouseControlsEnabled(false)
@@ -784,7 +791,7 @@ function GenerateMenu() -- this is a big ass function
 					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 				end 
 				
-				mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+				mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(mainMenu)
 				
 					mainMenu:SetMenuWidthOffset(menuWidth)	
@@ -860,7 +867,7 @@ function GenerateMenu() -- this is a big ass function
 							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 						end 
 						
-						mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+						mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 						_menuPool:Add(mainMenu)
 						
 							mainMenu:SetMenuWidthOffset(menuWidth)	
