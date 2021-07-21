@@ -2391,16 +2391,20 @@ end
     Menus
 --]]
 
-function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
+function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName, titleTxt)
     local X, Y = tonumber(X) or 0, tonumber(Y) or 0
     if Title ~= nil then Title = tostring(Title) or "" else Title = "" end
     if Subtitle ~= nil then Subtitle = tostring(Subtitle) or "" else Subtitle = "" end
     if TxtDictionary ~= nil then TxtDictionary = tostring(TxtDictionary) or "commonmenu" else TxtDictionary = "commonmenu" end
     if TxtName ~= nil then TxtName = tostring(TxtName) or "interaction_bgd" else TxtName = "interaction_bgd" end
+    local Title = UIResText.New(Title, 215 + X, 20 + Y, 1.15, 255, 255, 255, 255, 1, 1)
+    if titleTxt then
+        Title = Sprite.New(TxtDictionary, titleTxt, 0 + X, 0 + Y, 431, 107)
+    end
     local _UIMenu = {
         Logo = Sprite.New(TxtDictionary, TxtName, 0 + X, 0 + Y, 431, 107),
         Banner = nil,
-        Title = UIResText.New(Title, 215 + X, 20 + Y, 1.15, 255, 255, 255, 255, 1, 1),
+        Title = Title,
         Subtitle = {ExtraY = 0},
         WidthOffset = 0,
         Position = {X = X, Y = Y},
@@ -2411,6 +2415,9 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
         Items = {},
         Windows = {},
         Children = {},
+        TxtDictionary = TxtDictionary,
+        TxtName = TxtName,
+        titleTxt = titleTxt,
         Controls = {
             Back = {
                 Enabled = true,
@@ -2543,7 +2550,11 @@ function UIMenu:SetMenuWidthOffset(Offset)
     if tonumber(Offset) then
         self.WidthOffset = math.floor(tonumber(Offset))
         self.Logo:Size(431 + self.WidthOffset, 107)
-        self.Title:Position(((self.WidthOffset + 431)/2) + self.Position.X, 20 + self.Position.Y)
+        if self.Title.TxtName then
+            self.Title:Position(((self.WidthOffset + 0)/2) + self.Position.X, 0 + self.Position.Y)
+        else
+            self.Title:Position(((self.WidthOffset + 431)/2) + self.Position.X, 20 + self.Position.Y)
+        end
         if self.Subtitle.Rectangle ~= nil then
             self.Subtitle.Rectangle:Size(431 + self.WidthOffset + 100, 37)            
             self.PageCounter.Text:Position(425 + self.Position.X + self.WidthOffset, 110 + self.Position.Y)
@@ -3212,7 +3223,9 @@ function UIMenu:Draw()
         self.Banner:Draw()
     end
 
-    self.Title:Draw()
+    if self.Title.TxtName then
+        self.Title:Draw()
+    end
 
     if self.Subtitle.Rectangle then
         self.Subtitle.Rectangle:Draw()
@@ -3613,10 +3626,19 @@ function MenuPool:AddSubMenu(Menu, Text, Description, KeepPosition, KeepBanner)
         local Item = UIMenuItem.New(tostring(Text), Description or "")
         Menu:AddItem(Item)
         local SubMenu
+
         if KeepPosition then
-            SubMenu = UIMenu.New(Menu.Title:Text(), Text, Menu.Position.X, Menu.Position.Y)
+            if Menu.Title.TxtName then
+                SubMenu = UIMenu.New(Menu.Title:Draw(), Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+            else
+                SubMenu = UIMenu.New(Menu.Title:Text(), Text, Menu.Position.X, Menu.Position.Y)
+            end
         else
-            SubMenu = UIMenu.New(Menu.Title:Text(), Text)
+            if Menu.Title.TxtName then
+                SubMenu = UIMenu.New(Menu.Title:Draw(), Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+            else
+                SubMenu = UIMenu.New(Menu.Title:Text(), Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+            end
         end
         if KeepBanner then
             if Menu.Logo ~= nil then
@@ -3811,8 +3833,8 @@ function NativeUI.CreatePool()
     return MenuPool.New()
 end
 
-function NativeUI.CreateMenu(Title, Subtitle, X, Y, TxtDictionary, TxtName)
-    return UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
+function NativeUI.CreateMenu(Title, Subtitle, X, Y, TxtDictionary, TxtName, titleTxt)
+    return UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName, titleTxt)
 end
 
 function NativeUI.CreateItem(Text, Description)
