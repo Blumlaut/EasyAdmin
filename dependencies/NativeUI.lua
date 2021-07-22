@@ -3223,9 +3223,7 @@ function UIMenu:Draw()
         self.Banner:Draw()
     end
 
-    if self.Title.TxtName then
-        self.Title:Draw()
-    end
+    self.Title:Draw()
 
     if self.Subtitle.Rectangle then
         self.Subtitle.Rectangle:Draw()
