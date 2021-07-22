@@ -1858,6 +1858,7 @@ Citizen.CreateThread(function()
 			infinity = true
 		end
 		
+		readAcePermissions()
 		SetTimeout(3600000, checkVersionHTTPRequest)
 	end
 	
@@ -1867,7 +1868,6 @@ Citizen.CreateThread(function()
 	
 	function loopUpdateBlacklist()
 		updateBlacklist()
-		readAcePermissions()
 		SetTimeout(300000, loopUpdateBlacklist)
 	end
 
