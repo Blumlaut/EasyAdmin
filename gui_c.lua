@@ -201,12 +201,14 @@ function GenerateMenu() -- this is a big ass function
 			if overrideEgg == "pipes" or chance == 1 then
 				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
 				duihandle = GetDuiHandle(dui)
+				Wait(800)
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
 				CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
 				currentEgg = "pipes"
 			elseif overrideEgg == "nom" or chance == 2 then
 				dui = CreateDui("http://furfag.de/eggs/nom", 512,128)	
 				duihandle = GetDuiHandle(dui)
+				Wait(500)
 				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = "nom"
@@ -219,7 +221,6 @@ function GenerateMenu() -- this is a big ass function
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = false
 			end
-			Wait(800) -- wait for the DUI to roughly finish loading
 		else
 			if settings.alternativeLogo then
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/'..settings.alternativeLogo..'.png')
