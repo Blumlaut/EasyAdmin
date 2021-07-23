@@ -187,16 +187,16 @@ local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
 
-	if not txd or (overrideEgg ~= currentEgg and easterChance ~= 1000) then
+	if not txd or (overrideEgg ~= currentEgg) then
 		if dui then
 			DestroyDui(dui)
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
-		if (overrideEgg or easterChance == 1000) then
+		if ((overrideEgg == nil) or easterChance == 1000) then
 			local chance = 0
-			if easterChance == 1000 then
-				chance = math.random(1,3)
+			if ((overrideEgg == nil) and easterChance == 1000) then
+				chance = math.random(1,2)
 			end
 			if overrideEgg == "pipes" or chance == 1 then
 				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
@@ -210,9 +210,14 @@ function GenerateMenu() -- this is a big ass function
 				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = "nom"
-			elseif overrideEgg == "pride" or chance == 3 then
+			elseif overrideEgg == "pride" then
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = "pride"
+			elseif overrideEgg == false then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = false
 			end
 			Wait(800) -- wait for the DUI to roughly finish loading
 		else
@@ -1428,7 +1433,7 @@ function GenerateMenu() -- this is a big ass function
 			if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == "none" then
-						overrideEgg = nil
+						overrideEgg = false
 					else
 						overrideEgg = i
 					end
