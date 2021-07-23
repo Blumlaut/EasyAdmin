@@ -83,6 +83,19 @@ Citizen.CreateThread(function()
 	local tx = CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/banner-gradient.png')
 
 	
+	-- load menu textures
+	local txd = CreateRuntimeTxd("easyadmin")
+	--[[
+	if GetConvar("ea_nostalgy", "true") == "true" then
+		dui = CreateDui("blumlaut.me/easyadmin/pipes.html", 800, 620)	
+		local handle = GetDuiHandle(dui)
+		local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo-nostalgy.png')
+		local tx = CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', handle)
+	else ]]
+		local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo.png')
+		local tx = CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/banner-gradient.png')
+	--end
+	
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
