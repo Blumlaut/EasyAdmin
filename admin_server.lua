@@ -1348,6 +1348,7 @@ Citizen.CreateThread(function()
 	
 			add_aces = aces
 			add_principals = principals
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("admineditedpermissions"), getName(source, false, false)), "permissions", 16777214)
 			TriggerClientEvent("EasyAdmin:getServerAces", source, add_aces, add_principals)
 		end
 	end)

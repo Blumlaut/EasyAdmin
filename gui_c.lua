@@ -1038,7 +1038,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	if permissions["permissions.view"] then
-		permissionEditor = _menuPool:AddSubMenu(servermanagement, "Permission Editor","~r~PRERELEASE CONTENT AHEAD, MIGHT BE BUGGY!",true)
+		permissionEditor = _menuPool:AddSubMenu(servermanagement, GetLocalisedText("permissioneditor"),GetLocalisedText("permissioneditorguide"),true)
 		local thisMenuWidth = menuWidth
 		if menuWidth < 150 then
 			thisMenuWidth = 150
@@ -1047,19 +1047,19 @@ function GenerateMenu() -- this is a big ass function
 		end
 		permissionEditor:SetMenuWidthOffset(thisMenuWidth)
 
-		editAces = _menuPool:AddSubMenu(permissionEditor, "ACEs","",true)
+		editAces = _menuPool:AddSubMenu(permissionEditor, GetLocalisedText("aces"),"",true)
 		editAces:SetMenuWidthOffset(thisMenuWidth)
 
 
 		if permissions["permissions.write"] then 
-			local thisMenu = _menuPool:AddSubMenu(editAces, "~g~Add ACE", "", true)
+			local thisMenu = _menuPool:AddSubMenu(editAces, GetLocalisedText("addace"), "", true)
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			local tempAce = {}
-			local thisItem = NativeUI.CreateItem("Group", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
 			thisItem:RightLabel(tempAce[1] or "")
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				AddTextEntry("ENTERGROUP", "Enter group name (e.g. group.admin)")
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
 				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
 
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1075,11 +1075,11 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("Permission", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("permission"), "")
 			thisItem:RightLabel(tempAce[2])
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				AddTextEntry("ENTERPERM", "Enter Permission name (e.g. easyadmin.kick)")
+				AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
 				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", "", "", "", 64)
 
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1095,14 +1095,14 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("State", "Denying permissions does not work properly, only allow permissions you want the player to have.")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("state"), GetLocalisedText("stateguide"))
 			thisItem:RightLabel("allow")
 			tempAce[3] = "allow"
 			thisMenu:AddItem(thisItem)
 			thisItem:Enabled(false)
 			
 
-			local thisItem = NativeUI.CreateItem("~g~Add ACE", "You have the opportunity to edit this before saving.")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("addace"), GetLocalisedText("addaceguide"))
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				table.insert(add_aces, tempAce)
@@ -1119,11 +1119,11 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(ace[3])
 
-			local thisItem = NativeUI.CreateItem("Group", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
 			thisItem:RightLabel(ace[1])
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				AddTextEntry("ENTERGROUP", "Enter group name (e.g. group.admin)")
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
 				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", ace[1], "", "", 64)
 	
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1139,11 +1139,11 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("Permission", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("permission"), "")
 			thisItem:RightLabel(ace[2])
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				AddTextEntry("ENTERPERM", "Enter Permission name (e.g. easyadmin.kick)")
+				AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
 				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", ace[2], "", "", 64)
 	
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1159,42 +1159,42 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("State", "Denying permissions does not work properly, only allow permissions you want the player to have.")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("state"), GetLocalisedText("stateguide"))
 			thisItem:RightLabel(ace[3])
 			thisMenu:AddItem(thisItem)
 			thisItem:Enabled(false)
 			
 			if (ace.file) then
-				local thisItem = NativeUI.CreateItem("Location", "This value cannot be edited.")
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("location"), GetLocalisedText("locationguide"))
 				thisItem:RightLabel(ace.file)
 				thisMenu:AddItem(thisItem)
 				thisItem:Enabled(false)
 			end
 
 
-			local thisItem = NativeUI.CreateItem("~r~Delete Permission", "~r~Warning! This will do what it says it does")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("deletepermission"), GetLocalisedText("deletepermissionguide"))
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				thisMenu.ParentItem:Enabled(false)
-				thisMenu.ParentItem._Description = "~r~This Item has been deleted."
+				thisMenu.ParentItem._Description = GetLocalisedText("itemdeleted")
 				add_aces[i] = nil
 				thisMenu:GoBack()
 			end
 		end
 
 
-		editPrincipals = _menuPool:AddSubMenu(permissionEditor, "Principals","",true)
+		editPrincipals = _menuPool:AddSubMenu(permissionEditor, GetLocalisedText("principals"),"",true)
 		editPrincipals:SetMenuWidthOffset(thisMenuWidth)	
 
 		if permissions["permissions.write"] then
-			local thisMenu = _menuPool:AddSubMenu(editPrincipals, "~g~Add Principal", "", true)
+			local thisMenu = _menuPool:AddSubMenu(editPrincipals, GetLocalisedText("addprincipal"), "", true)
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			local tempPrincipal = {}
-			local thisItem = NativeUI.CreateItem("Principal", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("principal"), "")
 			thisItem:RightLabel(tempPrincipal[1] or "")
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				AddTextEntry("ENTERPRINCIPAL", "Enter principal (e.g. identifier.steam:aabbccddeefff)")
+				AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
 				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", "identifier.", "", "", 64)
 
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1209,10 +1209,11 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("Group", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
 			thisItem:RightLabel(tempPrincipal[2] or "")
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
 				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
 
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1228,7 +1229,7 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("~g~Add Principal", "You have the opportunity to edit this before saving.")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("addprincipal"), GetLocalisedText("addaceguide")) -- the use of addaceguide is intentional.
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				table.insert(add_principals, tempPrincipal)
@@ -1246,11 +1247,11 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(principal[2])
 
-			local thisItem = NativeUI.CreateItem("Principal", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("principal"), "")
 			thisItem:RightLabel(principal[1])
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				AddTextEntry("ENTERPRINCIPAL", "Enter principal (e.g. identifier.steam:aabbccddeefff)")
+				AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
 				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", principal[1], "", "", 64)
 	
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1266,10 +1267,11 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem("Group", "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
 			thisItem:RightLabel(principal[2])
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
 				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", principal[2], "", "", 64)
 	
 				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -1286,17 +1288,17 @@ function GenerateMenu() -- this is a big ass function
 			end
 
 			if (principal.file) then
-				local thisItem = NativeUI.CreateItem("Location", "This value cannot be edited.")
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("location"), GetLocalisedText("locationguide"))
 				thisItem:RightLabel(principal.file)
 				thisMenu:AddItem(thisItem)
 				thisItem:Enabled(false)
 			end
 
-			local thisItem = NativeUI.CreateItem("~r~Delete Principal", "~r~Warning! This will do what it says it does")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("deleteprincipal"), GetLocalisedText("deleteprincipalguide"))
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				thisMenu.ParentItem:Enabled(false)
-				thisMenu.ParentItem._Description = "~r~This Item has been deleted."
+				thisMenu.ParentItem._Description = GetLocalisedText("itemdeleted")
 				add_principals[i] = nil
 				thisMenu:GoBack()
 			end
@@ -1304,7 +1306,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	if permissions["permissions.view"] then
-		local thisItem = NativeUI.CreateItem("Refresh Permissions", "")
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshpermissions"), "")
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			TriggerServerEvent("EasyAdmin:getServerAces")
@@ -1317,7 +1319,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	if permissions["permissions.write"] then
-		local thisItem = NativeUI.CreateItem("~g~Save Changes", "~r~Warning! ~w~This cannot be undone!")
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("savechanges"), GetLocalisedText("savechangesguide"))
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			TriggerServerEvent("EasyAdmin:setServerAces",add_aces, add_principals)
@@ -1427,7 +1429,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	local sl = {"none","pipes", "nom", "pride"}
-	local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceEasterEgg"), sl, 1, "")
+	local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
 	settingsMenu:AddItem(thisItem)
 	settingsMenu.OnListSelect = function(sender, item, index)
 			if item == thisItem then

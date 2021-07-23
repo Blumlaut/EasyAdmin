@@ -169,5 +169,34 @@
     "finishedcleaning": "Finished cleaning %s",
     "admincleanedup": "**%s** Cleaned up all **%s** in their area.",
 
-    "forceEasterEgg": "Force Easter Egg"
+    "forceeasteregg": "Force Easter Egg",
+
+    "permissioneditor": "Permission Editor",
+    "permissioneditorguide": "Edit Permissions on the Server, saves into ~g~easyadmin_permissions.cfg~w~",
+
+    "aces": "ACEs",
+    "permission": "Permission",
+    "principals": "Principals",
+    "addace": "~g~Add ACE",
+    "addaceguide": "You have the opportunity to edit this before saving.",
+    "addprincipal": "~g~Add Principal",
+    "group": "Group",
+    "entergroup": "Enter group name (e.g. group.admin)",
+    "enterperm": "Enter Permission name (e.g. easyadmin.kick)",
+    "state": "State",
+    "stateguide": "Denying permissions does not work properly, only allow permissions you want the player to have.",
+    "location": "Location",
+    "locationguide": "This value cannot be edited.",
+    "principal": "Principal",
+    "enterprincipal": "Enter principal (e.g. identifier.steam:aabbccddeefff)",
+    "deletepermission": "~r~Delete Permission",
+    "deletepermissionguide": "~r~Warning! This will completely revoke and delete the Permission!",
+    "deleteprincipal": "~r~Delete Principal",
+    "deleteprincipalguide": "~r~Warning! This will completely revoke and delete the Principal!",
+
+    "itemdeleted": "~r~This Item has been deleted.",
+    "savechanges": "~g~Save Changes",
+    "savechangesguide": "~r~Warning! ~w~This cannot be undone!",
+    "admineditedpermissions": "**%s** edited the server's permissions."
+
 }]
