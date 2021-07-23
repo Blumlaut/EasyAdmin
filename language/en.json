@@ -123,7 +123,7 @@
     "lastpage": "Last Page»»",
     "previouspage": "«Previous Page",
     "playercalledforadmin": "\nUser %s calls for an admin!\nReason: %s\nID: %s\n",
-    "playerreportedplayer": "\nUser %s reported a player!\n%s (%s), Reason: %s\nReport %s/%s\nID: %s\n",
+    "playerreportedplayer": "\nUser %s reported a player!\n%s, Reason: %s\nReport %s/%s\nID: %s\n",
     "successfullyreported": "Successfully reported the player!",
     "reportbantext": "Reported by %s Players in short time.",
     "alreadyreported": "You already reported this player!",
