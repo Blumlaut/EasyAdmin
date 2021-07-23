@@ -197,6 +197,17 @@
     "itemdeleted": "~r~This Item has been deleted.",
     "savechanges": "~g~Save Changes",
     "savechangesguide": "~r~Warning! ~w~This cannot be undone!",
-    "admineditedpermissions": "**%s** edited the server's permissions."
+    "admineditedpermissions": "**%s** edited the server's permissions.",
+
+    "reportviewer": "Report Viewer",
+    "call": "Call",
+    "report": "Report",
+    "open": "Open",
+    "reporter": "Reporter",
+    "reported": "Reported",
+    "closereport": "Close Report",
+    "closesimilarreports": "~r~Close all similar reports~w~",
+    "closesimilarreportsguide": "Will attempt to find and delete reports made by the same user.",
+    "adminclosedreport": "**%s** closed Report #**%s**"
 
 }]
