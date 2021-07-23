@@ -76,6 +76,7 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(100)
 	until NativeUI
+
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
@@ -182,7 +183,55 @@ end
 
 local banlistPage = 1
 local playerMenus = {}
+local easterChance = math.random(0,1001)
+local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
+
+	if not txd or (overrideEgg ~= currentEgg) then
+		if dui then
+			DestroyDui(dui)
+			dui = nil
+		end
+		txd = CreateRuntimeTxd("easyadmin")
+		if ((overrideEgg == nil) and easterChance == 1000) or (overrideEgg or overrideEgg == false) then
+			local chance = 0
+			if ((overrideEgg == nil) and easterChance == 1000) then
+				chance = math.random(1,2)
+			end
+			if overrideEgg == "pipes" or chance == 1 then
+				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
+				duihandle = GetDuiHandle(dui)
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
+				currentEgg = "pipes"
+			elseif overrideEgg == "nom" or chance == 2 then
+				dui = CreateDui("http://furfag.de/eggs/nom", 512,128)	
+				duihandle = GetDuiHandle(dui)
+				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = "nom"
+			elseif overrideEgg == "pride" then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = "pride"
+			elseif overrideEgg == false then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = false
+			end
+			Wait(800) -- wait for the DUI to roughly finish loading
+		else
+			if settings.alternativeLogo then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/'..settings.alternativeLogo..'.png')
+			else
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+			end
+			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+			currentEgg=nil
+		end
+		
+	end
+
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
@@ -204,16 +253,16 @@ function GenerateMenu() -- this is a big ass function
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
 	end
-	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
+	mainMenu = NativeUI.CreateMenu("", subtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 	_menuPool:Add(mainMenu)
 	
 		mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
-	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true)
-	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true)
-	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true)
+	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true, true)
+	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true, true)
+	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true, true)
 
 	mainMenu:SetMenuWidthOffset(menuWidth)	
 	playermanagement:SetMenuWidthOffset(menuWidth)	
@@ -282,7 +331,7 @@ function GenerateMenu() -- this is a big ass function
 
 			if found and (#temp > 1) then
 				local searchsubtitle = "Found "..tostring(#temp).." results!"
-				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
+				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(resultMenu)
 				_menuPool:ControlDisablingEnabled(false)
 				_menuPool:MouseControlsEnabled(false)
@@ -718,7 +767,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	if permissions["unban"] then
-		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true, true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
 		local reason = ""
 		local identifier = ""
@@ -784,7 +833,7 @@ function GenerateMenu() -- this is a big ass function
 					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 				end 
 				
-				mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+				mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(mainMenu)
 				
 					mainMenu:SetMenuWidthOffset(menuWidth)	
@@ -860,7 +909,7 @@ function GenerateMenu() -- this is a big ass function
 							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 						end 
 						
-						mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+						mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 						_menuPool:Add(mainMenu)
 						
 							mainMenu:SetMenuWidthOffset(menuWidth)	
@@ -1337,6 +1386,7 @@ function GenerateMenu() -- this is a big ass function
 					end
 			end
 	end
+
 	local sl = {}
 	for i=0,250,10 do
 		table.insert(sl,i)
@@ -1374,6 +1424,20 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:SetAnonymous", checked_)
 			end
 		end
+	end
+
+	local sl = {"none","pipes", "nom", "pride"}
+	local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceEasterEgg"), sl, 1, "")
+	settingsMenu:AddItem(thisItem)
+	settingsMenu.OnListSelect = function(sender, item, index)
+			if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == "none" then
+						overrideEgg = false
+					else
+						overrideEgg = i
+					end
+			end
 	end
 
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")

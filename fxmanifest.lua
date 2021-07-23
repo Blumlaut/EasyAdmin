@@ -21,3 +21,7 @@ client_scripts {
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_client.lua"
 }
+
+files {
+	"dependencies/images/*.png",
+}
