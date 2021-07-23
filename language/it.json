@@ -170,5 +170,7 @@
     "cleaningped": "Deleting Ped %s",
     "cleaningprop": "Deleting Object %s",
     "finishedcleaning": "Finished cleaning %s",
-    "admincleanedup": "**%s** Cleaned up all **%s** in their area."
+    "admincleanedup": "**%s** Cleaned up all **%s** in their area.",
+
+    "forceEasterEgg": "Force Easter Egg"
 }]

@@ -76,19 +76,6 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(100)
 	until NativeUI
-	
-	-- load menu textures
-	local txd = CreateRuntimeTxd("easyadmin")
-	--[[
-	if GetConvar("ea_nostalgy", "true") == "true" then
-		dui = CreateDui("blumlaut.me/easyadmin/pipes.html", 800, 620)	
-		local handle = GetDuiHandle(dui)
-		local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo-nostalgy.png')
-		local tx = CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', handle)
-	else ]]
-		local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo.png')
-		local tx = CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/banner-gradient.png')
-	--end
 
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
@@ -196,7 +183,50 @@ end
 
 local banlistPage = 1
 local playerMenus = {}
+local easterChance = math.random(0,1001)
+local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
+
+	if not txd or (overrideEgg ~= currentEgg and easterChance ~= 1000) then
+		if dui then
+			DestroyDui(dui)
+			dui = nil
+		end
+		txd = CreateRuntimeTxd("easyadmin")
+		if (overrideEgg or easterChance == 1000) then
+			local chance = 0
+			if easterChance == 1000 then
+				chance = math.random(1,3)
+			end
+			if overrideEgg == "pipes" or chance == 1 then
+				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
+				duihandle = GetDuiHandle(dui)
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
+				currentEgg = "pipes"
+			elseif overrideEgg == "nom" or chance == 2 then
+				dui = CreateDui("http://furfag.de/eggs/nom", 512,128)	
+				duihandle = GetDuiHandle(dui)
+				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = "nom"
+			elseif overrideEgg == "pride" or chance == 3 then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+			end
+			Wait(800) -- wait for the DUI to roughly finish loading
+		else
+			if settings.alternativeLogo then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/'..settings.alternativeLogo..'.png')
+			else
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+			end
+			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+			currentEgg=nil
+		end
+		
+	end
+
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
@@ -732,7 +762,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	if permissions["unban"] then
-		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true, true)
 		unbanPlayer:SetMenuWidthOffset(menuWidth)
 		local reason = ""
 		local identifier = ""
@@ -1351,6 +1381,7 @@ function GenerateMenu() -- this is a big ass function
 					end
 			end
 	end
+
 	local sl = {}
 	for i=0,250,10 do
 		table.insert(sl,i)
@@ -1388,6 +1419,20 @@ function GenerateMenu() -- this is a big ass function
 				TriggerServerEvent("EasyAdmin:SetAnonymous", checked_)
 			end
 		end
+	end
+
+	local sl = {"none","pipes", "nom", "pride"}
+	local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceEasterEgg"), sl, 1, "")
+	settingsMenu:AddItem(thisItem)
+	settingsMenu.OnListSelect = function(sender, item, index)
+			if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == "none" then
+						overrideEgg = nil
+					else
+						overrideEgg = i
+					end
+			end
 	end
 
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")

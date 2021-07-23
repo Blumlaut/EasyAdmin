@@ -23,5 +23,5 @@ client_scripts {
 }
 
 files {
-	"dependencies/*.png"
+	"dependencies/images/*.png",
 }
