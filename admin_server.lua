@@ -1454,6 +1454,9 @@ Citizen.CreateThread(function()
 						identifier = identifiers[i]
 					end
 				end
+				if identifierPref == "discord" then
+					identifier = "<@"..identifier..">"
+				end
 				if identifierenabled then
 					return (string.format("%s [ %s ]", GetPlayerName(src), identifier))
 				else
