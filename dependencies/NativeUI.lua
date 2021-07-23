@@ -2397,14 +2397,15 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName, titleTxt)
     if Subtitle ~= nil then Subtitle = tostring(Subtitle) or "" else Subtitle = "" end
     if TxtDictionary ~= nil then TxtDictionary = tostring(TxtDictionary) or "commonmenu" else TxtDictionary = "commonmenu" end
     if TxtName ~= nil then TxtName = tostring(TxtName) or "interaction_bgd" else TxtName = "interaction_bgd" end
-    local Title = UIResText.New(Title, 215 + X, 20 + Y, 1.15, 255, 255, 255, 255, 1, 1)
     if titleTxt then
-        Title = Sprite.New(TxtDictionary, titleTxt, 0 + X, 0 + Y, 431, 107)
+        thisTitle = Sprite.New(TxtDictionary, titleTxt, 0 + X, 0 + Y, 431, 107)
+    else
+        thisTitle = UIResText.New(Title, 215 + X, 20 + Y, 1.15, 255, 255, 255, 255, 1, 1)
     end
     local _UIMenu = {
         Logo = Sprite.New(TxtDictionary, TxtName, 0 + X, 0 + Y, 431, 107),
         Banner = nil,
-        Title = Title,
+        Title = thisTitle,
         Subtitle = {ExtraY = 0},
         WidthOffset = 0,
         Position = {X = X, Y = Y},
@@ -3222,7 +3223,7 @@ function UIMenu:Draw()
     elseif self.Banner then
         self.Banner:Draw()
     end
-
+    
     self.Title:Draw()
 
     if self.Subtitle.Rectangle then
@@ -3627,15 +3628,15 @@ function MenuPool:AddSubMenu(Menu, Text, Description, KeepPosition, KeepBanner)
 
         if KeepPosition then
             if Menu.Title.TxtName then
-                SubMenu = UIMenu.New(Menu.Title:Draw(), Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+                SubMenu = UIMenu.New("", Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
             else
-                SubMenu = UIMenu.New(Menu.Title:Text(), Text, Menu.Position.X, Menu.Position.Y)
+                SubMenu = UIMenu.New("", Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName)
             end
         else
             if Menu.Title.TxtName then
-                SubMenu = UIMenu.New(Menu.Title:Draw(), Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+                SubMenu = UIMenu.New("", Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
             else
-                SubMenu = UIMenu.New(Menu.Title:Text(), Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+                SubMenu = UIMenu.New("", Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
             end
         end
         if KeepBanner then
