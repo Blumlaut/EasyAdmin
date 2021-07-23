@@ -76,12 +76,6 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(100)
 	until NativeUI
-
-	-- load menu textures
-	local txd = CreateRuntimeTxd("easyadmin")
-	local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo.png')
-	local tx = CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/banner-gradient.png')
-
 	
 	-- load menu textures
 	local txd = CreateRuntimeTxd("easyadmin")
@@ -95,7 +89,7 @@ Citizen.CreateThread(function()
 		local tx = CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/banner-logo.png')
 		local tx = CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/banner-gradient.png')
 	--end
-	
+
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
