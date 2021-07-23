@@ -193,7 +193,7 @@ function GenerateMenu() -- this is a big ass function
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
-		if ((overrideEgg == nil) or easterChance == 1000) then
+		if ((overrideEgg == nil) and easterChance == 1000) or (overrideEgg or overrideEgg == false) then
 			local chance = 0
 			if ((overrideEgg == nil) and easterChance == 1000) then
 				chance = math.random(1,2)
