@@ -11,6 +11,11 @@ Citizen.CreateThread(function()
 		for i, player in pairs(CachedPlayers) do 
 			if player.droppedTime and (os.time() > player.droppedTime+GetConvarInt("ea_playerCacheExpiryTime", 1800)) then
 				PrintDebugMessage("Cache for "..player.id.." expired, removing from cache.", 3)
+				for i, report in pairs(reports) do
+					if report.reported == player.id then 
+						reports[i] = nil
+					end
+				end
 				CachedPlayers[i]=nil
 			end
 		end
@@ -803,17 +808,18 @@ Citizen.CreateThread(function()
 			end
 
 			local reason = string.gsub(rawCommand, "calladmin ", "")
+			local reportid = addNewReport(0, source, _,reason)
 			for i,_ in pairs(OnlineAdmins) do 
 				--TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason))
 				TriggerClientEvent('chat:addMessage', i, { 
 				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason) }, color = { 255, 255, 255 } 
+				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason, reportid) }, color = { 255, 255, 255 } 
 				})
 			end
 
 
 			local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true), source, reason), "calladmin", 16776960)
+			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true), source, reason, reportid), "calladmin", 16776960)
 			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 			TriggerClientEvent('chat:addMessage', source, { 
 				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
@@ -862,16 +868,18 @@ Citizen.CreateThread(function()
 				end
 				if addReport then
 					table.insert(PlayerReports[id], {source = source, sourceName = getName(source, true), reason = reason, time = os.time()})
+					local reportid = addNewReport(1, source, id, reason)
 					local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-					SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, getName(id, true), id, reason, #PlayerReports[id], minimumreports), "report", 16776960)
+					SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, getName(id, true), id, reason, #PlayerReports[id], minimumreports, reportid), "report", 16776960)
 					if GetConvar("ea_enableReportScreenshots", "true") == "true" then
 						TriggerEvent("EasyAdmin:TakeScreenshot", id)
 					end
 
+
 					for i,_ in pairs(OnlineAdmins) do 
 						TriggerClientEvent('chat:addMessage', i, { 
 							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-							args = { "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source), source, getName(id, true), id, reason, #PlayerReports[id], minimumreports) }, color = { 255, 255, 255 } 
+							args = { "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source), source, getName(id, true), id, reason, #PlayerReports[id], minimumreports, reportid) }, color = { 255, 255, 255 } 
 						})
 					end
 					TriggerClientEvent('chat:addMessage', source, { 
@@ -1055,6 +1063,91 @@ Citizen.CreateThread(function()
 				AnonymousAdmins[source] = true
 				PrintDebugMessage("Player "..getName(source,true).." anoned themself", 3)
 			end
+		end
+	end)
+
+	---------------------------------- Reports System
+
+	-- {type=1, reporter=source, reporterName=getName(source, true), reported=id, reportedName=getName(id, true),reason=reason}
+	function addNewReport(type, reporter, reported, reason)
+		local t = nil
+		if type == 1 then
+			t = {type=type, reporter=reporter, reporterName=getName(reporter, true), reported=reported, reportedName=getName(reported, true),reason=reason}
+		else
+			t = {type=type, reporter=reporter, reporterName=getName(reporter, true), reason=reason}
+		end
+		t.id = #reports+1
+		reports[t.id] = t
+		for i,_ in pairs(OnlineAdmins) do 
+			TriggerClientEvent("EasyAdmin:NewReport", i, t)
+		end
+		return t.id
+	end
+
+	function removeReport(index,reporter,reported,reason)
+		for i, report in pairs(reports) do
+			if (index and i == index) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, report)
+				end
+				reports[i] = nil
+			elseif (reporter and reporter == report.reporter) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, report)
+				end
+				reports[i] = nil
+			elseif (reported and reported == report.reported) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, report)
+				end
+				reports[i] = nil
+			end
+		end
+	end
+
+	function removeSimilarReports(report)
+		for i, r in pairs(reports) do
+			if (report.reporter and report.reported) and (report.reporter == r.reporter and report.reported == r.reported) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+			if (report.reason and report.reporter) and (report.reason == r.reason and report.reporter == r.reporter) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+			if (report.reported) and (report.reported == r.reported) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+			print(i, report.reporter, r.reporter)
+			if (report.reporter) and (report.reporter == r.reporter) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+		end
+	end
+
+	RegisterServerEvent("EasyAdmin:RemoveReport")
+	AddEventHandler("EasyAdmin:RemoveReport", function(report)
+		if DoesPlayerHavePermission(source,"easyadmin.reports.process") then
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclosedreport"), getName(source, false, true), report.id), "reports", 16777214)
+			removeReport(report.id)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:RemoveSimilarReports")
+	AddEventHandler("EasyAdmin:RemoveSimilarReports", function(report)
+		if DoesPlayerHavePermission(source,"easyadmin.reports.process") then
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclosedreport"), getName(source, false, true), report.id), "reports", 16777214)
+			removeSimilarReports(report)
 		end
 	end)
 
@@ -1354,7 +1447,7 @@ Citizen.CreateThread(function()
 	
 			add_aces = aces
 			add_principals = principals
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("admineditedpermissions"), getName(source, false, false)), "permissions", 16777214)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("admineditedpermissions"), getName(source, false, true)), "permissions", 16777214)
 			TriggerClientEvent("EasyAdmin:getServerAces", source, add_aces, add_principals)
 		end
 	end)
@@ -1942,6 +2035,7 @@ ChatReminders = {} -- DO NOT TOUCH THIS
 MessageShortcuts = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {} -- DO NOT TOUCH THIS
 cooldowns = {} -- DO NOT TOUCH THIS
+reports = {}
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE

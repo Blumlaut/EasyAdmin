@@ -592,7 +592,82 @@ function GenerateMenu() -- this is a big ass function
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
 	end
+
+	playermanagement.ParentItem.Activated = function(ParentMenu, SelectedItem)
+		for i, menu in pairs(playerMenus) do
+			menu.menu.ParentMenu = playermanagement
+		end
+	end
+
+	if permissions["reports.view"] then
+		reportViewer = _menuPool:AddSubMenu(playermanagement, GetLocalisedText("reportviewer"),"",true)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		reportViewer:SetMenuWidthOffset(thisMenuWidth)
+		reportViewer.ParentItem:RightLabel(tostring(#reports).." "..GetLocalisedText("open"))
+
+		for i, report in pairs(reports) do
+			local thisMenu = _menuPool:AddSubMenu(reportViewer, (report.type == 0 and "~y~" or "~r~").. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
+			thisMenu.ParentItem:RightLabel(string.sub(report.reason, 1,38))
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), "")
+			thisItem:RightLabel(report.reporterName)
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				local ourMenu = playerMenus[tostring(report.reporter)].menu
+				ourMenu.ParentMenu=thisMenu
+				ourMenu:Visible(true)
+			end
+
+			if report.type == 1 then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("reported"), "")
+				thisItem:RightLabel(report.reportedName)
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(300)
+					local ourMenu = playerMenus[tostring(report.reported)].menu
+					ourMenu.ParentMenu=thisMenu
+					ourMenu:Visible(true)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"), "")
+			thisItem:RightLabel(report.reason)
+			thisMenu:AddItem(thisItem)
+
+			if permissions["reports.process"] then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("closereport"), "")
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:RemoveReport", report)
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					reportViewer:Visible(true)
+				end
+
 	
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("closesimilarreports"), GetLocalisedText("closesimilarreportsguide"))
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:RemoveSimilarReports", report)
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					reportViewer:Visible(true)
+				end
+			end
+		end
+	end
+
 	
 	thisPlayer = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("allplayers"),"",true)
 	thisPlayer:SetMenuWidthOffset(menuWidth)

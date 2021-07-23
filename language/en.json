@@ -122,8 +122,8 @@
     "firstpage": "««First Page",
     "lastpage": "Last Page»»",
     "previouspage": "«Previous Page",
-    "playercalledforadmin": "```\nUser %s (ID: %s) calls for an admin!\nReason: %s\n```",
-    "playerreportedplayer": "```\nUser %s (ID: %s) reported a player!\n%s (%s), Reason: %s\nReport %s/%s\n```",
+    "playercalledforadmin": "```\nUser %s (ID: %s) calls for an admin!\nReason: %s\nID: %s\n```",
+    "playerreportedplayer": "```\nUser %s (ID: %s) reported a player!\n%s (%s), Reason: %s\nReport %s/%s\nID: %s\n```",
     "successfullyreported": "Successfully reported the player!",
     "reportbantext": "Reported by %s Players in short time.",
     "alreadyreported": "You already reported this player!",
@@ -197,7 +197,19 @@
     "itemdeleted": "~r~This Item has been deleted.",
     "savechanges": "~g~Save Changes",
     "savechangesguide": "~r~Warning! ~w~This cannot be undone!",
-    "admineditedpermissions": "**%s** edited the server's permissions."
+    "admineditedpermissions": "**%s** edited the server's permissions.",
+
+    "reportviewer": "Report Viewer",
+    "call": "Call",
+    "report": "Report",
+    "open": "Open",
+    "reporter": "Reporter",
+    "reported": "Reported",
+    "closereport": "Close Report",
+    "closesimilarreports": "~r~Close all similar reports~w~",
+    "closesimilarreportsguide": "Will attempt to find and delete reports made by the same user.",
+    "adminclosedreport": "**%s** closed Report #**%s**"
+
 
 
 

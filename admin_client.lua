@@ -8,6 +8,7 @@
 players = {}
 banlist = {}
 cachedplayers = {}
+reports = {}
 
 RegisterNetEvent("EasyAdmin:adminresponse")
 RegisterNetEvent("EasyAdmin:amiadmin")
@@ -76,6 +77,16 @@ AddEventHandler("EasyAdmin:SetLanguage", function()
 	if permissions["permissions.view"] then
 		TriggerServerEvent("EasyAdmin:getServerAces")
 	end
+end)
+
+RegisterNetEvent("EasyAdmin:NewReport")
+AddEventHandler("EasyAdmin:NewReport", function(reportData)
+	reports[reportData.id] = reportData
+end)
+
+RegisterNetEvent("EasyAdmin:RemoveReport")
+AddEventHandler("EasyAdmin:RemoveReport", function(reportData)
+	reports[reportData.id] = nil 
 end)
 
 
