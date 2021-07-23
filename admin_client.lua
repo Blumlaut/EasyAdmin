@@ -27,10 +27,13 @@ RegisterNetEvent("EasyAdmin:GetInfinityPlayerList")
 RegisterNetEvent("EasyAdmin:fillCachedPlayers")
 
 
-AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
-	permissions[response] = permission
-	if permission == true then
-		isAdmin = true
+AddEventHandler('EasyAdmin:adminresponse', function(perms)
+	permissions = perms
+
+	for perm, val in pairs(perms) do
+		if val == true then
+			isAdmin = true
+		end
 	end
 end)
 
@@ -65,7 +68,7 @@ RegisterNetEvent("EasyAdmin:getServerAces")
 AddEventHandler("EasyAdmin:getServerAces", function(aces,principals)
 	add_aces = aces
 	add_principals = principals
-	PrintDebugMessage("Recieved Permissions list", 4)
+	PrintDebugMessage("Recieved ACE Permissions list", 4)
 end)
 
 RegisterNetEvent("EasyAdmin:SetLanguage")

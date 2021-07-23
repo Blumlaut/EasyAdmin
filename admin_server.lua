@@ -465,6 +465,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
 		local identifiers = getAllPlayerIdentifiers(source)
+		local perms = {}
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
 			if perm == "screenshot" and not screenshots then
@@ -477,9 +478,11 @@ Citizen.CreateThread(function()
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
 			end
-			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
+			perms[perm] = thisPerm
 			PrintDebugMessage("Processed Perm "..perm.." for "..getName(source, true)..", result: "..tostring(thisPerm), 3)
 		end
+
+		TriggerClientEvent("EasyAdmin:adminresponse", source, perms)
 		
 		if (DoesPlayerHavePermission(source,"easyadmin.ban.temporary") or DoesPlayerHavePermission(source,"easyadmin.ban.permanent")) then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
@@ -790,6 +793,7 @@ Citizen.CreateThread(function()
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
 			local time = os.time()
 			local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
+			local source=source
 			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
 				TriggerClientEvent('chat:addMessage', source, { 
 					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
@@ -806,6 +810,8 @@ Citizen.CreateThread(function()
 				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason) }, color = { 255, 255, 255 } 
 				})
 			end
+
+
 			local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true), source, reason), "calladmin", 16776960)
 			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
@@ -1373,6 +1379,8 @@ Citizen.CreateThread(function()
 			return 1
 		end
 	end
+
+
 	function updateAdmins(addItem)
 		admins = {}
 		local content = LoadResourceFile(GetCurrentResourceName(), "admins.txt")
@@ -1932,8 +1940,8 @@ CachedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
 MessageShortcuts = {} -- DO NOT TOUCH THIS
-WarnedPlayers = {}
-cooldowns = {}
+WarnedPlayers = {} -- DO NOT TOUCH THIS
+cooldowns = {} -- DO NOT TOUCH THIS
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
