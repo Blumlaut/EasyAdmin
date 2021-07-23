@@ -3630,13 +3630,13 @@ function MenuPool:AddSubMenu(Menu, Text, Description, KeepPosition, KeepBanner)
             if Menu.Title.TxtName then
                 SubMenu = UIMenu.New("", Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
             else
-                SubMenu = UIMenu.New("", Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName)
+                SubMenu = UIMenu.New(Menu.Title._Text, Text, Menu.Position.X, Menu.Position.Y, Menu.TxtDictionary, Menu.TxtName)
             end
         else
             if Menu.Title.TxtName then
                 SubMenu = UIMenu.New("", Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
             else
-                SubMenu = UIMenu.New("", Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
+                SubMenu = UIMenu.New(Menu.Title._Text, Text, 0, 0, Menu.TxtDictionary, Menu.TxtName, Menu.titleTxt)
             end
         end
         if KeepBanner then
