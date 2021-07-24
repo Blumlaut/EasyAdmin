@@ -187,7 +187,8 @@ local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
 
-	if not txd or (overrideEgg ~= currentEgg) then
+	if not RedM and not txd or (overrideEgg ~= currentEgg) then
+		txdDictionary, txdName, 
 		if dui then
 			DestroyDui(dui)
 			dui = nil
@@ -230,7 +231,6 @@ function GenerateMenu() -- this is a big ass function
 			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 			currentEgg=nil
 		end
-		
 	end
 
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
