@@ -367,6 +367,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 
 		supportData.config = {
 			gamename = GetConvar("gamename", "not-rdr3"),
+			version = GetVersion()
 			ea_moderationNotification = GetConvar("ea_moderationNotification", "false"),
 			ea_screenshoturl = GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'),
 			onesync = GetConvar("onesync", "off"),
