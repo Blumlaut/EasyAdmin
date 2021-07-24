@@ -522,7 +522,7 @@ function GenerateMenu() -- this is a big ass function
 			local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
 			local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
 			thisPlayer:AddItem(thisItem)
-			thisPlayer.OnListSelect = function(sender, item, index)
+			thisItem.OnListSelected = function(sender, item, index)
 					if item == thisItem then
 							i = item:IndexToItem(index)
 							if i == GetLocalisedText("on") then
@@ -1100,7 +1100,7 @@ function GenerateMenu() -- this is a big ass function
 	if #sl > 0 then
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("cleanarea"), sl, 1, GetLocalisedText("cleanareaguide"))
 		servermanagement:AddItem(thisItem)
-		servermanagement.OnListSelect = function(sender, item, index)
+		thisItem.OnListSelected = function(sender, item, index)
 			if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == GetLocalisedText('cars') then
@@ -1415,7 +1415,7 @@ function GenerateMenu() -- this is a big ass function
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlistshowtype"), sl, 1,GetLocalisedText("banlistshowtypeguide"))
 		settingsMenu:AddItem(thisItem)
-		settingsMenu.OnListSelect = function(sender, item, index)
+		thisItem.OnListSelected = function(sender, item, index)
 				if item == thisItem then
 						i = item:IndexToItem(index)
 						if i == GetLocalisedText(unbanreasons) then
@@ -1453,7 +1453,7 @@ function GenerateMenu() -- this is a big ass function
 	local sl = {GetLocalisedText("left"), GetLocalisedText("middle")}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnListSelect = function(sender, item, index)
+	thisItem.OnListSelected = function(sender, item, index)
 			if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == GetLocalisedText("left") then
@@ -1508,7 +1508,7 @@ function GenerateMenu() -- this is a big ass function
 	local sl = {"none","pipes", "nom", "pride"}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
 	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnListSelect = function(sender, item, index)
+	thisItem.OnListSelected = function(sender, item, index)
 			if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == "none" then
