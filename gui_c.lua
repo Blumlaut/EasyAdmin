@@ -845,7 +845,13 @@ function GenerateMenu() -- this is a big ass function
 	
 	if permissions["unban"] then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true, true)
-		unbanPlayer:SetMenuWidthOffset(menuWidth)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		unbanPlayer:SetMenuWidthOffset(thisMenuWidth)
 		local reason = ""
 		local identifier = ""
 
@@ -913,7 +919,13 @@ function GenerateMenu() -- this is a big ass function
 				mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(mainMenu)
 				
-					mainMenu:SetMenuWidthOffset(menuWidth)	
+				local thisMenuWidth = menuWidth
+				if menuWidth < 150 then
+					thisMenuWidth = 150
+				else
+					thisMenuWidth = menuWidth
+				end
+				mainMenu:SetMenuWidthOffset(thisMenuWidth)	
 				_menuPool:ControlDisablingEnabled(false)
 				_menuPool:MouseControlsEnabled(false)
 
@@ -988,8 +1000,14 @@ function GenerateMenu() -- this is a big ass function
 						
 						mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 						_menuPool:Add(mainMenu)
+						local thisMenuWidth = menuWidth
+						if menuWidth < 150 then
+							thisMenuWidth = 150
+						else
+							thisMenuWidth = menuWidth
+						end
 						
-							mainMenu:SetMenuWidthOffset(menuWidth)	
+							mainMenu:SetMenuWidthOffset(thisMenuWidth)	
 						_menuPool:ControlDisablingEnabled(false)
 						_menuPool:MouseControlsEnabled(false)
 		
