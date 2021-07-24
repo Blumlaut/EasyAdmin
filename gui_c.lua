@@ -487,27 +487,28 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions["teleport.player"] then
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
+			local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome")}
+			local thisItem = NativeUI.CreateListItem(GetLocalisedText("teleportplayer"), sl, 1, "")
 			thisPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				if settings.infinity and not RedM then
-					TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
-				else
-					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
-					local heading = GetEntityHeading(GetPlayerPed(player))
-					SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+			thisItem.OnListSelected = function(sender, item, index)
+				if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == GetLocalisedText("teleporttoplayer") then
+						if settings.infinity and not RedM then
+							TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
+						else
+							local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
+							local heading = GetEntityHeading(GetPlayerPed(player))
+							SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+						end
+					else
+						local coords = GetEntityCoords(PlayerPedId(),true)
+						TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
+					end
 				end
 			end
 		end
 		
-		if permissions["teleport.player"] then
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleportplayertome"),"")
-			thisPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local coords = GetEntityCoords(PlayerPedId(),true)
-				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
-			end
-		end
 		
 		if permissions["slap"] then
 			local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
