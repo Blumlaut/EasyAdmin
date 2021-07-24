@@ -938,7 +938,7 @@ function GenerateMenu() -- this is a big ass function
 				end	
 
 				if banlist[foundBanid].name then
-					local thisItem = NativeUI.CreateItem("Name: "..banlist[foundBanid].name)
+					local thisItem = NativeUI.CreateItem("Name: "..banlist[foundBanid].name, "")
 					mainMenu:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 						--nothing
