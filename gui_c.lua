@@ -844,7 +844,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	if permissions["unban"] then
-		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true, true)
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
 		local thisMenuWidth = menuWidth
 		if menuWidth < 150 then
 			thisMenuWidth = 150
