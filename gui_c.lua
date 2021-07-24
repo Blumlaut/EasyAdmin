@@ -980,7 +980,7 @@ function GenerateMenu() -- this is a big ass function
 			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
 				if theBanned then
 					reason = theBanned.reason or "No Reason"
-					local thisItem = NativeUI.CreateItem(reason, "")
+					local thisItem = NativeUI.CreateItem(string.sub(reason, 1,50), "")
 					unbanPlayer:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 
