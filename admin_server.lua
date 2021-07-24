@@ -1550,7 +1550,7 @@ Citizen.CreateThread(function()
 						identifier = identifiers[i]
 					end
 				end
-				if identifierPref == "discord" then
+				if identifierPref == "discord" and identifier ~= "~No Identifier~" then
 					identifier = "<@"..identifier..">"
 				end
 				if identifierenabled then
