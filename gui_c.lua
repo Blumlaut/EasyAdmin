@@ -188,7 +188,6 @@ local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
 
 	if not RedM and not txd or (overrideEgg ~= currentEgg) then
-		txdDictionary, txdName, 
 		if dui then
 			DestroyDui(dui)
 			dui = nil
