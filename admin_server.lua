@@ -1939,7 +1939,7 @@ Citizen.CreateThread(function()
 				print("\n--------------------------------------------------------------------------")
 				updateAvailable = remoteVersion
 			elseif tonumber(curVersion) > tonumber(remoteVersion) then
-				print("Your version of "..resourceName.." seems to be higher than the current version.")
+				print("Your version of "..resourceName.." seems to be higher than the current stable version.")
 			else
 				--print(resourceName.." is up to date!")
 			end
