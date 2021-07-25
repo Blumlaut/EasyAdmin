@@ -616,7 +616,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(string.sub(report.reason, 1,38))
 
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), "")
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), GetLocalisedText("entertoopen"))
 			thisItem:RightLabel(report.reporterName)
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -628,7 +628,7 @@ function GenerateMenu() -- this is a big ass function
 			end
 
 			if report.type == 1 then
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("reported"), "")
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("reported"), GetLocalisedText("entertoopen"))
 				thisItem:RightLabel(report.reportedName)
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
