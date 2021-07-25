@@ -1523,18 +1523,21 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	local sl = {"none","pipes", "nom", "pride"}
-	local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
-	settingsMenu:AddItem(thisItem)
-	thisItem.OnListSelected = function(sender, item, index)
-			if item == thisItem then
-					i = item:IndexToItem(index)
-					if i == "none" then
-						overrideEgg = false
-					else
-						overrideEgg = i
-					end
-			end
+
+	if not RedM then
+		local sl = {"none","pipes", "nom", "pride"}
+		local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
+		settingsMenu:AddItem(thisItem)
+		thisItem.OnListSelected = function(sender, item, index)
+				if item == thisItem then
+						i = item:IndexToItem(index)
+						if i == "none" then
+							overrideEgg = false
+						else
+							overrideEgg = i
+						end
+				end
+		end
 	end
 
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")
