@@ -667,6 +667,16 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 		end
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshreports"), GetLocalisedText("refreshreportsguide"))
+		reportViewer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			_menuPool:CloseAllMenus()
+			repeat
+				Wait(100)
+			until reportViewer
+			GenerateMenu()
+			reportViewer:Visible(true)
+		end
 	end
 
 	
