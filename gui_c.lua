@@ -100,13 +100,14 @@ Citizen.CreateThread(function()
 
 	while true do
 		if _menuPool then
-			_menuPool:ProcessMenus()
 			if not _menuPool:IsAnyMenuOpen() then 
 				_menuPool:Remove()
 				TriggerEvent("EasyAdmin:MenuRemoved")
 				_menuPool = nil
 				collectgarbage()
-			end
+			elseif _menuPool:IsAnyMenuOpen() then
+				_menuPool:ProcessMenus()
+			end 
 		end
 		
 		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
@@ -116,9 +117,9 @@ Citizen.CreateThread(function()
 				local waitTime = 0
 
 				repeat 
-					Wait(100)
+					Wait(10)
 					waitTime=waitTime+1
-				until (isAdmin or waitTime==60)
+				until (isAdmin or waitTime==1000)
 				if not isAdmin then
 				end
 			end
@@ -129,7 +130,7 @@ Citizen.CreateThread(function()
 				playerlist = nil
 				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 				repeat
-					Wait(100)
+					Wait(10)
 				until playerlist
 			end
 
