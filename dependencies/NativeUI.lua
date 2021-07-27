@@ -381,8 +381,8 @@ end
 function IsMouseInBounds(X, Y, Width, Height)
     local MX, MY = math.round(GetControlNormal(0, 239) * 1920), math.round(GetControlNormal(0, 240) * 1080)
     MX, MY = FormatXWYH(MX, MY)
-    X, Y = FormatXWYH(X, Y)
-    Width, Height = FormatXWYH(Width, Height)
+    local X, Y = FormatXWYH(X, Y)
+    local Width, Height = FormatXWYH(Width, Height)
     return (MX >= X and MX <= X + Width) and (MY > Y and MY < Y + Height)
 end
 
@@ -455,7 +455,7 @@ function UIResRectangle:Draw()
 end
 
 function DrawRectangle(X, Y, Width, Height, R, G, B, A)
-    X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
+    local X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
     X, Y = FormatXWYH(X, Y)
     Width, Height = FormatXWYH(Width, Height)
     DrawRect(X + Width * 0.5, Y + Height * 0.5, Width, Height, tonumber(R) or 255, tonumber(G) or 255, tonumber(B) or 255, tonumber(A) or 255)
@@ -628,8 +628,8 @@ function UIResText:Draw()
 end
 
 function RenderText(Text, X, Y, Font, Scale, R, G, B, A, Alignment, DropShadow, Outline, WordWrap)
-    Text = tostring(Text)
-    X, Y = FormatXWYH(X, Y)
+    local Text = tostring(Text)
+    local X, Y = FormatXWYH(X, Y)
     SetTextFont(Font or 0)
     SetTextScale(1.0, Scale or 0)
     SetTextColour(R or 255, G or 255, B or 255, A or 255)
@@ -725,7 +725,7 @@ function DrawTexture(TxtDictionary, TxtName, X, Y, Width, Height, Heading, R, G,
     if not HasStreamedTextureDictLoaded(tostring(TxtDictionary) or "") then
         RequestStreamedTextureDict(tostring(TxtDictionary) or "", true)
     end
-    X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
+    local X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
     X, Y = FormatXWYH(X, Y)
     Width, Height = FormatXWYH(Width, Height)
     DrawSprite(tostring(TxtDictionary) or "", tostring(TxtName) or "", X + Width * 0.5, Y + Height * 0.5, Width, Height, tonumber(Heading) or 0, tonumber(R) or 255, tonumber(G) or 255, tonumber(B) or 255, tonumber(A) or 255)
@@ -2397,6 +2397,7 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName, titleTxt)
     if Subtitle ~= nil then Subtitle = tostring(Subtitle) or "" else Subtitle = "" end
     if TxtDictionary ~= nil then TxtDictionary = tostring(TxtDictionary) or "commonmenu" else TxtDictionary = "commonmenu" end
     if TxtName ~= nil then TxtName = tostring(TxtName) or "interaction_bgd" else TxtName = "interaction_bgd" end
+    local thisTitle
     if titleTxt then
         thisTitle = Sprite.New(TxtDictionary, titleTxt, 0 + X, 0 + Y, 431, 107)
     else
@@ -2877,8 +2878,10 @@ function UIMenu:ProcessControl()
         self.JustOpened = false
         return
     end
+    
+    local isInputZeroDisabled = IsInputDisabled(0)
 
-    if self.Controls.Back.Enabled and (IsDisabledControlJustReleased(2, 177) or IsDisabledControlJustReleased(2, 199) ) and IsInputDisabled(0) then
+    if self.Controls.Back.Enabled and (IsDisabledControlJustReleased(2, 177) or IsDisabledControlJustReleased(2, 199) ) and isInputZeroDisabled then
         self:GoBack()
     end
     
@@ -2887,7 +2890,7 @@ function UIMenu:ProcessControl()
     end
 
     if not self.UpPressed then
-        if self.Controls.Up.Enabled and (IsDisabledControlJustPressed(1, 172) or IsDisabledControlJustPressed(1, 241)) and IsInputDisabled(0) then
+        if self.Controls.Up.Enabled and (IsDisabledControlJustPressed(1, 172) or IsDisabledControlJustPressed(1, 241)) and isInputZeroDisabled then
             Citizen.CreateThread(function()
                 self.UpPressed = true
                 if #self.Items > self.Pagination.Total + 1 then
@@ -2897,7 +2900,7 @@ function UIMenu:ProcessControl()
                 end
                 self:UpdateScaleform()
                 Citizen.Wait(175)
-                while self.Controls.Up.Enabled and (IsDisabledControlPressed(2, 172) or IsDisabledControlPressed(2, 241)) and IsInputDisabled(0) do
+                while self.Controls.Up.Enabled and (IsDisabledControlPressed(2, 172) or IsDisabledControlPressed(2, 241)) and isInputZeroDisabled do
                     if #self.Items > self.Pagination.Total + 1 then
                         self:GoUpOverflow()
                     else
@@ -2912,7 +2915,7 @@ function UIMenu:ProcessControl()
     end
 
     if not self.DownPressed then
-        if self.Controls.Down.Enabled and (IsDisabledControlJustPressed(1, 173) or IsDisabledControlJustPressed(1, 242)) and IsInputDisabled(0) then
+        if self.Controls.Down.Enabled and (IsDisabledControlJustPressed(1, 173) or IsDisabledControlJustPressed(1, 242)) and isInputZeroDisabled then
             Citizen.CreateThread(function()
                 self.DownPressed = true
                 if #self.Items > self.Pagination.Total + 1 then
@@ -2922,7 +2925,7 @@ function UIMenu:ProcessControl()
                 end
                 self:UpdateScaleform()
                 Citizen.Wait(175)
-                while self.Controls.Down.Enabled and (IsDisabledControlPressed(2, 173) or IsDisabledControlPressed(2, 242)) and IsInputDisabled(0) do
+                while self.Controls.Down.Enabled and (IsDisabledControlPressed(2, 173) or IsDisabledControlPressed(2, 242)) and isInputZeroDisabled do
                     if #self.Items > self.Pagination.Total + 1 then
                         self:GoDownOverflow()
                     else
@@ -2937,13 +2940,13 @@ function UIMenu:ProcessControl()
     end
 
     if not self.LeftPressed then
-        if self.Controls.Left.Enabled and (IsDisabledControlPressed(2, 174)) and IsInputDisabled(0) then
+        if self.Controls.Left.Enabled and (IsDisabledControlPressed(2, 174)) and isInputZeroDisabled then
             Citizen.CreateThread(function()
                 if not self.LeftPressed then
                     self.LeftPressed = true
                     self:GoLeft()
                     Citizen.Wait(150)
-                    while self.Controls.Left.Enabled and (IsDisabledControlPressed(2, 174)) and IsInputDisabled(0) do
+                    while self.Controls.Left.Enabled and (IsDisabledControlPressed(2, 174)) and isInputZeroDisabled do
                     self:GoLeft()
                         Citizen.Wait(200)
                     end
@@ -2954,13 +2957,13 @@ function UIMenu:ProcessControl()
     end
 
     if not self.RightPressed then
-        if self.Controls.Right.Enabled and (IsDisabledControlPressed(2, 175)) and IsInputDisabled(0) then
+        if self.Controls.Right.Enabled and (IsDisabledControlPressed(2, 175)) and isInputZeroDisabled then
             Citizen.CreateThread(function()
                 if not self.RightPressed then
                     self.RightPressed = true
                     self:GoRight()
                     Citizen.Wait(150)
-                    while self.Controls.Right.Enabled and (IsDisabledControlPressed(2, 175)) and IsInputDisabled(0) do
+                    while self.Controls.Right.Enabled and (IsDisabledControlPressed(2, 175)) and isInputZeroDisabled do
                         self:GoRight()
                         Citizen.Wait(200)
                     end
@@ -2970,7 +2973,7 @@ function UIMenu:ProcessControl()
         end
     end
 
-    if self.Controls.Select.Enabled and (IsDisabledControlJustPressed(1, 201) and IsInputDisabled(0)) then
+    if self.Controls.Select.Enabled and (IsDisabledControlJustPressed(1, 201) and isInputZeroDisabled) then
         self:SelectItem()
     end
 end
@@ -3281,7 +3284,7 @@ function UIMenu:Draw()
     if #self.Items <= self.Pagination.Total + 1 then
         local ItemOffset = self.Subtitle.ExtraY - 37 + WindowHeight
         for index = 1, #self.Items do
-            Item = self.Items[index]
+            local Item = self.Items[index]
             Item:Position(ItemOffset)
             Item:Draw()
             ItemOffset = ItemOffset + self:CalculateItemHeightOffset(Item)
@@ -3290,7 +3293,7 @@ function UIMenu:Draw()
         local ItemOffset = self.Subtitle.ExtraY - 37 + WindowHeight
         for index = self.Pagination.Min + 1, self.Pagination.Max, 1 do
             if self.Items[index] then
-                Item = self.Items[index]
+                local Item = self.Items[index]
                 Item:Position(ItemOffset)
                 Item:Draw()
                 ItemOffset = ItemOffset + self:CalculateItemHeightOffset(Item)
@@ -3753,7 +3756,9 @@ end
 
 function MenuPool:ProcessMenus()
     self:ProcessControl()
-    self:ProcessMouse()
+    if false then
+        self:ProcessMouse()
+    end
     self:Draw()
 end
 
@@ -3761,6 +3766,7 @@ function MenuPool:ProcessControl()
     for _, Menu in pairs(self.Menus) do
         if Menu:Visible() then
             Menu:ProcessControl()
+            break
         end
     end
 end
@@ -3769,6 +3775,7 @@ function MenuPool:ProcessMouse()
     for _, Menu in pairs(self.Menus) do
         if Menu:Visible() then
             Menu:ProcessMouse()
+            break
         end
     end
 end
@@ -3777,6 +3784,7 @@ function MenuPool:Draw()
     for _, Menu in pairs(self.Menus) do
         if Menu:Visible() then
             Menu:Draw()
+            break
         end
     end
 end
@@ -3797,6 +3805,7 @@ function MenuPool:CloseAllMenus()
         if Menu:Visible() then
             Menu:Visible(false)
             Menu.OnMenuClosed(Menu)
+            break
         end
     end
 end
