@@ -109,7 +109,7 @@
     "menuOrientationguide": "Imposta l'orientamento del menù ( Sinistra, Destra o Centro ) \nRichiede la riapertura del menù.",
     "menuOffset": "Larghezza del menù",
     "menuOffsetguide": "Imposta l'offset della dimensione del menù\nRichiede la riapertura del menù.",
-    "resetmenùOffset": "Resetta larghezza del menù",
+    "resetmenuOffset": "Resetta larghezza del menù",
     "takescreenshot": "Prendi uno Screenshot",
     "admintookscreenshot": "**%s** ha preso uno Screenshot dallo schermo di **%s** : %s",
     "screenshotinprogress": "si sta già catturando lo Screenshot, attendi!",
