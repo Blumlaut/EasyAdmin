@@ -44,6 +44,7 @@ RegisterCommand('easyadmin', function(source, args)
 				waitTime=waitTime+1
 			until (isAdmin or waitTime==1000)
 			if not isAdmin then
+				return
 			end
 		end
 		
@@ -81,6 +82,7 @@ RegisterCommand('easyadmin', function(source, args)
 		end
 	end)
 end)
+RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', GetConvar("ea_MenuButton", "f2"))
 
 Citizen.CreateThread(function()
 	if CompendiumHorseObserved then -- https://www.youtube.com/watch?v=r7qovpFAGrQ
@@ -124,61 +126,63 @@ Citizen.CreateThread(function()
 			end 
 		end
 		
-		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
-			-- clear and re-create incase of permission change+player count change
-			if not isAdmin == true then
-				TriggerServerEvent("EasyAdmin:amiadmin")
-				local waitTime = 0
+		if RedM or tonumber(settings.button) then -- legacy watch menu button for press, for people that ignored the installation instructions, or use RedM.
+			if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
+				-- clear and re-create incase of permission change+player count change
+				if not isAdmin == true then
+					TriggerServerEvent("EasyAdmin:amiadmin")
+					local waitTime = 0
 
-				repeat 
-					Wait(10)
-					waitTime=waitTime+1
-				until (isAdmin or waitTime==1000)
-				if not isAdmin then
-				end
-			end
-			
-
-			
-			if not RedM and isAdmin then
-				playerlist = nil
-				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
-				repeat
-					Wait(10)
-				until playerlist
-			end
-
-			if strings and isAdmin then
-				banLength = {}
-				
-				if permissions["ban.permanent"] then
-					table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
-				end
-
-				if permissions["ban.temporary"] then
-					table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
-					table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
-					table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
-					table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
-					table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
-					table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
-					table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
-					table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+					repeat 
+						Wait(10)
+						waitTime=waitTime+1
+					until (isAdmin or waitTime==1000)
+					if not isAdmin then
+					end
 				end
 				
-				
 
-				if mainMenu and mainMenu:Visible() then
-					mainMenu:Visible(false)
-					_menuPool:Remove()
-					TriggerEvent("EasyAdmin:MenuRemoved")
-					collectgarbage()
+				
+				if not RedM and isAdmin then
+					playerlist = nil
+					TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
+					repeat
+						Wait(10)
+					until playerlist
+				end
+
+				if strings and isAdmin then
+					banLength = {}
+					
+					if permissions["ban.permanent"] then
+						table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+					end
+
+					if permissions["ban.temporary"] then
+						table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
+						table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
+						table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
+						table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
+						table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
+						table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
+						table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
+						table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+					end
+					
+					
+
+					if mainMenu and mainMenu:Visible() then
+						mainMenu:Visible(false)
+						_menuPool:Remove()
+						TriggerEvent("EasyAdmin:MenuRemoved")
+						collectgarbage()
+					else
+						GenerateMenu()
+						mainMenu:Visible(true)
+					end
 				else
-					GenerateMenu()
-					mainMenu:Visible(true)
+					TriggerServerEvent("EasyAdmin:amiadmin")
 				end
-			else
-				TriggerServerEvent("EasyAdmin:amiadmin")
 			end
 		end
 		

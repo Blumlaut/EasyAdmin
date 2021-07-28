@@ -519,7 +519,7 @@ Citizen.CreateThread(function()
 		end
 		
 		-- give player the right settings to work with
-		local key = GetConvar("ea_MenuButton", 289)
+		local key = GetConvar("ea_MenuButton", "f2")
 		if RedM then
 			key = GetConvar("ea_MenuButton", "PhotoModePc")
 		end
@@ -1956,6 +1956,10 @@ Citizen.CreateThread(function()
 		if (onesync ~= "off" and onesync ~= "legacy") then 
 			PrintDebugMessage("Onesync is Infinity", 3)
 			infinity = true
+		end
+		if tonumber(GetConvar("ea_MenuButton", "f2")) then -- let people know they broke stuff
+			PrintDebugMessage("^1ea_MenuButton has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions^7", 1)
+			PrintDebugMessage("^1If you do not correct this, your Menu key will cease working in the near future.^7", 1)
 		end
 		
 		readAcePermissions()
