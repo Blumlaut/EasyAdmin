@@ -11,6 +11,11 @@ Citizen.CreateThread(function()
 		for i, player in pairs(CachedPlayers) do 
 			if player.droppedTime and (os.time() > player.droppedTime+GetConvarInt("ea_playerCacheExpiryTime", 1800)) then
 				PrintDebugMessage("Cache for "..player.id.." expired, removing from cache.", 3)
+				for i, report in pairs(reports) do
+					if report.reported == player.id then 
+						reports[i] = nil
+					end
+				end
 				CachedPlayers[i]=nil
 			end
 		end
@@ -165,13 +170,6 @@ function getNewBackupid(backupInfos)
 	end
 end
 
-function mergeTables(t1, t2)
-	local t = t1
-	for i,v in pairs(t2) do
-		table.insert(t, v)
-	end
-	return t
-end
 
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
 	local identifiers = GetPlayerIdentifiers(playerId)
@@ -369,6 +367,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 
 		supportData.config = {
 			gamename = GetConvar("gamename", "not-rdr3"),
+			version = GetVersion(),
 			ea_moderationNotification = GetConvar("ea_moderationNotification", "false"),
 			ea_screenshoturl = GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'),
 			onesync = GetConvar("onesync", "off"),
@@ -377,7 +376,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
 			ea_logLevel = GetConvar("ea_logLevel", 1),
 			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
-			ea_MenuButton = GetConvar("ea_MenuButton", 289),
+			ea_MenuButton = GetConvar("ea_MenuButton", "f2"),
 			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
 			ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
 			ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),
@@ -412,6 +411,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 		local servercfg = io.open(path.."server.cfg")
 		if servercfg then
 			supportData.serverconfig = servercfg:read("*a")
+			servercfg:close()
 		end
 
 		PrintDebugMessage("Collecting Banlist....^7\n", 1)
@@ -471,6 +471,7 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:amiadmin', function()
 		
 		local identifiers = getAllPlayerIdentifiers(source)
+		local perms = {}
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source,"easyadmin."..perm)
 			if perm == "screenshot" and not screenshots then
@@ -483,9 +484,11 @@ Citizen.CreateThread(function()
 			if thisPerm == true then
 				OnlineAdmins[source] = true 
 			end
-			TriggerClientEvent("EasyAdmin:adminresponse", source, perm,thisPerm)
+			perms[perm] = thisPerm
 			PrintDebugMessage("Processed Perm "..perm.." for "..getName(source, true)..", result: "..tostring(thisPerm), 3)
 		end
+
+		TriggerClientEvent("EasyAdmin:adminresponse", source, perms)
 		
 		if (DoesPlayerHavePermission(source,"easyadmin.ban.temporary") or DoesPlayerHavePermission(source,"easyadmin.ban.permanent")) then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
@@ -516,7 +519,7 @@ Citizen.CreateThread(function()
 		end
 		
 		-- give player the right settings to work with
-		local key = GetConvar("ea_MenuButton", 289)
+		local key = GetConvar("ea_MenuButton", "f2")
 		if RedM then
 			key = GetConvar("ea_MenuButton", "PhotoModePc")
 		end
@@ -531,17 +534,11 @@ Citizen.CreateThread(function()
 		end
 
 		-- if you remove this code then you're a killjoy, can't we have nice things? just once? it's not like this changes the whole admin menu or how it behaves, its a single subtitle.
-		if os.date("%d/%m") == "31/03" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "~b~Trans Rights = Human Rights!")
-		elseif os.date("%d/%m") == "22/08" then
+		if os.date("%d/%m") == "22/08" then
 			local age = tonumber(os.date("%Y"))-2017 local ordinal = "th" last_digit = age % 10 if last_digit == 1 and age ~= 11 then ordinal = 'st' elseif last_digit == 2 and age ~= 12 then ordinal = 'nd' elseif last_digit == 3 and age ~= 13 then ordinal = 'rd' end
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "~b~Today is EasyAdmin's "..age..""..ordinal.." birthday! :)")
-		elseif os.date("%d/%m") == "01/03" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎗️")
-		elseif os.date("%m") == "06" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🏳️‍🌈🏳️‍🌈🏳️‍🌈")
-		elseif os.date("%d/%m") == "29/07" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "🎂")
+		elseif os.date("%m") == "06" and (tonumber(os.date("%d")) >= 1 and tonumber(os.date("%d")) <= 7)  then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeLogo", "pride")
 		end
 
 
@@ -802,6 +799,7 @@ Citizen.CreateThread(function()
 		if GetConvar("ea_enableCallAdminCommand", "false") == "true" then
 			local time = os.time()
 			local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
+			local source=source
 			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
 				TriggerClientEvent('chat:addMessage', source, { 
 					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
@@ -811,15 +809,18 @@ Citizen.CreateThread(function()
 			end
 
 			local reason = string.gsub(rawCommand, "calladmin ", "")
+			local reportid = addNewReport(0, source, _,reason)
 			for i,_ in pairs(OnlineAdmins) do 
 				--TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason))
 				TriggerClientEvent('chat:addMessage', i, { 
 				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason) }, color = { 255, 255, 255 } 
+				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,true), reason, reportid) }, color = { 255, 255, 255 } 
 				})
 			end
+
+
 			local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true), source, reason), "calladmin", 16776960)
+			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true, true), reason, reportid), "calladmin", 16776960)
 			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 			TriggerClientEvent('chat:addMessage', source, { 
 				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
@@ -868,16 +869,18 @@ Citizen.CreateThread(function()
 				end
 				if addReport then
 					table.insert(PlayerReports[id], {source = source, sourceName = getName(source, true), reason = reason, time = os.time()})
+					local reportid = addNewReport(1, source, id, reason)
 					local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-					SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source), source, getName(id, true), id, reason, #PlayerReports[id], minimumreports), "report", 16776960)
+					SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid), "report", 16776960)
 					if GetConvar("ea_enableReportScreenshots", "true") == "true" then
 						TriggerEvent("EasyAdmin:TakeScreenshot", id)
 					end
 
+
 					for i,_ in pairs(OnlineAdmins) do 
 						TriggerClientEvent('chat:addMessage', i, { 
 							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-							args = { "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source), source, getName(id, true), id, reason, #PlayerReports[id], minimumreports) }, color = { 255, 255, 255 } 
+							args = { "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid) }, color = { 255, 255, 255 } 
 						})
 					end
 					TriggerClientEvent('chat:addMessage', source, { 
@@ -958,11 +961,11 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("screenshotinprogress") } })
 			return
 		end
-		scrinprogress = true
 		local src=source
 		local playerId = playerId
 
 		if DoesPlayerHavePermission(source,"easyadmin.screenshot") then
+			scrinprogress = true
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
 				if result == "ERROR" then return false end
 				res = tostring(result)
@@ -1063,6 +1066,402 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
+
+	---------------------------------- Reports System
+
+	-- {type=1, reporter=source, reporterName=getName(source, true), reported=id, reportedName=getName(id, true),reason=reason}
+	function addNewReport(type, reporter, reported, reason)
+		local t = nil
+		if type == 1 then
+			t = {type=type, reporter=reporter, reporterName=getName(reporter, true), reported=reported, reportedName=getName(reported, true),reason=reason}
+		else
+			t = {type=type, reporter=reporter, reporterName=getName(reporter, true), reason=reason}
+		end
+		t.id = #reports+1
+		reports[t.id] = t
+		for i,_ in pairs(OnlineAdmins) do 
+			TriggerClientEvent("EasyAdmin:NewReport", i, t)
+		end
+		return t.id
+	end
+
+	function removeReport(index,reporter,reported,reason)
+		for i, report in pairs(reports) do
+			if (index and i == index) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, report)
+				end
+				reports[i] = nil
+			elseif (reporter and reporter == report.reporter) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, report)
+				end
+				reports[i] = nil
+			elseif (reported and reported == report.reported) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, report)
+				end
+				reports[i] = nil
+			end
+		end
+	end
+
+	function removeSimilarReports(report)
+		for i, r in pairs(reports) do
+			if (report.reporter and report.reported) and (report.reporter == r.reporter and report.reported == r.reported) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+			if (report.reason and report.reporter) and (report.reason == r.reason and report.reporter == r.reporter) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+			if (report.reported) and (report.reported == r.reported) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+			print(i, report.reporter, r.reporter)
+			if (report.reporter) and (report.reporter == r.reporter) then
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
+				end
+				reports[i] = nil
+			end
+		end
+	end
+
+	RegisterServerEvent("EasyAdmin:RemoveReport")
+	AddEventHandler("EasyAdmin:RemoveReport", function(report)
+		if DoesPlayerHavePermission(source,"easyadmin.reports.process") then
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclosedreport"), getName(source, false, true), report.id), "reports", 16777214)
+			removeReport(report.id)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:RemoveSimilarReports")
+	AddEventHandler("EasyAdmin:RemoveSimilarReports", function(report)
+		if DoesPlayerHavePermission(source,"easyadmin.reports.process") then
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclosedreport"), getName(source, false, true), report.id), "reports", 16777214)
+			removeSimilarReports(report)
+		end
+	end)
+
+	---------------------------------- PERMISSION EDITOR	
+	local add_aces = {}
+	local add_principals = {}
+	function readAcePermissions()
+		add_aces, add_principals, execs = FindInfosinFile("server.cfg")
+		for i, config in pairs(execs) do
+			local tempaces, tempprincipals, _ = FindInfosinFile(config)
+			add_aces = mergeTables(add_aces, tempaces)
+			add_principals = mergeTables(add_principals, tempprincipals)
+		end
+	end
+	
+	function FindInfosinFile(filename)
+		local path = GetResourcePath(GetCurrentResourceName())
+		local occurance = string.find(path, "/resources")
+		local path = string.reverse(string.sub(string.reverse(path), -occurance))
+	
+		local filename = filename
+	
+		local lines = {}
+		local needsExec = true
+		local needsResourcePerms = true
+	
+		if filename ~= "server.cfg" then 
+			needsExec , needsResourcePerms = false, false
+		end
+		local changes = false
+		local aces, principals, execs = {}, {}, {}
+	
+		PrintDebugMessage("reading "..filename, 4)
+		
+		local file = io.open(filename, "r")
+		if file then
+			line = file:read("*line")
+			while line do
+				table.insert(lines,line)
+				line = file:read("*line")
+			end
+			file:close()
+			local file = io.open(filename, "a+") -- reopen in read mode
+	
+			for i, line in pairs(lines) do 
+				if filename == "server.cfg" then
+					if string.find(line, "exec easyadmin_permissions.cfg") then
+						needsExec = false
+					end
+					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow") then
+						needsResourcePerms = false
+					end
+				end
+				local oldline = line
+				line = string.gsub(line, "	", " ") -- convert tabs to spaces
+				line = string.gsub(line, "  ", " ") -- and then multiple spaces to a single space
+				if not (string.sub(line, 1, 1) == "#" or string.sub(line, 2, 2) == "#") then -- we dont want comments
+					if string.sub(line, 1, 7) == "add_ace" then -- make sure the first few characters match the command we are looking for
+						line = (string.split(line, "#")[1] or line) -- in case there are comments AFTER our commands, strip them out
+						line = string.sub(line, 9, 999) -- strip add_ace, we dont need it
+						local t = {file = filename, oldline = oldline} -- prepare our list of permissions
+						for i,word in pairs(string.split(line, " ")) do
+							if i>3 then break end -- we dont count past 3
+							table.insert(t,word) -- insert individual "part" of the command
+						end
+						table.insert(aces,t)
+					elseif string.sub(line, 1, 13) == "add_principal" then
+						line = (string.split(line, "#")[1] or line)
+						line = string.sub(line, 15, 999) -- strip add_principal , we dont need it
+						local t = {file = filename, oldline = oldline}
+						for i,word in pairs(string.split(line, " ")) do
+							if i>2 then break end
+							table.insert(t,word)
+						end
+						table.insert(principals,t)
+					elseif string.sub(line, 1, 4) == "exec" then
+						line = (string.split(line, "#")[1] or line)
+						line = string.sub(line, 6, 999) -- strip add_principal , we dont need it
+						if line ~= "server.cfg" then
+							table.insert(execs, line)
+						end
+					end
+				end
+			end
+	
+			if needsExec or needsResourcePerms then
+				local newLines = {}
+				if needsExec then
+					table.insert(newLines, "exec easyadmin_permissions.cfg")
+					table.insert(execs, "easyadmin_permissions.cfg")
+					PrintDebugMessage("Did not find `exec easyadmin_permissions.cfg`, added it automatically", 4)
+					changes=true
+				end
+				if needsResourcePerms then
+					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow")
+					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_ace allow")
+					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_principal allow")
+					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_principal allow")
+					PrintDebugMessage("Did not find `add_ace resource."..GetCurrentResourceName().."` lines, added them automatically", 4)
+					changes=true
+				end
+				local output = "\n"
+				if changes then
+					for i, line in pairs(newLines) do
+						output=output..line.."\n"
+					end
+					file:write(output) -- write our lines
+				end
+			end
+			file:close()
+	
+			for i,ace in pairs(aces) do 
+				PrintDebugMessage("parsed ace ^1"
+				..tostring(ace[1]).." "
+				..tostring(ace[2]).." "
+				..tostring(ace[3]).."^7 in "
+				..filename.."\n", 4)
+			end
+	
+			for i,ace in pairs(principals) do 
+				PrintDebugMessage("parsed principal ^1"
+				..tostring(ace[1]).." "
+				..tostring(ace[2]).."^7 in "
+				..filename.."\n", 4)
+			end
+	
+			for i,ace in pairs(execs) do 
+				PrintDebugMessage("parsed exec ^1"
+				..tostring(ace).."^7 in "
+				..filename.."\n", 4)
+			end
+	
+			return aces, principals, execs
+		else 
+			if filename == "easyadmin_permissions.cfg" then
+				local file = io.open(filename, "w")
+				file:close()
+			end
+			PrintDebugMessage(filename.." cannot be read, bailing.", 4)
+			return {}, {}, {}
+		end
+	end
+	
+	Citizen.CreateThread(function()
+		lockedFiles = {}
+		function AddToFile(filename, args)
+			local path = GetResourcePath(GetCurrentResourceName())
+			local occurance = string.find(path, "/resources")
+			local path = string.reverse(string.sub(string.reverse(path), -occurance))
+	
+	
+			local args = args
+			local filename = filename
+			while lockedFiles[filename] do
+				Wait(100)
+			end
+			lockedFiles[filename] = true
+			
+	
+			local file = io.open(filename, "a")
+			if file then
+				file:write("\n"..args) -- write our lines
+				file:close()
+			else 
+				PrintDebugMessage(filename.." cannot be read, bailing.", 4)
+				return {}, {}, {}
+			end
+			Wait(500) -- without waiting after saving a file it sometimes does not properly save, some OS limitation maybe?
+			lockedFiles[filename] = false
+		end
+	
+		function RemoveFromFile(filename, args)
+			local path = GetResourcePath(GetCurrentResourceName())
+			local occurance = string.find(path, "/resources")
+			local path = string.reverse(string.sub(string.reverse(path), -occurance))
+	
+			local args = args
+			local filename = filename
+			while lockedFiles[filename] do
+				Wait(100)
+			end
+			lockedFiles[filename] = true
+			
+			local file = io.open(filename, "r")
+			local lines = {}
+			if file then
+				local line = file:read("*line")
+				while line do
+					if line == args or (filename == "easyadmin_permissions.cfg" and line == "") then -- skip lines we dont want, incl. empty lines
+					else
+						table.insert(lines, line)
+					end
+					line = file:read("*line")
+				end
+				file:close()
+				local output = ""
+				for i, line in pairs(lines) do
+					output=output..line.."\n"
+				end
+				local file = io.open(filename, "w")
+				file:write(output) -- write our lines
+				file:close()
+			else 
+				PrintDebugMessage(filename.." cannot be read, bailing.", 4)
+				return {}, {}, {}
+			end
+			Wait(500) -- without waiting after saving a file it sometimes does not properly save, some OS limitation maybe?
+			lockedFiles[filename] = false
+		end
+	end)
+	
+	RegisterServerEvent("EasyAdmin:getServerAces")
+	AddEventHandler("EasyAdmin:getServerAces", function()
+		if DoesPlayerHavePermission(source,"easyadmin.permissions.view") then
+			TriggerClientEvent("EasyAdmin:getServerAces", source, add_aces, add_principals)
+		end
+	end)
+	
+	RegisterServerEvent("EasyAdmin:setServerAces")
+	AddEventHandler("EasyAdmin:setServerAces", function(aces,principals)
+		if DoesPlayerHavePermission(source,"easyadmin.permissions.write") then
+			local source=source
+			local aces=aces
+			local principals=principals
+			-- reconfigure aces
+			for i, ace in pairs(add_aces) do
+
+				if not aces[i] then
+					if not ace.file then ace.file = "easyadmin_permissions.cfg" end
+
+					ExecuteCommand("remove_ace "..ace[1].." "..ace[2].." "..ace[3])
+					RemoveFromFile(ace.file, ace.oldline or "add_ace "..ace[1].." "..ace[2].." "..ace[3])
+	
+	
+					PrintDebugMessage("Executed remove_ace "..ace[1].." "..ace[2].." "..ace[3], 4)
+				elseif aces[i][1] ~= ace[1] or aces[i][2] ~= ace[2] or aces[i][3] ~= ace[3] then
+					if not ace.file then ace.file = "easyadmin_permissions.cfg" end
+					if not aces[i].file then aces[i].file = "easyadmin_permissions.cfg" end
+					ExecuteCommand("remove_ace "..ace[1].." "..ace[2].." "..ace[3])
+					RemoveFromFile(ace.file, ace.oldline or "add_ace "..ace[1].." "..ace[2].." "..ace[3])
+	
+					ExecuteCommand("add_ace "..aces[i][1].." "..aces[i][2].." "..aces[i][3])
+					AddToFile(aces[i].file, "add_ace "..aces[i][1].." "..aces[i][2].." "..aces[i][3])
+	
+	
+					PrintDebugMessage("Executed remove_ace "..ace[1].." "..ace[2].." "..ace[3], 4)
+					PrintDebugMessage("Executed add_ace "..aces[i][1].." "..aces[i][2].." "..aces[i][3], 4)
+				end
+			end
+			for i, ace in pairs(aces) do
+				if not add_aces[i] then
+					if not ace.file then ace.file = "easyadmin_permissions.cfg" end
+
+					ExecuteCommand("add_ace "..ace[1].." "..ace[2].." "..ace[3])
+					AddToFile(ace.file, "add_ace "..ace[1].." "..ace[2].." "..ace[3])
+	
+					PrintDebugMessage("Executed add_ace "..ace[1].." "..ace[2].." "..ace[3], 4)
+				end
+			end
+			-- reconfigure principals
+			for i, principal in pairs(add_principals) do
+
+				-- set file as our permissions file in case its unset
+
+				if not principals[i] then
+					if not principal.file then principal.file = "easyadmin_permissions.cfg" end
+
+					ExecuteCommand("remove_principal "..principal[1].." "..principal[2])
+					RemoveFromFile(principal.file, principal.oldline or "add_principal "..principal[1].." "..principal[2])
+	
+					PrintDebugMessage("Executed remove_principal "..principal[1].." "..principal[2], 4)
+				elseif principals[i][1] ~= principal[1] or principals[i][2] ~= principal[2] then
+					if not principal.file then principal.file = "easyadmin_permissions.cfg" end
+					if not principals[i].file then principals[i].file = "easyadmin_permissions.cfg" end
+
+					ExecuteCommand("remove_principal "..principal[1].." "..principal[2])
+					RemoveFromFile(principal.file, principal.oldline or "add_principal "..principal[1].." "..principal[2])
+	
+	
+					ExecuteCommand("add_principal "..principals[i][1].." "..principals[i][2])
+					AddToFile(principals[i].file, "add_principal "..principals[i][1].." "..principals[i][2])
+	
+					PrintDebugMessage("Executed remove_principal "..principal[1].." "..principal[2], 4)
+					PrintDebugMessage("Executed add_principal "..principals[i][1].." "..principals[i][2], 4)
+				end
+			end
+			for i, principal in pairs(principals) do
+				if not add_principals[i] then
+					if not principal.file then principal.file = "easyadmin_permissions.cfg" end
+					ExecuteCommand("add_principal "..principal[1].." "..principal[2])
+					AddToFile(principal.file, "add_principal "..principal[1].." "..principal[2])
+	
+					PrintDebugMessage("Executed add_principal "..principal[1].." "..principal[2], 4)
+				end
+			end
+	
+	
+			add_aces = aces
+			add_principals = principals
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("admineditedpermissions"), getName(source, false, true)), "permissions", 16777214)
+			TriggerClientEvent("EasyAdmin:getServerAces", source, add_aces, add_principals)
+		end
+	end)
+	
+
+
+
+
+
+
+
+
+
 	
 	blacklist = {}
 	
@@ -1074,6 +1473,8 @@ Citizen.CreateThread(function()
 			return 1
 		end
 	end
+
+
 	function updateAdmins(addItem)
 		admins = {}
 		local content = LoadResourceFile(GetCurrentResourceName(), "admins.txt")
@@ -1149,6 +1550,9 @@ Citizen.CreateThread(function()
 					if identifiers[i]:match(identifierPref) then
 						identifier = identifiers[i]
 					end
+				end
+				if identifierPref == "discord" and identifier ~= "~No Identifier~" then
+					identifier = "<@"..identifier..">"
 				end
 				if identifierenabled then
 					return (string.format("%s [ %s ]", GetPlayerName(src), identifier))
@@ -1535,7 +1939,7 @@ Citizen.CreateThread(function()
 				print("\n--------------------------------------------------------------------------")
 				updateAvailable = remoteVersion
 			elseif tonumber(curVersion) > tonumber(remoteVersion) then
-				print("Your version of "..resourceName.." seems to be higher than the current version.")
+				print("Your version of "..resourceName.." seems to be higher than the current stable version.")
 			else
 				--print(resourceName.." is up to date!")
 			end
@@ -1553,7 +1957,12 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Onesync is Infinity", 3)
 			infinity = true
 		end
+		if tonumber(GetConvar("ea_MenuButton", "f2")) then -- let people know they broke stuff
+			PrintDebugMessage("ea_MenuButton has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
+			PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
+		end
 		
+		readAcePermissions()
 		SetTimeout(3600000, checkVersionHTTPRequest)
 	end
 	
@@ -1629,8 +2038,9 @@ CachedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
 MessageShortcuts = {} -- DO NOT TOUCH THIS
-WarnedPlayers = {}
-cooldowns = {}
+WarnedPlayers = {} -- DO NOT TOUCH THIS
+cooldowns = {} -- DO NOT TOUCH THIS
+reports = {}
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE

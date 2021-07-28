@@ -10,7 +10,7 @@ showLicenses = false
 RedM = false
 
 settings = {
-	button = 289,
+	button = "f2",
 	forceShowGUIButtons = false,
 }
 
@@ -35,24 +35,49 @@ playlist = nil
 
 RegisterCommand('easyadmin', function(source, args)
 	CreateThread(function()
-		if not RedM then
+		if not isAdmin == true then
+			TriggerServerEvent("EasyAdmin:amiadmin")
+			local waitTime = 0
+
+			repeat 
+				Wait(10)
+				waitTime=waitTime+1
+			until (isAdmin or waitTime==1000)
+			if not isAdmin then
+				return
+			end
+		end
+		
+
+		
+		if not RedM and isAdmin then
 			playerlist = nil
 			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 			repeat
-				Wait(100)
+				Wait(10)
 			until playerlist
 		end
 
-		if strings then
-			banLength = {
-				{label = GetLocalisedText("permanent"), time = 10444633200},
-				{label = GetLocalisedText("oneday"), time = 86400},
-				{label = GetLocalisedText("threedays"), time = 259200},
-				{label = GetLocalisedText("oneweek"), time = 518400},
-				{label = GetLocalisedText("twoweeks"), time = 1123200},
-				{label = GetLocalisedText("onemonth"), time = 2678400},
-				{label = GetLocalisedText("oneyear"), time = 31536000},
-			}
+		if strings and isAdmin then
+			banLength = {}
+			
+			if permissions["ban.permanent"] then
+				table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+			end
+
+			if permissions["ban.temporary"] then
+				table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
+				table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
+				table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
+				table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
+				table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
+				table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
+				table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
+				table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+			end
+			
+			
+
 			if mainMenu and mainMenu:Visible() then
 				mainMenu:Visible(false)
 				_menuPool:Remove()
@@ -76,15 +101,16 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(100)
 	until NativeUI
+
 	TriggerServerEvent("EasyAdmin:amiadmin")
 	TriggerServerEvent("EasyAdmin:requestBanlist")
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 
 	if not GetResourceKvpString("ea_menuorientation") then
-		SetResourceKvp("ea_menuorientation", "right")
+		SetResourceKvp("ea_menuorientation", "middle")
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
-		menuOrientation = handleOrientation("right")
+		menuOrientation = handleOrientation("middle")
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
@@ -99,70 +125,73 @@ Citizen.CreateThread(function()
 
 	while true do
 		if _menuPool then
-			_menuPool:ProcessMenus()
 			if not _menuPool:IsAnyMenuOpen() then 
 				_menuPool:Remove()
 				TriggerEvent("EasyAdmin:MenuRemoved")
 				_menuPool = nil
 				collectgarbage()
-			end
+			elseif _menuPool:IsAnyMenuOpen() then
+				_menuPool:ProcessMenus()
+			end 
 		end
 		
-		if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
-			-- clear and re-create incase of permission change+player count change
-			if not isAdmin == true then
-				TriggerServerEvent("EasyAdmin:amiadmin")
-				local waitTime = 0
+		if RedM or tonumber(settings.button) then -- legacy watch menu button for press, for people that ignored the installation instructions, or use RedM.
+			if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
+				-- clear and re-create incase of permission change+player count change
+				if not isAdmin == true then
+					TriggerServerEvent("EasyAdmin:amiadmin")
+					local waitTime = 0
 
-				repeat 
-					Wait(100)
-					waitTime=waitTime+1
-				until (isAdmin or waitTime==60)
-				if not isAdmin then
-				end
-			end
-			
-
-			
-			if not RedM and isAdmin then
-				playerlist = nil
-				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
-				repeat
-					Wait(100)
-				until playerlist
-			end
-
-			if strings and isAdmin then
-				banLength = {}
-				
-				if permissions["ban.permanent"] then
-					table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
-				end
-
-				if permissions["ban.temporary"] then
-					table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
-					table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
-					table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
-					table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
-					table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
-					table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
-					table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
-					table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+					repeat 
+						Wait(10)
+						waitTime=waitTime+1
+					until (isAdmin or waitTime==1000)
+					if not isAdmin then
+					end
 				end
 				
-				
 
-				if mainMenu and mainMenu:Visible() then
-					mainMenu:Visible(false)
-					_menuPool:Remove()
-					TriggerEvent("EasyAdmin:MenuRemoved")
-					collectgarbage()
+				
+				if not RedM and isAdmin then
+					playerlist = nil
+					TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
+					repeat
+						Wait(10)
+					until playerlist
+				end
+
+				if strings and isAdmin then
+					banLength = {}
+					
+					if permissions["ban.permanent"] then
+						table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+					end
+
+					if permissions["ban.temporary"] then
+						table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
+						table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
+						table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
+						table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
+						table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
+						table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
+						table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
+						table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+					end
+					
+					
+
+					if mainMenu and mainMenu:Visible() then
+						mainMenu:Visible(false)
+						_menuPool:Remove()
+						TriggerEvent("EasyAdmin:MenuRemoved")
+						collectgarbage()
+					else
+						GenerateMenu()
+						mainMenu:Visible(true)
+					end
 				else
-					GenerateMenu()
-					mainMenu:Visible(true)
+					TriggerServerEvent("EasyAdmin:amiadmin")
 				end
-			else
-				TriggerServerEvent("EasyAdmin:amiadmin")
 			end
 		end
 		
@@ -182,7 +211,55 @@ end
 
 local banlistPage = 1
 local playerMenus = {}
+local easterChance = math.random(0,1001)
+local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
+
+	if not RedM and not txd or (overrideEgg ~= currentEgg) then
+		if dui then
+			DestroyDui(dui)
+			dui = nil
+		end
+		txd = CreateRuntimeTxd("easyadmin")
+		if ((overrideEgg == nil) and easterChance == 1000) or (overrideEgg or overrideEgg == false) then
+			local chance = 0
+			if ((overrideEgg == nil) and easterChance == 1000) then
+				chance = math.random(1,2)
+			end
+			if overrideEgg == "pipes" or chance == 1 then
+				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
+				duihandle = GetDuiHandle(dui)
+				Wait(800)
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
+				currentEgg = "pipes"
+			elseif overrideEgg == "nom" or chance == 2 then
+				dui = CreateDui("http://furfag.de/eggs/nom", 512,128)	
+				duihandle = GetDuiHandle(dui)
+				Wait(500)
+				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = "nom"
+			elseif overrideEgg == "pride" then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = "pride"
+			elseif overrideEgg == false then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+				currentEgg = false
+			end
+		else
+			if settings.alternativeLogo then
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/'..settings.alternativeLogo..'.png')
+			else
+				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+			end
+			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+			currentEgg=nil
+		end
+	end
+
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
@@ -192,28 +269,28 @@ function GenerateMenu() -- this is a big ass function
 	_menuPool = NativeUI.CreatePool()
 	collectgarbage()
 	if not GetResourceKvpString("ea_menuorientation") then
-		SetResourceKvp("ea_menuorientation", "right")
+		SetResourceKvp("ea_menuorientation", "middle")
 		SetResourceKvpInt("ea_menuwidth", 0)
 		menuWidth = 0
-		menuOrientation = handleOrientation("right")
+		menuOrientation = handleOrientation("middle")
 	else
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
-	local subtitle = "~b~Admin Menu"
+	local subtitle = "Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
 	end
-	mainMenu = NativeUI.CreateMenu("EasyAdmin", subtitle, menuOrientation, 0)
+	mainMenu = NativeUI.CreateMenu("", subtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 	_menuPool:Add(mainMenu)
 	
 		mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
-	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true)
-	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true)
-	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true)
+	playermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("playermanagement"),"",true, true)
+	servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true, true)
+	settingsMenu = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("settings"),"",true, true)
 
 	mainMenu:SetMenuWidthOffset(menuWidth)	
 	playermanagement:SetMenuWidthOffset(menuWidth)	
@@ -282,7 +359,7 @@ function GenerateMenu() -- this is a big ass function
 
 			if found and (#temp > 1) then
 				local searchsubtitle = "Found "..tostring(#temp).." results!"
-				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0)
+				local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(resultMenu)
 				_menuPool:ControlDisablingEnabled(false)
 				_menuPool:MouseControlsEnabled(false)
@@ -437,27 +514,28 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions["teleport.player"] then
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttoplayer"),"")
+			local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome")}
+			local thisItem = NativeUI.CreateListItem(GetLocalisedText("teleportplayer"), sl, 1, "")
 			thisPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				if settings.infinity and not RedM then
-					TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
-				else
-					local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
-					local heading = GetEntityHeading(GetPlayerPed(player))
-					SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+			thisItem.OnListSelected = function(sender, item, index)
+				if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == GetLocalisedText("teleporttoplayer") then
+						if settings.infinity and not RedM then
+							TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
+						else
+							local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
+							local heading = GetEntityHeading(GetPlayerPed(player))
+							SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+						end
+					else
+						local coords = GetEntityCoords(PlayerPedId(),true)
+						TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
+					end
 				end
 			end
 		end
 		
-		if permissions["teleport.player"] then
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleportplayertome"),"")
-			thisPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local coords = GetEntityCoords(PlayerPedId(),true)
-				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
-			end
-		end
 		
 		if permissions["slap"] then
 			local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
@@ -471,7 +549,7 @@ function GenerateMenu() -- this is a big ass function
 			local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
 			local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
 			thisPlayer:AddItem(thisItem)
-			thisPlayer.OnListSelect = function(sender, item, index)
+			thisItem.OnListSelected = function(sender, item, index)
 					if item == thisItem then
 							i = item:IndexToItem(index)
 							if i == GetLocalisedText("on") then
@@ -543,7 +621,92 @@ function GenerateMenu() -- this is a big ass function
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:MouseControlsEnabled(false)
 	end
+
+	playermanagement.ParentItem.Activated = function(ParentMenu, SelectedItem)
+		for i, menu in pairs(playerMenus) do
+			menu.menu.ParentMenu = playermanagement
+		end
+	end
+
+	if permissions["reports.view"] then
+		reportViewer = _menuPool:AddSubMenu(playermanagement, GetLocalisedText("reportviewer"),"",true)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		reportViewer:SetMenuWidthOffset(thisMenuWidth)
+		reportViewer.ParentItem:RightLabel(tostring(#reports).." "..GetLocalisedText("open"))
+
+		for i, report in pairs(reports) do
+			local thisMenu = _menuPool:AddSubMenu(reportViewer, (report.type == 0 and "~y~" or "~r~").. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
+			thisMenu.ParentItem:RightLabel(string.sub(report.reason, 1,38))
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), GetLocalisedText("entertoopen"))
+			thisItem:RightLabel(report.reporterName)
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				local ourMenu = playerMenus[tostring(report.reporter)].menu
+				ourMenu.ParentMenu=thisMenu
+				ourMenu:Visible(true)
+			end
+
+			if report.type == 1 then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("reported"), GetLocalisedText("entertoopen"))
+				thisItem:RightLabel(report.reportedName)
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(300)
+					local ourMenu = playerMenus[tostring(report.reported)].menu
+					ourMenu.ParentMenu=thisMenu
+					ourMenu:Visible(true)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"), "")
+			thisItem:RightLabel(report.reason)
+			thisMenu:AddItem(thisItem)
+
+			if permissions["reports.process"] then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("closereport"), "")
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:RemoveReport", report)
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					reportViewer:Visible(true)
+				end
+
 	
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("closesimilarreports"), GetLocalisedText("closesimilarreportsguide"))
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:RemoveSimilarReports", report)
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					reportViewer:Visible(true)
+				end
+			end
+		end
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshreports"), GetLocalisedText("refreshreportsguide"))
+		reportViewer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			_menuPool:CloseAllMenus()
+			repeat
+				Wait(100)
+			until reportViewer
+			GenerateMenu()
+			reportViewer:Visible(true)
+		end
+	end
+
 	
 	thisPlayer = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("allplayers"),"",true)
 	thisPlayer:SetMenuWidthOffset(menuWidth)
@@ -719,7 +882,13 @@ function GenerateMenu() -- this is a big ass function
 	
 	if permissions["unban"] then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
-		unbanPlayer:SetMenuWidthOffset(menuWidth)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		unbanPlayer:SetMenuWidthOffset(thisMenuWidth)
 		local reason = ""
 		local identifier = ""
 
@@ -775,19 +944,25 @@ function GenerateMenu() -- this is a big ass function
 				_menuPool = NativeUI.CreatePool()
 				collectgarbage()
 				if not GetResourceKvpString("ea_menuorientation") then
-					SetResourceKvp("ea_menuorientation", "right")
+					SetResourceKvp("ea_menuorientation", "middle")
 					SetResourceKvpInt("ea_menuwidth", 0)
 					menuWidth = 0
-					menuOrientation = handleOrientation("right")
+					menuOrientation = handleOrientation("middle")
 				else
 					menuWidth = GetResourceKvpInt("ea_menuwidth")
 					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 				end 
 				
-				mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+				mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 				_menuPool:Add(mainMenu)
 				
-					mainMenu:SetMenuWidthOffset(menuWidth)	
+				local thisMenuWidth = menuWidth
+				if menuWidth < 150 then
+					thisMenuWidth = 150
+				else
+					thisMenuWidth = menuWidth
+				end
+				mainMenu:SetMenuWidthOffset(thisMenuWidth)	
 				_menuPool:ControlDisablingEnabled(false)
 				_menuPool:MouseControlsEnabled(false)
 
@@ -800,7 +975,7 @@ function GenerateMenu() -- this is a big ass function
 				end	
 
 				if banlist[foundBanid].name then
-					local thisItem = NativeUI.CreateItem("Name: "..banlist[foundBanid].name)
+					local thisItem = NativeUI.CreateItem("Name: "..banlist[foundBanid].name, "")
 					mainMenu:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 						--nothing
@@ -842,7 +1017,7 @@ function GenerateMenu() -- this is a big ass function
 			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
 				if theBanned then
 					reason = theBanned.reason or "No Reason"
-					local thisItem = NativeUI.CreateItem(reason, "")
+					local thisItem = NativeUI.CreateItem(string.sub(reason, 1,50), "")
 					unbanPlayer:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 
@@ -851,19 +1026,25 @@ function GenerateMenu() -- this is a big ass function
 						_menuPool = NativeUI.CreatePool()
 						collectgarbage()
 						if not GetResourceKvpString("ea_menuorientation") then
-							SetResourceKvp("ea_menuorientation", "right")
+							SetResourceKvp("ea_menuorientation", "middle")
 							SetResourceKvpInt("ea_menuwidth", 0)
 							menuWidth = 0
-							menuOrientation = handleOrientation("right")
+							menuOrientation = handleOrientation("middle")
 						else
 							menuWidth = GetResourceKvpInt("ea_menuwidth")
 							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 						end 
 						
-						mainMenu = NativeUI.CreateMenu("EasyAdmin", "~b~Ban Infos", menuOrientation, 0)
+						mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 						_menuPool:Add(mainMenu)
+						local thisMenuWidth = menuWidth
+						if menuWidth < 150 then
+							thisMenuWidth = 150
+						else
+							thisMenuWidth = menuWidth
+						end
 						
-							mainMenu:SetMenuWidthOffset(menuWidth)	
+							mainMenu:SetMenuWidthOffset(thisMenuWidth)	
 						_menuPool:ControlDisablingEnabled(false)
 						_menuPool:MouseControlsEnabled(false)
 		
@@ -886,6 +1067,7 @@ function GenerateMenu() -- this is a big ass function
 						for _, identifier in pairs(banlist[i].identifiers) do
 							if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
 								local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+								thisItem:RightLabel(identifier)
 								mainMenu:AddItem(thisItem)
 								thisItem.Activated = function(ParentMenu,SelectedItem)
 									--nothing
@@ -955,36 +1137,333 @@ function GenerateMenu() -- this is a big ass function
 				unbanPlayer:Visible(true)
 			end	
 		end 
-
-
 	end
 	
+
+
+
+	local sl = {}
 	if permissions["cleanup.cars"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleancars"), GetLocalisedText("cleancarsguide"))
-		servermanagement:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:requestCleanup", "cars")
-		end
-
+		table.insert(sl, GetLocalisedText('cars'))
 	end
-
 	if permissions["cleanup.peds"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanpeds"), GetLocalisedText("cleanpedsguide"))
-		servermanagement:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:requestCleanup", "peds")
-		end
+		table.insert(sl, GetLocalisedText('peds'))
 	end
-
-
 	if permissions["cleanup.props"] then
-		local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanprops"), GetLocalisedText("cleanpropsguide"))
+		table.insert(sl, GetLocalisedText('props'))
+	end
+
+	if #sl > 0 then
+		local thisItem = NativeUI.CreateListItem(GetLocalisedText("cleanarea"), sl, 1, GetLocalisedText("cleanareaguide"))
 		servermanagement:AddItem(thisItem)
-		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:requestCleanup", "props")
+		thisItem.OnListSelected = function(sender, item, index)
+			if item == thisItem then
+					i = item:IndexToItem(index)
+					if i == GetLocalisedText('cars') then
+						TriggerServerEvent("EasyAdmin:requestCleanup", "cars")
+					elseif i == GetLocalisedText('peds') then
+						TriggerServerEvent("EasyAdmin:requestCleanup", "peds")
+					else
+						TriggerServerEvent("EasyAdmin:requestCleanup", "props")
+					end
+			end
+		end
+	end
+
+	if permissions["permissions.view"] then
+		permissionEditor = _menuPool:AddSubMenu(servermanagement, GetLocalisedText("permissioneditor"),GetLocalisedText("permissioneditorguide"),true)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		permissionEditor:SetMenuWidthOffset(thisMenuWidth)
+
+		editAces = _menuPool:AddSubMenu(permissionEditor, GetLocalisedText("aces"),"",true)
+		editAces:SetMenuWidthOffset(thisMenuWidth)
+
+
+		if permissions["permissions.view"] and permissions["permissions.write"] then 
+			local thisMenu = _menuPool:AddSubMenu(editAces, GetLocalisedText("addace"), "", true)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
+			local tempAce = {}
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
+			thisItem:RightLabel(tempAce[1] or "")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempAce[1] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = result
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("permission"), "")
+			thisItem:RightLabel(tempAce[2])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
+				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", "", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempAce[2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem:RightLabel(result)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("state"), GetLocalisedText("stateguide"))
+			thisItem:RightLabel("allow")
+			tempAce[3] = "allow"
+			thisMenu:AddItem(thisItem)
+			thisItem:Enabled(false)
+			
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("addace"), GetLocalisedText("addaceguide"))
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				table.insert(add_aces, tempAce)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				editAces:Visible(true)
+				collectgarbage()
+			end
 		end
 
+		for i, ace in pairs(add_aces) do
+			local thisMenu = _menuPool:AddSubMenu(editAces, ace[1].." "..ace[2], "", true)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
+			thisMenu.ParentItem:RightLabel(ace[3])
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
+			thisItem:RightLabel(ace[1])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", ace[1], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_aces[i][1] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = add_aces[i][1].." "..add_aces[i][2]
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("permission"), "")
+			thisItem:RightLabel(ace[2])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
+				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", ace[2], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_aces[i][2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = add_aces[i][1].." "..add_aces[i][2]
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("state"), GetLocalisedText("stateguide"))
+			thisItem:RightLabel(ace[3])
+			thisMenu:AddItem(thisItem)
+			thisItem:Enabled(false)
+			
+			if (ace.file) then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("location"), GetLocalisedText("locationguide"))
+				thisItem:RightLabel(ace.file)
+				thisMenu:AddItem(thisItem)
+				thisItem:Enabled(false)
+			end
+
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("deletepermission"), GetLocalisedText("deletepermissionguide"))
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				thisMenu.ParentItem:Enabled(false)
+				thisMenu.ParentItem._Description = GetLocalisedText("itemdeleted")
+				add_aces[i] = nil
+				thisMenu:GoBack()
+			end
+		end
+
+
+		editPrincipals = _menuPool:AddSubMenu(permissionEditor, GetLocalisedText("principals"),"",true)
+		editPrincipals:SetMenuWidthOffset(thisMenuWidth)	
+
+		if permissions["permissions.view"] and permissions["permissions.write"] then
+			local thisMenu = _menuPool:AddSubMenu(editPrincipals, GetLocalisedText("addprincipal"), "", true)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
+			local tempPrincipal = {}
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("principal"), "")
+			thisItem:RightLabel(tempPrincipal[1] or "")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
+				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", "identifier.", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempPrincipal[1] = result
+					thisItem:RightLabel(result)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
+			thisItem:RightLabel(tempPrincipal[2] or "")
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
+
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+
+				local result = GetOnscreenKeyboardResult()
+
+				if result and result ~= "" then
+					tempPrincipal[2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem:RightLabel(result)
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("addprincipal"), GetLocalisedText("addaceguide")) -- the use of addaceguide is intentional.
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				table.insert(add_principals, tempPrincipal)
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				editPrincipals:Visible(true)
+				collectgarbage()
+			end
+		end
+
+		for i, principal in pairs(add_principals) do
+
+			local thisMenu = _menuPool:AddSubMenu(editPrincipals, principal[1], "", true)
+			thisMenu:SetMenuWidthOffset(thisMenuWidth)
+			thisMenu.ParentItem:RightLabel(principal[2])
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("principal"), "")
+			thisItem:RightLabel(principal[1])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
+				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", principal[1], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_principals[i][1] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem.Text._Text = add_principals[i][1]
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
+			thisItem:RightLabel(principal[2])
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
+				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", principal[2], "", "", 64)
+	
+				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+					Citizen.Wait( 0 )
+				end
+	
+				local result = GetOnscreenKeyboardResult()
+	
+				if result and result ~= "" then
+					add_principals[i][2] = result
+					thisItem:RightLabel(result)
+					thisMenu.ParentItem:RightLabel(result)
+				end
+			end
+
+			if (principal.file) then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("location"), GetLocalisedText("locationguide"))
+				thisItem:RightLabel(principal.file)
+				thisMenu:AddItem(thisItem)
+				thisItem:Enabled(false)
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("deleteprincipal"), GetLocalisedText("deleteprincipalguide"))
+			thisMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				thisMenu.ParentItem:Enabled(false)
+				thisMenu.ParentItem._Description = GetLocalisedText("itemdeleted")
+				add_principals[i] = nil
+				thisMenu:GoBack()
+			end
+
+		end
 	end
+	if permissions["permissions.view"] then
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshpermissions"), "")
+		permissionEditor:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:getServerAces")
+			_menuPool:CloseAllMenus()
+			Citizen.Wait(800)
+			GenerateMenu()
+			permissionEditor:Visible(true)
+			collectgarbage()
+		end
+	end
+
+	if permissions["permissions.view"] and permissions["permissions.write"] then
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("savechanges"), GetLocalisedText("savechangesguide"))
+		permissionEditor:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			TriggerServerEvent("EasyAdmin:setServerAces",add_aces, add_principals)
+			_menuPool:CloseAllMenus()
+			Citizen.Wait(800)
+			GenerateMenu()
+			permissionEditor:Visible(true)
+			collectgarbage()
+		end
+	end
+
 
 	TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 
@@ -992,7 +1471,7 @@ function GenerateMenu() -- this is a big ass function
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlistshowtype"), sl, 1,GetLocalisedText("banlistshowtypeguide"))
 		settingsMenu:AddItem(thisItem)
-		settingsMenu.OnListChange = function(sender, item, index)
+		thisItem.OnListSelected = function(sender, item, index)
 				if item == thisItem then
 						i = item:IndexToItem(index)
 						if i == GetLocalisedText(unbanreasons) then
@@ -1027,10 +1506,10 @@ function GenerateMenu() -- this is a big ass function
 		TriggerServerEvent("EasyAdmin:amiadmin")
 	end
 	
-	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
+	local sl = {GetLocalisedText("left"), GetLocalisedText("middle")}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
-	settingsMenu.OnListChange = function(sender, item, index)
+	thisItem.OnListSelected = function(sender, item, index)
 			if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == GetLocalisedText("left") then
@@ -1042,8 +1521,9 @@ function GenerateMenu() -- this is a big ass function
 					end
 			end
 	end
+
 	local sl = {}
-	for i=0,150,10 do
+	for i=0,250,10 do
 		table.insert(sl,i)
 	end
 	local thisi = 0
@@ -1078,6 +1558,23 @@ function GenerateMenu() -- this is a big ass function
 				anonymous = checked_
 				TriggerServerEvent("EasyAdmin:SetAnonymous", checked_)
 			end
+		end
+	end
+
+
+	if not RedM then
+		local sl = {"none","pipes", "nom", "pride"}
+		local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
+		settingsMenu:AddItem(thisItem)
+		thisItem.OnListSelected = function(sender, item, index)
+				if item == thisItem then
+						i = item:IndexToItem(index)
+						if i == "none" then
+							overrideEgg = false
+						else
+							overrideEgg = i
+						end
+				end
 		end
 	end
 

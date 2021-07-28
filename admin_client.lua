@@ -8,6 +8,7 @@
 players = {}
 banlist = {}
 cachedplayers = {}
+reports = {}
 
 RegisterNetEvent("EasyAdmin:adminresponse")
 RegisterNetEvent("EasyAdmin:amiadmin")
@@ -27,15 +28,23 @@ RegisterNetEvent("EasyAdmin:GetInfinityPlayerList")
 RegisterNetEvent("EasyAdmin:fillCachedPlayers")
 
 
-AddEventHandler('EasyAdmin:adminresponse', function(response,permission)
-	permissions[response] = permission
-	if permission == true then
-		isAdmin = true
+AddEventHandler('EasyAdmin:adminresponse', function(perms)
+	permissions = perms
+
+	for perm, val in pairs(perms) do
+		if val == true then
+			isAdmin = true
+		end
 	end
 end)
 
 AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
 	settings[setting] = state
+	if setting == "button" then
+		if (not RedM and not tonumber(settings.button)) then
+			RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', settings.button)
+		end
+	end
 end)
 
 AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
@@ -59,6 +68,30 @@ end)
 
 AddEventHandler("EasyAdmin:GetInfinityPlayerList", function(players)
 	playerlist = players
+end)
+
+RegisterNetEvent("EasyAdmin:getServerAces")
+AddEventHandler("EasyAdmin:getServerAces", function(aces,principals)
+	add_aces = aces
+	add_principals = principals
+	PrintDebugMessage("Recieved ACE Permissions list", 4)
+end)
+
+RegisterNetEvent("EasyAdmin:SetLanguage")
+AddEventHandler("EasyAdmin:SetLanguage", function()
+	if permissions["permissions.view"] then
+		TriggerServerEvent("EasyAdmin:getServerAces")
+	end
+end)
+
+RegisterNetEvent("EasyAdmin:NewReport")
+AddEventHandler("EasyAdmin:NewReport", function(reportData)
+	reports[reportData.id] = reportData
+end)
+
+RegisterNetEvent("EasyAdmin:RemoveReport")
+AddEventHandler("EasyAdmin:RemoveReport", function(reportData)
+	reports[reportData.id] = nil 
 end)
 
 
@@ -255,13 +288,15 @@ Citizen.CreateThread(function()
 					SetTextEntry("STRING")
 					AddTextComponentString(string.format(GetLocalisedText("cleaningprop"), object))
 					EndTextCommandDisplayText(0.45, 0.95)
+					DetachEntity(object, false, false)
+					SetEntityAsNoLongerNeeded(object)
 					DeleteEntity(object)
 					Wait(1)
 				end
 				toDelete[i] = nil
 			end
 		end
-		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), type))
+		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), GetLocalisedText(type)))
 	end)
 end)
 Citizen.CreateThread( function()

@@ -17,6 +17,10 @@ permissions = {
 	["cleanup.cars"] = false,
 	["cleanup.props"] = false,
 	["cleanup.peds"] = false,
+	["reports.view"] = false,
+	["reports.process"] = false,
+	["permissions.view"] = false,
+	["permissions.write"] = false
 }
 
 
@@ -126,7 +130,9 @@ function table_to_string(tbl)
             result = result..table_to_string(v)
         elseif type(v) == "boolean" then
             result = result..tostring(v)
-        else
+		elseif type(v) == "function" then
+			result = result..tostring(v)
+		else
             result = result.."\""..v.."\""
         end
         result = result..","
@@ -136,4 +142,12 @@ function table_to_string(tbl)
         result = result:sub(1, result:len()-1)
     end
     return result.."}"
+end
+
+function mergeTables(t1, t2)
+	local t = t1
+	for i,v in pairs(t2) do
+		table.insert(t, v)
+	end
+	return t
 end
