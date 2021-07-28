@@ -376,7 +376,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
 			ea_logLevel = GetConvar("ea_logLevel", 1),
 			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
-			ea_MenuButton = GetConvar("ea_MenuButton", 289),
+			ea_MenuButton = GetConvar("ea_MenuButton", "f2"),
 			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
 			ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
 			ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),

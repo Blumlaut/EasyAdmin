@@ -10,7 +10,7 @@ showLicenses = false
 RedM = false
 
 settings = {
-	button = 289,
+	button = "f2",
 	forceShowGUIButtons = false,
 }
 
@@ -111,10 +111,6 @@ Citizen.CreateThread(function()
 	elseif settings.alternativeTitle then
 		-- if you remove this code then you're a killjoy, can't we have nice things? just once? it's not like this changes the whole admin menu or how it behaves, its a single subtitle.
 		subtitle = settings.alternativeTitle
-	end
-
-	if (not RedM and not tonumber(settings.button)) then
-		RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', settings.button)
 	end
 
 	while true do
