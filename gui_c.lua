@@ -82,7 +82,6 @@ RegisterCommand('easyadmin', function(source, args)
 		end
 	end)
 end)
-RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', GetConvar("ea_MenuButton", "f2"))
 
 Citizen.CreateThread(function()
 	if CompendiumHorseObserved then -- https://www.youtube.com/watch?v=r7qovpFAGrQ
@@ -112,6 +111,10 @@ Citizen.CreateThread(function()
 	elseif settings.alternativeTitle then
 		-- if you remove this code then you're a killjoy, can't we have nice things? just once? it's not like this changes the whole admin menu or how it behaves, its a single subtitle.
 		subtitle = settings.alternativeTitle
+	end
+
+	if (not RedM and not tonumber(settings.button)) then
+		RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', settings.button)
 	end
 
 	while true do
