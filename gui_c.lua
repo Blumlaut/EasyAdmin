@@ -35,11 +35,25 @@ playlist = nil
 
 RegisterCommand('easyadmin', function(source, args)
 	CreateThread(function()
-		if not RedM then
+		if not isAdmin == true then
+			TriggerServerEvent("EasyAdmin:amiadmin")
+			local waitTime = 0
+
+			repeat 
+				Wait(10)
+				waitTime=waitTime+1
+			until (isAdmin or waitTime==1000)
+			if not isAdmin then
+			end
+		end
+		
+
+		
+		if not RedM and isAdmin then
 			playerlist = nil
 			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 			repeat
-				Wait(100)
+				Wait(10)
 			until playerlist
 		end
 
