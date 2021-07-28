@@ -1958,8 +1958,8 @@ Citizen.CreateThread(function()
 			infinity = true
 		end
 		if tonumber(GetConvar("ea_MenuButton", "f2")) then -- let people know they broke stuff
-			PrintDebugMessage("^1ea_MenuButton has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions^7", 1)
-			PrintDebugMessage("^1If you do not correct this, your Menu key will cease working in the near future.^7", 1)
+			PrintDebugMessage("ea_MenuButton has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
+			PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
 		end
 		
 		readAcePermissions()
