@@ -200,8 +200,8 @@
 
     "itemdeleted": "~r~This Item has been deleted.",
     "savechanges": "~g~Salve Modifiche",
-    "savechangesguide": "~r~Warning! ~w~This cannot be undone!",
-    "admineditedpermissions": "**%s** edited the server's permissions.",
+    "savechangesguide": "~r~Attenzione! ~w~Non può essere fatto!",
+    "admineditedpermissions": "**%s** ha modificato i permessi del server.",
 
     "reportviewer": "Lista Segnalazioni",
     "call": "Call",
