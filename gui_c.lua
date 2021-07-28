@@ -58,16 +58,26 @@ RegisterCommand('easyadmin', function(source, args)
 			until playerlist
 		end
 
-		if strings then
-			banLength = {
-				{label = GetLocalisedText("permanent"), time = 10444633200},
-				{label = GetLocalisedText("oneday"), time = 86400},
-				{label = GetLocalisedText("threedays"), time = 259200},
-				{label = GetLocalisedText("oneweek"), time = 518400},
-				{label = GetLocalisedText("twoweeks"), time = 1123200},
-				{label = GetLocalisedText("onemonth"), time = 2678400},
-				{label = GetLocalisedText("oneyear"), time = 31536000},
-			}
+		if strings and isAdmin then
+			banLength = {}
+			
+			if permissions["ban.permanent"] then
+				table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+			end
+
+			if permissions["ban.temporary"] then
+				table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
+				table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
+				table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
+				table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
+				table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
+				table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
+				table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
+				table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+			end
+			
+			
+
 			if mainMenu and mainMenu:Visible() then
 				mainMenu:Visible(false)
 				_menuPool:Remove()
