@@ -216,6 +216,11 @@ AddEventHandler('playerDropped', function (reason)
 	if cooldowns[source] then
 		cooldowns[source] = nil
 	end
+	for i, report in pairs(reports) do
+		if report.reporter == source or (report.reported and report.reported == source) then
+			removeReport(report.id)
+		end
+	end
 	PrintDebugMessage(source.." disconnected.", 4)
 end)
 
