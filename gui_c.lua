@@ -1506,7 +1506,7 @@ function GenerateMenu() -- this is a big ass function
 		TriggerServerEvent("EasyAdmin:amiadmin")
 	end
 	
-	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
+	local sl = {GetLocalisedText("left"), GetLocalisedText("middle")}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
 	thisItem.OnListSelected = function(sender, item, index)
