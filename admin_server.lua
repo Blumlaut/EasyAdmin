@@ -216,6 +216,11 @@ AddEventHandler('playerDropped', function (reason)
 	if cooldowns[source] then
 		cooldowns[source] = nil
 	end
+	for i, report in pairs(reports) do
+		if report.reporter == source or (report.reported and report.reported == source) then
+			removeReport(report.id)
+		end
+	end
 	PrintDebugMessage(source.." disconnected.", 4)
 end)
 
@@ -376,7 +381,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
 			ea_logLevel = GetConvar("ea_logLevel", 1),
 			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
-			ea_MenuButton = GetConvar("ea_MenuButton", "f2"),
+			ea_MenuButton = GetConvar("ea_MenuButton", "none"),
 			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
 			ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
 			ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),
@@ -519,7 +524,7 @@ Citizen.CreateThread(function()
 		end
 		
 		-- give player the right settings to work with
-		local key = GetConvar("ea_MenuButton", "f2")
+		local key = GetConvar("ea_MenuButton", "none")
 		if RedM then
 			key = GetConvar("ea_MenuButton", "PhotoModePc")
 		end
@@ -1552,6 +1557,7 @@ Citizen.CreateThread(function()
 					end
 				end
 				if identifierPref == "discord" and identifier ~= "~No Identifier~" then
+					identifier = string.gsub(identifier, "discord:", "")
 					identifier = "<@"..identifier..">"
 				end
 				if identifierenabled then
@@ -1957,9 +1963,11 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Onesync is Infinity", 3)
 			infinity = true
 		end
-		if tonumber(GetConvar("ea_MenuButton", "f2")) then -- let people know they broke stuff
+		if tonumber(GetConvar("ea_MenuButton", "none")) then -- let people know they broke stuff
 			PrintDebugMessage("ea_MenuButton has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
 			PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
+		elseif GetConvar("ea_MenuButton", "none") == "none" then
+			PrintDebugMessage("ea_MenuButton is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
 		end
 		
 		readAcePermissions()
