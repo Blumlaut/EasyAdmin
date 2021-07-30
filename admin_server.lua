@@ -1557,6 +1557,7 @@ Citizen.CreateThread(function()
 					end
 				end
 				if identifierPref == "discord" and identifier ~= "~No Identifier~" then
+					string.gsub(identifier, "discord:", "")
 					identifier = "<@"..identifier..">"
 				end
 				if identifierenabled then
