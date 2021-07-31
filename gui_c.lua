@@ -1170,7 +1170,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	if permissions["permissions.view"] then
+	if permissions["permissions.read"] then
 		permissionEditor = _menuPool:AddSubMenu(servermanagement, GetLocalisedText("permissioneditor"),GetLocalisedText("permissioneditorguide"),true)
 		local thisMenuWidth = menuWidth
 		if menuWidth < 150 then
@@ -1184,7 +1184,7 @@ function GenerateMenu() -- this is a big ass function
 		editAces:SetMenuWidthOffset(thisMenuWidth)
 
 
-		if permissions["permissions.view"] and permissions["permissions.write"] then 
+		if permissions["permissions.read"] and permissions["permissions.write"] then 
 			local thisMenu = _menuPool:AddSubMenu(editAces, GetLocalisedText("addace"), "", true)
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			local tempAce = {}
@@ -1319,7 +1319,7 @@ function GenerateMenu() -- this is a big ass function
 		editPrincipals = _menuPool:AddSubMenu(permissionEditor, GetLocalisedText("principals"),"",true)
 		editPrincipals:SetMenuWidthOffset(thisMenuWidth)	
 
-		if permissions["permissions.view"] and permissions["permissions.write"] then
+		if permissions["permissions.read"] and permissions["permissions.write"] then
 			local thisMenu = _menuPool:AddSubMenu(editPrincipals, GetLocalisedText("addprincipal"), "", true)
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			local tempPrincipal = {}
@@ -1438,7 +1438,7 @@ function GenerateMenu() -- this is a big ass function
 
 		end
 	end
-	if permissions["permissions.view"] then
+	if permissions["permissions.read"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshpermissions"), "")
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -1451,7 +1451,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	if permissions["permissions.view"] and permissions["permissions.write"] then
+	if permissions["permissions.read"] and permissions["permissions.write"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("savechanges"), GetLocalisedText("savechangesguide"))
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)

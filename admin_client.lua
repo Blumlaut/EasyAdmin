@@ -79,7 +79,7 @@ end)
 
 RegisterNetEvent("EasyAdmin:SetLanguage")
 AddEventHandler("EasyAdmin:SetLanguage", function()
-	if permissions["permissions.view"] then
+	if permissions["permissions.read"] then
 		TriggerServerEvent("EasyAdmin:getServerAces")
 	end
 end)

@@ -19,7 +19,7 @@ permissions = {
 	["cleanup.peds"] = false,
 	["reports.view"] = false,
 	["reports.process"] = false,
-	["permissions.view"] = false,
+	["permissions.read"] = false,
 	["permissions.write"] = false
 }
 

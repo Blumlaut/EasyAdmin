@@ -1367,7 +1367,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:getServerAces")
 	AddEventHandler("EasyAdmin:getServerAces", function()
-		if DoesPlayerHavePermission(source,"easyadmin.permissions.view") then
+		if DoesPlayerHavePermission(source,"easyadmin.permissions.read") then
 			TriggerClientEvent("EasyAdmin:getServerAces", source, add_aces, add_principals)
 		end
 	end)
