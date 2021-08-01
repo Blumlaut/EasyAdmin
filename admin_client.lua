@@ -180,7 +180,7 @@ Citizen.CreateThread(function()
 			
 		elseif type == "peds" then
 			local toDelete = GetGamePool("CPed")
-			for i,ped in pairs(toDelete) do
+			for _,ped in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for ped "..ped, 4)
 				if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
 					if not NetworkHasControlOfEntity(ped) then
@@ -213,7 +213,7 @@ Citizen.CreateThread(function()
 			
 		elseif type == "props" then
 			local toDelete = mergeTables(GetGamePool("CObject"), GetGamePool("CPickup"))
-			for i,object in pairs(toDelete) do
+			for _,object in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for object "..object, 4)
 				if DoesEntityExist(object) then
 					if not NetworkHasControlOfEntity(object) then
