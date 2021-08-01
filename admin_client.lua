@@ -145,24 +145,8 @@ Citizen.CreateThread(function()
 	AddEventHandler('EasyAdmin:requestCleanup', function(type)
 		if type == "cars" then
 			
-			local toDelete = {}
-			local handle, veh = FindFirstVehicle()
-			local finished = false
-			repeat
-				if veh ~= 0 then
-					if not NetworkHasControlOfEntity(veh) then
-						PrintDebugMessage("taking control of "..veh, 3)
-						NetworkRequestControlOfEntity(veh)
-					end
-					PrintDebugMessage("saving veh "..veh.." for deletion.", 4)
-					table.insert(toDelete,veh)
-				end
-				Wait(1)
-				finished, veh = FindNextVehicle(handle)
-			until not finished
-			EndFindVehicle(handle)
-			
-			for i,veh in pairs(toDelete) do
+			local toDelete = GetGamePool("CVehicle")
+			for _,veh in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for veh "..veh, 4)
 				if DoesEntityExist(veh) then
 					if not NetworkHasControlOfEntity(veh) then
@@ -195,23 +179,7 @@ Citizen.CreateThread(function()
 			
 			
 		elseif type == "peds" then
-			local toDelete = {}
-			local handle, ped = FindFirstPed()
-			local finished = false
-			repeat
-				if ped ~= 0 and not IsPedAPlayer(ped) then
-					if not NetworkHasControlOfEntity(ped) then
-						PrintDebugMessage("taking control of ped "..ped, 3)
-						NetworkRequestControlOfEntity(ped)
-					end
-					PrintDebugMessage("saving ped "..ped.." for deletion.", 4)
-					table.insert(toDelete,ped)
-				end
-				Wait(1)
-				finished, ped = FindNextPed(handle)
-			until not finished
-			EndFindPed(handle)
-			
+			local toDelete = GetGamePool("CPed")
 			for i,ped in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for ped "..ped, 4)
 				if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
@@ -244,25 +212,7 @@ Citizen.CreateThread(function()
 			end
 			
 		elseif type == "props" then
-			
-			
-			local toDelete = {}
-			local handle, object = FindFirstObject()
-			local finished = false
-			repeat
-				if object ~= 0 then
-					if not NetworkHasControlOfEntity(object) then
-						PrintDebugMessage("taking control of object "..object, 3)
-						NetworkRequestControlOfEntity(object)
-					end
-					PrintDebugMessage("saving object "..object.." for deletion.", 4)
-					table.insert(toDelete,object)
-				end
-				Wait(1)
-				finished, object = FindNextObject(handle)
-			until not finished
-			EndFindObject(handle)
-			
+			local toDelete = mergeTables(GetGamePool("CObject"), GetGamePool("CPickup"))
 			for i,object in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for object "..object, 4)
 				if DoesEntityExist(object) then
@@ -289,6 +239,9 @@ Citizen.CreateThread(function()
 					AddTextComponentString(string.format(GetLocalisedText("cleaningprop"), object))
 					EndTextCommandDisplayText(0.45, 0.95)
 					DetachEntity(object, false, false)
+					if IsObjectAPickup(object) then 
+						RemovePickup(object)
+					end
 					SetEntityAsNoLongerNeeded(object)
 					DeleteEntity(object)
 					Wait(1)
