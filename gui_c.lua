@@ -649,10 +649,17 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				_menuPool:CloseAllMenus()
-				Citizen.Wait(300)
-				local ourMenu = playerMenus[tostring(report.reporter)].menu
-				ourMenu.ParentMenu=thisMenu
-				ourMenu:Visible(true)
+				Citizen.Wait(100)
+				GenerateMenu()
+				Wait(100)
+				if not playerMenus[tostring(report.reporter)] then
+					ShowNotification("~r~Reporting player not found.")
+					reportViewer:Visible(true)
+				else
+					local ourMenu = playerMenus[tostring(report.reporter)].menu
+					ourMenu.ParentMenu=thisMenu
+					ourMenu:Visible(true)
+				end
 			end
 
 			if report.type == 1 then
@@ -661,10 +668,17 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					_menuPool:CloseAllMenus()
-					Citizen.Wait(300)
-					local ourMenu = playerMenus[tostring(report.reported)].menu
-					ourMenu.ParentMenu=thisMenu
-					ourMenu:Visible(true)
+					Citizen.Wait(100)
+					GenerateMenu()
+					Wait(100)
+					if not playerMenus[tostring(report.reported)] then
+						ShowNotification("~r~Reported player not found.")
+						reportViewer:Visible(true)
+					else
+						local ourMenu = playerMenus[tostring(report.reported)].menu
+						ourMenu.ParentMenu=thisMenu
+						ourMenu:Visible(true)
+					end
 				end
 			end
 
