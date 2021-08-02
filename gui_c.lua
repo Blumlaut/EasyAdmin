@@ -929,23 +929,27 @@ function GenerateMenu() -- this is a big ass function
 						foundBanid=i
 						break
 					end 
-					if theBanned.name then
-						if string.find(theBanned.name, result) then
+				end
+				if not foundBan then
+					for i,theBanned in ipairs(banlist) do
+						if theBanned.name then
+							if string.find(theBanned.name, result) then
+								foundBan=true
+								foundBanid=i
+								break
+							end
+						end
+						if string.find((theBanned.reason or "No Reason"), result) then
 							foundBan=true
 							foundBanid=i
 							break
 						end
-					end
-					if string.find((theBanned.reason or "No Reason"), result) then
-						foundBan=true
-						foundBanid=i
-						break
-					end
-					for _, identifier in pairs(theBanned.identifiers) do
-						if string.find(identifier, result) then
-							foundBan=true
-							foundBanid=i
-							break
+						for _, identifier in pairs(theBanned.identifiers) do
+							if string.find(identifier, result) then
+								foundBan=true
+								foundBanid=i
+								break
+							end
 						end
 					end
 				end
