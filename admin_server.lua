@@ -484,7 +484,7 @@ Citizen.CreateThread(function()
 		local perms = {}
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source, perm)
-			if perm == "screenshot" and not screenshots then
+			if perm == "player.screenshot" and not screenshots then
 				thisPerm = false
 			end
 			--if (perm == "teleport" or perm == "spectate") and infinity then
@@ -500,31 +500,21 @@ Citizen.CreateThread(function()
 
 		TriggerClientEvent("EasyAdmin:adminresponse", source, perms)
 		
-		if (DoesPlayerHavePermission(source, "ban.temporary") or DoesPlayerHavePermission(source, "ban.permanent")) then
+		if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
 		end
-		if DoesPlayerHavePermission(source, "kick") then
+		if DoesPlayerHavePermission(source, "player.kick") then
 			TriggerClientEvent('chat:addSuggestion', source, '/kick', GetLocalisedText("chatsuggestionkick"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
 		end
-		if DoesPlayerHavePermission(source, "spectate") then
+		if DoesPlayerHavePermission(source, "player.spectate") then
 			TriggerClientEvent('chat:addSuggestion', source, '/spectate', GetLocalisedText("chatsuggestionspectate"), { {name='player id', help="the player's server id"} })
 		end
-		if DoesPlayerHavePermission(source, "unban") then
-			TriggerClientEvent('chat:addSuggestion', source, '/unban', GetLocalisedText("chatsuggestionunban"), { {name='identifier', help="the identifier ( such as steamid, ip or license )"} })
-		end
-		if DoesPlayerHavePermission(source, "teleport.player") then
-			TriggerClientEvent('chat:addSuggestion', source, '/teleport', GetLocalisedText("chatsuggestionteleport"), { {name='player id', help="the player's server id"} })
-		end
-		if DoesPlayerHavePermission(source, "manageserver") then
-			TriggerClientEvent('chat:addSuggestion', source, '/setgametype', GetLocalisedText("chatsuggestiongametype"), { {name='game type', help="the game type"} })
-			TriggerClientEvent('chat:addSuggestion', source, '/setmapname', GetLocalisedText("chatsuggestionmapname"), { {name='map name', help="the map name"} })
-		end
 		
-		if DoesPlayerHavePermission(source, "slap") then
+		if DoesPlayerHavePermission(source, "player.slap") then
 			TriggerClientEvent('chat:addSuggestion', source, '/slap', GetLocalisedText("chatsuggestionslap"), { {name='player id', help="the player's server id"},{name='hp', help="the hp to take"} })
 		end
 		
-		if DoesPlayerHavePermission(source, "freeze") then
+		if DoesPlayerHavePermission(source, "player.freeze") then
 			TriggerClientEvent('chat:addSuggestion', source, '/freeze', GetLocalisedText("chatsuggestionfreeze"), { {name='player id', help="the player's server id"},{name='toggle', help="either true or false"} })
 		end
 		
@@ -562,7 +552,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer")
 	AddEventHandler('EasyAdmin:kickPlayer', function(playerId,reason)
-		if DoesPlayerHavePermission(source, "kick") and not DoesPlayerHavePermission(playerId,"immune") then
+		if DoesPlayerHavePermission(source, "player.kick") and not DoesPlayerHavePermission(playerId,"player.immune") then
 			reason = formatShortcuts(reason)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
@@ -572,7 +562,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate")
 	AddEventHandler('EasyAdmin:requestSpectate', function(playerId)
-		if DoesPlayerHavePermission(source, "spectate") then
+		if DoesPlayerHavePermission(source, "player.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
 			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
@@ -584,7 +574,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:requestCleanup")
 	AddEventHandler('EasyAdmin:requestCleanup', function(type)
-		if DoesPlayerHavePermission(source, "cleanup."..type) then
+		if DoesPlayerHavePermission(source, "server.cleanup."..type) then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Cleanup for "..type, 3)
 			TriggerClientEvent("EasyAdmin:requestCleanup", source, type)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
