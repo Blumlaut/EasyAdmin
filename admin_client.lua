@@ -57,7 +57,7 @@ AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
 end)
 
 AddEventHandler("EasyAdmin:fillCachedPlayers", function(thecached)
-	if permissions["ban.temporary"] or permissions["ban.permanent"] then
+	if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
 		cachedplayers = thecached
 	end
 end)
@@ -79,7 +79,7 @@ end)
 
 RegisterNetEvent("EasyAdmin:SetLanguage")
 AddEventHandler("EasyAdmin:SetLanguage", function()
-	if permissions["permissions.read"] then
+	if permissions["server.permissions.read"] then
 		TriggerServerEvent("EasyAdmin:getServerAces")
 	end
 end)
