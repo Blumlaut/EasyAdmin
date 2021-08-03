@@ -9,7 +9,7 @@ players = {}
 banlist = {}
 cachedplayers = {}
 reports = {}
-
+add_aces, add_principals = {}, {}
 RegisterNetEvent("EasyAdmin:adminresponse")
 RegisterNetEvent("EasyAdmin:amiadmin")
 RegisterNetEvent("EasyAdmin:fillBanlist")
