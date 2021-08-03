@@ -149,36 +149,36 @@ Citizen.CreateThread(function()
 			for _,veh in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for veh "..veh, 4)
 				if DoesEntityExist(veh) then
-					if not NetworkHasControlOfEntity(veh) then
-						local i=0
-						repeat 
-							NetworkRequestControlOfEntity(veh)
-							i=i+1
-							Wait(150)
-						until (NetworkHasControlOfEntity(veh) or i==500)
+					if not IsPedAPlayer(GetPedInVehicleSeat(veh, 1)) then
+						if not NetworkHasControlOfEntity(veh) then
+							local i=0
+							repeat 
+								NetworkRequestControlOfEntity(veh)
+								i=i+1
+								Wait(150)
+							until (NetworkHasControlOfEntity(veh) or i==500)
+						end
+						PrintDebugMessage("deleting veh "..veh, 3)
+						
+						-- draw
+						SetTextFont(2)
+						SetTextColour(255, 255, 255, 200)
+						SetTextProportional(1)
+						SetTextScale(0.0, 0.6)
+						SetTextDropshadow(0, 0, 0, 0, 255)
+						SetTextEdge(1, 0, 0, 0, 255)
+						SetTextDropShadow()
+						SetTextOutline()
+						SetTextEntry("STRING")
+						AddTextComponentString(string.format(GetLocalisedText("cleaningcar"), veh))
+						EndTextCommandDisplayText(0.45, 0.95)
+						SetEntityAsNoLongerNeeded(veh)
+						DeleteEntity(veh)
+						Wait(1)
 					end
-					PrintDebugMessage("deleting veh "..veh, 3)
-					
-					-- draw
-					SetTextFont(2)
-					SetTextColour(255, 255, 255, 200)
-					SetTextProportional(1)
-					SetTextScale(0.0, 0.6)
-					SetTextDropshadow(0, 0, 0, 0, 255)
-					SetTextEdge(1, 0, 0, 0, 255)
-					SetTextDropShadow()
-					SetTextOutline()
-					SetTextEntry("STRING")
-					AddTextComponentString(string.format(GetLocalisedText("cleaningcar"), veh))
-					EndTextCommandDisplayText(0.45, 0.95)
-					SetEntityAsNoLongerNeeded(veh)
-					DeleteEntity(veh)
-					Wait(1)
 				end
 				toDelete[i] = nil
 			end
-			
-			
 		elseif type == "peds" then
 			local toDelete = GetGamePool("CPed")
 			for _,ped in pairs(toDelete) do
