@@ -1176,7 +1176,7 @@ function GenerateMenu() -- this is a big ass function
 		table.insert(sl, GetLocalisedText('props'))
 	end
 
-	if #sl > 0 then
+	if #sl > 0 and not RedM then
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("cleanarea"), sl, 1, GetLocalisedText("cleanareaguide"))
 		servermanagement:AddItem(thisItem)
 		thisItem.OnListSelected = function(sender, item, index)
