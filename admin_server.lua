@@ -579,7 +579,7 @@ Citizen.CreateThread(function()
 			if (onesync ~= "off" and onesync ~= "legacy") then
 				if type == "cars" then
 					local toDelete = GetAllVehicles()
-					print("server-known vehicles: "..table_to_string(toDelete))
+					PrintDebugMessage("server-known vehicles: "..table_to_string(toDelete), 4)
 					for _,veh in pairs(toDelete) do
 						PrintDebugMessage("starting deletion for veh "..veh, 4)
 						if DoesEntityExist(veh) and not IsPedAPlayer(GetPedInVehicleSeat(veh, -1)) then
@@ -589,7 +589,7 @@ Citizen.CreateThread(function()
 					end
 				elseif type == "peds" then
 					local toDelete = GetAllPeds()
-					print("server-known peds: "..table_to_string(toDelete))
+					PrintDebugMessage("server-known peds: "..table_to_string(toDelete), 4)
 					for _,ped in pairs(toDelete) do
 						PrintDebugMessage("starting deletion for ped "..ped, 4)
 						if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
@@ -599,7 +599,7 @@ Citizen.CreateThread(function()
 					end
 				elseif type == "props" then
 					local toDelete = GetAllPeds()
-					print(table_to_string(toDelete))
+					PrintDebugMessage("server-known props: "..table_to_string(toDelete), 4)
 					for _,object in pairs(toDelete) do
 						PrintDebugMessage("starting deletion for object "..object, 4)
 						if DoesEntityExist(object) then
