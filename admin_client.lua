@@ -149,7 +149,7 @@ Citizen.CreateThread(function()
 			for _,veh in pairs(toDelete) do
 				PrintDebugMessage("starting deletion for veh "..veh, 4)
 				if DoesEntityExist(veh) then
-					if not IsPedAPlayer(GetPedInVehicleSeat(veh, 1)) then
+					if not IsPedAPlayer(GetPedInVehicleSeat(veh, -1)) then
 						if not NetworkHasControlOfEntity(veh) then
 							local i=0
 							repeat 
