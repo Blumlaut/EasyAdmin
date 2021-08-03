@@ -24,7 +24,7 @@ EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is fe
 
 Take a look at our Documentation [here](https://github.com/Blumlaut/EasyAdmin/wiki/0.-Installing-EasyAdmin,-TL;DR-Edition), we Explain how to Install and Configure EasyAdmin on the Wiki.
 
-### [Support Discord](https://discord.gg/GugyRU8)
+## [Support Discord](https://discord.gg/GugyRU8)
 
 
 Graphic Design by [Team Snaily](https://teamsnaily.com)
