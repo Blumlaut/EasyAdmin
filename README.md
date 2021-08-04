@@ -4,12 +4,16 @@ EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is fe
 
 - Basic Administration (Kicking,Temp/PermaBanning,Mute,Teleport To/From,Slapping,Freeze Player,Warnings)
 - Ability to Screenshot other Players' Game (requires screenshot-basic)
-- Extensive Banlist System which is highly resiliant to ban evasion 
+- Extensive Banlist System which is highly resilient to ban evasion
 - Basic Ability to modify Server Settings from a GUI.
+- Report / Admin Call System with GUI to view and handle them
 - Extensive Permission system utilising FiveM's inbuilt ACE System.
+- A Permission Editor allowing for realtime modification of Server Permissions, saves to a config!
+- Various Server Admin Tools such as Cleaning up spawned Cars/Peds/Props
 - API to allow Developers to Communicate with EasyAdmin
 - Translation in 10 Languages (Community Driven)
 - Actively Supported & Updated since 2017
+- Plugin Support 
 
 ![image](https://user-images.githubusercontent.com/13604413/126916981-1680e5ac-e024-467b-aad3-a5a9658449e0.png)
 
