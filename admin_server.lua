@@ -1250,20 +1250,24 @@ Citizen.CreateThread(function()
 						line = (string.split(line, "#")[1] or line) -- in case there are comments AFTER our commands, strip them out
 						line = string.sub(line, 9, 999) -- strip add_ace, we dont need it
 						local t = {file = filename, oldline = oldline} -- prepare our list of permissions
-						for i,word in pairs(string.split(line, " ")) do
-							if i>3 then break end -- we dont count past 3
-							table.insert(t,word) -- insert individual "part" of the command
-						end
+						if #(string.split(line, " ")) >= 3 then -- skip invalid/broken lines
+							for i,word in pairs(string.split(line, " ")) do
+								if i>3 then break end -- we dont count past 3
+								table.insert(t,word) -- insert individual "part" of the command
+							end
 						table.insert(aces,t)
+						end
 					elseif string.sub(line, 1, 13) == "add_principal" then
 						line = (string.split(line, "#")[1] or line)
 						line = string.sub(line, 15, 999) -- strip add_principal , we dont need it
 						local t = {file = filename, oldline = oldline}
-						for i,word in pairs(string.split(line, " ")) do
-							if i>2 then break end
-							table.insert(t,word)
+						if #(string.split(line, " ")) >= 2 then -- skip invalid/broken lines
+							for i,word in pairs(string.split(line, " ")) do
+								if i>2 then break end
+								table.insert(t,word)
+							end
+							table.insert(principals,t)
 						end
-						table.insert(principals,t)
 					elseif string.sub(line, 1, 4) == "exec" then
 						line = (string.split(line, "#")[1] or line)
 						line = string.sub(line, 6, 999) -- strip add_principal , we dont need it
