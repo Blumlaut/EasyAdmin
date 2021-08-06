@@ -1210,8 +1210,10 @@ Citizen.CreateThread(function()
 		local needsExec = true
 		local needsResourcePerms = true
 	
-		if filename ~= "server.cfg" then 
-			needsExec , needsResourcePerms = false, false
+		if filename == "server.cfg" then 
+			needsResourcePerms = false
+		elseif filename == "easyadmin_permissions.cfg" then
+			needsExec = false
 		end
 		local changes = false
 		local aces, principals, execs = {}, {}, {}
@@ -1230,9 +1232,12 @@ Citizen.CreateThread(function()
 	
 			for i, line in pairs(lines) do 
 				if filename == "server.cfg" then
+					needsResourcePerms = false
 					if string.find(line, "exec easyadmin_permissions.cfg") then
 						needsExec = false
 					end
+				elseif filename == "easyadmin_permissions.cfg" then
+					needsExec = false
 					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow") then
 						needsResourcePerms = false
 					end
@@ -1320,6 +1325,16 @@ Citizen.CreateThread(function()
 		else 
 			if filename == "easyadmin_permissions.cfg" then
 				local file = io.open(filename, "w")
+				local newLines = {}
+				table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow")
+				table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_ace allow")
+				table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_principal allow")
+				table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_principal allow")
+				local output = ""
+				for i, line in pairs(newLines) do
+					output=output..line.."\n"
+				end
+				file:write(output) -- write our lines
 				file:close()
 			end
 			PrintDebugMessage(filename.." cannot be read, bailing.", 4)
