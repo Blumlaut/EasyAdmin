@@ -7,8 +7,8 @@
     "stoppedSpectating": "Has parado de spectear.",
     "6hours": "6 Horas",
     "12hours": "12 Horas",
-    "oneday": "1 Día",
-    "threedays": "3 Días",
+    "oneday": "1 Dia",
+    "threedays": "3 Dias",
     "oneweek": "1 Semana",
     "twoweeks": "2 Semanas",
     "onemonth": "1 Mes",
@@ -147,16 +147,14 @@
     "warnkicked": "Has sido kickeado por recibir demasiados avisos.",
     "warnbanned": "Has sido baneado por recibir demasiados avisos.",
     "adminwarnedplayer": "**%s** advirtió a **%s**, Razón: %s, Aviso %s/%s",
-
     "searchuser": "Buscar usuario",
     "searchuserguide": "Encuentra un jugador usando su nombre de usuario o ID",
-
+  
     "setconvar": "Set Convar",
     "setconvarguide": "~r~NOTA: NO TOQUES ESTO si no sabes lo que haces ~w~\nCambia una Convar",
     "adminchangedconvar": "**%s** ha cambiado la convar **%s** a **%s**",
     "adminstartedresource": "**%s** ha iniciado el script **%s**",
     "adminstoppedresource": "**%s** ha parado el script **%s**",
-
     "convarname": "Nombre de Convar",
     "convarvalue": "Valor de Convar",
 
