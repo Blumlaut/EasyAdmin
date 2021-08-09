@@ -1026,10 +1026,12 @@ Citizen.CreateThread(function()
 							end
 						elseif res.url then
 							res = res.url
-						elseif res.data.link then
-							res = res.data.link
-						elseif res.data.url then
-							res = res.data.url
+						elseif res.data then
+							if res.data.link then
+								res = res.data.link
+							elseif res.data.url then
+								res = res.data.url
+							end
 						elseif res.link then
 							res = res.link
 						end
