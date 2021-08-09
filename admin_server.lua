@@ -1020,12 +1020,20 @@ Citizen.CreateThread(function()
 							if res.attachments[1].url then
 								res = res.attachments[1].url
 							end
+						elseif res.files then
+							if res.files[1].url then
+								res = res.files[1].url
+							end
 						elseif res.url then
 							res = res.url
-						elseif res.data.link then
-							res = res.data.link
-						elseif res.data.url then
-							res = res.data.url
+						elseif res.data then
+							if res.data.link then
+								res = res.data.link
+							elseif res.data.url then
+								res = res.data.url
+							else
+								res = tostring(result)
+							end
 						elseif res.link then
 							res = res.link
 						end
@@ -1214,6 +1222,8 @@ Citizen.CreateThread(function()
 			needsResourcePerms = false
 		elseif filename == "easyadmin_permissions.cfg" then
 			needsExec = false
+		else
+			needsResourcePerms, needsExec = false, false
 		end
 		local changes = false
 		local aces, principals, execs = {}, {}, {}
