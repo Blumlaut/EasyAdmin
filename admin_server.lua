@@ -1003,42 +1003,9 @@ Citizen.CreateThread(function()
 			scrinprogress = true
 			thistemporaryevent = AddEventHandler("EasyAdmin:TookScreenshot", function(result)
 				if result == "ERROR" then return false end
-				res = tostring(result)
-				if (moderationNotification == GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php')) then
-					res = ""
-				elseif string.find(GetConvar("ea_screenshoturl", ''), "discordapp") or string.find(GetConvar("ea_screenshoturl", ''), "discord.com") then
-					res = json.decode(res)
-					if not res.attachments then
-						res = "An Error occured and the screenshot was not uploaded, here is the raw json data: "..tostring(result)
-						PrintDebugMessage("Screenshot failed, no attachment found", 4)
-					else
-						res = res.attachments[1].url
-					end
-				else
-					if json.decode(res) then
-						if res.attachments then
-							if res.attachments[1].url then
-								res = res.attachments[1].url
-							end
-						elseif res.files then
-							if res.files[1].url then
-								res = res.files[1].url
-							end
-						elseif res.url then
-							res = res.url
-						elseif res.data then
-							if res.data.link then
-								res = res.data.link
-							elseif res.data.url then
-								res = res.data.url
-							else
-								res = tostring(result)
-							end
-						elseif res.link then
-							res = res.link
-						end
-					end 
-				end
+				
+				res = matchURL(tostring(result)) 
+
 				PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
 				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
