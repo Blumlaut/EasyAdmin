@@ -1214,6 +1214,8 @@ Citizen.CreateThread(function()
 			needsResourcePerms = false
 		elseif filename == "easyadmin_permissions.cfg" then
 			needsExec = false
+		else
+			needsResourcePerms, needsExec = false, false
 		end
 		local changes = false
 		local aces, principals, execs = {}, {}, {}
