@@ -1020,6 +1020,10 @@ Citizen.CreateThread(function()
 							if res.attachments[1].url then
 								res = res.attachments[1].url
 							end
+						elseif res.files then
+							if res.files[1].url then
+								res = res.files[1].url
+							end
 						elseif res.url then
 							res = res.url
 						elseif res.data.link then
