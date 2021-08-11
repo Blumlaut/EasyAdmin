@@ -598,7 +598,7 @@ Citizen.CreateThread(function()
 						end
 					end
 				elseif type == "props" then
-					local toDelete = GetAllPeds()
+					local toDelete = GetAllObjects()
 					PrintDebugMessage("server-known props: "..table_to_string(toDelete), 4)
 					for _,object in pairs(toDelete) do
 						PrintDebugMessage("starting deletion for object "..object, 4)
