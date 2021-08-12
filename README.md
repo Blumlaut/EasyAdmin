@@ -1,4 +1,5 @@
-![](https://blumlaut.me/s/CEJbQTjbX4byGkW/preview)
+![image](https://user-images.githubusercontent.com/13604413/129143671-3ab6a643-faf0-479d-8b97-af71ffb5193c.png)
+
 
 EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is feature-rich and highly customisable, it includes features such as
 
@@ -31,8 +32,9 @@ Take a look at our Documentation [here](https://github.com/Blumlaut/EasyAdmin/wi
 ## [Support Discord](https://discord.gg/GugyRU8)
 
 
+
 Graphic Design by [Team Snaily](https://teamsnaily.com)
-<a href="https://gamestore.teamsnaily.com/"><img src="https://blumlaut.me/s/cyHrE6tB3bpi8bx/preview"/></a>
+<a href="https://gamestore.teamsnaily.com/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
 
 
 Supported by:
