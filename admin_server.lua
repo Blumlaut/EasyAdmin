@@ -1136,7 +1136,7 @@ Citizen.CreateThread(function()
 				end
 				reports[i] = nil
 			end
-			print(i, report.reporter, r.reporter)
+			PrintDebugMessage(i, report.reporter, r.reporter)
 			if (report.reporter) and (report.reporter == r.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
 					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
