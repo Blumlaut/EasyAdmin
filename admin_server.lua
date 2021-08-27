@@ -73,6 +73,9 @@ end)
 
 Citizen.CreateThread(function()
 	while true do 
+		repeat
+			Wait(5000)
+		until blacklist
 		local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 		if backupInfos == nil then 
 			lastBackupTime = 0
