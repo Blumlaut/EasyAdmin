@@ -73,6 +73,9 @@ end)
 
 Citizen.CreateThread(function()
 	while true do 
+		repeat
+			Wait(5000)
+		until blacklist
 		local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 		if backupInfos == nil then 
 			lastBackupTime = 0
@@ -1136,7 +1139,6 @@ Citizen.CreateThread(function()
 				end
 				reports[i] = nil
 			end
-			print(i, report.reporter, r.reporter)
 			if (report.reporter) and (report.reporter == r.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
 					TriggerClientEvent("EasyAdmin:RemoveReport", admin, r)
@@ -1166,12 +1168,14 @@ Citizen.CreateThread(function()
 	local add_aces = {}
 	local add_principals = {}
 	function readAcePermissions()
-		add_aces, add_principals, execs = FindInfosinFile("server.cfg")
-		for i, config in pairs(execs) do
-			local tempaces, tempprincipals, _ = FindInfosinFile(config)
-			add_aces = mergeTables(add_aces, tempaces)
-			add_principals = mergeTables(add_principals, tempprincipals)
-		end
+		Citizen.CreateThread(function()
+			add_aces, add_principals, execs = FindInfosinFile("server.cfg")
+			for i, config in pairs(execs) do
+				local tempaces, tempprincipals, _ = FindInfosinFile(config)
+				add_aces = mergeTables(add_aces, tempaces)
+				add_principals = mergeTables(add_principals, tempprincipals)
+			end
+		end)
 	end
 	
 	function FindInfosinFile(filename)
@@ -1218,6 +1222,14 @@ Citizen.CreateThread(function()
 					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow") then
 						needsResourcePerms = false
 					end
+				else
+					local broken = false
+					-- remove broken lines
+					if string.find(line, "exec easyadmin_permissions.cfg") then
+						RemoveFromFile(filename, "exec easyadmin_permissions.cfg")
+					elseif string.find(line, "add_ace resource."..GetCurrentResourceName().." command.") then
+						RemoveFromFile(filename, line)
+					end 
 				end
 				local oldline = line
 				line = string.gsub(line, "	", " ") -- convert tabs to spaces
@@ -1255,7 +1267,7 @@ Citizen.CreateThread(function()
 				end
 			end
 	
-			if needsExec or needsResourcePerms then
+			if needsExec or needsResourcePerms or changes then
 				local newLines = {}
 				if needsExec then
 					table.insert(newLines, "exec easyadmin_permissions.cfg")
