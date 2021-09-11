@@ -162,9 +162,9 @@
 
     "cleanarea": "Gebiete Aufräumen",
     "cleanareaguide": "Entfernt alle Entities in der nähe.",
-    "cars": "Fahrzeuge",
-    "peds": "NPC's",
-    "props": "Objekte",
+    "cars": "Fahrzeug",
+    "peds": "NPC",
+    "props": "Objekt",
     "cleaningcar": "Lösche Fahrzeuge %s",
     "cleaningped": "Lösche NPC's %s",
     "cleaningprop": "Lösche Objekte %s",
