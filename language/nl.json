@@ -215,7 +215,8 @@
     "adminclosedreport": "**%s** sloot Report #**%s**",
     "entertoopen": "Selecteer om de opties voor de speler te bekijken.",
     "refreshreports": "Vernieuw Reports",
-    "refreshreportsguide": "Laat nieuwe reports zien, als er nieuwe zijn."
+    "refreshreportsguide": "Laat nieuwe reports zien, als er nieuwe zijn.",
+    "waitbeforeusingagain": "You must wait before using this again!"
 
 
 }]
