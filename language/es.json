@@ -1,5 +1,5 @@
 [{
-    "translator": "Antho#0707",
+    "translator": "Antho#0707 & Javiito32",
     "language": "es",
     "on": "On",
     "off": "Off",
@@ -211,6 +211,7 @@
     "adminclosedreport": "**%s** ha cerrado el reporte #**%s**",
     "entertoopen": "Comprueba las opciones para este jugador.",
     "refreshreports": "Recargar Reportes",
-    "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú."
+    "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú.",
+    "waitBeforeUsingAgain": "¡Debes esperar antes de poder hacer eso otra vez!"
 
 }]
