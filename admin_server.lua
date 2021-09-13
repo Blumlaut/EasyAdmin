@@ -841,7 +841,7 @@ Citizen.CreateThread(function()
 			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
 				TriggerClientEvent('chat:addMessage', source, { 
 					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
-					args = { "^3!!EasyAdmin!!^7", "You must wait before using this again!" }, color = { 255, 255, 255 } 
+					args = { "^3!!EasyAdmin!!^7", GetLocalisedText("waitbeforeusingagain") }, color = { 255, 255, 255 } 
 				})
 				return
 			end
