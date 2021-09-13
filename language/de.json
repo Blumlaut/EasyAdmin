@@ -212,6 +212,7 @@
     "closesimilarreportsguide": "Versucht, ähnliche Reports zu finden und zu löschen.",
     "adminclosedreport": "**%s** hat Report #**%s** geschlossen.",
     "refreshreports": "Reports Aktualisieren",
-    "refreshreportsguide": "Zeigt neue Reports, falls es neue gibt seitdem das Menü geöffnet wurde."
+    "refreshreportsguide": "Zeigt neue Reports, falls es neue gibt seitdem das Menü geöffnet wurde.",
+    "waitbeforeusingagain": "You must wait before using this again!"
 
 }]
