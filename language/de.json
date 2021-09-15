@@ -173,8 +173,8 @@
 
     "forceeasteregg": "Easter Egg aktivieren",
 
-    "permissioneditor": "Berechtigung's Editor",
-    "permissioneditorguide": "Berechtigungen auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~",
+    "permissioneditor": "Permissions anpassen",
+    "permissioneditorguide": "Permission auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~",
 
     "aces": "ACEs",
     "permission": "Permission",
@@ -186,13 +186,13 @@
     "entergroup": "Gruppennamen einfügen (z.b. group.admin)",
     "enterperm": "Permissionnamen einfügen (z.b. easyadmin.kick)",
     "state": "Status",
-    "stateguide": "Das verweigern von Berechtigungen funktioniert nicht richtig. Erlaube nur die Berechtigungen, die der Spieler haben soll.",
+    "stateguide": "Das verweigern von Permissions funktioniert nicht richtig. Erlaube nur die Permissions, die der Spieler haben soll.",
     "location": "Ort",
     "locationguide": "Dieser Wert kann nicht bearbeitet werden.",
     "principal": "Principal",
     "enterprincipal": "Principal einfügen (e.g. identifier.steam:aabbccddeefff)",
     "deletepermission": "~r~Permission löschen",
-    "deletepermissionguide": "~r~Warnung! Dadurch wird die Berechtigung vollständig widerrufen und gelöscht!",
+    "deletepermissionguide": "~r~Warnung! Dadurch wird die Permission vollständig widerrufen und gelöscht!",
     "deleteprincipal": "~r~Principal löschen",
     "deleteprincipalguide": "~r~Warnung! Dadurch wird der Principal vollständig widerrufen und gelöscht!",
 
