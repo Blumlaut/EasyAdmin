@@ -752,7 +752,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:updateBanlist")
 	AddEventHandler('EasyAdmin:updateBanlist', function(playerId)
 		local src = source
-		if DoesPlayerHavePermission(source, "player.kick") then
+		if DoesPlayerHavePermission(source, "player.unban") then
 			updateBlacklist(false,true)
 			Citizen.Wait(300)
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
@@ -763,7 +763,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:requestBanlist")
 	AddEventHandler('EasyAdmin:requestBanlist', function()
 		local src = source
-		if DoesPlayerHavePermission(source, "player.kick") then
+		if DoesPlayerHavePermission(source, "player.unban") then
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
 			PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
 		end
