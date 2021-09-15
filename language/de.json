@@ -160,7 +160,7 @@
     "convarname": "Convar Name",
     "convarvalue": "Convar Inhalt",
 
-    "cleanarea": "Gebiete Aufräumen",
+    "cleanarea": "Gebiete aufräumen",
     "cleanareaguide": "Entfernt alle Entities in der nähe.",
     "cars": "Fahrzeuge",
     "peds": "NPC's",
@@ -173,8 +173,8 @@
 
     "forceeasteregg": "Easter Egg aktivieren",
 
-    "permissioneditor": "Permission Editor",
-    "permissioneditorguide": "Permissions auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~",
+    "permissioneditor": "Berechtigung's Editor",
+    "permissioneditorguide": "Berechtigungen auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~",
 
     "aces": "ACEs",
     "permission": "Permission",
@@ -199,7 +199,7 @@
     "itemdeleted": "~r~Dieser Eintrag wurde gelöscht.",
     "savechanges": "~g~Änderungen speichern",
     "savechangesguide": "~r~Warnung! ~w~Das kann nicht rückgängig gemacht werden!",
-    "admineditedpermissions": "**%s** hat die Permission des Servers bearbeitet.",
+    "admineditedpermissions": "**%s** hat die Berechtigungen des Servers bearbeitet.",
 
     "reportviewer": "Report Viewer",
     "call": "Ruf",
