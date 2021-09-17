@@ -72,7 +72,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+	backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 
 	while true do 
 		repeat
@@ -131,30 +131,30 @@ function createBackup()
 
 	SaveResourceFile(GetCurrentResourceName(), "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
 
-	local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+	backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 	if backupInfos then
-		backupInfos = json.decode(backupInfos)
-		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
+		backupData = json.decode(backupInfos)
+		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
 
 
-		if #backupInfos.backups > GetConvarInt("ea_maxBackupCount", 10) then
-			deleteBackup(backupInfos,1)
+		if #backupData.backups > GetConvarInt("ea_maxBackupCount", 10) then
+			deleteBackup(backupData,1)
 		end
-		backupInfos.lastBackup = backupTime
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos, {indent = true}))
+		backupData.lastBackup = backupTime
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
 
 	else
-		local backupInfos = {lastBackup = backupTime, backups = {}}
-		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos, {indent = true}))
+		local backupData = {lastBackup = backupTime, backups = {}}
+		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
 	end
 
 	return id,timestamp
 end
 
-function deleteBackup(backupInfos,id)
-	local expiredBackup = backupInfos.backups[id]
-	table.remove(backupInfos.backups, id)
+function deleteBackup(backupData,id)
+	local expiredBackup = backupData.backups[id]
+	table.remove(backupData.backups, id)
 
 	local backupFileName = expiredBackup.backupFile
 
@@ -164,10 +164,10 @@ function deleteBackup(backupInfos,id)
 
 end
 
-function getNewBackupid(backupInfos)
-	if backupInfos then
-		local lastBackup = backupInfos.lastbackup
-		local backups = backupInfos.backups
+function getNewBackupid(backupData)
+	if backupData then
+		local lastBackup = backupData.lastbackup
+		local backups = backupData.backups
 		return #backups+1
 	else
 		return 0
