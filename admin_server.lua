@@ -72,13 +72,17 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+	backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+
 	while true do 
-		local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+		repeat
+			Wait(5000)
+		until blacklist
 		if backupInfos == nil then 
 			lastBackupTime = 0
 		else
-			backupInfos = json.decode(backupInfos)
-			lastBackupTime = backupInfos.lastBackup
+			backupData = json.decode(backupInfos)
+			lastBackupTime = backupData.lastBackup
 		end
 		if (GetConvarInt("ea_backupFrequency", 72) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 72)*3600) < os.time()) then
 			createBackup()
@@ -127,30 +131,30 @@ function createBackup()
 
 	SaveResourceFile(GetCurrentResourceName(), "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
 
-	local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+	backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 	if backupInfos then
-		backupInfos = json.decode(backupInfos)
-		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
+		backupData = json.decode(backupInfos)
+		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
 
 
-		if #backupInfos.backups > GetConvarInt("ea_maxBackupCount", 10) then
-			deleteBackup(backupInfos,1)
+		if #backupData.backups > GetConvarInt("ea_maxBackupCount", 10) then
+			deleteBackup(backupData,1)
 		end
-		backupInfos.lastBackup = backupTime
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos, {indent = true}))
+		backupData.lastBackup = backupTime
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
 
 	else
-		local backupInfos = {lastBackup = backupTime, backups = {}}
-		table.insert(backupInfos.backups, {id = getNewBackupid(backupInfos), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupInfos, {indent = true}))
+		local backupData = {lastBackup = backupTime, backups = {}}
+		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
+		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
 	end
 
 	return id,timestamp
 end
 
-function deleteBackup(backupInfos,id)
-	local expiredBackup = backupInfos.backups[id]
-	table.remove(backupInfos.backups, id)
+function deleteBackup(backupData,id)
+	local expiredBackup = backupData.backups[id]
+	table.remove(backupData.backups, id)
 
 	local backupFileName = expiredBackup.backupFile
 
@@ -160,10 +164,10 @@ function deleteBackup(backupInfos,id)
 
 end
 
-function getNewBackupid(backupInfos)
-	if backupInfos then
-		local lastBackup = backupInfos.lastbackup
-		local backups = backupInfos.backups
+function getNewBackupid(backupData)
+	if backupData then
+		local lastBackup = backupData.lastbackup
+		local backups = backupData.backups
 		return #backups+1
 	else
 		return 0
@@ -749,7 +753,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:updateBanlist")
 	AddEventHandler('EasyAdmin:updateBanlist', function(playerId)
 		local src = source
-		if DoesPlayerHavePermission(source, "player.kick") then
+		if DoesPlayerHavePermission(source, "player.unban") then
 			updateBlacklist(false,true)
 			Citizen.Wait(300)
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
@@ -760,7 +764,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:requestBanlist")
 	AddEventHandler('EasyAdmin:requestBanlist', function()
 		local src = source
-		if DoesPlayerHavePermission(source, "player.kick") then
+		if DoesPlayerHavePermission(source, "player.unban") then
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
 			PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
 		end
@@ -838,7 +842,7 @@ Citizen.CreateThread(function()
 			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
 				TriggerClientEvent('chat:addMessage', source, { 
 					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
-					args = { "^3!!EasyAdmin!!^7", "You must wait before using this again!" }, color = { 255, 255, 255 } 
+					args = { "^3!!EasyAdmin!!^7", GetLocalisedText("waitbeforeusingagain") }, color = { 255, 255, 255 } 
 				})
 				return
 			end
@@ -1165,12 +1169,14 @@ Citizen.CreateThread(function()
 	local add_aces = {}
 	local add_principals = {}
 	function readAcePermissions()
-		add_aces, add_principals, execs = FindInfosinFile("server.cfg")
-		for i, config in pairs(execs) do
-			local tempaces, tempprincipals, _ = FindInfosinFile(config)
-			add_aces = mergeTables(add_aces, tempaces)
-			add_principals = mergeTables(add_principals, tempprincipals)
-		end
+		Citizen.CreateThread(function()
+			add_aces, add_principals, execs = FindInfosinFile("server.cfg")
+			for i, config in pairs(execs) do
+				local tempaces, tempprincipals, _ = FindInfosinFile(config)
+				add_aces = mergeTables(add_aces, tempaces)
+				add_principals = mergeTables(add_principals, tempprincipals)
+			end
+		end)
 	end
 	
 	function FindInfosinFile(filename)
@@ -1217,6 +1223,14 @@ Citizen.CreateThread(function()
 					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow") then
 						needsResourcePerms = false
 					end
+				else
+					local broken = false
+					-- remove broken lines
+					if string.find(line, "exec easyadmin_permissions.cfg") then
+						RemoveFromFile(filename, "exec easyadmin_permissions.cfg")
+					elseif string.find(line, "add_ace resource."..GetCurrentResourceName().." command.") then
+						RemoveFromFile(filename, line)
+					end 
 				end
 				local oldline = line
 				line = string.gsub(line, "	", " ") -- convert tabs to spaces
@@ -1254,7 +1268,7 @@ Citizen.CreateThread(function()
 				end
 			end
 	
-			if needsExec or needsResourcePerms then
+			if needsExec or needsResourcePerms or changes then
 				local newLines = {}
 				if needsExec then
 					table.insert(newLines, "exec easyadmin_permissions.cfg")

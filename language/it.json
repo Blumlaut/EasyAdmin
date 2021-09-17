@@ -215,7 +215,8 @@
     "adminclosedreport": "**%s** ha chiuso il report #**%s**",
     "entertoopen": "Seleziona per vedere opzioni per questo giocatore.",
     "refreshreports": "Aggiorna Segnalazioni",
-    "refreshreportsguide": "Mostra le nuove segnalazioni rispetto all'ultima volta che hai aperto il menù."
+    "refreshreportsguide": "Mostra le nuove segnalazioni rispetto all'ultima volta che hai aperto il menù.",
+    "waitbeforeusingagain": "You must wait before using this again!"
 
   
 }]
