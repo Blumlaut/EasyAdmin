@@ -72,16 +72,17 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+	local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+
 	while true do 
 		repeat
 			Wait(5000)
 		until blacklist
-		local backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
 		if backupInfos == nil then 
 			lastBackupTime = 0
 		else
-			backupInfos = json.decode(backupInfos)
-			lastBackupTime = backupInfos.lastBackup
+			backupData = json.decode(backupInfos)
+			lastBackupTime = backupData.lastBackup
 		end
 		if (GetConvarInt("ea_backupFrequency", 72) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 72)*3600) < os.time()) then
 			createBackup()
