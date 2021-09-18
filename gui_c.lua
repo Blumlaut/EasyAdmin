@@ -23,7 +23,7 @@ end
 
 function handleOrientation(orientation)
 	if orientation == "right" then
-		return 1320
+		return 1320-menuWidth
 	elseif orientation == "middle" then
 		return 730
 	elseif orientation == "left" then
@@ -1529,7 +1529,7 @@ function GenerateMenu() -- this is a big ass function
 		TriggerServerEvent("EasyAdmin:amiadmin")
 	end
 	
-	local sl = {GetLocalisedText("left"), GetLocalisedText("middle")}
+	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
 	thisItem.OnListSelected = function(sender, item, index)
