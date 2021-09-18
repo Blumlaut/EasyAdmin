@@ -1529,8 +1529,15 @@ function GenerateMenu() -- this is a big ass function
 		TriggerServerEvent("EasyAdmin:amiadmin")
 	end
 	
+	local orientationIndex = 1
+	if GetResourceKvpString("ea_menuorientation") == "middle" then
+		orientationIndex = 2
+	elseif GetResourceKvpString("ea_menuorientation") == "right" then
+		orientationIndex = 3
+	end
+
 	local sl = {GetLocalisedText("left"), GetLocalisedText("middle"), GetLocalisedText("right")}
-	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, 1, GetLocalisedText("menuOrientationguide"))
+	local thisItem = NativeUI.CreateListItem(GetLocalisedText("menuOrientation"), sl, orientationIndex, GetLocalisedText("menuOrientationguide"))
 	settingsMenu:AddItem(thisItem)
 	thisItem.OnListSelected = function(sender, item, index)
 			if item == thisItem then
