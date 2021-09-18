@@ -23,7 +23,7 @@ end
 
 function handleOrientation(orientation)
 	if orientation == "right" then
-		return 1320-menuWidth
+		return 1390-menuWidth
 	elseif orientation == "middle" then
 		return 730
 	elseif orientation == "left" then
