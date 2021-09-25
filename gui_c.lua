@@ -211,6 +211,7 @@ end
 
 local banlistPage = 1
 local playerMenus = {}
+local cachedMenus = {}
 local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
@@ -356,6 +357,12 @@ function GenerateMenu() -- this is a big ass function
 					table.insert(temp, {id = v.id, name = v.name, menu = v.menu})
 				end
 			end
+			for k,v in pairs(cachedMenus) do
+				if string.find(string.lower(v.name), string.lower(result)) then
+					found = true
+					table.insert(temp, {id = v.id, name = v.name, menu = v.menu, cached = true})
+				end
+			end 
 
 			if found and (#temp > 1) then
 				local searchsubtitle = "Found "..tostring(#temp).." results!"
@@ -365,7 +372,11 @@ function GenerateMenu() -- this is a big ass function
 				_menuPool:MouseControlsEnabled(false)
 
 				for i,thePlayer in ipairs(temp) do
-					local thisItem = NativeUI.CreateItem("["..thePlayer.id.."] "..thePlayer.name, "")
+					local title = "["..thePlayer.id.."] "..thePlayer.name, ""
+					if thePlayer.cached then
+						title = thePlayer.name
+					end
+					local thisItem = NativeUI.CreateItem(title)
 					resultMenu:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu, SelectedItem)
 						_menuPool:CloseAllMenus()
@@ -391,6 +402,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	playerMenus = {}
+	cachedMenus = {}
 	for i,thePlayer in pairs(players) do
 		if RedM then
 			thePlayer = {
@@ -740,6 +752,7 @@ function GenerateMenu() -- this is a big ass function
 		for i, cachedplayer in pairs(cachedplayers) do
 			if cachedplayer.droppedTime and not cachedplayer.immune then
 				thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
+				cachedMenus[tostring(cachedplayer.id)] = {menu = thisPlayer, name = cachedplayer.name, id = cachedplayer.id }
 				thisPlayer:SetMenuWidthOffset(menuWidth)
 				local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
 				thisBanMenu:SetMenuWidthOffset(menuWidth)
