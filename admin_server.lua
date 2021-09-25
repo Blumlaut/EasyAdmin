@@ -558,7 +558,7 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
-	RegisterServerEvent("EasyAdmin:requestSpectate" function(playerId)
+	RegisterServerEvent("EasyAdmin:requestSpectate", function(playerId)
 		if DoesPlayerHavePermission(source, "player.spectate") then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
@@ -569,7 +569,7 @@ Citizen.CreateThread(function()
 	end)
 
 
-	RegisterServerEvent("EasyAdmin:requestCleanup"), function(type)
+	RegisterServerEvent("EasyAdmin:requestCleanup", function(type)
 		if DoesPlayerHavePermission(source, "server.cleanup."..type) then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Cleanup for "..type, 3)
 			if (onesync ~= "off" and onesync ~= "legacy") then
