@@ -10,25 +10,8 @@ banlist = {}
 cachedplayers = {}
 reports = {}
 add_aces, add_principals = {}, {}
-RegisterNetEvent("EasyAdmin:adminresponse")
-RegisterNetEvent("EasyAdmin:amiadmin")
-RegisterNetEvent("EasyAdmin:fillBanlist")
-RegisterNetEvent("EasyAdmin:requestSpectate")
-RegisterNetEvent("EasyAdmin:requestCleanup")
 
-RegisterNetEvent("EasyAdmin:SetSetting")
-RegisterNetEvent("EasyAdmin:SetLanguage")
-
-RegisterNetEvent("EasyAdmin:TeleportRequest")
-RegisterNetEvent("EasyAdmin:SlapPlayer")
-RegisterNetEvent("EasyAdmin:FreezePlayer")
-RegisterNetEvent("EasyAdmin:CaptureScreenshot")
-RegisterNetEvent("EasyAdmin:GetPlayerList")
-RegisterNetEvent("EasyAdmin:GetInfinityPlayerList")
-RegisterNetEvent("EasyAdmin:fillCachedPlayers")
-
-
-AddEventHandler('EasyAdmin:adminresponse', function(perms)
+RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	permissions = perms
 
 	for perm, val in pairs(perms) do
@@ -38,7 +21,7 @@ AddEventHandler('EasyAdmin:adminresponse', function(perms)
 	end
 end)
 
-AddEventHandler('EasyAdmin:SetSetting', function(setting,state)
+RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
 	if setting == "button" and state ~= "none" then
 		if (not RedM and not tonumber(settings.button)) then
@@ -51,46 +34,41 @@ AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
 end)
 
-
-AddEventHandler("EasyAdmin:fillBanlist", function(thebanlist)
+RegisterNetEvent("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
 end)
 
-AddEventHandler("EasyAdmin:fillCachedPlayers", function(thecached)
+RegisterNetEvent("EasyAdmin:fillCachedPlayers", function(thecached)
 	if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
 		cachedplayers = thecached
 	end
 end)
 
-AddEventHandler("EasyAdmin:GetPlayerList", function(players)
+RegisterNetEvent("EasyAdmin:GetPlayerList", function(players)
 	playerlist = players
 end)
 
-AddEventHandler("EasyAdmin:GetInfinityPlayerList", function(players)
+RegisterNetEvent("EasyAdmin:GetInfinityPlayerList", function(players)
 	playerlist = players
 end)
 
-RegisterNetEvent("EasyAdmin:getServerAces")
-AddEventHandler("EasyAdmin:getServerAces", function(aces,principals)
+RegisterNetEvent("EasyAdmin:getServerAces", function(aces,principals)
 	add_aces = aces
 	add_principals = principals
 	PrintDebugMessage("Recieved ACE Permissions list", 4)
 end)
 
-RegisterNetEvent("EasyAdmin:SetLanguage")
-AddEventHandler("EasyAdmin:SetLanguage", function()
+RegisterNetEvent("EasyAdmin:SetLanguage", function()
 	if permissions["server.permissions.read"] then
 		TriggerServerEvent("EasyAdmin:getServerAces")
 	end
 end)
 
-RegisterNetEvent("EasyAdmin:NewReport")
-AddEventHandler("EasyAdmin:NewReport", function(reportData)
+RegisterNetEvent("EasyAdmin:NewReport", function(reportData)
 	reports[reportData.id] = reportData
 end)
 
-RegisterNetEvent("EasyAdmin:RemoveReport")
-AddEventHandler("EasyAdmin:RemoveReport", function(reportData)
+RegisterNetEvent("EasyAdmin:RemoveReport", function(reportData)
 	reports[reportData.id] = nil 
 end)
 
@@ -110,7 +88,7 @@ Citizen.CreateThread( function()
 	end
 end)
 
-AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
+RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords)
 	local localPlayerPed = PlayerPedId()
 	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId))) end
 	if playerServerId == GetPlayerServerId(PlayerId()) then 
@@ -142,7 +120,7 @@ AddEventHandler('EasyAdmin:requestSpectate', function(playerServerId, tgtCoords)
 end)
 
 Citizen.CreateThread(function()
-	AddEventHandler('EasyAdmin:requestCleanup', function(type)
+	RegisterNetEvent("EasyAdmin:requestCleanup", function(type)
 		if type == "cars" then
 			
 			local toDelete = GetGamePool("CVehicle")
@@ -273,7 +251,7 @@ Citizen.CreateThread( function()
 end)
 
 
-AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)
+RegisterNetEvent("EasyAdmin:TeleportRequest", function(id, tgtCoords)
 	if id then
 		if (tgtCoords.x == 0.0 and tgtCoords.y == 0.0 and tgtCoords.z == 0.0) then
 			local tgtPed = GetPlayerPed(GetPlayerFromServerId(id))
@@ -285,7 +263,7 @@ AddEventHandler('EasyAdmin:TeleportRequest', function(id, tgtCoords)
 	end
 end)
 
-AddEventHandler('EasyAdmin:SlapPlayer', function(slapAmount)
+RegisterNetEvent("EasyAdmin:SlapPlayer", function(slapAmount)
 	local ped = PlayerPedId()
 	if slapAmount > GetEntityHealth(ped) then
 		ApplyDamageToPed(ped, 5000, false, true,true)
@@ -322,7 +300,7 @@ RegisterCommand("ban", function(source, args, rawCommand)
 	end
 end, false)
 
-AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
+RegisterNetEvent("EasyAdmin:FreezePlayer", function(toggle)
 	frozen = toggle
 	FreezeEntityPosition(PlayerPedId(), frozen)
 	if IsPedInAnyVehicle(PlayerPedId(), false) then
@@ -331,7 +309,7 @@ AddEventHandler('EasyAdmin:FreezePlayer', function(toggle)
 end)
 
 
-AddEventHandler('EasyAdmin:CaptureScreenshot', function(toggle, url, field)
+RegisterNetEvent("EasyAdmin:CaptureScreenshot", function(toggle, url, field)
 	exports['screenshot-basic']:requestScreenshotUpload(GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'), GetConvar("ea_screenshotfield", 'files[]'), function(data)
 		TriggerServerEvent("EasyAdmin:TookScreenshot", data)
 	end)
@@ -389,8 +367,8 @@ function ShowNotification(text)
 		
 	end
 end
-RegisterNetEvent("EasyAdmin:showNotification")
-AddEventHandler("EasyAdmin:showNotification", function(text, important)
+
+RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
 	if not RedM then
 		BeginTextCommandThefeedPost("STRING")
 		AddTextComponentString(text)
