@@ -351,7 +351,7 @@ function GenerateMenu() -- this is a big ass function
 				table.insert(temp, {id = foundbyid.id, name = foundbyid.name, menu = foundbyid.menu})
 			end
 			for k,v in pairs(playerMenus) do
-				if string.find(v.name, result) then
+				if string.find(string.lower(v.name), string.lower(result)) then
 					found = true
 					table.insert(temp, {id = v.id, name = v.name, menu = v.menu})
 				end
@@ -938,13 +938,13 @@ function GenerateMenu() -- this is a big ass function
 				if not foundBan then
 					for i,theBanned in ipairs(banlist) do
 						if theBanned.name then
-							if string.find(theBanned.name, result) then
+							if string.find(string.lower(theBanned.name), string.lower(result)) then
 								foundBan=true
 								foundBanid=i
 								break
 							end
 						end
-						if string.find((theBanned.reason or "No Reason"), result) then
+						if string.find((string.lower(theBanned.reason) or "No Reason"), string.lower()) then
 							foundBan=true
 							foundBanid=i
 							break
