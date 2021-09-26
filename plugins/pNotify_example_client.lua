@@ -6,6 +6,9 @@
 -- Feel free to make Pull Requests to add aditional features for this, this is merely an example of whats possible.
 --
 
+enableNotificationReplace = false -- change to true to enable replacement of the default V Notification for EasyAdmin
+
+
 local PnOptions = {layout = "topRight", type = "alert"}
 function pushNotification(options)
 	TriggerEvent("pNotify:SendNotification", options)
@@ -19,5 +22,19 @@ AddEventHandler("EasyAdmin:NewReport", function(reportData)
 	else
 		local str = string.format("%s reported <br>%s, Reason: %s<br>ID: %s", reportData.reporterName, reportData.reportedName, reportData.reason, reportData.id)
 		pushNotification({layout = "topRight", type = "alert", text = str})
+	end
+end)
+
+
+Citizen.CreateThread(function()
+	if enableNotificationReplace then
+		function ShowNotification(text)
+			pushNotification({layout = "topRight", type = "alert", text = text})
+		end
+
+		AddEventHandler("EasyAdmin:showNotification", function(text)
+			CancelEvent()
+			ShowNotification(text)
+		end)
 	end
 end)
