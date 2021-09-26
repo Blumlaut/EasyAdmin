@@ -335,7 +335,7 @@ function GenerateMenu() -- this is a big ass function
 	local userSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
 	playermanagement:AddItem(userSearch)
 	userSearch.Activated = function(ParentMenu, SelectedItem)
-		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 6)
+		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 60)
 
 		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
 			Citizen.Wait( 0 )
