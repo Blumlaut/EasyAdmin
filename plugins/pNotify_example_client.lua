@@ -31,10 +31,5 @@ Citizen.CreateThread(function()
 		function ShowNotification(text)
 			pushNotification({layout = "topRight", type = "alert", text = text})
 		end
-
-		AddEventHandler("EasyAdmin:showNotification", function(text)
-			CancelEvent()
-			ShowNotification(text)
-		end)
 	end
 end)

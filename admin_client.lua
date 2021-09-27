@@ -359,9 +359,9 @@ end
 
 function ShowNotification(text)
 	if not RedM then
-		SetNotificationTextEntry("STRING")
-		AddTextComponentString(text)
-		DrawNotification(0,1)
+		BeginTextCommandThefeedPost("STRING")
+		AddTextComponentSubstringPlayerName(text)
+		EndTextCommandThefeedPostTicker(0,1)
 	else
 		-- someone who has RedM installed please write some code for this
 		
@@ -370,8 +370,6 @@ end
 
 RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
 	if not RedM or not WasEventCanceled() then
-		BeginTextCommandThefeedPost("STRING")
-		AddTextComponentString(text)
-		EndTextCommandThefeedPostTicker(important or false,0)
+		ShowNotification(text)
 	end
 end)
