@@ -369,7 +369,7 @@ function ShowNotification(text)
 end
 
 RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
-	if not RedM or not WasEventCanceled() then
+	if not WasEventCanceled() then
 		ShowNotification(text)
 	end
 end)
