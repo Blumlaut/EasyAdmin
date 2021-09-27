@@ -50,7 +50,7 @@ RegisterCommand('easyadmin', function(source, args)
 		
 
 		
-		if not RedM and isAdmin then
+		if ((RedM and settings.infinity) or not RedM) and isAdmin then
 			playerlist = nil
 			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 			repeat
@@ -152,7 +152,7 @@ Citizen.CreateThread(function()
 				
 
 				
-				if not RedM and isAdmin then
+				if ((RedM and settings.infinity) or not RedM) and isAdmin then
 					playerlist = nil
 					TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
 					repeat
@@ -302,7 +302,7 @@ function GenerateMenu() -- this is a big ass function
 	players = {}
 	local localplayers = {}
 
-	if not RedM then
+	if (RedM and settings.infinity) or not RedM then
 		local localplayers = playerlist
 		local temp = {}
 		--table.sort(localplayers)
@@ -404,7 +404,7 @@ function GenerateMenu() -- this is a big ass function
 	playerMenus = {}
 	cachedMenus = {}
 	for i,thePlayer in pairs(players) do
-		if RedM then
+		if RedM and not settings.infinity then
 			thePlayer = {
 				id = GetPlayerServerId(thePlayer), 
 				name = GetPlayerName(thePlayer)
@@ -533,7 +533,7 @@ function GenerateMenu() -- this is a big ass function
 				if item == thisItem then
 					i = item:IndexToItem(index)
 					if i == GetLocalisedText("teleporttoplayer") then
-						if settings.infinity and not RedM then
+						if settings.infinity then
 							TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 						else
 							local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
