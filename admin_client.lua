@@ -369,7 +369,7 @@ function ShowNotification(text)
 end
 
 RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
-	if not RedM and not WasEventCanceled() then
+	if not RedM or not WasEventCanceled() then
 		BeginTextCommandThefeedPost("STRING")
 		AddTextComponentString(text)
 		EndTextCommandThefeedPostTicker(important or false,0)
