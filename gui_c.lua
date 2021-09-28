@@ -212,6 +212,7 @@ end
 local banlistPage = 1
 local playerMenus = {}
 local cachedMenus = {}
+local reportMenus = {}
 local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
@@ -403,6 +404,7 @@ function GenerateMenu() -- this is a big ass function
 
 	playerMenus = {}
 	cachedMenus = {}
+	reportMenus = {}
 	for i,thePlayer in pairs(players) do
 		if RedM and not settings.infinity then
 			thePlayer = {
@@ -634,6 +636,12 @@ function GenerateMenu() -- this is a big ass function
 		_menuPool:MouseControlsEnabled(false)
 	end
 
+	thisPlayer.ParentItem.Activated = function(ParentMenu, SelectedItem)
+		for i, menu in pairs(playerMenus) do
+			menu.menu.ParentMenu = playermanagement
+		end
+	end
+
 	playermanagement.ParentItem.Activated = function(ParentMenu, SelectedItem)
 		for i, menu in pairs(playerMenus) do
 			menu.menu.ParentMenu = playermanagement
@@ -655,13 +663,14 @@ function GenerateMenu() -- this is a big ass function
 			local thisMenu = _menuPool:AddSubMenu(reportViewer, (report.type == 0 and "~y~" or "~r~").. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(string.sub(report.reason, 1,38))
+			reportMenus[report.id] = thisMenu
 
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), GetLocalisedText("entertoopen"))
 			thisItem:RightLabel(report.reporterName)
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				_menuPool:CloseAllMenus()
-				Citizen.Wait(100)
+				Citizen.Wait(50)
 				GenerateMenu()
 				Wait(100)
 				if not playerMenus[tostring(report.reporter)] then
@@ -669,7 +678,7 @@ function GenerateMenu() -- this is a big ass function
 					reportViewer:Visible(true)
 				else
 					local ourMenu = playerMenus[tostring(report.reporter)].menu
-					ourMenu.ParentMenu=thisMenu
+					ourMenu.ParentMenu=reportMenus[report.id]
 					ourMenu:Visible(true)
 				end
 			end
@@ -680,7 +689,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					_menuPool:CloseAllMenus()
-					Citizen.Wait(100)
+					Citizen.Wait(50)
 					GenerateMenu()
 					Wait(100)
 					if not playerMenus[tostring(report.reported)] then
@@ -688,7 +697,7 @@ function GenerateMenu() -- this is a big ass function
 						reportViewer:Visible(true)
 					else
 						local ourMenu = playerMenus[tostring(report.reported)].menu
-						ourMenu.ParentMenu=thisMenu
+						ourMenu.ParentMenu=reportMenus[report.id]
 						ourMenu:Visible(true)
 					end
 				end
