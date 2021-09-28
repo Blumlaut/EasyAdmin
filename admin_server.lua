@@ -423,6 +423,12 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			servercfg:close()
 		end
 
+		local permissions = io.open(path.."easyadmin_permissions.cfg")
+		if permissions then
+			supportData.serverconfig = supportData.serverconfig.."\n#### The following are the contents of the easyadmin_permissions.cfg ####"..permissions:read("*a")
+			permissions:close()
+		end
+
 		PrintDebugMessage("Collecting Banlist....^7\n", 1)
 
 		supportData.banlist = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
