@@ -933,6 +933,82 @@ function GenerateMenu() -- this is a big ass function
 		local reason = ""
 		local identifier = ""
 
+		local function generateBanOverview(banId)
+			_menuPool:Remove()
+			TriggerEvent("EasyAdmin:MenuRemoved")
+			_menuPool = NativeUI.CreatePool()
+			collectgarbage()
+			if not GetResourceKvpString("ea_menuorientation") then
+				SetResourceKvp("ea_menuorientation", "middle")
+				SetResourceKvpInt("ea_menuwidth", 0)
+				menuWidth = 0
+				menuOrientation = handleOrientation("middle")
+			else
+				menuWidth = GetResourceKvpInt("ea_menuwidth")
+				menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+			end 
+			
+			local mainMenu = NativeUI.CreateMenu("", "Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
+			_menuPool:Add(mainMenu)
+			
+			local thisMenuWidth = menuWidth
+			if menuWidth < 150 then
+				thisMenuWidth = 150
+			else
+				thisMenuWidth = menuWidth
+			end
+			mainMenu:SetMenuWidthOffset(thisMenuWidth)	
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:MouseControlsEnabled(false)
+
+
+			
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[banId].reason)
+			mainMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				--nothing
+			end	
+
+			if banlist[banId].name then
+				local thisItem = NativeUI.CreateItem("Name: "..banlist[banId].name, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					--nothing
+				end	
+			end
+			if banlist[banId].expireString then
+				local thisItem = NativeUI.CreateItem("Expires: "..banlist[banId].expireString, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					--nothing
+				end	
+			end
+			
+			for _, identifier in pairs(banlist[banId].identifiers) do
+				if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
+					local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+					mainMenu:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						--nothing
+					end	
+				end
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+			mainMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[banId].banid)
+				TriggerServerEvent("EasyAdmin:requestBanlist")
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(800)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+
+
+			mainMenu:Visible(true)
+		end
+
 
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("searchbans"), "")
 		unbanPlayer:AddItem(thisItem)
@@ -984,72 +1060,7 @@ function GenerateMenu() -- this is a big ass function
 			_menuPool:CloseAllMenus()
 			Citizen.Wait(300)
 			if foundBan then
-				_menuPool:Remove()
-				TriggerEvent("EasyAdmin:MenuRemoved")
-				_menuPool = NativeUI.CreatePool()
-				collectgarbage()
-				if not GetResourceKvpString("ea_menuorientation") then
-					SetResourceKvp("ea_menuorientation", "middle")
-					SetResourceKvpInt("ea_menuwidth", 0)
-					menuWidth = 0
-					menuOrientation = handleOrientation("middle")
-				else
-					menuWidth = GetResourceKvpInt("ea_menuwidth")
-					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
-				end 
-				
-				mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
-				_menuPool:Add(mainMenu)
-				
-				local thisMenuWidth = menuWidth
-				if menuWidth < 150 then
-					thisMenuWidth = 150
-				else
-					thisMenuWidth = menuWidth
-				end
-				mainMenu:SetMenuWidthOffset(thisMenuWidth)	
-				_menuPool:ControlDisablingEnabled(false)
-				_menuPool:MouseControlsEnabled(false)
-
-
-				
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[foundBanid].reason)
-				mainMenu:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					--nothing
-				end	
-
-				if banlist[foundBanid].name then
-					local thisItem = NativeUI.CreateItem("Name: "..banlist[foundBanid].name, "")
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						--nothing
-					end	
-				end
-				
-				for _, identifier in pairs(banlist[foundBanid].identifiers) do
-					if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
-						local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
-						mainMenu:AddItem(thisItem)
-						thisItem.Activated = function(ParentMenu,SelectedItem)
-							--nothing
-						end	
-					end
-				end
-
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
-				mainMenu:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[foundBanid].banid)
-					TriggerServerEvent("EasyAdmin:requestBanlist")
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(800)
-					GenerateMenu()
-					unbanPlayer:Visible(true)
-				end	
-
-
-				mainMenu:Visible(true)
+				generateBanOverview(foundBanid)
 			else
 				ShowNotification(GetLocalisedText("searchbansfail"))
 				GenerateMenu()
@@ -1065,74 +1076,7 @@ function GenerateMenu() -- this is a big ass function
 					local thisItem = NativeUI.CreateItem(string.sub(reason, 1,50), "")
 					unbanPlayer:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
-
-						_menuPool:Remove()
-						TriggerEvent("EasyAdmin:MenuRemoved")
-						_menuPool = NativeUI.CreatePool()
-						collectgarbage()
-						if not GetResourceKvpString("ea_menuorientation") then
-							SetResourceKvp("ea_menuorientation", "middle")
-							SetResourceKvpInt("ea_menuwidth", 0)
-							menuWidth = 0
-							menuOrientation = handleOrientation("middle")
-						else
-							menuWidth = GetResourceKvpInt("ea_menuwidth")
-							menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
-						end 
-						
-						mainMenu = NativeUI.CreateMenu("", "~b~Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
-						_menuPool:Add(mainMenu)
-						local thisMenuWidth = menuWidth
-						if menuWidth < 150 then
-							thisMenuWidth = 150
-						else
-							thisMenuWidth = menuWidth
-						end
-						
-							mainMenu:SetMenuWidthOffset(thisMenuWidth)	
-						_menuPool:ControlDisablingEnabled(false)
-						_menuPool:MouseControlsEnabled(false)
-		
-		
-						
-						local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[i].reason)
-						mainMenu:AddItem(thisItem)
-						thisItem.Activated = function(ParentMenu,SelectedItem)
-							--nothing
-						end	
-		
-						if banlist[i].name then
-							local thisItem = NativeUI.CreateItem("Name: "..banlist[i].name)
-							mainMenu:AddItem(thisItem)
-							thisItem.Activated = function(ParentMenu,SelectedItem)
-								--nothing
-							end	
-						end
-						
-						for _, identifier in pairs(banlist[i].identifiers) do
-							if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
-								local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
-								thisItem:RightLabel(identifier)
-								mainMenu:AddItem(thisItem)
-								thisItem.Activated = function(ParentMenu,SelectedItem)
-									--nothing
-								end	
-							end
-						end
-		
-						local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
-						mainMenu:AddItem(thisItem)
-						thisItem.Activated = function(ParentMenu,SelectedItem)
-							TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[i].banid)
-							TriggerServerEvent("EasyAdmin:requestBanlist")
-							_menuPool:CloseAllMenus()
-							Citizen.Wait(800)
-							GenerateMenu()
-							unbanPlayer:Visible(true)
-						end	
-		
-		
-						mainMenu:Visible(true)
+						generateBanOverview(i)
 					end	
 				end
 			end
