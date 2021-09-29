@@ -779,7 +779,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:updateBanlist", function(playerId)
 		local src = source
-		if DoesPlayerHavePermission(source, "player.unban") then
+		if DoesPlayerHavePermission(source, "player.ban.view") then
 			updateBlacklist(false,true)
 			Citizen.Wait(300)
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
@@ -789,7 +789,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:requestBanlist", function()
 		local src = source
-		if DoesPlayerHavePermission(source, "player.unban") then
+		if DoesPlayerHavePermission(source, "player.ban.view") then
 			TriggerClientEvent("EasyAdmin:fillBanlist", src, blacklist)
 			PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
 		end
@@ -815,7 +815,7 @@ Citizen.CreateThread(function()
 	end, false)
 	
 	RegisterCommand("unban", function(source, args, rawCommand)
-		if args[1] and DoesPlayerHavePermission(source, "player.unban") then
+		if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") then
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1], 3)
 			UnbanIdentifier(args[1])
 			if (source ~= 0) then
@@ -1054,7 +1054,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
 		local thisBan = nil
-		if DoesPlayerHavePermission(source, "player.unban") then
+		if DoesPlayerHavePermission(source, "player.ban.remove") then
 			for i,ban in ipairs(blacklist) do 
 				if ban.banid == banId then
 					thisBan = ban

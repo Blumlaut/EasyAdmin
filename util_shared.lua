@@ -1,9 +1,11 @@
 permissions = {
 	["player.ban.temporary"] = false,
 	["player.ban.permanent"] = false,
+	["player.ban.view"] = false,
+	["player.ban.edit"] = false,
+	["player.ban.remove"] = false,
 	["player.kick"] = false,
 	["player.spectate"] = false,
-	["player.unban"] = false,
 	["player.teleport.single"] = false,
 	["player.slap"] = false,
 	["player.freeze"] = false,

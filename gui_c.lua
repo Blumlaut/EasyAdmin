@@ -921,7 +921,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 	
-	if permissions["player.unban"] then
+	if permissions["player.ban.view"] then
 		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
 		local thisMenuWidth = menuWidth
 		if menuWidth < 150 then
@@ -976,6 +976,17 @@ function GenerateMenu() -- this is a big ass function
 					--nothing
 				end	
 			end
+
+
+			if banlist[banId].banner then
+				local thisItem = NativeUI.CreateItem("Banner: "..banlist[banId].banner, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					--nothing
+				end	
+			end
+
+
 			if banlist[banId].expireString then
 				local thisItem = NativeUI.CreateItem("Expires: "..banlist[banId].expireString, "")
 				mainMenu:AddItem(thisItem)
@@ -994,19 +1005,19 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
-			mainMenu:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[banId].banid)
-				TriggerServerEvent("EasyAdmin:requestBanlist")
-				_menuPool:CloseAllMenus()
-				Citizen.Wait(800)
-				GenerateMenu()
-				unbanPlayer:Visible(true)
-			end	
-
-
-			mainMenu:Visible(true)
+			if permissions["player.ban.remove"] then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[banId].banid)
+					TriggerServerEvent("EasyAdmin:requestBanlist")
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					unbanPlayer:Visible(true)
+				end	
+				mainMenu:Visible(true)
+			end
 		end
 
 
@@ -1456,7 +1467,7 @@ function GenerateMenu() -- this is a big ass function
 
 	TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 
-	if permissions["player.unban"] then
+	if permissions["player.ban.view"] then
 		local sl = {GetLocalisedText("unbanreasons"), GetLocalisedText("unbanlicenses")}
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlistshowtype"), sl, 1,GetLocalisedText("banlistshowtypeguide"))
 		settingsMenu:AddItem(thisItem)
@@ -1473,7 +1484,7 @@ function GenerateMenu() -- this is a big ass function
 	end
 	
 	
-	if permissions["player.unban"] then
+	if permissions["player.ban.view"] then
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshbanlist"), GetLocalisedText("refreshbanlistguide"))
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
