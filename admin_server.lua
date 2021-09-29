@@ -1052,6 +1052,13 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
+	
+	RegisterServerEvent("EasyAdmin:editBan", function(ban)
+		if DoesPlayerHavePermission(source, "player.ban.edit") then
+			updateBan(ban.banid,ban)
+			-- TODO Webhook
+		end
+	end)
 	RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
 		local thisBan = nil
 		if DoesPlayerHavePermission(source, "player.ban.remove") then
