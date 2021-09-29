@@ -417,15 +417,31 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 		local occurance = string.find(path, "/resources")
 		local path = string.reverse(string.sub(string.reverse(path), -occurance))
 
+		local blacklistedPhrases = {"mysql", "mariadb", "licensekey", "SentryIO", "mongodb", "tebex", "endpoint_add"}
 		local servercfg = io.open(path.."server.cfg")
 		if servercfg then
-			supportData.serverconfig = servercfg:read("*a")
+			supportData.serverconfig = ""
+			line = servercfg:read("*line")
+			while line do
+				local addLine = true
+				for i, blacklisted in pairs(blacklistedPhrases) do
+					if string.find(string.lower(line), string.lower(blacklisted)) then
+						addLine = false
+					end
+				end
+				if addLine then
+					supportData.serverconfig = supportData.serverconfig.."\n"..line
+				else
+					PrintDebugMessage("Skipped line "..line.." for privacy.", 4)
+				end
+				line = servercfg:read("*line")
+			end
 			servercfg:close()
 		end
 
 		local permissions = io.open(path.."easyadmin_permissions.cfg")
 		if permissions then
-			supportData.serverconfig = supportData.serverconfig.."\n#### The following are the contents of the easyadmin_permissions.cfg ####"..permissions:read("*a")
+			supportData.serverconfig = supportData.serverconfig.."\n#### The following are the contents of the easyadmin_permissions.cfg ####\n"..permissions:read("*a")
 			permissions:close()
 		end
 
