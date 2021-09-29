@@ -1987,13 +1987,10 @@ Citizen.CreateThread(function()
 
 		if GetConvar("ea_defaultKey", "none") == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
 			PrintDebugMessage("ea_MenuButton has been replaced by ea_defaultKey, please rename it in your Server Config!\nSee https://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
-		end
-
-		if tonumber(GetConvar("ea_MenuButton", "none")) or tonumber(GetConvar("ea_defaultKey", "none")) then
+		elseif tonumber(GetConvar("ea_MenuButton", "none")) or tonumber(GetConvar("ea_defaultKey", "none")) then
 			PrintDebugMessage("ea_MenuButton/ea_defaultKey has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
 			PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
-		end
-		if GetConvar("ea_defaultKey", "none") == "none" then
+		elseif GetConvar("ea_defaultKey", "none") == "none" then
 			PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
 		end
 		
