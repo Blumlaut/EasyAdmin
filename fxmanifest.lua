@@ -35,7 +35,7 @@ convar_category 'EasyAdmin' {
     "Configuration Options",
     {
     { "EasyAdmin language", "$ea_LanguageName", "CV_STRING", "en" },
-    { "Key to open the menu", "$ea_MenuButton", "CV_STRING", "none" },
+    { "Default key to open the menu", "$ea_defaultKey", "CV_STRING", "none" },
     { "The Minimum Amount of Identifiers", "$ea_minIdentifierMatches", "CV_INT", "2" },
     { "Moderation Actions Webhook", "$ea_moderationNotification", "CV_STRING", "false" },
     { "Report Notifications Webhook", "$ea_reportNotification", "CV_STRING", "false" },

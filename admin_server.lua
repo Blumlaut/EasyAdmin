@@ -385,7 +385,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
 			ea_logLevel = GetConvar("ea_logLevel", 1),
 			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
-			ea_MenuButton = GetConvar("ea_MenuButton", "none"),
+			ea_defaultKey = GetConvar("ea_defaultKey", "none"),
 			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
 			ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
 			ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),
@@ -524,11 +524,21 @@ Citizen.CreateThread(function()
 		end
 		
 		-- give player the right settings to work with
-		local key = GetConvar("ea_MenuButton", "none")
-		if RedM then
-			key = GetConvar("ea_MenuButton", "PhotoModePc")
+		local key = GetConvar("ea_defaultKey", "none")
+		if key == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
+			if RedM then
+				key = GetConvar("ea_MenuButton", "PhotoModePc")
+			else
+				key = GetConvar("ea_MenuButton", "none")
+			end
+		else
+			if RedM then
+				key = GetConvar("ea_defaultKey", "PhotoModePc")
+			end
 		end
+
 		TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
+
 		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
 		else
@@ -1974,11 +1984,17 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Onesync is Infinity", 3)
 			infinity = true
 		end
-		if tonumber(GetConvar("ea_MenuButton", "none")) then -- let people know they broke stuff
-			PrintDebugMessage("ea_MenuButton has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
+
+		if GetConvar("ea_defaultKey", "none") == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
+			PrintDebugMessage("ea_MenuButton has been replaced by ea_defaultKey, please rename it in your Server Config!\nSee https://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
+		end
+
+		if tonumber(GetConvar("ea_MenuButton", "none")) or tonumber(GetConvar("ea_defaultKey", "none")) then
+			PrintDebugMessage("ea_MenuButton/ea_defaultKey has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
 			PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
-		elseif GetConvar("ea_MenuButton", "none") == "none" then
-			PrintDebugMessage("ea_MenuButton is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
+		end
+		if GetConvar("ea_defaultKey", "none") == "none" then
+			PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
 		end
 		
 		readAcePermissions()
