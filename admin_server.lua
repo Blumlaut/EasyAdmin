@@ -703,7 +703,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
 		if playerId ~= nil then
-			if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not DoesPlayerHavePermission(playerId,"immune") then
+			if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or getName(playerId, true)
 				if expires and expires < os.time() then
@@ -1647,7 +1647,7 @@ Citizen.CreateThread(function()
 
 
 	function updateBlacklist(data,remove, forceChange)
-		local change= (forceChange or false) --mark if file was changed to save up on disk writes.
+		local change = (forceChange or false) --mark if file was changed to save up on disk writes.
 		if GetConvar("ea_custombanlist", "false") == "true" then 
 			PrintDebugMessage("You are using a Custom Banlist System, this is ^3not currently supported^7 and WILL cause issues! Only use this if you know what you are doing, otherwise, disable ea_custombanlist.", 1)
 			if data and not remove then
@@ -1688,8 +1688,9 @@ Citizen.CreateThread(function()
 			return
 		end
 		
-		performBanlistUpgrades(blacklist)
-		
+		upgraded = performBanlistUpgrades(blacklist)
+		if upgraded then change = true end
+
 		if data and not remove then
 			addBan(data)
 			PrintDebugMessage("Added the following data to banlist:\n"..table_to_string(data), 4)
@@ -1821,23 +1822,28 @@ Citizen.CreateThread(function()
 	end)
 
 	function performBanlistUpgrades()
+		local upgraded = false
 		for i,ban in pairs(blacklist) do
 			if type(i) == "string" then
-				PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 4)
+				PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 1)
 				blacklist[i] = nil
 				table.insert(blacklist,ban) 
-				change = true
+				upgraded = true
 			end
 		end
 		for i,ban in ipairs(blacklist) do
 			if ban.identifiers then
 				for k, identifier in pairs(ban.identifiers) do
 					if identifier == "" then
-						PrintDebugMessage("Ban "..ban.banid.." had an empty identifier, removed it.", 4)
+						PrintDebugMessage("Ban "..ban.banid.." had an empty identifier, removed it.", 1)
 						ban.identifiers[k] = nil
-						change = true 
+						upgraded = true 
 					end
 				end
+			end
+			if not ban.expireString then
+				upgraded = true
+				ban.expireString = formatDateString(ban.expire)
 			end
 		end
 		if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then 
@@ -1846,29 +1852,30 @@ Citizen.CreateThread(function()
 				if not ban.identifiers then
 					ban.identifiers = {}
 					PrintDebugMessage("Ban "..ban.banid.." had no identifiers, added one.", 4)
-					change=true
+					upgraded=true
 				end
 				if ban.identifier then
 					table.insert(ban.identifiers, ban.identifier)
 					PrintDebugMessage("Ban "..ban.banid.." had identifier, converted to identifiers table", 4)
 					ban.identifier = nil
-					change=true
+					upgraded=true
 				end
 				if ban.steam then
 					table.insert(ban.identifiers, ban.steam)
 					PrintDebugMessage("Ban "..ban.banid.." had seperate steam identifier, converted to identifiers table", 4)
 					ban.steam = nil
-					change=true
+					upgraded=true
 				end
 				if ban.discord and ban.discord ~= "" then
 					table.insert(ban.identifiers, ban.discord)
 					PrintDebugMessage("Ban "..ban.banid.." had seperate discord identifier, converted to identifiers table", 4)
 					ban.discord = nil
-					change=true
+					upgraded=true
 				end
 			end
 			Citizen.Trace("Banlist Upgraded.\n", 4)
 		end
+		return upgraded
 	end
 
 
