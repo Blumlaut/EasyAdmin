@@ -1623,10 +1623,15 @@ Citizen.CreateThread(function()
 	
 	function updateBan(id,newData)
 		if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then 
-			blacklist[id] = newData
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-			if GetConvar("ea_custombanlist", "false") == "true" then 
-				TriggerEvent("ea_data:updateBan", newData)
+			for i, ban in pairs(blacklist) do
+				if ban.banid == newData.banid then
+					blacklist[i] = newData
+					SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+					if GetConvar("ea_custombanlist", "false") == "true" then 
+						TriggerEvent("ea_data:updateBan", newData)
+					end
+					break
+				end
 			end
 		end
 	end
