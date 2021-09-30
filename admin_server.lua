@@ -1297,6 +1297,7 @@ Citizen.CreateThread(function()
 					changes=true
 				end
 				if needsResourcePerms then
+					table.insert(newLines, "# This file was generated automatically by EasyAdmin #")
 					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow")
 					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_ace allow")
 					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_principal allow")
