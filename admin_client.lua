@@ -68,6 +68,20 @@ RegisterNetEvent("EasyAdmin:NewReport", function(reportData)
 	reports[reportData.id] = reportData
 end)
 
+RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
+	reports[reportData.id] = reportData
+	if _menuPool:IsAnyMenuOpen() then
+		for i, menu in pairs(reportMenus) do
+			for o,item in pairs(menu.Items) do 
+				if item.Text._Text == GetLocalisedText("claimreport") then
+					item.Text._Text = GetLocalisedText("claimedby")
+					item:RightLabel(reportData.claimedName)
+				end
+			end
+		end
+	end
+end)
+
 RegisterNetEvent("EasyAdmin:RemoveReport", function(reportData)
 	reports[reportData.id] = nil 
 end)

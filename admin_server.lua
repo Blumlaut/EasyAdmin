@@ -867,7 +867,7 @@ Citizen.CreateThread(function()
 			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
 				TriggerClientEvent('chat:addMessage', source, { 
 					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
-					args = { "^3!!EasyAdmin!!^7", GetLocalisedText("waitbeforeusingagain") }, color = { 255, 255, 255 } 
+					args = { "^3EasyAdmin^7", GetLocalisedText("waitbeforeusingagain") }, color = { 255, 255, 255 } 
 				})
 				return
 			end
@@ -878,7 +878,7 @@ Citizen.CreateThread(function()
 				--TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason))
 				TriggerClientEvent('chat:addMessage', i, { 
 				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-				    args = { "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,true), reason, reportid) }, color = { 255, 255, 255 } 
+				    args = { "^3EasyAdmin^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,true), reason, reportid) }, color = { 255, 255, 255 } 
 				})
 			end
 
@@ -888,7 +888,7 @@ Citizen.CreateThread(function()
 			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
 			TriggerClientEvent('chat:addMessage', source, { 
 				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
-				args = { "^3!!EasyAdmin!!^7", GetLocalisedText("admincalled") }, color = { 255, 255, 255 } 
+				args = { "^3EasyAdmin^7", GetLocalisedText("admincalled") }, color = { 255, 255, 255 } 
 			})
 
 			time = os.time()
@@ -944,7 +944,7 @@ Citizen.CreateThread(function()
 					for i,_ in pairs(OnlineAdmins) do 
 						TriggerClientEvent('chat:addMessage', i, { 
 							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-							args = { "^3!!EasyAdmin Report!!^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid) }, color = { 255, 255, 255 } 
+							args = { "^3EasyAdmin Report^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid) }, color = { 255, 255, 255 } 
 						})
 					end
 					TriggerClientEvent('chat:addMessage', source, { 
@@ -1120,6 +1120,20 @@ Citizen.CreateThread(function()
 		end
 		return t.id
 	end
+
+	RegisterServerEvent("EasyAdmin:ClaimReport", function(reportId)
+		if DoesPlayerHavePermission(source, "player.reports.claim") then
+			if not reports[reportId].claimed then
+				reports[reportId].claimed = source
+				reports[reportId].claimedName = getName(source,true)
+				for admin,_ in pairs(OnlineAdmins) do 
+					TriggerClientEvent("EasyAdmin:ClaimedReport", admin, reports[reportId])
+				end
+			else
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
+			end
+		end
+	end)
 
 	function removeReport(index,reporter,reported,reason)
 		for i, report in pairs(reports) do

@@ -14,6 +14,7 @@ permissions = {
 	["player.warn"] = false,
 	["player.teleport.everyone"] = false,
 	["player.reports.view"] = false,
+	["player.reports.claim"] = false,
 	["player.reports.process"] = false,
 	
 	["server.cleanup.cars"] = false,

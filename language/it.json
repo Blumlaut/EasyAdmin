@@ -216,7 +216,11 @@
     "entertoopen": "Seleziona per vedere opzioni per questo giocatore.",
     "refreshreports": "Aggiorna Segnalazioni",
     "refreshreportsguide": "Mostra le nuove segnalazioni rispetto all'ultima volta che hai aperto il menù.",
-    "waitbeforeusingagain": "You must wait before using this again!"
+    "waitbeforeusingagain": "You must wait before using this again!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!"
+
 
   
 }]

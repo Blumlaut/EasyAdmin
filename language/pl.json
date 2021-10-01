@@ -214,7 +214,11 @@
     "entertoopen": "Wybierz, aby wyświetlić opcje dla tego gracza.",
     "refreshreports": "Odśwież zgłoszenia",
     "refreshreportsguide": "Pokazuje nowe raporty, jeśli są jakieś od ostatniego otwarcia menu.",
-    "waitbeforeusingagain": "Musisz poczekać przed użyciem tego ponownie!"
+    "waitbeforeusingagain": "Musisz poczekać przed użyciem tego ponownie!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!"
+
 
 
 }]

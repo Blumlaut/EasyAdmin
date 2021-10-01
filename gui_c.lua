@@ -212,7 +212,7 @@ end
 local banlistPage = 1
 local playerMenus = {}
 local cachedMenus = {}
-local reportMenus = {}
+reportMenus = {}
 local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
 function GenerateMenu() -- this is a big ass function
@@ -660,10 +660,34 @@ function GenerateMenu() -- this is a big ass function
 		reportViewer.ParentItem:RightLabel(tostring(#reports).." "..GetLocalisedText("open"))
 
 		for i, report in pairs(reports) do
-			local thisMenu = _menuPool:AddSubMenu(reportViewer, (report.type == 0 and "~y~" or "~r~").. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
+			local reportColor = (report.type == 0 and "~y~" or "~r~")
+			if report.claimed then
+				reportColor = "~g~"
+			end
+			local thisMenu = _menuPool:AddSubMenu(reportViewer, reportColor.. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
 			thisMenu:SetMenuWidthOffset(thisMenuWidth)
 			thisMenu.ParentItem:RightLabel(string.sub(report.reason, 1,38))
 			reportMenus[report.id] = thisMenu
+
+			if permissions["player.reports.claim"] then
+				local claimText = GetLocalisedText("claimreport")
+				local rightLabel = ""
+				if report.claimed then
+					claimText = GetLocalisedText("claimedby")
+					rightLabel = report.claimedName
+				end
+
+				local thisItem = NativeUI.CreateItem(claimText, "")
+				thisItem:RightLabel(rightLabel)
+				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if not report.claimed then
+						TriggerServerEvent("EasyAdmin:ClaimReport", i)
+					else
+						showNotification(GetLocalisedText("reportalreadyclaimed"))
+					end
+				end
+			end
 
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), GetLocalisedText("entertoopen"))
 			thisItem:RightLabel(report.reporterName)
@@ -1024,7 +1048,6 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("searchbans"), "")
 		unbanPlayer:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			-- TODO
 			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
 				
 			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do

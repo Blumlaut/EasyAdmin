@@ -213,6 +213,10 @@
     "adminclosedreport": "**%s** hat Report #**%s** geschlossen.",
     "refreshreports": "Reports aktualisieren",
     "refreshreportsguide": "Zeigt neue Reports, falls es neue gibt seitdem das Menü geöffnet wurde.",
-    "waitbeforeusingagain": "Du musst warten bevor du das benutzen kannst!"
+    "waitbeforeusingagain": "Du musst warten bevor du das benutzen kannst!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!"
+
 
 }]

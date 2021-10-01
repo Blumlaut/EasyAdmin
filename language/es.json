@@ -212,6 +212,10 @@
     "entertoopen": "Comprueba las opciones para este jugador.",
     "refreshreports": "Recargar Reportes",
     "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú.",
-    "waitbeforeusingagain": "¡Debes esperar antes de poder hacer eso otra vez!"
+    "waitbeforeusingagain": "¡Debes esperar antes de poder hacer eso otra vez!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!"
+
 
 }]
