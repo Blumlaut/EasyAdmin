@@ -70,7 +70,7 @@ end)
 
 RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
 	reports[reportData.id] = reportData
-	if _menuPool:IsAnyMenuOpen() then
+	if _menuPool and _menuPool:IsAnyMenuOpen() then
 		for i, menu in pairs(reportMenus) do
 			for o,item in pairs(menu.Items) do 
 				if item.Text._Text == GetLocalisedText("claimreport") then
