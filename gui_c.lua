@@ -902,7 +902,7 @@ function GenerateMenu() -- this is a big ass function
 			local result = GetOnscreenKeyboardResult()
 			
 			if result then
-				if result ~= GetCurrentResourceName() and result ~= "NativeUI" then
+				if result ~= GetCurrentResourceName() then
 					TriggerServerEvent("EasyAdmin:StopResource", result)
 				else
 					TriggerEvent("chat:addMessage", { args = { "EasyAdmin", GetLocalisedText("badidea") } })
