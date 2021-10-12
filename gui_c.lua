@@ -49,46 +49,42 @@ RegisterCommand('easyadmin', function(source, args)
 		end
 		
 
-		
-		if ((RedM and settings.infinity) or not RedM) and isAdmin then
-			playerlist = nil
-			TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
-			repeat
-				Wait(10)
-			until playerlist
-		end
-
-		if strings and isAdmin then
-			banLength = {}
-			
-			if permissions["player.ban.permanent"] then
-				table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+		if not mainMenu or not mainMenu:Visible() then
+			if ((RedM and settings.infinity) or not RedM) and isAdmin then
+				playerlist = nil
+				TriggerServerEvent("EasyAdmin:GetInfinityPlayerList") -- shitty fix for bigmode
+				repeat
+					Wait(10)
+				until playerlist
 			end
 
-			if permissions["player.ban.temporary"] then
-				table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
-				table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
-				table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
-				table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
-				table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
-				table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
-				table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
-				table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
-			end
-			
-			
+			if strings and isAdmin then
+				banLength = {}
+				
+				if permissions["player.ban.permanent"] then
+					table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
+				end
 
-			if mainMenu and mainMenu:Visible() then
-				mainMenu:Visible(false)
-				_menuPool:Remove()
-				TriggerEvent("EasyAdmin:MenuRemoved")
-				collectgarbage()
-			else
+				if permissions["player.ban.temporary"] then
+					table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
+					table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
+					table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
+					table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
+					table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
+					table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
+					table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
+					table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+				end
 				GenerateMenu()
 				mainMenu:Visible(true)
+			else
+				TriggerServerEvent("EasyAdmin:amiadmin")
 			end
 		else
-			TriggerServerEvent("EasyAdmin:amiadmin")
+			mainMenu:Visible(false)
+			_menuPool:Remove()
+			TriggerEvent("EasyAdmin:MenuRemoved")
+			collectgarbage()
 		end
 	end)
 end)
@@ -682,7 +678,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					if not report.claimed then
-						TriggerServerEvent("EasyAdmin:ClaimReport", i)
+						TriggerLatentServerEvent("EasyAdmin:ClaimReport", 500, i)
 					else
 						showNotification(GetLocalisedText("reportalreadyclaimed"))
 					end
@@ -735,7 +731,7 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("closereport"), "")
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:RemoveReport", report)
+					TriggerLatentServerEvent("EasyAdmin:RemoveReport", 500, report)
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
@@ -746,7 +742,7 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("closesimilarreports"), GetLocalisedText("closesimilarreportsguide"))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:RemoveSimilarReports", report)
+					TriggerLatentServerEvent("EasyAdmin:RemoveSimilarReports", 500, report)
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
@@ -1478,7 +1474,7 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("savechanges"), GetLocalisedText("savechangesguide"))
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerServerEvent("EasyAdmin:setServerAces",add_aces, add_principals)
+			TriggerLatentServerEvent("EasyAdmin:setServerAces", 2000, add_aces, add_principals)
 			_menuPool:CloseAllMenus()
 			Citizen.Wait(800)
 			GenerateMenu()
