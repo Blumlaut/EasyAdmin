@@ -1116,7 +1116,7 @@ Citizen.CreateThread(function()
 		t.id = #reports+1
 		reports[t.id] = t
 		for i,_ in pairs(OnlineAdmins) do 
-			TriggerLatentClientEvent("EasyAdmin:NewReport", i, 200, t)
+			TriggerLatentClientEvent("EasyAdmin:NewReport", i, 600, t)
 		end
 		return t.id
 	end
@@ -1127,7 +1127,7 @@ Citizen.CreateThread(function()
 				reports[reportId].claimed = source
 				reports[reportId].claimedName = getName(source,true)
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:ClaimedReport", admin, 200, reports[reportId])
+					TriggerLatentClientEvent("EasyAdmin:ClaimedReport", admin, 100, reports[reportId])
 				end
 			else
 				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
@@ -1139,17 +1139,17 @@ Citizen.CreateThread(function()
 		for i, report in pairs(reports) do
 			if (index and i == index) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 200, report)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, report)
 				end
 				reports[i] = nil
 			elseif (reporter and reporter == report.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 200, report)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, report)
 				end
 				reports[i] = nil
 			elseif (reported and reported == report.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 200, report)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, report)
 				end
 				reports[i] = nil
 			end
@@ -1160,25 +1160,25 @@ Citizen.CreateThread(function()
 		for i, r in pairs(reports) do
 			if (report.reporter and report.reported) and (report.reporter == r.reporter and report.reported == r.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, r, 200)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
 				end
 				reports[i] = nil
 			end
 			if (report.reason and report.reporter) and (report.reason == r.reason and report.reporter == r.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, r, 200)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
 				end
 				reports[i] = nil
 			end
 			if (report.reported) and (report.reported == r.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, r, 200)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
 				end
 				reports[i] = nil
 			end
 			if (report.reporter) and (report.reporter == r.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, r, 200)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
 				end
 				reports[i] = nil
 			end
