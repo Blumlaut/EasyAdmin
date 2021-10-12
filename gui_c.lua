@@ -678,7 +678,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					if not report.claimed then
-						TriggerLatentServerEvent("EasyAdmin:ClaimReport", 500, i)
+						TriggerLatentServerEvent("EasyAdmin:ClaimReport", 200, i)
 					else
 						showNotification(GetLocalisedText("reportalreadyclaimed"))
 					end
@@ -731,7 +731,7 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("closereport"), "")
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerLatentServerEvent("EasyAdmin:RemoveReport", 500, report)
+					TriggerLatentServerEvent("EasyAdmin:RemoveReport", 200, report)
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
@@ -742,7 +742,7 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("closesimilarreports"), GetLocalisedText("closesimilarreportsguide"))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerLatentServerEvent("EasyAdmin:RemoveSimilarReports", 500, report)
+					TriggerLatentServerEvent("EasyAdmin:RemoveSimilarReports", 200, report)
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
@@ -1461,9 +1461,12 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshpermissions"), "")
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
+			add_aces, add_principals = nil, nil
 			TriggerServerEvent("EasyAdmin:getServerAces")
 			_menuPool:CloseAllMenus()
-			Citizen.Wait(800)
+			repeat
+				Wait(500)
+			until add_aces
 			GenerateMenu()
 			permissionEditor:Visible(true)
 			collectgarbage()
@@ -1474,7 +1477,7 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("savechanges"), GetLocalisedText("savechangesguide"))
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerLatentServerEvent("EasyAdmin:setServerAces", 2000, add_aces, add_principals)
+			TriggerLatentServerEvent("EasyAdmin:setServerAces", 500, add_aces, add_principals)
 			_menuPool:CloseAllMenus()
 			Citizen.Wait(800)
 			GenerateMenu()
@@ -1507,7 +1510,14 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshbanlist"), GetLocalisedText("refreshbanlistguide"))
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
+			banlist=nil
 			TriggerServerEvent("EasyAdmin:updateBanlist")
+			repeat
+				Wait(500)
+			until banlist
+			GenerateMenu()
+			settingsMenu:Visible(true)
+			collectgarbage()
 		end
 	end
 
@@ -1515,7 +1525,14 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("refreshcachedplayers"), GetLocalisedText("refreshcachedplayersguide"))
 		settingsMenu:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
+			cachedplayers=nil
 			TriggerServerEvent("EasyAdmin:requestCachedPlayers")
+			repeat
+				Wait(500)
+			until cachedplayers
+			GenerateMenu()
+			settingsMenu:Visible(true)
+			collectgarbage()
 		end
 	end
 	
