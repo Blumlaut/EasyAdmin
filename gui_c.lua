@@ -219,7 +219,6 @@ function generateTextures()
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
-		CreateRuntimeTextureFromImage(txd, 'small-logo', 'dependencies/images/small-logo.png')
 		if ((overrideEgg == nil) and easterChance == 1000) or (overrideEgg or overrideEgg == false) then
 			local chance = 0
 			if ((overrideEgg == nil) and easterChance == 1000) then
@@ -245,6 +244,7 @@ function generateTextures()
 				currentEgg = "pride"
 			elseif overrideEgg == false then
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
+				CreateRuntimeTextureFromImage(txd, 'small_logo', 'dependencies/images/small-logo-bg.png')
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = false
 			end
@@ -254,6 +254,7 @@ function generateTextures()
 			else
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
 			end
+			CreateRuntimeTextureFromImage(txd, 'small_logo', 'dependencies/images/small-logo-bg.png')
 			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 			currentEgg=nil
 		end
