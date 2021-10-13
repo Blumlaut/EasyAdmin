@@ -211,14 +211,15 @@ local cachedMenus = {}
 reportMenus = {}
 local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
-function GenerateMenu() -- this is a big ass function
 
+function generateTextures()
 	if not RedM and not txd or (overrideEgg ~= currentEgg) then
 		if dui then
 			DestroyDui(dui)
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
+		CreateRuntimeTextureFromImage(txd, 'small-logo', 'dependencies/images/small-logo.png')
 		if ((overrideEgg == nil) and easterChance == 1000) or (overrideEgg or overrideEgg == false) then
 			local chance = 0
 			if ((overrideEgg == nil) and easterChance == 1000) then
@@ -257,7 +258,12 @@ function GenerateMenu() -- this is a big ass function
 			currentEgg=nil
 		end
 	end
+end
 
+function GenerateMenu() -- this is a big ass function
+
+
+	generateTextures()
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
