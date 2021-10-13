@@ -373,9 +373,21 @@ end
 
 function ShowNotification(text)
 	if not RedM then
+		local notificationTxd = CreateRuntimeTxd("easyadmin_notification")
+		CreateRuntimeTextureFromImage(notificationTxd, 'small_logo', 'dependencies/images/small-logo-bg.png')
 		BeginTextCommandThefeedPost("STRING")
 		AddTextComponentSubstringPlayerName(text)
-		EndTextCommandThefeedPostTicker(0,1)
+
+		local title = "~bold~EasyAdmin"
+		local subtitle = GetLocalisedText("notification")
+		local iconType = 0
+		local flash = false
+
+		EndTextCommandThefeedPostMessagetext("easyadmin_notification", "small_logo", flash, iconType, title, subtitle)
+		local showInBrief = false
+		local blink = false
+		EndTextCommandThefeedPostTicker(blink, showInBrief)
+
 	else
 		-- someone who has RedM installed please write some code for this
 		
