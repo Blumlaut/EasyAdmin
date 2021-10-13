@@ -1076,7 +1076,7 @@ function GenerateMenu() -- this is a big ass function
 								break
 							end
 						end
-						if string.find((string.lower(theBanned.reason) or "No Reason"), string.lower()) then
+						if string.find((string.lower(theBanned.reason) or "No Reason"), string.lower(result)) then
 							foundBan=true
 							foundBanid=i
 							break
