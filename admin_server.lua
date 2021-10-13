@@ -933,7 +933,7 @@ Citizen.CreateThread(function()
 
 
 					for i,_ in pairs(OnlineAdmins) do 
-						local notificationText = string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, false), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid)
+						local notificationText = string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, false), getName(id, true, false), reason, #PlayerReports[id], minimumreports, reportid)
 						TriggerClientEvent('chat:addMessage', i, { 
 							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
 							args = { "^3EasyAdmin Report^7\n"..notificationText }, color = { 255, 255, 255 } 
