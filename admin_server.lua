@@ -809,7 +809,7 @@ Citizen.CreateThread(function()
 			if getName(args[1]) then
 				TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1])
 			else
-				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("playernotfound") } })
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
 			end
 		end
 	end, false)
@@ -819,7 +819,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1], 3)
 			UnbanIdentifier(args[1])
 			if (source ~= 0) then
-				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("done") } })
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("done"))
 			else
 				Citizen.Trace(GetLocalisedText("done"))
 			end
@@ -865,31 +865,22 @@ Citizen.CreateThread(function()
 			local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
 			local source=source
 			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
-				TriggerClientEvent('chat:addMessage', source, { 
-					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
-					args = { "^3EasyAdmin^7", GetLocalisedText("waitbeforeusingagain") }, color = { 255, 255, 255 } 
-				})
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("waitbeforeusingagain"))
 				return
 			end
 
 			local reason = string.gsub(rawCommand, "calladmin ", "")
 			local reportid = addNewReport(0, source, _,reason)
 			for i,_ in pairs(OnlineAdmins) do 
-				--TriggerClientEvent('chatMessage', i, "^3!!EasyAdmin Admin Call!!^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source), source, reason))
-				TriggerClientEvent('chat:addMessage', i, { 
-				    template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-				    args = { "^3EasyAdmin^7\n"..string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,true), reason, reportid) }, color = { 255, 255, 255 } 
-				})
+				local notificationText = string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,false), reason, reportid)
+				TriggerClientEvent("EasyAdmin:showNotification", source, notificationText)
 			end
 
 
 			local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true, true), reason, reportid), "calladmin", 16776960)
 			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
-			TriggerClientEvent('chat:addMessage', source, { 
-				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 3px;"><i class="fas fa-crown"></i> {0}: {1}</div>',
-				args = { "^3EasyAdmin^7", GetLocalisedText("admincalled") }, color = { 255, 255, 255 } 
-			})
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("admincalled"))
 
 			time = os.time()
 			cooldowns[source] = time
@@ -942,29 +933,27 @@ Citizen.CreateThread(function()
 
 
 					for i,_ in pairs(OnlineAdmins) do 
+						local notificationText = string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, false), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid)
 						TriggerClientEvent('chat:addMessage', i, { 
 							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-							args = { "^3EasyAdmin Report^7\n"..string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid) }, color = { 255, 255, 255 } 
+							args = { "^3EasyAdmin Report^7\n"..notificationText }, color = { 255, 255, 255 } 
 						})
+						TriggerClientEvent("EasyAdmin:showNotification", source, notificationText)
 					end
-					TriggerClientEvent('chat:addMessage', source, { 
-						template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0}:<br> {1}</div>',
-						args = { "^3EasyAdmin^7", GetLocalisedText("successfullyreported") }, color = { 255, 255, 255 } 
-					})
+					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported"))
+
 					if #PlayerReports[id] >= minimumreports then
 						TriggerEvent("EasyAdmin:addBan", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
 					end
 				else
-					TriggerClientEvent('chat:addMessage', source, { 
-						template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0}:<br> {1}</div>',
-						args = { "^3EasyAdmin^7", GetLocalisedText("alreadyreported") }, color = { 255, 255, 255 } 
-					})
+					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("alreadyreported"))
 				end
 			else
 				TriggerClientEvent('chat:addMessage', source, { 
 					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0}:<br> {1}</div>',
 					args = { "^3EasyAdmin^7", GetLocalisedText("reportedusageerror") }, color = { 255, 255, 255 } 
 				})
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportedusageerror"))
 			end
 		end
 	end, false)
@@ -1015,7 +1004,7 @@ Citizen.CreateThread(function()
 		
 	RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
 		if scrinprogress then
-			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("screenshotinprogress") } })
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("screenshotinprogress"))
 			return
 		end
 		local src=source
@@ -1046,7 +1035,7 @@ Citizen.CreateThread(function()
 					RemoveEventHandler(thistemporaryevent)
 					scrinprogress = false -- cancel screenshot, seems like it failed
 					PrintDebugMessage("Screenshot timed out", 4)
-					TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", "Screenshot Failed!" } })
+					TriggerClientEvent("EasyAdmin:showNotification", source, "Screenshot Failed!")
 				end
 			until not scrinprogress
 		end
@@ -1079,12 +1068,12 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(src,"player.mute") then
 			if not MutedPlayers[playerId] then 
 				MutedPlayers[playerId] = true
-				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playermuted") } })
+				TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playermuted"))
 				PrintDebugMessage("Player "..getName(source,true).." muted "..getName(playerId,true), 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
 			else 
 				MutedPlayers[playerId] = nil
-				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", getName(playerId) .. " " .. GetLocalisedText("playerunmuted") } })
+				TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playerunmuted"))
 				PrintDebugMessage("Player "..getName(source,true).." unmuted "..getName(playerId,true), 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, false), getName(playerId, false, true)), "mute", 16777214)
 			end
@@ -1972,6 +1961,7 @@ Citizen.CreateThread(function()
 		if MutedPlayers[Source] then
 			CancelEvent()
 			TriggerClientEvent("chat:addMessage", Source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
+			TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playermute"))
 		end
 	end)
 

@@ -244,7 +244,6 @@ function generateTextures()
 				currentEgg = "pride"
 			elseif overrideEgg == false then
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
-				CreateRuntimeTextureFromImage(txd, 'small_logo', 'dependencies/images/small-logo-bg.png')
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = false
 			end
@@ -254,7 +253,6 @@ function generateTextures()
 			else
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
 			end
-			CreateRuntimeTextureFromImage(txd, 'small_logo', 'dependencies/images/small-logo-bg.png')
 			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 			currentEgg=nil
 		end
@@ -262,7 +260,6 @@ function generateTextures()
 end
 
 function GenerateMenu() -- this is a big ass function
-
 
 	generateTextures()
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
@@ -912,7 +909,7 @@ function GenerateMenu() -- this is a big ass function
 				if result ~= GetCurrentResourceName() then
 					TriggerServerEvent("EasyAdmin:StopResource", result)
 				else
-					TriggerEvent("chat:addMessage", { args = { "EasyAdmin", GetLocalisedText("badidea") } })
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("badidea"))
 				end
 			end
 		end
