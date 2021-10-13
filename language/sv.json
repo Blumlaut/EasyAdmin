@@ -124,8 +124,8 @@
     "firstpage": "««First Page",
     "lastpage": "Last Page»»",
     "previouspage": "«Previous Page",
-    "playercalledforadmin": "\nUser %s calls for an admin!\nReason: %s\nID: %s\n",
-    "playerreportedplayer": "\nUser %s reported a player!\n%s, Reason: %s\nReport %s/%s\nID: %s\n",
+    "playercalledforadmin": "User %s calls for an admin!\nReason: %s\nID: %s\n",
+    "playerreportedplayer": "User %s reported a player!\n%s, Reason: %s\nReport %s/%s\nID: %s\n",
     "successfullyreported": "Successfully reported the player!",
     "reportbantext": "Reported by %s Players in short time.",
     "alreadyreported": "You already reported this player!",
@@ -217,7 +217,8 @@
     "waitbeforeusingagain": "You must wait before using this again!",
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
-    "reportalreadyclaimed": "This report has already been claimed!"
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification"
 
 
 

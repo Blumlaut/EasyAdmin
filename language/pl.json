@@ -123,8 +123,8 @@
     "firstpage": "««Pierwsza strona",
     "lastpage": "Ostatnia strona»»",
     "previouspage": "«Poprzednia strona",
-    "playercalledforadmin": "\nUżytkownik %s wzywa Administratora!\nPowód: %s\nID: %s\n",
-    "playerreportedplayer": "\nUżytkownik %s zgłosił gracza!\n%s, Powód: %s\nReport %s/%s\nID: %s\n",
+    "playercalledforadmin": "Użytkownik %s wzywa Administratora!\nPowód: %s\nID: %s\n",
+    "playerreportedplayer": "Użytkownik %s zgłosił gracza!\n%s, Powód: %s\nReport %s/%s\nID: %s\n",
     "successfullyreported": "Pomyślnie zgłoszono gracza!",
     "reportbantext": "Zgłosił %s Graczy w krótkim czasie.",
     "alreadyreported": "Już zgłosiłeś tego gracza!",
@@ -217,7 +217,8 @@
     "waitbeforeusingagain": "Musisz poczekać przed użyciem tego ponownie!",
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
-    "reportalreadyclaimed": "This report has already been claimed!"
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification"
 
 
 
