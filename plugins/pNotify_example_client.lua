@@ -15,17 +15,6 @@ function pushNotification(options)
 end
 
 
-AddEventHandler("EasyAdmin:NewReport", function(reportData)
-	if reportData.type == 0 then -- call admin
-		local str = string.format("%s calls for an admin!<br>Reason: %s<br>ID: %s", reportData.reporterName, reportData.reason, reportData.id)
-		pushNotification({layout = "topRight", type = "alert", text = str})
-	else
-		local str = string.format("%s reported <br>%s, Reason: %s<br>ID: %s", reportData.reporterName, reportData.reportedName, reportData.reason, reportData.id)
-		pushNotification({layout = "topRight", type = "alert", text = str})
-	end
-end)
-
-
 Citizen.CreateThread(function()
 	if enableNotificationReplace then
 		function ShowNotification(text)
