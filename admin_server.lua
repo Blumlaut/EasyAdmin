@@ -1910,11 +1910,7 @@ Citizen.CreateThread(function()
 	function GetVersion()
 		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 		local verContent = json.decode(verFile)
-		if RedM then
-			return verContent.redm.version
-		else
-			return verContent.fivem.version
-		end
+		return verContent.version
 	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
@@ -1998,32 +1994,28 @@ Citizen.CreateThread(function()
 	
 	
 	curVersion = GetVersion()
-	local updatePath = "/Blumlaut/EasyAdmin"
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
-			local remoteVersion = data.fivem.version
-			local changelog = data.fivem.changelog
-			if RedM then
-				remoteVersion = data.redm.version
-				changelog = data.redm.changelog
-			end
+			local remoteVersion = tonumber(data.tag_name)
 			PrintDebugMessage("Version check returned "..err..", Local Version: "..curVersion..", Remote Version: "..remoteVersion, 4)
-			if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
-				print("\n--------------------------------------------------------------------------")
-				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
-				print("\nUpdate Changelog:\n"..changelog)
-				print("\n--------------------------------------------------------------------------")
-				updateAvailable = remoteVersion
-			elseif tonumber(curVersion) > tonumber(remoteVersion) then
-				print("Your version of "..resourceName.." seems to be higher than the current stable version.")
+			if curVersion == "master" then
+				PrintDebugMessage("You are using an Unstable Version of EasyAdmin, if this was not your intention, please download the latest Version from "..data.html_url, 1)
 			else
-				--print(resourceName.." is up to date!")
+				if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+					print("\n--------------------------------------------------------------------------")
+					print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..data.html_url)
+					print("\n--------------------------------------------------------------------------")
+					updateAvailable = remoteVersion
+				elseif tonumber(curVersion) > tonumber(remoteVersion) then
+					print("Your version of "..resourceName.." seems to be higher than the current stable version.")
+				end
 			end
 		else
-			PrintDebugMessage("EasyAdmin Version Check failed, please make sure its updated!")
+			PrintDebugMessage("Version Check failed, please make sure EasyAdmin is up to date!", 1)
 		end
+
 		if GetResourceState("screenshot-basic") == "missing" then 
 			PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
 		else
@@ -2050,7 +2042,7 @@ Citizen.CreateThread(function()
 	end
 	
 	function checkVersionHTTPRequest()
-		PerformHttpRequest("https://raw.githubusercontent.com/"..updatePath.."/master/version.json", checkVersion, "GET")
+		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", checkVersion, "GET")
 	end
 	
 	function loopUpdateBlacklist()
