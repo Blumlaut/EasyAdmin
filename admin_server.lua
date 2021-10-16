@@ -2054,7 +2054,7 @@ Citizen.CreateThread(function()
 
 	function sendTelemetry()
 		local data = {}
-		data.version = GetVersion()
+		data.version, data.unstable = GetVersion()
 		data.servername = GetConvar("sv_hostname", "Default FXServer")
 		data.usercount = #GetPlayers()
 		data.bancount = #blacklist
