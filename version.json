@@ -1,5 +1,6 @@
 {
     "version": "6.202",
+    "master": true,
     "changelog": "Fixes lag caused on Server start/menu open in some cases, fix banlist backups failing, various tiny improvements",
 
 

@@ -374,9 +374,11 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 
 		PrintDebugMessage("Collecting EasyAdmin Config....^7\n", 1)
 
+		local version,ismaster = GetVersion()
 		supportData.config = {
 			gamename = GetConvar("gamename", "not-rdr3"),
-			version = GetVersion(),
+			version = version,
+			ismaster = tostring(ismaster),
 			ea_moderationNotification = GetConvar("ea_moderationNotification", "false"),
 			ea_screenshoturl = GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'),
 			onesync = GetConvar("onesync", "off"),
@@ -1910,7 +1912,7 @@ Citizen.CreateThread(function()
 	function GetVersion()
 		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 		local verContent = json.decode(verFile)
-		return verContent.version
+		return verContent.version, verContent.master
 	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason)
@@ -1993,24 +1995,23 @@ Citizen.CreateThread(function()
 	end
 	
 	
-	curVersion = GetVersion()
+	curVersion, IsMaster = GetVersion()
 	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 	function checkVersion(err,response, headers)
 		if err == 200 then
 			local data = json.decode(response)
 			local remoteVersion = tonumber(data.tag_name)
 			PrintDebugMessage("Version check returned "..err..", Local Version: "..curVersion..", Remote Version: "..remoteVersion, 4)
-			if curVersion == "master" then
-				PrintDebugMessage("You are using an Unstable Version of EasyAdmin, if this was not your intention, please download the latest Version from "..data.html_url, 1)
-			else
-				if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
-					print("\n--------------------------------------------------------------------------")
-					print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..data.html_url)
-					print("\n--------------------------------------------------------------------------")
-					updateAvailable = remoteVersion
-				elseif tonumber(curVersion) > tonumber(remoteVersion) then
-					print("Your version of "..resourceName.." seems to be higher than the current stable version.")
-				end
+			if IsMaster then
+				PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..data.html_url, 1)
+			end
+			if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+				print("\n--------------------------------------------------------------------------")
+				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..data.html_url)
+				print("\n--------------------------------------------------------------------------")
+				updateAvailable = remoteVersion
+			elseif tonumber(curVersion) > tonumber(remoteVersion) then
+				print("Your version of "..resourceName.." seems to be higher than the current stable version.")
 			end
 		else
 			PrintDebugMessage("Version Check failed, please make sure EasyAdmin is up to date!", 1)
