@@ -26,7 +26,7 @@ jobs:
     steps:
     # Runs a single command using the runners shell
     - uses: actions/checkout@master
-    - name: Set version.json
+    - name: Configure version.json & Push Tag
       run: | 
             echo "version is ${{ github.event.inputs.version }}"
             git config user.name "GitHub Actions Bot"
@@ -34,10 +34,8 @@ jobs:
             echo '{"version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
             git commit -m "Update Version"
-            git push
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
-            git push --tags
             echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
             git commit -m "Update Version"
-            git push
+            git push --follow-tags
