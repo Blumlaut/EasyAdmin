@@ -37,7 +37,7 @@ jobs:
             git push
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
             git push --tags
-            echo '{"version": "master", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "master","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "master","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
+            echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
             git commit -m "Update Version"
             git push
