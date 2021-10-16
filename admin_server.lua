@@ -245,7 +245,7 @@ RegisterServerEvent("EasyAdmin:GetPlayerList", function()
 				table.insert(l, CachedPlayers[player])
 			end
 		end
-		TriggerLatentClientEvent("EasyAdmin:GetPlayerList", source, 1000, l) 
+		TriggerLatentClientEvent("EasyAdmin:GetPlayerList", source, 10000, l) 
 	end
 end)
 
@@ -263,7 +263,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 				end
 			end
 		end
-		TriggerLatentClientEvent("EasyAdmin:GetInfinityPlayerList", source, 4000, l) 
+		TriggerLatentClientEvent("EasyAdmin:GetInfinityPlayerList", source, 10000, l) 
 	end
 end)
 
@@ -271,7 +271,7 @@ RegisterServerEvent("EasyAdmin:requestCachedPlayers", function()
 	PrintDebugMessage(getName(source, true).." requested Cache.", 4)
 	local src = source
 	if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) then
-		TriggerLatentClientEvent("EasyAdmin:fillCachedPlayers", src, 500, CachedPlayers)
+		TriggerLatentClientEvent("EasyAdmin:fillCachedPlayers", src, 10000, CachedPlayers)
 		PrintDebugMessage("Cached Players requested by "..getName(src,true), 4)
 	end
 end)
@@ -530,7 +530,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Processed Perm "..perm.." for "..getName(source, true)..", result: "..tostring(thisPerm), 3)
 		end
 
-		TriggerLatentClientEvent("EasyAdmin:adminresponse", source, 1000, perms)
+		TriggerLatentClientEvent("EasyAdmin:adminresponse", source, 10000, perms)
 		
 		if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) then
 			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
@@ -588,7 +588,7 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
 		end
 		
-		TriggerLatentClientEvent("EasyAdmin:SetLanguage", source, 3000, strings)
+		TriggerLatentClientEvent("EasyAdmin:SetLanguage", source, 10000, strings)
 		
 	end)
 	
@@ -782,7 +782,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source, "player.ban.view") then
 			updateBlacklist(false,true)
 			Citizen.Wait(300)
-			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 1000, blacklist)
+			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 10000, blacklist)
 			PrintDebugMessage("Banlist Refreshed by "..getName(src,true), 3)
 		end
 	end)
@@ -790,7 +790,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:requestBanlist", function()
 		local src = source
 		if DoesPlayerHavePermission(source, "player.ban.view") then
-			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 1000, blacklist)
+			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 10000, blacklist)
 			PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
 		end
 	end)
@@ -1105,7 +1105,7 @@ Citizen.CreateThread(function()
 		t.id = #reports+1
 		reports[t.id] = t
 		for i,_ in pairs(OnlineAdmins) do 
-			TriggerLatentClientEvent("EasyAdmin:NewReport", i, 600, t)
+			TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, t)
 		end
 		return t.id
 	end
@@ -1116,7 +1116,7 @@ Citizen.CreateThread(function()
 				reports[reportId].claimed = source
 				reports[reportId].claimedName = getName(source,true)
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:ClaimedReport", admin, 100, reports[reportId])
+					TriggerLatentClientEvent("EasyAdmin:ClaimedReport", admin, 10000, reports[reportId])
 				end
 			else
 				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
@@ -1128,17 +1128,17 @@ Citizen.CreateThread(function()
 		for i, report in pairs(reports) do
 			if (index and i == index) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, report)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
 				end
 				reports[i] = nil
 			elseif (reporter and reporter == report.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, report)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
 				end
 				reports[i] = nil
 			elseif (reported and reported == report.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, report)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
 				end
 				reports[i] = nil
 			end
@@ -1149,25 +1149,25 @@ Citizen.CreateThread(function()
 		for i, r in pairs(reports) do
 			if (report.reporter and report.reported) and (report.reporter == r.reporter and report.reported == r.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
 				end
 				reports[i] = nil
 			end
 			if (report.reason and report.reporter) and (report.reason == r.reason and report.reporter == r.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
 				end
 				reports[i] = nil
 			end
 			if (report.reported) and (report.reported == r.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
 				end
 				reports[i] = nil
 			end
 			if (report.reporter) and (report.reporter == r.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
-					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 100, r)
+					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
 				end
 				reports[i] = nil
 			end
@@ -1430,7 +1430,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:getServerAces", function()
 		if DoesPlayerHavePermission(source, "server.permissions.read") then
-			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 3000, add_aces, add_principals)
+			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 10000, add_aces, add_principals)
 		end
 	end)
 	
@@ -1515,7 +1515,7 @@ Citizen.CreateThread(function()
 			add_aces = aces
 			add_principals = principals
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("admineditedpermissions"), getName(source, false, true)), "permissions", 16777214)
-			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 3000, add_aces, add_principals)
+			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 10000, add_aces, add_principals)
 		end
 	end)
 	
