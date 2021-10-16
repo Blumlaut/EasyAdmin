@@ -2098,7 +2098,9 @@ Citizen.CreateThread(function()
 		loopTelemetryUpdate()
 	end
 	if GetConvar("ea_enableSplash", "true") == "true" then
-		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..GetVersion().."^7")
+		local version,master = GetVersion()
+		if master then version = version.." (UNSTABLE PRE-RELEASE!)" end
+		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..version.."^7")
 		PrintDebugMessage("Intialised.", 4)
 	end
 end)
