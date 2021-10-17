@@ -682,7 +682,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					if not report.claimed then
-						TriggerServerEvent("EasyAdmin:ClaimReport", 200, i)
+						TriggerServerEvent("EasyAdmin:ClaimReport", i)
 					else
 						showNotification(GetLocalisedText("reportalreadyclaimed"))
 					end
@@ -735,7 +735,7 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("closereport"), "")
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:RemoveReport", 200, report)
+					TriggerServerEvent("EasyAdmin:RemoveReport", report)
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
@@ -746,7 +746,7 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("closesimilarreports"), GetLocalisedText("closesimilarreportsguide"))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:RemoveSimilarReports", 200, report)
+					TriggerServerEvent("EasyAdmin:RemoveSimilarReports", report)
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
