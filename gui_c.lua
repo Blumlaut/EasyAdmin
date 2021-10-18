@@ -1481,7 +1481,7 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("savechanges"), GetLocalisedText("savechangesguide"))
 		permissionEditor:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			TriggerLatentServerEvent("EasyAdmin:setServerAces", 10000, add_aces, add_principals)
+			TriggerLatentServerEvent("EasyAdmin:setServerAces", 200000, add_aces, add_principals)
 			_menuPool:CloseAllMenus()
 			Citizen.Wait(800)
 			GenerateMenu()

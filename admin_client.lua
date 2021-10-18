@@ -325,7 +325,7 @@ end)
 
 RegisterNetEvent("EasyAdmin:CaptureScreenshot", function(toggle, url, field)
 	exports['screenshot-basic']:requestScreenshotUpload(GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'), GetConvar("ea_screenshotfield", 'files[]'), function(data)
-		TriggerLatentServerEvent("EasyAdmin:TookScreenshot", 10000, data)
+		TriggerLatentServerEvent("EasyAdmin:TookScreenshot", 100000, data)
 	end)
 end)
 

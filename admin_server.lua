@@ -245,7 +245,7 @@ RegisterServerEvent("EasyAdmin:GetPlayerList", function()
 				table.insert(l, CachedPlayers[player])
 			end
 		end
-		TriggerLatentClientEvent("EasyAdmin:GetPlayerList", source, 10000, l) 
+		TriggerLatentClientEvent("EasyAdmin:GetPlayerList", source, 200000, l) 
 	end
 end)
 
@@ -263,7 +263,9 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 				end
 			end
 		end
-		TriggerLatentClientEvent("EasyAdmin:GetInfinityPlayerList", source, 10000, l) 
+
+		-- each player is more or less 2000bytes big.
+		TriggerLatentClientEvent("EasyAdmin:GetInfinityPlayerList", source, 200000, l) 
 	end
 end)
 
@@ -271,7 +273,7 @@ RegisterServerEvent("EasyAdmin:requestCachedPlayers", function()
 	PrintDebugMessage(getName(source, true).." requested Cache.", 4)
 	local src = source
 	if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) then
-		TriggerLatentClientEvent("EasyAdmin:fillCachedPlayers", src, 10000, CachedPlayers)
+		TriggerLatentClientEvent("EasyAdmin:fillCachedPlayers", src, 200000, CachedPlayers)
 		PrintDebugMessage("Cached Players requested by "..getName(src,true), 4)
 	end
 end)
@@ -784,7 +786,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source, "player.ban.view") then
 			updateBlacklist(false,true)
 			Citizen.Wait(300)
-			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 10000, blacklist)
+			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 100000, blacklist)
 			PrintDebugMessage("Banlist Refreshed by "..getName(src,true), 3)
 		end
 	end)
@@ -792,7 +794,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:requestBanlist", function()
 		local src = source
 		if DoesPlayerHavePermission(source, "player.ban.view") then
-			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 10000, blacklist)
+			TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 100000, blacklist)
 			PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
 		end
 	end)
@@ -1432,7 +1434,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:getServerAces", function()
 		if DoesPlayerHavePermission(source, "server.permissions.read") then
-			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 10000, add_aces, add_principals)
+			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 100000, add_aces, add_principals)
 		end
 	end)
 	
@@ -1517,7 +1519,7 @@ Citizen.CreateThread(function()
 			add_aces = aces
 			add_principals = principals
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("admineditedpermissions"), getName(source, false, true)), "permissions", 16777214)
-			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 10000, add_aces, add_principals)
+			TriggerLatentClientEvent("EasyAdmin:getServerAces", source, 100000, add_aces, add_principals)
 		end
 	end)
 	
