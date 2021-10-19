@@ -9,16 +9,20 @@
 enableNotificationReplace = false -- change to true to enable replacement of the default V Notification for EasyAdmin
 
 
-local PnOptions = {layout = "topRight", type = "alert"}
-function pushNotification(options)
-	TriggerEvent("pNotify:SendNotification", options)
-end
+local PnOptions = {layout = "centerLeft", type = "alert"} -- define our pNotify options
 
+
+-- this bit of code tells EasyAdmin to not draw the V Notification.
+AddEventHandler("EasyAdmin:receivedNotification", function()
+	CancelEvent() 
+end)
 
 Citizen.CreateThread(function()
-	if enableNotificationReplace then
-		function ShowNotification(text)
-			pushNotification({layout = "topRight", type = "alert", text = text})
-		end
-	end
+		RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
+			if GetResourceState("pNotify") == "started" or enableNotificationReplace then
+				local options = PnOptions
+				options.text = text
+				TriggerEvent("pNotify:SendNotification", options)
+			end
+		end)
 end)

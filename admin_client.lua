@@ -394,8 +394,11 @@ function ShowNotification(text)
 	end
 end
 
-RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
-	if not WasEventCanceled() then
-		ShowNotification(text)
-	end
+Citizen.CreateThread(function()
+	RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
+		TriggerEvent("EasyAdmin:receivedNotification", text)
+		if not WasEventCanceled() then
+			ShowNotification(text)
+		end
+	end)
 end)
