@@ -14,7 +14,9 @@ local PnOptions = {layout = "centerLeft", type = "alert"} -- define our pNotify 
 
 -- this bit of code tells EasyAdmin to not draw the V Notification.
 AddEventHandler("EasyAdmin:receivedNotification", function()
-	CancelEvent() 
+	if GetResourceState("pNotify") == "started" or enableNotificationReplace then
+		CancelEvent() 
+	end
 end)
 
 Citizen.CreateThread(function()
