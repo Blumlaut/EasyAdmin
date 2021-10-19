@@ -33,7 +33,7 @@ jobs:
             git config user.email "<>"
             echo '{"version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
-            git commit -m "Update Version"
+            git commit -m "${{ github.event.inputs.version }}"
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
             echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
