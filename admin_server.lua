@@ -1013,6 +1013,10 @@ Citizen.CreateThread(function()
 		end
 		local src=source
 		local playerId = playerId
+		local invokingResource
+		if GetInvokingResource() and GetInvokingResource() ~= GetCurrentResourceName() then
+			invokingResource = "`"..GetInvokingResource().."`"
+		end
 
 		if DoesPlayerHavePermission(source, "player.screenshot") then
 			scrinprogress = true
@@ -1022,7 +1026,7 @@ Citizen.CreateThread(function()
 				res = matchURL(tostring(result)) 
 
 				PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
-				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), getName(src), getName(playerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
+				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), invokingResource or getName(src), getName(playerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
 				TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
 				TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
 				PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..res.." requsted by"..getName(src,true), 3)
