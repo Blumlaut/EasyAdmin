@@ -398,7 +398,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:Visible(true)
 				return
 			end
-			ShowNotification("~r~No results found!")
+			TriggerEvent("EasyAdmin:showNotification", "~r~No results found!")
 		end
 	end
 
@@ -684,7 +684,7 @@ function GenerateMenu() -- this is a big ass function
 					if not report.claimed then
 						TriggerServerEvent("EasyAdmin:ClaimReport", i)
 					else
-						showNotification(GetLocalisedText("reportalreadyclaimed"))
+						TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("reportalreadyclaimed"))
 					end
 				end
 			end
@@ -698,7 +698,7 @@ function GenerateMenu() -- this is a big ass function
 				GenerateMenu()
 				Wait(100)
 				if not playerMenus[tostring(report.reporter)] then
-					ShowNotification("~r~Reporting player not found.")
+					TriggerEvent("EasyAdmin:showNotification", "~r~Reporting player not found.")
 					reportViewer:Visible(true)
 				else
 					local ourMenu = playerMenus[tostring(report.reporter)].menu
@@ -717,7 +717,7 @@ function GenerateMenu() -- this is a big ass function
 					GenerateMenu()
 					Wait(100)
 					if not playerMenus[tostring(report.reported)] then
-						ShowNotification("~r~Reported player not found.")
+						TriggerEvent("EasyAdmin:showNotification", "~r~Reported player not found.")
 						reportViewer:Visible(true)
 					else
 						local ourMenu = playerMenus[tostring(report.reported)].menu
@@ -1096,7 +1096,7 @@ function GenerateMenu() -- this is a big ass function
 			if foundBan then
 				generateBanOverview(foundBanid)
 			else
-				ShowNotification(GetLocalisedText("searchbansfail"))
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("searchbansfail"))
 				GenerateMenu()
 				unbanPlayer:Visible(true)
 			end
@@ -1705,7 +1705,7 @@ Citizen.CreateThread( function()
 				end
 	
 				StopDrawPlayerInfo()
-				ShowNotification(GetLocalisedText("stoppedSpectating"))
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
 			end
 		else
 			Citizen.Wait(1000)

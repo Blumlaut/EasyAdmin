@@ -243,7 +243,7 @@ Citizen.CreateThread(function()
 				toDelete[i] = nil
 			end
 		end
-		ShowNotification(string.format(GetLocalisedText("finishedcleaning"), GetLocalisedText(type)))
+		TriggerEvent("EasyAdmin:showNotification", string.format(GetLocalisedText("finishedcleaning"), GetLocalisedText(type)))
 	end)
 end)
 Citizen.CreateThread( function()
@@ -351,7 +351,7 @@ function spectatePlayer(targetPed,target,name)
 		NetworkSetInSpectatorMode(true, targetPed)
 		
 		DrawPlayerInfo(target)
-		ShowNotification(string.format(GetLocalisedText("spectatingUser"), name))
+		TriggerEvent("EasyAdmin:showNotification", string.format(GetLocalisedText("spectatingUser"), name))
 	else
 		if oldCoords then
 			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
@@ -361,7 +361,7 @@ function spectatePlayer(targetPed,target,name)
 		end
 		NetworkSetInSpectatorMode(false, targetPed)
 		StopDrawPlayerInfo()
-		ShowNotification(GetLocalisedText("stoppedSpectating"))
+		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
 		frozen = false
 		Citizen.Wait(200) -- to prevent staying invisible
 		SetEntityVisible(playerPed, true, 0)
