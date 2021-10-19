@@ -19,12 +19,10 @@ AddEventHandler("EasyAdmin:receivedNotification", function()
 	end
 end)
 
-Citizen.CreateThread(function()
-		RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
-			if GetResourceState("pNotify") == "started" or enableNotificationReplace then
-				local options = PnOptions
-				options.text = text
-				TriggerEvent("pNotify:SendNotification", options)
-			end
-		end)
+RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
+	if GetResourceState("pNotify") == "started" or enableNotificationReplace then
+		local options = PnOptions
+		options.text = text
+		TriggerEvent("pNotify:SendNotification", options)
+	end
 end)
