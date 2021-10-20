@@ -523,6 +523,9 @@ Citizen.CreateThread(function()
 			if perm == "player.screenshot" and not screenshots then
 				thisPerm = false
 			end
+			if string.find(perm, "server.permissions") and disablePermissionEditor then
+				thisPerm = false
+			end
 			--if (perm == "teleport" or perm == "spectate") and infinity then
 			--if (perm == "spectate") and infinity then
 			--	thisPerm = false
@@ -2044,7 +2047,13 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
 		end
 		
-		readAcePermissions()
+		if not string.find(GetCurrentResourceName(), "-") then -- all my homies hate hyphens
+			readAcePermissions()
+		else
+			disablePermissionEditor = true
+			local resourceName = GetCurrentResourceName()
+			PrintDebugMessage("^1Permission Editor Disabled!^7 Please remove any hyphens ("..string.gsub(resourceName, "-", ">-<").." from EasyAdmin's resource name.) #271", 1)
+		end
 		SetTimeout(3600000, checkVersionHTTPRequest)
 	end
 	
