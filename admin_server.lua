@@ -945,7 +945,7 @@ Citizen.CreateThread(function()
 							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
 							args = { "^3EasyAdmin Report^7\n"..notificationText }, color = { 255, 255, 255 } 
 						})
-						TriggerClientEvent("EasyAdmin:showNotification", source, notificationText)
+						TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
 					end
 					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported"))
 
