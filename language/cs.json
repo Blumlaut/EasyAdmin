@@ -80,7 +80,7 @@
     "chatsuggestionslap": "profackovat hrace",
     "chatsuggestionfreeze": "zmrazit hrace",
 
-    "bannedjoin": "Byl jsi zabanovan, \nDuvod: %s, Ban vyprsi: %s",
+    "bannedjoin": "Byl jsi zabanovan, \nDuvod: %s, Ban vyprsi: %s, Ban ID: %s",
     "kicked": "Vyhozen adminem %s, Duvod: %s",
     "banned": "Byl jsi zabanovan, Duvod: %s, Ban vyprsi: %s",
     "reasonadd": " ( Prezdivka: %s ), Zabanovan adminem: %s",
@@ -217,7 +217,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 }]

@@ -84,7 +84,7 @@
     "chatsuggestionslap": "schiaffeggia un giocatore",
     "chatsuggestionfreeze": "blocca un giocatore",
 
-    "bannedjoin": "Sei stato bandito da questo server, \nMotivo: %s, Il Ban Scade: %s",
+    "bannedjoin": "Sei stato bandito da questo server, \nMotivo: %s, Il Ban Scade: %s, Ban ID: %s",
     "kicked": "Espulso da %s, Motivo: %s",
     "banned": "Sei stato bandito da questo server, Motivo: %s, Il Ban Scade: %s",
     "reasonadd": " ( Nickname: %s ), Bandito da: %s",
@@ -220,7 +220,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
   

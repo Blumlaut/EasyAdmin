@@ -83,7 +83,7 @@
     "chatsuggestionslap": "spieler schlagen",
     "chatsuggestionfreeze": "spieler einfrieren",
 
-    "bannedjoin": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",
+    "bannedjoin": "\nDu wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab\nDeine Ban-ID ist #%s.",
     "kicked": "Gekickt von %s, \nGrund: %s",
     "banned": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",
     "reasonadd": " ( Spielername: %s ), \nGebannt von: %s",
@@ -217,7 +217,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Benachrichtigung"
+    "notification":"Benachrichtigung",
+    "deferral":"Prüfe Banliste, bitte warten.. (%s%%)"
 
 
 }]

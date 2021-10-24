@@ -82,7 +82,7 @@
     "chatsuggestionslap": "abofetea al jugador",
     "chatsuggestionfreeze": "congela al jugador",
 
-    "bannedjoin": "Has sido baneado del servidor, \nRazón: %s, Expira: %s",
+    "bannedjoin": "Has sido baneado del servidor, \nRazón: %s, Expira: %s, Ban ID: %s",
     "kicked": "Has sido kickeado por %s, Razón: %s",
     "banned": "Has sido baneado del servidor, Razón: %s, Expira: %s",
     "reasonadd": " ( El jugador: %s ), ha sido baneado por: %s",
@@ -216,7 +216,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 }]

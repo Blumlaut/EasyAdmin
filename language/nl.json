@@ -84,7 +84,7 @@
     "chatsuggestionslap": "speler klap geven",
     "chatsuggestionfreeze": "Speler vastzetten",
 
-    "bannedjoin": "Je bent verbannen van deze Server, \nReden: %s, Ban Vervalt: %s",
+    "bannedjoin": "Je bent verbannen van deze Server, \nReden: %s, Ban Vervalt: %s, Ban ID: %s",
     "kicked": "Gekickt door %s, Reden: %s",
     "banned": "Je bent verbannen van deze Server, Reden: %s, Ban Vervalt: %s",
     "reasonadd": " ( Gebruikersnaam: %s ), Verbannen door: %s",
@@ -220,7 +220,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 

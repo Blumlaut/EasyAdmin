@@ -82,7 +82,7 @@
     "chatsuggestionslap": "jebnij gracza",
     "chatsuggestionfreeze": "unieruchom gracza",
 
-    "bannedjoin": "Zostałeś zbanowany na tym serwerze, \nPowód: %s, Czas trwania: %s",
+    "bannedjoin": "Zostałeś zbanowany na tym serwerze, \nPowód: %s, Czas trwania: %s, Ban ID: %s",
     "kicked": "Wyrzucony przez %s, Powód: %s",
     "banned": "Zostałeś zbanowany na tym serwerze, Powód: %s, Czas trwania: %s",
     "reasonadd": " ( Gracz: %s ), Zablokowany przez: %s",
@@ -218,7 +218,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 

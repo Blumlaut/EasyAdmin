@@ -83,7 +83,7 @@
     "chatsuggestionslap": "slå spelare",
     "chatsuggestionfreeze": "frys en spelare",
 
-    "bannedjoin": "Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s",
+    "bannedjoin": "Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s, Ban ID: %s",
     "kicked": "Kickad av %s, Anledning: %s",
     "banned": "Du har blivit bannlsyt frånb denna server, Anledning: %s, Bannlysning upphävs: %s",
     "reasonadd": " ( Smeknamn: %s ), Bannlyst av: %s",
@@ -218,7 +218,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 

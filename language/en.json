@@ -82,7 +82,7 @@
     "chatsuggestionslap": "slap a player",
     "chatsuggestionfreeze": "freeze a player",
 
-    "bannedjoin": "\nYou have been banned from this Server\n\nReason: %s\n\nBan Expires: %s",
+    "bannedjoin": "\nYou have been banned from this Server\n\nReason: %s\n\nBan Expires: %s\nYour Ban ID is #%s.",
     "kicked": "Kicked by %s, Reason: %s",
     "banned": "You have been banned from this Server, Reason: %s, Ban Expires: %s",
     "reasonadd": " ( Nickname: %s ), Banned by: %s",
@@ -217,7 +217,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 

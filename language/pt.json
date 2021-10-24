@@ -81,7 +81,7 @@
     "chatsuggestionmapname": "definir nome do mapa do servidor",
     "chatsuggestionslap": "Matar um jogador",
     "chatsuggestionfreeze": "Congelar um jogador",
-    "bannedjoin": "Você foi banido deste servidor, \nRazão: %s, Ban Expira: %s",
+    "bannedjoin": "Você foi banido deste servidor, \nRazão: %s, Ban Expira: %s, Ban ID: %s",
     "kicked": "Kicked por %s, Razão: %s",
     "banned": "Você foi banido deste servidor, Motivo: %s, Ban Expira: %s",
     "reasonadd": " ( Apelido: %s ), Banido por: %s",
@@ -214,7 +214,8 @@
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification"
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)"
 
 
 
