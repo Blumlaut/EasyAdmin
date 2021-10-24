@@ -997,7 +997,17 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem("Name: "..banlist[banId].name, "")
 				mainMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					--nothing
+					DisplayOnscreenKeyboard(1, "", "", "", banlist[banId].name, "", "", 64 + 1)
+				
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+	
+					if result then
+						banlist[banId].name = result
+					end
 				end	
 			end
 
@@ -1006,8 +1016,18 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem("Banner: "..banlist[banId].banner, "")
 				mainMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					--nothing
-				end	
+					DisplayOnscreenKeyboard(1, "", "", "", banlist[banId].banner, "", "", 64 + 1)
+				
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+	
+					if result then
+						banlist[banId].banner = result
+					end
+				end
 			end
 
 
@@ -1015,9 +1035,21 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem("Expires: "..banlist[banId].expireString, "")
 				mainMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					--nothing
+					AddTextEntry("EA_ENTERTIME", "Enter Unix Timestamp")
+					DisplayOnscreenKeyboard(1, "EA_ENTERTIME", "", "", banlist[banId].expire, "", "", 64 + 1)
+				
+					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+						Citizen.Wait( 0 )
+					end
+					
+					local result = GetOnscreenKeyboardResult()
+	
+					if result then
+						banlist[banId].expire = tonumber(result)
+					end
 				end	
 			end
+
 			
 			for _, identifier in pairs(banlist[banId].identifiers) do
 				if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
@@ -1026,6 +1058,14 @@ function GenerateMenu() -- this is a big ass function
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 						--nothing
 					end	
+				end
+			end
+
+			if permissions["player.ban.edit"] then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("savebanchanges"),GetLocalisedText("savebanguide"))
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:editBan", banlist[banId])
 				end
 			end
 

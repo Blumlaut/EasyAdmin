@@ -221,7 +221,9 @@
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
     "notification":"Notification",
-    "deferral":"Checking Banlist, please wait.. (%s%%)"
+    "deferral":"Checking Banlist, please wait.. (%s%%)",
+    "savebanchanges":"Save Changes",
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server."
 
 
   
