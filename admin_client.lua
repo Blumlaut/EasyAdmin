@@ -112,12 +112,12 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords
 			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 			oldCoords=nil
 		end
-		spectatePlayer(PlayerPedId(),GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
+		spectatePlayer(localPlayerPed,GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
 		frozen = false
 		return 
 	else
 		if not oldCoords then
-			oldCoords = GetEntityCoords(PlayerPedId())
+			oldCoords = GetEntityCoords(localPlayerPed)
 		end
 	end
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
@@ -316,9 +316,10 @@ end, false)
 
 RegisterNetEvent("EasyAdmin:FreezePlayer", function(toggle)
 	frozen = toggle
-	FreezeEntityPosition(PlayerPedId(), frozen)
-	if IsPedInAnyVehicle(PlayerPedId(), false) then
-		FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), frozen)
+	local playerPed = PlayerPedId()
+	FreezeEntityPosition(playerPed, frozen)
+	if IsPedInAnyVehicle(playerPed, false) then
+		FreezeEntityPosition(GetVehiclePedIsIn(playerPed, false), frozen)
 	end 
 end)
 

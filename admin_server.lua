@@ -129,11 +129,12 @@ function createBackup()
 	local backupTime = os.time()
 	local backupDate = os.date("%H_%M_%d_%m_%Y")
 	local backupName = "banlist_"..backupDate..".json"
+	local resourceName = GetCurrentResourceName()
 	PrintDebugMessage("Creating Banlist Backup to "..backupName, 3)
 
-	SaveResourceFile(GetCurrentResourceName(), "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
+	SaveResourceFile(resourceName, "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
 
-	backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+	backupInfos = LoadResourceFile(resourceName, "backups/_backups.json")
 	if backupInfos then
 		backupData = json.decode(backupInfos)
 		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
@@ -143,12 +144,12 @@ function createBackup()
 			deleteBackup(backupData,1)
 		end
 		backupData.lastBackup = backupTime
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
+		SaveResourceFile(resourceName, "backups/_backups.json", json.encode(backupData, {indent = true}))
 
 	else
 		local backupData = {lastBackup = backupTime, backups = {}}
 		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
-		SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
+		SaveResourceFile(resourceName, "backups/_backups.json", json.encode(backupData, {indent = true}))
 	end
 
 	return id,timestamp
