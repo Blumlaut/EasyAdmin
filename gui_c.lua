@@ -986,12 +986,20 @@ function GenerateMenu() -- this is a big ass function
 			_menuPool:MouseControlsEnabled(false)
 
 
-			
+			if banlist[banId].banid then
+				local thisItem = NativeUI.CreateItem("Ban ID: "..banlist[banId].banid, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					-- nothing
+				end	
+			end
+
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[banId].reason)
 			mainMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				--nothing
 			end	
+
 
 			if banlist[banId].name then
 				local thisItem = NativeUI.CreateItem("Name: "..banlist[banId].name, "")
