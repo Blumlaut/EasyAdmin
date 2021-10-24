@@ -972,6 +972,10 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source, "player.teleport.single") then
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..tgtCoords.x..", "..tgtCoords.y..", "..tgtCoords.z, 3)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+			local playerName = getName(playerId, true, true)
+			if playerId == -1 then
+				playerName = GetLocalisedText("allplayers")
+			end
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("teleportedtoplayer"), getName(playerId, true, true), getName(source, false, true)), "teleport", 16777214)
 			TriggerClientEvent("EasyAdmin:TeleportRequest", playerId, false, tgtCoords)
 		end
