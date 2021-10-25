@@ -411,6 +411,7 @@ RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 			ea_maxBackupCount = GetConvarInt("ea_maxBackupCount", 10),
 			ea_useTokenIdentifiers = GetConvar("ea_useTokenIdentifiers", "true"),
 			ea_enableTelemetry = GetConvar("ea_enableTelemetry", "true"),
+			ea_enableNotificationReplace = GetConvar("ea_enableNotificationReplace", "none"),
 		}
 
 		if supportData.config.steam_webApiKey ~= "" then
