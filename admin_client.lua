@@ -397,7 +397,7 @@ end
 
 Citizen.CreateThread(function()
 	RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
-		TriggerEvent("EasyAdmin:receivedNotification", text)
+		TriggerEvent("EasyAdmin:receivedNotification")
 		if not WasEventCanceled() then
 			ShowNotification(text)
 		end
