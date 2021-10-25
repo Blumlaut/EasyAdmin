@@ -7,7 +7,7 @@ if GetResourceState("mythic-notify") == "started" or enableNotificationReplace t
 		CancelEvent() 
 	end)
 
-	RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
+	AddEventHandler("EasyAdmin:showNotification", function(text, important)
 		exports['mythic_notify']:SendAlert('inform', text)
 	end)
 end

@@ -7,7 +7,7 @@ if GetResourceState("t-notify") == "started" or enableNotificationReplace then
 		CancelEvent() 
 	end)
 
-	RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
+	AddEventHandler("EasyAdmin:showNotification", function(text, important)
 		exports['t-notify']:Alert({style = "error", message = text})
 	end)
 end

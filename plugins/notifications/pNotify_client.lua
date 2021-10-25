@@ -14,7 +14,7 @@ if GetResourceState("pNotify") == "started" or enableNotificationReplace then
 		CancelEvent() 
 	end)
 
-	RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
+	AddEventHandler("EasyAdmin:showNotification", function(text, important)
 		exports['pNotify']:SendNotification({layout = "centerLeft", type = "alert", text = text})
 	end)
 end
