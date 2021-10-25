@@ -5,7 +5,7 @@ local PnOptions = {type = "error"} -- define our pNotify options
 
 -- this bit of code tells EasyAdmin to not draw the V Notification.
 AddEventHandler("EasyAdmin:receivedNotification", function()
-	if GetResourceState("mytic-notify") == "started" or enableNotificationReplace then
+	if GetResourceState("mythic-notify") == "started" or enableNotificationReplace then
 		CancelEvent() 
 	end
 end)
