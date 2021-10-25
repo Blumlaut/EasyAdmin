@@ -1926,9 +1926,10 @@ Citizen.CreateThread(function()
 	end)
 
 	function GetVersion()
-		local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-		local verContent = json.decode(verFile)
-		return verContent.version, verContent.master
+		local resourceName = GetCurrentResourceName()
+		local version = tonumber(GetResourceMetadata(resourceName, 'version', 0))
+		local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
+		return version, is_master
 	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
