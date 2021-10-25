@@ -31,10 +31,13 @@ jobs:
             echo "version is ${{ github.event.inputs.version }}"
             git config user.name "GitHub Actions Bot"
             git config user.email "<>"
+            sed -i "/is_master/d" fxmanifest.lua
+            sed -i "/^version/c\version '${{ github.event.inputs.version }}'" fxmanifest.lua
             echo '{"version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
             git commit -m "${{ github.event.inputs.version }}"
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
+            sed -i "/^version/ais_master 'yes'" fxmanifest.lua
             echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
             git add .
             git commit -m "Update Version"
