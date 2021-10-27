@@ -1086,7 +1086,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(src,"player.mute") then
 			if not MutedPlayers[playerId] then 
 				MutedPlayers[playerId] = true
-				if MumbleSetPlayerMuted and MumbleIsConnected() then -- workaround for outdated servers
+				if MumbleSetPlayerMuted then -- workaround for outdated servers
 					MumbleSetPlayerMuted(playerId, true)
 				end
 				TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playermuted"))
@@ -1094,7 +1094,7 @@ Citizen.CreateThread(function()
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
 			else 
 				MutedPlayers[playerId] = nil
-				if MumbleSetPlayerMuted and MumbleIsConnected() then -- workaround for outdated servers
+				if MumbleSetPlayerMuted then -- workaround for outdated servers
 					MumbleSetPlayerMuted(playerId, false)
 				end
 				TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playerunmuted"))
