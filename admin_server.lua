@@ -1565,16 +1565,6 @@ Citizen.CreateThread(function()
 	end
 
 
-	function updateAdmins(addItem)
-		admins = {}
-		local content = LoadResourceFile(GetCurrentResourceName(), "admins.txt")
-		if not content then
-			return -- instead of re-creating the file, just quit, we dont need to continue anyway.
-		end
-		PrintDebugMessage("Found Legacy admins.txt.", 2)
-		PrintDebugMessage("It seems you still use an admins.txt, please add them according to the Wiki and delete this file!\n")
-	end
-
 	RegisterCommand("convertbanlist", function(source, args, rawCommand)
 		if GetConvar("ea_custombanlist", "false") == "true" then
 			local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
@@ -2026,123 +2016,122 @@ Citizen.CreateThread(function()
 			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({embeds = embed}), { ['Content-Type'] = 'application/json' })
 		end
 	end
-	
-	
-	curVersion, IsMaster = GetVersion()
-	local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
-	function checkVersion(err,response, headers)
-		if err == 200 then
-			local data = json.decode(response)
-			local remoteVersion = tonumber(data.tag_name)
-			PrintDebugMessage("Version check returned "..err..", Local Version: "..curVersion..", Remote Version: "..remoteVersion, 4)
-			if IsMaster then
-				PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..data.html_url, 1)
-			end
-			if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
-				print("\n--------------------------------------------------------------------------")
-				print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..data.html_url)
-				print("\n--------------------------------------------------------------------------")
-				updateAvailable = remoteVersion
-			elseif tonumber(curVersion) > tonumber(remoteVersion) then
-				print("Your version of "..resourceName.." seems to be higher than the current stable version.")
-			end
-		else
-			PrintDebugMessage("Version Check failed, please make sure EasyAdmin is up to date!", 1)
-		end
+end)
 
-		if GetResourceState("screenshot-basic") == "missing" then 
-			PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
-		else
-			StartResource("screenshot-basic")
-			screenshots = true
-		end
-		local onesync = GetConvar("onesync", "off")
-		if (onesync ~= "off" and onesync ~= "legacy") then 
-			PrintDebugMessage("Onesync is Infinity", 3)
-			infinity = true
-		end
-
-		if GetConvar("ea_defaultKey", "none") == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
-			PrintDebugMessage("ea_MenuButton has been replaced by ea_defaultKey, please rename it in your Server Config!\nSee https://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
-		elseif tonumber(GetConvar("ea_MenuButton", "none")) or tonumber(GetConvar("ea_defaultKey", "none")) then
-			PrintDebugMessage("ea_MenuButton/ea_defaultKey has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
-			PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
-		elseif GetConvar("ea_defaultKey", "none") == "none" then
-			PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
-		end
-		
-		if not string.find(GetCurrentResourceName(), "-") then -- all my homies hate hyphens
-			readAcePermissions()
-		else
-			disablePermissionEditor = true
-			local resourceName = GetCurrentResourceName()
-			PrintDebugMessage("^1Permission Editor Disabled!^7 Please remove any hyphens ("..string.gsub(resourceName, "-", ">-<").." from EasyAdmin's resource name.) #271", 1)
-		end
-		SetTimeout(3600000, checkVersionHTTPRequest)
-	end
-	
-	function checkVersionHTTPRequest()
+Citizen.CreateThread(function()
+	while true do
 		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", checkVersion, "GET")
-	end
-	
-	function loopUpdateBlacklist()
-		updateBlacklist()
-		SetTimeout(300000, loopUpdateBlacklist)
-	end
-
-
-	function sendTelemetry()
-		local data = {}
-		data.version, data.unstable = GetVersion()
-		data.servername = GetConvar("sv_hostname", "Default FXServer")
-		data.usercount = #GetPlayers()
-		data.bancount = #blacklist
-		data.time = os.time()
-		if os.getenv('OS') then
-			data.os = os.getenv('OS')
-		else
-			local os_release = io.open("/etc/os-release")
-			if os_release then
-				data.os = string.split(os_release:read("*a"), '"')[2]
-			else
-				local issue = io.open("/etc/issue")
-				if issue then
-					data.os = issue:read("*a")
-				else 
-					data.os = "unknown"
-				end
-			end
-		end
-		
-		data.zap = GetConvar("is_zap", "false")
-		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
-		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
-	end
-
-
-	function loopTelemetryUpdate()
-		if GetConvar("ea_enableTelemetry", "true") == "false" then
-			return -- stop telemetry if it gets disabled at runtime
-		end
-		sendTelemetry()
-		SetTimeout(math.random(6600000, 12000000), loopTelemetryUpdate)
-	end
-
-	
-	---------------------------------- END USEFUL
-	loopUpdateBlacklist()
-	updateAdmins()
-	checkVersionHTTPRequest()
-	if GetConvar("ea_enableTelemetry", "true") == "true" then
-		loopTelemetryUpdate()
-	end
-	if GetConvar("ea_enableSplash", "true") == "true" then
-		local version,master = GetVersion()
-		if master then version = version.." (UNSTABLE PRE-RELEASE!)" end
-		print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..version.."^7")
-		PrintDebugMessage("Intialised.", 4)
+		Wait(3600000)
 	end
 end)
+	
+curVersion, IsMaster = GetVersion()
+local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
+function checkVersion(err,response, headers)
+	if err == 200 then
+		local data = json.decode(response)
+		local remoteVersion = tonumber(data.tag_name)
+		PrintDebugMessage("Version check returned "..err..", Local Version: "..curVersion..", Remote Version: "..remoteVersion, 4)
+		if IsMaster then
+			PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..data.html_url, 1)
+		end
+		if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+			print("\n--------------------------------------------------------------------------")
+			print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..data.html_url)
+			print("\n--------------------------------------------------------------------------")
+			updateAvailable = remoteVersion
+		elseif tonumber(curVersion) > tonumber(remoteVersion) then
+			print("Your version of "..resourceName.." seems to be higher than the current stable version.")
+		end
+	else
+		PrintDebugMessage("Version Check failed, please make sure EasyAdmin is up to date!", 1)
+	end
+
+	if GetResourceState("screenshot-basic") == "missing" then 
+		PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
+	else
+		StartResource("screenshot-basic")
+		screenshots = true
+	end
+	local onesync = GetConvar("onesync", "off")
+	if (onesync ~= "off" and onesync ~= "legacy") then 
+		PrintDebugMessage("Onesync is Infinity", 3)
+		infinity = true
+	end
+
+	if GetConvar("ea_defaultKey", "none") == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
+		PrintDebugMessage("ea_MenuButton has been replaced by ea_defaultKey, please rename it in your Server Config!\nSee https://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
+	elseif tonumber(GetConvar("ea_MenuButton", "none")) or tonumber(GetConvar("ea_defaultKey", "none")) then
+		PrintDebugMessage("ea_MenuButton/ea_defaultKey has not been updated, please follow the updating instructions here:\nhttps://github.com/Blumlaut/EasyAdmin/wiki/Update-Instructions", 1)
+		PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
+	elseif GetConvar("ea_defaultKey", "none") == "none" then
+		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://github.com/Blumlaut/EasyAdmin/wiki", 1)
+	end
+	
+	if not string.find(GetCurrentResourceName(), "-") then -- all my homies hate hyphens
+		readAcePermissions()
+	else
+		disablePermissionEditor = true
+		local resourceName = GetCurrentResourceName()
+		PrintDebugMessage("^1Permission Editor Disabled!^7 Please remove any hyphens ("..string.gsub(resourceName, "-", ">-<").." from EasyAdmin's resource name.) #271", 1)
+	end
+end
+
+Citizen.CreateThread(function()
+	while true do
+		updateBlacklist()
+		Wait(300000)
+	end
+end)
+
+function sendTelemetry()
+	local data = {}
+	data.version, data.unstable = GetVersion()
+	data.servername = GetConvar("sv_hostname", "Default FXServer")
+	data.usercount = #GetPlayers()
+	data.bancount = #blacklist
+	data.time = os.time()
+	if os.getenv('OS') then
+		data.os = os.getenv('OS')
+	else
+		local os_release = io.open("/etc/os-release")
+		if os_release then
+			data.os = string.split(os_release:read("*a"), '"')[2]
+		else
+			local issue = io.open("/etc/issue")
+			if issue then
+				data.os = issue:read("*a")
+			else 
+				data.os = "unknown"
+			end
+		end
+	end
+	
+	data.zap = GetConvar("is_zap", "false")
+	PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
+	PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
+end
+
+if GetConvar("ea_enableTelemetry", "true") == "true" then
+	Citizen.CreateThread(function()
+		while true do
+			if GetConvar("ea_enableTelemetry", "true") == "false" then
+				return -- stop telemetry if it gets disabled at runtime
+			end
+			sendTelemetry()
+			Wait(math.random(6600000, 12000000))
+		end
+	end)
+end
+	
+---------------------------------- END USEFUL
+
+if GetConvar("ea_enableSplash", "true") == "true" then
+	local version,master = GetVersion()
+	if master then version = version.." (UNSTABLE PRE-RELEASE!)" end
+	print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..version.."^7")
+	PrintDebugMessage("Intialised.", 4)
+end
 
 
 -- DO NOT TOUCH THESE
