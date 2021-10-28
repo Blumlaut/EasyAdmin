@@ -13,6 +13,11 @@ on:
         description: 'Version Number'
         # Input has to be provided for the workflow to run
         required: true
+      changelog:
+        description: 'Changelog'
+        default: 'Your Version is unsupported and may no longer function properly in the near future, please update as soon as possible.'
+        required: false
+        type: string
       
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -33,12 +38,12 @@ jobs:
             git config user.email "<>"
             sed -i "/is_master/d" fxmanifest.lua
             sed -i "/^version/c\version '${{ github.event.inputs.version }}'" fxmanifest.lua
-            echo '{"version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
+            echo '{"version": "${{ github.event.inputs.version }}", "changelog": "${{ github.event.inputs.changelog }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"}}' > version.json
             git add .
             git commit -m "${{ github.event.inputs.version }}"
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
             sed -i "/^version/ais_master 'yes'" fxmanifest.lua
-            echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "Version ${{ github.event.inputs.version }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "Version ${{ github.event.inputs.version }}"}}' > version.json
+            echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "${{ github.event.inputs.changelog }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"}}' > version.json
             git add .
             git commit -m "Update Version"
             git push --follow-tags
