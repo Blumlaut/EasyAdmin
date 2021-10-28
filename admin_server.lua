@@ -290,6 +290,7 @@ function IsPlayerAdmin(pid)
 end
 
 
+
 function DoesPlayerHavePermission(player, object)
 	local haspermission = false
 	if (player == 0 or player == "") then
@@ -322,168 +323,180 @@ function DoesPlayerHavePermission(player, object)
 	return haspermission
 end
 
-RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
-	if args[2] and DoesPlayerHavePermission(source, "server.shortcut.add") then
-		local shortcut = args[1]
-		local text = table.concat(args, " ", 2)
-		
-		PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
-		MessageShortcuts[shortcut] = text
-	end
-end)
 
-RegisterCommand("ea_addReminder", function(source, args, rawCommand)
-	if args[1] and DoesPlayerHavePermission(source, "server.reminder.add") then
-		local text = string.gsub(rawCommand, "ea_addReminder ", "")
-		local text = string.gsub(text, '"', '')
-		
-		PrintDebugMessage("added '"..text.."' as a Chat Reminder", 3)
-		table.insert(ChatReminders, text)
-	end
-end, false)
+function GetVersion()
+	local resourceName = GetCurrentResourceName()
+	local version = tonumber(GetResourceMetadata(resourceName, 'version', 0))
+	local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
+	return version, is_master
+end
 
-RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
-	if DoesPlayerHavePermission(source, "server") then
-		SendWebhookMessage(moderationNotification, "**Testing Webhook for moderationNotification**", false, 65280)
-		SendWebhookMessage(detailNotification, "**Testing Webhook for detailNotification**", false, 65280)
-		SendWebhookMessage(reportNotification, "**Testing Webhook for reportNotification**", false, 65280)
-		PrintDebugMessage("Webhook Message Sent")
-	end
-end, false)
+Citizen.CreateThread(function()
 
-RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
-	if DoesPlayerHavePermission(source, "server") then
-		ExcludedWebhookFeatures = Set(args)
-		PrintDebugMessage("Webhook excludes set", 3)
-	end
-end, false)
-
-RegisterCommand("ea_createBackup", function(source, args, rawCommand)
-	if DoesPlayerHavePermission(source, "server") then
-		createBackup()
-	end
-end, false)
-
-RegisterCommand("ea_loadBackup", function(source,args,rawCommand)
-	if DoesPlayerHavePermission(source, "server") and args[1] then
-		loadBackupName(args[1])
-	end
-end,false)
-
-
-RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
-	if DoesPlayerHavePermission(source, "server") then
-		PrintDebugMessage("Creating Support File....^7\n", 1)
-		
-		local supportData = {}
-		
-		PrintDebugMessage("Collecting EasyAdmin Config....^7\n", 1)
-		
-		local version,ismaster = GetVersion()
-		supportData.config = {
-			gamename = GetConvar("gamename", "not-rdr3"),
-			version = version,
-			ismaster = tostring(ismaster),
-			ea_moderationNotification = GetConvar("ea_moderationNotification", "false"),
-			ea_screenshoturl = GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'),
-			onesync = GetConvar("onesync", "off"),
-			steam_webApiKey = GetConvar("steam_webApiKey", ""),
-			ea_LanguageName = GetConvar("ea_LanguageName", "en"),
-			ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
-			ea_logLevel = GetConvar("ea_logLevel", 1),
-			ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
-			ea_defaultKey = GetConvar("ea_defaultKey", "none"),
-			ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
-			ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
-			ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),
-			ea_defaultMinReports = GetConvarInt("ea_defaultMinReports", 3),
-			ea_MinReportPlayers = GetConvarInt("ea_MinReportPlayers", 12),
-			ea_MinReportModifierEnabled = GetConvar("ea_MinReportModifierEnabled", "true"),
-			ea_ReportBanTime = GetConvarInt("ea_ReportBanTime", 86400),
-			ea_custombanlist = GetConvar("ea_custombanlist", "false"),
-			ea_maxWarnings = GetConvarInt("ea_maxWarnings", 3),
-			ea_warnAction = GetConvar("ea_warnAction", "kick"),
-			ea_warningBanTime = GetConvarInt("ea_warningBanTime", 604800),
-			ea_enableSplash = GetConvar("ea_enableSplash", "true"),
-			ea_playerCacheExpiryTime = GetConvarInt("ea_playerCacheExpiryTime", 900),
-			ea_chatReminderTime = GetConvarInt("ea_chatReminderTime", 0),
-			ea_backupFrequency = GetConvarInt("ea_backupFrequency", 72),
-			ea_maxBackupCount = GetConvarInt("ea_maxBackupCount", 10),
-			ea_useTokenIdentifiers = GetConvar("ea_useTokenIdentifiers", "true"),
-			ea_enableTelemetry = GetConvar("ea_enableTelemetry", "true"),
-		}
-		
-		if supportData.config.steam_webApiKey ~= "" then
-			supportData.config.steam_webApiKey = "CENSORED"
+	RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
+		if args[2] and DoesPlayerHavePermission(source, "server.shortcut.add") then
+			local shortcut = args[1]
+			local text = table.concat(args, " ", 2)
+			
+			PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
+			MessageShortcuts[shortcut] = text
 		end
-		
-		for i,v in pairs(supportData.config) do
-			PrintDebugMessage(i.." = "..v, 4)
+	end)
+
+	RegisterCommand("ea_addReminder", function(source, args, rawCommand)
+		if args[1] and DoesPlayerHavePermission(source, "server.reminder.add") then
+			local text = string.gsub(rawCommand, "ea_addReminder ", "")
+			local text = string.gsub(text, '"', '')
+			
+			PrintDebugMessage("added '"..text.."' as a Chat Reminder", 3)
+			table.insert(ChatReminders, text)
 		end
-		
-		
-		PrintDebugMessage("Collecting Server Config....^7\n", 1)
-		
-		local path = GetResourcePath(GetCurrentResourceName())
-		local occurance = string.find(path, "/resources")
-		local path = string.reverse(string.sub(string.reverse(path), -occurance))
-		
-		local blacklistedPhrases = {"mysql", "mariadb", "licensekey", "SentryIO", "mongodb", "tebex", "endpoint_add", "ac_webhook"}
-		local servercfg = io.open(path.."server.cfg")
-		if servercfg then
-			supportData.serverconfig = "# Some lines may have been stripped for privacy, this is intentional. #\n # Generated by EasyAdmin "..GetVersion().." on "..formatDateString(os.time()).." #\n"
-			line = servercfg:read("*line")
-			while line do
-				local addLine = true
-				for i, blacklisted in pairs(blacklistedPhrases) do
-					if string.find(string.lower(line), string.lower(blacklisted)) then
-						addLine = false
-					end
-					if string.find(line, "ea_moderationNotification") then
-						line = "set ea_moderationNotification 'CENSORED BY EASYADMIN'"
-					elseif string.find(line, "steam_webApiKey") then 
-						line = "steam_webApiKey 'CENSORED BY EASYADMIN'"
-					elseif string.find(line, "ea_screenshoturl") then
-						line = "ea_screenshoturl 'CENSORED BY EASYADMIN'"
-					end
-				end
-				if addLine then
-					supportData.serverconfig = supportData.serverconfig.."\n"..line
-				else
-					PrintDebugMessage("Skipped line "..line.." for privacy.", 4)
-				end
-				line = servercfg:read("*line")
+	end, false)
+
+	RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
+		if DoesPlayerHavePermission(source, "server") then
+			SendWebhookMessage(moderationNotification, "**Testing Webhook for moderationNotification**", false, 65280)
+			SendWebhookMessage(detailNotification, "**Testing Webhook for detailNotification**", false, 65280)
+			SendWebhookMessage(reportNotification, "**Testing Webhook for reportNotification**", false, 65280)
+			PrintDebugMessage("Webhook Message Sent")
+		end
+	end, false)
+
+	RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
+		if DoesPlayerHavePermission(source, "server") then
+			ExcludedWebhookFeatures = Set(args)
+			PrintDebugMessage("Webhook excludes set", 3)
+		end
+	end, false)
+
+	RegisterCommand("ea_createBackup", function(source, args, rawCommand)
+		if DoesPlayerHavePermission(source, "server") then
+			createBackup()
+		end
+	end, false)
+
+	RegisterCommand("ea_loadBackup", function(source,args,rawCommand)
+		if DoesPlayerHavePermission(source, "server") and args[1] then
+			loadBackupName(args[1])
+		end
+	end,false)
+
+
+	RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
+		if DoesPlayerHavePermission(source, "server") then
+			PrintDebugMessage("Creating Support File....^7\n", 1)
+			
+			local supportData = {}
+			
+			PrintDebugMessage("Collecting EasyAdmin Config....^7\n", 1)
+			
+			local version,ismaster = GetVersion()
+			supportData.config = {
+				gamename = GetConvar("gamename", "not-rdr3"),
+				version = version,
+				ismaster = tostring(ismaster),
+				ea_moderationNotification = GetConvar("ea_moderationNotification", "false"),
+				ea_screenshoturl = GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'),
+				onesync = GetConvar("onesync", "off"),
+				steam_webApiKey = GetConvar("steam_webApiKey", ""),
+				ea_LanguageName = GetConvar("ea_LanguageName", "en"),
+				ea_enableDebugging = GetConvar("ea_enableDebugging", "false"),
+				ea_logLevel = GetConvar("ea_logLevel", 1),
+				ea_minIdentifierMatches = GetConvarInt("ea_minIdentifierMatches", 2),
+				ea_defaultKey = GetConvar("ea_defaultKey", "none"),
+				ea_alwaysShowButtons = GetConvar("ea_alwaysShowButtons", "false"),
+				ea_enableCallAdminCommand = GetConvar("ea_enableCallAdminCommand", "false"),
+				ea_enableReportCommand = GetConvar("ea_enableReportCommand", "false"),
+				ea_defaultMinReports = GetConvarInt("ea_defaultMinReports", 3),
+				ea_MinReportPlayers = GetConvarInt("ea_MinReportPlayers", 12),
+				ea_MinReportModifierEnabled = GetConvar("ea_MinReportModifierEnabled", "true"),
+				ea_ReportBanTime = GetConvarInt("ea_ReportBanTime", 86400),
+				ea_custombanlist = GetConvar("ea_custombanlist", "false"),
+				ea_maxWarnings = GetConvarInt("ea_maxWarnings", 3),
+				ea_warnAction = GetConvar("ea_warnAction", "kick"),
+				ea_warningBanTime = GetConvarInt("ea_warningBanTime", 604800),
+				ea_enableSplash = GetConvar("ea_enableSplash", "true"),
+				ea_playerCacheExpiryTime = GetConvarInt("ea_playerCacheExpiryTime", 900),
+				ea_chatReminderTime = GetConvarInt("ea_chatReminderTime", 0),
+				ea_backupFrequency = GetConvarInt("ea_backupFrequency", 72),
+				ea_maxBackupCount = GetConvarInt("ea_maxBackupCount", 10),
+				ea_useTokenIdentifiers = GetConvar("ea_useTokenIdentifiers", "true"),
+				ea_enableTelemetry = GetConvar("ea_enableTelemetry", "true"),
+			}
+			
+			if supportData.config.steam_webApiKey ~= "" then
+				supportData.config.steam_webApiKey = "CENSORED"
 			end
-			servercfg:close()
+			
+			for i,v in pairs(supportData.config) do
+				PrintDebugMessage(i.." = "..v, 4)
+			end
+			
+			
+			PrintDebugMessage("Collecting Server Config....^7\n", 1)
+			
+			local path = GetResourcePath(GetCurrentResourceName())
+			local occurance = string.find(path, "/resources")
+			local path = string.reverse(string.sub(string.reverse(path), -occurance))
+			
+			local blacklistedPhrases = {"mysql", "mariadb", "licensekey", "SentryIO", "mongodb", "tebex", "endpoint_add", "ac_webhook"}
+			local servercfg = io.open(path.."server.cfg")
+			if servercfg then
+				supportData.serverconfig = "# Some lines may have been stripped for privacy, this is intentional. #\n # Generated by EasyAdmin "..GetVersion().." on "..formatDateString(os.time()).." #\n"
+				line = servercfg:read("*line")
+				while line do
+					local addLine = true
+					for i, blacklisted in pairs(blacklistedPhrases) do
+						if string.find(string.lower(line), string.lower(blacklisted)) then
+							addLine = false
+						end
+						if string.find(line, "ea_moderationNotification") then
+							line = "set ea_moderationNotification 'CENSORED BY EASYADMIN'"
+						elseif string.find(line, "steam_webApiKey") then 
+							line = "steam_webApiKey 'CENSORED BY EASYADMIN'"
+						elseif string.find(line, "ea_screenshoturl") then
+							line = "ea_screenshoturl 'CENSORED BY EASYADMIN'"
+						end
+					end
+					if addLine then
+						supportData.serverconfig = supportData.serverconfig.."\n"..line
+					else
+						PrintDebugMessage("Skipped line "..line.." for privacy.", 4)
+					end
+					line = servercfg:read("*line")
+				end
+				servercfg:close()
+			end
+			
+			local permissions = io.open(path.."easyadmin_permissions.cfg")
+			if permissions then
+				supportData.serverconfig = supportData.serverconfig.."\n#### The following are the contents of the easyadmin_permissions.cfg ####\n"..permissions:read("*a")
+				permissions:close()
+			end
+			
+			PrintDebugMessage("Collecting Banlist....^7\n", 1)
+			
+			supportData.banlist = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+			
+			PrintDebugMessage("Collecting Players....^7\n", 1)
+			
+			local players = {}
+			for i, player in pairs(GetPlayers()) do
+				players[player] = GetPlayerIdentifiers(player)
+			end
+			
+			supportData.players = players
+			
+			PrintDebugMessage("Saving to support.json....^7\n", 1)
+			
+			SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
+			
+			
+			PrintDebugMessage("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n", 1)
 		end
-		
-		local permissions = io.open(path.."easyadmin_permissions.cfg")
-		if permissions then
-			supportData.serverconfig = supportData.serverconfig.."\n#### The following are the contents of the easyadmin_permissions.cfg ####\n"..permissions:read("*a")
-			permissions:close()
-		end
-		
-		PrintDebugMessage("Collecting Banlist....^7\n", 1)
-		
-		supportData.banlist = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-		
-		PrintDebugMessage("Collecting Players....^7\n", 1)
-		
-		local players = {}
-		for i, player in pairs(GetPlayers()) do
-			players[player] = GetPlayerIdentifiers(player)
-		end
-		
-		supportData.players = players
-		
-		PrintDebugMessage("Saving to support.json....^7\n", 1)
-		
-		SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
-		
-		
-		PrintDebugMessage("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n", 1)
-	end
-end, false)
+	end, false)
+
+end)
 
 Citizen.CreateThread(function()
 	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
@@ -1918,13 +1931,6 @@ Citizen.CreateThread(function()
 	AddEventHandler("EasyAdmin:GetVersion", function(cb)
 		cb(GetVersion())
 	end)
-	
-	function GetVersion()
-		local resourceName = GetCurrentResourceName()
-		local version = tonumber(GetResourceMetadata(resourceName, 'version', 0))
-		local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
-		return version, is_master
-	end
 	
 	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
 		local player = source
