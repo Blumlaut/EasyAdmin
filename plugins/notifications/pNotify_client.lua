@@ -8,13 +8,15 @@
 
 enableNotificationReplace = false -- change to true to enable replacement of the default V Notification for EasyAdmin
 
-if GetResourceState("pNotify") == "started" or enableNotificationReplace then
-	-- this bit of code tells EasyAdmin to not draw the V Notification.
-	AddEventHandler("EasyAdmin:receivedNotification", function()
+-- this bit of code tells EasyAdmin to not draw the V Notification.
+AddEventHandler("EasyAdmin:receivedNotification", function()
+	if GetResourceState("pNotify") == "started" or enableNotificationReplace then
 		CancelEvent() 
-	end)
+	end
+end)
 
-	AddEventHandler("EasyAdmin:showNotification", function(text, important)
+AddEventHandler("EasyAdmin:showNotification", function(text, important)
+	if GetResourceState("pNotify") == "started" or enableNotificationReplace then
 		exports['pNotify']:SendNotification({layout = "centerLeft", type = "alert", text = text})
-	end)
-end
+	end
+end)
