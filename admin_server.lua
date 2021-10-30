@@ -1941,7 +1941,7 @@ Citizen.CreateThread(function()
 		deferrals.defer()
 		Wait(0)
 		deferrals.update(string.format(GetLocalisedText("deferral"), 0))
-		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 4)
+		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
 		if not blacklist then
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
@@ -2135,7 +2135,7 @@ if GetConvar("ea_enableSplash", "true") == "true" then
 	local version,master = GetVersion()
 	if master then version = version.." (UNSTABLE PRE-RELEASE!)" end
 	print("\n _______ _______ _______ __   __ _______ ______  _______ _____ __   _\n |______ |_____| |______   \\_/   |_____| |     \\ |  |  |   |   | \\  |\n |______ |     | ______|    |    |     | |_____/ |  |  | __|__ |  \\_|\n                           Version ^3"..version.."^7")
-	PrintDebugMessage("Intialised.", 4)
+	PrintDebugMessage("Initialised.", 4)
 end
 
 
@@ -2151,7 +2151,7 @@ ChatReminders = {} -- DO NOT TOUCH THIS
 MessageShortcuts = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {} -- DO NOT TOUCH THIS
 cooldowns = {} -- DO NOT TOUCH THIS
-reports = {}
+reports = {} -- DO NOT TOUCH THIS
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
