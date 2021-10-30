@@ -1,17 +1,1 @@
-{
-    "version": "6.202",
-    "master": true,
-    "changelog": "Fixes lag caused on Server start/menu open in some cases, fix banlist backups failing, various tiny improvements",
-
-
-    "_comment": "The Version Check above is outdated, below is the new system, supporting both gta and rdr",
-
-    "fivem": {
-        "version": "6.202",
-        "changelog": "Fixes lag caused on Server start/menu open in some cases, fix banlist backups failing, various tiny improvements"
-    },
-    "redm": {
-        "version": "6.202",
-        "changelog": "Fixes lag caused on Server start/menu open in some cases, fix banlist backups failing, various tiny improvements"
-    }
-}
+{"version": "6.3", "changelog": "Your Version is unsupported and may no longer function properly in the near future, please update as soon as possible.", "fivem": {"version": "6.3","changelog": "Your Version is unsupported and may no longer function properly in the near future, please update as soon as possible."},"redm": {"version": "6.3","changelog": "Your Version is unsupported and may no longer function properly in the near future, please update as soon as possible."}}
