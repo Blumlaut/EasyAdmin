@@ -326,7 +326,7 @@ end
 
 function GetVersion()
 	local resourceName = GetCurrentResourceName()
-	local version = tonumber(GetResourceMetadata(resourceName, 'version', 0))
+	local version = GetResourceMetadata(resourceName, 'version', 0)
 	local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
 	return version, is_master
 end
