@@ -161,7 +161,7 @@
     "convarvalue": "Convar Inhalt",
 
     "cleanarea": "Gebiete aufräumen",
-    "cleanareaguide": "Entfernt alle Objekte in der nähe.",
+    "cleanareaguide": "Entfernt alle Gegestände in der nähe.",
     "cars": "Fahrzeuge",
     "peds": "NPC's",
     "props": "Objekte",
@@ -219,8 +219,8 @@
     "reportalreadyclaimed": "Dieser Report wurde bereits übernommen",
     "notification": "Benachrichtigung",
     "deferral": "Prüfe Bannliste, bitte warten... (%s%%)",
-    "savebanchanges": "Speichere Änderungen",
-    "savebanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Bann überarbeitet"
+    "savebanchanges": "Änderungen speichern",
+    "savebanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Bann überschrieben"
 
 
 }]
