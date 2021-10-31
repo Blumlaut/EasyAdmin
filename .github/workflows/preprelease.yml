@@ -43,7 +43,6 @@ jobs:
             git commit -m "${{ github.event.inputs.version }}"
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
             sed -i "/^version/ais_master 'yes'" fxmanifest.lua
-            echo '{"master":true, "version": "${{ github.event.inputs.version }}", "changelog": "${{ github.event.inputs.changelog }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"}}' > version.json
             git add .
             git commit -m "Update Version"
             git push --follow-tags
