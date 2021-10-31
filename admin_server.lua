@@ -2040,7 +2040,7 @@ local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 function checkVersion(err,response, headers)
 	if err == 200 then
 		local data = json.decode(response)
-		local remoteVersion = tonumber(data.tag_name)
+		local remoteVersion = data.tag_name
 		PrintDebugMessage("Version check returned "..err..", Local Version: "..curVersion..", Remote Version: "..remoteVersion, 4)
 		if IsMaster then
 			PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..data.html_url, 1)
