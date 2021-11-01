@@ -331,61 +331,63 @@ function GetVersion()
 	return version, is_master
 end
 
-Citizen.CreateThread(function()
-
-	RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
-		if args[2] and DoesPlayerHavePermission(source, "server.shortcut.add") then
-			local shortcut = args[1]
-			local text = table.concat(args, " ", 2)
-			
-			PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
-			MessageShortcuts[shortcut] = text
-		end
-	end)
-
-	RegisterCommand("ea_addReminder", function(source, args, rawCommand)
-		if args[1] and DoesPlayerHavePermission(source, "server.reminder.add") then
-			local text = string.gsub(rawCommand, "ea_addReminder ", "")
-			local text = string.gsub(text, '"', '')
-			
-			PrintDebugMessage("added '"..text.."' as a Chat Reminder", 3)
-			table.insert(ChatReminders, text)
-		end
-	end, false)
-
-	RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
-		if DoesPlayerHavePermission(source, "server") then
-			SendWebhookMessage(moderationNotification, "**Testing Webhook for moderationNotification**", false, 65280)
-			SendWebhookMessage(detailNotification, "**Testing Webhook for detailNotification**", false, 65280)
-			SendWebhookMessage(reportNotification, "**Testing Webhook for reportNotification**", false, 65280)
-			PrintDebugMessage("Webhook Message Sent")
-		end
-	end, false)
-
-	RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
-		if DoesPlayerHavePermission(source, "server") then
-			ExcludedWebhookFeatures = Set(args)
-			PrintDebugMessage("Webhook excludes set", 3)
-		end
-	end, false)
-
-	RegisterCommand("ea_createBackup", function(source, args, rawCommand)
-		if DoesPlayerHavePermission(source, "server") then
-			createBackup()
-		end
-	end, false)
-
-	RegisterCommand("ea_loadBackup", function(source,args,rawCommand)
-		if DoesPlayerHavePermission(source, "server") and args[1] then
-			loadBackupName(args[1])
-		end
-	end,false)
 	
-	RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
-		if source == 0 and args[1] then -- only let Console run this command
-			PrintDebugMessage(json.encode(GetPlayerIdentifiers(args[1])), 1) -- puke all identifiers into console
-		end
-	end,false)
+	
+RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
+	if args[2] and DoesPlayerHavePermission(source, "server.shortcut.add") then
+		local shortcut = args[1]
+		local text = table.concat(args, " ", 2)
+
+		PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
+		MessageShortcuts[shortcut] = text
+	end
+end)
+
+RegisterCommand("ea_addReminder", function(source, args, rawCommand)
+	if args[1] and DoesPlayerHavePermission(source, "server.reminder.add") then
+		local text = string.gsub(rawCommand, "ea_addReminder ", "")
+		local text = string.gsub(text, '"', '')
+
+		PrintDebugMessage("added '"..text.."' as a Chat Reminder", 3)
+		table.insert(ChatReminders, text)
+	end
+end, false)
+
+RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
+	if DoesPlayerHavePermission(source, "server") then
+		SendWebhookMessage(moderationNotification, "**Testing Webhook for moderationNotification**", false, 65280)
+		SendWebhookMessage(detailNotification, "**Testing Webhook for detailNotification**", false, 65280)
+		SendWebhookMessage(reportNotification, "**Testing Webhook for reportNotification**", false, 65280)
+		PrintDebugMessage("Webhook Message Sent")
+	end
+end, false)
+
+RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
+	if DoesPlayerHavePermission(source, "server") then
+		ExcludedWebhookFeatures = Set(args)
+		PrintDebugMessage("Webhook excludes set", 3)
+	end
+end, false)
+
+RegisterCommand("ea_createBackup", function(source, args, rawCommand)
+	if DoesPlayerHavePermission(source, "server") then
+		createBackup()
+	end
+end, false)
+
+RegisterCommand("ea_loadBackup", function(source,args,rawCommand)
+	if DoesPlayerHavePermission(source, "server") and args[1] then
+		loadBackupName(args[1])
+	end
+end,false)
+
+RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
+	if source == 0 and args[1] then -- only let Console run this command
+		PrintDebugMessage(json.encode(GetPlayerIdentifiers(args[1])), 1) -- puke all identifiers into console
+	end
+end,false)
+	
+Citizen.CreateThread(function()
 
 
 	RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
@@ -2089,6 +2091,9 @@ function checkVersion(err,response, headers)
 end
 	
 Citizen.CreateThread(function()
+	repeat
+		Wait(1000)
+	until updateBlacklist
 	while true do
 		updateBlacklist()
 		Wait(300000)
