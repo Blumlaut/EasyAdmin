@@ -1845,7 +1845,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		local src = source
-		if DoesPlayerHavePermission(src,"player.warn") and not DoesPlayerHavePermission(id,"immune") then
+		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune then
 			reason = formatShortcuts(reason)
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
@@ -1881,7 +1881,7 @@ Citizen.CreateThread(function()
 					
 				end
 			end
-		elseif DoesPlayerHavePermission(id,"immune") then
+		elseif CachedPlayers[id].immune then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
