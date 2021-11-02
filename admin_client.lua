@@ -265,15 +265,24 @@ Citizen.CreateThread( function()
 end)
 
 
+RegisterNetEvent("EasyAdmin:TeleportPlayerBack", function(id, tgtCoords)
+	if lastLocation then
+		SetEntityCoords(PlayerPedId(), lastLocation,0,0,0, false)
+		lastLocation=nil
+	end
+end)
+
 RegisterNetEvent("EasyAdmin:TeleportRequest", function(id, tgtCoords)
 	if id then
 		if (tgtCoords.x == 0.0 and tgtCoords.y == 0.0 and tgtCoords.z == 0.0) then
 			local tgtPed = GetPlayerPed(GetPlayerFromServerId(id))
 			tgtCoords = GetEntityCoords(tgtPed)
 		end
-		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
+		lastLocation = tgtCoords
+		SetEntityCoords(PlayerPedId(), tgtCoords,0,0,0, false)
 	else
-		SetEntityCoords(PlayerPedId(), tgtCoords.x, tgtCoords.y, tgtCoords.z,0,0,0, false)
+		lastLocation = tgtCoords
+		SetEntityCoords(PlayerPedId(), tgtCoords,0,0,0, false)
 	end
 end)
 

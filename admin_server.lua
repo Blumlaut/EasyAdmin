@@ -1032,6 +1032,12 @@ Citizen.CreateThread(function()
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
 	end)
+
+	RegisterServerEvent("EasyAdmin:TeleportPlayerBack", function(id)
+		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") then
+			TriggerClientEvent('EasyAdmin:TeleportPlayerBack', id)
+		end
+	end)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
 		if DoesPlayerHavePermission(source, "player.slap") and not CachedPlayers[playerId].immune then

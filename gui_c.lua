@@ -528,23 +528,32 @@ function GenerateMenu() -- this is a big ass function
 		end
 		
 		if permissions["player.teleport.single"] then
-			local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome")}
+			local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome"), GetLocalisedText("teleportmeback"), GetLocalisedText("teleportplayerback")}
 			local thisItem = NativeUI.CreateListItem(GetLocalisedText("teleportplayer"), sl, 1, "")
 			thisPlayer:AddItem(thisItem)
 			thisItem.OnListSelected = function(sender, item, index)
 				if item == thisItem then
 					i = item:IndexToItem(index)
+					local playerPed = PlayerPedId()
+					print(i, lastLocation)
 					if i == GetLocalisedText("teleporttoplayer") then
 						if settings.infinity then
 							TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
 						else
+							lastLocation = GetEntityCoords(playerPed)
 							local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
 							local heading = GetEntityHeading(GetPlayerPed(player))
-							SetEntityCoords(PlayerPedId(), x,y,z,0,0,heading, false)
+							SetEntityCoords(playerPed, x,y,z,0,0,heading, false)
 						end
-					else
-						local coords = GetEntityCoords(PlayerPedId(),true)
+					elseif i == GetLocalisedText("teleportplayertome") then
+						local coords = GetEntityCoords(playerPed,true)
 						TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
+					elseif i == GetLocalisedText("teleportmeback") and lastLocation then
+						local heading = GetEntityHeading(playerPed)
+						SetEntityCoords(playerPed, lastLocation,0,0,heading, false)
+						lastLocation = nil
+					elseif i == GetLocalisedText("teleportplayerback") then 
+						TriggerServerEvent("EasyAdmin:TeleportPlayerBack", thePlayer.id)
 					end
 				end
 			end
