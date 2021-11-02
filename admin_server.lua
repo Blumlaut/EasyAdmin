@@ -383,7 +383,8 @@ end,false)
 
 RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
 	if source == 0 and args[1] then -- only let Console run this command
-		PrintDebugMessage(json.encode(CachedPlayers[source].identifiers), 1) -- puke all identifiers into console
+		local id = tonumber(args[1])
+		PrintDebugMessage(json.encode(CachedPlayers[id].identifiers), 1) -- puke all identifiers into console
 	end
 end,false)
 	
