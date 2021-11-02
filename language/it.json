@@ -223,7 +223,8 @@
     "notification":"Notification",
     "deferral":"Checking Banlist, please wait.. (%s%%)",
     "savebanchanges":"Save Changes",
-    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server."
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
+    "adminimmune":"You do not have permission to perform this action, target player is immune."
 
 
   

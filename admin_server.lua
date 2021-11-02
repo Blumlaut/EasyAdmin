@@ -629,6 +629,8 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
+		elseif CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
@@ -734,7 +736,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
 		if playerId ~= nil then
-			if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] then
+			if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or getName(playerId, true)
 				if expires and expires < os.time() then
@@ -753,12 +755,14 @@ Citizen.CreateThread(function()
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
 				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 			end
+		elseif CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
 	RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
 		if playerId ~= nil and not CachedPlayers[playerId].immune then
-			if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not DoesPlayerHavePermission(playerId,"immune") then
+			if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not CachedPlayers[playerId].immune then
 				local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
 				local username = CachedPlayers[playerId].name or getName(playerId, true)
 				if expires and expires < os.time() then
@@ -776,6 +780,8 @@ Citizen.CreateThread(function()
 				PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
 			end
+		elseif CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
@@ -784,27 +790,29 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires, offline)
-		if offline then 
-			bannedIdentifiers = playerId 
-			bannedUsername = "Unknown"
-		else 
-			bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
-			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
-		end
-		if expires and expires < os.time() then
-			expires = os.time()+expires 
-		elseif not expires then 
-			expires = 10444633200
-		end
-		reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
-		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
-		updateBlacklist( ban )
-		
-		
-		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
-		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ) ), "ban", 16711680)
-		if not offline then
-			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
+		if not offline and not CachedPlayers[playerId].immune then
+			if offline then 
+				bannedIdentifiers = playerId 
+				bannedUsername = "Unknown"
+			else 
+				bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
+				bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
+			end
+			if expires and expires < os.time() then
+				expires = os.time()+expires 
+			elseif not expires then 
+				expires = 10444633200
+			end
+			reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
+			local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
+			updateBlacklist( ban )
+			
+			
+			PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ) ), "ban", 16711680)
+			if not offline then
+				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
+			end
 		end
 	end)
 	
@@ -1015,16 +1023,18 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
-		if DoesPlayerHavePermission(source, "player.slap") then
+		if DoesPlayerHavePermission(source, "player.slap") and not CachedPlayers[playerId].immune then
 			PrintDebugMessage("Player "..getName(source,true).." slapped "..getName(playerId,true).." for "..slapAmount.." HP", 3)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminslappedplayer"), getName(source, false, true), getName(playerId, true, true), slapAmount), "slap", 16777214)
 			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
+		elseif CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
 	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
-		if DoesPlayerHavePermission(source, "player.freeze") then
+		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune then
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			if toggle then
 				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
@@ -1034,6 +1044,8 @@ Citizen.CreateThread(function()
 				PrintDebugMessage("Player "..getName(source,true).." unfroze "..getName(playerId,true), 3)
 			end
 			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
+		elseif CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
@@ -1104,7 +1116,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
 		local src = source
-		if DoesPlayerHavePermission(src,"player.mute") then
+		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune then
 			if not MutedPlayers[playerId] then 
 				MutedPlayers[playerId] = true
 				if MumbleSetPlayerMuted then -- workaround for outdated servers
@@ -1122,6 +1134,8 @@ Citizen.CreateThread(function()
 				PrintDebugMessage("Player "..getName(source,true).." unmuted "..getName(playerId,true), 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, false), getName(playerId, false, true)), "mute", 16777214)
 			end
+		elseif CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
@@ -1862,6 +1876,8 @@ Citizen.CreateThread(function()
 					
 				end
 			end
+		elseif DoesPlayerHavePermission(id,"immune") then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	

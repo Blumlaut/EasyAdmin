@@ -220,7 +220,8 @@
     "notification": "Benachrichtigung",
     "deferral": "Prüfe Bannliste, bitte warten... (%s%%)",
     "savebanchanges": "Änderungen speichern",
-    "savebanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Bann überschrieben"
+    "savebanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Bann überschrieben",
+    "adminimmune":"You do not have permission to perform this action, target player is immune."
 
 
 }]
