@@ -2016,10 +2016,16 @@ Citizen.CreateThread(function()
 		local numIds = getAllPlayerIdentifiers(player)
 		local matchingIdentifierCount = 0
 		local matchingIdentifiers = {}
+		local showProgress = GetConvar("ea_presentDeferral", "true")
 		
 		deferrals.defer()
 		Wait(0)
-		deferrals.update(string.format(GetLocalisedText("deferral"), 0))
+		local deferralText = string.format(GetLocalisedText("deferral"), 0)
+		if showProgress == "false" then
+			deferralText = deferralText:sub(1, -6)
+		end
+
+		deferrals.update(deferralText)
 		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
 		if not blacklist then
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
@@ -2030,10 +2036,13 @@ Citizen.CreateThread(function()
 			return
 		end
 		Wait(0)
+
 		for bi,blacklisted in ipairs(blacklist) do
-			if bi % 12 == 0 then -- only update on every 12th ban
-				Wait(0)
-				deferrals.update(string.format(GetLocalisedText("deferral"), math.round(bi/#blacklist*100)))
+			if showProgress == "true" then
+				if bi % 12 == 0 then -- only update on every 12th ban
+					Wait(0)
+					deferrals.update(string.format(GetLocalisedText("deferral"), math.round(bi/#blacklist*100)))
+				end
 			end
 			for i,theId in ipairs(numIds) do
 				for ci,identifier in ipairs(blacklisted.identifiers) do
