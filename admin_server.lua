@@ -754,9 +754,9 @@ Citizen.CreateThread(function()
 				PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
 				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
+			elseif CachedPlayers[playerId].immune then
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 			end
-		elseif CachedPlayers[playerId].immune then
-			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
