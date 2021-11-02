@@ -856,7 +856,11 @@ Citizen.CreateThread(function()
 	RegisterCommand("unban", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") then
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1], 3)
-			UnbanIdentifier(args[1])
+			if tonumber(args[1]) then
+				UnbanId(args[1])
+			else
+				UnbanIdentifier(args[1])
+			end
 			if (source ~= 0) then
 				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("done"))
 			else
@@ -1099,6 +1103,7 @@ Citizen.CreateThread(function()
 			-- TODO Webhook
 		end
 	end)
+
 	RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
 		local thisBan = nil
 		if DoesPlayerHavePermission(source, "player.ban.remove") then
