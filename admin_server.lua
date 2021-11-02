@@ -541,6 +541,12 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent('EasyAdmin:amiadmin', function()
 		
+		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+15 > os.time() then
+			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..CachedPlayers[source].lastPermRequest+15-os.time().." seconds left.", 3)
+			return
+		end
+		CachedPlayers[source].lastPermRequest = os.time()
+
 		local identifiers = getAllPlayerIdentifiers(source)
 		local perms = {}
 		for perm,val in pairs(permissions) do
