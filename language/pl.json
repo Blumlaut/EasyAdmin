@@ -79,7 +79,7 @@
     "chatsuggestionteleport": "teleportuj się do gracza",
     "chatsuggestiongametype": "ustaw typ gry serwera",
     "chatsuggestionmapname": "ustaw nazwę mapy serwera",
-    "chatsuggestionslap": "jebnij gracza",
+    "chatsuggestionslap": "uderz gracza",
     "chatsuggestionfreeze": "unieruchom gracza",
 
     "bannedjoin": "Zostałeś zbanowany na tym serwerze, \nPowód: %s, Czas trwania: %s, Ban ID: %s",
@@ -215,14 +215,14 @@
     "refreshreports": "Odśwież zgłoszenia",
     "refreshreportsguide": "Pokazuje nowe raporty, jeśli są jakieś od ostatniego otwarcia menu.",
     "waitbeforeusingagain": "Musisz poczekać przed użyciem tego ponownie!",
-    "claimreport":"Claim Report",
-    "claimedby":"Claimed By",
-    "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification",
-    "deferral":"Checking Banlist, please wait.. (%s%%)",
-    "savebanchanges":"Save Changes",
-    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
-    "adminimmune":"You do not have permission to perform this action, target player is immune."
+    "claimreport":"Zajmij Report",
+    "claimedby":"Zajęty przez",
+    "reportalreadyclaimed": "Ten report został już zajęty!", 
+    "notification":"Powiadomienie",
+    "deferral":"Sprawdzanie listy banów, proszę czekać.. (%s%%)",
+    "savebanchanges":"Zapisz zmiany",
+    "savebanguide":"~r~~h~UWAGA:~h~~w~ Naciśnięcie przycisku Potwierdź zaktualizuje ten ban na serwerze.",
+    "adminimmune":"Nie masz uprawnień aby wykonać tą akcje, docelowy gracz jest nietykalny."
 
 
 
