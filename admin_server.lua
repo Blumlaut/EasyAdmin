@@ -857,7 +857,7 @@ Citizen.CreateThread(function()
 		if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") then
 			PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1], 3)
 			if tonumber(args[1]) then
-				UnbanId(args[1])
+				UnbanId(tonumber(args[1]))
 			else
 				UnbanIdentifier(args[1])
 			end
@@ -1815,8 +1815,8 @@ Citizen.CreateThread(function()
 	
 	function UnbanIdentifier(identifier)
 		if identifier then
-			for i,ban in ipairs(blacklist) do
-				for index,id in ipairs(ban.identifiers) do
+			for i,ban in pairs(blacklist) do
+				for index,id in pairs(ban.identifiers) do
 					if identifier == id then
 						table.remove(blacklist,i)
 						SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
@@ -1832,7 +1832,7 @@ Citizen.CreateThread(function()
 	end
 	
 	function UnbanId(id)
-		for i,ban in ipairs(blacklist) do
+		for i,ban in pairs(blacklist) do
 			if ban.banid == id then
 				table.remove(blacklist,i)
 				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
