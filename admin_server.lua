@@ -1961,55 +1961,6 @@ Citizen.CreateThread(function()
 		cb(GetVersion())
 	end)
 	
-	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
-		local player = source
-		local numIds = getAllPlayerIdentifiers(player)
-		local matchingIdentifierCount = 0
-		local matchingIdentifiers = {}
-		
-		deferrals.defer()
-		Wait(0)
-		deferrals.update(string.format(GetLocalisedText("deferral"), 0))
-		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
-		if not blacklist then
-			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
-			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
-			print("EasyAdmin: Please check this error soon, ^1Bans *will not* work!^7\n")
-			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
-			deferrals.done("\n\nEasyAdmin: A fatal error occured, please contact a Server Administrator to resolve this issue.")
-			return
-		end
-		Wait(0)
-		for bi,blacklisted in ipairs(blacklist) do
-			Wait(0)
-			if bi % 12 == 0 then -- only update on every 12th ban
-				deferrals.update(string.format(GetLocalisedText("deferral"), math.round(bi/#blacklist*100)))
-			end
-			for i,theId in ipairs(numIds) do
-				for ci,identifier in ipairs(blacklisted.identifiers) do
-					if identifier == theId and matchingIdentifiers[theId] ~= true then
-						matchingIdentifierCount = matchingIdentifierCount+1 
-						matchingIdentifiers[theId] = true -- make sure we remember the identifier for later
-						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount, 3)
-						local notBannedIds = checkForChangedIdentifiers(numIds, blacklisted.identifiers)
-						if matchingIdentifierCount >= minimumMatchingIdentifierCount then
-							if #notBannedIds > 0 then
-								local newBanData = blacklisted
-								newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds) -- add newly found identifiers to the existing ban
-								updateBan(blacklisted.banid,newBanData) -- send it off!
-							end
-							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 1)
-							deferrals.done(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, formatDateString(blacklist[bi].expire), blacklist[bi].banid))
-							return
-						end
-					end
-				end
-			end
-		end
-		
-		deferrals.done()
-	end)
-	
 	
 	AddEventHandler('chatMessage', function(Source, Name, Msg)
 		if MutedPlayers[Source] then
@@ -2057,6 +2008,60 @@ Citizen.CreateThread(function()
 		Wait(3600000)
 	end
 end)
+
+Citizen.CreateThread(function()
+	
+	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
+		local player = source
+		local numIds = getAllPlayerIdentifiers(player)
+		local matchingIdentifierCount = 0
+		local matchingIdentifiers = {}
+		
+		deferrals.defer()
+		Wait(0)
+		deferrals.update(string.format(GetLocalisedText("deferral"), 0))
+		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
+		if not blacklist then
+			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
+			print("EasyAdmin: Please check this error soon, ^1Bans *will not* work!^7\n")
+			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+			deferrals.done("\n\nEasyAdmin: A fatal error occured, please contact a Server Administrator to resolve this issue.")
+			return
+		end
+		Wait(0)
+		for bi,blacklisted in ipairs(blacklist) do
+			if bi % 12 == 0 then -- only update on every 12th ban
+				Wait(0)
+				deferrals.update(string.format(GetLocalisedText("deferral"), math.round(bi/#blacklist*100)))
+			end
+			for i,theId in ipairs(numIds) do
+				for ci,identifier in ipairs(blacklisted.identifiers) do
+					if identifier == theId and matchingIdentifiers[theId] ~= true then
+						matchingIdentifierCount = matchingIdentifierCount+1 
+						matchingIdentifiers[theId] = true -- make sure we remember the identifier for later
+						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount, 3)
+						local notBannedIds = checkForChangedIdentifiers(numIds, blacklisted.identifiers)
+						if matchingIdentifierCount >= minimumMatchingIdentifierCount then
+							if #notBannedIds > 0 then
+								local newBanData = blacklisted
+								newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds) -- add newly found identifiers to the existing ban
+								updateBan(blacklisted.banid,newBanData) -- send it off!
+							end
+							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 1)
+							deferrals.done(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, formatDateString(blacklist[bi].expire), blacklist[bi].banid))
+							return
+						end
+					end
+				end
+			end
+		end
+		
+		deferrals.done()
+	end)
+
+end)
+
 
 curVersion, IsMaster = GetVersion()
 local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
