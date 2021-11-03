@@ -535,7 +535,6 @@ function GenerateMenu() -- this is a big ass function
 				if item == thisItem then
 					i = item:IndexToItem(index)
 					local playerPed = PlayerPedId()
-					print(i, lastLocation)
 					if i == GetLocalisedText("teleporttoplayer") then
 						if settings.infinity then
 							TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
