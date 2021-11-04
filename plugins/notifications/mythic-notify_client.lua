@@ -9,6 +9,6 @@ end)
 
 AddEventHandler("EasyAdmin:showNotification", function(text, important)
 	if GetResourceState("mythic-notify") == "started" or enableNotificationReplace then
-		exports['mythic_notify']:SendAlert('inform', text)
+		exports['mythic_notify']:DoHudText('inform', text)
 	end
 end)
