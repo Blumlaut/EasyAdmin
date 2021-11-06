@@ -79,10 +79,10 @@
     "chatsuggestionteleport": "teleportuj się do gracza",
     "chatsuggestiongametype": "ustaw typ gry serwera",
     "chatsuggestionmapname": "ustaw nazwę mapy serwera",
-    "chatsuggestionslap": "jebnij gracza",
+    "chatsuggestionslap": "uderz gracza",
     "chatsuggestionfreeze": "unieruchom gracza",
 
-    "bannedjoin": "Zostałeś zbanowany na tym serwerze, \nPowód: %s, Czas trwania: %s",
+    "bannedjoin": "Zostałeś zbanowany na tym serwerze, \nPowód: %s, Czas trwania: %s, Ban ID: %s",
     "kicked": "Wyrzucony przez %s, Powód: %s",
     "banned": "Zostałeś zbanowany na tym serwerze, Powód: %s, Czas trwania: %s",
     "reasonadd": " ( Gracz: %s ), Zablokowany przez: %s",
@@ -123,8 +123,8 @@
     "firstpage": "««Pierwsza strona",
     "lastpage": "Ostatnia strona»»",
     "previouspage": "«Poprzednia strona",
-    "playercalledforadmin": "\nUżytkownik %s wzywa Administratora!\nPowód: %s\nID: %s\n",
-    "playerreportedplayer": "\nUżytkownik %s zgłosił gracza!\n%s, Powód: %s\nReport %s/%s\nID: %s\n",
+    "playercalledforadmin": "Użytkownik %s wzywa Administratora!\nPowód: %s\nID: %s\n",
+    "playerreportedplayer": "Użytkownik %s zgłosił gracza!\n%s, Powód: %s\nReport %s/%s\nID: %s\n",
     "successfullyreported": "Pomyślnie zgłoszono gracza!",
     "reportbantext": "Zgłosił %s Graczy w krótkim czasie.",
     "alreadyreported": "Już zgłosiłeś tego gracza!",
@@ -213,7 +213,19 @@
     "adminclosedreport": "**%s** zamknięte zgłoszenie #**%s**",
     "entertoopen": "Wybierz, aby wyświetlić opcje dla tego gracza.",
     "refreshreports": "Odśwież zgłoszenia",
-    "refreshreportsguide": "Pokazuje nowe raporty, jeśli są jakieś od ostatniego otwarcia menu."
+    "refreshreportsguide": "Pokazuje nowe raporty, jeśli są jakieś od ostatniego otwarcia menu.",
+    "waitbeforeusingagain": "Musisz poczekać przed użyciem tego ponownie!",
+    "claimreport":"Zajmij Report",
+    "claimedby":"Zajęty przez",
+    "reportalreadyclaimed": "Ten report został już zajęty!", 
+    "notification":"Powiadomienie",
+    "deferral":"Sprawdzanie listy banów, proszę czekać.. (%s%%)",
+    "savebanchanges":"Zapisz zmiany",
+    "savebanguide":"~r~~h~UWAGA:~h~~w~ Naciśnięcie przycisku Potwierdź zaktualizuje ten ban na serwerze.",
+    "adminimmune":"Nie masz uprawnień aby wykonać tą akcje, docelowy gracz jest nietykalny.",
+    "teleportmeback":"Teleport me back",
+    "teleportplayerback":"Teleport Player back"
+
 
 
 }]

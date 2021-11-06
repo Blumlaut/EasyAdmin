@@ -84,7 +84,7 @@
     "chatsuggestionslap": "speler klap geven",
     "chatsuggestionfreeze": "Speler vastzetten",
 
-    "bannedjoin": "Je bent verbannen van deze Server, \nReden: %s, Ban Vervalt: %s",
+    "bannedjoin": "Je bent verbannen van deze Server, \nReden: %s, Ban Vervalt: %s, Ban ID: %s",
     "kicked": "Gekickt door %s, Reden: %s",
     "banned": "Je bent verbannen van deze Server, Reden: %s, Ban Vervalt: %s",
     "reasonadd": " ( Gebruikersnaam: %s ), Verbannen door: %s",
@@ -125,8 +125,8 @@
     "firstpage": "««Eerste Pagina",
     "lastpage": "Laatste Pagina»»",
     "previouspage": "«Vorige Pagina",
-    "playercalledforadmin": "\nSpeler %s wil hulp van een admin!\nReden: %s\nID: %s\n",
-    "playerreportedplayer": "\nSpeler %s heeft een speler gereported!\n%s, Reden: %s\nReport %s/%s\nID: %s\n",
+    "playercalledforadmin": "Speler %s wil hulp van een admin!\nReden: %s\nID: %s\n",
+    "playerreportedplayer": "Speler %s heeft een speler gereported!\n%s, Reden: %s\nReport %s/%s\nID: %s\n",
     "successfullyreported": "De speler is succesvol gereported!",
     "reportbantext": "Gereported door %s Spelers in een zeer korte tijd.",
     "alreadyreported": "Je hebt deze speler al gereported!",
@@ -215,7 +215,19 @@
     "adminclosedreport": "**%s** sloot Report #**%s**",
     "entertoopen": "Selecteer om de opties voor de speler te bekijken.",
     "refreshreports": "Vernieuw Reports",
-    "refreshreportsguide": "Laat nieuwe reports zien, als er nieuwe zijn."
+    "refreshreportsguide": "Laat nieuwe reports zien, als er nieuwe zijn.",
+    "waitbeforeusingagain": "You must wait before using this again!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)",
+    "savebanchanges":"Save Changes",
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
+    "adminimmune":"You do not have permission to perform this action, target player is immune.",
+    "teleportmeback":"Teleport me back",
+    "teleportplayerback":"Teleport Player back"
+
 
 
 }]

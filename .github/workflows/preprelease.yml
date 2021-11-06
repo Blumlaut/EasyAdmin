@@ -1,0 +1,48 @@
+# This is a basic workflow that is manually triggered
+
+name: Prepare Release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      version:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Version Number'
+        # Input has to be provided for the workflow to run
+        required: true
+      changelog:
+        description: 'Changelog'
+        default: 'Your Version is unsupported and may no longer function properly in the near future, please update as soon as possible.'
+        required: false
+        type: string
+      
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  create:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    - uses: actions/checkout@master
+    - name: Configure version.json & Push Tag
+      run: | 
+            echo "version is ${{ github.event.inputs.version }}"
+            git config user.name "GitHub Actions Bot"
+            git config user.email "<>"
+            sed -i "/is_master/d" fxmanifest.lua
+            sed -i "/^version/c\version '${{ github.event.inputs.version }}'" fxmanifest.lua
+            echo '{"version": "${{ github.event.inputs.version }}", "changelog": "${{ github.event.inputs.changelog }}", "fivem": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"},"redm": {"version": "${{ github.event.inputs.version }}","changelog": "${{ github.event.inputs.changelog }}"}}' > version.json
+            git add .
+            git commit -m "${{ github.event.inputs.version }}"
+            git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
+            sed -i "/^version/ais_master 'yes'" fxmanifest.lua
+            git add .
+            git commit -m "Update Version"
+            git push --follow-tags

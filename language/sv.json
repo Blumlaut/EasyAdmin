@@ -83,7 +83,7 @@
     "chatsuggestionslap": "slå spelare",
     "chatsuggestionfreeze": "frys en spelare",
 
-    "bannedjoin": "Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s",
+    "bannedjoin": "Du har blivit bannlyst från denna server, \nAnledning: %s, Bannlysning upphävs: %s, Ban ID: %s",
     "kicked": "Kickad av %s, Anledning: %s",
     "banned": "Du har blivit bannlsyt frånb denna server, Anledning: %s, Bannlysning upphävs: %s",
     "reasonadd": " ( Smeknamn: %s ), Bannlyst av: %s",
@@ -124,8 +124,8 @@
     "firstpage": "««First Page",
     "lastpage": "Last Page»»",
     "previouspage": "«Previous Page",
-    "playercalledforadmin": "\nUser %s calls for an admin!\nReason: %s\nID: %s\n",
-    "playerreportedplayer": "\nUser %s reported a player!\n%s, Reason: %s\nReport %s/%s\nID: %s\n",
+    "playercalledforadmin": "User %s calls for an admin!\nReason: %s\nID: %s\n",
+    "playerreportedplayer": "User %s reported a player!\n%s, Reason: %s\nReport %s/%s\nID: %s\n",
     "successfullyreported": "Successfully reported the player!",
     "reportbantext": "Reported by %s Players in short time.",
     "alreadyreported": "You already reported this player!",
@@ -213,7 +213,19 @@
     "adminclosedreport": "**%s** closed Report #**%s**",
     "entertoopen": "Select to display options for this player.",
     "refreshreports": "Refresh Reports",
-    "refreshreportsguide": "Shows new reports in case there are any since last time the menu was opened."
+    "refreshreportsguide": "Shows new reports in case there are any since last time the menu was opened.",
+    "waitbeforeusingagain": "You must wait before using this again!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)",
+    "savebanchanges":"Save Changes",
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
+    "adminimmune":"You do not have permission to perform this action, target player is immune.",
+    "teleportmeback":"Teleport me back",
+    "teleportplayerback":"Teleport Player back"
+
 
 
 }]

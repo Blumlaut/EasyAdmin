@@ -1,5 +1,5 @@
 [{
-    "translator": "Antho#0707",
+    "translator": "Antho#0707 & Javiito32",
     "language": "es",
     "on": "On",
     "off": "Off",
@@ -82,7 +82,7 @@
     "chatsuggestionslap": "abofetea al jugador",
     "chatsuggestionfreeze": "congela al jugador",
 
-    "bannedjoin": "Has sido baneado del servidor, \nRazón: %s, Expira: %s",
+    "bannedjoin": "Has sido baneado del servidor, \nRazón: %s, Expira: %s, Ban ID: %s",
     "kicked": "Has sido kickeado por %s, Razón: %s",
     "banned": "Has sido baneado del servidor, Razón: %s, Expira: %s",
     "reasonadd": " ( El jugador: %s ), ha sido baneado por: %s",
@@ -123,8 +123,8 @@
     "firstpage": "««Primera página",
     "lastpage": "Última página»»",
     "previouspage": "«Página anterior",
-    "playercalledforadmin": "\nUsuario %s pide un administrador\nRazón: %s\nID: %s\n",
-    "playerreportedplayer": "\nUsuario %s reportó a un jugador\n%s, Razón: %s\nReporta %s/%s\nID: %s\n",
+    "playercalledforadmin": "Usuario %s pide un administrador\nRazón: %s\nID: %s\n",
+    "playerreportedplayer": "Usuario %s reportó a un jugador\n%s, Razón: %s\nReporta %s/%s\nID: %s\n",
     "successfullyreported": "Se ha reportado correctamente",
     "reportbantext": "Reportado por %s jugadores en poco tiempo.",
     "alreadyreported": "Ya has reportado a este jugador",
@@ -211,6 +211,18 @@
     "adminclosedreport": "**%s** ha cerrado el reporte #**%s**",
     "entertoopen": "Comprueba las opciones para este jugador.",
     "refreshreports": "Recargar Reportes",
-    "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú."
+    "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú.",
+    "waitbeforeusingagain": "¡Debes esperar antes de poder hacer eso otra vez!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)",
+    "savebanchanges":"Save Changes",
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
+    "adminimmune":"You do not have permission to perform this action, target player is immune.",
+    "teleportmeback":"Teleport me back",
+    "teleportplayerback":"Teleport Player back"
+
 
 }]

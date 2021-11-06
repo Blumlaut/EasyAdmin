@@ -1,9 +1,11 @@
 permissions = {
 	["player.ban.temporary"] = false,
 	["player.ban.permanent"] = false,
+	["player.ban.view"] = false,
+	["player.ban.edit"] = false,
+	["player.ban.remove"] = false,
 	["player.kick"] = false,
 	["player.spectate"] = false,
-	["player.unban"] = false,
 	["player.teleport.single"] = false,
 	["player.slap"] = false,
 	["player.freeze"] = false,
@@ -12,6 +14,7 @@ permissions = {
 	["player.warn"] = false,
 	["player.teleport.everyone"] = false,
 	["player.reports.view"] = false,
+	["player.reports.claim"] = false,
 	["player.reports.process"] = false,
 	
 	["server.cleanup.cars"] = false,
@@ -124,30 +127,7 @@ end
 
 -- Convert a lua table into a lua syntactically correct string
 function table_to_string(tbl)
-	local result = "{"
-	for k, v in pairs(tbl) do
-		-- Check the key type (ignore any numerical keys - assume its an array)
-		if type(k) == "string" then
-			result = result.."[\""..k.."\"]".."="
-		end
-		
-		-- Check the value type
-		if type(v) == "table" then
-			result = result..table_to_string(v)
-		elseif type(v) == "boolean" then
-			result = result..tostring(v)
-		elseif type(v) == "function" then
-			result = result..tostring(v)
-		else
-			result = result.."\""..v.."\""
-		end
-		result = result..","
-	end
-	-- Remove leading commas from the result
-	if result ~= "" then
-		result = result:sub(1, result:len()-1)
-	end
-	return result.."}"
+	return json.encode(tbl)
 end
 
 function mergeTables(t1, t2)

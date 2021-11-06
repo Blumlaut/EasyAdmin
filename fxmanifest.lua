@@ -2,6 +2,14 @@ fx_version "cerulean"
 
 games {"rdr3","gta5"}
 
+author 'Blumlaut <blue@furfag.de>'
+description 'EasyAdmin - Admin Menu for FiveM & RedM'
+version '6.33'
+is_master 'yes'
+
+
+lua54 'yes'
+
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
 server_scripts {
@@ -30,7 +38,7 @@ convar_category 'EasyAdmin' {
     "Configuration Options",
     {
     { "EasyAdmin language", "$ea_LanguageName", "CV_STRING", "en" },
-    { "Key to open the menu", "$ea_MenuButton", "CV_STRING", "none" },
+    { "Default key to open the menu", "$ea_defaultKey", "CV_STRING", "none" },
     { "The Minimum Amount of Identifiers", "$ea_minIdentifierMatches", "CV_INT", "2" },
     { "Moderation Actions Webhook", "$ea_moderationNotification", "CV_STRING", "false" },
     { "Report Notifications Webhook", "$ea_reportNotification", "CV_STRING", "false" },

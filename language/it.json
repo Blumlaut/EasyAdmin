@@ -84,7 +84,7 @@
     "chatsuggestionslap": "schiaffeggia un giocatore",
     "chatsuggestionfreeze": "blocca un giocatore",
 
-    "bannedjoin": "Sei stato bandito da questo server, \nMotivo: %s, Il Ban Scade: %s",
+    "bannedjoin": "Sei stato bandito da questo server, \nMotivo: %s, Il Ban Scade: %s, Ban ID: %s",
     "kicked": "Espulso da %s, Motivo: %s",
     "banned": "Sei stato bandito da questo server, Motivo: %s, Il Ban Scade: %s",
     "reasonadd": " ( Nickname: %s ), Bandito da: %s",
@@ -125,8 +125,8 @@
     "firstpage": "««Prima Pagina",
     "lastpage": "Ultima Pagina»»",
     "previouspage": "«Pagina Precedente",
-    "playercalledforadmin": "\nL'utente %s sta chiamando un admin!\nMotivo: %s\nID: %s\n",
-    "playerreportedplayer": "\nL'utente %s sta segnalando un giocatore!\n%s, Motivo: %s\nSegnalazione %s/%s\nID: %s\n",
+    "playercalledforadmin": "L'utente %s sta chiamando un admin!\nMotivo: %s\nID: %s\n",
+    "playerreportedplayer": "L'utente %s sta segnalando un giocatore!\n%s, Motivo: %s\nSegnalazione %s/%s\nID: %s\n",
     "successfullyreported": "Player segnalato con successo!",
     "reportbantext": "Sei stato segnalato da %s giocatori in breve periodo.",
     "alreadyreported": "Hai già segnalato questo player!",
@@ -215,7 +215,19 @@
     "adminclosedreport": "**%s** ha chiuso il report #**%s**",
     "entertoopen": "Seleziona per vedere opzioni per questo giocatore.",
     "refreshreports": "Aggiorna Segnalazioni",
-    "refreshreportsguide": "Mostra le nuove segnalazioni rispetto all'ultima volta che hai aperto il menù."
+    "refreshreportsguide": "Mostra le nuove segnalazioni rispetto all'ultima volta che hai aperto il menù.",
+    "waitbeforeusingagain": "You must wait before using this again!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)",
+    "savebanchanges":"Save Changes",
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
+    "adminimmune":"You do not have permission to perform this action, target player is immune.",
+    "teleportmeback":"Teleport me back",
+    "teleportplayerback":"Teleport Player back"
+
 
   
 }]

@@ -80,7 +80,7 @@
     "chatsuggestionslap": "profackovat hrace",
     "chatsuggestionfreeze": "zmrazit hrace",
 
-    "bannedjoin": "Byl jsi zabanovan, \nDuvod: %s, Ban vyprsi: %s",
+    "bannedjoin": "Byl jsi zabanovan, \nDuvod: %s, Ban vyprsi: %s, Ban ID: %s",
     "kicked": "Vyhozen adminem %s, Duvod: %s",
     "banned": "Byl jsi zabanovan, Duvod: %s, Ban vyprsi: %s",
     "reasonadd": " ( Prezdivka: %s ), Zabanovan adminem: %s",
@@ -121,8 +121,8 @@
     "firstpage": "««Prvni stranka",
     "lastpage": "Poslední stránka»»",
     "previouspage": "«Predchozi stranka",
-    "playercalledforadmin": "\nUzivatel % vola admina!\nDuvod: %s\nID: %s\n",
-    "playerreportedplayer": "\nUzivatel %s nahlasil hrace!\n%s, Duvod: %s\nHlaseni %s/%s\nID: %s\n",
+    "playercalledforadmin": "Uzivatel % vola admina!\nDuvod: %s\nID: %s\n",
+    "playerreportedplayer": "Uzivatel %s nahlasil hrace!\n%s, Duvod: %s\nHlaseni %s/%s\nID: %s\n",
     "successfullyreported": "Hrac byl uspesne nahlasen!",
     "reportbantext": "Nahlaseno %s hraci v kratky cas.",
     "alreadyreported": "Tohoto hrace jsi uz nahlasil!",
@@ -212,7 +212,18 @@
     "adminclosedreport": "**%s** closed Report #**%s**",
     "entertoopen": "Select to display options for this player.",
     "refreshreports": "Refresh Reports",
-    "refreshreportsguide": "Shows new reports in case there are any since last time the menu was opened."
+    "refreshreportsguide": "Shows new reports in case there are any since last time the menu was opened.",
+    "waitbeforeusingagain": "You must wait before using this again!",
+    "claimreport":"Claim Report",
+    "claimedby":"Claimed By",
+    "reportalreadyclaimed": "This report has already been claimed!",
+    "notification":"Notification",
+    "deferral":"Checking Banlist, please wait.. (%s%%)",
+    "savebanchanges":"Save Changes",
+    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
+    "adminimmune":"You do not have permission to perform this action, target player is immune.",
+    "teleportmeback":"Teleport me back",
+    "teleportplayerback":"Teleport Player back"
 
 
 }]
