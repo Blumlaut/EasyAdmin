@@ -83,7 +83,7 @@
     "chatsuggestionslap": "Spieler schlagen",
     "chatsuggestionfreeze": "Spieler einfrieren",
 
-    "bannedjoin": "\nDu wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab\nDeine Ban-ID lautet #%s.",
+    "bannedjoin": "\nDu wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab\nDeine Bann-ID lautet #%s.",
     "kicked": "Gekickt von %s, \nGrund: %s",
     "banned": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",
     "reasonadd": " ( Spielername: %s ), \nGebannt von: %s",
@@ -221,9 +221,9 @@
     "deferral": "Prüfe Bannliste, bitte warten... (%s%%)",
     "savebanchanges": "Änderungen speichern",
     "savebanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Bann überschrieben",
-    "adminimmune":"You do not have permission to perform this action, target player is immune.",
-    "teleportmeback":"Teleport me back",
-    "teleportplayerback":"Teleport Player back"
+    "adminimmune": "Dazu hast du keine Rechte, der ausgewählte Spieler ist Immun",
+    "teleportmeback": "Teleportiere mich zurück",
+    "teleportplayerback": "Teleportiere Spieler zurück"
 
 
 }]
