@@ -213,16 +213,16 @@
     "refreshreports": "Recargar Reportes",
     "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú.",
     "waitbeforeusingagain": "¡Debes esperar antes de poder hacer eso otra vez!",
-    "claimreport":"Claim Report",
-    "claimedby":"Claimed By",
-    "reportalreadyclaimed": "This report has already been claimed!",
-    "notification":"Notification",
-    "deferral":"Checking Banlist, please wait.. (%s%%)",
-    "savebanchanges":"Save Changes",
-    "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
-    "adminimmune":"You do not have permission to perform this action, target player is immune.",
-    "teleportmeback":"Teleport me back",
-    "teleportplayerback":"Teleport Player back"
+    "claimreport":"Aceptar reporte",
+    "claimedby":"Reporte atendido por",
+    "reportalreadyclaimed": "Este report ya ha sido aceptado",
+    "notification":"Notificación",
+    "deferral":"Comprobando lista de baneos, por favor espere.. (%s%%)",
+    "savebanchanges":"Guardar Cambios",
+    "savebanguide":"~r~~h~NOTA:~h~~w~ Pulsando Confirmar actualizarás este Baneo en el servidor.",
+    "adminimmune":"No tienes permiso para hacer esto, el jugador que has seleccionado es Administrador.",
+    "teleportmeback":"Teleportarme a donde estaba",
+    "teleportplayerback":"Teleportar al jugador a donde estaba"
 
 
 }]
