@@ -63,7 +63,7 @@
     "unbanlicenses": "Lizenzen",
     "banlistshowtypeguide": "Zwischen Gründen und Lizenzen wechseln .\nErfordert erneutes öffnen des Adminpanels.",
     "refreshbanlist": "Bannliste neu laden",
-    "refreshbanlistguide": "Das wird die Bannliste neu laden, bei Änderungen der banlist.json ist das empfohlen \nErfordert erneutes öffnen des Adminpanels.",
+    "refreshbanlistguide": "Das wird die Bannliste neu laden.\nErfordert erneutes öffnen des Adminpanels.",
     "refreshpermissions": "Berechtigungen neu Laden",
     "refreshpermissionsguide": "Das wird deine jetzigen Berechtigungen neu laden.\nErfordert erneutes öffnen des Adminpanels.",
     "godmodedetected": "Godmode: ~r~Erkannt~w~",
@@ -107,7 +107,7 @@
     "menuOrientation": "Menüorientation",
     "menuOrientationguide": "Menü Orientation setzen ( Links, Rechts oder Mitte ) \nErfordert Spielneustart.",
     "menuOffset": "Menüoffset",
-    "menuOffsetguide": "Menüoffset setzen, das wird das Menü länger machen\nErfordert erneutes öffnen des Adminpanels.",
+    "menuOffsetguide": "Menü länger machen.\nErfordert erneutes öffnen des Adminpanels.",
     "resetmenuOffset": "Menüoffset Zurücksetzen",
     "takescreenshot": "Screenshot erstellen",
     "admintookscreenshot": "**%s** hat ein Screenshot von **%s**'s Bildschirm Erstellt: %s",
@@ -118,7 +118,7 @@
     "adminofflinebannedplayer": "**%s** hat Offline-Spieler **%s** gebannt, Grund: %s, Bann Läuft am %s ab.",
     "cachedplayers": "Frühere Spieler",
     "refreshcachedplayers": "Frühere Spielerliste aktualisieren",
-    "refreshcachedplayersguide": "Aktualisiert die Liste der zwischengespeicherten Spieler \nErfordert erneutes öffnen des Adminpanels.",
+    "refreshcachedplayersguide": "Aktualisiert die Liste der früheren Spieler. Erfordert erneutes öffnen des Adminpanels.",
     "adminrequestedofflineinfo": "**%s** hat die Nutzerdaten des Spielers **%s** angefordert",
     "nextpage": "Nächste Seite»",
     "firstpage": "««Erste Seite",
@@ -149,10 +149,10 @@
     "adminwarnedplayer": "**%s** hat **%s** gewarnt, Grund: %s, Warnung %s/%s",
 
     "searchuser": "Spieler suchen",
-    "searchuserguide": "Spieler mit Spielernamen oder ID finden.",
+    "searchuserguide": "Spieler mit Spielernamen oder Server ID finden.",
 
     "setconvar": "Convar Setzen",
-    "setconvarguide": "~r~~h~ACHTUNG~h~~w~: Wenn du nicht weißt was hier zu tun ist, nicht anfassen!~w~\nÄndert eine Convar.",
+    "setconvarguide": "~r~~h~ACHTUNG:~h~~w~ Nur mit wissen anfassen!\nÄndert eine Convar.",
     "adminchangedconvar": "**%s** hat die Convar **%s** zu **%s** geändert.",
     "adminstartedresource": "**%s** hat die Ressource **%s** gestartet",
     "adminstoppedresource": "**%s** hat die Ressource **%s** gestoppt",
@@ -160,21 +160,21 @@
     "convarname": "Convar Name",
     "convarvalue": "Convar Inhalt",
 
-    "cleanarea": "Gebiete aufräumen",
+    "cleanarea": "Gebiet aufräumen",
     "cleanareaguide": "Entfernt alle Gegenstände in der nähe.",
     "cars": "Fahrzeuge",
     "peds": "NPC's",
     "props": "Objekte",
-    "cleaningcar": "Lösche Fahrzeug %s",
-    "cleaningped": "Lösche NPC %s",
-    "cleaningprop": "Lösche Objekt %s",
+    "cleaningcar": "Loesche Fahrzeug %s",
+    "cleaningped": "Loesche NPC %s",
+    "cleaningprop": "Loesche Objekt %s",
     "finishedcleaning": "Löschen von %s beendet.",
     "admincleanedup": "**%s** hat alle **%s** in seiner Nähe gelöscht.",
 
     "forceeasteregg": "Easter Egg aktivieren",
 
     "permissioneditor": "Permissions anpassen",
-    "permissioneditorguide": "Permissions auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~",
+    "permissioneditorguide": "Permissions auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~.",
 
     "aces": "ACEs",
     "permission": "Permission",
@@ -212,7 +212,7 @@
     "closesimilarreportsguide": "Versucht ähnliche Reports zu finden und zu löschen.",
     "adminclosedreport": "**%s** hat Report #**%s** geschlossen.",
     "refreshreports": "Reports aktualisieren",
-    "refreshreportsguide": "Zeigt neue Reports, falls es neue gibt seitdem das Menü geöffnet wurde.",
+    "refreshreportsguide": "Zeigt neue Reports an, falls es neue gibt seitdem das Menü geöffnet wurde.",
     "waitbeforeusingagain": "Du musst warten bevor du das benutzen kannst!",
     "claimreport": "Report übernehmen",
     "claimedby": "Übernommen von",
@@ -224,6 +224,4 @@
     "adminimmune": "Dazu hast du keine Rechte, der ausgewählte Spieler ist Immun",
     "teleportmeback": "Teleportiere mich zurück",
     "teleportplayerback": "Teleportiere Spieler zurück"
-
-
 }]
