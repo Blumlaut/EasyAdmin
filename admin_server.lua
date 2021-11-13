@@ -1386,7 +1386,7 @@ Citizen.CreateThread(function()
 				end
 				local output = "\n"
 				if changes then
-					local file = io.open(filename, "a+") -- reopen in read mode
+					local file = io.open(filename, "a+") -- reopen in write mode
 					for i, line in pairs(newLines) do
 						output=output..line.."\n"
 					end
