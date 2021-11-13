@@ -1310,7 +1310,6 @@ Citizen.CreateThread(function()
 				line = file:read("*line")
 			end
 			file:close()
-			local file = io.open(filename, "a+") -- reopen in read mode
 			
 			for i, line in pairs(lines) do 
 				if filename == "server.cfg" then
@@ -1387,13 +1386,14 @@ Citizen.CreateThread(function()
 				end
 				local output = "\n"
 				if changes then
+					local file = io.open(filename, "a+") -- reopen in read mode
 					for i, line in pairs(newLines) do
 						output=output..line.."\n"
 					end
 					file:write(output) -- write our lines
+					file:close()
 				end
 			end
-			file:close()
 			
 			for i,ace in pairs(aces) do 
 				PrintDebugMessage("parsed ace ^1"
