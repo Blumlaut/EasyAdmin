@@ -88,10 +88,9 @@ function DoesPlayerHavePermission(player, object)
 			return true
 		end-- Console. It's assumed this will be an admin with access.
 		
-		if string.find(object, "easyadmin.") then -- compatability with outdated plugins
-			object = string.gsub(object, "easyadmin.", "")
+		if not string.find(object, "easyadmin.") then -- compatability with outdated plugins
+			object = "easyadmin."..object
 		end
-		object = "easyadmin."..object
 		
 		if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
 			haspermission = true
