@@ -64,6 +64,22 @@ if IsDuplicityVersion() then
 	end
 end
 
+function displayKeyboardInput(title,default,maxLength)
+
+	DisplayOnscreenKeyboard(1, title, "", default, "", "", "", maxLength)
+
+	while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do --While typing is not aborted and not finished, this loop waits
+		Citizen.Wait(0)
+	end
+		
+	if UpdateOnscreenKeyboard() ~= 2 then
+		local result = GetOnscreenKeyboardResult()
+		return result
+	else
+		return nil
+	end
+end
+
 function GetLocalisedText(string)
 	if not strings then return "Strings not Loaded yet!" end
 	if not string then return "No String!" end

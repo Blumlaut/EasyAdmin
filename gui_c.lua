@@ -336,13 +336,8 @@ function GenerateMenu() -- this is a big ass function
 	local userSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
 	playermanagement:AddItem(userSearch)
 	userSearch.Activated = function(ParentMenu, SelectedItem)
-		DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 60)
 
-		while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-			Citizen.Wait( 0 )
-		end
-
-		local result = GetOnscreenKeyboardResult()
+		local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 60)
 
 		if result and result ~= "" then
 			local found = false
@@ -426,13 +421,7 @@ function GenerateMenu() -- this is a big ass function
 			KickReason = GetLocalisedText("noreason")
 			thisItem:RightLabel(KickReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-				
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-				
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
 				
 				if result and result ~= "" then
 					KickReason = result
@@ -467,13 +456,7 @@ function GenerateMenu() -- this is a big ass function
 			BanReason = GetLocalisedText("noreason")
 			thisItem:RightLabel(BanReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
 				
 				if result and result ~= "" then
 					BanReason = result
@@ -600,13 +583,7 @@ function GenerateMenu() -- this is a big ass function
 			WarnReason = GetLocalisedText("noreason")
 			thisItem:RightLabel(WarnReason)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
-				DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-				
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-				
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
 				
 				if result and result ~= "" then
 					WarnReason = result
@@ -803,13 +780,7 @@ function GenerateMenu() -- this is a big ass function
 				BanReason = GetLocalisedText("noreason")
 				thisItem:RightLabel(BanReason)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-					
-					while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-						Citizen.Wait( 0 )
-					end
-					
-					local result = GetOnscreenKeyboardResult()
+					local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
 					
 					if result and result ~= "" then
 						BanReason = result
@@ -853,13 +824,8 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("setgametype"), GetLocalisedText("setgametypeguide"))
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
 			
-			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-				Citizen.Wait( 0 )
-			end
-			
-			local result = GetOnscreenKeyboardResult()
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 32)
 			
 			if result then
 				TriggerServerEvent("EasyAdmin:SetGameType", result)
@@ -869,13 +835,7 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("setmapname"), GetLocalisedText("setmapnameguide"))
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
-			
-			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-				Citizen.Wait( 0 )
-			end
-			
-			local result = GetOnscreenKeyboardResult()
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 32)
 			
 			if result then
 				TriggerServerEvent("EasyAdmin:SetMapName", result)
@@ -887,13 +847,7 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("startresourcebyname"), GetLocalisedText("startresourcebynameguide"))
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
-			
-			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-				Citizen.Wait( 0 )
-			end
-			
-			local result = GetOnscreenKeyboardResult()
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 32)
 			
 			if result then
 				TriggerServerEvent("EasyAdmin:StartResource", result)
@@ -905,13 +859,7 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("stopresourcebyname"), GetLocalisedText("stopresourcebynameguide"))
 		servermanagement:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 32 + 1)
-			
-			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-				Citizen.Wait( 0 )
-			end
-			
-			local result = GetOnscreenKeyboardResult()
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 32)
 			
 			if result then
 				if result ~= GetCurrentResourceName() then
@@ -929,22 +877,10 @@ function GenerateMenu() -- this is a big ass function
 		thisItem.Activated = function(ParentMenu,SelectedItem)
 			AddTextEntry("EA_SETCONVAR_1", GetLocalisedText("convarname"))
 			AddTextEntry("EA_SETCONVAR_2", GetLocalisedText("convarvalue"))
-			DisplayOnscreenKeyboard(1, "EA_SETCONVAR_1", "", "", "", "", "", 64 + 1)
-			
-			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-				Citizen.Wait( 0 )
-			end
-			
-			local result = GetOnscreenKeyboardResult()
+			local result = displayKeyboardInput("EA_SETCONVAR_1", "", 64)
 			
 			if result then
-				DisplayOnscreenKeyboard(1, "EA_SETCONVAR_2", "", "", "", "", "", 64 + 1)
-			
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-				
-				local result2 = GetOnscreenKeyboardResult()
+				local result2 = displayKeyboardInput("EA_SETCONVAR_2", "", 64)
 
 				if result2 then
 					TriggerServerEvent("EasyAdmin:SetConvar", result, result2)
@@ -1014,14 +950,7 @@ function GenerateMenu() -- this is a big ass function
 				mainMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					if permissions["player.ban.edit"] then
-
-						DisplayOnscreenKeyboard(1, "", "", "", banlist[banId].name, "", "", 64 + 1)
-					
-						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-							Citizen.Wait( 0 )
-						end
-						
-						local result = GetOnscreenKeyboardResult()
+						local result = displayKeyboardInput("", banlist[banId].name, 64)
 		
 						if result then
 							banlist[banId].name = result
@@ -1036,13 +965,7 @@ function GenerateMenu() -- this is a big ass function
 				mainMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					if permissions["player.ban.edit"] then
-						DisplayOnscreenKeyboard(1, "", "", "", banlist[banId].banner, "", "", 64 + 1)
-					
-						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-							Citizen.Wait( 0 )
-						end
-						
-						local result = GetOnscreenKeyboardResult()
+						local result = displayKeyboardInput("", banlist[banId].banner, 64)
 		
 						if result then
 							banlist[banId].banner = result
@@ -1058,13 +981,7 @@ function GenerateMenu() -- this is a big ass function
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					if permissions["player.ban.edit"] then
 						AddTextEntry("EA_ENTERTIME", "Enter Unix Timestamp")
-						DisplayOnscreenKeyboard(1, "EA_ENTERTIME", "", "", banlist[banId].expire, "", "", 64 + 1)
-					
-						while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-							Citizen.Wait( 0 )
-						end
-						
-						local result = GetOnscreenKeyboardResult()
+						local result = displayKeyboardInput("EA_ENTERTIME", banlist[banId].expire, 64)
 		
 						if result then
 							banlist[banId].expire = tonumber(result)
@@ -1111,13 +1028,8 @@ function GenerateMenu() -- this is a big ass function
 		local thisItem = NativeUI.CreateItem(GetLocalisedText("searchbans"), "")
 		unbanPlayer:AddItem(thisItem)
 		thisItem.Activated = function(ParentMenu,SelectedItem)
-			DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP8", "", "", "", "", "", 128 + 1)
-				
-			while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-				Citizen.Wait( 0 )
-			end
-			
-			local result = GetOnscreenKeyboardResult()
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+
 			local foundBan = false
 			if result then
 				for i,theBanned in ipairs(banlist) do
@@ -1279,13 +1191,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
-				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERGROUP", "group.", 64)
 
 				if result and result ~= "" then
 					tempAce[1] = result
@@ -1299,13 +1205,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
-				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", "", "", "", 64)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERPERM", "", 64)
 
 				if result and result ~= "" then
 					tempAce[2] = result
@@ -1343,13 +1243,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
-				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", ace[1], "", "", 64)
-	
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-	
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERGROUP", ace[1], 64)
 	
 				if result and result ~= "" then
 					add_aces[i][1] = result
@@ -1363,13 +1257,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
-				DisplayOnscreenKeyboard(1, "ENTERPERM", "", "", ace[2], "", "", 64)
-	
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-	
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERPERM", ace[2], 64)
 	
 				if result and result ~= "" then
 					add_aces[i][2] = result
@@ -1414,13 +1302,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
-				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", "identifier.", "", "", 64)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERPRINCIPAL", "identifier.", 64)
 
 				if result and result ~= "" then
 					tempPrincipal[1] = result
@@ -1433,13 +1315,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
-				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", "group.", "", "", 64)
-
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERGROUP", "group.", 64)
 
 				if result and result ~= "" then
 					tempPrincipal[2] = result
@@ -1471,13 +1347,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
-				DisplayOnscreenKeyboard(1, "ENTERPRINCIPAL", "", "", principal[1], "", "", 64)
-	
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-	
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERPRINCIPAL", principal[1], 64)
 	
 				if result and result ~= "" then
 					add_principals[i][1] = result
@@ -1491,13 +1361,7 @@ function GenerateMenu() -- this is a big ass function
 			thisMenu:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
-				DisplayOnscreenKeyboard(1, "ENTERGROUP", "", "", principal[2], "", "", 64)
-	
-				while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-					Citizen.Wait( 0 )
-				end
-	
-				local result = GetOnscreenKeyboardResult()
+				local result = displayKeyboardInput("ENTERGROUP", principal[2], 64)
 	
 				if result and result ~= "" then
 					add_principals[i][2] = result
