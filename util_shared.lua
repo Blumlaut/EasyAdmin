@@ -80,6 +80,51 @@ function displayKeyboardInput(title,default,maxLength)
 	end
 end
 
+function DoesPlayerHavePermission(player, object)
+
+	if IsDuplicityVersion() then
+		local haspermission = false
+		if (player == 0 or player == "") then
+			return true
+		end-- Console. It's assumed this will be an admin with access.
+		
+		if string.find(object, "easyadmin.") then -- compatability with outdated plugins
+			object = string.gsub(object, "easyadmin.", "")
+		end
+		object = "easyadmin."..object
+		
+		if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
+			haspermission = true
+			PrintDebugMessage(getName(player, true).." has Permissions for "..object..".", 4)
+		else
+			haspermission = false
+			PrintDebugMessage(getName(player, true).." does not have Permissions for "..object..".", 4)
+		end
+		
+		if not haspermission then -- if not, check if they are admin using the legacy method.
+			local numIds = getAllPlayerIdentifiers(player)
+			for i,admin in pairs(admins) do
+				for i,theId in pairs(numIds) do
+					if admin == theId then
+						haspermission = true
+					end
+				end
+			end
+		end
+		return haspermission
+	else
+		return permissions[object]
+	end
+end
+
+function GetVersion()
+	local resourceName = GetCurrentResourceName()
+	local version = GetResourceMetadata(resourceName, 'version', 0)
+	local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
+	return version, is_master
+end
+
+
 function GetLocalisedText(string)
 	if not strings then return "Strings not Loaded yet!" end
 	if not string then return "No String!" end

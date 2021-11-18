@@ -289,49 +289,6 @@ function IsPlayerAdmin(pid)
 	return OnlineAdmins[pid]
 end
 
-
-
-function DoesPlayerHavePermission(player, object)
-	local haspermission = false
-	if (player == 0 or player == "") then
-		return true
-	end-- Console. It's assumed this will be an admin with access.
-	
-	if string.find(object, "easyadmin.") then -- compatability with outdated plugins
-		object = string.gsub(object, "easyadmin.", "")
-	end
-	object = "easyadmin."..object
-	
-	if IsPlayerAceAllowed(player,object) then -- check if the player has access to this permission
-		haspermission = true
-		PrintDebugMessage(getName(player, true).." has Permissions for "..object..".", 4)
-	else
-		haspermission = false
-		PrintDebugMessage(getName(player, true).." does not have Permissions for "..object..".", 4)
-	end
-	
-	if not haspermission then -- if not, check if they are admin using the legacy method.
-		local numIds = getAllPlayerIdentifiers(player)
-		for i,admin in pairs(admins) do
-			for i,theId in pairs(numIds) do
-				if admin == theId then
-					haspermission = true
-				end
-			end
-		end
-	end
-	return haspermission
-end
-
-
-function GetVersion()
-	local resourceName = GetCurrentResourceName()
-	local version = GetResourceMetadata(resourceName, 'version', 0)
-	local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
-	return version, is_master
-end
-
-	
 	
 RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
 	if args[2] and DoesPlayerHavePermission(source, "server.shortcut.add") then
