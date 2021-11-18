@@ -99,17 +99,7 @@ function DoesPlayerHavePermission(player, object)
 			haspermission = false
 			PrintDebugMessage(getName(player, true).." does not have Permissions for "..object..".", 4)
 		end
-		
-		if not haspermission then -- if not, check if they are admin using the legacy method.
-			local numIds = getAllPlayerIdentifiers(player)
-			for i,admin in pairs(admins) do
-				for i,theId in pairs(numIds) do
-					if admin == theId then
-						haspermission = true
-					end
-				end
-			end
-		end
+	
 		return haspermission
 	else
 		return permissions[object]

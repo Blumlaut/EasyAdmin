@@ -2159,7 +2159,6 @@ end
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
-admins = {} -- DO NOT TOUCH THIS
 MutedPlayers = {} -- DO NOT TOUCH THIS
 CachedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
