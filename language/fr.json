@@ -94,7 +94,7 @@
     "playernotfound": "Le joueur n'a pas été trouvé.",
     "done": "Fait!",
     "adminkickedplayer": "**%s** a expulser **%s**, Raison: %s",
-    "adminbannedplayer": "**%s** a banni **%s**, Raison: %s, Expire: %s",
+    "adminbannedplayer": "**%s** a banni **%s**, Raison: %s, Expire: %s, ID: %s",
     "adminunbannedplayer": "**%s** a débanni **%s** [ %s ]",
     "adminslappedplayer": "**%s** à pousser **%s** pour **%s HP**",
 
