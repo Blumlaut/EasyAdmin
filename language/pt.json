@@ -92,7 +92,7 @@
     "playernotfound": "Jogador não pode ser encontrado.",
     "done": "Feito!",
     "adminkickedplayer": "**%s** kicked **%s**, Razão: %s",
-    "adminbannedplayer": "**%s** banido **%s**, Razão: %s, Ban Expira: %s",
+    "adminbannedplayer": "**%s** banido **%s**, Razão: %s, Ban Expira: %s, ID: %s",
     "adminunbannedplayer": "**%s** unbanned **%s** [ %s ]",
     "adminslappedplayer": "**%s** slapped **%s** for **%s HP**",
     "adminfrozeplayer": "**%s** froze **%s**.",

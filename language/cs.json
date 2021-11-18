@@ -91,7 +91,7 @@
     "playernotfound": "Hrac nemohl byt nalezen.",
     "done": "Hotovo!",
     "adminkickedplayer": "**%s** vyhodil **%s**, Duvod: %s",
-    "adminbannedplayer": "**%s** zabanoval **%s**, Duvod: %s, Ban vyprsi: %s",
+    "adminbannedplayer": "**%s** zabanoval **%s**, Duvod: %s, Ban vyprsi: %s, ID: %s",
     "adminunbannedplayer": "**%s** odbanoval **%s** [ %s ]",
     "adminslappedplayer": "**%s** profackoval **%s** za **%s HP**",
 

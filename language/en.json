@@ -93,7 +93,7 @@
     "playernotfound": "Player could not be found.",
     "done": "Done!",
     "adminkickedplayer": "**%s** kicked **%s**, Reason: %s",
-    "adminbannedplayer": "**%s** banned **%s**, Reason: %s, Ban Expires: %s",
+    "adminbannedplayer": "**%s** banned **%s**, Reason: %s, Ban Expires: %s, ID: %s",
     "adminunbannedplayer": "**%s** unbanned **%s** [ %s ]",
     "adminslappedplayer": "**%s** slapped **%s** for **%s HP**",
 

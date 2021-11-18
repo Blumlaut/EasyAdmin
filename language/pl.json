@@ -93,7 +93,7 @@
     "playernotfound": "Nie można znaleźć gracza.",
     "done": "Zrobione!",
     "adminkickedplayer": "**%s** wyrzucił **%s**, Powód: %s",
-    "adminbannedplayer": "**%s** zbanował **%s**, Powód: %s, Czas trwania: %s",
+    "adminbannedplayer": "**%s** zbanował **%s**, Powód: %s, Czas trwania: %s, ID: %s",
     "adminunbannedplayer": "**%s** odblokował **%s** [ %s ]",
     "adminslappedplayer": "**%s** uderzył **%s** za **%s HP**",
 
