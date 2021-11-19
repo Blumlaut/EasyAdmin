@@ -77,6 +77,12 @@ html {
 	background: rgba(57, 63, 84, 0.6);
 	filter: url(#svgDropShadowFilter);
   }
+
+  .webflow-style-button {
+	position: absolute;
+	right: 5px;
+	top: 50%
+  }
   
   .webflow-style-input:after {
 	content: "";
