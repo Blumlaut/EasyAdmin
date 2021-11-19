@@ -105,15 +105,14 @@ function DoesPlayerHavePermission(player, object)
 end
 
 function DoesPlayerHavePermissionForCategory(player, object)
-	local haspermission = false
 	for perm in pairs(permissions) do
 		if string.startswith(perm, object) then
 			if DoesPlayerHavePermission(player, perm) then
-				haspermission = true
+				return true
 			end
 		end
 	end
-	return haspermission
+	return false
 end
 
 
