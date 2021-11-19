@@ -11,24 +11,24 @@
 		var resource = "EasyAdmin"
 
 		function open(data){
+			var title = document.getElementById("textTitle");
+			title.textContent = data.title
 			var input = document.getElementById("textInput");
-			input.placeholder = data.title;
-			input.setAttribute('width',input.getAttribute('placeholder').length);
 			input.maxLength = data.maxLength
 			input.value = data.default
-			$(`.webflow-style-input`).fadeIn(0)
+			$(`.webflow-style-input`).show()
 			input.focus
 			input.setActive
 			input.select();
 		}
 
 		function cancel(){
-			$(`.webflow-style-input`).fadeOut(0);
+			$(`.webflow-style-input`).fadeOut(200);
 			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: "", state: 1}))
 		}
 
 		function submit(){
-			$(`.webflow-style-input`).fadeOut(0);
+			$(`.webflow-style-input`).fadeOut(400);
 			var input = document.getElementById("textInput");
 			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: input.value, state: 0}))
 		}
@@ -64,7 +64,8 @@
 	<div class="demo-flex-spacer"></div>
   
 	<div class="webflow-style-input">
-	  <input class="" id="textInput" type="text" placeholder="Enter your text."></input>
+		<p id="textTitle" class="webflow-style-text" >Title</p>
+		<input class="" id="textInput" type="text"></input>
 	</div>
   
 	<div class="demo-flex-spacer"></div>

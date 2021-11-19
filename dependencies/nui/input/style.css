@@ -88,7 +88,7 @@ html {
 	height: 2px;
 	border-bottom-left-radius: 2px;
 	border-bottom-right-radius: 2px;
-	background: linear-gradient(to right, #060709, #3C4E63, #526B86);
+	background: linear-gradient(to right, #3C4E63, #526B86);
   }
   
   .webflow-style-input input {
@@ -97,7 +97,16 @@ html {
 	font-size: 1.8rem;
 	line-height: 2.4rem;
 	vertical-align: middle;
+	width:100%;
   }
+
+  .webflow-style-text {
+	color: #b5cafc;
+	font-size: 1.6rem;
+	margin-bottom: 0.3rem;
+	vertical-align: middle;
+  }
+
   .webflow-style-input input::-webkit-input-placeholder {
 	color: #8B95B7;
   }
