@@ -81,7 +81,6 @@ function displayKeyboardInput(title,default,maxLength)
 end
 
 function DoesPlayerHavePermission(player, object)
-
 	if IsDuplicityVersion() then
 		local haspermission = false
 		if (player == 0 or player == "") then
@@ -99,12 +98,24 @@ function DoesPlayerHavePermission(player, object)
 			haspermission = false
 			PrintDebugMessage(getName(player, true).." does not have Permissions for "..object..".", 4)
 		end
-	
 		return haspermission
 	else
 		return permissions[object]
 	end
 end
+
+function DoesPlayerHavePermissionForCategory(player, object)
+	local haspermission = false
+	for perm in pairs(permissions) do
+		if string.startswith(perm, object) then
+			if DoesPlayerHavePermission(player, perm) then
+				haspermission = true
+			end
+		end
+	end
+	return haspermission
+end
+
 
 function GetVersion()
 	local resourceName = GetCurrentResourceName()
@@ -166,6 +177,10 @@ function string.reverse(s)
 	end
 	return r
 end
+
+function string.startswith(string,start)
+	return string:sub(1,string.len(start))==start
+ end
 
 
 --- http://www.lua.org/pil/11.5.html
