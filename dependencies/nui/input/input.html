@@ -1,0 +1,73 @@
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Keyboard Input</title>
+	<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="style.css" />
+	<script src="shadow.js" defer></script>
+	<script>
+
+		var resource = "EasyAdmin"
+
+		function open(data){
+			var input = document.getElementById("textInput");
+			input.placeholder = data.title;
+			input.setAttribute('width',input.getAttribute('placeholder').length);
+			input.maxLength = data.maxLength
+			input.value = data.default
+			$(`.webflow-style-input`).fadeIn(0)
+			input.focus
+			input.setActive
+			input.select();
+		}
+
+		function cancel(){
+			$(`.webflow-style-input`).fadeOut(0);
+			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: "", state: 1}))
+		}
+
+		function submit(){
+			$(`.webflow-style-input`).fadeOut(0);
+			var input = document.getElementById("textInput");
+			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: input.value, state: 0}))
+		}
+
+		window.addEventListener("keydown", (ev) => {
+			if (ev.which == 27) {
+				cancel();
+			} else if (ev.which == 13) {
+				submit()
+			}
+		})
+
+		window.addEventListener("message", (evt) => {
+			const data = evt.data
+			const action = data.action
+			resource = data.resource
+			switch (action) {
+				case "open":
+					return open(data);
+				default:
+					return;
+			}
+		})
+
+	</script>
+
+</head>
+
+<body>
+<div class="container">
+	
+
+	<div class="demo-flex-spacer"></div>
+  
+	<div class="webflow-style-input">
+	  <input class="" id="textInput" type="text" placeholder="Enter your text."></input>
+	</div>
+  
+	<div class="demo-flex-spacer"></div>
+
+  </div>
+</body>

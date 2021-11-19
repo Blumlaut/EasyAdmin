@@ -64,8 +64,36 @@ if IsDuplicityVersion() then
 	end
 end
 
-function displayKeyboardInput(title,default,maxLength)
+if not IsDuplicityVersion() then
+	RegisterNUICallback("keyboardFinished", function(data, cb)
+		keyboardResult = data.result
+		keyboardState = data.state
+		cb('ok')
+	end)
+end
 
+function displayKeyboardInput(title,default,maxLength)
+	if alreadyTyping then return nil end
+	keyboardResult, keyboardState = nil
+
+
+	SetNuiFocus(true, true)
+	SendNUIMessage({action= "open", title=GetLabelText(title), default=default, maxLength=maxLength, resource=GetCurrentResourceName()})
+
+	alreadyTyping = true
+
+	while not keyboardState do --While typing is not aborted and not finished, this loop waits
+		Citizen.Wait(0)
+	end
+
+	alreadyTyping = false
+	SetNuiFocus(false,false)
+	if keyboardState == 0 then
+		return keyboardResult
+	else
+		return nil
+	end
+--[[ -- default V Input
 	DisplayOnscreenKeyboard(1, title, "", default, "", "", "", maxLength)
 
 	while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do --While typing is not aborted and not finished, this loop waits
@@ -78,6 +106,7 @@ function displayKeyboardInput(title,default,maxLength)
 	else
 		return nil
 	end
+]]
 end
 
 function DoesPlayerHavePermission(player, object)
