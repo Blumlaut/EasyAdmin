@@ -72,6 +72,7 @@ if not IsDuplicityVersion() then
 	end)
 end
 
+
 function displayKeyboardInput(title,default,maxLength)
 	if alreadyTyping then return nil end
 	keyboardResult, keyboardState = nil
@@ -107,6 +108,11 @@ function displayKeyboardInput(title,default,maxLength)
 		return nil
 	end
 ]]
+end
+
+function copyToClipboard(text)
+	SendNUIMessage({action= "clip", text=text})
+	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("copiedtoclipboard"))
 end
 
 function DoesPlayerHavePermission(player, object)

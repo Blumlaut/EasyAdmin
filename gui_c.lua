@@ -48,7 +48,6 @@ RegisterCommand('easyadmin', function(source, args)
 			end
 		end
 		
-
 		if not mainMenu or not mainMenu:Visible() then
 			if ((RedM and settings.infinity) or not RedM) and isAdmin then
 				playerlist = nil
@@ -1016,7 +1015,7 @@ function GenerateMenu() -- this is a big ass function
 						local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
 						mainMenu:AddItem(thisItem)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
-							--nothing
+							copyToClipboard(identifier)
 						end	
 					end
 				end

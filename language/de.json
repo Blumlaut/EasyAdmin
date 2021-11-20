@@ -223,5 +223,6 @@
     "savebanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Bann überschrieben",
     "adminimmune": "Dazu hast du keine Rechte, der ausgewählte Spieler ist Immun",
     "teleportmeback": "Teleportiere mich zurück",
-    "teleportplayerback": "Teleportiere Spieler zurück"
+    "teleportplayerback": "Teleportiere Spieler zurück",
+    "copiedtoclipboard":"Text wurde in die Zwischenablage kopiert!"
 }]

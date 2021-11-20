@@ -222,7 +222,8 @@
     "savebanguide":"~r~~h~NOTA:~h~~w~ Pulsando Confirmar actualizarás este Baneo en el servidor.",
     "adminimmune":"No tienes permiso para hacer esto, el jugador que has seleccionado es Administrador.",
     "teleportmeback":"Teleportarme a donde estaba",
-    "teleportplayerback":"Teleportar al jugador a donde estaba"
+    "teleportplayerback":"Teleportar al jugador a donde estaba",
+    "copiedtoclipboard":"Text copied to Clipboard!"
 
 
 }]

@@ -4,12 +4,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Keyboard Input</title>
 	<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="style.css" />
-	<script src="shadow.js" defer></script>
+	<link rel="stylesheet" href="./input/style.css" />
+	<script src="./input/shadow.js" defer></script>
 	<script>
-
+		
 		var resource = "EasyAdmin"
-
+		
 		function open(data){
 			var title = document.getElementById("textTitle");
 			title.textContent = data.title
@@ -21,18 +21,18 @@
 			input.setActive
 			input.select();
 		}
-
+		
 		function cancel(){
 			$(`.webflow-style-input`).fadeOut(200);
 			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: "", state: 1}))
 		}
-
+		
 		function submit(){
 			$(`.webflow-style-input`).fadeOut(400);
 			var input = document.getElementById("textInput");
 			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: input.value, state: 0}))
 		}
-
+		
 		window.addEventListener("keydown", (ev) => {
 			if (ev.which == 27) {
 				cancel();
@@ -40,45 +40,59 @@
 				submit()
 			}
 		})
-	
+		
 		$(document).ready(function() {
 			document.getElementById("confirmButton").addEventListener("click", function() {
 				submit()
 			})
 		})
-			
+		
 		window.addEventListener("message", (evt) => {
 			const data = evt.data
 			const action = data.action
-			resource = data.resource
+			if (data.resource) {
+				resource = data.resource
+			}
+
 			switch (action) {
 				case "open":
 					return open(data);
+				case "clip":
+					return copyToClipboard(data.text)
 				default:
 					return;
 			}
 		})
+		
+		function copyToClipboard(text) {
+			const el = document.createElement('textarea');
+			el.value = text;
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+		}
 	</script>
 </head>
 
 <body>
-<div class="container">
-	
-
-	<div class="demo-flex-spacer"></div>
-  
-	<div class="webflow-style-input">
-		<p id="textTitle" class="webflow-style-text" ></p>
-		<input class="" id="textInput" type="text"></input>
-		<button id="confirmButton" class="webflow-style-button" >
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
-				<path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-			</svg>
-		</button>
+	<div class="container">
+		
+		
+		<div class="demo-flex-spacer"></div>
+		
+		<div class="webflow-style-input">
+			<p id="textTitle" class="webflow-style-text" ></p>
+			<input class="" id="textInput" type="text"></input>
+			<button id="confirmButton" class="webflow-style-button" >
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
+					<path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+				</svg>
+			</button>
+		</div>
+		
+		
+		<div class="demo-flex-spacer"></div>
+		
 	</div>
-	
-  
-	<div class="demo-flex-spacer"></div>
-
-  </div>
 </body>

@@ -220,7 +220,8 @@
     "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
     "adminimmune":"You do not have permission to perform this action, target player is immune.",
     "teleportmeback":"Teleport me back",
-    "teleportplayerback":"Teleport Player back"
+    "teleportplayerback":"Teleport Player back",
+    "copiedtoclipboard":"Text copied to Clipboard!"
 
 
 }]

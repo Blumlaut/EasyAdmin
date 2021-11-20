@@ -30,11 +30,11 @@ client_scripts {
 	"plugins/**/*_client.lua"
 }
 
-ui_page "dependencies/nui/input/input.html"
+ui_page "dependencies/nui/index.html"
 
 files {
 	"dependencies/images/*.png",
-    "dependencies/nui/input/*"
+    "dependencies/nui/**/*"
 }
 
 convar_category 'EasyAdmin' {
