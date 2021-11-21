@@ -402,10 +402,10 @@ function spectatePlayer(targetPed,target,name)
 				if IsVehicleSeatFree(vehicle, vehicleInfo.seat) then
 					SetPedIntoVehicle(playerPed, vehicle, vehicleInfo.seat)
 				else
-					TriggerEvent("EasyAdmin:showNotification", 'The seat you was in is no longer empty.')
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("spectatevehicleseatoccupied"))
 				end
 			else
-				TriggerEvent("EasyAdmin:showNotification", 'Cant find the vehicle.')
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("spectatenovehiclefound"))
 			end
 
 			vehicleInfo.netId = nil
