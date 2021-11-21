@@ -11,6 +11,11 @@ cachedplayers = {}
 reports = {}
 add_aces, add_principals = {}, {}
 
+local vehicleInfo = {
+	netId = nil,
+	seat = nil,
+}
+
 RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	permissions = perms
 
@@ -104,6 +109,19 @@ end)
 
 RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords)
 	local localPlayerPed = PlayerPedId()
+
+	if IsPedInAnyVehicle(localPlayerPed) then
+		local vehicle = GetVehiclePedIsIn(localPlayerPed, false)
+		local numVehSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
+		vehicleInfo.netId = VehToNet(vehicle)
+		for i = -1, numVehSeats do
+			if GetPedInVehicleSeat(vehicle, i) == localPlayerPed then
+				vehicleInfo.seat = i
+				break
+			end
+		end
+	end
+
 	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId))) end
 	if playerServerId == GetPlayerServerId(PlayerId()) then 
 		if oldCoords then
@@ -344,8 +362,8 @@ function spectatePlayer(targetPed,target,name)
 	enable = true
 	if (target == PlayerId() or target == -1) then 
 		enable = false
-		print("Target Player is ourselves, disabling spectate.")
 	end
+
 	if(enable)then
 		SetEntityVisible(playerPed, false, 0)
 		SetEntityCollision(playerPed, false, false)
@@ -378,6 +396,21 @@ function spectatePlayer(targetPed,target,name)
 		SetEntityCollision(playerPed, true, true)
 		SetEntityInvincible(playerPed, false)
 		NetworkSetEntityInvisibleToNetwork(playerPed, false)
+		if vehicleInfo.netId and vehicleInfo.seat then
+			local vehicle = NetToVeh(vehicleInfo.netId)
+			if DoesEntityExist(vehicle) then
+				if IsVehicleSeatFree(vehicle, vehicleInfo.seat) then
+					SetPedIntoVehicle(playerPed, vehicle, vehicleInfo.seat)
+				else
+					TriggerEvent("EasyAdmin:showNotification", 'The seat you was in is no longer empty.')
+				end
+			else
+				TriggerEvent("EasyAdmin:showNotification", 'Cant find the vehicle.')
+			end
+
+			vehicleInfo.netId = nil
+			vehicleInfo.seat = nil
+		end
 	end
 end
 
