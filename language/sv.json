@@ -225,8 +225,9 @@
     "adminimmune":"You do not have permission to perform this action, target player is immune.",
     "teleportmeback":"Teleport me back",
     "teleportplayerback":"Teleport Player back",
-    "copiedtoclipboard":"Text copied to Clipboard!"
+    "copiedtoclipboard":"Text copied to Clipboard!",
 
-
+    "spectatevehicleseatoccupied":"The vehicle seat you were in is now occupied.",
+    "spectatenovehiclefound":"The vehicle you were in can no longer be found."
 
 }]

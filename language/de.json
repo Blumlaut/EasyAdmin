@@ -224,5 +224,8 @@
     "adminimmune": "Dazu hast du keine Rechte, der ausgewählte Spieler ist Immun",
     "teleportmeback": "Teleportiere mich zurück",
     "teleportplayerback": "Teleportiere Spieler zurück",
-    "copiedtoclipboard":"Text wurde in die Zwischenablage kopiert!"
+    "copiedtoclipboard":"Text wurde in die Zwischenablage kopiert!",
+
+    "spectatevehicleseatoccupied":"The vehicle seat you were in is now occupied.",
+    "spectatenovehiclefound":"The vehicle you were in can no longer be found."
 }]

@@ -223,7 +223,10 @@
     "adminimmune":"No tienes permiso para hacer esto, el jugador que has seleccionado es Administrador.",
     "teleportmeback":"Teleportarme a donde estaba",
     "teleportplayerback":"Teleportar al jugador a donde estaba",
-    "copiedtoclipboard":"Text copied to Clipboard!"
+    "copiedtoclipboard":"Text copied to Clipboard!",
+
+    "spectatevehicleseatoccupied":"The vehicle seat you were in is now occupied.",
+    "spectatenovehiclefound":"The vehicle you were in can no longer be found."
 
 
 }]
