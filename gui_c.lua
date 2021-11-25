@@ -69,14 +69,15 @@ RegisterCommand('easyadmin', function(source, args)
 				end
 
 				if permissions["player.ban.temporary"] then
-					table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
-					table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
-					table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
-					table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
-					table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
-					table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
-					table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
-					table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+					table.insert(banLength, {label = "6 "..GetLocalisedText("hours"), time = 21600})
+					table.insert(banLength, {label = "12 "..GetLocalisedText("hours"), time = 43200})
+					table.insert(banLength, {label = "1 "..GetLocalisedText("day"), time = 86400})
+					table.insert(banLength, {label = "3 "..GetLocalisedText("days"), time = 259200})
+					table.insert(banLength, {label = "1 "..GetLocalisedText("week"), time = 518400})
+					table.insert(banLength, {label = "2 "..GetLocalisedText("weeks"), time = 1123200})
+					table.insert(banLength, {label = "1 "..GetLocalisedText("month"), time = 2678400})
+					table.insert(banLength, {label = "1 "..GetLocalisedText("year"), time = 31536000})
+					table.insert(banLength, {label = GetLocalisedText("customtime"), time = -1})
 				end
 				GenerateMenu()
 				mainMenu:Visible(true)
@@ -171,14 +172,15 @@ Citizen.CreateThread(function()
 					end
 
 					if permissions["player.ban.temporary"] then
-						table.insert(banLength, {label = GetLocalisedText("6hours"), time = 21600})
-						table.insert(banLength, {label = GetLocalisedText("12hours"), time = 43200})
-						table.insert(banLength, {label = GetLocalisedText("oneday"), time = 86400})
-						table.insert(banLength, {label = GetLocalisedText("threedays"), time = 259200})
-						table.insert(banLength, {label = GetLocalisedText("oneweek"), time = 518400})
-						table.insert(banLength, {label = GetLocalisedText("twoweeks"), time = 1123200})
-						table.insert(banLength, {label = GetLocalisedText("onemonth"), time = 2678400})
-						table.insert(banLength, {label = GetLocalisedText("oneyear"), time = 31536000})
+						table.insert(banLength, {label = "6 "..GetLocalisedText("hours"), time = 21600})
+						table.insert(banLength, {label = "12 "..GetLocalisedText("hours"), time = 43200})
+						table.insert(banLength, {label = "1 "..GetLocalisedText("day"), time = 86400})
+						table.insert(banLength, {label = "3 "..GetLocalisedText("days"), time = 259200})
+						table.insert(banLength, {label = "1 "..GetLocalisedText("week"), time = 518400})
+						table.insert(banLength, {label = "2 "..GetLocalisedText("weeks"), time = 1123200})
+						table.insert(banLength, {label = "1 "..GetLocalisedText("month"), time = 2678400})
+						table.insert(banLength, {label = "1 "..GetLocalisedText("year"), time = 31536000})
+						table.insert(banLength, {label = "1 "..GetLocalisedText("customtime"), time = -1})
 					end
 					
 					
@@ -454,8 +456,6 @@ function GenerateMenu() -- this is a big ass function
 						KickReason = GetLocalisedText("noreason")
 					end
 					TriggerServerEvent("EasyAdmin:kickPlayer", thePlayer.id, KickReason)
-					BanTime = 1
-					BanReason = ""
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(800)
 					GenerateMenu()
@@ -490,16 +490,99 @@ function GenerateMenu() -- this is a big ass function
 				thisBanMenu:AddItem(thisItem)
 				local BanTime = 1
 				thisItem.OnListChanged = function(sender,item,index)
-					BanTime = index
+					BanTime = banLength[index].time
+				end
+
+				thisItem.OnListSelected = function (sender,item,index)
+					if banLength[index].time == -1 then
+
+
+						local thisBanTimeMenu = _menuPool:AddSubMenu(thisBanMenu, GetLocalisedText("banlength"), "",true)
+						thisBanTimeMenu:SetMenuWidthOffset(menuWidth)
+	
+
+
+						local hours, days, weeks, months = 0, 0, 0, 0
+						-- generate our ban lengths
+						local hourArray = {}
+						for i=0, 24 do
+							table.insert(hourArray,i)
+						end
+
+						local dayArray = {}
+						for i=0, 31 do
+							table.insert(dayArray,i)
+						end
+
+						local weekArray = {}
+						for i=0, 4 do
+							table.insert(weekArray,i)
+						end
+
+						local monthArray = {}
+						for i=0, 12 do
+							table.insert(monthArray,i)
+						end
+
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("hours"),hourArray, 1,"")
+						thisBanTimeMenu:AddItem(thisItem)
+						thisItem.OnListChanged = function(sender,item,index)
+							hours = item:IndexToItem(index)
+						end
+
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("days"),dayArray, 1,"")
+						thisBanTimeMenu:AddItem(thisItem)
+						thisItem.OnListChanged = function(sender,item,index)
+							days = item:IndexToItem(index)
+						end
+
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("weeks"),weekArray, 1,"")
+						thisBanTimeMenu:AddItem(thisItem)
+						thisItem.OnListChanged = function(sender,item,index)
+							weeks = item:IndexToItem(index)
+						end
+
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("months"),monthArray, 1,"")
+						thisBanTimeMenu:AddItem(thisItem)
+						thisItem.OnListChanged = function(sender,item,index)
+							months = item:IndexToItem(index)
+						end
+
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("confirm"),"")
+						thisBanTimeMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							hours=hours*3600
+							days=days*86400
+							weeks=weeks*518400
+							months=months*2678400
+							BanTime = hours+days+weeks+months
+							thisBanMenu:Visible(true)
+						end
+
+						thisBanTimeMenu:RefreshIndex()
+						-- evil NativeUI hack to force it to select and open our submenu
+						thisBanMenu:CurrentSelection(#thisBanMenu.Items-1)
+						for i, item in pairs(thisBanMenu.Items) do
+							item:Selected(false)
+						end
+
+						thisBanMenu:SelectItem()
+						-- woosh
+						thisBanMenu:RemoveItemAt(#thisBanMenu.Items)
+					end
 				end
 			
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
 				thisBanMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if BanTime == -1 then
+						TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nocustombantime"))
+						return
+					end
 					if BanReason == "" then
 						BanReason = GetLocalisedText("noreason")
 					end
-					TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, banLength[BanTime].time, thePlayer.name )
+					TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, BanTime, thePlayer.name )
 					BanTime = 1
 					BanReason = ""
 					_menuPool:CloseAllMenus()
