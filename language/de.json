@@ -1,5 +1,5 @@
 [{
-    "translator": "zRxnx",
+    "translator": "EasyAdmin, zRxnx",
     "language": "de",
     "on": "An",
     "off": "Aus",
@@ -231,6 +231,6 @@
     "teleportplayerback": "Teleportiere Spieler zurück",
     "copiedtoclipboard": "Text wurde in die Zwischenablage kopiert!",
 
-    "spectatevehicleseatoccupied": "Der Fahrzeugsitz auf dem du gessesen bist, ist jetzt besetzt",
-    "spectatenovehiclefound": "Das Fahrzeug in dem du gessesen bist, wurde nicht mehr gefunden"
+    "spectatevehicleseatoccupied": "Der Fahrzeugsitz auf dem du gesessen hast, ist jetzt besetzt",
+    "spectatenovehiclefound": "Das Fahrzeug in dem du gesessen hast, wurde nicht mehr gefunden"
 }]
