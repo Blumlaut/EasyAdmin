@@ -868,99 +868,107 @@ Citizen.CreateThread(function()
 	--- Commands for Normal Users
 	RegisterCommand(GetConvar("ea_callAdminCommandName", "calladmin"), function(source, args, rawCommand)
 		if GetConvar("ea_enableCallAdminCommand", "true") == "true" then
-			local time = os.time()
-			local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
-			local source=source
-			if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
-				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("waitbeforeusingagain"))
-				return
+			if args[1] then
+				local time = os.time()
+				local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
+				local source=source
+				if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
+					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("waitbeforeusingagain"))
+					return
+				end
+				
+				local reason = string.gsub(rawCommand, "calladmin ", "")
+				local reportid = addNewReport(0, source, _,reason)
+				for i,_ in pairs(OnlineAdmins) do 
+					local notificationText = string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,false), reason, reportid)
+					TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
+				end
+				
+				
+				local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
+				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true, true), reason, reportid), "calladmin", 16776960)
+				--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("admincalled"))
+				
+				time = os.time()
+				cooldowns[source] = time
+			else
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
 			end
-			
-			local reason = string.gsub(rawCommand, "calladmin ", "")
-			local reportid = addNewReport(0, source, _,reason)
-			for i,_ in pairs(OnlineAdmins) do 
-				local notificationText = string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,false), reason, reportid)
-				TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
-			end
-			
-			
-			local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true, true), reason, reportid), "calladmin", 16776960)
-			--TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
-			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("admincalled"))
-			
-			time = os.time()
-			cooldowns[source] = time
 		end
 	end, false)
 	PlayerReports = {}
 	RegisterCommand(GetConvar("ea_reportCommandName", "report"), function(source, args, rawCommand)
 		if GetConvar("ea_enableReportCommand", "true") == "true" then
-			local source = source
-			local id = args[1]
-			local valid = false
-			local minimumreports = GetConvarInt("ea_defaultMinReports", 3)
-			if GetConvar("ea_MinReportModifierEnabled", "true") == "true" then
-				if #GetPlayers() > GetConvarInt("ea_MinReportPlayers", 12) then
-					minimumreports = math.round(#GetPlayers()/GetConvarInt("ea_MinReportModifier", 4),0)
-				end
-			end
-			if id and not GetPlayerIdentifier(id, 1) then
-				for i, player in pairs(GetPlayers()) do
-					if string.find(string.lower(getName(player, true)), string.lower(id)) then
-						id = player
-						valid = true
-						break
+			if args[2] then
+				local source = source
+				local id = args[1]
+				local valid = false
+				local minimumreports = GetConvarInt("ea_defaultMinReports", 3)
+				if GetConvar("ea_MinReportModifierEnabled", "true") == "true" then
+					if #GetPlayers() > GetConvarInt("ea_MinReportPlayers", 12) then
+						minimumreports = math.round(#GetPlayers()/GetConvarInt("ea_MinReportModifier", 4),0)
 					end
 				end
-			else
-				valid = true
-			end
-			
-			
-			if id and valid then
-				local reason = string.gsub(rawCommand, "report " ..args[1].." ", "")
-				if not PlayerReports[id] then
-					PlayerReports[id] = { }
-				end
-				local addReport = true
-				for i, report in pairs(PlayerReports[id]) do
-					if report.source == source or report.sourceName == getName(source, true) then
-						addReport = false
-					end
-				end
-				if addReport then
-					table.insert(PlayerReports[id], {source = source, sourceName = getName(source, true), reason = reason, time = os.time()})
-					local reportid = addNewReport(1, source, id, reason)
-					local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-					SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid), "report", 16776960)
-					if GetConvar("ea_enableReportScreenshots", "true") == "true" then
-						TriggerEvent("EasyAdmin:TakeScreenshot", id)
-					end
-					
-					
-					for i,_ in pairs(OnlineAdmins) do 
-						local notificationText = string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, false), getName(id, true, false), reason, #PlayerReports[id], minimumreports, reportid)
-						TriggerClientEvent('chat:addMessage', i, { 
-							template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
-							args = { "^3EasyAdmin Report^7\n"..notificationText }, color = { 255, 255, 255 } 
-						})
-						TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
-					end
-					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported"))
-					
-					if #PlayerReports[id] >= minimumreports then
-						TriggerEvent("EasyAdmin:addBan", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
+				if id and not GetPlayerIdentifier(id, 1) then
+					for i, player in pairs(GetPlayers()) do
+						if string.find(string.lower(getName(player, true)), string.lower(id)) then
+							id = player
+							valid = true
+							break
+						end
 					end
 				else
-					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("alreadyreported"))
+					valid = true
+				end
+				
+				
+				if id and valid then
+					local reason = string.gsub(rawCommand, "report " ..args[1].." ", "")
+					if not PlayerReports[id] then
+						PlayerReports[id] = { }
+					end
+					local addReport = true
+					for i, report in pairs(PlayerReports[id]) do
+						if report.source == source or report.sourceName == getName(source, true) then
+							addReport = false
+						end
+					end
+					if addReport then
+						table.insert(PlayerReports[id], {source = source, sourceName = getName(source, true), reason = reason, time = os.time()})
+						local reportid = addNewReport(1, source, id, reason)
+						local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
+						SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playerreportedplayer"), getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid), "report", 16776960)
+						if GetConvar("ea_enableReportScreenshots", "true") == "true" then
+							TriggerEvent("EasyAdmin:TakeScreenshot", id)
+						end
+						
+						
+						for i,_ in pairs(OnlineAdmins) do 
+							local notificationText = string.format(string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""), getName(source, false, false), getName(id, true, false), reason, #PlayerReports[id], minimumreports, reportid)
+							TriggerClientEvent('chat:addMessage', i, { 
+								template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
+								args = { "^3EasyAdmin Report^7\n"..notificationText }, color = { 255, 255, 255 } 
+							})
+							TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
+						end
+						TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported"))
+						
+						if #PlayerReports[id] >= minimumreports then
+							TriggerEvent("EasyAdmin:addBan", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
+						end
+					else
+						TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("alreadyreported"))
+					end
+				else
+					TriggerClientEvent('chat:addMessage', source, { 
+						template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0}:<br> {1}</div>',
+						args = { "^3EasyAdmin^7", GetLocalisedText("reportedusageerror") }, color = { 255, 255, 255 } 
+					})
+					TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportedusageerror"))
 				end
 			else
-				TriggerClientEvent('chat:addMessage', source, { 
-					template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0}:<br> {1}</div>',
-					args = { "^3EasyAdmin^7", GetLocalisedText("reportedusageerror") }, color = { 255, 255, 255 } 
-				})
-				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportedusageerror"))
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
 			end
 		end
 	end, false)

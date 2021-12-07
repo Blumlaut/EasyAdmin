@@ -222,6 +222,7 @@
     "refreshreports": "Vernieuw Reports",
     "refreshreportsguide": "Laat nieuwe reports zien, als er nieuwe zijn.",
     "waitbeforeusingagain": "You must wait before using this again!",
+    "invalidreport": "Je moet een reden specificeren!",
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
