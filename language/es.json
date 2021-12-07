@@ -218,6 +218,7 @@
     "refreshreports": "Recargar Reportes",
     "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menú.",
     "waitbeforeusingagain": "¡Debes esperar antes de poder hacer eso otra vez!",
+    "invalidreport": "You need to specify a reason!",
     "claimreport":"Aceptar reporte",
     "claimedby":"Reporte atendido por",
     "reportalreadyclaimed": "Este report ya ha sido aceptado",

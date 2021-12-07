@@ -220,6 +220,7 @@
     "refreshreports": "Odśwież zgłoszenia",
     "refreshreportsguide": "Pokazuje nowe raporty, jeśli są jakieś od ostatniego otwarcia menu.",
     "waitbeforeusingagain": "Musisz poczekać przed użyciem tego ponownie!",
+    "invalidreport": "You need to specify a reason!",
     "claimreport":"Zajmij Report",
     "claimedby":"Zajęty przez",
     "reportalreadyclaimed": "Ten report został już zajęty!", 

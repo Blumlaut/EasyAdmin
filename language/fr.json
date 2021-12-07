@@ -221,6 +221,7 @@
     "refreshreports": "Refresh Reports",
     "refreshreportsguide": "Shows new reports in case there are any since last time the menu was opened.",
     "waitbeforeusingagain": "You must wait before using this again!",
+    "invalidreport": "You need to specify a reason!",
     "claimreport":"Claim Report",
     "claimedby":"Claimed By",
     "reportalreadyclaimed": "This report has already been claimed!",
