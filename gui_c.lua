@@ -488,7 +488,7 @@ function GenerateMenu() -- this is a big ass function
 				
 				local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
 				thisBanMenu:AddItem(thisItem)
-				local BanTime = 1
+				local BanTime = banLength[1].time
 				thisItem.OnListChanged = function(sender,item,index)
 					BanTime = banLength[index].time
 				end
