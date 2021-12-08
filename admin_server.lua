@@ -1950,6 +1950,33 @@ Citizen.CreateThread(function()
 	
 	
 	
+	function sendTelemetry()
+		local data = {}
+		data.version, data.unstable = GetVersion()
+		data.servername = GetConvar("sv_hostname", "Default FXServer")
+		data.usercount = #GetPlayers()
+		data.bancount = #blacklist
+		data.time = os.time()
+		if os.getenv('OS') then
+			data.os = os.getenv('OS')
+		else
+			local os_release = io.open("/etc/os-release")
+			if os_release then
+				data.os = string.split(os_release:read("*a"), '"')[2]
+			else
+				local issue = io.open("/etc/issue")
+				if issue then
+					data.os = issue:read("*a")
+				else 
+					data.os = "unknown"
+				end
+			end
+		end
+		
+		data.zap = GetConvar("is_zap", "false")
+		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
+		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
+	end
 	
 	
 	
@@ -2107,51 +2134,23 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(1000)
 	until updateBlacklist
+	if GetConvar("ea_enableTelemetry", "true") == "true" then
+		Citizen.CreateThread(function()
+			while true do
+				if GetConvar("ea_enableTelemetry", "true") == "false" then
+					return -- stop telemetry if it gets disabled at runtime
+				end
+				sendTelemetry()
+				Wait(math.random(6600000, 12000000))
+			end
+		end)
+	end
 	while true do
 		updateBlacklist()
 		Wait(300000)
 	end
 end)
 	
-function sendTelemetry()
-	local data = {}
-	data.version, data.unstable = GetVersion()
-	data.servername = GetConvar("sv_hostname", "Default FXServer")
-	data.usercount = #GetPlayers()
-	data.bancount = #blacklist
-	data.time = os.time()
-	if os.getenv('OS') then
-		data.os = os.getenv('OS')
-	else
-		local os_release = io.open("/etc/os-release")
-		if os_release then
-			data.os = string.split(os_release:read("*a"), '"')[2]
-		else
-			local issue = io.open("/etc/issue")
-			if issue then
-				data.os = issue:read("*a")
-			else 
-				data.os = "unknown"
-			end
-		end
-	end
-	
-	data.zap = GetConvar("is_zap", "false")
-	PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
-	PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
-end
-
-if GetConvar("ea_enableTelemetry", "true") == "true" then
-	Citizen.CreateThread(function()
-		while true do
-			if GetConvar("ea_enableTelemetry", "true") == "false" then
-				return -- stop telemetry if it gets disabled at runtime
-			end
-			sendTelemetry()
-			Wait(math.random(6600000, 12000000))
-		end
-	end)
-end
 
 ---------------------------------- END USEFUL
 
