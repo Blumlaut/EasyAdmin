@@ -177,7 +177,7 @@
     "finishedcleaning": "Nettoyage terminé %s",
     "admincleanedup": "**%s** Tout nettoyé **%s** dans leur domaine.",
 
-    "forceeasteregg": "Forcer l'œuf de Pâques",
+    "forceeasteregg": "Force Easter Egg",
 
     "permissioneditor": "Permission Editor",
     "permissioneditorguide": "Modifier les autorisations sur le serveur, enregistre dans ~g~easyadmin_permissions.cfg~w~",
