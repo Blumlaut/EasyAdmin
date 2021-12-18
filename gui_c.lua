@@ -715,6 +715,10 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
 				thisPlayer:AddItem(thisItem)
 			end
+			if GetResourceState("qb-core") == "started" and not QBCore then
+				local thisItem = NativeUI.CreateItem("~b~[QBCore]~s~ Options","You can buy the QBCore Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+				thisPlayer:AddItem(thisItem)
+			end
 			
 			_menuPool:ControlDisablingEnabled(false)
 			_menuPool:MouseControlsEnabled(false)
