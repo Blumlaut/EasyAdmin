@@ -1313,7 +1313,7 @@ Citizen.CreateThread(function()
 						end
 					elseif string.sub(line, 1, 13) == "add_principal" then
 						line = (string.split(line, "#")[1] or line)
-						line = string.sub(line, 15, 999) -- strip add_principal , we dont need it
+						line = string.sub(line, 15, 999) -- strip add_principal, we dont need it
 						local t = {file = filename, oldline = oldline}
 						if #(string.split(line, " ")) >= 2 then -- skip invalid/broken lines
 							for i,word in pairs(string.split(line, " ")) do
@@ -1324,7 +1324,7 @@ Citizen.CreateThread(function()
 						end
 					elseif string.sub(line, 1, 4) == "exec" then
 						line = (string.split(line, "#")[1] or line)
-						line = string.sub(line, 6, 999) -- strip add_principal , we dont need it
+						line = string.sub(line, 6, 999) -- strip exec, we dont need it
 						if line ~= "server.cfg" then
 							table.insert(execs, line)
 						end
