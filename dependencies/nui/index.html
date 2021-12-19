@@ -16,7 +16,7 @@
 			var input = document.getElementById("textInput");
 			input.maxLength = data.maxLength
 			input.value = data.default
-			$(`.webflow-style-input`).fadeIn(1)
+			$(`.webflow-style-input`).stop(true,true).fadeIn(1)
 			$(`.webflow-style-input`).show()
 			input.focus
 			input.setActive
