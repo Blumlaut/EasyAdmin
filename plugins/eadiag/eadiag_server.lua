@@ -2,7 +2,7 @@ Citizen.CreateThread(function()
 	local diagActive = false
 	RegisterCommand("eaDiag", function(source, args, rawCommand)
 		if diagActive then
-			PrintDebugMessage("eaDiag is still running, please wait, or report any errors!")
+			PrintDebugMessage("eaDiag is still running, please wait, or report any errors!", 1)
 			return false
 		end
 
@@ -143,6 +143,7 @@ Citizen.CreateThread(function()
 			end
 
 			PrintDebugMessage("eaDiag Finished.", 1)
+			diagActive=false
 
 			
 
