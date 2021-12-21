@@ -425,309 +425,318 @@ function GenerateMenu() -- this is a big ass function
 					name = GetPlayerName(thePlayer)
 				}
 			end
-			thisPlayer = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
-			playerMenus[tostring(thePlayer.id)] = {menu = thisPlayer, name = thePlayer.name, id = thePlayer.id }
+			local thisPlayerMenu = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
+			playerMenus[tostring(thePlayer.id)] = {menu = thisPlayerMenu, name = thePlayer.name, id = thePlayer.id }
 
-			thisPlayer:SetMenuWidthOffset(menuWidth)
-			-- generate specific menu stuff, dirty but it works for now
-			if permissions["player.kick"] then
-				local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("kickplayer"),"",true)
-				thisKickMenu:SetMenuWidthOffset(menuWidth)
+			thisPlayerMenu:SetMenuWidthOffset(menuWidth)
 
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("kickreasonguide"))
-				thisKickMenu:AddItem(thisItem)
-				KickReason = GetLocalisedText("noreason")
-				thisItem:RightLabel(KickReason)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-					
-					if result and result ~= "" then
-						KickReason = result
-						thisItem:RightLabel(result) -- this is broken for now
-					else
+			thisPlayerMenu.ParentItem.Activated = function(ParentMenu, SelectedItem)
+				thisPlayer = thisPlayerMenu
+				if not playerMenus[tostring(thePlayer.id)].generated then
+				
+					if permissions["player.kick"] then
+						local thisKickMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("kickplayer"),"",true)
+						thisKickMenu:SetMenuWidthOffset(menuWidth)
+		
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("kickreasonguide"))
+						thisKickMenu:AddItem(thisItem)
 						KickReason = GetLocalisedText("noreason")
-					end
-				end
-				
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmkick"),GetLocalisedText("confirmkickguide"))
-				thisKickMenu:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					if KickReason == "" then
-						KickReason = GetLocalisedText("noreason")
-					end
-					TriggerServerEvent("EasyAdmin:kickPlayer", thePlayer.id, KickReason)
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(800)
-					GenerateMenu()
-					playermanagement:Visible(true)
-				end	
-			end
-			
-			if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
-				local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
-				thisBanMenu:SetMenuWidthOffset(menuWidth)
-				
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
-				thisBanMenu:AddItem(thisItem)
-				BanReason = GetLocalisedText("noreason")
-				thisItem:RightLabel(BanReason)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-					
-					if result and result ~= "" then
-						BanReason = result
-						thisItem:RightLabel(result) -- this is broken for now
-					else
-						BanReason = GetLocalisedText("noreason")
-					end
-				end
-				local bt = {}
-				for i,a in ipairs(banLength) do
-					table.insert(bt, a.label)
-				end
-				
-				local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
-				thisBanMenu:AddItem(thisItem)
-				local BanTime = banLength[1].time
-				thisItem.OnListChanged = function(sender,item,index)
-					BanTime = banLength[index].time
-				end
-
-				thisItem.OnListSelected = function (sender,item,index)
-					if banLength[index].time == -1 then
-
-
-						local thisBanTimeMenu = _menuPool:AddSubMenu(thisBanMenu, GetLocalisedText("banlength"), "",true)
-						thisBanTimeMenu:SetMenuWidthOffset(menuWidth)
-	
-
-
-						local hours, days, weeks, months = 0, 0, 0, 0
-						-- generate our ban lengths
-						local hourArray = {}
-						for i=0, 24 do
-							table.insert(hourArray,i)
-						end
-
-						local dayArray = {}
-						for i=0, 31 do
-							table.insert(dayArray,i)
-						end
-
-						local weekArray = {}
-						for i=0, 4 do
-							table.insert(weekArray,i)
-						end
-
-						local monthArray = {}
-						for i=0, 12 do
-							table.insert(monthArray,i)
-						end
-
-						local thisItem = NativeUI.CreateListItem(GetLocalisedText("hours"),hourArray, 1,"")
-						thisBanTimeMenu:AddItem(thisItem)
-						thisItem.OnListChanged = function(sender,item,index)
-							hours = item:IndexToItem(index)
-						end
-
-						local thisItem = NativeUI.CreateListItem(GetLocalisedText("days"),dayArray, 1,"")
-						thisBanTimeMenu:AddItem(thisItem)
-						thisItem.OnListChanged = function(sender,item,index)
-							days = item:IndexToItem(index)
-						end
-
-						local thisItem = NativeUI.CreateListItem(GetLocalisedText("weeks"),weekArray, 1,"")
-						thisBanTimeMenu:AddItem(thisItem)
-						thisItem.OnListChanged = function(sender,item,index)
-							weeks = item:IndexToItem(index)
-						end
-
-						local thisItem = NativeUI.CreateListItem(GetLocalisedText("months"),monthArray, 1,"")
-						thisBanTimeMenu:AddItem(thisItem)
-						thisItem.OnListChanged = function(sender,item,index)
-							months = item:IndexToItem(index)
-						end
-
-						local thisItem = NativeUI.CreateItem(GetLocalisedText("confirm"),"")
-						thisBanTimeMenu:AddItem(thisItem)
+						thisItem:RightLabel(KickReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
-							hours=hours*3600
-							days=days*86400
-							weeks=weeks*518400
-							months=months*2678400
-							BanTime = hours+days+weeks+months
-							thisBanMenu:Visible(true)
-						end
-
-						thisBanTimeMenu:RefreshIndex()
-						-- evil NativeUI hack to force it to select and open our submenu
-						thisBanMenu:CurrentSelection(#thisBanMenu.Items-1)
-						for i, item in pairs(thisBanMenu.Items) do
-							item:Selected(false)
-						end
-
-						thisBanMenu:SelectItem()
-						-- woosh
-						thisBanMenu:RemoveItemAt(#thisBanMenu.Items)
-					end
-				end
-			
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
-				thisBanMenu:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					if BanTime == -1 then
-						TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nocustombantime"))
-						return
-					end
-					if BanReason == "" then
-						BanReason = GetLocalisedText("noreason")
-					end
-					TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, BanTime, thePlayer.name )
-					BanTime = 1
-					BanReason = ""
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(800)
-					GenerateMenu()
-					playermanagement:Visible(true)
-				end	
-				
-			end
-			
-			if permissions["player.mute"] then			
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("mute"),GetLocalisedText("muteguide"))
-				thisPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:mutePlayer", thePlayer.id)
-				end
-			end
-
-			if permissions["player.spectate"] then
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
-				thisPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:requestSpectate",thePlayer.id)
-				end
-			end
-			
-			if permissions["player.teleport.single"] then
-				local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome"), GetLocalisedText("teleportmeback"), GetLocalisedText("teleportplayerback")}
-				local thisItem = NativeUI.CreateListItem(GetLocalisedText("teleportplayer"), sl, 1, "")
-				thisPlayer:AddItem(thisItem)
-				thisItem.OnListSelected = function(sender, item, index)
-					if item == thisItem then
-						i = item:IndexToItem(index)
-						local playerPed = PlayerPedId()
-						if i == GetLocalisedText("teleporttoplayer") then
-							if settings.infinity then
-								TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
+							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+							
+							if result and result ~= "" then
+								KickReason = result
+								thisItem:RightLabel(result) -- this is broken for now
 							else
-								lastLocation = GetEntityCoords(playerPed)
-								local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
-								local heading = GetEntityHeading(GetPlayerPed(player))
-								SetEntityCoords(playerPed, x,y,z,0,0,heading, false)
+								KickReason = GetLocalisedText("noreason")
 							end
-						elseif i == GetLocalisedText("teleportplayertome") then
-							local coords = GetEntityCoords(playerPed,true)
-							TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
-						elseif i == GetLocalisedText("teleportmeback") and lastLocation then
-							local heading = GetEntityHeading(playerPed)
-							SetEntityCoords(playerPed, lastLocation,0,0,heading, false)
-							lastLocation = nil
-						elseif i == GetLocalisedText("teleportplayerback") then 
-							TriggerServerEvent("EasyAdmin:TeleportPlayerBack", thePlayer.id)
+						end
+						
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmkick"),GetLocalisedText("confirmkickguide"))
+						thisKickMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							if KickReason == "" then
+								KickReason = GetLocalisedText("noreason")
+							end
+							TriggerServerEvent("EasyAdmin:kickPlayer", thePlayer.id, KickReason)
+							_menuPool:CloseAllMenus()
+							Citizen.Wait(800)
+							GenerateMenu()
+							playermanagement:Visible(true)
+						end	
+					end
+					
+					if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
+						local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
+						thisBanMenu:SetMenuWidthOffset(menuWidth)
+						
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
+						thisBanMenu:AddItem(thisItem)
+						BanReason = GetLocalisedText("noreason")
+						thisItem:RightLabel(BanReason)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+							
+							if result and result ~= "" then
+								BanReason = result
+								thisItem:RightLabel(result) -- this is broken for now
+							else
+								BanReason = GetLocalisedText("noreason")
+							end
+						end
+						local bt = {}
+						for i,a in ipairs(banLength) do
+							table.insert(bt, a.label)
+						end
+						
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
+						thisBanMenu:AddItem(thisItem)
+						local BanTime = banLength[1].time
+						thisItem.OnListChanged = function(sender,item,index)
+							BanTime = banLength[index].time
+						end
+		
+						thisItem.OnListSelected = function (sender,item,index)
+							if banLength[index].time == -1 then
+		
+		
+								local thisBanTimeMenu = _menuPool:AddSubMenu(thisBanMenu, GetLocalisedText("banlength"), "",true)
+								thisBanTimeMenu:SetMenuWidthOffset(menuWidth)
+			
+		
+		
+								local hours, days, weeks, months = 0, 0, 0, 0
+								-- generate our ban lengths
+								local hourArray = {}
+								for i=0, 24 do
+									table.insert(hourArray,i)
+								end
+		
+								local dayArray = {}
+								for i=0, 31 do
+									table.insert(dayArray,i)
+								end
+		
+								local weekArray = {}
+								for i=0, 4 do
+									table.insert(weekArray,i)
+								end
+		
+								local monthArray = {}
+								for i=0, 12 do
+									table.insert(monthArray,i)
+								end
+		
+								local thisItem = NativeUI.CreateListItem(GetLocalisedText("hours"),hourArray, 1,"")
+								thisBanTimeMenu:AddItem(thisItem)
+								thisItem.OnListChanged = function(sender,item,index)
+									hours = item:IndexToItem(index)
+								end
+		
+								local thisItem = NativeUI.CreateListItem(GetLocalisedText("days"),dayArray, 1,"")
+								thisBanTimeMenu:AddItem(thisItem)
+								thisItem.OnListChanged = function(sender,item,index)
+									days = item:IndexToItem(index)
+								end
+		
+								local thisItem = NativeUI.CreateListItem(GetLocalisedText("weeks"),weekArray, 1,"")
+								thisBanTimeMenu:AddItem(thisItem)
+								thisItem.OnListChanged = function(sender,item,index)
+									weeks = item:IndexToItem(index)
+								end
+		
+								local thisItem = NativeUI.CreateListItem(GetLocalisedText("months"),monthArray, 1,"")
+								thisBanTimeMenu:AddItem(thisItem)
+								thisItem.OnListChanged = function(sender,item,index)
+									months = item:IndexToItem(index)
+								end
+		
+								local thisItem = NativeUI.CreateItem(GetLocalisedText("confirm"),"")
+								thisBanTimeMenu:AddItem(thisItem)
+								thisItem.Activated = function(ParentMenu,SelectedItem)
+									hours=hours*3600
+									days=days*86400
+									weeks=weeks*518400
+									months=months*2678400
+									BanTime = hours+days+weeks+months
+									thisBanMenu:Visible(true)
+								end
+		
+								thisBanTimeMenu:RefreshIndex()
+								-- evil NativeUI hack to force it to select and open our submenu
+								thisBanMenu:CurrentSelection(#thisBanMenu.Items-1)
+								for i, item in pairs(thisBanMenu.Items) do
+									item:Selected(false)
+								end
+		
+								thisBanMenu:SelectItem()
+								-- woosh
+								thisBanMenu:RemoveItemAt(#thisBanMenu.Items)
+							end
+						end
+					
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
+						thisBanMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							if BanTime == -1 then
+								TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nocustombantime"))
+								return
+							end
+							if BanReason == "" then
+								BanReason = GetLocalisedText("noreason")
+							end
+							TriggerServerEvent("EasyAdmin:banPlayer", thePlayer.id, BanReason, BanTime, thePlayer.name )
+							BanTime = 1
+							BanReason = ""
+							_menuPool:CloseAllMenus()
+							Citizen.Wait(800)
+							GenerateMenu()
+							playermanagement:Visible(true)
+						end	
+						
+					end
+					
+					if permissions["player.mute"] then			
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("mute"),GetLocalisedText("muteguide"))
+						thisPlayer:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							TriggerServerEvent("EasyAdmin:mutePlayer", thePlayer.id)
 						end
 					end
-				end
-			end
-			
-			
-			if permissions["player.slap"] then
-				local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
-				thisPlayer:AddItem(thisItem)
-				thisItem.OnSliderSelected = function(index)
-					TriggerServerEvent("EasyAdmin:SlapPlayer", thePlayer.id, index*10)
-				end
-			end
-
-			if permissions["player.freeze"] and not RedM then
-				local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
-				local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
-				thisPlayer:AddItem(thisItem)
-				thisItem.OnListSelected = function(sender, item, index)
-						if item == thisItem then
+		
+					if permissions["player.spectate"] then
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("spectateplayer"), "")
+						thisPlayer:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							TriggerServerEvent("EasyAdmin:requestSpectate",thePlayer.id)
+						end
+					end
+					
+					if permissions["player.teleport.single"] then
+						local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome"), GetLocalisedText("teleportmeback"), GetLocalisedText("teleportplayerback")}
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("teleportplayer"), sl, 1, "")
+						thisPlayer:AddItem(thisItem)
+						thisItem.OnListSelected = function(sender, item, index)
+							if item == thisItem then
 								i = item:IndexToItem(index)
-								if i == GetLocalisedText("on") then
-									TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, true)
-								else
-									TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, false)
+								local playerPed = PlayerPedId()
+								if i == GetLocalisedText("teleporttoplayer") then
+									if settings.infinity then
+										TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', thePlayer.id)
+									else
+										lastLocation = GetEntityCoords(playerPed)
+										local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(thePlayer.id)),true))
+										local heading = GetEntityHeading(GetPlayerPed(player))
+										SetEntityCoords(playerPed, x,y,z,0,0,heading, false)
+									end
+								elseif i == GetLocalisedText("teleportplayertome") then
+									local coords = GetEntityCoords(playerPed,true)
+									TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", thePlayer.id, coords)
+								elseif i == GetLocalisedText("teleportmeback") and lastLocation then
+									local heading = GetEntityHeading(playerPed)
+									SetEntityCoords(playerPed, lastLocation,0,0,heading, false)
+									lastLocation = nil
+								elseif i == GetLocalisedText("teleportplayerback") then 
+									TriggerServerEvent("EasyAdmin:TeleportPlayerBack", thePlayer.id)
+								end
+							end
+						end
+					end
+					
+					
+					if permissions["player.slap"] then
+						local thisItem = NativeUI.CreateSliderItem(GetLocalisedText("slapplayer"), SlapAmount, 20, false, false)
+						thisPlayer:AddItem(thisItem)
+						thisItem.OnSliderSelected = function(index)
+							TriggerServerEvent("EasyAdmin:SlapPlayer", thePlayer.id, index*10)
+						end
+					end
+		
+					if permissions["player.freeze"] and not RedM then
+						local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
+						local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
+						thisPlayer:AddItem(thisItem)
+						thisItem.OnListSelected = function(sender, item, index)
+								if item == thisItem then
+										i = item:IndexToItem(index)
+										if i == GetLocalisedText("on") then
+											TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, true)
+										else
+											TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, false)
+										end
 								end
 						end
-				end
-			end
+					end
+				
+					if permissions["player.screenshot"] then
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("takescreenshot"),"")
+						thisPlayer:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							TriggerServerEvent("EasyAdmin:TakeScreenshot", thePlayer.id)
+						end
+					end
 		
-			if permissions["player.screenshot"] then
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("takescreenshot"),"")
-				thisPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					TriggerServerEvent("EasyAdmin:TakeScreenshot", thePlayer.id)
-				end
-			end
-
-			if permissions["player.warn"] then
-				local thisWarnMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("warnplayer"),"",true)
-				thisWarnMenu:SetMenuWidthOffset(menuWidth)
-				
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("warnreasonguide"))
-				thisWarnMenu:AddItem(thisItem)
-				WarnReason = GetLocalisedText("noreason")
-				thisItem:RightLabel(WarnReason)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+					if permissions["player.warn"] then
+						local thisWarnMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("warnplayer"),"",true)
+						thisWarnMenu:SetMenuWidthOffset(menuWidth)
+						
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("warnreasonguide"))
+						thisWarnMenu:AddItem(thisItem)
+						WarnReason = GetLocalisedText("noreason")
+						thisItem:RightLabel(WarnReason)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+							
+							if result and result ~= "" then
+								WarnReason = result
+								thisItem:RightLabel(result) -- this is broken for now
+							else
+								WarnReason = GetLocalisedText("noreason")
+							end
+						end
+						
+						local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmwarn"),GetLocalisedText("confirmwarnguide"))
+						thisWarnMenu:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu,SelectedItem)
+							if WarnReason == "" then
+								WarnReason = GetLocalisedText("noreason")
+							end
+							TriggerServerEvent("EasyAdmin:warnPlayer", thePlayer.id, WarnReason)
+							BanTime = 1
+							BanReason = ""
+							_menuPool:CloseAllMenus()
+							Citizen.Wait(800)
+							GenerateMenu()
+							playermanagement:Visible(true)
+						end	
+					end
+		
+		
+					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 					
-					if result and result ~= "" then
-						WarnReason = result
-						thisItem:RightLabel(result) -- this is broken for now
-					else
-						WarnReason = GetLocalisedText("noreason")
+					if GetResourceState("es_extended") == "started" and not ESX then
+						local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+						thisPlayer:AddItem(thisItem)
 					end
+					if GetResourceState("qb-core") == "started" and not QBCore then
+						local thisItem = NativeUI.CreateItem("~b~[QBCore]~s~ Options","You can buy the QBCore Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+						thisPlayer:AddItem(thisItem)
+					end
+					
+					_menuPool:ControlDisablingEnabled(false)
+					_menuPool:MouseControlsEnabled(false)
+		
+					thisPlayer:RefreshIndex()
+					playerMenus[tostring(thePlayer.id)].generated = true
 				end
-				
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmwarn"),GetLocalisedText("confirmwarnguide"))
-				thisWarnMenu:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					if WarnReason == "" then
-						WarnReason = GetLocalisedText("noreason")
-					end
-					TriggerServerEvent("EasyAdmin:warnPlayer", thePlayer.id, WarnReason)
-					BanTime = 1
-					BanReason = ""
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(800)
-					GenerateMenu()
-					playermanagement:Visible(true)
-				end	
-			end
 
+				for i, menu in pairs(playerMenus) do
+					menu.menu.ParentMenu = playermanagement
+				end
+			end
+	
 
-			TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
-			
-			if GetResourceState("es_extended") == "started" and not ESX then
-				local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
-				thisPlayer:AddItem(thisItem)
-			end
-			if GetResourceState("qb-core") == "started" and not QBCore then
-				local thisItem = NativeUI.CreateItem("~b~[QBCore]~s~ Options","You can buy the QBCore Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
-				thisPlayer:AddItem(thisItem)
-			end
-			
-			_menuPool:ControlDisablingEnabled(false)
-			_menuPool:MouseControlsEnabled(false)
-		end
-
-		thisPlayer.ParentItem.Activated = function(ParentMenu, SelectedItem)
-			for i, menu in pairs(playerMenus) do
-				menu.menu.ParentMenu = playermanagement
-			end
 		end
 
 		playermanagement.ParentItem.Activated = function(ParentMenu, SelectedItem)
@@ -855,12 +864,12 @@ function GenerateMenu() -- this is a big ass function
 		end
 
 		
-		thisPlayer = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("allplayers"),"",true)
-		thisPlayer:SetMenuWidthOffset(menuWidth)
+		allPlayers = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("allplayers"),"",true)
+		allPlayers:SetMenuWidthOffset(menuWidth)
 		if permissions["player.teleport.everyone"] then
 			-- "all players" function
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("teleporttome"), GetLocalisedText("teleporttomeguide"))
-			thisPlayer:AddItem(thisItem)
+			allPlayers:AddItem(thisItem)
 			thisItem.Activated = function(ParentMenu,SelectedItem)
 				local pCoords = GetEntityCoords(PlayerPedId(),true)
 				TriggerServerEvent("EasyAdmin:TeleportPlayerToCoords", -1, pCoords)
@@ -872,10 +881,10 @@ function GenerateMenu() -- this is a big ass function
 		if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
 			for i, cachedplayer in pairs(cachedplayers) do
 				if cachedplayer.droppedTime and not cachedplayer.immune then
-					thisPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
-					cachedMenus[tostring(cachedplayer.id)] = {menu = thisPlayer, name = cachedplayer.name, id = cachedplayer.id }
-					thisPlayer:SetMenuWidthOffset(menuWidth)
-					local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
+					thisCachedPlayer = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
+					cachedMenus[tostring(cachedplayer.id)] = {menu = thisCachedPlayer, name = cachedplayer.name, id = cachedplayer.id }
+					thisCachedPlayer:SetMenuWidthOffset(menuWidth)
+					local thisBanMenu = _menuPool:AddSubMenu(thisCachedPlayer,GetLocalisedText("banplayer"),"",true)
 					thisBanMenu:SetMenuWidthOffset(menuWidth)
 					
 					local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
