@@ -716,12 +716,18 @@ function GenerateMenu() -- this is a big ass function
 					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 					
 					if GetResourceState("es_extended") == "started" and not ESX then
-						local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+						local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.")
 						thisPlayer:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu, SelectedItem)
+							copyToClipboard("https://blumlaut.tebex.io/package/4455820")
+						end
 					end
 					if GetResourceState("qb-core") == "started" and not QBCore then
-						local thisItem = NativeUI.CreateItem("~b~[QBCore]~s~ Options","You can buy the QBCore Plugin from https://blumlaut.tebex.io to use this Feature.") -- create our new item
+						local thisItem = NativeUI.CreateItem("~b~[QBCore]~s~ Options","You can buy the QBCore Plugin from https://blumlaut.tebex.io to use this Feature.")
 						thisPlayer:AddItem(thisItem)
+						thisItem.Activated = function(ParentMenu, SelectedItem)
+							copyToClipboard("https://blumlaut.tebex.io/package/4842353")
+						end
 					end
 					
 					_menuPool:ControlDisablingEnabled(false)
@@ -1057,7 +1063,7 @@ function GenerateMenu() -- this is a big ass function
 					local thisItem = NativeUI.CreateItem("Ban ID: "..banlist[banId].banid, "")
 					mainMenu:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
-						-- nothing
+						copyToClipboard(banlist[banId].banid)
 					end	
 				end
 
