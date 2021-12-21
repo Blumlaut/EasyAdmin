@@ -588,7 +588,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer", function(playerId,reason)
-		if DoesPlayerHavePermission(source, "player.kick") and not DoesPlayerHavePermission(playerId,"player.immune") then
+		if DoesPlayerHavePermission(source, "player.kick") and not CachedPlayers[playerId].immune then
 			reason = formatShortcuts(reason)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
