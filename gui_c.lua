@@ -931,6 +931,7 @@ function GenerateMenu() -- this is a big ass function
 								GenerateMenu()
 								playermanagement:Visible(true)
 							end	
+							thisPlayer:RefreshIndex()
 							TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
 						end
 					end
