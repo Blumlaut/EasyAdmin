@@ -76,10 +76,10 @@ end
 function displayKeyboardInput(title,default,maxLength)
 	if alreadyTyping then return nil end
 	keyboardResult, keyboardState = nil
-
+	local label = GetLabelText(title)
 
 	SetNuiFocus(true, true)
-	SendNUIMessage({action= "open", title=GetLabelText(title), default=default, maxLength=maxLength, resource=GetCurrentResourceName()})
+	SendNUIMessage({action= "open", title=label, default=default, maxLength=maxLength, resource=GetCurrentResourceName()})
 
 	alreadyTyping = true
 
