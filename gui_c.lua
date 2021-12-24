@@ -396,6 +396,7 @@ function GenerateMenu() -- this is a big ass function
 							_menuPool:CloseAllMenus()
 							Citizen.Wait(300)
 							local thisMenu = thePlayer.menu
+							playerMenus[tostring(thePlayer.id)].generate(thisMenu)
 							thisMenu:Visible(true)
 						end
 					end
@@ -408,6 +409,7 @@ function GenerateMenu() -- this is a big ass function
 					local thisMenu = temp[1].menu
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(300)
+					playerMenus[tostring(temp[1].id)].generate(thisMenu)
 					thisMenu:Visible(true)
 					return
 				end
@@ -430,8 +432,8 @@ function GenerateMenu() -- this is a big ass function
 
 			thisPlayerMenu:SetMenuWidthOffset(menuWidth)
 
-			thisPlayerMenu.ParentItem.Activated = function(ParentMenu, SelectedItem)
-				thisPlayer = thisPlayerMenu
+			playerMenus[tostring(thePlayer.id)].generate = function(thisPlayer)
+
 				if not playerMenus[tostring(thePlayer.id)].generated then
 				
 					if permissions["player.kick"] then
@@ -736,6 +738,11 @@ function GenerateMenu() -- this is a big ass function
 					thisPlayer:RefreshIndex()
 					playerMenus[tostring(thePlayer.id)].generated = true
 				end
+			end
+
+			thisPlayerMenu.ParentItem.Activated = function(ParentMenu, SelectedItem)
+				thisPlayer = thisPlayerMenu
+				playerMenus[tostring(thePlayer.id)].generate(thisPlayer)
 
 				for i, menu in pairs(playerMenus) do
 					menu.menu.ParentMenu = playermanagement
