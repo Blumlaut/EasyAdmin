@@ -432,7 +432,9 @@ function GenerateMenu() -- this is a big ass function
 
 			thisPlayerMenu:SetMenuWidthOffset(menuWidth)
 
-			playerMenus[tostring(thePlayer.id)].generate = function(thisPlayer)
+			playerMenus[tostring(thePlayer.id)].generate = function(menu)
+				thisPlayer = menu
+				
 
 				if not playerMenus[tostring(thePlayer.id)].generated then
 				
