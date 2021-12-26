@@ -814,6 +814,7 @@ function GenerateMenu() -- this is a big ass function
 						reportViewer:Visible(true)
 					else
 						local ourMenu = playerMenus[tostring(report.reporter)].menu
+						playerMenus[tostring(report.reporter)].generate(ourMenu)
 						ourMenu.ParentMenu=reportMenus[report.id]
 						ourMenu:Visible(true)
 					end
@@ -833,6 +834,7 @@ function GenerateMenu() -- this is a big ass function
 							reportViewer:Visible(true)
 						else
 							local ourMenu = playerMenus[tostring(report.reported)].menu
+							playerMenus[tostring(report.reported)].generate(ourMenu)
 							ourMenu.ParentMenu=reportMenus[report.id]
 							ourMenu:Visible(true)
 						end
