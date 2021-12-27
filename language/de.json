@@ -4,7 +4,7 @@
     "on": "An",
     "off": "Aus",
 
-    "spectatingUser": "Schaue ~b~<C>%s</C> zu.",
+    "spectatingUser": "Schaue ~b~<C>%s</C> ~w~zu.",
     "stoppedSpectating": "Zuschauermodus verlassen.",
     "hour": "Stunde",
     "hours": "Stunden",
