@@ -737,7 +737,7 @@ function GenerateMenu() -- this is a big ass function
 					_menuPool:ControlDisablingEnabled(false)
 					_menuPool:MouseControlsEnabled(false)
 		
-					thisPlayer:RefreshIndex()
+					_menuPool:RefreshIndex()
 					playerMenus[tostring(thePlayer.id)].generated = true
 				end
 			end
