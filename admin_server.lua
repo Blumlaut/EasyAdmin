@@ -1068,7 +1068,7 @@ Citizen.CreateThread(function()
 					RemoveEventHandler(thistemporaryevent)
 					scrinprogress = false -- cancel screenshot, seems like it failed
 					PrintDebugMessage("Screenshot timed out", 4)
-					TriggerClientEvent("EasyAdmin:showNotification", source, "Screenshot Failed!")
+					TriggerClientEvent("EasyAdmin:showNotification", src, "Screenshot Failed!")
 				end
 			until not scrinprogress
 		end
