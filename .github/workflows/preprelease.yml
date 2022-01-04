@@ -8,7 +8,7 @@ on:
         required: true
       changelog:
         description: 'Changelog'
-        default: 'Your Version is unsupported and may no longer function properly in the near future, please update as soon as possible.'
+        default: 'Your Version is unsupported and will no longer function properly in the near future, please update as soon as possible.'
         required: false
         type: string
 
