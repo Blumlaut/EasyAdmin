@@ -402,7 +402,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Collecting Server Config....^7\n", 1)
 			
 			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources")
+			local occurance = string.find(path, "/resources", 1, true)
 			local path = string.reverse(string.sub(string.reverse(path), -occurance))
 			
 			local blacklistedPhrases = {"mysql", "mariadb", "licensekey", "SentryIO", "mongodb", "tebex", "endpoint_add", "ac_webhook"}
@@ -1246,7 +1246,7 @@ Citizen.CreateThread(function()
 	
 	function FindInfosinFile(filename)
 		local path = GetResourcePath(GetCurrentResourceName())
-		local occurance = string.find(path, "/resources")
+		local occurance = string.find(path, "/resources", 1, true)
 		local path = string.reverse(string.sub(string.reverse(path), -occurance))
 		
 		local filename = filename
@@ -1279,20 +1279,20 @@ Citizen.CreateThread(function()
 			for i, line in pairs(lines) do 
 				if filename == "server.cfg" then
 					needsResourcePerms = false
-					if string.find(line, "exec easyadmin_permissions.cfg") then
+					if string.find(line, "exec easyadmin_permissions.cfg", 1, true) then
 						needsExec = false
 					end
 				elseif filename == "easyadmin_permissions.cfg" then
 					needsExec = false
-					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow") then
+					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow", 1, true) then
 						needsResourcePerms = false
 					end
 				else
 					local broken = false
 					-- remove broken lines
-					if string.find(line, "exec easyadmin_permissions.cfg") then
+					if string.find(line, "exec easyadmin_permissions.cfg", 1, true) then
 						RemoveFromFile(filename, "exec easyadmin_permissions.cfg")
-					elseif string.find(line, "add_ace resource."..GetCurrentResourceName().." command.") then
+					elseif string.find(line, "add_ace resource."..GetCurrentResourceName().." command.", 1, true) then
 						RemoveFromFile(filename, line)
 					end 
 				end
@@ -1406,7 +1406,7 @@ Citizen.CreateThread(function()
 		lockedFiles = {}
 		function AddToFile(filename, args)
 			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources")
+			local occurance = string.find(path, "/resources", 1, true)
 			local path = string.reverse(string.sub(string.reverse(path), -occurance))
 			
 			
@@ -1432,7 +1432,7 @@ Citizen.CreateThread(function()
 		
 		function RemoveFromFile(filename, args)
 			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources")
+			local occurance = string.find(path, "/resources", 1, true)
 			local path = string.reverse(string.sub(string.reverse(path), -occurance))
 			
 			local args = args
@@ -2121,13 +2121,7 @@ function checkVersion(err,response, headers)
 		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
 	end
 		
-	if not string.find(GetCurrentResourceName(), "-") then -- all my homies hate hyphens
-		readAcePermissions()
-	else
-		disablePermissionEditor = true
-		local resourceName = GetCurrentResourceName()
-		PrintDebugMessage("^1Permission Editor Disabled!^7 Please remove any hyphens ("..string.gsub(resourceName, "-", ">-<").." from EasyAdmin's resource name.) #271", 1)
-	end
+	readAcePermissions()
 end
 	
 Citizen.CreateThread(function()
