@@ -2760,9 +2760,9 @@ end
 function UIMenu:RefreshIndexRecursively()
     self:RefreshIndex()
 
-    for _, Item in pairs(self.Items) do
+    for _, Item in pairs(self.Children) do
         if Item.RefreshIndex then
-            Item:RefreshIndex()
+            Item:RefreshIndexRecursively()
         end
     end
 end
