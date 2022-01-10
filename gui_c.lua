@@ -567,7 +567,7 @@ function GenerateMenu() -- this is a big ass function
 									thisBanMenu:Visible(true)
 								end
 		
-								thisBanTimeMenu:RefreshIndex()
+								thisBanTimeMenu:RefreshIndexRecursively()
 								-- evil NativeUI hack to force it to select and open our submenu
 								thisBanMenu:CurrentSelection(#thisBanMenu.Items-1)
 								for i, item in pairs(thisBanMenu.Items) do
@@ -737,7 +737,7 @@ function GenerateMenu() -- this is a big ass function
 					_menuPool:ControlDisablingEnabled(false)
 					_menuPool:MouseControlsEnabled(false)
 		
-					_menuPool:RefreshIndex()
+					thisPlayer:RefreshIndexRecursively()
 					playerMenus[tostring(thePlayer.id)].generated = true
 				end
 			end
@@ -948,8 +948,8 @@ function GenerateMenu() -- this is a big ass function
 								GenerateMenu()
 								playermanagement:Visible(true)
 							end	
-							thisPlayer:RefreshIndex()
 							TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
+							thisPlayer:RefreshIndexRecursively()
 						end
 					end
 
