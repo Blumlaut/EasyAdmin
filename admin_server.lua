@@ -753,30 +753,35 @@ Citizen.CreateThread(function()
 		Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 	end)
 	
-	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires, offline)
-		if not offline and not CachedPlayers[playerId].immune then
-			if offline then 
-				bannedIdentifiers = playerId 
-				bannedUsername = "Unknown"
-			else 
-				bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
-				bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
-			end
-			if expires and expires < os.time() then
-				expires = os.time()+expires 
-			elseif not expires then 
-				expires = 10444633200
-			end
-			reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
-			local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
-			updateBlacklist( ban )
-			
-			
-			PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ) ), "ban", 16711680)
-			if not offline then
-				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
-			end
+	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
+
+		if type(playerId) == "table" then -- if playerId is a table of identifiers
+			offline = true
+		end
+
+		if offline then 
+			bannedIdentifiers = playerId 
+			playerId = nil
+			bannedUsername = "Unknown"
+		else 
+			bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
+			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
+		end
+
+		if expires and expires < os.time() then
+			expires = os.time()+expires 
+		elseif not expires then 
+			expires = 10444633200
+		end
+		reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
+		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
+		updateBlacklist( ban )
+		
+		
+		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
+		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ) ), "ban", 16711680)
+		if not offline then
+			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 		end
 	end)
 	
