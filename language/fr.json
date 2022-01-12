@@ -230,8 +230,8 @@
     "savebanchanges":"Sauvegarder les modifications",
     "savebanguide":"~r~~h~NOTE:~h~~w~ Appuyez sur Confirmer pour mettre à jour cette interdiction sur le serveur.",
     "adminimmune":"Vous n'avez pas la permission d'effectuer cette action, le joueur ciblé est immunisé.",
-    "teleportmeback":"Se téléporter en arrière",
-    "teleportplayerback":"Téléporter le joueur de retour",
+    "teleportmeback":"Téléporter moi dos",
+    "teleportplayerback":"Téléporter le joueur dos",
     "copiedtoclipboard":"Texte copié dans le presse-papiers!",
 
     "spectatevehicleseatoccupied":"Le siège du véhicule dans lequel vous étiez est maintenant occupé.",
