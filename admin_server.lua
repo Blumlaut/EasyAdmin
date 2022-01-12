@@ -238,20 +238,6 @@ AddEventHandler("EasyAdmin:amiadmin", function()
 	end
 end)
 
-RegisterServerEvent("EasyAdmin:GetPlayerList", function()
-	PrintDebugMessage(getName(source, true).." requested legacy Playerlist.", 4)
-	if IsPlayerAdmin(source) then
-		local l = {}
-		local players = GetPlayers()
-		for i, player in pairs(players) do
-			if CachedPlayers[player] then
-				table.insert(l, CachedPlayers[player])
-			end
-		end
-		TriggerLatentClientEvent("EasyAdmin:GetPlayerList", source, 200000, l) 
-	end
-end)
-
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 	PrintDebugMessage(getName(source, true).." requested Playerlist.", 4)
 	if IsPlayerAdmin(source) then
