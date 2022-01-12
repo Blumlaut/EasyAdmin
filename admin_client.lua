@@ -49,9 +49,6 @@ RegisterNetEvent("EasyAdmin:fillCachedPlayers", function(thecached)
 	end
 end)
 
-RegisterNetEvent("EasyAdmin:GetPlayerList", function(players)
-	playerlist = players
-end)
 
 RegisterNetEvent("EasyAdmin:GetInfinityPlayerList", function(players)
 	playerlist = players

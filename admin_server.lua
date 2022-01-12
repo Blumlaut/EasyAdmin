@@ -248,7 +248,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 			local player = tonumber(player)
 			for i, cached in pairs(CachedPlayers) do
 				if (cached.id == player) then
-					table.insert(l, CachedPlayers[i])
+					table.insert(l, {id = cached.id, name = cached.name, immune = cached.immune})
 				end
 			end
 		end
