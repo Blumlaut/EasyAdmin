@@ -893,69 +893,80 @@ function GenerateMenu() -- this is a big ass function
 			end
 		end
 
+
+		cachedListGenerated = false
+
 		CachedList = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("cachedplayers"),"",true)
 		CachedList:SetMenuWidthOffset(menuWidth)
-		if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
-			for i, cachedplayer in pairs(cachedplayers) do
-				if cachedplayer.droppedTime and not cachedplayer.immune then
-					local thisCachedPlayerMenu = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
-					cachedMenus[tostring(cachedplayer.id)] = {menu = thisCachedPlayerMenu, name = cachedplayer.name, id = cachedplayer.id }
-					thisCachedPlayerMenu:SetMenuWidthOffset(menuWidth)
 
-					thisCachedPlayerMenu.ParentItem.Activated = function(ParentMenu, SelectedItem)
-						thisPlayer = thisCachedPlayerMenu
-						if not cachedMenus[tostring(cachedplayer.id)].generated then
-							local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
-							thisBanMenu:SetMenuWidthOffset(menuWidth)
-							
-							local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
-							thisBanMenu:AddItem(thisItem)
-							BanReason = GetLocalisedText("noreason")
-							thisItem:RightLabel(BanReason)
-							thisItem.Activated = function(ParentMenu,SelectedItem)
-								local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+		CachedList.ParentItem.Activated = function(ParentMenu, SelectedItem)
+			if not cachedListGenerated then
+				if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
+					for i, cachedplayer in pairs(cachedplayers) do
+						if cachedplayer.droppedTime and not cachedplayer.immune then
+							local thisCachedPlayerMenu = _menuPool:AddSubMenu(CachedList,"["..cachedplayer.id.."] "..cachedplayer.name,"",true)
+							cachedMenus[tostring(cachedplayer.id)] = {menu = thisCachedPlayerMenu, name = cachedplayer.name, id = cachedplayer.id }
+							thisCachedPlayerMenu:SetMenuWidthOffset(menuWidth)
+		
+							thisCachedPlayerMenu.ParentItem.Activated = function(ParentMenu, SelectedItem)
+								thisPlayer = thisCachedPlayerMenu
+								if not cachedMenus[tostring(cachedplayer.id)].generated then
+									local thisBanMenu = _menuPool:AddSubMenu(thisPlayer,GetLocalisedText("banplayer"),"",true)
+									thisBanMenu:SetMenuWidthOffset(menuWidth)
+									
+									local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),GetLocalisedText("banreasonguide"))
+									thisBanMenu:AddItem(thisItem)
+									BanReason = GetLocalisedText("noreason")
+									thisItem:RightLabel(BanReason)
+									thisItem.Activated = function(ParentMenu,SelectedItem)
+										local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+										
+										if result and result ~= "" then
+											BanReason = result
+											thisItem:RightLabel(result) -- this is broken for now
+										else
+											BanReason = GetLocalisedText("noreason")
+										end
+									end
+									local bt = {}
+									for i,a in ipairs(banLength) do
+										table.insert(bt, a.label)
+									end
+									
+									local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
+									thisBanMenu:AddItem(thisItem)
+									local BanTime = 1
+									thisItem.OnListChanged = function(sender,item,index)
+										BanTime = index
+									end
 								
-								if result and result ~= "" then
-									BanReason = result
-									thisItem:RightLabel(result) -- this is broken for now
-								else
-									BanReason = GetLocalisedText("noreason")
+									local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
+									thisBanMenu:AddItem(thisItem)
+									thisItem.Activated = function(ParentMenu,SelectedItem)
+										if BanReason == "" then
+											BanReason = GetLocalisedText("noreason")
+										end
+										TriggerServerEvent("EasyAdmin:offlinebanPlayer", cachedplayer.id, BanReason, banLength[BanTime].time, cachedplayer.name)
+										BanTime = 1
+										BanReason = ""
+										_menuPool:CloseAllMenus()
+										Citizen.Wait(800)
+										GenerateMenu()
+										playermanagement:Visible(true)
+									end	
+									TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
+									thisPlayer:RefreshIndexRecursively()
 								end
 							end
-							local bt = {}
-							for i,a in ipairs(banLength) do
-								table.insert(bt, a.label)
-							end
-							
-							local thisItem = NativeUI.CreateListItem(GetLocalisedText("banlength"),bt, 1,GetLocalisedText("banlengthguide") )
-							thisBanMenu:AddItem(thisItem)
-							local BanTime = 1
-							thisItem.OnListChanged = function(sender,item,index)
-								BanTime = index
-							end
-						
-							local thisItem = NativeUI.CreateItem(GetLocalisedText("confirmban"),GetLocalisedText("confirmbanguide"))
-							thisBanMenu:AddItem(thisItem)
-							thisItem.Activated = function(ParentMenu,SelectedItem)
-								if BanReason == "" then
-									BanReason = GetLocalisedText("noreason")
-								end
-								TriggerServerEvent("EasyAdmin:offlinebanPlayer", cachedplayer.id, BanReason, banLength[BanTime].time, cachedplayer.name)
-								BanTime = 1
-								BanReason = ""
-								_menuPool:CloseAllMenus()
-								Citizen.Wait(800)
-								GenerateMenu()
-								playermanagement:Visible(true)
-							end	
-							TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
-							thisPlayer:RefreshIndexRecursively()
+		
 						end
 					end
-
 				end
+				cachedListGenerated=true
+				CachedList:RefreshIndexRecursively()
 			end
 		end
+
 	end
 
 
