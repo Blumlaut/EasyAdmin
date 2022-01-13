@@ -776,7 +776,9 @@ Citizen.CreateThread(function()
 		
 		
 		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
-		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ) ), "ban", 16711680)
+
+
+		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
 		if not offline then
 			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 		end
@@ -1875,7 +1877,7 @@ Citizen.CreateThread(function()
 					
 					
 					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..CachedPlayers[id].name.." for "..reason, 3)
-					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), bannedUsername, reason, formatDateString( expires ) ), "ban", 16711680)
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), bannedUsername, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
 					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 					WarnedPlayers[id] = nil
 					
