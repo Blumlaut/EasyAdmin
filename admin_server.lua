@@ -112,7 +112,10 @@ function loadBackupName(name)
 				TriggerEvent("ea_data:addBan", ban)
 				Wait(50)
 			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			if not saved then
+				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
 			updateBlacklist()
 			PrintDebugMessage("Backup should be loaded!")
 		else
@@ -132,8 +135,12 @@ function createBackup()
 	local resourceName = GetCurrentResourceName()
 	PrintDebugMessage("Creating Banlist Backup to "..backupName, 3)
 	
-	SaveResourceFile(resourceName, "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
+	local saved = SaveResourceFile(resourceName, "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
 	
+	if not saved then
+		PrintDebugMessage("^1Saving banlist backup failed! Please check if EasyAdmin has Permission to write in the backups folder!^7", 1)
+	end
+
 	backupInfos = LoadResourceFile(resourceName, "backups/_backups.json")
 	if backupInfos then
 		backupData = json.decode(backupInfos)
@@ -441,8 +448,12 @@ Citizen.CreateThread(function()
 			
 			PrintDebugMessage("Saving to support.json....^7\n", 1)
 			
-			SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
-			
+			local saved = SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
+
+			if not saved then
+				PrintDebugMessage("^1Saving support.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
+
 			
 			PrintDebugMessage("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n", 1)
 		end
@@ -1602,7 +1613,10 @@ Citizen.CreateThread(function()
 						theBan.discord=nil
 					end
 				end
-				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				if not saved then
+					PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+				end
 			end)
 		end
 	end, true)
@@ -1658,7 +1672,10 @@ Citizen.CreateThread(function()
 			for i, ban in pairs(blacklist) do
 				if ban.banid == newData.banid then
 					blacklist[i] = newData
-					SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+					local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+					if not saved then
+						PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+					end
 					if GetConvar("ea_custombanlist", "false") == "true" then 
 						TriggerEvent("ea_data:updateBan", newData)
 					end
@@ -1707,7 +1724,10 @@ Citizen.CreateThread(function()
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		if not content then
 			PrintDebugMessage("banlist.json file was missing, we created a new one.")
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+			if not saved then
+				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
 			content = json.encode({})
 		end
 		blacklist = json.decode(content)
@@ -1769,7 +1789,10 @@ Citizen.CreateThread(function()
 		end
 		if change then
 			PrintDebugMessage("Banlist changed, saving..", 4)
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			if not saved then
+				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
 		end
 		PrintDebugMessage("Completed Banlist Update.", 4)
 	end
@@ -1788,7 +1811,11 @@ Citizen.CreateThread(function()
 				for index,id in pairs(ban.identifiers) do
 					if identifier == id then
 						table.remove(blacklist,i)
-						SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+						local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+						if not saved then
+							PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+						end
+
 						if GetConvar("ea_custombanlist", "false") == "true" then 
 							TriggerEvent("ea_data:removeBan", ban)
 						end
@@ -1804,7 +1831,11 @@ Citizen.CreateThread(function()
 		for i,ban in pairs(blacklist) do
 			if ban.banid == id then
 				table.remove(blacklist,i)
-				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				if not saved then
+					PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+				end
+
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
 				end
