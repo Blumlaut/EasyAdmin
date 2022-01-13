@@ -751,17 +751,14 @@ Citizen.CreateThread(function()
 	end)
 	
 	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
-
+		local bannedIdentifiers = {}
+		local bannedUsername = "Unknown"
 		if type(playerId) == "table" then -- if playerId is a table of identifiers
 			offline = true
-		end
-
-		if offline then 
-			bannedIdentifiers = playerId 
-			playerId = nil
-			bannedUsername = "Unknown"
-		else 
-			bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
+			bannedIdentifiers = playerId
+		elseif CachedPlayers[playerId].dropped then
+			offline = true
+			bannedIdentifiers = CachedPlayers[playerId.dropped]
 			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
 		end
 
