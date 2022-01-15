@@ -334,7 +334,7 @@ end,false)
 RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
 	if source == 0 and args[1] then -- only let Console run this command
 		local id = tonumber(args[1])
-		PrintDebugMessage(json.encode(CachedPlayers[id].identifiers), 1) -- puke all identifiers into console
+		print(json.encode(CachedPlayers[id].identifiers)) -- puke all identifiers into console
 	end
 end,false)
 	
@@ -343,11 +343,11 @@ Citizen.CreateThread(function()
 
 	RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 		if DoesPlayerHavePermission(source, "server") then
-			PrintDebugMessage("Creating Support File....^7\n", 1)
+			print("Creating Support File....^7\n")
 			
 			local supportData = {}
 			
-			PrintDebugMessage("Collecting EasyAdmin Config....^7\n", 1)
+			print("Collecting EasyAdmin Config....^7\n")
 			
 			local version,ismaster = GetVersion()
 			supportData.config = {
@@ -392,7 +392,7 @@ Citizen.CreateThread(function()
 			end
 			
 			
-			PrintDebugMessage("Collecting Server Config....^7\n", 1)
+			print("Collecting Server Config....^7\n")
 			
 			local path = GetResourcePath(GetCurrentResourceName())
 			local occurance = string.find(path, "/resources", 1, true)
@@ -433,11 +433,11 @@ Citizen.CreateThread(function()
 				permissions:close()
 			end
 			
-			PrintDebugMessage("Collecting Banlist....^7\n", 1)
+			print("Collecting Banlist....^7\n")
 			
 			supportData.banlist = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 			
-			PrintDebugMessage("Collecting Players....^7\n", 1)
+			print("Collecting Players....^7\n")
 			
 			local players = {}
 			for i, player in pairs(GetPlayers()) do
@@ -446,7 +446,7 @@ Citizen.CreateThread(function()
 			
 			supportData.players = players
 			
-			PrintDebugMessage("Saving to support.json....^7\n", 1)
+			print("Saving to support.json....^7\n")
 			
 			local saved = SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
 
@@ -455,7 +455,7 @@ Citizen.CreateThread(function()
 			end
 
 			
-			PrintDebugMessage("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n", 1)
+			print("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n")
 		end
 	end, false)
 
@@ -473,7 +473,7 @@ Citizen.CreateThread(function()
 	local resourcemeta = LoadResourceFile(GetCurrentResourceName(), "__resource.lua")
 	if resourcemeta then
 		os.remove(GetResourcePath(GetCurrentResourceName()).."/__resource.lua")
-		PrintDebugMessage("Found __resource.lua file in EasyAdmin Folder and attempted deletion.", 1)
+		PrintDebugMessage("Found __resource.lua file in EasyAdmin Folder and attempted deletion.", 2)
 	end
 	
 	ExcludedWebhookFeatures = {}
@@ -1722,7 +1722,7 @@ Citizen.CreateThread(function()
 		
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		if not content then
-			PrintDebugMessage("banlist.json file was missing, we created a new one.")
+			PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
 			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
 			if not saved then
 				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
@@ -1889,7 +1889,7 @@ Citizen.CreateThread(function()
 		local upgraded = false
 		for i,ban in pairs(blacklist) do
 			if type(i) == "string" then
-				PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 1)
+				PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 4)
 				blacklist[i] = nil
 				table.insert(blacklist,ban) 
 				upgraded = true
@@ -1899,7 +1899,7 @@ Citizen.CreateThread(function()
 			if ban.identifiers then
 				for k, identifier in pairs(ban.identifiers) do
 					if identifier == "" then
-						PrintDebugMessage("Ban "..ban.banid.." had an empty identifier, removed it.", 1)
+						PrintDebugMessage("Ban "..ban.banid.." had an empty identifier, removed it.", 4)
 						ban.identifiers[k] = nil
 						upgraded = true 
 					end
@@ -2083,7 +2083,7 @@ Citizen.CreateThread(function()
 								newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds) -- add newly found identifiers to the existing ban
 								updateBan(blacklisted.banid,newBanData) -- send it off!
 							end
-							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 1)
+							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 3)
 							deferrals.done(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, formatDateString(blacklist[bi].expire), blacklist[bi].banid))
 							return
 						end
