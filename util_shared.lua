@@ -39,8 +39,13 @@ function PrintDebugMessage(msg,level)
 	
 	if level == 1 and loglevel >= level then -- ERROR Loglevel
 		Citizen.Trace("^1"..GetCurrentResourceName().."^7: "..msg.."^7\n")
-		for i,k in pairs(GetOnlineAdmins()) do
-			TriggerClientEvent("EasyAdmin:showNotification", i, string.gsub(msg, "%^%d", ""))
+
+		if IsDuplicityVersion() then
+			for i,k in pairs(GetOnlineAdmins()) do
+				TriggerClientEvent("EasyAdmin:showNotification", i, string.gsub(msg, "%^%d", ""))
+			end
+		else
+			TriggerEvent("EasyAdmin:showNotification", string.gsub(msg, "%^%d", ""))
 		end
 	elseif level == 2 and loglevel >= level then -- WARN Loglevel
 		Citizen.Trace("^3"..GetCurrentResourceName().."^7: "..msg.."^7\n")
