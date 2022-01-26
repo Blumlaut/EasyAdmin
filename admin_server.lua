@@ -756,10 +756,13 @@ Citizen.CreateThread(function()
 		if type(playerId) == "table" then -- if playerId is a table of identifiers
 			offline = true
 			bannedIdentifiers = playerId
-		elseif CachedPlayers[playerId].dropped then
+		elseif CachedPlayers[playerId] then
 			offline = true
-			bannedIdentifiers = CachedPlayers[playerId.dropped]
+			bannedIdentifiers = CachedPlayers[playerId.dropped].identifiers
 			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
+		else
+			PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.")
+			return
 		end
 
 		if expires and expires < os.time() then
