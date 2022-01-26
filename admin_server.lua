@@ -757,11 +757,13 @@ Citizen.CreateThread(function()
 			offline = true
 			bannedIdentifiers = playerId
 		elseif CachedPlayers[playerId] then
-			offline = true
-			bannedIdentifiers = CachedPlayers[playerId.dropped].identifiers
+			if CachedPlayers[playerId].dropped then
+				offline = true
+			end
+			bannedIdentifiers = CachedPlayers[playerId].identifiers
 			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
 		else
-			PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.")
+			PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
 			return
 		end
 
