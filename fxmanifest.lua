@@ -34,7 +34,7 @@ ui_page "dependencies/nui/index.html"
 
 files {
 	"dependencies/images/*.png",
-    "dependencies/nui/**/*"
+	"dependencies/nui/**/*"
 }
 
 convar_category 'EasyAdmin' {
