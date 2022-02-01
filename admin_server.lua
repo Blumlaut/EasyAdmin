@@ -544,17 +544,6 @@ Citizen.CreateThread(function()
 		
 		-- give player the right settings to work with
 		local key = GetConvar("ea_defaultKey", "none")
-		if key == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
-			if RedM then
-				key = GetConvar("ea_MenuButton", "PhotoModePc")
-			else
-				key = GetConvar("ea_MenuButton", "none")
-			end
-		else
-			if RedM then
-				key = GetConvar("ea_defaultKey", "PhotoModePc")
-			end
-		end
 		
 		TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
 		
@@ -2138,12 +2127,7 @@ function checkVersion(err,response, headers)
 		infinity = true
 	end
 	
-	if GetConvar("ea_defaultKey", "none") == "none" and GetConvar("ea_MenuButton", "none") ~= "none" then
-		PrintDebugMessage("ea_MenuButton has been replaced by ea_defaultKey, please rename it in your Server Config!\nSee https://easyadmin.readthedocs.io/en/latest/updating", 1)
-	elseif tonumber(GetConvar("ea_MenuButton", "none")) or tonumber(GetConvar("ea_defaultKey", "none")) then
-		PrintDebugMessage("ea_MenuButton/ea_defaultKey has not been updated, please follow the updating instructions here:\nhttps://easyadmin.readthedocs.io/en/latest/updating", 1)
-		PrintDebugMessage("If you do not correct this, your Menu key will cease working in the near future.", 1)
-	elseif GetConvar("ea_defaultKey", "none") == "none" then
+	if GetConvar("ea_defaultKey", "none") == "none" then
 		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
 	end
 		

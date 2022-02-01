@@ -33,6 +33,7 @@ end
 
 playlist = nil
 
+
 RegisterCommand('easyadmin', function(source, args)
 	CreateThread(function()
 		if not isAdmin == true then
@@ -135,68 +136,9 @@ Citizen.CreateThread(function()
 			end 
 		end
 		
-		if RedM or tonumber(settings.button) then -- legacy watch menu button for press, for people that ignored the installation instructions, or use RedM.
-			if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) or (not RedM and IsControlJustReleased(0, tonumber(settings.button)) and GetLastInputMethod( 0 )) then
-				-- clear and re-create incase of permission change+player count change
-				if not isAdmin == true then
-					TriggerServerEvent("EasyAdmin:amiadmin")
-					local waitTime = 0
-
-					repeat 
-						Wait(10)
-						waitTime=waitTime+1
-					until (isAdmin or waitTime==1000)
-					if not isAdmin then
-					end
-				end
-				
-
-				
-				if ((RedM and settings.infinity) or not RedM) and isAdmin then
-					playerlist = nil
-					if DoesPlayerHavePermissionForCategory(-1, "player") then
-						TriggerServerEvent("EasyAdmin:GetInfinityPlayerList")
-						repeat
-							Wait(10)
-						until playerlist
-					else
-						playerlist = {}
-					end
-				end
-
-				if strings and isAdmin then
-					banLength = {}
-					
-					if permissions["player.ban.permanent"] then
-						table.insert(banLength, {label = GetLocalisedText("permanent"), time = 10444633200})
-					end
-
-					if permissions["player.ban.temporary"] then
-						table.insert(banLength, {label = "6 "..GetLocalisedText("hours"), time = 21600})
-						table.insert(banLength, {label = "12 "..GetLocalisedText("hours"), time = 43200})
-						table.insert(banLength, {label = "1 "..GetLocalisedText("day"), time = 86400})
-						table.insert(banLength, {label = "3 "..GetLocalisedText("days"), time = 259200})
-						table.insert(banLength, {label = "1 "..GetLocalisedText("week"), time = 518400})
-						table.insert(banLength, {label = "2 "..GetLocalisedText("weeks"), time = 1123200})
-						table.insert(banLength, {label = "1 "..GetLocalisedText("month"), time = 2678400})
-						table.insert(banLength, {label = "1 "..GetLocalisedText("year"), time = 31536000})
-						table.insert(banLength, {label = "1 "..GetLocalisedText("customtime"), time = -1})
-					end
-					
-					
-
-					if mainMenu and mainMenu:Visible() then
-						mainMenu:Visible(false)
-						_menuPool:Remove()
-						TriggerEvent("EasyAdmin:MenuRemoved")
-						collectgarbage()
-					else
-						GenerateMenu()
-						mainMenu:Visible(true)
-					end
-				else
-					TriggerServerEvent("EasyAdmin:amiadmin")
-				end
+		if RedM then -- since RedM doesn't have the new key bindings yet, watch for button press actively.
+			if (RedM and IsControlJustReleased(0, Controls[settings.button]) ) then
+				ExecuteCommand("easyadmin")
 			end
 		end
 		
