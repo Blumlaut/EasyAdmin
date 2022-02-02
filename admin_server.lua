@@ -290,6 +290,10 @@ RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
 
 		PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
 		MessageShortcuts[shortcut] = text
+
+		for i,_ in pairs(OnlineAdmins) do 
+			TriggerLatentClientEvent("EasyAdmin:fillShortcuts", i, 10000, MessageShortcuts)
+		end
 	end
 end)
 
@@ -568,6 +572,8 @@ Citizen.CreateThread(function()
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
 		end
+
+		TriggerLatentClientEvent("EasyAdmin:fillShortcuts", source, 10000, MessageShortcuts)
 		
 		TriggerLatentClientEvent("EasyAdmin:SetLanguage", source, 10000, strings)
 		

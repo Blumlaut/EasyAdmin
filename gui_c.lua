@@ -390,10 +390,12 @@ function GenerateMenu() -- this is a big ass function
 						thisItem:RightLabel(KickReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
 							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+							local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
+							
 							
 							if result and result ~= "" then
 								KickReason = result
-								thisItem:RightLabel(result) -- this is broken for now
+								thisItem:RightLabel(formattedResult)
 							else
 								KickReason = GetLocalisedText("noreason")
 							end
@@ -423,10 +425,11 @@ function GenerateMenu() -- this is a big ass function
 						thisItem:RightLabel(BanReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
 							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+							local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
 							
 							if result and result ~= "" then
 								BanReason = result
-								thisItem:RightLabel(result) -- this is broken for now
+								thisItem:RightLabel(formattedResult)
 							else
 								BanReason = GetLocalisedText("noreason")
 							end
@@ -633,10 +636,11 @@ function GenerateMenu() -- this is a big ass function
 						thisItem:RightLabel(WarnReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
 							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+							local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
 							
 							if result and result ~= "" then
 								WarnReason = result
-								thisItem:RightLabel(result) -- this is broken for now
+								thisItem:RightLabel(formattedResult)
 							else
 								WarnReason = GetLocalisedText("noreason")
 							end
@@ -862,10 +866,11 @@ function GenerateMenu() -- this is a big ass function
 									thisItem:RightLabel(BanReason)
 									thisItem.Activated = function(ParentMenu,SelectedItem)
 										local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+										local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
 										
 										if result and result ~= "" then
 											BanReason = result
-											thisItem:RightLabel(result) -- this is broken for now
+											thisItem:RightLabel(formattedResult)
 										else
 											BanReason = GetLocalisedText("noreason")
 										end

@@ -10,6 +10,7 @@ banlist = {}
 cachedplayers = {}
 reports = {}
 add_aces, add_principals = {}, {}
+MessageShortcuts = {}
 
 local vehicleInfo = {
 	netId = nil,
@@ -88,6 +89,10 @@ RegisterNetEvent("EasyAdmin:RemoveReport", function(reportData)
 	reports[reportData.id] = nil 
 end)
 
+
+RegisterNetEvent("EasyAdmin:fillShortcuts", function (shortcuts)
+	MessageShortcuts = shortcuts
+end)
 
 Citizen.CreateThread( function()
 	while true do
