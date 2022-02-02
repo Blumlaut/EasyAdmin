@@ -183,12 +183,22 @@ function formatDateString(string)
 end
 
 function formatShortcuts(thisstring)
+	if not thisstring then return thisstring end
 	local cleanString = string.gsub(string.lower(thisstring), " ", "")
 	for shortcut,value in pairs(MessageShortcuts) do
 		if string.lower(shortcut) == cleanString then
 			thisstring = value
 		end
 	end
+	return thisstring
+end
+
+function formatRightString(thisstring)
+	if not thisstring then return thisstring end -- in case string is nil, just yeet it back.
+	if string.len(thisstring) > maxRightTextWidth then
+		thisstring = string.sub(thisstring, 1, maxRightTextWidth)..".."
+	end
+
 	return thisstring
 end
 

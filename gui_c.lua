@@ -230,6 +230,7 @@ function GenerateMenu() -- this is a big ass function
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
+	maxRightTextWidth = math.floor((24+(menuWidth*0.12)))
 	local subtitle = "Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!" elseif settings.alternativeTitle then subtitle = settings.alternativeTitle
@@ -390,7 +391,7 @@ function GenerateMenu() -- this is a big ass function
 						thisItem:RightLabel(KickReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
 							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-							local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
+							local formattedResult = formatRightString(formatShortcuts(result))
 							
 							
 							if result and result ~= "" then
@@ -425,7 +426,7 @@ function GenerateMenu() -- this is a big ass function
 						thisItem:RightLabel(BanReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
 							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-							local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
+							local formattedResult = formatRightString(formatShortcuts(result))
 							
 							if result and result ~= "" then
 								BanReason = result
@@ -636,7 +637,7 @@ function GenerateMenu() -- this is a big ass function
 						thisItem:RightLabel(WarnReason)
 						thisItem.Activated = function(ParentMenu,SelectedItem)
 							local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-							local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
+							local formattedResult = formatRightString(formatShortcuts(result))
 							
 							if result and result ~= "" then
 								WarnReason = result
@@ -724,7 +725,7 @@ function GenerateMenu() -- this is a big ass function
 				end
 				local thisMenu = _menuPool:AddSubMenu(reportViewer, reportColor.. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
 				thisMenu:SetMenuWidthOffset(thisMenuWidth)
-				thisMenu.ParentItem:RightLabel(string.sub(report.reason, 1,38))
+				thisMenu.ParentItem:RightLabel(formatRightString(report.reason))
 				reportMenus[report.id] = thisMenu
 
 				if permissions["player.reports.claim"] then
@@ -732,7 +733,7 @@ function GenerateMenu() -- this is a big ass function
 					local rightLabel = ""
 					if report.claimed then
 						claimText = GetLocalisedText("claimedby")
-						rightLabel = report.claimedName
+						rightLabel = formatRightString(report.claimedName)
 					end
 
 					local thisItem = NativeUI.CreateItem(claimText, "")
@@ -748,7 +749,7 @@ function GenerateMenu() -- this is a big ass function
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("reporter"), GetLocalisedText("entertoopen"))
-				thisItem:RightLabel(report.reporterName)
+				thisItem:RightLabel(formatRightString(report.reporterName))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					_menuPool:CloseAllMenus()
@@ -768,7 +769,7 @@ function GenerateMenu() -- this is a big ass function
 
 				if report.type == 1 then
 					local thisItem = NativeUI.CreateItem(GetLocalisedText("reported"), GetLocalisedText("entertoopen"))
-					thisItem:RightLabel(report.reportedName)
+					thisItem:RightLabel(formatRightString(report.reportedName))
 					thisMenu:AddItem(thisItem)
 					thisItem.Activated = function(ParentMenu,SelectedItem)
 						_menuPool:CloseAllMenus()
@@ -788,7 +789,7 @@ function GenerateMenu() -- this is a big ass function
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"), "")
-				thisItem:RightLabel(report.reason)
+				thisItem:RightLabel(formatRightString(report.reason))
 				thisMenu:AddItem(thisItem)
 
 				if permissions["player.reports.process"] then
@@ -866,7 +867,7 @@ function GenerateMenu() -- this is a big ass function
 									thisItem:RightLabel(BanReason)
 									thisItem.Activated = function(ParentMenu,SelectedItem)
 										local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-										local formattedResult = string.sub(formatShortcuts(result), 1, 28)..".."
+										local formattedResult = formatRightString(formatShortcuts(result))
 										
 										if result and result ~= "" then
 											BanReason = result
@@ -1293,13 +1294,13 @@ function GenerateMenu() -- this is a big ass function
 
 					if result and result ~= "" then
 						tempAce[1] = result
-						thisItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
 						thisMenu.ParentItem.Text._Text = result
 					end
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("permission"), "")
-				thisItem:RightLabel(tempAce[2])
+				thisItem:RightLabel(formatRightString(tempAce[2]))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
@@ -1307,8 +1308,8 @@ function GenerateMenu() -- this is a big ass function
 
 					if result and result ~= "" then
 						tempAce[2] = result
-						thisItem:RightLabel(result)
-						thisMenu.ParentItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
+						thisMenu.ParentItem:RightLabel(formatRightString(result))
 					end
 				end
 
@@ -1337,7 +1338,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu.ParentItem:RightLabel(ace[3])
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
-				thisItem:RightLabel(ace[1])
+				thisItem:RightLabel(formatRightString(ace[1]))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
@@ -1345,13 +1346,13 @@ function GenerateMenu() -- this is a big ass function
 		
 					if result and result ~= "" then
 						add_aces[i][1] = result
-						thisItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
 						thisMenu.ParentItem.Text._Text = add_aces[i][1].." "..add_aces[i][2]
 					end
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("permission"), "")
-				thisItem:RightLabel(ace[2])
+				thisItem:RightLabel(formatRightString(ace[2]))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					AddTextEntry("ENTERPERM", GetLocalisedText("enterperm"))
@@ -1359,19 +1360,19 @@ function GenerateMenu() -- this is a big ass function
 		
 					if result and result ~= "" then
 						add_aces[i][2] = result
-						thisItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
 						thisMenu.ParentItem.Text._Text = add_aces[i][1].." "..add_aces[i][2]
 					end
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("state"), GetLocalisedText("stateguide"))
-				thisItem:RightLabel(ace[3])
+				thisItem:RightLabel(formatRightString(ace[3]))
 				thisMenu:AddItem(thisItem)
 				thisItem:Enabled(false)
 				
 				if (ace.file) then
 					local thisItem = NativeUI.CreateItem(GetLocalisedText("location"), GetLocalisedText("locationguide"))
-					thisItem:RightLabel(ace.file)
+					thisItem:RightLabel(formatRightString(ace.file))
 					thisMenu:AddItem(thisItem)
 					thisItem:Enabled(false)
 				end
@@ -1404,7 +1405,7 @@ function GenerateMenu() -- this is a big ass function
 
 					if result and result ~= "" then
 						tempPrincipal[1] = result
-						thisItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
 					end
 				end
 
@@ -1417,8 +1418,8 @@ function GenerateMenu() -- this is a big ass function
 
 					if result and result ~= "" then
 						tempPrincipal[2] = result
-						thisItem:RightLabel(result)
-						thisMenu.ParentItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
+						thisMenu.ParentItem:RightLabel(formatRightString(result))
 					end
 				end
 
@@ -1441,7 +1442,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu.ParentItem:RightLabel(principal[2])
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("principal"), "")
-				thisItem:RightLabel(principal[1])
+				thisItem:RightLabel(formatRightString(principal[1]))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					AddTextEntry("ENTERPRINCIPAL", GetLocalisedText("enterprincipal"))
@@ -1449,13 +1450,13 @@ function GenerateMenu() -- this is a big ass function
 		
 					if result and result ~= "" then
 						add_principals[i][1] = result
-						thisItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
 						thisMenu.ParentItem.Text._Text = add_principals[i][1]
 					end
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("group"), "")
-				thisItem:RightLabel(principal[2])
+				thisItem:RightLabel(formatRightString(principal[2]))
 				thisMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
 					AddTextEntry("ENTERGROUP", GetLocalisedText("entergroup"))
@@ -1463,14 +1464,14 @@ function GenerateMenu() -- this is a big ass function
 		
 					if result and result ~= "" then
 						add_principals[i][2] = result
-						thisItem:RightLabel(result)
-						thisMenu.ParentItem:RightLabel(result)
+						thisItem:RightLabel(formatRightString(result))
+						thisMenu.ParentItem:RightLabel(formatRightString(result))
 					end
 				end
 
 				if (principal.file) then
 					local thisItem = NativeUI.CreateItem(GetLocalisedText("location"), GetLocalisedText("locationguide"))
-					thisItem:RightLabel(principal.file)
+					thisItem:RightLabel(formatRightString(principal.file))
 					thisMenu:AddItem(thisItem)
 					thisItem:Enabled(false)
 				end
