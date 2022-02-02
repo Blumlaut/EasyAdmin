@@ -193,10 +193,11 @@ function formatShortcuts(thisstring)
 	return thisstring
 end
 
-function formatRightString(thisstring)
+function formatRightString(thisstring, customWidth)
 	if not thisstring then return thisstring end -- in case string is nil, just yeet it back.
-	if string.len(thisstring) > maxRightTextWidth then
-		thisstring = string.sub(thisstring, 1, maxRightTextWidth)..".."
+	local width = (customWidth or maxRightTextWidth)
+	if string.len(thisstring) > width then
+		thisstring = string.sub(thisstring, 1, width)..".."
 	end
 
 	return thisstring

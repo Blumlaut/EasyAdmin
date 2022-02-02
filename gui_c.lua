@@ -725,7 +725,7 @@ function GenerateMenu() -- this is a big ass function
 				end
 				local thisMenu = _menuPool:AddSubMenu(reportViewer, reportColor.. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
 				thisMenu:SetMenuWidthOffset(thisMenuWidth)
-				thisMenu.ParentItem:RightLabel(formatRightString(report.reason))
+				thisMenu.ParentItem:RightLabel(formatRightString(report.reason, 32))
 				reportMenus[report.id] = thisMenu
 
 				if permissions["player.reports.claim"] then
@@ -789,7 +789,7 @@ function GenerateMenu() -- this is a big ass function
 				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"), "")
-				thisItem:RightLabel(formatRightString(report.reason))
+				thisItem:RightLabel(formatRightString(report.reason, 48))
 				thisMenu:AddItem(thisItem)
 
 				if permissions["player.reports.process"] then
