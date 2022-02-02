@@ -239,11 +239,16 @@ AddEventHandler('playerDropped', function (reason)
 end)
 
 AddEventHandler("EasyAdmin:amiadmin", function()
-	if not CachedPlayers[source] then
-		CachedPlayers[source] = {id = source, name = getName(source, true), identifiers = getAllPlayerIdentifiers(source), immune = DoesPlayerHavePermission(source, "immune")}
-		PrintDebugMessage(getName(source).." has been added to cache.", 4)
-	end
+	cachePlayer(source)
 end)
+
+
+function cachePlayer(playerId)
+	if not CachedPlayers[playerId] then
+		CachedPlayers[playerId] = {id = playerId, name = getName(playerId, true), identifiers = getAllPlayerIdentifiers(playerId), immune = DoesPlayerHavePermission(playerId, "immune")}
+		PrintDebugMessage(getName(playerId).." has been added to cache.", 4)
+	end
+end
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 	PrintDebugMessage(getName(source, true).." requested Playerlist.", 4)
@@ -252,6 +257,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 		local players = GetPlayers()
 		
 		for i, player in pairs(players) do
+			cachePlayer(player)
 			local player = tonumber(player)
 			for i, cached in pairs(CachedPlayers) do
 				if (cached.id == player) then
@@ -270,7 +276,6 @@ RegisterServerEvent("EasyAdmin:requestCachedPlayers", function()
 	local src = source
 	if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) then
 		TriggerLatentClientEvent("EasyAdmin:fillCachedPlayers", src, 200000, CachedPlayers)
-		PrintDebugMessage("Cached Players requested by "..getName(src,true), 4)
 	end
 end)
 
