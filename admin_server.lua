@@ -238,16 +238,15 @@ AddEventHandler('playerDropped', function (reason)
 	PrintDebugMessage(source.." disconnected.", 4)
 end)
 
-AddEventHandler("EasyAdmin:amiadmin", function()
-	cachePlayer(source)
-end)
 
 
 function cachePlayer(playerId)
 	if not CachedPlayers[playerId] then
 		CachedPlayers[playerId] = {id = playerId, name = getName(playerId, true), identifiers = getAllPlayerIdentifiers(playerId), immune = DoesPlayerHavePermission(playerId, "immune")}
 		PrintDebugMessage(getName(playerId).." has been added to cache.", 4)
+		return true
 	end
+	return false
 end
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
@@ -503,6 +502,8 @@ Citizen.CreateThread(function()
 	
 	
 	RegisterServerEvent('EasyAdmin:amiadmin', function()
+
+		cachePlayer(source) -- this will do nothing if player is already cached.
 		
 		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+15 > os.time() then
 			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..CachedPlayers[source].lastPermRequest+15-os.time().." seconds left.", 3)
