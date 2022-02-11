@@ -1994,6 +1994,23 @@ Citizen.CreateThread(function()
 			end
 		end)
 	end
+
+
+	if GetConvar("ea_enableChat", "true") == "true" and chatEventsSupported then
+		exports.chat:registerMode({
+			name = "admins",
+			displayName = "Admin Chat",
+			color = "#19A2E3",
+			seObject = "easyadmin.server.chat",
+			cb = function(source, message, cbs)
+			  cbs.updateMessage({
+				template = "^5[ADMIN CHAT]^7" .. ' {}'
+			  })
+		  
+			  cbs.setSeObject("easyadmin.server.chat")
+			end
+		})
+	end
 	
 	
 	function sendTelemetry()
