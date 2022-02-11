@@ -76,8 +76,8 @@ RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
 	if _menuPool and _menuPool:IsAnyMenuOpen() then
 		for i, menu in pairs(reportMenus) do
 			for o,item in pairs(menu.Items) do 
-				if item.Text._Text == GetLocalisedText("claimreport") then
-					item.Text._Text = GetLocalisedText("claimedby")
+				if getMenuItemTitle(item) == GetLocalisedText("claimreport") then
+					setMenuItemTitle(item, GetLocalisedText("claimedby"))
 					item:RightLabel(reportData.claimedName)
 				end
 			end
