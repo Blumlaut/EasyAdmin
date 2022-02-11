@@ -547,12 +547,14 @@ function GenerateMenu() -- this is a big ass function
 						
 					end
 					
-					if permissions["player.mute"] then			
-						local thisItem = NativeUI.CreateItem(GetLocalisedText("mute"),GetLocalisedText("muteguide"))
+					if permissions["player.mute"] then
+						local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("mute"), MutedPlayers[thePlayer.id], GetLocalisedText("muteguide"))
 						thisPlayer:AddItem(thisItem)
-						thisItem.Activated = function(ParentMenu,SelectedItem)
+						thisItem.CheckboxEvent = function(sender, item, checked_)
 							TriggerServerEvent("EasyAdmin:mutePlayer", thePlayer.id)
 						end
+
+
 					end
 		
 					if permissions["player.spectate"] then
@@ -604,7 +606,7 @@ function GenerateMenu() -- this is a big ass function
 					end
 		
 					if permissions["player.freeze"] and not RedM then
-						local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("setplayerfrozen"), frozenPlayers[thePlayer.id])
+						local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("setplayerfrozen"), FrozenPlayers[thePlayer.id])
 						thisPlayer:AddItem(thisItem)
 						thisItem.CheckboxEvent = function(sender, item, checked_)
 							TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, checked_)

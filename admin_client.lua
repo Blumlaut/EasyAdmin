@@ -11,7 +11,8 @@ cachedplayers = {}
 reports = {}
 add_aces, add_principals = {}, {}
 MessageShortcuts = {}
-frozenPlayers = {}
+FrozenPlayers = {}
+MutedPlayers = {}
 
 local vehicleInfo = {
 	netId = nil,
@@ -96,11 +97,24 @@ RegisterNetEvent("EasyAdmin:fillShortcuts", function (shortcuts)
 end)
 
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(player,state)
-	frozenPlayers[player] = state
+	FrozenPlayers[player] = state
 	if _menuPool and _menuPool:IsAnyMenuOpen() then
 		if playerMenus[tostring(player)].menu then
 			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
 				if getMenuItemTitle(item) == GetLocalisedText("setplayerfrozen") then
+					item.Checked = state
+				end
+			end
+		end
+	end
+end)
+
+RegisterNetEvent('EasyAdmin:SetPlayerMuted', function(player,state)
+	MutedPlayers[player] = state
+	if _menuPool and _menuPool:IsAnyMenuOpen() then
+		if playerMenus[tostring(player)].menu then
+			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
+				if getMenuItemTitle(item) == GetLocalisedText("mute") then
 					item.Checked = state
 				end
 			end
