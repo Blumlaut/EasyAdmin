@@ -553,8 +553,6 @@ function GenerateMenu() -- this is a big ass function
 						thisItem.CheckboxEvent = function(sender, item, checked_)
 							TriggerServerEvent("EasyAdmin:mutePlayer", thePlayer.id)
 						end
-
-
 					end
 		
 					if permissions["player.spectate"] then
