@@ -40,7 +40,7 @@
     "adminunmutedplayer": "**%s** odciszył **%s**",
     "playermuted": "został wyciszony!",
     "playerunmuted": "został bez wyciszenia!",
-    "playermute": "Jesteś ^8wyciszony^7!",
+    "playermute": "Jesteś wyciszony!",
     "spectateplayer": "Obserwuj gracza",
     "teleportplayer": "Teleport",
     "teleporttoplayer": "do gracza",

@@ -1967,14 +1967,33 @@ Citizen.CreateThread(function()
 	end)
 	
 	
-	AddEventHandler('chatMessage', function(Source, Name, Msg)
-		if MutedPlayers[Source] then
-			CancelEvent()
-			TriggerClientEvent("chat:addMessage", Source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
-			TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playermute"))
+
+	local chatEventsSupported = false
+
+	pcall(function() -- this will prevent our script from erroring if the exports are missing, also mutes any errors.
+		if exports.chat.registerMessageHook and exports.chat.registerMode then
+			chatEventsSupported = true
 		end
 	end)
-	
+
+
+
+	if chatEventsSupported then
+		exports.chat:registerMessageHook(function(source, outMessage, hookRef)
+			if MutedPlayers[source] then
+				hookRef.cancel()
+				TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("playermute"))
+			end
+		end)
+	else
+		AddEventHandler('chatMessage', function(source, name, msg)
+			if MutedPlayers[source] then
+				CancelEvent()
+				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
+				TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("playermute"))
+			end
+		end)
+	end
 	
 	
 	function sendTelemetry()

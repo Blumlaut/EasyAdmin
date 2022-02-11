@@ -40,7 +40,7 @@
     "adminunmutedplayer": "**%s** ha quitado el muteo a **%s**",
     "playermuted": "ha sido muteado",
     "playerunmuted": "ha sido desmuteado",
-    "playermute": "Ha sido ^8muteado^7",
+    "playermute": "Ha sido muteado",
     "spectateplayer": "Spectear jugador",
     "teleportplayer": "Teleportar",
     "teleporttoplayer": "hacia jugador",

@@ -40,7 +40,7 @@
     "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "has been muted!",
     "playerunmuted": "has been un-muted!",
-    "playermute": "You are ^8muted^7!",
+    "playermute": "You are muted!",
     "spectateplayer": "Spectate Player",
     "teleportplayer": "Teleport",
     "teleporttoplayer": "Me to Player",
