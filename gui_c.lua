@@ -157,8 +157,8 @@ function StopDrawPlayerInfo()
 end
 
 local banlistPage = 1
-local playerMenus = {}
-local cachedMenus = {}
+playerMenus = {}
+cachedMenus = {}
 reportMenus = {}
 local easterChance = math.random(0,1001)
 local overrideEgg, currentEgg
@@ -604,18 +604,10 @@ function GenerateMenu() -- this is a big ass function
 					end
 		
 					if permissions["player.freeze"] and not RedM then
-						local sl = {GetLocalisedText("on"), GetLocalisedText("off")}
-						local thisItem = NativeUI.CreateListItem(GetLocalisedText("setplayerfrozen"), sl, 1)
+						local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("setplayerfrozen"), frozenPlayers[thePlayer.id])
 						thisPlayer:AddItem(thisItem)
-						thisItem.OnListSelected = function(sender, item, index)
-								if item == thisItem then
-										i = item:IndexToItem(index)
-										if i == GetLocalisedText("on") then
-											TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, true)
-										else
-											TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, false)
-										end
-								end
+						thisItem.CheckboxEvent = function(sender, item, checked_)
+							TriggerServerEvent("EasyAdmin:FreezePlayer", thePlayer.id, checked_)
 						end
 					end
 				
@@ -1627,11 +1619,9 @@ function GenerateMenu() -- this is a big ass function
 	if permissions["anon"] then
 		local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("anonymous"), anonymous or false, GetLocalisedText("anonymousguide"))
 		settingsMenu:AddItem(thisItem)
-		settingsMenu.OnCheckboxChange = function(sender, item, checked_)
-			if item == thisItem then
-				anonymous = checked_
-				TriggerServerEvent("EasyAdmin:SetAnonymous", checked_)
-			end
+		thisItem.CheckboxEvent = function(sender, item, checked_)
+			anonymous = checked_
+			TriggerServerEvent("EasyAdmin:SetAnonymous", checked_)
 		end
 	end
 

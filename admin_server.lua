@@ -230,6 +230,13 @@ AddEventHandler('playerDropped', function (reason)
 	if cooldowns[source] then
 		cooldowns[source] = nil
 	end
+	if frozenPlayers[source] then
+		frozenPlayers[source] = nil
+		for i,_ in pairs(OnlineAdmins) do 
+			TriggerLatentClientEvent("EasyAdmin:SetPlayerFrozen", i, 1000, source, nil)
+		end
+	end
+
 	for i, report in pairs(reports) do
 		if report.reporter == source or (report.reported and report.reported == source) then
 			removeReport(report.id)
@@ -1026,12 +1033,18 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune then
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			if toggle then
+				frozenPlayers[playerId] = toggle
 				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
 				PrintDebugMessage("Player "..getName(source,true).." froze "..getName(playerId,true), 3)
 			else
+				frozenPlayers[playerId] = nil
 				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminunfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
 				PrintDebugMessage("Player "..getName(source,true).." unfroze "..getName(playerId,true), 3)
 			end
+			for i,_ in pairs(OnlineAdmins) do 
+				TriggerLatentClientEvent("EasyAdmin:SetPlayerFrozen", i, 1000, playerId, (toggle == true or nil))
+			end
+
 			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
 		elseif CachedPlayers[playerId].immune then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
@@ -2226,6 +2239,7 @@ MessageShortcuts = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {} -- DO NOT TOUCH THIS
 cooldowns = {} -- DO NOT TOUCH THIS
 reports = {} -- DO NOT TOUCH THIS
+frozenPlayers = {}
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE
 -- DO NOT TOUCH THESE

@@ -11,6 +11,7 @@ cachedplayers = {}
 reports = {}
 add_aces, add_principals = {}, {}
 MessageShortcuts = {}
+frozenPlayers = {}
 
 local vehicleInfo = {
 	netId = nil,
@@ -92,6 +93,19 @@ end)
 
 RegisterNetEvent("EasyAdmin:fillShortcuts", function (shortcuts)
 	MessageShortcuts = shortcuts
+end)
+
+RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(player,state)
+	frozenPlayers[player] = state
+	if _menuPool and _menuPool:IsAnyMenuOpen() then
+		if playerMenus[tostring(player)].menu then
+			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
+				if getMenuItemTitle(item) == GetLocalisedText("setplayerfrozen") then
+					item.Checked = state
+				end
+			end
+		end
+	end
 end)
 
 Citizen.CreateThread( function()
