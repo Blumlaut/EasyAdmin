@@ -160,7 +160,7 @@ local banlistPage = 1
 playerMenus = {}
 cachedMenus = {}
 reportMenus = {}
-local easterChance = math.random(0,1001)
+local easterChance = math.random(0,101)
 local overrideEgg, currentEgg
 
 function generateTextures()
@@ -170,10 +170,10 @@ function generateTextures()
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
-		if ((overrideEgg == nil) and easterChance == 1000) or (overrideEgg or overrideEgg == false) then
+		if ((overrideEgg == nil) and easterChance == 100) or (overrideEgg or overrideEgg == false) then
 			local chance = 0
-			if ((overrideEgg == nil) and easterChance == 1000) then
-				chance = math.random(1,2)
+			if ((overrideEgg == nil) and easterChance == 100) then
+				chance = math.random(1,3)
 			end
 			if overrideEgg == "pipes" or chance == 1 then
 				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
@@ -189,7 +189,7 @@ function generateTextures()
 				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = "nom"
-			elseif overrideEgg == "pride" then
+			elseif overrideEgg == "pride" or chance == 3 then
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = "pride"
