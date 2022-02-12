@@ -173,7 +173,7 @@ function generateTextures()
 		if ((overrideEgg == nil) and easterChance == 100) or (overrideEgg or overrideEgg == false) then
 			local chance = 0
 			if ((overrideEgg == nil) and easterChance == 100) then
-				chance = math.random(1,2)
+				chance = math.random(1,3)
 			end
 			if overrideEgg == "pipes" or chance == 1 then
 				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
@@ -189,7 +189,7 @@ function generateTextures()
 				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = "nom"
-			elseif overrideEgg == "pride" then
+			elseif overrideEgg == "pride" or chance == 3 then
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = "pride"
