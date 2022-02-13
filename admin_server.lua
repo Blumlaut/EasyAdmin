@@ -496,7 +496,14 @@ Citizen.CreateThread(function()
 		os.remove(GetResourcePath(GetCurrentResourceName()).."/__resource.lua")
 		PrintDebugMessage("Found __resource.lua file in EasyAdmin Folder and attempted deletion.", 2)
 	end
-	
+
+	local versionjson = LoadResourceFile(GetCurrentResourceName(), "version.json")
+	if versionjson then
+		os.remove(GetResourcePath(GetCurrentResourceName()).."/version.json")
+		PrintDebugMessage("Found legacy version.json file in EasyAdmin Folder and attempted deletion.", 2)
+	end
+		
+
 	ExcludedWebhookFeatures = {}
 	AnonymousAdmins = {}
 	
