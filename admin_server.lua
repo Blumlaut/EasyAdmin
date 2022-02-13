@@ -553,17 +553,7 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source, "player.kick") then
 			TriggerClientEvent('chat:addSuggestion', source, '/kick', GetLocalisedText("chatsuggestionkick"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
 		end
-		if DoesPlayerHavePermission(source, "player.spectate") then
-			TriggerClientEvent('chat:addSuggestion', source, '/spectate', GetLocalisedText("chatsuggestionspectate"), { {name='player id', help="the player's server id"} })
-		end
-		
-		if DoesPlayerHavePermission(source, "player.slap") then
-			TriggerClientEvent('chat:addSuggestion', source, '/slap', GetLocalisedText("chatsuggestionslap"), { {name='player id', help="the player's server id"},{name='hp', help="the hp to take"} })
-		end
-		
-		if DoesPlayerHavePermission(source, "player.freeze") then
-			TriggerClientEvent('chat:addSuggestion', source, '/freeze', GetLocalisedText("chatsuggestionfreeze"), { {name='player id', help="the player's server id"},{name='toggle', help="either true or false"} })
-		end
+		TriggerClientEvent('chat:addSuggestion', source, '/easyadmin', "EasyAdmin Menu")
 		
 		-- give player the right settings to work with
 		local key = GetConvar("ea_defaultKey", "none")

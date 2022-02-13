@@ -31,12 +31,11 @@ end)
 
 RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
-	if setting == "button" and state ~= "none" then
-		if (not RedM and not tonumber(settings.button)) then
-			RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', settings.button)
-		end
-	end
 end)
+
+if not RedM then
+	RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', "")
+end
 
 AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
