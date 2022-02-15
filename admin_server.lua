@@ -483,6 +483,15 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+
+	if not CachedPlayers or GetVersion() == nil then
+		print("^7--------------------------------------------------------------")
+		print("^1EasyAdmin self-test failed! Your EasyAdmin **will not work**, likely you edited some files and broke EasyAdmin in the progress, please reinstall EasyAdmin.")
+		print("^7--------------------------------------------------------------")
+		return 
+	end
+
+
 	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
 		RedM = true
 		PrintDebugMessage("Starting in rdr3 Mode.", 4)
