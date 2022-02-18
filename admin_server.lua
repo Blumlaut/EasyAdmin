@@ -629,43 +629,51 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
-	
-	RegisterServerEvent("EasyAdmin:requestCleanup", function(type)
-		if DoesPlayerHavePermission(source, "server.cleanup."..type) then
-			PrintDebugMessage("Player "..getName(source,true).." Requested Cleanup for "..type, 3)
-			if (onesync ~= "off" and onesync ~= "legacy") then
-				if type == "cars" then
-					local toDelete = GetAllVehicles()
-					PrintDebugMessage("server-known vehicles: "..table_to_string(toDelete), 4)
-					for _,veh in pairs(toDelete) do
-						PrintDebugMessage("starting deletion for veh "..veh, 4)
-						if DoesEntityExist(veh) and not IsPedAPlayer(GetPedInVehicleSeat(veh, -1)) then
-							PrintDebugMessage("deleting veh "..veh, 3)
-							DeleteEntity(veh)
-						end
+	function cleanupArea(type)
+		if (onesync ~= "off" and onesync ~= "legacy") then
+			if type == "cars" then
+				local toDelete = GetAllVehicles()
+				PrintDebugMessage("server-known vehicles: "..table_to_string(toDelete), 4)
+				for _,veh in pairs(toDelete) do
+					PrintDebugMessage("starting deletion for veh "..veh, 4)
+					if DoesEntityExist(veh) and not IsPedAPlayer(GetPedInVehicleSeat(veh, -1)) then
+						PrintDebugMessage("deleting veh "..veh, 3)
+						DeleteEntity(veh)
 					end
-				elseif type == "peds" then
-					local toDelete = GetAllPeds()
-					PrintDebugMessage("server-known peds: "..table_to_string(toDelete), 4)
-					for _,ped in pairs(toDelete) do
-						PrintDebugMessage("starting deletion for ped "..ped, 4)
-						if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
-							PrintDebugMessage("deleting ped "..ped, 3)
-							DeleteEntity(ped)
-						end
+				end
+			elseif type == "peds" then
+				local toDelete = GetAllPeds()
+				PrintDebugMessage("server-known peds: "..table_to_string(toDelete), 4)
+				for _,ped in pairs(toDelete) do
+					PrintDebugMessage("starting deletion for ped "..ped, 4)
+					if DoesEntityExist(ped) and not IsPedAPlayer(ped) then
+						PrintDebugMessage("deleting ped "..ped, 3)
+						DeleteEntity(ped)
 					end
-				elseif type == "props" then
-					local toDelete = GetAllObjects()
-					PrintDebugMessage("server-known props: "..table_to_string(toDelete), 4)
-					for _,object in pairs(toDelete) do
-						PrintDebugMessage("starting deletion for object "..object, 4)
-						if DoesEntityExist(object) then
-							PrintDebugMessage("deleting object "..object, 3)
-							DeleteEntity(object)
-						end
+				end
+			elseif type == "props" then
+				local toDelete = GetAllObjects()
+				PrintDebugMessage("server-known props: "..table_to_string(toDelete), 4)
+				for _,object in pairs(toDelete) do
+					PrintDebugMessage("starting deletion for object "..object, 4)
+					if DoesEntityExist(object) then
+						PrintDebugMessage("deleting object "..object, 3)
+						DeleteEntity(object)
 					end
 				end
 			end
+			return true
+		else
+			return false
+		end
+	end
+	exports('cleanupArea', cleanupArea)
+
+
+	RegisterServerEvent("EasyAdmin:requestCleanup", function(type)
+		if DoesPlayerHavePermission(source, "server.cleanup."..type) then
+			PrintDebugMessage("Player "..getName(source,true).." Requested Cleanup for "..type, 3)
+			cleanupArea(type)
 			
 			
 			TriggerClientEvent("EasyAdmin:requestCleanup", source, type)
