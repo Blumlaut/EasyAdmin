@@ -9,7 +9,7 @@ if (GetConvar('ea_botChatBridge', "") != "") {
     }
 
     client.on('messageCreate', async msg => {
-        if(msg.member.id == userID) {
+        if(msg.member.user.id == userID) {
             return
         }
         if(!msg.channel) { return }
