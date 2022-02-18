@@ -8,10 +8,10 @@ module.exports = {
             option.setName('query')
                 .setDescription('Username or ID')
                 .setRequired(true))
-                .addStringOption(option =>
-                    option.setName('reason')
-                        .setDescription('Reason Text')
-                        .setRequired(true)),
+        .addStringOption(option =>
+            option.setName('reason')
+                .setDescription('Reason Text')
+                .setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('query')
         const reason = exports[EasyAdmin].formatShortcuts(interaction.options.getString('reason'))
