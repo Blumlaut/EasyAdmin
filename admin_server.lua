@@ -774,7 +774,7 @@ Citizen.CreateThread(function()
 		Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 	end)
 	
-	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
+	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires,banner)
 		local bannedIdentifiers = {}
 		local bannedUsername = "Unknown"
 		if type(playerId) == "table" then -- if playerId is a table of identifiers
@@ -797,7 +797,7 @@ Citizen.CreateThread(function()
 			expires = 10444633200
 		end
 		reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
-		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires or 10444633200 }
 		updateBlacklist( ban )
 		
 		
