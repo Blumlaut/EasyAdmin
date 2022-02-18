@@ -5,29 +5,13 @@ module.exports = {
 		.setName('userinfo')
 		.setDescription('Gives Info about User')
         .addStringOption(option =>
-            option.setName('query')
+            option.setName('user')
                 .setDescription('Username or ID')
                 .setRequired(true)),
 	async execute(interaction, exports) {
-		const userOrId = interaction.options.getString('query')
-		var user = null
-
-
-		var players = await exports[EasyAdmin].getCachedPlayers()
-
-		Object.keys(players).forEach(function(key) {
-			var player = players[key]
-			var name = player.name
-			if(!isNaN(userOrId)) {
-				if (player.id == userOrId) {
-					user = player
-				}
-			} else {
-				if (name.search(userOrId) != -1) {
-					user = player
-				}
-			}
-		})
+		const userOrId = interaction.options.getString('user')
+		
+		const user = await findPlayerFromUserInput(userOrId)
 
 		if (!user) {
 			interaction.reply({ content: "Sorry, i couldn't find any user with the infos you provided, if they have recently left, try using their ID instead of username", ephemeral: true})
