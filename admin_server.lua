@@ -1054,23 +1054,33 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
-	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
-		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune then
-			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
-			if toggle then
-				FrozenPlayers[playerId] = toggle
-				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
-				PrintDebugMessage("Player "..getName(source,true).." froze "..getName(playerId,true), 3)
-			else
-				FrozenPlayers[playerId] = nil
-				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminunfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
-				PrintDebugMessage("Player "..getName(source,true).." unfroze "..getName(playerId,true), 3)
-			end
+
+	function freezePlayer(playerId, toggle)
+		if not toggle then toggle = not FrozenPlayers[playerId] end
+		if not CachedPlayers[playerId].immune then
+			FrozenPlayers[playerId] = (toggle == true or nil)
+			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
 			for i,_ in pairs(OnlineAdmins) do 
 				TriggerLatentClientEvent("EasyAdmin:SetPlayerFrozen", i, 1000, playerId, (toggle == true or nil))
 			end
-			
-			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
+			return true
+		else
+			return false
+		end
+	end
+	exports('freezePlayer', freezePlayer)
+
+	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
+		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune then
+			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+			freezePlayer(playerId, toggle)
+			if toggle then
+				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
+				PrintDebugMessage("Player "..getName(source,true).." froze "..getName(playerId,true), 3)
+			else
+				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminunfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
+				PrintDebugMessage("Player "..getName(source,true).." unfroze "..getName(playerId,true), 3)
+			end
 		elseif CachedPlayers[playerId].immune then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
