@@ -43,6 +43,6 @@ module.exports = {
         DropPlayer(user.id, sprintf(exports[EasyAdmin].GetLocalisedText("kicked"), interaction.user.tag, reason ))
 
         
-		await interaction.reply('Successfully kicked **'+user.name+'** for **'+reason+'**.');
+		await interaction.reply('Successfully kicked **'+user.name+'** for **'+reason+'**');
 	},
 };
