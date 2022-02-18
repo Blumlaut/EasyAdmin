@@ -9,6 +9,7 @@ process.on('unhandledRejection', function(err) {
 Discord = require("discord.js")
 AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
+juration = require('juration');
 MessageAttachment = Discord.MessageAttachment
 Collection = Discord.Collection
 Intents = Discord.Intents
@@ -81,7 +82,7 @@ if (GetConvar("ea_botToken", "") != "") {
         
             if (!command) return;
         
-            if (!IsPrincipalAceAllowed("identifier.discord:"+interaction.user.id, "easyadmin.bot."+interaction.commandName)) {
+            if (!DoesGuildMemberHavePermission(interaction.member, "bot."+interaction.commandName)) {
                 await interaction.reply({ content: 'You don\'t have permission to run this command!', ephemeral: true });
                 return false
             }

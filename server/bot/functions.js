@@ -1,3 +1,7 @@
+// this file contains util functions the bot uses
+
+const { Guild } = require("discord.js");
+
 
 async function LogDiscordMessage() {
     var text = Array.from(arguments).toString();
@@ -30,5 +34,19 @@ async function findPlayerFromUserInput(input) {
     })
 
     return user
+}
 
+
+async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
+
+    if (object.search('easyadmin.') == -1) {
+        object = "easyadmin."+object
+    }
+
+    if (guild.ownerId == member.id) { // guild owner always has permissions, to everything.
+        return true
+    }
+
+
+    return IsPrincipalAceAllowed("identifier.discord:"+member.id, object)
 }
