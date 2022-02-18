@@ -34,8 +34,8 @@ module.exports = {
 			}
 		})
 
-		if (!user) {
-			interaction.reply({ content: "Sorry, i couldn't find any user with the infos you provided, if they have recently left, try using their ID instead of username", ephemeral: true})
+		if (!user || user.dropped) {
+			interaction.reply({ content: "Sorry, i couldn't find any user with the infos you provided.", ephemeral: true})
 			return
 		}
         
