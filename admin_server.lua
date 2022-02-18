@@ -140,7 +140,7 @@ function createBackup()
 	if not saved then
 		PrintDebugMessage("^1Saving banlist backup failed! Please check if EasyAdmin has Permission to write in the backups folder!^7", 1)
 	end
-
+	
 	backupInfos = LoadResourceFile(resourceName, "backups/_backups.json")
 	if backupInfos then
 		backupData = json.decode(backupInfos)
@@ -244,7 +244,7 @@ AddEventHandler('playerDropped', function (reason)
 			TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, source, nil)
 		end
 	end
-
+	
 	for i, report in pairs(reports) do
 		if report.reporter == source or (report.reported and report.reported == source) then
 			removeReport(report.id)
@@ -303,15 +303,15 @@ function IsPlayerAdmin(pid)
 end
 exports('IsPlayerAdmin', IsPlayerAdmin)
 
-	
+
 RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
 	if args[2] and DoesPlayerHavePermission(source, "server.shortcut.add") then
 		local shortcut = args[1]
 		local text = table.concat(args, " ", 2)
-
+		
 		PrintDebugMessage("added '"..shortcut.." -> "..text.."' as a shortcut", 3)
 		MessageShortcuts[shortcut] = text
-
+		
 		for i,_ in pairs(OnlineAdmins) do 
 			TriggerLatentClientEvent("EasyAdmin:fillShortcuts", i, 10000, MessageShortcuts)
 		end
@@ -322,7 +322,7 @@ RegisterCommand("ea_addReminder", function(source, args, rawCommand)
 	if args[1] and DoesPlayerHavePermission(source, "server.reminder.add") then
 		local text = string.gsub(rawCommand, "ea_addReminder ", "")
 		local text = string.gsub(text, '"', '')
-
+		
 		PrintDebugMessage("added '"..text.."' as a Chat Reminder", 3)
 		table.insert(ChatReminders, text)
 	end
@@ -362,10 +362,10 @@ RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
 		print(json.encode(CachedPlayers[id].identifiers)) -- puke all identifiers into console
 	end
 end,false)
-	
+
 Citizen.CreateThread(function()
-
-
+	
+	
 	RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
 		if DoesPlayerHavePermission(source, "server") then
 			print("Creating Support File....^7\n")
@@ -474,28 +474,28 @@ Citizen.CreateThread(function()
 			print("Saving to support.json....^7\n")
 			
 			local saved = SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
-
+			
 			if not saved then
 				PrintDebugMessage("^1Saving support.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
 			end
-
+			
 			
 			print("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n")
 		end
 	end, false)
-
+	
 end)
 
 Citizen.CreateThread(function()
-
+	
 	if not CachedPlayers or GetVersion() == nil then
 		print("^7--------------------------------------------------------------")
 		print("^1EasyAdmin self-test failed! Your EasyAdmin **will not work**, likely you edited some files and broke EasyAdmin in the progress, please reinstall EasyAdmin.")
 		print("^7--------------------------------------------------------------")
 		return 
 	end
-
-
+	
+	
 	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
 		RedM = true
 		PrintDebugMessage("Starting in rdr3 Mode.", 4)
@@ -509,14 +509,14 @@ Citizen.CreateThread(function()
 		os.remove(GetResourcePath(GetCurrentResourceName()).."/__resource.lua")
 		PrintDebugMessage("Found __resource.lua file in EasyAdmin Folder and attempted deletion.", 2)
 	end
-
+	
 	local versionjson = LoadResourceFile(GetCurrentResourceName(), "version.json")
 	if versionjson then
 		os.remove(GetResourcePath(GetCurrentResourceName()).."/version.json")
 		PrintDebugMessage("Found legacy version.json file in EasyAdmin Folder and attempted deletion.", 2)
 	end
-		
-
+	
+	
 	ExcludedWebhookFeatures = {}
 	AnonymousAdmins = {}
 	
@@ -535,7 +535,7 @@ Citizen.CreateThread(function()
 	
 	
 	RegisterServerEvent('EasyAdmin:amiadmin', function()
-
+		
 		cachePlayer(source) -- this will do nothing if player is already cached.
 		
 		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+15 > os.time() then
@@ -543,7 +543,7 @@ Citizen.CreateThread(function()
 			return
 		end
 		CachedPlayers[source].lastPermRequest = os.time()
-
+		
 		local identifiers = getAllPlayerIdentifiers(source)
 		local perms = {}
 		for perm,val in pairs(permissions) do
@@ -601,7 +601,7 @@ Citizen.CreateThread(function()
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
 		end
-
+		
 		TriggerLatentClientEvent("EasyAdmin:fillShortcuts", source, 10000, MessageShortcuts)
 		
 		TriggerLatentClientEvent("EasyAdmin:SetLanguage", source, 10000, strings)
@@ -790,7 +790,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
 			return
 		end
-
+		
 		if expires and expires < os.time() then
 			expires = os.time()+expires 
 		elseif not expires then 
@@ -802,8 +802,8 @@ Citizen.CreateThread(function()
 		
 		
 		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
-
-
+		
+		
 		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
 		if not offline then
 			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
@@ -1027,7 +1027,7 @@ Citizen.CreateThread(function()
 			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
 		end
 	end)
-
+	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerBack", function(id)
 		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") then
 			TriggerClientEvent('EasyAdmin:TeleportPlayerBack', id)
@@ -1060,7 +1060,7 @@ Citizen.CreateThread(function()
 			for i,_ in pairs(OnlineAdmins) do 
 				TriggerLatentClientEvent("EasyAdmin:SetPlayerFrozen", i, 1000, playerId, (toggle == true or nil))
 			end
-
+			
 			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
 		elseif CachedPlayers[playerId].immune then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
@@ -1117,7 +1117,7 @@ Citizen.CreateThread(function()
 			-- TODO Webhook
 		end
 	end)
-
+	
 	RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
 		local thisBan = nil
 		if DoesPlayerHavePermission(source, "player.ban.remove") then
@@ -1153,13 +1153,13 @@ Citizen.CreateThread(function()
 				PrintDebugMessage("Player "..getName(source,true).." unmuted "..getName(playerId,true), 3)
 				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, false), getName(playerId, false, true)), "mute", 16777214)
 			end
-
+			
 			for i,_ in pairs(OnlineAdmins) do 
 				TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, playerId, (MutedPlayers[playerId] == true or nil))
 			end
-
-
-
+			
+			
+			
 		elseif CachedPlayers[playerId].immune then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
@@ -1708,6 +1708,8 @@ Citizen.CreateThread(function()
 			end
 		end
 	end
+	exports('getName', getName)
+
 	
 	function updateBan(id,newData)
 		if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then 
@@ -1857,7 +1859,7 @@ Citizen.CreateThread(function()
 						if not saved then
 							PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
 						end
-
+						
 						if GetConvar("ea_custombanlist", "false") == "true" then 
 							TriggerEvent("ea_data:removeBan", ban)
 						end
@@ -1877,7 +1879,7 @@ Citizen.CreateThread(function()
 				if not saved then
 					PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
 				end
-
+				
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
 				end
@@ -2005,17 +2007,17 @@ Citizen.CreateThread(function()
 	end)
 	
 	
-
+	
 	local chatEventsSupported = false
-
+	
 	pcall(function() -- this will prevent our script from erroring if the exports are missing, also mutes any errors.
 		if exports.chat.registerMessageHook and exports.chat.registerMode then
 			chatEventsSupported = true
 		end
 	end)
-
-
-
+	
+	
+	
 	if chatEventsSupported then
 		exports.chat:registerMessageHook(function(source, outMessage, hookRef)
 			if MutedPlayers[source] then
@@ -2032,8 +2034,8 @@ Citizen.CreateThread(function()
 			end
 		end)
 	end
-
-
+	
+	
 	if GetConvar("ea_enableChat", "true") == "true" and chatEventsSupported then
 		exports.chat:registerMode({
 			name = "admins",
@@ -2041,11 +2043,11 @@ Citizen.CreateThread(function()
 			color = "#19A2E3",
 			seObject = "easyadmin.server.chat",
 			cb = function(source, message, cbs)
-			  cbs.updateMessage({
-				template = "^5[ADMIN CHAT]^7" .. ' {}'
-			  })
-		  
-			  cbs.setSeObject("easyadmin.server.chat")
+				cbs.updateMessage({
+					template = "^5[ADMIN CHAT]^7" .. ' {}'
+				})
+				
+				cbs.setSeObject("easyadmin.server.chat")
 			end
 		})
 	end
@@ -2130,7 +2132,7 @@ Citizen.CreateThread(function()
 		if showProgress == "false" then
 			deferralText = deferralText:sub(1, -6)
 		end
-
+		
 		deferrals.update(deferralText)
 		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
 		if not blacklist then
@@ -2142,7 +2144,7 @@ Citizen.CreateThread(function()
 			return
 		end
 		Wait(0)
-
+		
 		for bi,blacklisted in ipairs(blacklist) do
 			if showProgress == "true" then
 				if bi % 12 == 0 then -- only update on every 12th ban
@@ -2174,30 +2176,25 @@ Citizen.CreateThread(function()
 		
 		deferrals.done()
 	end)
-
+	
 end)
 
 
 curVersion, isMaster = GetVersion()
 local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
-function checkVersion(err,response, headers)
-	if err == 200 then
-		local data = json.decode(response)
-		local remoteVersion = data.tag_name
-		PrintDebugMessage("Version check returned "..err..", Local Version: "..curVersion..", Remote Version: "..remoteVersion, 4)
-		if isMaster then
-			PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..data.html_url, 1)
-		end
-		if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
-			print("\n--------------------------------------------------------------------------")
-			print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..data.html_url)
-			print("\n--------------------------------------------------------------------------")
-			updateAvailable = remoteVersion
-		elseif tonumber(curVersion) > tonumber(remoteVersion) then
-			print("Your version of "..resourceName.." seems to be higher than the current stable version.")
-		end
-	else
-		PrintDebugMessage("Version Check failed, please make sure EasyAdmin is up to date!", 1)
+function checkVersion()
+	local remoteVersion,remoteURL = getLatestVersion()
+
+	if isMaster then
+		PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
+	end
+	if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+		print("\n--------------------------------------------------------------------------")
+		print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..remoteURL)
+		print("\n--------------------------------------------------------------------------")
+		updateAvailable = remoteVersion
+	elseif tonumber(curVersion) > tonumber(remoteVersion) then
+		print("Your version of "..resourceName.." seems to be higher than the current stable version.")
 	end
 	
 	if GetResourceState("screenshot-basic") == "missing" then 
@@ -2216,10 +2213,36 @@ function checkVersion(err,response, headers)
 	if GetConvar("ea_defaultKey", "none") == "none" then
 		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
 	end
-		
+	
 	readAcePermissions()
 end
-	
+
+
+Citizen.CreateThread(function()
+	function getLatestVersion()
+		local latestVersion,latestURL
+		
+		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", function(err,response,headers)
+			if err == 200 then
+				local data = json.decode(response)
+				latestVersion = data.tag_name
+				latestURL = data.html_url
+			else
+				latestVersion = GetVersion()
+				latestURL = "https://github.com/Blumlaut/EasyAdmin"
+			end		
+			PrintDebugMessage("Version check returned "..err..", Local Version: "..GetVersion()..", Remote Version: "..latestVersion, 4)
+		end, "GET")
+		
+		repeat
+			Wait(50)
+		until (latestVersion and latestURL)
+		return latestVersion, latestURL
+	end
+	exports('getLatestVersion', getLatestVersion)
+
+end)
+
 Citizen.CreateThread(function()
 	repeat
 		Wait(1000)
@@ -2240,7 +2263,7 @@ Citizen.CreateThread(function()
 		Wait(300000)
 	end
 end)
-	
+
 
 ---------------------------------- END USEFUL
 
