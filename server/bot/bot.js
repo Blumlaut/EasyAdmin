@@ -38,9 +38,9 @@ if (GetConvar("ea_botToken", "") != "") {
 
 
         RegisterClientCommands(client.user.id, guild)
-        var startupMessage = "**EasyAdmin "+exports[EasyAdmin].GetVersion()[0]+"** has started."
+        var startupMessage = "**EasyAdmin "+currentVersion+"** has started."
         if (currentVersion != latestVersionInfo[0]) {
-            startupMessage+="\nVersion "+exports[EasyAdmin].GetVersion()[0]+" is Available!\n Download it from "+latestVersionInfo[1]
+            startupMessage+="\nVersion "+latestVersionInfo[0]+" is Available!\n Download it from "+latestVersionInfo[1]
         }
         LogDiscordMessage(startupMessage)
 
