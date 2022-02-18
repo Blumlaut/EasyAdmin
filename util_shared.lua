@@ -180,11 +180,13 @@ function GetLocalisedText(string)
 		return "String "..string.." not found in "..strings.language
 	end
 end
+exports('GetLocalisedText', GetLocalisedText)
 
 function formatDateString(string)
 	local dateFormat = GetConvar("ea_dateFormat", '%d/%m/%Y 	%H:%M:%S')
 	return os.date(dateFormat, string)
 end
+exports('formatDateString', formatDateString)
 
 function formatShortcuts(thisstring)
 	if not thisstring then return thisstring end
@@ -196,6 +198,7 @@ function formatShortcuts(thisstring)
 	end
 	return thisstring
 end
+exports('formatShortcuts', formatShortcuts)
 
 function formatRightString(thisstring, customWidth)
 	if not thisstring then return thisstring end -- in case string is nil, just yeet it back.
@@ -224,6 +227,15 @@ function setMenuItemTitle(item,text)
 		item.Text._Text = text
 	end
 end
+
+function getCachedPlayer(playerId)
+	if CachedPlayers[playerId] then
+		return CachedPlayers[playerId]
+	else
+		return false
+	end
+end
+exports('getCachedPlayer', getCachedPlayer)
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then

@@ -1929,6 +1929,15 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
+
+	function getPlayerWarnings(playerId)
+		if not WarnedPlayers[playerId] then
+			return 0
+		else
+			return WarnedPlayers[id].warns
+		end
+	end
+	exports('getPlayerWarnings', getPlayerWarnings)
 	
 	function performBanlistUpgrades()
 		local upgraded = false
@@ -2052,6 +2061,11 @@ Citizen.CreateThread(function()
 		})
 	end
 	
+
+	function getCachedPlayers() -- this is server-only for security reasons.
+		return CachedPlayers
+	end
+	exports('getCachedPlayers', getCachedPlayers)
 	
 	function sendTelemetry()
 		local data = {}
