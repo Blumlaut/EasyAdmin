@@ -43,7 +43,7 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
         object = "easyadmin."+object
     }
 
-    if (guild.ownerId == member.id) { // guild owner always has permissions, to everything.
+    if (member.guild.ownerId === member.id) { // guild owner always has permissions, to everything.
         return true
     }
 

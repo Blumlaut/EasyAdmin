@@ -12,7 +12,7 @@ if (GetConvar('ea_botChatBridge', "") != "") {
         if(msg.member.id == userID) {
             return
         }
-
+        if(!msg.channel) { return }
         if (msg.channel.id == GetConvar('ea_botChatBridge', "")) {
             exports["chat"].addMessage(-1, { args: [msg.member.user.tag, msg.cleanContent]})
         }

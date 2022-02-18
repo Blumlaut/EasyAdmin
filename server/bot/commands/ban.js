@@ -46,10 +46,10 @@ module.exports = {
 		}
 
 
-		if (banTime < 10444633200 && !DoesGuildMemberHavePermission(interaction.member, "player.ban.temporary")) {
+		if (banTime < 10444633200 && !await DoesGuildMemberHavePermission(interaction.member, "player.ban.temporary")) {
 			interaction.reply({ content: "Insufficient Permissions, you need `easyadmin.player.ban.temporary`.", ephemeral: true })
 			return
-		} else if (banTime > 10444633200 && !DoesGuildMemberHavePermission(interaction.member, "player.ban.permanent")) {
+		} else if (banTime > 10444633200 && !await DoesGuildMemberHavePermission(interaction.member, "player.ban.permanent")) {
 			interaction.reply({ content: "Insufficient Permissions, you need `easyadmin.player.ban.permanent`.", ephemeral: true })
 			return
 		}
