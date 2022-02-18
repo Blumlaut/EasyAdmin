@@ -1033,13 +1033,22 @@ Citizen.CreateThread(function()
 			TriggerClientEvent('EasyAdmin:TeleportPlayerBack', id)
 		end
 	end)
+
+	function slapPlayer(playerId,slapAmount)
+		if not CachedPlayers[playerId].immune then
+			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
+			return true
+		else
+			return false
+		end
+	end
+	exports('slapPlayer', slapPlayer)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
-		if DoesPlayerHavePermission(source, "player.slap") and not CachedPlayers[playerId].immune then
+		if DoesPlayerHavePermission(source, "player.slap") and slapPlayer(playerId, slapAmount) then
 			PrintDebugMessage("Player "..getName(source,true).." slapped "..getName(playerId,true).." for "..slapAmount.." HP", 3)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminslappedplayer"), getName(source, false, true), getName(playerId, true, true), slapAmount), "slap", 16777214)
-			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
 		elseif CachedPlayers[playerId].immune then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
