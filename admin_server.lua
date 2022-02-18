@@ -1136,34 +1136,49 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
 		local src = source
 		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune then
-			if not MutedPlayers[playerId] then 
+			local muted = mutePlayer(playerId)
+
+			if muted then
+				if MutedPlayers[playerId] then
+					TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playermuted"))
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
+				else
+					TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playerunmuted"))
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, false), getName(playerId, false, true)), "mute", 16777214)
+				end
+			else
+				-- todo: handle false retval
+			end
+		end
+	end)
+
+	function mutePlayer(playerId, toggle)
+		if not CachedPlayers[playerId].immune then 
+			if toggle and not MutedPlayers[playerId] then
 				MutedPlayers[playerId] = true
 				if MumbleSetPlayerMuted then -- workaround for outdated servers
 					MumbleSetPlayerMuted(playerId, true)
 				end
-				TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playermuted"))
-				PrintDebugMessage("Player "..getName(source,true).." muted "..getName(playerId,true), 3)
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminmutedplayer"), getName(source, false, true), getName(playerId, false, true)), "mute", 16777214)
-			else 
+				PrintDebugMessage("muted "..getName(playerId,true), 3)
+				return true
+			elseif not toggle and MutedPlayers[playerId] then
 				MutedPlayers[playerId] = nil
 				if MumbleSetPlayerMuted then -- workaround for outdated servers
 					MumbleSetPlayerMuted(playerId, false)
 				end
-				TriggerClientEvent("EasyAdmin:showNotification", src, getName(playerId) .. " " .. GetLocalisedText("playerunmuted"))
-				PrintDebugMessage("Player "..getName(source,true).." unmuted "..getName(playerId,true), 3)
-				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunmutedplayer"), getName(source, false, false), getName(playerId, false, true)), "mute", 16777214)
+				PrintDebugMessage("unmuted "..getName(playerId,true), 3)
+				return true
+			else 
+				return false
 			end
-			
 			for i,_ in pairs(OnlineAdmins) do 
 				TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, playerId, (MutedPlayers[playerId] == true or nil))
 			end
-			
-			
-			
-		elseif CachedPlayers[playerId].immune then
-			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
+		else
+			return false
 		end
-	end)
+	end
+	exports('mutePlayer', mutePlayer)
 	
 	RegisterServerEvent("EasyAdmin:SetAnonymous", function(playerId)
 		if DoesPlayerHavePermission(source, "anon") then
