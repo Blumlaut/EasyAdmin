@@ -147,6 +147,7 @@ function DoesPlayerHavePermission(player, object)
 		return permissions[object]
 	end
 end
+exports('DoesPlayerHavePermission', DoesPlayerHavePermission)
 
 function DoesPlayerHavePermissionForCategory(player, object)
 	for perm in pairs(permissions) do
@@ -158,6 +159,7 @@ function DoesPlayerHavePermissionForCategory(player, object)
 	end
 	return false
 end
+exports('DoesPlayerHavePermissionForCategory', DoesPlayerHavePermissionForCategory)
 
 
 function GetVersion()
@@ -166,6 +168,7 @@ function GetVersion()
 	local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
 	return version, is_master
 end
+exports('GetVersion', GetVersion)
 
 
 function GetLocalisedText(string)

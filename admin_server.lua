@@ -201,6 +201,8 @@ function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a
 	end
 	return mergeTables(identifiers, tokens)
 end
+exports('getAllPlayerIdentifiers', getAllPlayerIdentifiers)
+
 
 function checkForChangedIdentifiers(playerIds, bannedIds)
 	local unbannedIds = {}
@@ -294,10 +296,12 @@ end)
 function GetOnlineAdmins()
 	return OnlineAdmins
 end
+exports('GetOnlineAdmins', GetOnlineAdmins)
 
 function IsPlayerAdmin(pid)
 	return OnlineAdmins[pid]
 end
+exports('IsPlayerAdmin', IsPlayerAdmin)
 
 	
 RegisterCommand("ea_addShortcut", function(source, args, rawCommand)
@@ -1620,6 +1624,7 @@ Citizen.CreateThread(function()
 			return 1
 		end
 	end
+	exports('GetFreshBanId', GetFreshBanId)
 	
 	
 	RegisterCommand("convertbanlist", function(source, args, rawCommand)
@@ -1993,6 +1998,7 @@ Citizen.CreateThread(function()
 		end
 		return identifierfound
 	end
+	exports('IsIdentifierBanned', IsIdentifierBanned)
 	
 	AddEventHandler("EasyAdmin:GetVersion", function(cb)
 		cb(GetVersion())
