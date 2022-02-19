@@ -18,7 +18,7 @@ module.exports = {
 			return
 		}
 
-		var ret = exports[EasyAdmin].freezePlayer(user.id, false)
+		var ret = await exports[EasyAdmin].freezePlayer(user.id, false)
 
 		if (ret) {
 			var embed = await prepareGenericEmbed('Successfully unfroze **'+user.name+'**.');

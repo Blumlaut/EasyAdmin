@@ -18,7 +18,7 @@ module.exports = {
 			return
 		}
 
-		var ret = exports[EasyAdmin].mutePlayer(user.id, false)
+		var ret = await exports[EasyAdmin].mutePlayer(user.id, false)
 
 		if (ret) {
 			var embed = await prepareGenericEmbed('Successfully unmuted **'+user.name+'**.');
