@@ -18,6 +18,7 @@ server_scripts {
 	"server/admin_server.lua",
     "server/bot/functions.js",
     "server/bot/bot.js",
+    "server/bot/notifications.js",
     "server/bot/chat_bridge.js",
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_server.lua"

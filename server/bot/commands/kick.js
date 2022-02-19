@@ -27,7 +27,8 @@ module.exports = {
 
         DropPlayer(user.id, sprintf(exports[EasyAdmin].GetLocalisedText("kicked"), interaction.user.tag, reason ))
 
+		var embed = await prepareGenericEmbed('Successfully kicked **'+user.name+'** for **'+reason+'**');
         
-		await interaction.reply('Successfully kicked **'+user.name+'** for **'+reason+'**');
+		await interaction.reply({ embeds: [embed]});
 	},
 };

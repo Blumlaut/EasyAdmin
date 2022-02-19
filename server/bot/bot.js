@@ -43,13 +43,6 @@ if (GetConvar("ea_botToken", "") != "") {
             startupMessage+="\nVersion "+latestVersionInfo[0]+" is Available!\n Download it from "+latestVersionInfo[1]
         }
         LogDiscordMessage(startupMessage)
-
-        onNet("EasyAdmin:amiadmin", async () => {
-            var src = source
-    
-            var msg = "Player **"+exports[EasyAdmin].getName(src,true,true)+"** with id **"+src+"** joined the Server!"
-            LogDiscordMessage(msg)
-        })
     });
 
 

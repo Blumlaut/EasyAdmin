@@ -55,7 +55,9 @@ module.exports = {
 		}
         
 		emit("EasyAdmin:addBan", user.id, reason, banTime, interaction.user.tag)
+
+		var embed = await prepareGenericEmbed('Successfully banned **'+user.name+'** for **'+reason+'** until '+timeframe+'.')
         
-		await interaction.reply('Successfully banned **'+user.name+'** for **'+reason+'** until '+timeframe+'.');
+		await interaction.reply({ embeds: [embed]});
 	},
 };

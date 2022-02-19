@@ -20,9 +20,13 @@ module.exports = {
 		var ret = exports[EasyAdmin].cleanupArea(type)
 
 		if (ret) {
-			await interaction.reply('Cleaned up **'+type+'**.');
+			var embed = await prepareGenericEmbed('Cleaned up **'+type+'**.')
+        
+			await interaction.reply({ embeds: [embed]});
 		} else {
-			await interaction.reply('Could clean up **'+type+'**.');
+			var embed = await prepareGenericEmbed('Could not cleanup **'+type+'**.')
+        
+			await interaction.reply({ embeds: [embed]});
 		}
 	},
 };

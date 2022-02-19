@@ -32,8 +32,8 @@ module.exports = {
 		  })
 
 
-
+		  var embed = await prepareGenericEmbed('User Infos for **'+user.name+'**\nIs Admin: '+exports[EasyAdmin].IsPlayerAdmin(user.id)+'\nWarnings: '+exports[EasyAdmin].getPlayerWarnings(user.id)+'\n```'+table+'```');
         
-		await interaction.reply('User Infos for **'+user.name+'**\nIs Admin: '+exports[EasyAdmin].IsPlayerAdmin(user.id)+'\nWarnings: '+exports[EasyAdmin].getPlayerWarnings(user.id)+'\n```'+table+'```');
+		  await interaction.reply({ embeds: [embed]});
 	},
 };

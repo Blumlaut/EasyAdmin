@@ -21,9 +21,13 @@ module.exports = {
 		var ret = exports[EasyAdmin].freezePlayer(user.id, true)
 
 		if (ret) {
-			await interaction.reply('Successfully froze **'+user.name+'**.');
+			var embed = await prepareGenericEmbed('Successfully froze **'+user.name+'**.');
+        
+			await interaction.reply({ embeds: [embed]});
 		} else {
-			await interaction.reply('Could not freeze **'+user.name+'**.');
+			var embed = await prepareGenericEmbed('Could not freeze **'+user.name+'**.');
+        
+			await interaction.reply({ embeds: [embed]});
 		}
 	},
 };

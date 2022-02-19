@@ -21,9 +21,13 @@ module.exports = {
 		var ret = exports[EasyAdmin].mutePlayer(user.id, true)
 
 		if (ret) {
-			await interaction.reply('Successfully muted **'+user.name+'**.');
+			var embed = await prepareGenericEmbed('Successfully muted **'+user.name+'**.');
+        
+			await interaction.reply({ embeds: [embed]});
 		} else {
-			await interaction.reply('Could not mute **'+user.name+'**.');
+			var embed = await prepareGenericEmbed('Could not mute **'+user.name+'**.');
+        
+			await interaction.reply({ embeds: [embed]});
 		}
 	},
 };

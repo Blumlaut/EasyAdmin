@@ -29,7 +29,8 @@ module.exports = {
 			table = "There are no players on the server!"
 		}
 
+		var embed = await prepareGenericEmbed('```'+table+'```');
         
-		await interaction.reply('```'+table+'```');
+		await interaction.reply({ embeds: [embed]});
 	},
 };

@@ -1,5 +1,5 @@
 
-if (GetConvar('ea_botChatBridge', "") != "") {
+if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botChatBridge', "") != "") {
     try {
 
         var knownAvatars = {} 
