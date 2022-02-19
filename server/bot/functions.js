@@ -5,14 +5,41 @@ const { Guild } = require("discord.js");
 
 async function LogDiscordMessage() {
     var text = Array.from(arguments).toString();
-    
-    const embed = new Discord.MessageEmbed()
-    .setTimestamp()
-    .addField("EasyAdmin", text)
+
+    const embed = await prepareGenericEmbed(text)
     
     client.channels.cache.get(logChannel).send({ embeds: [embed] })
 }
 
+
+async function prepareGenericEmbed(message,feature,colour,title,image,customAuthor,description,timestamp) {
+
+    if (feature && await exports[EasyAdmin].isWebhookFeatureExcluded(feature)) {
+        return
+    }
+
+    const embed = new Discord.MessageEmbed()
+    .setColor((colour || 65280))
+    if (timestamp != false) {
+        embed.setTimestamp()
+    }
+    if (message) {
+        embed.addField("**"+ (title || "EasyAdmin")+"**", message)
+    }
+    if (description) {
+        embed.setDescription(description)
+    }
+
+    if (customAuthor) {
+        embed.setAuthor(customAuthor)
+    }
+
+    if (image) {
+        embed.setImage(image)
+    }
+
+    return embed
+}
 
 async function findPlayerFromUserInput(input) {
     var user = undefined
