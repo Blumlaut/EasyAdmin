@@ -10,7 +10,7 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('group')
-                .setDescription('the group, for example, "admin", "group." is prefixed automatically!')
+                .setDescription('the group, for example, admin, "group." is prefixed automatically!')
                 .setRequired(true)),
 	async execute(interaction, exports) {
 		const user = interaction.options.getUser('user').id

@@ -10,7 +10,7 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('permission')
-                .setDescription('the permission, for example, `easyadmin.bot.playerlist`!')
+                .setDescription('the permission, for example, easyadmin.bot.playerlist')
                 .setRequired(true)),
 	async execute(interaction, exports) {
 		const group = interaction.options.getString('group')

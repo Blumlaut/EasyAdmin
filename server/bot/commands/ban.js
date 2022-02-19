@@ -14,7 +14,7 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('timeframe')
-                .setDescription('The timeframe in a human readable format (30 mins, 1 hour, 2 weeks, or `permanent`)')
+                .setDescription('The timeframe in a human readable format (30 mins, 1 hour, 2 weeks, or permanent)')
                 .setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
