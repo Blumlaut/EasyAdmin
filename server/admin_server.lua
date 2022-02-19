@@ -1518,69 +1518,77 @@ Citizen.CreateThread(function()
 	Citizen.CreateThread(function()
 		lockedFiles = {}
 		function AddToFile(filename, args)
-			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources", 1, true)
-			local path = string.reverse(string.sub(string.reverse(path), -occurance))
-			
-			
-			local args = args
-			local filename = filename
-			while lockedFiles[filename] do
-				Wait(100)
+			if not GetInvokingResource() or GetInvokingResource() == GetCurrentResourceName() then -- sorry, but i _really_ dont want other resources hooking into easyadmins file edit functions.
+
+				local path = GetResourcePath(GetCurrentResourceName())
+				local occurance = string.find(path, "/resources", 1, true)
+				local path = string.reverse(string.sub(string.reverse(path), -occurance))
+				
+				
+				local args = args
+				local filename = filename
+				while lockedFiles[filename] do
+					Wait(100)
+				end
+				lockedFiles[filename] = true
+				
+				
+				local file = io.open(filename, "a")
+				if file then
+					file:write("\n"..args) -- write our lines
+					file:close()
+				else 
+					PrintDebugMessage(filename.." cannot be read, bailing.", 4)
+					return {}, {}, {}
+				end
+				Wait(500) -- without waiting after saving a file it sometimes does not properly save, some OS limitation maybe?
+				lockedFiles[filename] = false
 			end
-			lockedFiles[filename] = true
-			
-			
-			local file = io.open(filename, "a")
-			if file then
-				file:write("\n"..args) -- write our lines
-				file:close()
-			else 
-				PrintDebugMessage(filename.." cannot be read, bailing.", 4)
-				return {}, {}, {}
-			end
-			Wait(500) -- without waiting after saving a file it sometimes does not properly save, some OS limitation maybe?
-			lockedFiles[filename] = false
 		end
+		exports('AddToFile', AddToFile)
 		
 		function RemoveFromFile(filename, args)
-			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources", 1, true)
-			local path = string.reverse(string.sub(string.reverse(path), -occurance))
-			
-			local args = args
-			local filename = filename
-			while lockedFiles[filename] do
-				Wait(100)
-			end
-			lockedFiles[filename] = true
-			
-			local file = io.open(filename, "r")
-			local lines = {}
-			if file then
-				local line = file:read("*line")
-				while line do
-					if line == args or (filename == "easyadmin_permissions.cfg" and line == "") then -- skip lines we dont want, incl. empty lines
-					else
-						table.insert(lines, line)
+			if not GetInvokingResource() or GetInvokingResource() == GetCurrentResourceName() then -- sorry, but i _really_ dont want other resources hooking into easyadmins file edit functions.
+
+				local path = GetResourcePath(GetCurrentResourceName())
+				local occurance = string.find(path, "/resources", 1, true)
+				local path = string.reverse(string.sub(string.reverse(path), -occurance))
+				
+				local args = args
+				local filename = filename
+				while lockedFiles[filename] do
+					Wait(100)
+				end
+				lockedFiles[filename] = true
+				
+				local file = io.open(filename, "r")
+				local lines = {}
+				if file then
+					local line = file:read("*line")
+					while line do
+						if line == args or (filename == "easyadmin_permissions.cfg" and line == "") then -- skip lines we dont want, incl. empty lines
+						else
+							table.insert(lines, line)
+						end
+						line = file:read("*line")
 					end
-					line = file:read("*line")
+					file:close()
+					local output = ""
+					for i, line in pairs(lines) do
+						output=output..line.."\n"
+					end
+					local file = io.open(filename, "w")
+					file:write(output) -- write our lines
+					file:close()
+				else 
+					PrintDebugMessage(filename.." cannot be read, bailing.", 4)
+					return {}, {}, {}
 				end
-				file:close()
-				local output = ""
-				for i, line in pairs(lines) do
-					output=output..line.."\n"
-				end
-				local file = io.open(filename, "w")
-				file:write(output) -- write our lines
-				file:close()
-			else 
-				PrintDebugMessage(filename.." cannot be read, bailing.", 4)
-				return {}, {}, {}
+				Wait(500) -- without waiting after saving a file it sometimes does not properly save, some OS limitation maybe?
+				lockedFiles[filename] = false
 			end
-			Wait(500) -- without waiting after saving a file it sometimes does not properly save, some OS limitation maybe?
-			lockedFiles[filename] = false
 		end
+		exports('RemoveFromFile', RemoveFromFile)
 	end)
 	
 	RegisterServerEvent("EasyAdmin:getServerAces", function()
