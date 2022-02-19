@@ -21,7 +21,7 @@ module.exports = {
 		var displayedIdentifiers = []
 		
 		for (let identifier of user.identifiers) {
-			if ((isNaN(identifier.charAt(0))) && !(GetConvar("ea_IpPrivacy", "false") == "true" && identifier.search("ip:") != -1)) {
+			if ((isNaN(identifier.charAt(0))) && !(GetConvar("ea_IpPrivacy", "true") == "true" && identifier.search("ip:") != -1)) {
 				displayedIdentifiers.push(identifier)
 			}
 		}
