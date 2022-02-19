@@ -2,8 +2,8 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('userinfo')
-		.setDescription('Gives Info about User')
+		.setName('playerinfo')
+		.setDescription('Gives Info about a Player')
         .addStringOption(option =>
             option.setName('user')
                 .setDescription('Username or ID')
@@ -31,8 +31,19 @@ module.exports = {
 		  , rows: displayedIdentifiers
 		  })
 
+		  var discordAccount = await getDiscordAccountFromPlayer(user)
+		  if (discordAccount) {
+			discordAccount = discordAccount.tag
+		  } else {
+			discordAccount = "N/A"
+		  }
 
-		  var embed = await prepareGenericEmbed('User Infos for **'+user.name+'**\nIs Admin: '+exports[EasyAdmin].IsPlayerAdmin(user.id)+'\nWarnings: '+exports[EasyAdmin].getPlayerWarnings(user.id)+'\n```'+table+'```');
+		  var text = 'User Infos for **'+user.name+
+		  '**\nIs Admin: '+exports[EasyAdmin].IsPlayerAdmin(user.id)+
+		  '\nWarnings: '+exports[EasyAdmin].getPlayerWarnings(user.id)+
+		  '\nDiscord Account: '+discordAccount+
+		  '\n```'+table+'```'
+		  var embed = await prepareGenericEmbed(text);
         
 		  await interaction.reply({ embeds: [embed]});
 	},
