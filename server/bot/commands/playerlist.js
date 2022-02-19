@@ -15,13 +15,14 @@ module.exports = {
 			for (let player of players) {
 				const user = await exports[EasyAdmin].getCachedPlayer(player)
 				var username = user.name
-				var discordAccount = "N/A"
 
-				for (let identifier of user.identifiers) {
-                    if (identifier.search("discord:") != -1) {
-                        discordAccount = (await client.users.fetch(identifier.substring(identifier.indexOf(":") + 1))).tag
-                    }
-                }
+				var discordAccount = await getDiscordAccountFromPlayer(user)
+				if (discordAccount) {
+					discordAccount = discordAccount.tag
+				} else {
+					discordAccount = "N/A"
+				}
+
 
 				table.addRow(player, username, discordAccount)
 			}

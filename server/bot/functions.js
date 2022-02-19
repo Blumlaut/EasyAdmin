@@ -78,3 +78,17 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
 
     return IsPrincipalAceAllowed("identifier.discord:"+member.id, object)
 }
+
+
+async function getDiscordAccountFromPlayer(user) {
+    var discordAccount = false
+
+    for (let identifier of user.identifiers) {
+        if (identifier.search("discord:") != -1) {
+            discordAccount = await client.users.fetch(identifier.substring(identifier.indexOf(":") + 1))
+        }
+    }
+
+    return discordAccount
+
+}
