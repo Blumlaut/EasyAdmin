@@ -1158,7 +1158,7 @@ Citizen.CreateThread(function()
 		end
 	end)
 
-	function unbanPlayer(banid)
+	function unbanPlayer(banId)
 		local thisBan = nil
 		for i,ban in ipairs(blacklist) do 
 			if ban.banid == banId then
