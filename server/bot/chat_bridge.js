@@ -16,8 +16,7 @@ if (GetConvar('ea_botChatBridge', "") != "") {
 
             var userInfo = {name: outMessage.args[0]}
 
-
-            if (!knownAvatars[source]) {
+            if (knownAvatars[source] == undefined) {
                 var fivemAccount = false
                 for (let identifier of user.identifiers) {
                     if (identifier.search("fivem:") != -1) {
@@ -27,17 +26,30 @@ if (GetConvar('ea_botChatBridge', "") != "") {
 
                 if (fivemAccount) {
                     var response = await exports[EasyAdmin].HTTPRequest("https://policy-live.fivem.net/api/getUserInfo/"+fivemAccount)
-                    response = JSON.parse(response)
-                    var avatarURL = response.avatar_template.replace("{size}", "96")
-                    if (avatarURL.indexOf('http') == -1) {
-                        avatarURL = "https://forum.cfx.re"+avatarURL
+                    try {
+                        response = JSON.parse(response)
+                        if (response.avatar_template) {
+                            var avatarURL = response.avatar_template.replace("{size}", "96")
+                            if (avatarURL.indexOf('http') == -1) {
+                                avatarURL = "https://forum.cfx.re"+avatarURL
+                            }
+                            userInfo.iconURL = avatarURL
+                            knownAvatars[source] = avatarURL // we dont need to resolve the avatar every time.
+                        } else {
+                            knownAvatars[source] = false // avatar missing.
+                        }
+                    } catch {
+                        knownAvatars[source] = false // something broke while trying to get discourse avatar, dont try again.
+
                     }
-                    userInfo.iconURL = avatarURL
-                    knownAvatars[source] = avatarURL // we dont need to resolve the avatar every time.
                 }
             } else {
                 userInfo.iconURL = knownAvatars[source]
             }
+            if (knownAvatars[source] == false) {
+                userInfo.iconURL = undefined // dont send anything to discord, assume something went wrong
+            }
+
             var embed = await prepareGenericEmbed(undefined, undefined, "5a5a5a", undefined, undefined, userInfo, outMessage.args[1], false)
             client.channels.cache.get(GetConvar('ea_botChatBridge', "")).send({ embeds: [embed] })
         })
