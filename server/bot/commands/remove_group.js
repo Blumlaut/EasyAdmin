@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('removegroup')
+		.setName('remove_group')
 		.setDescription('Removes a group from a User (ACE), saves into easyadmin_permissions.cfg')
         .addUserOption(option =>
             option.setName('user')

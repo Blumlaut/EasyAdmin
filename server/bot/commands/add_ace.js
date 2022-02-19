@@ -2,11 +2,11 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('removeace')
-		.setDescription('Removes a permission from a group, saves into easyadmin_permissions.cfg')
+		.setName('add_ace')
+		.setDescription('Adds a permission to a group, saves into easyadmin_permissions.cfg')
         .addStringOption(option =>
             option.setName('group')
-                .setDescription('The group to remove the permission from')
+                .setDescription('The group to add a permission to')
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('permission')
@@ -17,11 +17,11 @@ module.exports = {
         const perm = interaction.options.getString('permission')
 
 
-        var query = `remove_ace group.${group} ${perm} allow`
-        exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `add_ace group.${group} ${perm} allow`)
+        var query = `add_ace group.${group} ${perm} allow`
+        exports[EasyAdmin].AddToFile("easyadmin_permissions.cfg", query)
 
         ExecuteCommand(query)
 
-        interaction.reply(`Removed \`${perm}\` from \`group.${group}\``)
+        interaction.reply(`Added \`${perm}\` to \`group.${group}\``)
 	},
 };

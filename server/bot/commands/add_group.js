@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('addgroup')
+		.setName('add_group')
 		.setDescription('Adds a group to a User (ACE), saves into easyadmin_permissions.cfg')
         .addUserOption(option =>
             option.setName('user')
