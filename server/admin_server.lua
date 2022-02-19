@@ -1783,6 +1783,10 @@ Citizen.CreateThread(function()
 		end
 	end
 	
+	function isWebhookFeatureExcluded(feature)
+		return ExcludedWebhookFeatures[feature]
+	end
+	exports('isWebhookFeatureExcluded', isWebhookFeatureExcluded)
 	
 	
 	
@@ -2113,6 +2117,12 @@ Citizen.CreateThread(function()
 		return CachedPlayers
 	end
 	exports('getCachedPlayers', getCachedPlayers)
+
+	function getCachedPlayer(id)
+		return CachedPlayers[id]
+	end
+	exports('getCachedPlayer', getCachedPlayer)
+
 	
 	function sendTelemetry()
 		local data = {}
@@ -2176,6 +2186,22 @@ Citizen.CreateThread(function()
 		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", checkVersion, "GET")
 		Wait(3600000)
 	end
+end)
+
+Citizen.CreateThread(function()
+	function HTTPRequest(url, ...)
+		local err,response,headers
+		
+		PerformHttpRequest(url, function(e,r,h)
+			err,response,headers = e,r,h
+		end, ...)
+		repeat
+			Wait(10)
+		until (response)
+		
+		return response
+	end
+	exports('HTTPRequest', HTTPRequest)
 end)
 
 Citizen.CreateThread(function()
