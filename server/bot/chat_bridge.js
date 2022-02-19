@@ -1,9 +1,44 @@
 
 if (GetConvar('ea_botChatBridge', "") != "") {
     try {
-        exports["chat"].registerMessageHook(function(source, outMessage, hookRef) {
-            client.channels.cache.get(GetConvar('ea_botChatBridge', "")).send({ content: '**'+outMessage.args[0]+'**: '+outMessage.args[1] })
+
+        var knownAvatars = {} 
+
+
+        exports["chat"].registerMessageHook(async function(source, outMessage, hookRef) {
+
+            const user = await exports[EasyAdmin].getCachedPlayer(source)
+
+
+            var userInfo = {name: outMessage.args[0]}
+
+
+            if (!knownAvatars[source]) {
+                var fivemAccount = false
+                for (let identifier of user.identifiers) {
+                    if (identifier.search("fivem:") != -1) {
+                        fivemAccount = identifier.substring(identifier.indexOf(":") + 1)
+                    }
+                }
+
+                if (fivemAccount) {
+                    var response = await exports[EasyAdmin].HTTPRequest("https://policy-live.fivem.net/api/getUserInfo/"+fivemAccount)
+                    response = JSON.parse(response)
+                    var avatarURL = response.avatar_template.replace("{size}", "96")
+                    if (avatarURL.indexOf('http') == -1) {
+                        avatarURL = "https://forum.cfx.re"+avatarURL
+                    }
+                    userInfo.iconURL = avatarURL
+                    knownAvatars[source] = avatarURL // we dont need to resolve the avatar every time.
+                }
+            } else {
+                userInfo.iconURL = knownAvatars[source]
+            }
+            var embed = await prepareGenericEmbed(undefined, undefined, "5a5a5a", undefined, undefined, userInfo, outMessage.args[1], false)
+            client.channels.cache.get(GetConvar('ea_botChatBridge', "")).send({ embeds: [embed] })
         })
+
+
     } catch(error) {
         console.log("tried registering chat bridge, but failed.")
     }
@@ -18,5 +53,9 @@ if (GetConvar('ea_botChatBridge', "") != "") {
         }
 
     })
+
+    on("playerDropped", (reason) => {
+        knownAvatars[global.source] = undefined
+    });
     
 }
