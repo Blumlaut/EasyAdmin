@@ -9,6 +9,10 @@ if (GetConvar('ea_botChatBridge', "") != "") {
 
             const user = await exports[EasyAdmin].getCachedPlayer(source)
 
+            if (!user) { 
+                return // chat message wasnt sent by a user, we don't care.
+            }
+
 
             var userInfo = {name: outMessage.args[0]}
 
