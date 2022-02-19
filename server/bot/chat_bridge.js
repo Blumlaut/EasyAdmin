@@ -42,6 +42,8 @@ if (GetConvar('ea_botChatBridge', "") != "") {
                         knownAvatars[source] = false // something broke while trying to get discourse avatar, dont try again.
 
                     }
+                } else {
+                    knownAvatars[source] = false // no fivem identifier
                 }
             } else {
                 userInfo.iconURL = knownAvatars[source]
