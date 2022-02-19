@@ -1168,7 +1168,7 @@ Citizen.CreateThread(function()
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
 		local src = source
 		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune then
-			local muted = mutePlayer(playerId)
+			local muted = mutePlayer(playerId, not MutedPlayers[playerId])
 
 			if muted then
 				if MutedPlayers[playerId] then
@@ -1192,6 +1192,9 @@ Citizen.CreateThread(function()
 					MumbleSetPlayerMuted(playerId, true)
 				end
 				PrintDebugMessage("muted "..getName(playerId,true), 3)
+				for i,_ in pairs(OnlineAdmins) do 
+					TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, playerId, (MutedPlayers[playerId] == true or nil))
+				end
 				return true
 			elseif not toggle and MutedPlayers[playerId] then
 				MutedPlayers[playerId] = nil
@@ -1199,12 +1202,12 @@ Citizen.CreateThread(function()
 					MumbleSetPlayerMuted(playerId, false)
 				end
 				PrintDebugMessage("unmuted "..getName(playerId,true), 3)
+				for i,_ in pairs(OnlineAdmins) do 
+					TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, playerId, (MutedPlayers[playerId] == true or nil))
+				end
 				return true
 			else 
 				return false
-			end
-			for i,_ in pairs(OnlineAdmins) do 
-				TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, playerId, (MutedPlayers[playerId] == true or nil))
 			end
 		else
 			return false
