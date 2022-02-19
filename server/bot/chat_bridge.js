@@ -48,7 +48,8 @@ if (GetConvar('ea_botChatBridge', "") != "") {
     }
 
     client.on('messageCreate', async msg => {
-        if(msg.member.user.id == userID) {
+        if (!msg.member || msg.author.bot) { return } // message-sender is a webhook
+        if(msg.author.id == userID) {
             return
         }
         if(!msg.channel) { return }
