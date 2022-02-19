@@ -818,8 +818,9 @@ Citizen.CreateThread(function()
 		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires, expireString = formatDateString(expires) }
 		updateBlacklist( ban )
 		
-		
-		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
+		if source then
+			PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
+		end
 		
 		
 		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), banner or "Unknown", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
