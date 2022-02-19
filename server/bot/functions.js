@@ -4,6 +4,7 @@ const { Guild } = require("discord.js");
 
 
 async function LogDiscordMessage() {
+    if (logChannel == "") {return}
     var text = Array.from(arguments).toString();
 
     const embed = await prepareGenericEmbed(text)
