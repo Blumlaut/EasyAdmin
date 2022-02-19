@@ -504,18 +504,23 @@ Citizen.CreateThread(function()
 		PrintDebugMessage("Starting in gta5 Mode.", 4)
 	end
 	
-	local resourcemeta = LoadResourceFile(GetCurrentResourceName(), "__resource.lua")
-	if resourcemeta then
-		os.remove(GetResourcePath(GetCurrentResourceName()).."/__resource.lua")
-		PrintDebugMessage("Found __resource.lua file in EasyAdmin Folder and attempted deletion.", 2)
+
+	local legacyFiles = {
+		'__resource.lua',
+		'version.json',
+		'admin_server.lua',
+		'admin_client.lua',
+		'gui_c.lua',
+		'util_shared.lua'
+	}
+
+	for i,file in pairs(legacyFiles) do
+		local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
+		if fileExists then
+			os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
+			PrintDebugMessage("Found legacy "..file.." file in EasyAdmin Folder and attempted deletion.", 2)
+		end
 	end
-	
-	local versionjson = LoadResourceFile(GetCurrentResourceName(), "version.json")
-	if versionjson then
-		os.remove(GetResourcePath(GetCurrentResourceName()).."/version.json")
-		PrintDebugMessage("Found legacy version.json file in EasyAdmin Folder and attempted deletion.", 2)
-	end
-	
 	
 	ExcludedWebhookFeatures = {}
 	AnonymousAdmins = {}

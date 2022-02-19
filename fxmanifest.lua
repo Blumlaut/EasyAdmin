@@ -12,9 +12,10 @@ lua54 'yes'
 
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
+shared_script 'shared/util_shared.lua'
+
 server_scripts {
-	"util_shared.lua",
-	"admin_server.lua",
+	"server/admin_server.lua",
     "server/bot/functions.js",
     "server/bot/bot.js",
     "server/bot/chat_bridge.js",
@@ -26,9 +27,8 @@ client_scripts {
 	"dependencies/NativeUI.lua",
 	"dependencies/NativeUI-rdr3.lua",
 	"dependencies/Controls.lua",
-	"util_shared.lua",
-	"admin_client.lua",
-	"gui_c.lua",
+	"client/admin_client.lua",
+	"client/gui_c.lua",
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_client.lua"
 }
