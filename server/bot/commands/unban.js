@@ -12,9 +12,16 @@ module.exports = {
 		const banId = interaction.options.getInteger('banid')
 
 		
-		emit("EasyAdmin:unbanPlayer", banId) // todo: add easyadmin function to fetch a ban.
-		var embed = await prepareGenericEmbed('Removed Ban #'+banId+".");
+		var ret = await exports[EasyAdmin].unbanPlayer(banId)
+
+		if (ret == true) {
+			var embed = await prepareGenericEmbed('Successfully removed Ban #'+banId+".");
         
-		await interaction.reply({ embeds: [embed]});
+			await interaction.reply({ embeds: [embed]});
+		} else {
+			var embed = await prepareGenericEmbed('Failed to remove ban #'+banId+", make sure the ID is valid.");
+        
+			await interaction.reply({ embeds: [embed]});
+		}
 	},
 };

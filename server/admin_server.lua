@@ -787,7 +787,8 @@ Citizen.CreateThread(function()
 		Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 	end)
 	
-	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires,banner)
+
+	function addBanExport(playerId,reason,expires,banner)
 		local bannedIdentifiers = {}
 		local bannedUsername = "Unknown"
 		if type(playerId) == "table" then -- if playerId is a table of identifiers
@@ -797,12 +798,16 @@ Citizen.CreateThread(function()
 			if CachedPlayers[playerId].dropped then
 				offline = true
 			end
+			if CachedPlayers[playerId].immune then
+				return false
+			end
 			bannedIdentifiers = CachedPlayers[playerId].identifiers
 			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
 		else
 			PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
-			return
+			return false
 		end
+
 		
 		if expires and expires < os.time() then
 			expires = os.time()+expires 
@@ -810,7 +815,7 @@ Citizen.CreateThread(function()
 			expires = 10444633200
 		end
 		reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
-		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires or 10444633200 }
+		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires, expireString = formatDateString(expires) }
 		updateBlacklist( ban )
 		
 		
@@ -821,7 +826,10 @@ Citizen.CreateThread(function()
 		if not offline then
 			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 		end
-	end)
+		return ban
+	end
+	exports('addBan', addBanExport)
+	AddEventHandler("EasyAdmin:addBan", addBanExport)
 	
 	RegisterServerEvent("EasyAdmin:updateBanlist", function(playerId)
 		local src = source
@@ -1149,19 +1157,30 @@ Citizen.CreateThread(function()
 			-- TODO Webhook
 		end
 	end)
+
+	function unbanPlayer(banid)
+		local thisBan = nil
+		for i,ban in ipairs(blacklist) do 
+			if ban.banid == banId then
+				thisBan = ban
+				break
+			end
+		end
+		if thisBan == nil then
+			return false
+		end
+		UnbanId(banId)
+		return true
+	end
+	exports('unbanPlayer', unbanPlayer)
 	
 	RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
-		local thisBan = nil
 		if DoesPlayerHavePermission(source, "player.ban.remove") then
-			for i,ban in ipairs(blacklist) do 
-				if ban.banid == banId then
-					thisBan = ban
-					break
-				end
+			local ret = unbanPlayer(banId)
+			if ret then
+				PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId, 3)
+				SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), banId, thisBan.reason), "ban", 16711680)
 			end
-			UnbanId(banId)
-			PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId, 3)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), banId, thisBan.reason), "ban", 16711680)
 		end
 	end)
 	
