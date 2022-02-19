@@ -2122,6 +2122,7 @@ Citizen.CreateThread(function()
 	exports('getCachedPlayers', getCachedPlayers)
 
 	function getCachedPlayer(id)
+		id = tonumber(id)
 		return CachedPlayers[id]
 	end
 	exports('getCachedPlayer', getCachedPlayer)
