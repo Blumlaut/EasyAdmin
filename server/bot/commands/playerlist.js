@@ -2,8 +2,6 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {
-
-
 	const row = new MessageActionRow()
 	var button = new MessageButton()
 		.setCustomId(`prevpage${embedTimestamp}`)
