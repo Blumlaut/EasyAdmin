@@ -6,32 +6,54 @@ module.exports = {
 		.setDescription('Shows a list of all Players'),
 	async execute(interaction, exports) {
 
-		var players = getPlayers()
-		var table = new AsciiTable()
-		table.setHeading('Id', 'Name', 'Discord')
-		 
 
-		if (players.length != 0) {
-			for (let player of players) {
-				const user = await exports[EasyAdmin].getCachedPlayer(player)
-				var username = user.name
+		var tempReply = await prepareGenericEmbed(`\`\`\`Processing Playerlist..\`\`\``);
+		await interaction.reply({ embeds: [tempReply]})
 
-				var discordAccount = await getDiscordAccountFromPlayer(user)
-				if (discordAccount) {
-					discordAccount = discordAccount.tag
-				} else {
-					discordAccount = "N/A"
+		var players = await exports[EasyAdmin].getCachedPlayers()
+
+		var tables = []
+
+		var thisTable = new AsciiTable()
+		thisTable.setHeading('Id', 'Name', 'Discord')
+
+		if (getPlayers().length != 0) {
+			for(let [index,player] of Object.values(players).entries()){
+				if (!player.dropped) {
+
+					if (thisTable.toString().length >= 900) {
+						tables.push(thisTable)
+						thisTable = new AsciiTable()
+						thisTable.setHeading('Id', 'Name', 'Discord')
+					}
+
+					var username = player.name
+	
+					var discordAccount = await getDiscordAccountFromPlayer(player)
+					if (discordAccount) {
+						discordAccount = discordAccount.tag
+					} else {
+						discordAccount = "N/A"
+					}
+	
+	
+					thisTable.addRow(player.id, `${await exports[EasyAdmin].IsPlayerAdmin(parseInt(player.id)) == true && `*` || ``} ${username}`, discordAccount)
+
 				}
-
-
-				table.addRow(player, username, discordAccount)
 			}
+			tables.push(thisTable)
 		} else {
-			table = "There are no players on the server!"
+			tables = ["There are no players on the server!"]
 		}
 
-		var embed = await prepareGenericEmbed(`\`\`\`${table}\`\`\``);
+		const embed = new Discord.MessageEmbed()
+		.setColor((65280))
+		.setTimestamp()
+
+		tables.forEach(function(table) {
+			embed.addField(`\u200b`, `\`\`\`${table}\`\`\``)
+		})
         
-		await interaction.reply({ embeds: [embed]});
+		await interaction.editReply({ embeds: [embed]});
 	},
 };
