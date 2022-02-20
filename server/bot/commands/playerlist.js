@@ -15,7 +15,7 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 
 	var button = new MessageButton()
 		.setCustomId('unused')
-		.setLabel(`Current Page: ${curPage+1}`)
+		.setLabel(`Current Page: ${curPage+1}/${idFields.length+1}`)
 		.setStyle('SECONDARY')
 		.setDisabled(true)
 	row.addComponents(button)
@@ -144,7 +144,7 @@ module.exports = {
             embed = new Discord.MessageEmbed()
                 .setColor((65280))
                 .setTimestamp()
-                .addField('\u200b', "There are no players on the server!")
+                .addField('Player List', "There are no players on the server!")
 
 			row = generatePaginatorRow(idFields, 0, 0)
         }
