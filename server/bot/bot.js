@@ -83,7 +83,13 @@ if (GetConvar("ea_botToken", "") != "") {
                 await command.execute(interaction, exports); // we need to pass exports here, otherwise we won't be able to access them inside the command
             } catch (error) {
                 console.error(error);
-                await interaction.reply({ content: `There was an error while executing this command, please report the following stack trace here: <https://github.com/Blumlaut/EasyAdmin/issues> \`\`\`js\n${error.stack}\`\`\``, ephemeral: true });
+                var errorContent = { content: `There was an error while executing this command, please report the following stack trace here: <https://github.com/Blumlaut/EasyAdmin/issues> \`\`\`js\n${error.stack}\`\`\``, ephemeral: true }
+                if (interaction.replied) {
+                    interaction.followUp(errorContent)
+
+                } else {
+                    interaction.reply(errorContent)
+                }
             }
         });
     }

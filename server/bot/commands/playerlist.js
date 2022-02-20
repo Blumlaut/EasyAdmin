@@ -56,8 +56,6 @@ module.exports = {
         .setName('playerlist')
         .setDescription('Shows a list of all Players'),
     async execute(interaction, exports) {
-
-
         var tempReply = await prepareGenericEmbed(`\`\`\`Processing Playerlist..\`\`\``);
         await interaction.reply({
             embeds: [tempReply]
@@ -78,7 +76,6 @@ module.exports = {
         var discordnames = ``
         var curPage = 0
 		var row = undefined
-
 
         if (getPlayers().length != 0) {
             for (let [index, player] of Object.values(players).entries()) {
