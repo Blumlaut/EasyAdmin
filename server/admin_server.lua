@@ -580,10 +580,13 @@ Citizen.CreateThread(function()
 		end
 		TriggerClientEvent('chat:addSuggestion', source, '/easyadmin', "EasyAdmin Menu")
 		
-		-- give player the right settings to work with
-		local key = GetConvar("ea_defaultKey", "none")
-		
-		TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
+
+		if RedM then
+			-- give player the right settings to work with
+			local key = GetConvar("ea_defaultKey", "none")
+			
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
+		end
 		
 		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
@@ -2328,7 +2331,7 @@ function checkVersion()
 		infinity = true
 	end
 	
-	if GetConvar("ea_defaultKey", "none") == "none" then
+	if GetConvar("ea_defaultKey", "none") == "none" and RedM then
 		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
 	end
 	
