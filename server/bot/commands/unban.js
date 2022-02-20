@@ -15,11 +15,11 @@ module.exports = {
 		var ret = await exports[EasyAdmin].unbanPlayer(banId)
 
 		if (ret == true) {
-			var embed = await prepareGenericEmbed('Successfully removed Ban **#'+banId+"**.");
+			var embed = await prepareGenericEmbed(`Successfully removed Ban **#${banId}**.`);
         
 			await interaction.reply({ embeds: [embed]});
 		} else {
-			var embed = await prepareGenericEmbed('Failed to remove ban **#'+banId+"**, make sure the ID is valid.");
+			var embed = await prepareGenericEmbed(`Failed to remove ban **#${banId}**, make sure the ID is valid.`);
         
 			await interaction.reply({ embeds: [embed]});
 		}

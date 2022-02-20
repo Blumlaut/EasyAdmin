@@ -25,7 +25,7 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
         embed.setTimestamp()
     }
     if (message) {
-        embed.addField("**"+ (title || "EasyAdmin")+"**", message)
+        embed.addField(`**${(title || "EasyAdmin")}**`, message)
     }
     if (description) {
         embed.setDescription(description)
@@ -68,7 +68,7 @@ async function findPlayerFromUserInput(input) {
 async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
 
     if (object.search('easyadmin.') == -1) {
-        object = "easyadmin."+object
+        object = `easyadmin.${object}`
     }
 
     if (member.guild.ownerId === member.id) { // guild owner always has permissions, to everything.
@@ -76,7 +76,7 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
     }
 
 
-    return IsPrincipalAceAllowed("identifier.discord:"+member.id, object)
+    return IsPrincipalAceAllowed(`identifier.discord:${member.id}`, object)
 }
 
 

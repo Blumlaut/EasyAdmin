@@ -26,11 +26,11 @@ module.exports = {
 		var ret = exports[EasyAdmin].slapPlayer(user.id, slapAmount)
 
 		if (ret) {
-			var embed = await prepareGenericEmbed('Successfully slapped **'+user.name+'** for '+slapAmount+' HP.');
+			var embed = await prepareGenericEmbed(`Successfully slapped **${user.name}** for ${slapAmount} HP.`);
         
 			await interaction.reply({ embeds: [embed]});
 		} else {
-			var embed = await prepareGenericEmbed('Could not slap **'+user.name+'**.');
+			var embed = await prepareGenericEmbed(`Could not slap **${user.name}**.`);
         
 			await interaction.reply({ embeds: [embed]});
 		}

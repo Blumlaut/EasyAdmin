@@ -21,11 +21,11 @@ module.exports = {
 		var ret = await exports[EasyAdmin].freezePlayer(user.id, false)
 
 		if (ret) {
-			var embed = await prepareGenericEmbed('Successfully unfroze **'+user.name+'**.');
+			var embed = await prepareGenericEmbed(`Successfully unfroze **${user.name}**.`);
         
 			await interaction.reply({ embeds: [embed]});
 		} else {
-			var embed = await prepareGenericEmbed('Could not unfreeze **'+user.name+'**.');
+			var embed = await prepareGenericEmbed(`Could not unfreeze **${user.name}**.`);
         
 			await interaction.reply({ embeds: [embed]});
 		}

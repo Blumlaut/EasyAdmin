@@ -25,13 +25,13 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botChatBridge', "") != "
                 }
 
                 if (fivemAccount) {
-                    var response = await exports[EasyAdmin].HTTPRequest("https://policy-live.fivem.net/api/getUserInfo/"+fivemAccount)
+                    var response = await exports[EasyAdmin].HTTPRequest(`https://policy-live.fivem.net/api/getUserInfo/${fivemAccount}`)
                     try {
                         response = JSON.parse(response)
                         if (response.avatar_template) {
                             var avatarURL = response.avatar_template.replace("{size}", "96")
                             if (avatarURL.indexOf('http') == -1) {
-                                avatarURL = "https://forum.cfx.re"+avatarURL
+                                avatarURL = `https://forum.cfx.re${avatarURL}`
                             }
                             userInfo.iconURL = avatarURL
                             knownAvatars[source] = avatarURL // we dont need to resolve the avatar every time.

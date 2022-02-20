@@ -38,9 +38,9 @@ if (GetConvar("ea_botToken", "") != "") {
 
 
         RegisterClientCommands(client.user.id, guild)
-        var startupMessage = "**EasyAdmin "+currentVersion+"** has started."
+        var startupMessage = `**EasyAdmin ${currentVersion}** has started.`
         if (currentVersion != latestVersionInfo[0]) {
-            startupMessage+="\nVersion "+latestVersionInfo[0]+" is Available!\n Download it from "+latestVersionInfo[1]
+            startupMessage+=`\nVersion ${latestVersionInfo[0]} is Available!\n Download it from ${latestVersionInfo[1]}`
         }
         LogDiscordMessage(startupMessage)
     });
@@ -53,11 +53,11 @@ if (GetConvar("ea_botToken", "") != "") {
         const fs = require('fs');
     
         const commands = [];
-        const commandFiles = fs.readdirSync(resourcePath+'/server/bot/commands').filter(file => file.endsWith('.js'));
+        const commandFiles = fs.readdirSync(`${resourcePath}/server/bot/commands`).filter(file => file.endsWith('.js'));
         
         
         for (const file of commandFiles) {
-            const command = require(resourcePath+`/server/bot/commands/${file}`);
+            const command = require(`${resourcePath}/server/bot/commands/${file}`);
             commands.push(command.data.toJSON());
             client.commands.set(command.data.name, command);
         }
@@ -75,7 +75,7 @@ if (GetConvar("ea_botToken", "") != "") {
         
             if (!command) return;
         
-            if (!await DoesGuildMemberHavePermission(interaction.member, "bot."+interaction.commandName)) {
+            if (!await DoesGuildMemberHavePermission(interaction.member, `bot.${interaction.commandName}`)) {
                 await interaction.reply({ content: 'You don\'t have permission to run this command!', ephemeral: true });
                 return false
             }
@@ -83,7 +83,7 @@ if (GetConvar("ea_botToken", "") != "") {
                 await command.execute(interaction, exports); // we need to pass exports here, otherwise we won't be able to access them inside the command
             } catch (error) {
                 console.error(error);
-                await interaction.reply({ content: 'There was an error while executing this command, please report the following stack trace here: <https://github.com/Blumlaut/EasyAdmin/issues> ```js\n'+error.stack+'```', ephemeral: true });
+                await interaction.reply({ content: `There was an error while executing this command, please report the following stack trace here: <https://github.com/Blumlaut/EasyAdmin/issues> \`\`\`js\n${error.stack}\`\`\``, ephemeral: true });
             }
         });
     }
