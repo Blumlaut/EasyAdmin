@@ -57,6 +57,10 @@ function sendRandomReminder()
 	end
 end
 
+function announce(reason)
+	TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("announcement") .. "] " .. reason)
+end
+
 Citizen.CreateThread(function()
 	--Wait(10000)
 	reminderTime = GetConvarInt("ea_chatReminderTime", 0)
@@ -855,6 +859,11 @@ Citizen.CreateThread(function()
 	
 	
 	------------------------------ COMMANDS
+
+	RegisterCommand("announce", function(source, args, rawCommand)
+		local reason = table.concat(args, " ")
+		announce(reason)
+	end, false)
 	
 	RegisterCommand("spectate", function(source, args, rawCommand)
 		if(source == 0) then

@@ -96,6 +96,7 @@
     "bancheatingadd": " ( Spielername: %s )",
     "nongiven": "Keinen gegeben",
     "newadmin": "Du bist jetzt ein Admin",
+    "announcement": "Announcement",
     "playernotfound": "Spieler wurde nicht gefunden.",
     "done": "Fertig!",
     "adminkickedplayer": "**%s** hat **%s** gekickt, Grund: %s",
