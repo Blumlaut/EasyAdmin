@@ -15,7 +15,7 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 
 	var button = new MessageButton()
 		.setCustomId('unused')
-		.setLabel(`Current Page: ${curPage+1}/${idFields.length+1}`)
+		.setLabel(`Current Page: ${curPage+1}/${idFields.length}`)
 		.setStyle('SECONDARY')
 		.setDisabled(true)
 	row.addComponents(button)
