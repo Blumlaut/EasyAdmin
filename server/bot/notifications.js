@@ -2,7 +2,7 @@
 
 if (GetConvar("ea_botToken", "") != "") {
 
-    onNet("EasyAdmin:amiadmin", async () => {
+    onNet("playerJoining", async () => {
         var src = source
 
         var msg = `Player **${exports[EasyAdmin].getName(src,true,true)}** with id **${src}** joined the Server!`
