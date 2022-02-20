@@ -66,7 +66,7 @@ module.exports = {
         var players = await exports[EasyAdmin].getCachedPlayers()
         var embedTimestamp = Date.now();
 
-        const embed = new Discord.MessageEmbed()
+        var embed = new Discord.MessageEmbed()
             .setColor((65280))
             .setTimestamp()
 
@@ -148,6 +148,8 @@ module.exports = {
                 .setColor((65280))
                 .setTimestamp()
                 .addField('\u200b', "There are no players on the server!")
+
+			row = generatePaginatorRow(idFields, 0, 0)
         }
 
         await interaction.editReply({
