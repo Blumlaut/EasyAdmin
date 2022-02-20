@@ -58,8 +58,15 @@ function sendRandomReminder()
 end
 
 function announce(reason)
-	TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("announcement") .. "] " .. reason)
+	if reason then
+		TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("announcement") .. "] " .. reason)
+		return true
+	else
+		return false
+	end
 end
+
+exports('announce', announce)
 
 Citizen.CreateThread(function()
 	--Wait(10000)
