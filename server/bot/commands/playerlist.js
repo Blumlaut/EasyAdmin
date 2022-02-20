@@ -5,7 +5,7 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 	const row = new MessageActionRow()
 	var button = new MessageButton()
 		.setCustomId(`prevpage${embedTimestamp}`)
-		.setLabel(`Previous`)
+		.setLabel(`Previous Page`)
 		.setStyle('PRIMARY')
 		if (!idFields[curPage-1]) {
 			button.setDisabled(true)
