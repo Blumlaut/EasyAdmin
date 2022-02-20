@@ -38,11 +38,11 @@ module.exports = {
 			discordAccount = "N/A"
 		  }
 
-		  var text = 'User Infos for **'+user.name+
-		  '**\nIs Admin: '+exports[EasyAdmin].IsPlayerAdmin(user.id)+
-		  '\nWarnings: '+exports[EasyAdmin].getPlayerWarnings(user.id)+
-		  '\nDiscord Account: '+discordAccount+
-		  '\n```'+table+'```'
+		  var text = `User Infos for **${user.name}**
+		  \nIs Admin: ${exports[EasyAdmin].IsPlayerAdmin(user.id)}
+		  \nWarnings: ${exports[EasyAdmin].getPlayerWarnings(user.id)}
+		  \nDiscord Account: ${discordAccount}
+		  \n\`\`\`${table}\`\`\``
 		  var embed = await prepareGenericEmbed(text);
         
 		  await interaction.reply({ embeds: [embed]});

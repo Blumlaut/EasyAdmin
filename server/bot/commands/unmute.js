@@ -21,11 +21,11 @@ module.exports = {
 		var ret = await exports[EasyAdmin].mutePlayer(user.id, false)
 
 		if (ret) {
-			var embed = await prepareGenericEmbed('Successfully unmuted **'+user.name+'**.');
+			var embed = await prepareGenericEmbed(`Successfully unmuted **${user.name}**.`);
         
 			await interaction.reply({ embeds: [embed]});
 		} else {
-			var embed = await prepareGenericEmbed('Could not unmute **'+user.name+'**.');
+			var embed = await prepareGenericEmbed(`Could not unmute **${user.name}**.`);
         
 			await interaction.reply({ embeds: [embed]});
 		}
