@@ -2,6 +2,8 @@
 if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") != "") {
     var statusMessage = undefined
     var botStatusChannel = GetConvar('ea_botStatusChannel', '')
+    var startTimestamp = new Date()
+    const prettyMilliseconds = require('pretty-ms');
 
 
     async function getServerStatus(why) {
@@ -30,18 +32,6 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
         var serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
 
-        try {
-            var response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
-            response = JSON.parse(response).Data
-            embed.addField(`Upvotes`, `${response.upvotePower} (${response.burstPower} Bursts)`, true)
-            
-            embed.setAuthor({name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
-
-        } catch (error) {
-            console.error(error)
-
-        }
-
         /* this is broken, no idea why.
         var icon = GetConvar('sv_icon', '')
         if(icon != '') {
@@ -51,11 +41,35 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
         }
         */
 
+        var reports = await exports[EasyAdmin].getAllReports()
+        var activeReports = 0
+        var claimedReports = 0
+        for (let [i, report] of Object.values(reports).entries()) {
+            activeReports+=1
+            if (report.claimed) {
+                claimedReports+=1
+            }
+        }
+
         embed.addField('Players Online', `${getPlayers().length}/${GetConvar('sv_maxClients', '')}`, true)
         embed.addField('Admins Online', `${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}`, true)
-        embed.addField('Spawned Vehicles', `${GetAllVehicles().length}`, true)
-        embed.addField('Spawned Peds', `${GetAllPeds().length}`, true)
-        embed.addField('Spawned Objects', `${GetAllObjects().length}`, true)
+        embed.addField('Reports', `${activeReports} (${claimedReports} claimed)`, true)
+
+        try {
+            var response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
+            response = JSON.parse(response).Data
+            embed.addField(`Upvotes`, `${response.upvotePower} Upvotes, ${response.burstPower} Bursts`, false)
+            
+            embed.setAuthor({name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
+
+        } catch (error) {
+            console.error(error)
+        }
+        embed.addField('Active Vehicles', `${GetAllVehicles().length}`, true)
+        embed.addField('Active Peds', `${GetAllPeds().length}`, true)
+        embed.addField('Active Objects', `${GetAllObjects().length}`, true)
+        embed.addField('Uptime', prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0}), false)
+        
 
 
         if (why) {
@@ -74,8 +88,6 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
     async function updateServerStatus(why) {
         var channel = await client.channels.fetch(botStatusChannel)
-
-        const embed = await getServerStatus(why)
 
         if (!statusMessage) {
             var messagesToDelete = []
@@ -97,9 +109,11 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             } catch {
                 console.log("Could not bulk-delete messages in this channel.")
             }
+            const embed = await getServerStatus(why)
             statusMessage = await channel.send(embed)
         } else {
-             statusMessage.edit(embed)
+            const embed = await getServerStatus(why)
+            statusMessage.edit(embed)
         }
 
 
@@ -118,7 +132,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
     })
     setTimeout(updateServerStatus, 10000)
-    setInterval(updateServerStatus, 300000);
+    setInterval(updateServerStatus, 180000);
     
 
 

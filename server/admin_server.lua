@@ -1331,6 +1331,14 @@ Citizen.CreateThread(function()
 			end
 		end
 	end
+
+
+	function getAllReports()
+		return reports
+	end
+	exports('getAllReports', getAllReports)
+
+		
 	
 	RegisterServerEvent("EasyAdmin:RemoveReport", function(report)
 		if DoesPlayerHavePermission(source, "player.reports.process") then

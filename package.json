@@ -6,7 +6,8 @@
     "discord-api-types": "^0.27.2",
     "discord.js": "^13.6.0",
     "fs": "^0.0.1-security",
-    "sprintf-js": "^1.1.2",
-    "juration": "^0.1.1"
+    "juration": "^0.1.1",
+    "pretty-ms": "^7.0.1",
+    "sprintf-js": "^1.1.2"
   }
 }
