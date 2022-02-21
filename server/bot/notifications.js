@@ -1,6 +1,6 @@
 
 
-if (GetConvar("ea_botToken", "") != "") {
+if (GetConvar("ea_botToken", "") != "" && GetConvar("ea_botLogChannel", "") != "") {
 
     onNet("playerJoining", async () => {
         var src = source

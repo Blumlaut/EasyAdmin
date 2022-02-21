@@ -30,7 +30,6 @@ if (GetConvar("ea_botToken", "") != "") {
         userID = client.user.id;
         resourcePath = GetResourcePath(GetCurrentResourceName()) // absolute resource path, needed for FS
         guild = GetConvar("ea_botGuild", "")
-        logChannel = GetConvar("ea_botLogChannel", "")
 
         EasyAdmin = GetCurrentResourceName() // fetch our Resource name and claim we're called EasyAdmin, this just makes exports easier.
 
@@ -48,7 +47,7 @@ if (GetConvar("ea_botToken", "") != "") {
 
 
 
-    function RegisterClientCommands(clientId,guildId) {
+    async function RegisterClientCommands(clientId,guildId) {
         const { REST } = require('@discordjs/rest');
         const { Routes } = require('discord-api-types/v9');
         const fs = require('fs');
