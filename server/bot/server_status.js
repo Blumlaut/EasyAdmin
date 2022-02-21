@@ -11,9 +11,18 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
 
         var joinURL = GetConvar('web_baseUrl', '')
+        var buttonRow = false
 
         if(joinURL.indexOf('cfx.re' != -1)) {
             embed.setURL(`https://${joinURL}`)
+            buttonRow = new MessageActionRow()
+            var button = new MessageButton()
+                .setURL(`https://${joinURL}`)
+                .setLabel(`Join Server`)
+                .setStyle('LINK')
+
+
+            buttonRow.addComponents(button)
         }
 
         embed.addField('Server Name', `**${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}** ${GetConvar('sv_projectDesc', '')}`)
@@ -53,7 +62,12 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             embed.addField('Last Update', why)
         }
 
-        return embed
+        if (buttonRow) {
+            return {embeds: [embed], components: [buttonRow] }
+        } else {
+            return {embeds: [embed] }
+        }
+        
 
 
     }
@@ -83,9 +97,9 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             } catch {
                 console.log("Could not bulk-delete messages in this channel.")
             }
-            statusMessage = await channel.send({embeds: [embed]})
+            statusMessage = await channel.send(embed)
         } else {
-            statusMessage.edit({embeds: [embed]})
+             statusMessage.edit(embed)
         }
 
 
