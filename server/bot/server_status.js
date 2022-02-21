@@ -4,9 +4,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
     var botStatusChannel = GetConvar('ea_botStatusChannel', '')
 
 
-    async function updateServerStatus(why) {
-        var channel = await client.channels.fetch(botStatusChannel)
-
+    async function getServerStatus(why) {
         var embed = new Discord.MessageEmbed()
             .setColor((65280))
             .setTimestamp()
@@ -17,6 +15,8 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
         if(joinURL.indexOf('cfx.re' != -1)) {
             embed.setURL(`https://${joinURL}`)
         }
+
+        embed.addField('Server Name', `**${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}** ${GetConvar('sv_projectDesc', '')}`)
 
 
         var serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
@@ -33,7 +33,6 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
         }
 
-
         /* this is broken, no idea why.
         var icon = GetConvar('sv_icon', '')
         if(icon != '') {
@@ -43,8 +42,8 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
         }
         */
 
-        embed.addField('Players', `${getPlayers().length}/${GetConvar('sv_maxClients', '')}`, true)
-        embed.addField('Admins', `${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}`, true)
+        embed.addField('Players Online', `${getPlayers().length}/${GetConvar('sv_maxClients', '')}`, true)
+        embed.addField('Admins Online', `${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}`, true)
         embed.addField('Spawned Vehicles', `${GetAllVehicles().length}`, true)
         embed.addField('Spawned Peds', `${GetAllPeds().length}`, true)
         embed.addField('Spawned Objects', `${GetAllObjects().length}`, true)
@@ -54,11 +53,35 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             embed.addField('Last Update', why)
         }
 
+        return embed
+
+
+    }
+
+    async function updateServerStatus(why) {
+        var channel = await client.channels.fetch(botStatusChannel)
+
+        const embed = await getServerStatus(why)
 
         if (!statusMessage) {
-            var messages = await channel.messages.fetch({ limit: 64 })
+            var messagesToDelete = []
+            var messages = await channel.messages.fetch({ limit: 10 })
             for (var message of messages.values()) {
-                await message.delete()
+                if (messages.size == 1 && message.author.id == client.user.id) {
+                    statusMessage = message
+                    break
+                } else {
+                    messagesToDelete.push(message.id)
+                }
+            }
+            try {
+                if (statusMessage) {
+                    updateServerStatus()
+                    return
+                }
+                await channel.bulkDelete(messagesToDelete)
+            } catch {
+                console.log("Could not bulk-delete messages in this channel.")
             }
             statusMessage = await channel.send({embeds: [embed]})
         } else {
