@@ -10,11 +10,8 @@ Discord = require("discord.js")
 AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
-MessageAttachment = Discord.MessageAttachment
-Collection = Discord.Collection
-Intents = Discord.Intents
-MessageActionRow = Discord.MessageActionRow
-MessageButton = Discord.MessageButton
+const { MessageAttachment, Collection, Intents, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+
 
 client = new Discord.Client({
     partials: ['GUILD_MEMBER', 'USER', 'MESSAGE', 'CHANNEL', 'REACTION'],

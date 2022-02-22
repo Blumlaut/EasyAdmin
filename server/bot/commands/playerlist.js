@@ -3,34 +3,25 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 	const row = new MessageActionRow()
-	var button = new MessageButton()
-		.setCustomId(`prevpage${embedTimestamp}`)
-		.setLabel(`Previous Page`)
-		.setStyle('PRIMARY')
-		if (!idFields[curPage-1]) {
-			button.setDisabled(true)
-		}
 
-	row.addComponents(button)
+    var selector = new MessageSelectMenu()
+    .setCustomId(`pageSelector${embedTimestamp}`)
+    .setPlaceholder(`Page ${curPage+1}/${idFields.length}`)
 
-	var button = new MessageButton()
-		.setCustomId('unused')
-		.setLabel(`Current Page: ${curPage+1}/${idFields.length}`)
-		.setStyle('SECONDARY')
-		.setDisabled(true)
-	row.addComponents(button)
-
-
-	var button = new MessageButton()
-		.setCustomId(`nextpage${embedTimestamp}`)
-		.setLabel('Next Page')
-		.setStyle('PRIMARY')
-		if (!idFields[curPage+1]) {
-			button.setDisabled(true)
-		}
-	row.addComponents(button)
+    for (var i = 0; i < idFields.length; i++) {
+        selector.addOptions([
+            {
+                label: `Page ${i+1}/${idFields.length}`,
+                value: `${i}`,
+            }])
+    }
+    if (!idFields[1]) {
+        selector.setDisabled(true)
+    }
+    row.addComponents(selector)
 
 	return row
+    
 }
 
 
@@ -112,7 +103,7 @@ module.exports = {
 			row = generatePaginatorRow(idFields, curPage, embedTimestamp)
             if (idFields.length > 1) {
 
-                const filter = i => (i.customId === `prevpage${embedTimestamp}` || i.customId === `nextpage${embedTimestamp}`);
+                const filter = i => (i.customId === `pageSelector${embedTimestamp}`);
 
                 const collector = interaction.channel.createMessageComponentCollector({
                     filter,
@@ -123,10 +114,8 @@ module.exports = {
                     const embed = new Discord.MessageEmbed()
                         .setColor((65280))
                         .setTimestamp()
-                    if (i.customId === `nextpage${embedTimestamp}`) {
-                        curPage += 1
-                    } else if (i.customId === `prevpage${embedTimestamp}`) {
-                        curPage += -1
+                    if (i.customId === `pageSelector${embedTimestamp}`) {
+                        curPage = parseInt(i.values[0])
                     }
 					generateEmbedFields(embed,idFields,usernameFields,discordnamefields,curPage)
 
