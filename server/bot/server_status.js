@@ -108,13 +108,11 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             } catch {
                 console.log("Could not bulk-delete messages in this channel.")
             }
-            const embed = await getServerStatus(why)
-            statusMessage = await channel.send(embed)
-        } else {
-            const embed = await getServerStatus(why)
-            statusMessage.edit(embed)
+            let embed = await prepareGenericEmbed("Fetching Server Infos..")
+            statusMessage = await channel.send({ embeds: [embed] })
         }
-
+        const embed = await getServerStatus(why)
+        statusMessage.edit(embed)
 
     }
 
