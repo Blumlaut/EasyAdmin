@@ -5,13 +5,16 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 	const row = new MessageActionRow()
 
     var selector = new MessageSelectMenu()
-    .setCustomId(`pageSelector${embedTimestamp}`)
-    .setPlaceholder(`Page ${curPage+1}/${idFields.length}`)
+    
+    var fieldLength = idFields.length
+    if (fieldLength == 0) {fieldLength = 1}
+    selector.setCustomId(`pageSelector${embedTimestamp}`)
+    selector.setPlaceholder(`Page ${curPage+1}/${fieldLength}`)
 
-    for (var i = 0; i < idFields.length; i++) {
+    for (var i = 0; i < fieldLength; i++) {
         selector.addOptions([
             {
-                label: `Page ${i+1}/${idFields.length}`,
+                label: `Page ${i+1}/${(fieldLength)}`,
                 value: `${i}`,
             }])
     }
