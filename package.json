@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@discordjs/builders": "^0.12.0",
+    "@discordjs/rest": "^0.3.0",
+    "ascii-table": "^0.0.9",
+    "discord-api-types": "^0.27.2",
+    "discord.js": "^13.6.0",
+    "fs": "^0.0.1-security",
+    "juration": "^0.1.1",
+    "pretty-ms": "^7.0.1",
+    "sprintf-js": "^1.1.2"
+  }
+}

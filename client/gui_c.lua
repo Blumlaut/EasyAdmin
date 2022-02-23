@@ -1083,7 +1083,7 @@ function GenerateMenu() -- this is a big ass function
 
 				
 				for _, identifier in pairs(banlist[banId].identifiers) do
-					if not (GetConvar("ea_IpPrivacy", "false") == "true" and string.split(identifier, ":")[1] == "ip") then
+					if not (GetConvar("ea_IpPrivacy", "true") == "true" and string.split(identifier, ":")[1] == "ip") then
 						local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
 						mainMenu:AddItem(thisItem)
 						thisItem.Activated = function(ParentMenu,SelectedItem)

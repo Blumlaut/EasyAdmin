@@ -95,6 +95,7 @@
     "bancheatingadd": " ( Gracz: %s )",
     "nongiven": "Nie podano",
     "newadmin": "Jesteś teraz Adminem",
+    "announcement": "Announcement",
     "playernotfound": "Nie można znaleźć gracza.",
     "done": "Zrobione!",
     "adminkickedplayer": "**%s** wyrzucił **%s**, Powód: %s",
