@@ -10,11 +10,8 @@ Discord = require("discord.js")
 AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
-MessageAttachment = Discord.MessageAttachment
-Collection = Discord.Collection
-Intents = Discord.Intents
-MessageActionRow = Discord.MessageActionRow
-MessageButton = Discord.MessageButton
+const { MessageAttachment, Collection, Intents, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+
 
 client = new Discord.Client({
     partials: ['GUILD_MEMBER', 'USER', 'MESSAGE', 'CHANNEL', 'REACTION'],
@@ -26,10 +23,10 @@ if (GetConvar("ea_botToken", "") != "") {
 
     client.on('ready', async () => {
         console.log(`Logged in as ${client.user.tag}!`);
+        console.log(`Bot is in beta! Please report any bugs at https://github.com/Blumlaut/EasyAdmin/issues`)
         userID = client.user.id;
         resourcePath = GetResourcePath(GetCurrentResourceName()) // absolute resource path, needed for FS
         guild = GetConvar("ea_botGuild", "")
-        logChannel = GetConvar("ea_botLogChannel", "")
 
         EasyAdmin = GetCurrentResourceName() // fetch our Resource name and claim we're called EasyAdmin, this just makes exports easier.
 
@@ -47,7 +44,7 @@ if (GetConvar("ea_botToken", "") != "") {
 
 
 
-    function RegisterClientCommands(clientId,guildId) {
+    async function RegisterClientCommands(clientId,guildId) {
         const { REST } = require('@discordjs/rest');
         const { Routes } = require('discord-api-types/v9');
         const fs = require('fs');
@@ -65,7 +62,6 @@ if (GetConvar("ea_botToken", "") != "") {
         const rest = new REST({ version: '9' }).setToken(GetConvar("ea_botToken", ""));
         
         rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-        .then(() => console.log('Successfully registered application commands.'))
         .catch(console.error);
 
         client.on('interactionCreate', async interaction => {

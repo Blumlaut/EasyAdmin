@@ -4,12 +4,12 @@ const { Guild } = require("discord.js");
 
 
 async function LogDiscordMessage() {
-    if (logChannel == "") {return}
+    if (GetConvar("ea_botLogChannel", "") == "") {return}
     var text = Array.from(arguments).toString();
 
     const embed = await prepareGenericEmbed(text)
     
-    client.channels.cache.get(logChannel).send({ embeds: [embed] })
+    client.channels.cache.get(GetConvar("ea_botLogChannel", "")).send({ embeds: [embed] })
 }
 
 
