@@ -29,7 +29,7 @@ module.exports = {
 		if (ret) {
 			var embed = await prepareGenericEmbed(`Successfully warned **${user.name}** for **${reason}**`);
 		} else {
-			var embed = await prepareGenericEmbed('Could not warn this user. (Maybe this user is immmune)')
+			var embed = await prepareGenericEmbed('Could not warn this user. (Maybe this user is immune)')
 		}
 		await interaction.reply({ embeds: [embed]});
 	},
