@@ -24,10 +24,13 @@ module.exports = {
 			return
 		}
         
-
-        emitNet("EasyAdmin:warnPlayer", user.id, reason)
-		var embed = await prepareGenericEmbed(`Successfully warned **${user.name}** for **${reason}**`);
-        
+		var src = interaction.member.user.tag
+        var ret = await exports[EasyAdmin].warnPlayer(src, user.id, reason)
+		if (ret) {
+			var embed = await prepareGenericEmbed(`Successfully warned **${user.name}** for **${reason}**`);
+		} else {
+			var embed = await prepareGenericEmbed('Could not warn this user. (Maybe this user is immmune)')
+		}
 		await interaction.reply({ embeds: [embed]});
 	},
 };

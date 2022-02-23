@@ -2039,6 +2039,38 @@ Citizen.CreateThread(function()
 		end
 	end)
 
+	function warnPlayerExport(src, id, reason)
+		if not CachedPlayers[id].immune then
+			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
+			if not WarnedPlayers[id] then
+				WarnedPlayers[id] = {name = getName(id, true), identifiers = getAllPlayerIdentifiers(id), warns = 0}
+			end
+			WarnedPlayers[id].warns = WarnedPlayers[id].warns+1
+			TriggerClientEvent('chat:addMessage', id, { 
+				template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(253, 53, 53, 0.6); border-radius: 5px;"><i class="fas fa-user-crown"></i> {0} </div>',
+				args = {  string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings) }, color = { 255, 255, 255 } 
+			})
+			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), src, getName(id, true, true), reason, WarnedPlayers[id].warns, maxWarnings), "warn", 16711680)
+			TriggerClientEvent("txAdminClient:warn", id, src, string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings), GetLocalisedText("warnedtitle"), GetLocalisedText("warnedby"),GetLocalisedText("warndismiss"))
+			if WarnedPlayers[id].warns >= maxWarnings then
+				if GetConvar("ea_warnAction", "kick") == "kick" then
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), src, getName(id, true, true), reason), "kick", 16711680)
+					DropPlayer(id, GetLocalisedText("warnkicked"))
+					WarnedPlayers[id] = nil
+				elseif GetConvar("ea_warnAction", "kick") == "ban" then
+					local expires = os.time()+GetConvarInt("ea_warningBanTime", 604800)
+					addBanExport(id, reason, formatDateString(expires), src)
+					WarnedPlayers[id] = nil
+				end
+			end
+			return true
+		else
+			return false
+		end
+	end
+
+	exports('warnPlayer', warnPlayerExport)
+
 	function getPlayerWarnings(playerId)
 		if not WarnedPlayers[playerId] then
 			return 0
