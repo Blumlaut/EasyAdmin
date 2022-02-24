@@ -23,6 +23,7 @@ if (GetConvar("ea_botToken", "") != "") {
 
     client.on('ready', async () => {
         console.log(`Logged in as ${client.user.tag}!`);
+        client.user.setPresence({ activities: [{ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, type: 'WATCHING' }], status: 'online' })
         console.log(`Bot is in beta! Please report any bugs at https://github.com/Blumlaut/EasyAdmin/issues`)
         userID = client.user.id;
         resourcePath = GetResourcePath(GetCurrentResourceName()) // absolute resource path, needed for FS

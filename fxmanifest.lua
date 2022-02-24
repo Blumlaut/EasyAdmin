@@ -38,6 +38,11 @@ files {
 	"dependencies/nui/**/*"
 }
 
+dependencies {
+    'yarn',
+    'webpack'
+}
+
 convar_category 'EasyAdmin' {
     "Configuration Options",
     {
@@ -76,6 +81,10 @@ convar_category 'EasyAdmin' {
     { "Enable Custom Banlist", "$ea_custombanlist", "CV_BOOL", "false" },
     { "Enable Telemetry", "$ea_enableTelemetry", "CV_BOOL", "true" },
     { "Use Tokens as Identifiers", "$ea_useTokenIdentifiers", "CV_BOOL", "true" },
-    { "Enable Ascii Art on Start", "$ea_enableSplash", "CV_BOOL", "true" }
+    { "Enable Ascii Art on Start", "$ea_enableSplash", "CV_BOOL", "true" },
+    { "Token for Discord bot", "$ea_botToken", "CV_STRING", "none" },
+    { "Guild ID for Discord bot", "$ea_botGuild", "CV_STRING", "none" },
+    { "Channel for Discord bot to log", "$ea_botLogChannel", "CV_STRING", "none" },
+    { "Channel for Discord bot to enable live status", "$ea_botStatusChannel", "CV_BOOL", "true" }
     }
 }
