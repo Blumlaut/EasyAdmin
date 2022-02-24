@@ -38,6 +38,11 @@ files {
 	"dependencies/nui/**/*"
 }
 
+dependencies {
+    'yarn',
+    'webpack'
+}
+
 convar_category 'EasyAdmin' {
     "Configuration Options",
     {
