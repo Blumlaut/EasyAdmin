@@ -1,5 +1,5 @@
 [{
-    "translator": "EasyAdmin, Robi321 & Kubamaz",
+    "translator": "EasyAdmin, Robi321, Kubamaz",
     "language": "pl",
     "on": "Włącz",
     "off": "Wyłącz",
@@ -95,7 +95,7 @@
     "bancheatingadd": " ( Gracz: %s )",
     "nongiven": "Nie podano",
     "newadmin": "Jesteś teraz Adminem",
-    "announcement": "Announcement",
+    "announcement": "Ogłoszenie",
     "playernotfound": "Nie można znaleźć gracza.",
     "done": "Zrobione!",
     "adminkickedplayer": "**%s** wyrzucił **%s**, Powód: %s",
