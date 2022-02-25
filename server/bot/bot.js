@@ -44,6 +44,32 @@ if (GetConvar("ea_botToken", "") != "") {
     });
 
 
+    client.on("disconnect", function(event){
+        console.log(`The WebSocket has closed and will no longer attempt to reconnect`);
+    });
+
+    client.on("error", function(error){
+        console.error(`WebSocket encountered a connection error: ${error}`);
+    });
+
+    client.on("reconnecting", function(){
+        console.log(`reconnecting to websocket..`);
+    });
+
+    client.on("resume", function(replayed){
+        console.log(`websocket resumed, ${replayed}`);
+    });
+
+    client.on("warn", function(info){
+        console.log(`warning: ${info}`);
+    });
+
+    client.on("rateLimit", function(info){
+        console.log(`discord reports we hit a ratelimit! ${info}`);
+    });
+    
+
+
 
     async function RegisterClientCommands(clientId,guildId) {
         const { REST } = require('@discordjs/rest');
