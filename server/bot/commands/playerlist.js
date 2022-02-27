@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+
 
 
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {

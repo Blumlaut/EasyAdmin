@@ -10,7 +10,9 @@ Discord = require("discord.js")
 AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
-const { MessageAttachment, Collection, Intents, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const prettyMilliseconds = require('pretty-ms');
+const { MessageAttachment, Collection, Intents, MessageActionRow, MessageButton, MessageSelectMenu, Guild } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 
 client = new Discord.Client({

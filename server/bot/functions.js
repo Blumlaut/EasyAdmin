@@ -1,8 +1,4 @@
 // this file contains util functions the bot uses
-
-const { Guild } = require("discord.js");
-
-
 async function LogDiscordMessage() {
     if (GetConvar("ea_botLogChannel", "") == "") {return}
     var text = Array.from(arguments).toString();

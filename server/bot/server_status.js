@@ -3,7 +3,6 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
     var statusMessage = undefined
     var botStatusChannel = GetConvar('ea_botStatusChannel', '')
     var startTimestamp = new Date()
-    const prettyMilliseconds = require('pretty-ms');
 
 
     async function getServerStatus(why) {
