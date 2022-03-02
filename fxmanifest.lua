@@ -15,7 +15,7 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 shared_script 'shared/util_shared.lua'
 
 server_scripts {
-	"server/admin_server.lua",
+	"server/*.lua",
     "server/bot/*.js",
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_server.lua"

@@ -339,22 +339,6 @@ RegisterCommand("ea_addReminder", function(source, args, rawCommand)
 	end
 end, false)
 
-RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
-	if DoesPlayerHavePermission(source, "server") then
-		SendWebhookMessage(moderationNotification, "**Testing Webhook for moderationNotification**", false, 65280)
-		SendWebhookMessage(detailNotification, "**Testing Webhook for detailNotification**", false, 65280)
-		SendWebhookMessage(reportNotification, "**Testing Webhook for reportNotification**", false, 65280)
-		PrintDebugMessage("Webhook Message Sent")
-	end
-end, false)
-
-RegisterCommand("ea_excludeWebhookFeature", function(source, args, rawCommand)
-	if DoesPlayerHavePermission(source, "server") then
-		ExcludedWebhookFeatures = Set(args)
-		PrintDebugMessage("Webhook excludes set", 3)
-	end
-end, false)
-
 RegisterCommand("ea_createBackup", function(source, args, rawCommand)
 	if DoesPlayerHavePermission(source, "server") then
 		createBackup()
@@ -533,7 +517,6 @@ Citizen.CreateThread(function()
 		end
 	end
 	
-	ExcludedWebhookFeatures = {}
 	AnonymousAdmins = {}
 	
 	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
@@ -1841,11 +1824,6 @@ Citizen.CreateThread(function()
 		end
 	end
 	
-	function isWebhookFeatureExcluded(feature)
-		return ExcludedWebhookFeatures[feature]
-	end
-	exports('isWebhookFeatureExcluded', isWebhookFeatureExcluded)
-	
 	
 	
 	function updateBlacklist(data,remove, forceChange)
@@ -2240,34 +2218,6 @@ Citizen.CreateThread(function()
 		data.zap = GetConvar("is_zap", "false")
 		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
 		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
-	end
-	
-	
-	
-	---------------------------------- USEFUL
-	
-	function SendWebhookMessage(webhook,message,feature,colour,title,image)
-		moderationNotification = GetConvar("ea_moderationNotification", "false")
-		reportNotification = GetConvar("ea_reportNotification", "false")
-		detailNotification = GetConvar("ea_detailNotification", "false")
-		
-		local embed = {
-			{
-				["color"] = (colour or 65280),
-				["title"] = "**"..(title or "EasyAdmin").."**",
-				["description"] = message,
-				["footer"] = {
-					["text"] = "EasyAdmin on "..formatDateString(os.time()),
-				},
-			}
-		}
-		if image then
-			embed[1]["image"] = { ["url"] = image }
-		end
-		
-		if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= true then
-			PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({embeds = embed}), { ['Content-Type'] = 'application/json' })
-		end
 	end
 end)
 
