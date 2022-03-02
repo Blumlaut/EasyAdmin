@@ -7,6 +7,7 @@ async function LogDiscordMessage() {
     
     client.channels.cache.get(GetConvar("ea_botLogChannel", "")).send({ embeds: [embed] })
 }
+exports('LogDiscordMessage', LogDiscordMessage)
 
 
 async function prepareGenericEmbed(message,feature,colour,title,image,customAuthor,description,timestamp) {

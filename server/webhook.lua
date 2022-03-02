@@ -47,6 +47,11 @@ function SendWebhookMessage(webhook,message,feature,colour,title,image)
         embed[1]["image"] = { ["url"] = image }
     end
     
+    if GetConvar("ea_botLogChannel", "") ~= "" then
+        exports[GetCurrentResourceName()]:LogDiscordMessage(message)
+        return
+    end
+
     if webhook ~= "false" and ExcludedWebhookFeatures[feature] ~= true then
         PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({embeds = embed}), { ['Content-Type'] = 'application/json' })
     end
