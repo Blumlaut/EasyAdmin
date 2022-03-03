@@ -1,7 +1,13 @@
 ------------------------------------
 ------------------------------------
+------------------------------------
 ---- DONT TOUCH ANY OF THIS IF YOU DON'T KNOW WHAT YOU ARE DOING
 ---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
+----
+----
+---- If you are a developer and want to change something, consider writing a plugin instead:
+---- https://easyadmin.readthedocs.io/en/latest/plugins/
+----
 ------------------------------------
 ------------------------------------
 
