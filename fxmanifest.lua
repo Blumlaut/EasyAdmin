@@ -38,8 +38,7 @@ files {
 }
 
 dependencies {
-    'yarn',
-    'webpack'
+    'yarn'
 }
 
 convar_category 'EasyAdmin' {
