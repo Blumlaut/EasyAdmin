@@ -25,8 +25,7 @@ client_scripts {
 	"dependencies/NativeUI.lua",
 	"dependencies/NativeUI-rdr3.lua",
 	"dependencies/Controls.lua",
-	"client/admin_client.lua",
-	"client/gui_c.lua",
+	"client/*.lua",
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_client.lua"
 }
