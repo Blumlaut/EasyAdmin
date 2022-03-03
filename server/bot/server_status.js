@@ -26,7 +26,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             buttonRow.addComponents(button)
         }
 
-        embed.addField('Server Name', `**${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}** ${GetConvar('sv_projectDesc', '')}`)
+        embed.addField('Server Name', `\`\`\`${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))} ${GetConvar('sv_projectDesc', '')}\`\`\``)
 
         /* this is broken, no idea why.
         var icon = GetConvar('sv_icon', '')
@@ -47,26 +47,26 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             }
         }
 
-        embed.addField('Players Online', `${getPlayers().length}/${GetConvar('sv_maxClients', '')}`, true)
-        embed.addField('Admins Online', `${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}`, true)
-        embed.addField('Reports', `${activeReports} (${claimedReports} claimed)`, true)
+        embed.addField('Players Online', `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, true)
+        embed.addField('Admins Online', `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, true)
+        embed.addField('Reports', `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, true)
 
-        embed.addField('Active Vehicles', `${GetAllVehicles().length}`, true)
-        embed.addField('Active Peds', `${GetAllPeds().length}`, true)
-        embed.addField('Active Objects', `${GetAllObjects().length}`, true)
+        embed.addField('Active Vehicles', `\`\`\`${GetAllVehicles().length}\`\`\``, true)
+        embed.addField('Active Peds', `\`\`\`${GetAllPeds().length}\`\`\``, true)
+        embed.addField('Active Objects', `\`\`\`${GetAllObjects().length}\`\`\``, true)
 
         try {
             let serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
             let response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
             response = JSON.parse(response).Data
-            embed.addField(`Upvotes`, `${response.upvotePower} Upvotes, ${response.burstPower} Bursts`, false)
+            embed.addField(`Upvotes`, `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, false)
             
             embed.setAuthor({name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
 
         } catch (error) {
             console.error(error)
         }
-        embed.addField('Uptime', prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0}), false)
+        embed.addField('Uptime', `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, false)
         
 
 
