@@ -34,7 +34,7 @@ Take a look at our Documentation [here](https://easyadmin.readthedocs.io/), we E
 
 
 Graphic Design by [Team Snaily](https://teamsnaily.com)
-<a href="https://gamestore.teamsnaily.com/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
+<a href="https://teamsnaily.com/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
 
 
 Supported by:
