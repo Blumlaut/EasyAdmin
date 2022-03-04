@@ -100,6 +100,7 @@ RegisterCommand('easyadmin', function(source, args)
 	end)
 end)
 
+
 Citizen.CreateThread(function()
 	if CompendiumHorseObserved then -- https://www.youtube.com/watch?v=r7qovpFAGrQ
 		RedM = true
@@ -169,6 +170,30 @@ reportMenus = {}
 local easterChance = math.random(0,101)
 local overrideEgg, currentEgg
 
+
+
+-- note: we dont support dui banner and dui logo at the same time yet.
+local eastereggs = {
+	pipes = {
+		duibanner = "http://furfag.de/eggs/pipes",
+		banner = false,
+		logo = "dependencies/images/banner-logo.png",
+	},
+	nom = {
+		duilogo = "http://furfag.de/eggs/nom",
+		banner = "dependencies/images/banner-gradient.png",
+		logo = false,
+	},
+	pride = {
+		banner = "dependencies/images/banner-gradient.png",
+		logo = "dependencies/images/pride.png",
+	},
+	ukraine = {
+		banner = "dependencies/images/banner-gradient.png",
+		logo = "dependencies/images/ukraine.png"
+	}
+}
+
 function generateTextures()
 	if not RedM and not txd or (overrideEgg ~= currentEgg) then
 		if dui then
@@ -177,29 +202,39 @@ function generateTextures()
 		end
 		txd = CreateRuntimeTxd("easyadmin")
 		if ((overrideEgg == nil) and easterChance == 100) or (overrideEgg or overrideEgg == false) then
-			local chance = 0
+			local chance = overrideEgg
 			if ((overrideEgg == nil) and easterChance == 100) then
-				chance = math.random(1,3)
+				-- dirty function to select random easter egg
+				local tbl = {}
+				for k,v in pairs(eastereggs) do
+					table.insert(tbl, k)
+				end
+
+				chance = tbl[math.random( #tbl )] 
 			end
-			if overrideEgg == "pipes" or chance == 1 then
-				dui = CreateDui("http://furfag.de/eggs/pipes", 512,128)	
-				duihandle = GetDuiHandle(dui)
-				Wait(800)
-				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
-				CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
-				currentEgg = "pipes"
-			elseif overrideEgg == "nom" or chance == 2 then
-				dui = CreateDui("http://furfag.de/eggs/nom", 512,128)	
-				duihandle = GetDuiHandle(dui)
-				Wait(500)
-				CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
-				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
-				currentEgg = "nom"
-			elseif overrideEgg == "pride" or chance == 3 then
-				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/pride.png')
-				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
-				currentEgg = "pride"
-			elseif overrideEgg == false then
+
+			local egg = eastereggs[chance]
+			local dui, duihandle
+			if egg then
+				if egg.duibanner then
+					dui = CreateDui(egg.duibanner, 512,128)	
+					duihandle = GetDuiHandle(dui)
+					CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
+					Wait(800)
+				elseif egg.duilogo then
+					dui = CreateDui(egg.duilogo, 512,128)	
+					duihandle = GetDuiHandle(dui)
+					CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
+					Wait(800)
+				end
+				if egg.logo then
+					CreateRuntimeTextureFromImage(txd, 'logo', egg.logo)
+				end
+				if egg.banner then
+					CreateRuntimeTextureFromImage(txd, 'banner-gradient', egg.banner)
+				end
+				currentEgg = chance
+			else
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
 				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
 				currentEgg = false
@@ -1633,7 +1668,10 @@ function GenerateMenu() -- this is a big ass function
 
 
 	if not RedM then
-		local sl = {"none","pipes", "nom", "pride"}
+		local sl = {"none"}
+		for k,v in pairs(eastereggs) do
+			table.insert(sl, k)
+		end
 		local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
 		settingsMenu:AddItem(thisItem)
 		thisItem.OnListSelected = function(sender, item, index)
