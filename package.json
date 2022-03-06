@@ -5,9 +5,11 @@
     "ascii-table": "0.0.9",
     "discord-api-types": "0.27.3",
     "discord.js": "13.6.0",
+    "erlpack": "0.1.4",
     "fs": "0.0.1-security",
     "juration": "0.1.1",
     "pretty-ms": "7.0.1",
-    "sprintf-js": "1.1.2"
+    "sprintf-js": "1.1.2",
+    "zlib-sync": "0.1.7"
   }
 }
