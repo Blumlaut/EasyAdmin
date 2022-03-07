@@ -56,7 +56,7 @@ if (GetConvar("ea_botToken", "") != "") {
 
     async function RegisterClientCommands(clientId,guildId) {
         const { REST } = require('@discordjs/rest');
-        const { Routes } = require('discord-api-types/v9');
+        const { Routes } = require('discord-api-types/v10');
         const fs = require('fs');
     
         const commands = [];
@@ -69,7 +69,7 @@ if (GetConvar("ea_botToken", "") != "") {
             client.commands.set(command.data.name, command);
         }
         
-        const rest = new REST({ version: '9' }).setToken(GetConvar("ea_botToken", ""));
+        const rest = new REST({ version: '10' }).setToken(GetConvar("ea_botToken", ""));
         
         rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
         .catch(console.error);
