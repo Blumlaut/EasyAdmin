@@ -216,12 +216,12 @@ function generateTextures()
 			local egg = eastereggs[chance]
 			if egg then
 				if egg.duibanner then
-					local dui = CreateDui(egg.duibanner, 512,128)	
+					dui = CreateDui(egg.duibanner, 512,128)	
 					local duihandle = GetDuiHandle(dui)
 					CreateRuntimeTextureFromDuiHandle(txd, 'banner-gradient', duihandle)
 					Wait(800)
 				elseif egg.duilogo then
-					local dui = CreateDui(egg.duilogo, 512,128)	
+					dui = CreateDui(egg.duilogo, 512,128)	
 					local duihandle = GetDuiHandle(dui)
 					CreateRuntimeTextureFromDuiHandle(txd, 'logo', duihandle)
 					Wait(800)
