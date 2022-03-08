@@ -16,13 +16,13 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
         return
     }
 
-    const embed = new Discord.MessageEmbed()
-    .setColor((colour || 65280))
+    const embed = new Embed()
+    .setColor(Util.resolveColor(colour || 65280))
     if (timestamp != false) {
         embed.setTimestamp()
     }
     if (message) {
-        embed.addField(`**${(title || "EasyAdmin")}**`, message)
+        embed.addFields({name: `**${(title || "EasyAdmin")}**`, value: message})
     }
     if (description) {
         embed.setDescription(description)

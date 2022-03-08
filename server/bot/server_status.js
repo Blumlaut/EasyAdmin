@@ -6,8 +6,8 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
 
     async function getServerStatus(why) {
-        var embed = new Discord.MessageEmbed()
-            .setColor((65280))
+        var embed = new Embed()
+            .setColor(Util.resolveColor(65280))
             .setTimestamp()
 
 
@@ -16,17 +16,17 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
         if(joinURL.indexOf('cfx.re' != -1)) {
             embed.setURL(`https://${joinURL}`)
-            buttonRow = new MessageActionRow()
-            var button = new MessageButton()
+            buttonRow = new ActionRow()
+            var button = new ButtonComponent()
                 .setURL(`https://${joinURL}`)
                 .setLabel(`Join Server`)
-                .setStyle('LINK')
+                .setStyle(ButtonStyle.Link)
 
 
             buttonRow.addComponents(button)
         }
 
-        embed.addField('Server Name', `\`\`\`${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))} ${GetConvar('sv_projectDesc', '')}\`\`\``)
+        embed.addFields({name: 'Server Name', value: `\`\`\`${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))} ${GetConvar('sv_projectDesc', '')}\`\`\``})
 
         /* this is broken, no idea why.
         var icon = GetConvar('sv_icon', '')
@@ -47,31 +47,32 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             }
         }
 
-        embed.addField('Players Online', `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, true)
-        embed.addField('Admins Online', `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, true)
-        embed.addField('Reports', `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, true)
+        // TODO: move this into a single addFields call
+        embed.addFields({ name: 'Players Online', value: `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, inline: true})
+        embed.addFields({ name: 'Admins Online', value: `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, inline: true})
+        embed.addFields({ name: 'Reports', value: `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, inline: true})
 
-        embed.addField('Active Vehicles', `\`\`\`${GetAllVehicles().length}\`\`\``, true)
-        embed.addField('Active Peds', `\`\`\`${GetAllPeds().length}\`\`\``, true)
-        embed.addField('Active Objects', `\`\`\`${GetAllObjects().length}\`\`\``, true)
+        embed.addFields({ name: 'Active Vehicles', value: `\`\`\`${GetAllVehicles().length}\`\`\``, inline: true})
+        embed.addFields({ name: 'Active Peds', value: `\`\`\`${GetAllPeds().length}\`\`\``, inline: true})
+        embed.addFields({ name: 'Active Objects', value: `\`\`\`${GetAllObjects().length}\`\`\``, inline: true})
 
         try {
             let serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
             let response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
             response = JSON.parse(response).Data
-            embed.addField(`Upvotes`, `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, false)
+            embed.addFields({ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false})
             
-            embed.setAuthor({name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
+            embed.setAuthor({ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
 
         } catch (error) {
             console.error(error)
         }
-        embed.addField('Uptime', `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, false)
+        embed.addFields({ name: 'Uptime', value: `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, inline: false})
         
 
 
         if (why) {
-            embed.addField('Last Update', why)
+            embed.addFields({name: 'Last Update', value: why})
         }
 
         if (buttonRow) {

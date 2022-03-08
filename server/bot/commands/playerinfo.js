@@ -39,30 +39,30 @@ module.exports = {
 		  }
 		
 
-		  var embed = new Discord.MessageEmbed()
+		  var embed = new Embed()
 		  .setColor((65280))
 		  .setTimestamp()
 
-		  embed.addField('Player Info', `Player infos for **${user.name}**`)
-		  embed.addField('Discord Account', `\`\`\`${discordAccount}\`\`\``, true)
-		  embed.addField('Admin', `\`\`\`${exports[EasyAdmin].IsPlayerAdmin(user.id)}\`\`\``, true)
-		  embed.addField('Warnings', `\`\`\`${exports[EasyAdmin].getPlayerWarnings(user.id)}\`\`\``, true)
+		  embed.addFields({ name: 'Player Info', value: `Player infos for **${user.name}**`})
+		  embed.addFields({ name: 'Discord Account', value: `\`\`\`${discordAccount}\`\`\``, inline: true})
+		  embed.addFields({ name: 'Admin', value: `\`\`\`${exports[EasyAdmin].IsPlayerAdmin(user.id)}\`\`\``, inline: true})
+		  embed.addFields({ name: 'Warnings', value: `\`\`\`${exports[EasyAdmin].getPlayerWarnings(user.id)}\`\`\``, inline: true})
 
 
 
 		  if (!user.dropped) {
 			var playerPed = GetPlayerPed(user.id)
-			embed.addField('Health', `\`\`\`${GetEntityHealth(playerPed)}\`\`\``, true)
-			embed.addField('Armour', `\`\`\`${GetPedArmour(playerPed)}\`\`\``, true)
+			embed.addFields({ name: 'Health', value: `\`\`\`${GetEntityHealth(playerPed)}\`\`\``, inline: true})
+			embed.addFields({ name: 'Armour', value: `\`\`\`${GetPedArmour(playerPed)}\`\`\``, inline: true})
 			if (GetPlayerInvincible(user.id)) {
-				embed.addField('Godmode', '\`\`\`ON\`\`\`', true)
+				embed.addFields({ name: 'Godmode', value: '\`\`\`ON\`\`\`', inline: true})
 			}
 		  } else {
-			  embed.addField('Status', `\`\`\`Player Disconnected\`\`\``)
+			  embed.addFields({ name: 'Status', value: `\`\`\`Player Disconnected\`\`\``})
 		  }
 
 
-		  embed.addField('Identifiers', `\`\`\`${table}\`\`\``)
+		  embed.addFields({ name: 'Identifiers', value: `\`\`\`${table}\`\`\``})
         
 		  await interaction.reply({ embeds: [embed]});
 	},

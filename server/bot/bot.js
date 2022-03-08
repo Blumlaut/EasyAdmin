@@ -6,18 +6,17 @@ process.on('unhandledRejection', function(err) {
     console.log('Caught exception: ', err.stack);
 });
 
-Discord = require("discord.js")
 AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
 const prettyMilliseconds = require('pretty-ms');
-const { MessageAttachment, Collection, Intents, MessageActionRow, MessageButton, MessageSelectMenu, Guild } = require('discord.js');
+const { Client, Embed, MessageAttachment, Collection, GatewayIntentBits, Partials, ButtonStyle,ActionRow, ButtonComponent, SelectMenuComponent, Guild, Util } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 
-client = new Discord.Client({
-    partials: ['GUILD_MEMBER', 'USER', 'MESSAGE', 'CHANNEL', 'REACTION'],
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS]
+client = new Client({
+    partials: [Partials.GuildMember, Partials.User, Partials.Message, Partials.Channel, Partials.Reaction],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
 });
 client.commands = new Collection();
 
@@ -75,7 +74,7 @@ if (GetConvar("ea_botToken", "") != "") {
         .catch(console.error);
 
         client.on('interactionCreate', async interaction => {
-            if (!interaction.isCommand()) return;
+            if (!interaction.isChatInputCommand()) return;
         
             const command = client.commands.get(interaction.commandName);
         
