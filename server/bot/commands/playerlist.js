@@ -22,8 +22,6 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
         selector.setDisabled(true)
     }
     row.addComponents(selector)
-    console.log(row)
-
 	return row
     
 }
