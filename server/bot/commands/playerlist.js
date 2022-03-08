@@ -12,16 +12,17 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
     selector.setPlaceholder(`Page ${curPage+1}/${fieldLength}`)
 
     for (var i = 0; i < fieldLength; i++) {
-        selector.addOptions([
+        selector.addOptions(
             {
                 label: `Page ${i+1}/${(fieldLength)}`,
                 value: `${i}`,
-            }])
+            })
     }
     if (!idFields[1]) {
         selector.setDisabled(true)
     }
     row.addComponents(selector)
+    console.log(row)
 
 	return row
     
