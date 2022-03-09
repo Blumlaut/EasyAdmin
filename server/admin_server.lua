@@ -504,7 +504,7 @@ Citizen.CreateThread(function()
 		
 		cachePlayer(source) -- this will do nothing if player is already cached.
 		
-		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+15 > os.time() then
+		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+10 > os.time() then
 			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..CachedPlayers[source].lastPermRequest+15-os.time().." seconds left.", 3)
 			return
 		end
