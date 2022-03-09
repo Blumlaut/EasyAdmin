@@ -48,7 +48,7 @@ function SendWebhookMessage(webhook,message,feature,colour,title,image)
     end
     
     if GetConvar("ea_botLogChannel", "") ~= "" then
-        exports[GetCurrentResourceName()]:LogDiscordMessage(message)
+        exports[GetCurrentResourceName()]:LogDiscordMessage(message, feature)
         return
     end
 

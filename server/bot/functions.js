@@ -1,7 +1,7 @@
 // this file contains util functions the bot uses
-async function LogDiscordMessage() {
+async function LogDiscordMessage(text, feature) {
     if (GetConvar("ea_botLogChannel", "") == "") {return}
-    var text = Array.from(arguments).toString();
+    if (feature == "report" || feature == "calladmin") {return} // we dont care about reports, these get handled in reports.js
 
     const embed = await prepareGenericEmbed(text)
     
@@ -79,6 +79,9 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
 
 async function getDiscordAccountFromPlayer(user) {
     var discordAccount = false
+    if (!isNaN(user)) {
+        user = await exports[EasyAdmin].getCachedPlayer(user)
+    }
 
     for (let identifier of user.identifiers) {
         if (identifier.search("discord:") != -1) {

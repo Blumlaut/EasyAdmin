@@ -1059,6 +1059,9 @@ Citizen.CreateThread(function()
 		end
 		t.id = #reports+1
 		reports[t.id] = t
+		if GetConvar("ea_botLogChannel", "") ~= "" then
+			exports[GetCurrentResourceName()]:logNewReport(t)
+		end
 		for i,_ in pairs(OnlineAdmins) do 
 			TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, t)
 		end
