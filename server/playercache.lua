@@ -54,6 +54,7 @@ end
 exports('getCachedPlayers', getCachedPlayers)
 
 function getCachedPlayer(id)
+	cachePlayer(tonumber(id))
     return CachedPlayers[tonumber(id)]
 end
 exports('getCachedPlayer', getCachedPlayer)
