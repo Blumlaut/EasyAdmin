@@ -508,6 +508,10 @@ Citizen.CreateThread(function()
 			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..CachedPlayers[source].lastPermRequest+15-os.time().." seconds left.", 3)
 			return
 		end
+
+		if GetConvar("ea_botToken", "") ~= "" then
+			exports[GetCurrentResourceName()]:syncDiscordRoles(source)
+		end
 		CachedPlayers[source].lastPermRequest = os.time()
 		
 		local identifiers = getAllPlayerIdentifiers(source)
