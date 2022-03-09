@@ -96,17 +96,16 @@ async function getDiscordAccountFromPlayer(user) {
 async function getPlayerFromDiscordAccount(user) {
     var id = user.id
 
-    var allPlayers = await exports[EasyAdmin].getCachedPlayers()
+    var players = await exports[EasyAdmin].getCachedPlayers()
 
-    Object.keys(allPlayers).forEach(function(key) {
-        var player = allPlayers[key]
-
+    for (let [index, player] of Object.values(players).entries()) {
         for (let identifier of player.identifiers) {
             if (identifier == `discord:${id}`) {
                 return player
             }
 		}
-    })
+    }
+
     return false
 
 }
