@@ -100,3 +100,5 @@ onNet("EasyAdmin:RemoveReport", async function(report) {
         reports[reportId] = undefined
     }
 })
+
+// todo: close similar reports
