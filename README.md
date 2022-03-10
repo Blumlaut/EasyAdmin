@@ -15,6 +15,7 @@ EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is fe
 - Translation in 7 Languages (Community Driven)
 - Actively Supported & Updated since 2017
 - Plugin Support 
+- Fully integrated Discord Bot, including Discord ACE Permissions, Chat Bridge, Commands and Logs
 
 ![image](https://user-images.githubusercontent.com/13604413/126916981-1680e5ac-e024-467b-aad3-a5a9658449e0.png)
 

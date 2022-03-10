@@ -1,7 +1,7 @@
 // this file contains util functions the bot uses
-async function LogDiscordMessage() {
+async function LogDiscordMessage(text, feature) {
     if (GetConvar("ea_botLogChannel", "") == "") {return}
-    var text = Array.from(arguments).toString();
+    if (feature == "report" || feature == "calladmin") {return} // we dont care about reports, these get handled in reports.js
 
     const embed = await prepareGenericEmbed(text)
     
@@ -16,13 +16,13 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
         return
     }
 
-    const embed = new Discord.MessageEmbed()
-    .setColor((colour || 65280))
+    const embed = new Embed()
+    .setColor(Util.resolveColor(colour || 65280))
     if (timestamp != false) {
         embed.setTimestamp()
     }
     if (message) {
-        embed.addField(`**${(title || "EasyAdmin")}**`, message)
+        embed.addFields({name: `**${(title || "EasyAdmin")}**`, value: message})
     }
     if (description) {
         embed.setDescription(description)
@@ -79,6 +79,9 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
 
 async function getDiscordAccountFromPlayer(user) {
     var discordAccount = false
+    if (!isNaN(user)) {
+        user = await exports[EasyAdmin].getCachedPlayer(user)
+    }
 
     for (let identifier of user.identifiers) {
         if (identifier.search("discord:") != -1) {
@@ -87,5 +90,22 @@ async function getDiscordAccountFromPlayer(user) {
     }
 
     return discordAccount
+}
+
+
+async function getPlayerFromDiscordAccount(user) {
+    var id = user.id
+
+    var players = await exports[EasyAdmin].getCachedPlayers()
+
+    for (let [index, player] of Object.values(players).entries()) {
+        for (let identifier of player.identifiers) {
+            if (identifier == `discord:${id}`) {
+                return player
+            }
+		}
+    }
+
+    return false
 
 }

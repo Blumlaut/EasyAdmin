@@ -504,9 +504,13 @@ Citizen.CreateThread(function()
 		
 		cachePlayer(source) -- this will do nothing if player is already cached.
 		
-		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+15 > os.time() then
+		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+10 > os.time() then
 			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..CachedPlayers[source].lastPermRequest+15-os.time().." seconds left.", 3)
 			return
+		end
+
+		if GetConvar("ea_botToken", "") ~= "" then
+			exports[GetCurrentResourceName()]:syncDiscordRoles(source)
 		end
 		CachedPlayers[source].lastPermRequest = os.time()
 		
@@ -1059,6 +1063,9 @@ Citizen.CreateThread(function()
 		end
 		t.id = #reports+1
 		reports[t.id] = t
+		if GetConvar("ea_botLogChannel", "") ~= "" then
+			exports[GetCurrentResourceName()]:logNewReport(t)
+		end
 		for i,_ in pairs(OnlineAdmins) do 
 			TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, t)
 		end

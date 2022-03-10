@@ -2,9 +2,9 @@
 
 
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {
-	const row = new MessageActionRow()
+	const row = new ActionRow()
 
-    var selector = new MessageSelectMenu()
+    var selector = new SelectMenuComponent()
     
     var fieldLength = idFields.length
     if (fieldLength == 0) {fieldLength = 1}
@@ -12,17 +12,16 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
     selector.setPlaceholder(`Page ${curPage+1}/${fieldLength}`)
 
     for (var i = 0; i < fieldLength; i++) {
-        selector.addOptions([
+        selector.addOptions(
             {
                 label: `Page ${i+1}/${(fieldLength)}`,
                 value: `${i}`,
-            }])
+            })
     }
     if (!idFields[1]) {
         selector.setDisabled(true)
     }
     row.addComponents(selector)
-
 	return row
     
 }
@@ -58,7 +57,7 @@ module.exports = {
         var players = await exports[EasyAdmin].getCachedPlayers()
         var embedTimestamp = Date.now();
 
-        var embed = new Discord.MessageEmbed()
+        var embed = new Embed()
             .setColor((65280))
             .setTimestamp()
 
@@ -114,7 +113,7 @@ module.exports = {
                 });
 
                 collector.on('collect', async i => {
-                    const embed = new Discord.MessageEmbed()
+                    const embed = new Embed()
                         .setColor((65280))
                         .setTimestamp()
                     if (i.customId === `pageSelector${embedTimestamp}`) {
@@ -133,10 +132,10 @@ module.exports = {
                 });
             }
         } else {
-            embed = new Discord.MessageEmbed()
+            embed = new Embed()
                 .setColor((65280))
                 .setTimestamp()
-                .addField('Player List', "There are no players on the server!")
+                .addFields({name: 'Player List', value: "There are no players on the server!"})
 
 			row = generatePaginatorRow(idFields, 0, 0)
         }
