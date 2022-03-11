@@ -22,6 +22,6 @@ module.exports = {
 
         ExecuteCommand(query)
 
-        interaction.reply(`\`${query}\` has been executed`)
+        interaction.reply(`\`${query}\` has been executed and saved.`)
 	},
 };
