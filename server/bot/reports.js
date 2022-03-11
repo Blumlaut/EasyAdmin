@@ -77,24 +77,25 @@ async function logNewReport(report) {
     */
 
 }
-exports('logNewReport', logNewReport)
 
 
-onNet("EasyAdmin:ClaimReport", async function(reportId) {
-    var src = source
-    if (await exports[EasyAdmin].DoesPlayerHavePermission(src, "player.reports.claim")) {
-        if (!reports[reportId].claimed) {
-            reports[reportId].claimed = src
-            reports[reportId].claimedName = exports[EasyAdmin].getName(src,true)
-            var reportMessage = generateReportEmbed(reports[reportId], true)
-            reports[reportId].msg.edit(reportMessage)
-        }
+on('EasyAdmin:reportAdded', async function(reportdata) {
+    logNewReport(reportdata)
+})
+
+on('EasyAdmin:reportClaimed', async function (reportdata) {
+    var reportId = reportdata.id
+    if(reports[reportId]) {
+        reports[reportId].claimed = reportdata.claimed
+        reports[reportId].claimedName = reportdata.claimedName
+        let reportMessage = generateReportEmbed(reports[reportId], true)
+        reports[reportId].msg.edit(reportMessage)
     }
 })
 
-onNet("EasyAdmin:RemoveReport", async function(report) {
-    if (await exports[EasyAdmin].DoesPlayerHavePermission(source, "player.reports.process")) {
-        var reportId = report.id
+on("EasyAdmin:reportRemoved", async function(reportdata) {
+    var reportId = reportdata.id
+    if(reports[reportId]) {
         var reportMessage = generateReportEmbed(reports[reportId], true, true)
         reports[reportId].msg.edit(reportMessage)
         reports[reportId] = undefined
