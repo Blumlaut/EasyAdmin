@@ -22,6 +22,6 @@ module.exports = {
 
         ExecuteCommand(query)
 
-        interaction.reply(`Added \`${perm}\` to \`${group}\``)
+        interaction.reply(`\`${query}\` has been executed`)
 	},
 };

@@ -22,6 +22,6 @@ module.exports = {
 
         ExecuteCommand(query)
 
-        interaction.reply(`Added <@${user}> to \`group.${groupName}\``)
+        interaction.reply(`\`${query}\` has been executed`)
 	},
 };
