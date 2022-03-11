@@ -10,14 +10,14 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('group')
-                .setDescription('the group, for example, admin, "group." is prefixed automatically!')
+                .setDescription('the group, for example, group.admin')
                 .setRequired(true)),
 	async execute(interaction, exports) {
 		const user = interaction.options.getUser('user').id
         const groupName = interaction.options.getString('group')
 
 
-        var query = `add_principal identifier.discord:${user} group.${groupName}`
+        var query = `add_principal identifier.discord:${user} ${groupName}`
         exports[EasyAdmin].AddToFile("easyadmin_permissions.cfg", query)
 
         ExecuteCommand(query)
