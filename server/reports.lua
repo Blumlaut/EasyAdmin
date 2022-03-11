@@ -159,19 +159,19 @@ Citizen.CreateThread(function()
 				for admin,_ in pairs(OnlineAdmins) do 
 					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
 				end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
+                TriggerEvent("EasyAdmin:reportRemoved", report)
 				reports[i] = nil
 			elseif (reporter and reporter == report.reporter) then
 				for admin,_ in pairs(OnlineAdmins) do 
 					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
 				end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
+                TriggerEvent("EasyAdmin:reportRemoved", report)
 				reports[i] = nil
 			elseif (reported and reported == report.reported) then
 				for admin,_ in pairs(OnlineAdmins) do 
 					TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
 				end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
+                TriggerEvent("EasyAdmin:reportRemoved", report)
 				reports[i] = nil
 			end
 		end
