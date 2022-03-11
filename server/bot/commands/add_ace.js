@@ -17,7 +17,7 @@ module.exports = {
         const perm = interaction.options.getString('permission')
 
 
-        var query = `add_ace group.${group} ${perm} allow`
+        var query = `add_ace ${group} ${perm} allow`
         exports[EasyAdmin].AddToFile("easyadmin_permissions.cfg", query)
 
         ExecuteCommand(query)
