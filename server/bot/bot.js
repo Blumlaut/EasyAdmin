@@ -80,7 +80,7 @@ if (GetConvar("ea_botToken", "") != "") {
         
             if (!command) return;
         
-            if (!await DoesGuildMemberHavePermission(interaction.member, `bot.${interaction.commandName}`)) {
+            if (!await DoesGuildMemberHavePermission(interaction.member, `bot.${interaction.commandName}`) && !(command.data.name == "refreshperms")) {
                 await interaction.reply({ content: 'You don\'t have permission to run this command!', ephemeral: true });
                 return false
             }
