@@ -218,15 +218,8 @@ end
 
 
 AddEventHandler('playerDropped', function (reason)
-	if CachedPlayers[source] then
-		CachedPlayers[source].droppedTime = os.time()
-		CachedPlayers[source].dropped = true
-	end
 	if OnlineAdmins[source] then
 		OnlineAdmins[source] = nil
-	end
-	if cooldowns[source] then
-		cooldowns[source] = nil
 	end
 	if FrozenPlayers[source] then
 		FrozenPlayers[source] = nil
@@ -1680,7 +1673,6 @@ OnlineAdmins = {} -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
 MessageShortcuts = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {} -- DO NOT TOUCH THIS
-cooldowns = {} -- DO NOT TOUCH THIS
 reports = {} -- DO NOT TOUCH THIS
 FrozenPlayers = {}
 -- DO NOT TOUCH THESE

@@ -4,8 +4,12 @@ AddEventHandler('playerDropped', function (reason)
             removeReport(report.id)
         end
     end
+    if cooldowns[source] then
+		cooldowns[source] = nil
+	end
 end)
 
+cooldowns = {} -- DO NOT TOUCH THIS
 
 Citizen.CreateThread(function()
     

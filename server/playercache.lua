@@ -58,3 +58,10 @@ function getCachedPlayer(id)
     return CachedPlayers[tonumber(id)]
 end
 exports('getCachedPlayer', getCachedPlayer)
+
+AddEventHandler('playerDropped', function (reason)
+	if CachedPlayers[source] then
+		CachedPlayers[source].droppedTime = os.time()
+		CachedPlayers[source].dropped = true
+	end
+end)
