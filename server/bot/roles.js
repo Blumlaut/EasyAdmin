@@ -9,11 +9,8 @@ if (GetConvar("ea_botToken", "") != "") {
         try {
             var botGuild = await client.guilds.cache.get(guild)
             var user = await getDiscordAccountFromPlayer(src)
-            if (botGuild.members.cache.find(user.id)) {
-                member = await botGuild.members.fetch(user.id)
-            }
+            member = await botGuild.members.fetch(user.id)
         } catch (error) {
-            console.error(error)
             return
         }
 
