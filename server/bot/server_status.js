@@ -77,7 +77,6 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             embed.addFields({name: 'Last Update', value: why})
         }
 
-        console.log("testing")
         if (buttonRow) {
             return {embeds: [embed], components: [buttonRow] }
         } else {
