@@ -55,16 +55,19 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
         embed.addFields({ name: 'Active Peds', value: `\`\`\`${GetAllPeds().length}\`\`\``, inline: true})
         embed.addFields({ name: 'Active Objects', value: `\`\`\`${GetAllObjects().length}\`\`\``, inline: true})
 
-        try {
-            let serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
-            let response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
-            response = JSON.parse(response).Data
-            embed.addFields({ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false})
-            
-            embed.setAuthor({ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
 
-        } catch (error) {
-            console.error(error)
+        if (joinURL != '') {
+            try {
+                let serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
+                let response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
+                response = JSON.parse(response).Data
+                embed.addFields({ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false})
+                
+                embed.setAuthor({ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
+
+            } catch (error) {
+                console.error(error)
+            }
         }
         embed.addFields({ name: 'Uptime', value: `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, inline: false})
         
@@ -74,6 +77,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
             embed.addFields({name: 'Last Update', value: why})
         }
 
+        console.log("testing")
         if (buttonRow) {
             return {embeds: [embed], components: [buttonRow] }
         } else {
