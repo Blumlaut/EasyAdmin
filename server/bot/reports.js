@@ -4,13 +4,13 @@ var reports = []
 function generateReportEmbed(report, disabled, closed) {
     var reportId = report.id
 
-    var embed = new Embed()
+    var embed = new EmbedBuilder()
     .setTimestamp()
 
     if (closed) {
-        embed.setColor((808080))
+        embed.setColor(808080)
     } else {
-        embed.setColor((65280))
+        embed.setColor(65280)
     }
 
     if (report.type == 1) {

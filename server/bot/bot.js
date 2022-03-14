@@ -10,7 +10,7 @@ AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
 const prettyMilliseconds = require('pretty-ms');
-const { Client, Embed, MessageAttachment, Collection, GatewayIntentBits, Partials, ButtonStyle,ActionRow, ButtonComponent, SelectMenuComponent, Guild, Util } = require('discord.js');
+const { Client, EmbedBuilder, MessageAttachment, Collection, GatewayIntentBits, Partials, ButtonStyle, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, Guild, Util } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 

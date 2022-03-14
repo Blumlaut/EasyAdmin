@@ -39,7 +39,7 @@ module.exports = {
 		  }
 		
 
-		  var embed = new Embed()
+		  var embed = new EmbedBuilder()
 		  .setColor((65280))
 		  .setTimestamp()
 

@@ -1,4 +1,3 @@
-
 if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") != "") {
     var statusMessage = undefined
     var botStatusChannel = GetConvar('ea_botStatusChannel', '')
@@ -6,8 +5,8 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
 
     async function getServerStatus(why) {
-        var embed = new Embed()
-            .setColor(Util.resolveColor(65280))
+        var embed = new EmbedBuilder()
+            .setColor(65280)
             .setTimestamp()
 
 
@@ -16,8 +15,8 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
         if(joinURL.indexOf('cfx.re' != -1)) {
             embed.setURL(`https://${joinURL}`)
-            buttonRow = new ActionRow()
-            var button = new ButtonComponent()
+            buttonRow = new ActionRowBuilder()
+            var button = new ButtonBuilder()
                 .setURL(`https://${joinURL}`)
                 .setLabel(`Join Server`)
                 .setStyle(ButtonStyle.Link)

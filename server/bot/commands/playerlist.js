@@ -2,9 +2,9 @@
 
 
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {
-	const row = new ActionRow()
+	const row = new ActionRowBuilder()
 
-    var selector = new SelectMenuComponent()
+    var selector = new SelectMenuBuilder()
     
     var fieldLength = idFields.length
     if (fieldLength == 0) {fieldLength = 1}
@@ -57,7 +57,7 @@ module.exports = {
         var players = await exports[EasyAdmin].getCachedPlayers()
         var embedTimestamp = Date.now();
 
-        var embed = new Embed()
+        var embed = new EmbedBuilder()
             .setColor((65280))
             .setTimestamp()
 
@@ -113,8 +113,8 @@ module.exports = {
                 });
 
                 collector.on('collect', async i => {
-                    const embed = new Embed()
-                        .setColor((65280))
+                    const embed = new EmbedBuilder()
+                        .setColor(65280)
                         .setTimestamp()
                     if (i.customId === `pageSelector${embedTimestamp}`) {
                         curPage = parseInt(i.values[0])
@@ -132,7 +132,7 @@ module.exports = {
                 });
             }
         } else {
-            embed = new Embed()
+            embed = new EmbedBuilder()
                 .setColor((65280))
                 .setTimestamp()
                 .addFields({name: 'Player List', value: "There are no players on the server!"})
