@@ -13,7 +13,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
         var joinURL = GetConvar('web_baseUrl', '')
         var buttonRow = false
 
-        if(joinURL.indexOf('cfx.re' != -1)) {
+        if(joinURL != '' && joinURL.indexOf('cfx.re' != -1)) {
             embed.setURL(`https://${joinURL}`)
             buttonRow = new ActionRowBuilder()
             var button = new ButtonBuilder()
