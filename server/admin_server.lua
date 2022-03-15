@@ -488,6 +488,7 @@ Citizen.CreateThread(function()
 	
 	
 	RegisterServerEvent('EasyAdmin:amiadmin', function()
+		local source = source 
 		
 		cachePlayer(source) -- this will do nothing if player is already cached.
 		
