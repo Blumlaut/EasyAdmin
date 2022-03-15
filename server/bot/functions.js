@@ -5,7 +5,11 @@ async function LogDiscordMessage(text, feature) {
 
     const embed = await prepareGenericEmbed(text)
     
-    client.channels.cache.get(GetConvar("ea_botLogChannel", "")).send({ embeds: [embed] })
+    client.channels.cache.get(GetConvar("ea_botLogChannel", "")).send({ embeds: [embed] }).catch((error) => {
+        console.error("^7Failed to log message, please make sure you gave the bot permission to write in the log channel!\n\n")
+        console.error(error)
+        return
+    })
 }
 exports('LogDiscordMessage', LogDiscordMessage)
 

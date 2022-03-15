@@ -92,7 +92,11 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
         if (!statusMessage) {
             var messagesToDelete = []
-            var messages = await channel.messages.fetch({ limit: 10 })
+            var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
+                console.error("^7Failed to configure server status channel, please make sure you gave the bot permission to write in the channel!\n\n")
+                console.error(error)
+                return
+            })
             for (var message of messages.values()) {
                 if (messages.size == 1 && message.author.id == client.user.id) {
                     statusMessage = message
