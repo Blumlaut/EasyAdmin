@@ -24,8 +24,13 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
 
             buttonRow.addComponents(button)
         }
+        var serverName = GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))
+        if (serverName.length > 255) {
+            serverName = serverName.substring(0,255)
+        }
+        serverName = serverName.replace(/\^[0-9]/g, '')
 
-        embed.addFields({name: 'Server Name', value: `\`\`\`${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))} ${GetConvar('sv_projectDesc', '')}\`\`\``})
+        embed.addFields({name: 'Server Name', value: `\`\`\`${serverName}\`\`\``})
 
         /* this is broken, no idea why.
         var icon = GetConvar('sv_icon', '')
@@ -63,7 +68,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botStatusChannel', "") !
                 response = JSON.parse(response).Data
                 embed.addFields({ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false})
                 
-                embed.setAuthor({ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
+                embed.setAuthor({ name: `${serverName}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
 
             } catch (error) {
                 console.error(error)
