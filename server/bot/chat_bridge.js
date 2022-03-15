@@ -52,7 +52,7 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar('ea_botChatBridge', "") != "
                 userInfo.iconURL = undefined // dont send anything to discord, assume something went wrong
             }
 
-            var embed = await prepareGenericEmbed(undefined, undefined, "5a5a5a", undefined, undefined, userInfo, outMessage.args[1], false)
+            var embed = await prepareGenericEmbed(undefined, undefined, 55555, undefined, undefined, userInfo, outMessage.args[1], false)
             client.channels.cache.get(GetConvar('ea_botChatBridge', "")).send({ embeds: [embed] })
         })
 
