@@ -1,6 +1,7 @@
 
 
 if (GetConvar("ea_botToken", "") != "" && GetConvar("ea_botLogChannel", "") != "") {
+    if (!EasyAdmin) { return } // bot is offline
 
     onNet("playerJoining", async () => {
         var src = source
