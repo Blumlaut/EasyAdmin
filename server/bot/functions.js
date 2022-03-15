@@ -1,5 +1,6 @@
 // this file contains util functions the bot uses
 async function LogDiscordMessage(text, feature) {
+    if (!EasyAdmin) {return} // bot isnt running
     if (GetConvar("ea_botLogChannel", "") == "") {return}
     if (feature == "report" || feature == "calladmin") {return} // we dont care about reports, these get handled in reports.js
 
