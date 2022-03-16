@@ -25,7 +25,6 @@ if (GetConvar("ea_botToken", "") != "") {
         }
 
         for (var role of roles) {
-            console.log(`add_principal identifier.discord:${member.id} role:${role}`)
             ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
         }
     }
