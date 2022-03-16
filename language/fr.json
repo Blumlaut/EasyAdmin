@@ -190,7 +190,7 @@
     "addprincipal": "~g~Ajouter Principal",
     "group": "Grouper",
     "entergroup": "Entrez le nom du groupe (e.g. group.admin)",
-    "enterperm": "Entrez le nom de l'autorisation (e.g. easyadmin.kick)",
+    "enterperm": "Entrez le nom de l'autorisation (e.g. easyadmin.player.kick)",
     "state": "État",
     "stateguide": "Refuser les autorisations ne fonctionne pas correctement, n'autorisez que les autorisations que vous souhaitez que le joueur ait.",
     "location": "Emplacement",

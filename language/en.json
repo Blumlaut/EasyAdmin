@@ -188,7 +188,7 @@
     "addprincipal": "~g~Add Principal",
     "group": "Group",
     "entergroup": "Enter group name (e.g. group.admin)",
-    "enterperm": "Enter Permission name (e.g. easyadmin.kick)",
+    "enterperm": "Enter Permission name (e.g. easyadmin.player.kick)",
     "state": "State",
     "stateguide": "Denying permissions does not work properly, only allow permissions you want the player to have.",
     "location": "Location",
