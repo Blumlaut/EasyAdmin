@@ -18,8 +18,8 @@ if (GetConvar("ea_botToken", "") != "") {
         try {
             roles = await member.roles.cache.keys()
         } catch (error) {
-            console.log("failed to fetch member roles, despite having fetched the member, please report the following stack trace to https://github.com/Blumlaut/EasyAdmin/issues")
-            console.log(`member: ${member.toJSON()}`)
+            console.error("failed to fetch member roles, despite having fetched the member, please report the following stack trace to https://github.com/Blumlaut/EasyAdmin/issues")
+            console.error(`member: ${member.toJSON()}`)
             console.error(error)
             return
         }
