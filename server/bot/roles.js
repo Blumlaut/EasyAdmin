@@ -9,7 +9,7 @@ if (GetConvar("ea_botToken", "") != "") {
         try {
             var botGuild = await client.guilds.cache.get(guild)
             var user = await getDiscordAccountFromPlayer(src)
-            member = await botGuild.members.fetch(user.id)
+            member = await botGuild.members.fetch(user)
         } catch (error) {
             return
         }
@@ -25,6 +25,7 @@ if (GetConvar("ea_botToken", "") != "") {
         }
 
         for (var role of roles) {
+            console.log(`add_principal identifier.discord:${member.id} role:${role}`)
             ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
         }
     }
