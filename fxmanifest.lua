@@ -4,7 +4,7 @@ games {"rdr3","gta5"}
 
 author 'Blumlaut <blue@furfag.de>'
 description 'EasyAdmin - Admin Menu for FiveM & RedM'
-version '6.41'
+version '6.603'
 is_master 'yes'
 
 
@@ -12,9 +12,11 @@ lua54 'yes'
 
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
+shared_script 'shared/util_shared.lua'
+
 server_scripts {
-	"util_shared.lua",
-	"admin_server.lua",
+	"server/*.lua",
+    "server/bot/*.js",
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_server.lua"
 }
@@ -23,9 +25,7 @@ client_scripts {
 	"dependencies/NativeUI.lua",
 	"dependencies/NativeUI-rdr3.lua",
 	"dependencies/Controls.lua",
-	"util_shared.lua",
-	"admin_client.lua",
-	"gui_c.lua",
+	"client/*.lua",
 	"plugins/**/*_shared.lua",
 	"plugins/**/*_client.lua"
 }
@@ -34,7 +34,11 @@ ui_page "dependencies/nui/index.html"
 
 files {
 	"dependencies/images/*.png",
-    "dependencies/nui/**/*"
+	"dependencies/nui/**/*"
+}
+
+dependencies {
+    'yarn'
 }
 
 convar_category 'EasyAdmin' {
@@ -48,13 +52,13 @@ convar_category 'EasyAdmin' {
     { "Report Notifications Webhook", "$ea_reportNotification", "CV_STRING", "false" },
     { "Detail Notifications Webhook", "$ea_detailNotification", "CV_STRING", "false" },
     { "Set a custom DateTime format", "$ea_dateFormat", "CV_STRING", "%d/%m/%Y     %H:%M:%S" },
-    { "Image Uploader", "$ea_screenshoturl", "CV_STRING", "https://wew.wtf/upload.php" },
+    { "Image Uploader", "$ea_screenshoturl", "CV_STRING", "none" },
     { "Screenshot Field Name", "$ea_screenshotfield", "CV_STRING", "files[]" },
     { "JSON String arguments", "$ea_screenshotOptions", "CV_STRING", "{}" },
     { "Screenshot on Report", "$ea_enableReportScreenshots", "CV_BOOL", "true" },
     { "Webhook Identifier", "$ea_logIdentifier", "CV_STRING", "steam" },
-    { "Enable calladmin Command", "$ea_enableCallAdminCommand", "CV_BOOL", "false" },
-    { "Enable report Command", "$ea_enableReportCommand", "CV_BOOL", "false" },
+    { "Enable calladmin Command", "$ea_enableCallAdminCommand", "CV_BOOL", "true" },
+    { "Enable report Command", "$ea_enableReportCommand", "CV_BOOL", "true" },
     { "calladmin Command Name", "$ea_callAdminCommandName", "CV_STRING", "calladmin" },
     { "report Command Name", "$ea_reportCommandName", "CV_STRING", "report" },
     { "calladmin Cooldown (seconds)", "$ea_callAdminCooldown", "CV_INT", "60" },
@@ -66,7 +70,7 @@ convar_category 'EasyAdmin' {
     { "Amount of Warns before Actions", "$ea_maxWarnings", "CV_INT", "3" },
     { "Maximum Warn Action", "$ea_warnAction", "CV_STRING", "kick" },
     { "Maximum Warn Ban Time (unix time)", "$ea_warningBanTime", "CV_INT", "604800" },
-    { "Hide IP in the GUI", "$ea_IpPrivacy", "CV_BOOL", "false" },
+    { "Hide IP in the GUI", "$ea_IpPrivacy", "CV_BOOL", "true" },
     { "Banlist Backup Time (hours)", "$ea_backupFrequency", "CV_INT", "72" },
     { "Maximum Backup Count", "$ea_maxBackupCount", "CV_INT", "10" },
     { "Chat Reminder Time (minutes, disabled if 0)", "$ea_chatReminderTime", "CV_INT", "0" },
@@ -75,6 +79,10 @@ convar_category 'EasyAdmin' {
     { "Enable Custom Banlist", "$ea_custombanlist", "CV_BOOL", "false" },
     { "Enable Telemetry", "$ea_enableTelemetry", "CV_BOOL", "true" },
     { "Use Tokens as Identifiers", "$ea_useTokenIdentifiers", "CV_BOOL", "true" },
-    { "Enable Ascii Art on Start", "$ea_enableSplash", "CV_BOOL", "true" }
+    { "Enable Ascii Art on Start", "$ea_enableSplash", "CV_BOOL", "true" },
+    { "Token for Discord bot", "$ea_botToken", "CV_STRING", "none" },
+    { "Guild ID for Discord bot", "$ea_botGuild", "CV_STRING", "none" },
+    { "Channel for Discord bot to log", "$ea_botLogChannel", "CV_STRING", "none" },
+    { "Channel for Discord bot to enable live status", "$ea_botStatusChannel", "CV_STRING", "true" }
     }
 }

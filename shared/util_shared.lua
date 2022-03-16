@@ -27,6 +27,7 @@ permissions = {
 	["server.convars"] = false,
 	["server.resources.start"] = false,
 	["server.resources.stop"] = false,
+	["server.chat"] = false,
 	
 	["immune"] = false,
 	["anon"] = false,
@@ -39,8 +40,13 @@ function PrintDebugMessage(msg,level)
 	
 	if level == 1 and loglevel >= level then -- ERROR Loglevel
 		Citizen.Trace("^1"..GetCurrentResourceName().."^7: "..msg.."^7\n")
-		for i,k in pairs(GetOnlineAdmins()) do
-			TriggerClientEvent("EasyAdmin:showNotification", i, string.gsub(msg, "%^%d", ""))
+
+		if IsDuplicityVersion() then
+			for i,k in pairs(GetOnlineAdmins()) do
+				TriggerClientEvent("EasyAdmin:showNotification", i, string.gsub(msg, "%^%d", ""))
+			end
+		else
+			TriggerEvent("EasyAdmin:showNotification", string.gsub(msg, "%^%d", ""))
 		end
 	elseif level == 2 and loglevel >= level then -- WARN Loglevel
 		Citizen.Trace("^3"..GetCurrentResourceName().."^7: "..msg.."^7\n")
@@ -141,6 +147,7 @@ function DoesPlayerHavePermission(player, object)
 		return permissions[object]
 	end
 end
+exports('DoesPlayerHavePermission', DoesPlayerHavePermission)
 
 function DoesPlayerHavePermissionForCategory(player, object)
 	for perm in pairs(permissions) do
@@ -152,6 +159,7 @@ function DoesPlayerHavePermissionForCategory(player, object)
 	end
 	return false
 end
+exports('DoesPlayerHavePermissionForCategory', DoesPlayerHavePermissionForCategory)
 
 
 function GetVersion()
@@ -160,6 +168,7 @@ function GetVersion()
 	local is_master = GetResourceMetadata(resourceName, 'is_master', 0) == "yes" or false
 	return version, is_master
 end
+exports('GetVersion', GetVersion)
 
 
 function GetLocalisedText(string)
@@ -171,13 +180,16 @@ function GetLocalisedText(string)
 		return "String "..string.." not found in "..strings.language
 	end
 end
+exports('GetLocalisedText', GetLocalisedText)
 
 function formatDateString(string)
 	local dateFormat = GetConvar("ea_dateFormat", '%d/%m/%Y 	%H:%M:%S')
 	return os.date(dateFormat, string)
 end
+exports('formatDateString', formatDateString)
 
 function formatShortcuts(thisstring)
+	if not thisstring then return thisstring end
 	local cleanString = string.gsub(string.lower(thisstring), " ", "")
 	for shortcut,value in pairs(MessageShortcuts) do
 		if string.lower(shortcut) == cleanString then
@@ -186,6 +198,44 @@ function formatShortcuts(thisstring)
 	end
 	return thisstring
 end
+exports('formatShortcuts', formatShortcuts)
+
+function formatRightString(thisstring, customWidth)
+	if not thisstring then return thisstring end -- in case string is nil, just yeet it back.
+	local width = (customWidth or maxRightTextWidth)
+	if string.len(thisstring) > width then
+		thisstring = string.sub(thisstring, 1, width)..".."
+	end
+
+	return thisstring
+end
+
+
+-- some util funcs so i dont have to mess with NativeUI Source Code.
+function getMenuItemTitle(item)
+	if (item.Base and type(item.Base.Text) == "table" and item.Base.Text._Text) then
+		return item.Base.Text._Text
+	elseif (item.Text and type(item.Text) == "table" and item.Text._Text) then
+		return item.Text._Text
+	end
+end
+
+function setMenuItemTitle(item,text)
+	if (item.Base and type(item.Base.Text) == "table" and item.Base.Text._Text) then
+		item.Base.Text._Text = text
+	elseif (item.Text and type(item.Text) == "table" and item.Text._Text) then
+		item.Text._Text = text
+	end
+end
+
+function getCachedPlayer(playerId)
+	if CachedPlayers[playerId] then
+		return CachedPlayers[playerId]
+	else
+		return false
+	end
+end
+exports('getCachedPlayer', getCachedPlayer)
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then

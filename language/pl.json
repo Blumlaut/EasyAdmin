@@ -1,5 +1,5 @@
 [{
-    "translator": "EasyAdmin, Robi321 & Kubamaz",
+    "translator": "EasyAdmin, Robi321, Kubamaz",
     "language": "pl",
     "on": "Włącz",
     "off": "Wyłącz",
@@ -40,7 +40,7 @@
     "adminunmutedplayer": "**%s** odciszył **%s**",
     "playermuted": "został wyciszony!",
     "playerunmuted": "został bez wyciszenia!",
-    "playermute": "Jesteś ^8wyciszony^7!",
+    "playermute": "Jesteś wyciszony!",
     "spectateplayer": "Obserwuj gracza",
     "teleportplayer": "Teleport",
     "teleporttoplayer": "do gracza",
@@ -95,6 +95,7 @@
     "bancheatingadd": " ( Gracz: %s )",
     "nongiven": "Nie podano",
     "newadmin": "Jesteś teraz Adminem",
+    "announcement": "Ogłoszenie",
     "playernotfound": "Nie można znaleźć gracza.",
     "done": "Zrobione!",
     "adminkickedplayer": "**%s** wyrzucił **%s**, Powód: %s",

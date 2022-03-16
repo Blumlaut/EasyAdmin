@@ -4,3 +4,5 @@ banlist.txt
 settings.json
 backups/*.json
 plugins/dev/**/*.*
+*yarn*
+node_modules/

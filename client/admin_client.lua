@@ -2,6 +2,11 @@
 ------------------------------------
 ---- DONT TOUCH ANY OF THIS IF YOU DON'T KNOW WHAT YOU ARE DOING
 ---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
+----
+----
+---- If you are a developer and want to change something, consider writing a plugin instead:
+---- https://easyadmin.readthedocs.io/en/latest/plugins/
+----
 ------------------------------------
 ------------------------------------
 
@@ -10,6 +15,9 @@ banlist = {}
 cachedplayers = {}
 reports = {}
 add_aces, add_principals = {}, {}
+MessageShortcuts = {}
+FrozenPlayers = {}
+MutedPlayers = {}
 
 local vehicleInfo = {
 	netId = nil,
@@ -28,12 +36,11 @@ end)
 
 RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
-	if setting == "button" and state ~= "none" then
-		if (not RedM and not tonumber(settings.button)) then
-			RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', settings.button)
-		end
-	end
 end)
+
+if not RedM then
+	RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', "")
+end
 
 AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
@@ -75,8 +82,8 @@ RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
 	if _menuPool and _menuPool:IsAnyMenuOpen() then
 		for i, menu in pairs(reportMenus) do
 			for o,item in pairs(menu.Items) do 
-				if item.Text._Text == GetLocalisedText("claimreport") then
-					item.Text._Text = GetLocalisedText("claimedby")
+				if getMenuItemTitle(item) == GetLocalisedText("claimreport") then
+					setMenuItemTitle(item, GetLocalisedText("claimedby"))
 					item:RightLabel(reportData.claimedName)
 				end
 			end
@@ -88,6 +95,36 @@ RegisterNetEvent("EasyAdmin:RemoveReport", function(reportData)
 	reports[reportData.id] = nil 
 end)
 
+
+RegisterNetEvent("EasyAdmin:fillShortcuts", function (shortcuts)
+	MessageShortcuts = shortcuts
+end)
+
+RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(player,state)
+	FrozenPlayers[player] = state
+	if _menuPool and _menuPool:IsAnyMenuOpen() then
+		if playerMenus[tostring(player)].menu then
+			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
+				if getMenuItemTitle(item) == GetLocalisedText("setplayerfrozen") then
+					item.Checked = state
+				end
+			end
+		end
+	end
+end)
+
+RegisterNetEvent('EasyAdmin:SetPlayerMuted', function(player,state)
+	MutedPlayers[player] = state
+	if _menuPool and _menuPool:IsAnyMenuOpen() then
+		if playerMenus[tostring(player)].menu then
+			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
+				if getMenuItemTitle(item) == GetLocalisedText("mute") then
+					item.Checked = state
+				end
+			end
+		end
+	end
+end)
 
 Citizen.CreateThread( function()
 	while true do

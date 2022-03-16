@@ -2761,7 +2761,7 @@ function UIMenu:RefreshIndexRecursively()
     self:RefreshIndex()
 
     for _, Item in pairs(self.Children) do
-        if Item.RefreshIndex then
+        if Item.RefreshIndexRecursively then
             Item:RefreshIndexRecursively()
         end
     end

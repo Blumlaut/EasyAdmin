@@ -36,7 +36,7 @@
     "adminunmutedplayer": "**%s** unmuted **%s**",
     "playermuted": "is gedempt!",
     "playerunmuted": "is niet-gedempt!",
-    "playermute": "Je bent ^8gedempt^7!",
+    "playermute": "Je bent gedempt!",
     "banreasonguide": "Voeg een reden toe aan de ban.",
     "banlength": "Ban Lengte",
     "banlengthguide": "Hoelang moet de Speler verbannen worden?",
@@ -97,6 +97,7 @@
     "bancheatingadd": " ( Gebruikersnaam: %s )",
     "nongiven": "Geen reden opgegeven",
     "newadmin": "Je bent nu Admin",
+    "announcement": "Mededeling",
     "playernotfound": "Speler kan niet gevonden worden.",
     "done": "Gedaan!",
 
