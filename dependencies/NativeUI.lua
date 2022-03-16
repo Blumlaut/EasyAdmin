@@ -2770,6 +2770,16 @@ function UIMenu:RefreshIndex()
     self.ReDraw = true
 end
 
+function UIMenu:RefreshIndexRecursively()
+    self:RefreshIndex()
+
+    for _, Item in pairs(self.Children) do
+        if Item.RefreshIndex then
+            Item:RefreshIndexRecursively()
+        end
+    end
+end
+
 function UIMenu:Clear()
     self.Items = {}
     self.ReDraw = true

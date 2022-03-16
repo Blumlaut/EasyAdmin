@@ -112,7 +112,10 @@ function loadBackupName(name)
 				TriggerEvent("ea_data:addBan", ban)
 				Wait(50)
 			end
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			if not saved then
+				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
 			updateBlacklist()
 			PrintDebugMessage("Backup should be loaded!")
 		else
@@ -132,8 +135,12 @@ function createBackup()
 	local resourceName = GetCurrentResourceName()
 	PrintDebugMessage("Creating Banlist Backup to "..backupName, 3)
 	
-	SaveResourceFile(resourceName, "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
+	local saved = SaveResourceFile(resourceName, "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
 	
+	if not saved then
+		PrintDebugMessage("^1Saving banlist backup failed! Please check if EasyAdmin has Permission to write in the backups folder!^7", 1)
+	end
+
 	backupInfos = LoadResourceFile(resourceName, "backups/_backups.json")
 	if backupInfos then
 		backupData = json.decode(backupInfos)
@@ -238,20 +245,6 @@ AddEventHandler("EasyAdmin:amiadmin", function()
 	end
 end)
 
-RegisterServerEvent("EasyAdmin:GetPlayerList", function()
-	PrintDebugMessage(getName(source, true).." requested legacy Playerlist.", 4)
-	if IsPlayerAdmin(source) then
-		local l = {}
-		local players = GetPlayers()
-		for i, player in pairs(players) do
-			if CachedPlayers[player] then
-				table.insert(l, CachedPlayers[player])
-			end
-		end
-		TriggerLatentClientEvent("EasyAdmin:GetPlayerList", source, 200000, l) 
-	end
-end)
-
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 	PrintDebugMessage(getName(source, true).." requested Playerlist.", 4)
 	if IsPlayerAdmin(source) then
@@ -262,7 +255,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 			local player = tonumber(player)
 			for i, cached in pairs(CachedPlayers) do
 				if (cached.id == player) then
-					table.insert(l, CachedPlayers[i])
+					table.insert(l, {id = cached.id, name = cached.name, immune = cached.immune})
 				end
 			end
 		end
@@ -402,7 +395,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Collecting Server Config....^7\n", 1)
 			
 			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources")
+			local occurance = string.find(path, "/resources", 1, true)
 			local path = string.reverse(string.sub(string.reverse(path), -occurance))
 			
 			local blacklistedPhrases = {"mysql", "mariadb", "licensekey", "SentryIO", "mongodb", "tebex", "endpoint_add", "ac_webhook"}
@@ -455,8 +448,12 @@ Citizen.CreateThread(function()
 			
 			PrintDebugMessage("Saving to support.json....^7\n", 1)
 			
-			SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
-			
+			local saved = SaveResourceFile(GetCurrentResourceName(), "support.json", json.encode(supportData, {indent = true}), -1)
+
+			if not saved then
+				PrintDebugMessage("^1Saving support.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
+
 			
 			PrintDebugMessage("Done! Please upload the support.json in "..GetResourcePath(GetCurrentResourceName()).." to the Discord!^7\n", 1)
 		end
@@ -753,30 +750,34 @@ Citizen.CreateThread(function()
 		Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 	end)
 	
-	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires, offline)
-		if not offline and not CachedPlayers[playerId].immune then
-			if offline then 
-				bannedIdentifiers = playerId 
-				bannedUsername = "Unknown"
-			else 
-				bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
-				bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
-			end
-			if expires and expires < os.time() then
-				expires = os.time()+expires 
-			elseif not expires then 
-				expires = 10444633200
-			end
-			reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
-			local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
-			updateBlacklist( ban )
-			
-			
-			PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
-			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ) ), "ban", 16711680)
-			if not offline then
-				DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
-			end
+	AddEventHandler("EasyAdmin:addBan", function(playerId,reason,expires)
+		local bannedIdentifiers = {}
+		local bannedUsername = "Unknown"
+		if type(playerId) == "table" then -- if playerId is a table of identifiers
+			offline = true
+			bannedIdentifiers = playerId
+		elseif CachedPlayers[playerId].dropped then
+			offline = true
+			bannedIdentifiers = CachedPlayers[playerId.dropped]
+			bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
+		end
+
+		if expires and expires < os.time() then
+			expires = os.time()+expires 
+		elseif not expires then 
+			expires = 10444633200
+		end
+		reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), "Console" )
+		local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = "Unknown", reason = reason, expire = expires or 10444633200 }
+		updateBlacklist( ban )
+		
+		
+		PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
+
+
+		SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), "Console", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
+		if not offline then
+			DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 		end
 	end)
 	
@@ -1068,7 +1069,7 @@ Citizen.CreateThread(function()
 					RemoveEventHandler(thistemporaryevent)
 					scrinprogress = false -- cancel screenshot, seems like it failed
 					PrintDebugMessage("Screenshot timed out", 4)
-					TriggerClientEvent("EasyAdmin:showNotification", source, "Screenshot Failed!")
+					TriggerClientEvent("EasyAdmin:showNotification", src, "Screenshot Failed!")
 				end
 			until not scrinprogress
 		end
@@ -1246,7 +1247,7 @@ Citizen.CreateThread(function()
 	
 	function FindInfosinFile(filename)
 		local path = GetResourcePath(GetCurrentResourceName())
-		local occurance = string.find(path, "/resources")
+		local occurance = string.find(path, "/resources", 1, true)
 		local path = string.reverse(string.sub(string.reverse(path), -occurance))
 		
 		local filename = filename
@@ -1279,20 +1280,20 @@ Citizen.CreateThread(function()
 			for i, line in pairs(lines) do 
 				if filename == "server.cfg" then
 					needsResourcePerms = false
-					if string.find(line, "exec easyadmin_permissions.cfg") then
+					if string.find(line, "exec easyadmin_permissions.cfg", 1, true) then
 						needsExec = false
 					end
 				elseif filename == "easyadmin_permissions.cfg" then
 					needsExec = false
-					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow") then
+					if string.find(line, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow", 1, true) then
 						needsResourcePerms = false
 					end
 				else
 					local broken = false
 					-- remove broken lines
-					if string.find(line, "exec easyadmin_permissions.cfg") then
+					if string.find(line, "exec easyadmin_permissions.cfg", 1, true) then
 						RemoveFromFile(filename, "exec easyadmin_permissions.cfg")
-					elseif string.find(line, "add_ace resource."..GetCurrentResourceName().." command.") then
+					elseif string.find(line, "add_ace resource."..GetCurrentResourceName().." command.", 1, true) then
 						RemoveFromFile(filename, line)
 					end 
 				end
@@ -1406,7 +1407,7 @@ Citizen.CreateThread(function()
 		lockedFiles = {}
 		function AddToFile(filename, args)
 			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources")
+			local occurance = string.find(path, "/resources", 1, true)
 			local path = string.reverse(string.sub(string.reverse(path), -occurance))
 			
 			
@@ -1432,7 +1433,7 @@ Citizen.CreateThread(function()
 		
 		function RemoveFromFile(filename, args)
 			local path = GetResourcePath(GetCurrentResourceName())
-			local occurance = string.find(path, "/resources")
+			local occurance = string.find(path, "/resources", 1, true)
 			local path = string.reverse(string.sub(string.reverse(path), -occurance))
 			
 			local args = args
@@ -1611,7 +1612,10 @@ Citizen.CreateThread(function()
 						theBan.discord=nil
 					end
 				end
-				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				if not saved then
+					PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+				end
 			end)
 		end
 	end, true)
@@ -1667,7 +1671,10 @@ Citizen.CreateThread(function()
 			for i, ban in pairs(blacklist) do
 				if ban.banid == newData.banid then
 					blacklist[i] = newData
-					SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+					local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+					if not saved then
+						PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+					end
 					if GetConvar("ea_custombanlist", "false") == "true" then 
 						TriggerEvent("ea_data:updateBan", newData)
 					end
@@ -1716,7 +1723,10 @@ Citizen.CreateThread(function()
 		local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 		if not content then
 			PrintDebugMessage("banlist.json file was missing, we created a new one.")
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
+			if not saved then
+				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
 			content = json.encode({})
 		end
 		blacklist = json.decode(content)
@@ -1778,7 +1788,10 @@ Citizen.CreateThread(function()
 		end
 		if change then
 			PrintDebugMessage("Banlist changed, saving..", 4)
-			SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+			if not saved then
+				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+			end
 		end
 		PrintDebugMessage("Completed Banlist Update.", 4)
 	end
@@ -1797,7 +1810,11 @@ Citizen.CreateThread(function()
 				for index,id in pairs(ban.identifiers) do
 					if identifier == id then
 						table.remove(blacklist,i)
-						SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+						local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+						if not saved then
+							PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+						end
+
 						if GetConvar("ea_custombanlist", "false") == "true" then 
 							TriggerEvent("ea_data:removeBan", ban)
 						end
@@ -1813,7 +1830,11 @@ Citizen.CreateThread(function()
 		for i,ban in pairs(blacklist) do
 			if ban.banid == id then
 				table.remove(blacklist,i)
-				SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+				if not saved then
+					PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+				end
+
 				if GetConvar("ea_custombanlist", "false") == "true" then 
 					TriggerEvent("ea_data:removeBan", ban)
 				end
@@ -1853,7 +1874,7 @@ Citizen.CreateThread(function()
 					
 					
 					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..CachedPlayers[id].name.." for "..reason, 3)
-					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), bannedUsername, reason, formatDateString( expires ) ), "ban", 16711680)
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), bannedUsername, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
 					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 					WarnedPlayers[id] = nil
 					
@@ -2121,13 +2142,7 @@ function checkVersion(err,response, headers)
 		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
 	end
 		
-	if not string.find(GetCurrentResourceName(), "-") then -- all my homies hate hyphens
-		readAcePermissions()
-	else
-		disablePermissionEditor = true
-		local resourceName = GetCurrentResourceName()
-		PrintDebugMessage("^1Permission Editor Disabled!^7 Please remove any hyphens ("..string.gsub(resourceName, "-", ">-<").." from EasyAdmin's resource name.) #271", 1)
-	end
+	readAcePermissions()
 end
 	
 Citizen.CreateThread(function()
