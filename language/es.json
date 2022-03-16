@@ -189,7 +189,7 @@
     "addprincipal": "~g~Añadir Principal",
     "group": "Grupo",
     "entergroup": "Introduce un nombre de grupo (ej. group.admin)",
-    "enterperm": "Introduce nombre de permiso (ej. easyadmin.kick)",
+    "enterperm": "Introduce nombre de permiso (ej. easyadmin.player.kick)",
     "state": "Estado",
     "stateguide": "La denegacion de permisos no funciona correctamente, Solo dale permisos que quieras que el jugador tenga.",
     "location": "Ubicacion",

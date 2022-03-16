@@ -190,7 +190,7 @@
     "addprincipal": "~g~Principal hinzufügen",
     "group": "Gruppe",
     "entergroup": "Gruppennamen einfügen (z.b. group.admin)",
-    "enterperm": "Permissionnamen einfügen (z.b. easyadmin.kick)",
+    "enterperm": "Permissionnamen einfügen (z.b. easyadmin.player.kick)",
     "state": "Status",
     "stateguide": "Das verweigern von Permissions funktioniert nicht richtig. Erlaube nur die Permissions, die der Spieler haben soll.",
     "location": "Ort",

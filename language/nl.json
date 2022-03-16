@@ -192,7 +192,7 @@
     "addprincipal": "~g~Principal toevoegen",
     "group": "Groep",
     "entergroup": "Voeg groep naam toe (bijv. group.admin)",
-    "enterperm": "Vul permissie naam in (bijv. easyadmin.kick)",
+    "enterperm": "Vul permissie naam in (bijv. easyadmin.player.kick)",
     "state": "Staat",
     "stateguide": "Permissies weigeren functioneerd niet, sta alleen permissies toe.",
     "location": "Locatie",

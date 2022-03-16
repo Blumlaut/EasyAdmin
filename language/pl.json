@@ -190,7 +190,7 @@
     "addprincipal": "~g~Dodaj principala",
     "group": "Grupa",
     "entergroup": "Wprowadź nazwę grupy (np. group.admin)",
-    "enterperm": "Wprowadź nazwę uprawnienia (np. easyadmin.kick)",
+    "enterperm": "Wprowadź nazwę uprawnienia (np. easyadmin.player.kick)",
     "state": "Stan",
     "stateguide": "Odmawianie uprawnień nie działa poprawnie, zezwalaj tylko na uprawnienia, które chcesz, aby gracz posiadał.",
     "location": "Lokalizacja",
