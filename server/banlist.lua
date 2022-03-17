@@ -184,6 +184,7 @@ exports('fetchBan', fetchBan)
 
 RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
     if DoesPlayerHavePermission(source, "player.ban.remove") then
+        local thisBan = fetchBan(banId)
         local ret = unbanPlayer(banId)
         if ret then
             PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId, 3)
