@@ -171,6 +171,17 @@ function unbanPlayer(banId)
 end
 exports('unbanPlayer', unbanPlayer)
 
+
+function fetchBan(banId)
+    for i,ban in ipairs(blacklist) do 
+        if ban.banid == banId then
+            return ban
+        end
+    end
+    return false
+end
+exports('fetchBan', fetchBan)
+
 RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
     if DoesPlayerHavePermission(source, "player.ban.remove") then
         local ret = unbanPlayer(banId)
