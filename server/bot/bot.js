@@ -41,7 +41,7 @@ if (GetConvar("ea_botToken", "") != "") {
         if (currentVersion != latestVersionInfo[0]) {
             startupMessage+=`\nVersion ${latestVersionInfo[0]} is Available!\n Download it from ${latestVersionInfo[1]}`
         }
-        LogDiscordMessage(startupMessage)
+        LogDiscordMessage(startupMessage, "startup")
     });
 
     client.on("debug", function(info){
