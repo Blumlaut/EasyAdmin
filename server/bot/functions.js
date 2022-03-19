@@ -1,19 +1,4 @@
 // this file contains util functions the bot uses
-async function LogDiscordMessage(text, feature) {
-    if (!EasyAdmin) {return} // bot isnt running
-    if (GetConvar("ea_botLogChannel", "") == "") {return}
-    if (feature == "report" || feature == "calladmin") {return} // we dont care about reports, these get handled in reports.js
-
-    const embed = await prepareGenericEmbed(text)
-    
-    client.channels.cache.get(GetConvar("ea_botLogChannel", "")).send({ embeds: [embed] }).catch((error) => {
-        console.error("^7Failed to log message, please make sure you gave the bot permission to write in the log channel!\n\n")
-        console.error(error)
-        return
-    })
-}
-exports('LogDiscordMessage', LogDiscordMessage)
-
 
 async function prepareGenericEmbed(message,feature,colour,title,image,customAuthor,description,timestamp) {
 
