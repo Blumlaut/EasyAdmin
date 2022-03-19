@@ -6,13 +6,13 @@ if (GetConvar("ea_botToken", "") != "" && GetConvar("ea_botLogChannel", "") != "
         var src = source
 
         var msg = `Player **${exports[EasyAdmin].getName(src,true,true)}** with id **${src}** joined the Server!`
-        LogDiscordMessage(msg)
+        LogDiscordMessage(msg, "joinleave")
     })
 
     on("playerDropped", (reason) => {
         var src = global.source
 
         var msg = `Player **${exports[EasyAdmin].getName(src,true,true)}** left the server!`
-        LogDiscordMessage(msg)
+        LogDiscordMessage(msg, "joinleave")
     });
 }
