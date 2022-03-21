@@ -52,18 +52,32 @@ async function findPlayerFromUserInput(input) {
 }
 
 
-async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
+function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
 
-    if (object.search('easyadmin.') == -1) {
-        object = `easyadmin.${object}`
-    }
+    return new Promise(function(resolve) {
 
-    if (member.guild.ownerId === member.id) { // guild owner always has permissions, to everything.
-        return true
-    }
+        var memberId = member.id
+        if(!memberId) {
+            resolve(false)
+        }
+        if (object.search('easyadmin.') == -1) {
+            object = `easyadmin.${object}`
+        }
+    
+        if (member.guild.ownerId === memberId) { // guild owner always has permissions, to everything.
+            console.log("guild owner. blergh.")
+            //resolve(true)
+        }
+    
+    
+        var allowed=IsPrincipalAceAllowed(`identifier.discord:${memberId}`, object)
+        console.log(allowed)
+        resolve(allowed)
 
 
-    return IsPrincipalAceAllowed(`identifier.discord:${member.id}`, object)
+
+    })
+
 }
 
 
