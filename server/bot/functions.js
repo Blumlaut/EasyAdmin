@@ -32,7 +32,6 @@ function prepareGenericEmbed(message,feature,colour,title,image,customAuthor,des
 
 function findPlayerFromUserInput(input) {
     return new Promise(function(resolve) {
-
         var user = undefined
 
         var players = exports[EasyAdmin].getCachedPlayers()
