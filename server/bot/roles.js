@@ -11,6 +11,8 @@ if (GetConvar("ea_botToken", "") != "") {
             var user = await getDiscordAccountFromPlayer(src)
             if (user) {
                 member = await botGuild.members.fetch(user)
+            } else {
+                return false
             }
         } catch (error) {
             return
