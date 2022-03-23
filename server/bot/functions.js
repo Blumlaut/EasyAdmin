@@ -55,7 +55,7 @@ async function findPlayerFromUserInput(input) {
 async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
         var memberId = member.id
         if(!memberId) {
-            resolve(false)
+            return false
         }
         if (object.search('easyadmin.') == -1) {
             object = `easyadmin.${object}`
