@@ -52,10 +52,7 @@ async function findPlayerFromUserInput(input) {
 }
 
 
-function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
-
-    return new Promise(function(resolve) {
-
+async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
         var memberId = member.id
         if(!memberId) {
             resolve(false)
@@ -65,19 +62,12 @@ function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord 
         }
     
         if (member.guild.ownerId === memberId) { // guild owner always has permissions, to everything.
-            console.log("guild owner. blergh.")
-            //resolve(true)
+            return true 
         }
     
     
         var allowed=IsPrincipalAceAllowed(`identifier.discord:${memberId}`, object)
-        console.log(allowed)
-        resolve(allowed)
-
-
-
-    })
-
+        return allowed
 }
 
 
