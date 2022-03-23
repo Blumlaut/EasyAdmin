@@ -372,9 +372,6 @@ Citizen.CreateThread(function()
 			return
 		end
 
-		if GetConvar("ea_botToken", "") ~= "" then
-			exports[GetCurrentResourceName()]:syncDiscordRoles(source)
-		end
 		CachedPlayers[source].lastPermRequest = os.time()
 		
 		local identifiers = getAllPlayerIdentifiers(source)
