@@ -51,7 +51,7 @@ if (GetConvar("ea_botToken", "") != "") {
         }
     });
     
-    on('playerConnecting', function () {
+    on('playerJoining', function () {
         const player = global.source
         
         syncDiscordRoles(player)
