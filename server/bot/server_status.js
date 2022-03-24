@@ -6,22 +6,22 @@ var startTimestamp = new Date()
 
 async function getServerStatus(why) {
     var embed = new EmbedBuilder()
-        .setColor(65280)
-        .setTimestamp()
-
-
+    .setColor(65280)
+    .setTimestamp()
+    
+    
     var joinURL = GetConvar('web_baseUrl', '')
     var buttonRow = false
-
+    
     if(joinURL != '' && joinURL.indexOf('cfx.re' != -1)) {
         embed.setURL(`https://${joinURL}`)
         buttonRow = new ActionRowBuilder()
         var button = new ButtonBuilder()
-            .setURL(`https://${joinURL}`)
-            .setLabel(`Join Server`)
-            .setStyle(ButtonStyle.Link)
-
-
+        .setURL(`https://${joinURL}`)
+        .setLabel(`Join Server`)
+        .setStyle(ButtonStyle.Link)
+        
+        
         buttonRow.addComponents(button)
     }
     var serverName = GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))
@@ -29,9 +29,9 @@ async function getServerStatus(why) {
         serverName = serverName.substring(0,255)
     }
     serverName = serverName.replace(/\^[0-9]/g, '')
-
+    
     embed.addFields({name: 'Server Name', value: `\`\`\`${serverName}\`\`\``})
-
+    
     /* this is broken, no idea why.
     var icon = GetConvar('sv_icon', '')
     if(icon != '') {
@@ -40,7 +40,7 @@ async function getServerStatus(why) {
         embed.setAuthor({ name: "blah", iconURL: 'attachment://icon.png'})
     }
     */
-
+    
     var reports = await exports[EasyAdmin].getAllReports()
     var activeReports = 0
     var claimedReports = 0
@@ -50,17 +50,17 @@ async function getServerStatus(why) {
             claimedReports+=1
         }
     }
-
+    
     // TODO: move this into a single addFields call
     embed.addFields({ name: 'Players Online', value: `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, inline: true})
     embed.addFields({ name: 'Admins Online', value: `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, inline: true})
     embed.addFields({ name: 'Reports', value: `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, inline: true})
-
+    
     embed.addFields({ name: 'Active Vehicles', value: `\`\`\`${GetAllVehicles().length}\`\`\``, inline: true})
     embed.addFields({ name: 'Active Peds', value: `\`\`\`${GetAllPeds().length}\`\`\``, inline: true})
     embed.addFields({ name: 'Active Objects', value: `\`\`\`${GetAllObjects().length}\`\`\``, inline: true})
-
-
+    
+    
     if (joinURL != '') {
         try {
             let serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
@@ -69,33 +69,33 @@ async function getServerStatus(why) {
             embed.addFields({ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false})
             
             embed.setAuthor({ name: `${serverName}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
-
+            
         } catch (error) {
             console.error(error)
         }
     }
     embed.addFields({ name: 'Uptime', value: `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, inline: false})
     
-
-
+    
+    
     if (why) {
         embed.addFields({name: 'Last Update', value: why})
     }
-
+    
     if (buttonRow) {
         return {embeds: [embed], components: [buttonRow] }
     } else {
         return {embeds: [embed] }
     }
     
-
-
+    
+    
 }
 
 async function updateServerStatus(why) {
     if (GetConvar('ea_botStatusChannel', "") == "") { return }
     var channel = await client.channels.fetch(botStatusChannel)
-
+    
     if (!statusMessage) {
         var messagesToDelete = []
         var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
@@ -125,7 +125,7 @@ async function updateServerStatus(why) {
     }
     const embed = await getServerStatus(why)
     statusMessage.edit(embed)
-
+    
 }
 
 client.on('messageCreate', async msg => {
@@ -138,7 +138,7 @@ client.on('messageCreate', async msg => {
         msg.delete()
         updateServerStatus('manual')
     }
-
+    
 })
 setTimeout(updateServerStatus, 10000)
 setInterval(updateServerStatus, 180000);

@@ -21,7 +21,7 @@ client = new Client({
 client.commands = new Collection();
 
 if (GetConvar("ea_botToken", "") != "") {
-
+    
     client.on('ready', async () => {
         console.log(`Logged in as ${client.user.tag}!`);
         client.user.setPresence({ activities: [{ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, type: 'WATCHING' }], status: 'online' })
@@ -29,13 +29,13 @@ if (GetConvar("ea_botToken", "") != "") {
         userID = client.user.id;
         resourcePath = GetResourcePath(GetCurrentResourceName()) // absolute resource path, needed for FS
         guild = GetConvar("ea_botGuild", "")
-
+        
         EasyAdmin = GetCurrentResourceName() // fetch our Resource name and claim we're called EasyAdmin, this just makes exports easier.
-
+        
         currentVersion = await exports[EasyAdmin].GetVersion()[0]
         latestVersionInfo = await exports[EasyAdmin].getLatestVersion()
-
-
+        
+        
         RegisterClientCommands(client.user.id, guild)
         var startupMessage = `**EasyAdmin ${currentVersion}** has started.`
         if (currentVersion != latestVersionInfo[0]) {
@@ -43,21 +43,21 @@ if (GetConvar("ea_botToken", "") != "") {
         }
         LogDiscordMessage(startupMessage, "startup")
     });
-
+    
     client.on("debug", function(info){
         if (GetConvarInt('ea_logLevel', 1) >= 4 ) {
             console.log(`${info}`);
         }
     });
-
-
-
-
+    
+    
+    
+    
     async function RegisterClientCommands(clientId,guildId) {
         const { REST } = require('@discordjs/rest');
         const { Routes } = require('discord-api-types/v10');
         const fs = require('fs');
-    
+        
         const commands = [];
         const commandFiles = fs.readdirSync(`${resourcePath}/server/bot/commands`).filter(file => file.endsWith('.js'));
         
@@ -76,14 +76,14 @@ if (GetConvar("ea_botToken", "") != "") {
             console.error(error)
             return
         });
-
+        
         client.on('interactionCreate', async interaction => {
             if (!interaction.isChatInputCommand()) return;
-        
+            
             const command = client.commands.get(interaction.commandName);
-        
+            
             if (!command) return;
-        
+            
             if (!(await DoesGuildMemberHavePermission(interaction.member, `bot.${command.data.name}`) == true) && !(command.data.name == "refreshperms")) {
                 await interaction.reply({ content: 'You don\'t have permission to run this command!', ephemeral: true });
                 return false
@@ -95,18 +95,18 @@ if (GetConvar("ea_botToken", "") != "") {
                 var errorContent = { content: `There was an error while executing this command, please report the following stack trace here: <https://github.com/Blumlaut/EasyAdmin/issues> \`\`\`js\n${error.stack}\`\`\``, ephemeral: true }
                 if (interaction.replied) {
                     interaction.followUp(errorContent)
-
+                    
                 } else {
                     interaction.reply(errorContent)
                 }
             }
         });
     }
-
     
-
-
-
+    
+    
+    
+    
     client.login(GetConvar("ea_botToken", ""));
 }
 

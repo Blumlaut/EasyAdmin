@@ -1,22 +1,22 @@
 
 try {
-
+    
     var knownAvatars = {} 
-
-
+    
+    
     exports["chat"].registerMessageHook(async function(source, outMessage, hookRef) {
-
+        
         if (GetConvar('ea_botChatBridge', "") == "") { return }
-
+        
         const user = await exports[EasyAdmin].getCachedPlayer(source)
-
+        
         if (!user) { 
             return // chat message wasnt sent by a user, we don't care.
         }
-
-
+        
+        
         var userInfo = {name: outMessage.args[0]}
-
+        
         if (knownAvatars[source] == undefined) {
             var fivemAccount = false
             for (let identifier of user.identifiers) {
@@ -24,7 +24,7 @@ try {
                     fivemAccount = identifier.substring(identifier.indexOf(":") + 1)
                 }
             }
-
+            
             if (fivemAccount) {
                 var response = await exports[EasyAdmin].HTTPRequest(`https://policy-live.fivem.net/api/getUserInfo/${fivemAccount}`)
                 try {
@@ -41,7 +41,7 @@ try {
                     }
                 } catch {
                     knownAvatars[source] = false // something broke while trying to get discourse avatar, dont try again.
-
+                    
                 }
             } else {
                 knownAvatars[source] = false // no fivem identifier
@@ -52,17 +52,17 @@ try {
         if (knownAvatars[source] == false) {
             userInfo.iconURL = undefined // dont send anything to discord, assume something went wrong
         }
-
+        
         var embed = await prepareGenericEmbed(undefined, undefined, 55555, undefined, undefined, userInfo, outMessage.args[1], false)
         client.channels.cache.get(GetConvar('ea_botChatBridge', "")).send({ embeds: [embed] })
     })
-
-
+    
+    
 } catch(error) {
     if (GetConvar('ea_botChatBridge', "") != "") { 
         console.error("tried registering chat bridge, but failed.")
         console.error(error)
-     }
+    }
 }
 
 client.on('messageCreate', async msg => {
@@ -75,11 +75,11 @@ client.on('messageCreate', async msg => {
     if (msg.channel.id == GetConvar('ea_botChatBridge', "")) {
         exports["chat"].addMessage(-1, { args: [msg.member.user.tag, msg.cleanContent]})
     }
-
+    
 })
 
 on("playerDropped", (reason) => {
     if (GetConvar('ea_botChatBridge', "") == "") { return }
     knownAvatars[global.source] = undefined
 });
-    
+
