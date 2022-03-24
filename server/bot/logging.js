@@ -2,9 +2,9 @@
 
 botLogForwards = []
 async function addBotLogForwarding(source,args,rw) {
-    var source=source
+    var player=source
     
-    if (await exports[GetCurrentResourceName()].DoesPlayerHavePermission(source, "server")) {
+    if (await exports[GetCurrentResourceName()].DoesPlayerHavePermission(player, "server")) {
         var feature = args[0]
         var channel = args[1] 
         
