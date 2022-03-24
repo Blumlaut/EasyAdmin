@@ -1,7 +1,7 @@
 
 try {
     
-    var knownAvatars = {} 
+    knownAvatars = {} 
     
     
     exports["chat"].registerMessageHook(async function(source, outMessage, hookRef) {

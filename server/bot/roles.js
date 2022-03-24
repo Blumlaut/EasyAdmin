@@ -55,6 +55,11 @@ if (GetConvar("ea_botToken", "") != "") {
         const player = global.source
         
         syncDiscordRoles(player)
+
+        if (GetConvar("ea_botToken", "") != "" && GetConvar("ea_botLogChannel", "") != "") {
+            var msg = `Player **${exports[EasyAdmin].getName(src,true,true)}** with id **${src}** joined the Server!`
+            LogDiscordMessage(msg, "joinleave")
+        }
     })
     
 }
