@@ -27,8 +27,8 @@ Citizen.CreateThread(function()
     
     PlayerReports = {}
     
-    RegisterCommand(GetConvar("ea_callAdminCommandName", "calladmin"), function(source, args, rawCommand)
-        if GetConvar("ea_enableCallAdminCommand", "true") == "true" then
+    if GetConvar("ea_enableCallAdminCommand", "true") == "true" then
+        RegisterCommand(GetConvar("ea_callAdminCommandName", "calladmin"), function(source, args, rawCommand)
             if args[1] then
                 local time = os.time()
                 local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
@@ -56,10 +56,10 @@ Citizen.CreateThread(function()
             else
                 TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
             end
-        end
-    end, false)
-    RegisterCommand(GetConvar("ea_reportCommandName", "report"), function(source, args, rawCommand)
-        if GetConvar("ea_enableReportCommand", "true") == "true" then
+        end, false)
+    end
+    if GetConvar("ea_enableReportCommand", "true") == "true" then
+        RegisterCommand(GetConvar("ea_reportCommandName", "report"), function(source, args, rawCommand)
             if args[2] then
                 local source = source
                 local id = args[1]
@@ -130,8 +130,8 @@ Citizen.CreateThread(function()
             else
                 TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
             end
-        end
-    end, false)
+        end, false)
+    end
 
 
 	function addNewReport(type, reporter, reported, reason)
