@@ -396,13 +396,6 @@ Citizen.CreateThread(function()
 		end
 		
 		TriggerLatentClientEvent("EasyAdmin:adminresponse", source, 10000, perms)
-		
-		if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) then
-			TriggerClientEvent('chat:addSuggestion', source, '/ban', GetLocalisedText("chatsuggestionban"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."} } )
-		end
-		if DoesPlayerHavePermission(source, "player.kick") then
-			TriggerClientEvent('chat:addSuggestion', source, '/kick', GetLocalisedText("chatsuggestionkick"), { {name='player id', help="the player's server id"}, {name='reason', help="your reason."}} )
-		end
 		TriggerClientEvent('chat:addSuggestion', source, '/easyadmin', "EasyAdmin Menu")
 		
 
