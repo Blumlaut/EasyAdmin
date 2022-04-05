@@ -60,8 +60,7 @@ try {
     
 } catch(error) {
     if (GetConvar('ea_botChatBridge', "") != "") { 
-        console.error("tried registering chat bridge, but failed.")
-        console.error(error)
+        console.error("Registering Chat Bridge failed, you will need to update your chat resource from https://github.com/citizenfx/cfx-server-data to use it.")
     }
 }
 
