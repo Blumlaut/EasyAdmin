@@ -62,7 +62,7 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
     }
     
     if (member.guild.ownerId === memberId) { // guild owner always has permissions, to everything.
-        return true 
+        //return true 
     }
     
     
@@ -101,5 +101,12 @@ async function getPlayerFromDiscordAccount(user) {
     }
     
     return false
-    
+}
+
+async function refreshRolesForMember(member) {
+    var roles = await member.roles.cache.keys()
+
+    for (var role of roles) {
+        ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
+    }
 }

@@ -18,14 +18,9 @@ module.exports = {
         } else if (user) {
             member = await interaction.guild.members.fetch(user.id)
         }
-        var roles = await member.roles.cache.keys()
 
-        for (var role of roles) {
-            ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
-        }
-        
         let username =  (user && `${member.displayName}'s`) || "your" 
-
+        await refreshRolesForMember(member)
 
 		var embed = await prepareGenericEmbed(`Successfully refreshed ${username} permissions.`);
         

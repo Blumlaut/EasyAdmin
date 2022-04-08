@@ -85,8 +85,11 @@ if (GetConvar("ea_botToken", "") != "") {
             if (!command) return;
             
             if (!(await DoesGuildMemberHavePermission(interaction.member, `bot.${command.data.name}`) == true) && !(command.data.name == "refreshperms")) {
-                await interaction.reply({ content: 'You don\'t have permission to run this command!', ephemeral: true });
-                return false
+                await refreshRolesForMember(interaction.member)
+                if (!(await DoesGuildMemberHavePermission(interaction.member, `bot.${command.data.name}`) == true)) {
+                    await interaction.reply({ content: 'You don\'t have permission to run this command!', ephemeral: true });
+                    return false
+                }
             }
             try {
                 await command.execute(interaction, exports); // we need to pass exports here, otherwise we won't be able to access them inside the command
