@@ -416,6 +416,19 @@ end
 
 function performBanlistUpgrades()
     local upgraded = false
+    
+    local takenIds = {}
+    for i,b in pairs(blacklist) do
+        if takenIds[b.banid] then
+            local freshId = GetFreshBanId()
+            PrintDebugMessage("ID "..b.banid.." was assigned twice, reassigned to "..freshId, 4)
+            blacklist[i].banid = freshId
+            upgraded = true
+        end
+        takenIds[b.banid] = true 
+    end
+    takenIds=nil
+
     for i,ban in pairs(blacklist) do
         if type(i) == "string" then
             PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 4)
