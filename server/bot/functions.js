@@ -53,6 +53,7 @@ async function findPlayerFromUserInput(input) {
 
 
 async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
+    if (!member || !object) { return false }
     var memberId = member.id
     if(!memberId) {
         return false
@@ -62,7 +63,7 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
     }
     
     if (member.guild.ownerId === memberId) { // guild owner always has permissions, to everything.
-        //return true 
+        return true 
     }
     
     
