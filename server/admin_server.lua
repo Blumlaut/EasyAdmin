@@ -1061,11 +1061,14 @@ Citizen.CreateThread(function()
 		end
 		Wait(0)
 		
+		local lastPercentage = 0
 		for bi,blacklisted in ipairs(blacklist) do
 			if showProgress == "true" then
-				if bi % 12 == 0 then -- only update on every 12th ban
+				local percentage = math.round(bi/#blacklist*100)
+				if bi % 12 == 0 and percentage >= lastPercentage+4 then -- only update on every 12th ban
 					Wait(0)
-					deferrals.update(string.format(GetLocalisedText("deferral"), math.round(bi/#blacklist*100)))
+					deferrals.update(string.format(GetLocalisedText("deferral"), percentage))
+					lastPercentage = percentage
 				end
 			end
 			for i,theId in ipairs(numIds) do
