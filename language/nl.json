@@ -177,7 +177,11 @@
     "cleaningped": "Herzenlozen aan het verwijderen %s",
     "cleaningprop": "Voorwerpen aan het verwijderen %s",
     "finishedcleaning": "Klaar met verwijderen %s",
-    "admincleanedup": "**%s** Alle **%s** in de omgeving zijn verwijderd.",
+    "admincleanedup": "**%s** Alle **%s** in een **%s** gebied zijn verwijderd.",
+    "radius": "Radius",
+    "type": "Type",
+    "deepclean":"Deep Clean",
+    "deepcleanguide":"Also deletes clientside entities.",
 
     "forceeasteregg": "Forceer Easter Egg",
 

@@ -174,8 +174,12 @@
     "cleaningped": "Deleting Ped %s",
     "cleaningprop": "Deleting Object %s",
     "finishedcleaning": "Finished cleaning %s",
-    "admincleanedup": "**%s** Cleaned up all **%s** in their area.",
-
+    "admincleanedup": "**%s** Cleaned up all **%s** in a **%s** radius.",
+    "radius": "Radius",
+    "type": "Type",
+    "deepclean":"Deep Clean",
+    "deepcleanguide":"Also deletes clientside entities.",
+    
     "forceeasteregg": "Force Easter Egg",
 
     "permissioneditor": "Permission Editor",

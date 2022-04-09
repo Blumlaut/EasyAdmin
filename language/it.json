@@ -175,7 +175,11 @@
     "cleaningped": "Cancellando Ped %s",
     "cleaningprop": "Cancellando Oggetti %s",
     "finishedcleaning": "%s cancellatti correttamente",
-    "admincleanedup": "**%s** ha Cancellato **%s** nella sua area.",
+    "admincleanedup": "**%s** Ripulito tutto **%s** in un raggio **%s**.",
+    "radius": "Radius",
+    "type": "Type",
+    "deepclean":"Deep Clean",
+    "deepcleanguide":"Also deletes clientside entities.",
 
     "forceeasteregg": "Force Easter Egg",
 

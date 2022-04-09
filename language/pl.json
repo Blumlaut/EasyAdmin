@@ -175,7 +175,11 @@
     "cleaningped": "Usuwanie peda %s",
     "cleaningprop": "Usunięto obiekt %s",
     "finishedcleaning": "Zakończono czyszczenie %s",
-    "admincleanedup": "**%s** Wyczyszczono wszystkie **%s** w tej lokalizacji.",
+    "admincleanedup": "**%s** Wszystkie **%s** w **%s** obszarze zostały usunięte.",
+    "radius": "Radius",
+    "type": "Type",
+    "deepclean":"Deep Clean",
+    "deepcleanguide":"Also deletes clientside entities.",
 
     "forceeasteregg": "Wymuś Easter Egg-a",
 

@@ -175,7 +175,11 @@
     "cleaningped": "Loesche NPC %s",
     "cleaningprop": "Loesche Objekt %s",
     "finishedcleaning": "Löschen von %s beendet.",
-    "admincleanedup": "**%s** hat alle **%s** in seiner Nähe gelöscht.",
+    "admincleanedup": "**%s** hat alle **%s** in einem **%s** radius gelöscht.",
+    "radius": "Radius",
+    "type": "Art",
+    "deepclean":"Tiefe Reinigung",
+    "deepcleanguide":"Löscht auch clientseitige Gegenstände.",
 
     "forceeasteregg": "Easter Egg aktivieren",
 

@@ -1282,21 +1282,52 @@ function GenerateMenu() -- this is a big ass function
 			table.insert(sl, GetLocalisedText('props'))
 		end
 
+		local radi = {10,20,50,100,"global"}
+
 		if #sl > 0 and not RedM then
-			local thisItem = NativeUI.CreateListItem(GetLocalisedText("cleanarea"), sl, 1, GetLocalisedText("cleanareaguide"))
-			servermanagement:AddItem(thisItem)
-			thisItem.OnListSelected = function(sender, item, index)
+			cleanType = sl[1]
+			cleanRadius = radi[1]
+			deepClean = true
+
+			cleanupMenu = _menuPool:AddSubMenu(servermanagement, GetLocalisedText("cleanarea"), GetLocalisedText("cleanareaguide"),true)
+
+			local thisItem = NativeUI.CreateListItem(GetLocalisedText("type"), sl, 1, GetLocalisedText("cleanareaguide"))
+			cleanupMenu:AddItem(thisItem)
+			thisItem.OnListChanged = function(sender, item, index)
 				if item == thisItem then
-						i = item:IndexToItem(index)
-						if i == GetLocalisedText('cars') then
-							TriggerServerEvent("EasyAdmin:requestCleanup", "cars")
-						elseif i == GetLocalisedText('peds') then
-							TriggerServerEvent("EasyAdmin:requestCleanup", "peds")
-						else
-							TriggerServerEvent("EasyAdmin:requestCleanup", "props")
-						end
+					i = item:IndexToItem(index)
+					cleanType = i
 				end
 			end
+
+			local thisItem = NativeUI.CreateListItem(GetLocalisedText("radius"), radi, 1, "")
+			cleanupMenu:AddItem(thisItem)
+			thisItem.OnListChanged = function(sender, item, index)
+				if item == thisItem then
+					i = item:IndexToItem(index)
+					cleanRadius = i
+				end
+			end
+
+			local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("deepclean"), deepClean, GetLocalisedText("deepcleanguide"))
+			cleanupMenu:AddItem(thisItem)
+			thisItem.CheckboxEvent = function(sender, item, checked_)
+				deepClean = checked_
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("cleanarea"), GetLocalisedText("cleanareaguide"))
+			cleanupMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				if cleanType == GetLocalisedText('cars') then
+					cleanType = "cars"
+				elseif cleanType == GetLocalisedText('peds') then
+					cleanType = "peds"
+				elseif cleanType == GetLocalisedText('props') then
+					cleanType = "props"
+				end
+				print(cleanType)
+				TriggerServerEvent("EasyAdmin:requestCleanup", cleanType, cleanRadius, deepClean)
+			end	
 		end
 
 		if permissions["server.permissions.read"] then

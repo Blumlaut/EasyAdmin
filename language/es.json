@@ -174,7 +174,11 @@
     "cleaningped": "Borrando Peatones %s",
     "cleaningprop": "Borrando Objetos %s",
     "finishedcleaning": "Limpieza completada con exito %s",
-    "admincleanedup": "**%s** Ha realizado una limpieza de todos los **%s** en su area.",
+    "admincleanedup": "**%s** Ha realizado una limpieza de todos los **%s** en un radio de **%s**.",
+    "radius": "Radius",
+    "type": "Type",
+    "deepclean":"Deep Clean",
+    "deepcleanguide":"Also deletes clientside entities.",
 
     "forceeasteregg": "Forzar Easter Egg",
 
