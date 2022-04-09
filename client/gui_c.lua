@@ -1325,7 +1325,6 @@ function GenerateMenu() -- this is a big ass function
 				elseif cleanType == GetLocalisedText('props') then
 					cleanType = "props"
 				end
-				print(cleanType)
 				TriggerServerEvent("EasyAdmin:requestCleanup", cleanType, cleanRadius, deepClean)
 			end	
 		end
@@ -1787,7 +1786,6 @@ Citizen.CreateThread( function()
 				local targetPed = PlayerPedId()
 				local targetPlayer = -1
 				local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
-				print("pressed E")
 				spectatePlayer(targetPed,targetPlayer,GetPlayerName(targetPlayer))
 				TriggerEvent('EasyAdmin:FreezePlayer', false)
 				--SetEntityCoords(PlayerPedId(), oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)

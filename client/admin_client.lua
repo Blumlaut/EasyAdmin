@@ -235,7 +235,6 @@ Citizen.CreateThread(function()
 					else
 						local entityCoords = GetEntityCoords(entity)
 						local playerCoords = GetEntityCoords(PlayerPedId())
-						print(#(playerCoords - entityCoords))
 						if #(playerCoords - entityCoords) < radius then
 							PrintDebugMessage("deleting entity "..entity, 3)
 							SetEntityAsNoLongerNeeded(entity)
