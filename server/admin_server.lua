@@ -456,6 +456,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	function cleanupArea(type, radius, player)
+		if not radius then radius = "global" end
 		if (onesync ~= "off" and onesync ~= "legacy") then
 			local toDelete = {}
 			if type == "cars" then
