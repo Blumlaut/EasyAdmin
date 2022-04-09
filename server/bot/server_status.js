@@ -117,8 +117,9 @@ async function updateServerStatus(why) {
                 return
             }
             await channel.bulkDelete(messagesToDelete)
-        } catch {
-            console.log("Could not bulk-delete messages in this channel.")
+        } catch (error) {
+            console.log("Could not bulk-delete messages in botStatusChannel.")
+            console.error(error)
         }
         let embed = await prepareGenericEmbed("Fetching Server Infos..")
         statusMessage = await channel.send({ embeds: [embed] })
