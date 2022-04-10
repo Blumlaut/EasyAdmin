@@ -463,7 +463,6 @@ Citizen.CreateThread(function()
 				toDelete = GetAllVehicles()
 			elseif type == "peds" then
 				toDelete = GetAllPeds()
-				print("peds")
 			elseif type == "props" then
 				toDelete = GetAllObjects()
 			end
@@ -477,7 +476,6 @@ Citizen.CreateThread(function()
 					else
 						local entityCoords = GetEntityCoords(entity)
 						local playerCoords = GetEntityCoords(GetPlayerPed(player))
-						print(#(playerCoords - entityCoords))
 						if #(playerCoords - entityCoords) < radius then
 							PrintDebugMessage("deleting entity "..entity, 3)
 							DeleteEntity(entity)
@@ -497,7 +495,6 @@ Citizen.CreateThread(function()
 		local source=source
 		if DoesPlayerHavePermission(source, "server.cleanup."..type) then
 			PrintDebugMessage("Player "..getName(source,true).." Requested Cleanup for "..type, 3)
-			print("bruh")
 			cleanupArea(type, radius, source)
 			
 			if deep then
