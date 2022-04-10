@@ -13,6 +13,7 @@ async function configForward(interaction, exports) {
 	const collector = interaction.channel.createMessageCollector({ filter, time: 10000, max: 1 });
 
 	collector.on('collect', async m => {
+		await m.fetch()
 		let embed = await prepareGenericEmbed(`Great! Now please tag the channel you want me to log this in (like this: <#${interaction.channel.id}>).`);
 
 
@@ -21,7 +22,7 @@ async function configForward(interaction, exports) {
 		const collector = interaction.channel.createMessageCollector({ filter, time: 10000, max: 1 });
 
 		collector.on('collect', async message => {
-			console.log(message.mentions.channels)
+			await message.fetch()
 			let channel = message.mentions.channels.first().id
 
 			exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `ea_addBotLogForwarding ${m.cleanContent}`, true)
@@ -51,6 +52,7 @@ async function configBridge(interaction, exports) {
 	const collector = interaction.channel.createMessageCollector({ filter, time: 10000, max: 1 });
 
 	collector.on('collect', async m => {
+		await m.fetch()
 		let channel = m.mentions.channels.first().id
 
 		exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `set ea_botChatBridge`, true)
@@ -78,6 +80,7 @@ async function configLiveStatus(interaction, exports) {
 	const collector = interaction.channel.createMessageCollector({ filter, time: 10000, max: 1 });
 
 	collector.on('collect', async m => {
+		await m.fetch()
 		let channel = m.mentions.channels.first().id
 
 		exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `set ea_botStatusChannel`, true)
