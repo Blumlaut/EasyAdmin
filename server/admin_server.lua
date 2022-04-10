@@ -556,12 +556,6 @@ Citizen.CreateThread(function()
 	
 	
 	------------------------------ COMMANDS
-
-	RegisterCommand("announce", function(source, args, rawCommand)
-		local reason = table.concat(args, " ")
-		announce(reason)
-	end, false)
-	
 	RegisterCommand("spectate", function(source, args, rawCommand)
 		if(source == 0) then
 			Citizen.Trace(GetLocalisedText("badidea")) -- Maybe should be it's own string saying something like "only players can do this" or something
@@ -578,12 +572,6 @@ Citizen.CreateThread(function()
 		end
 	end, false)
 	
-	RegisterCommand("teleport", function(source, args, rawCommand)
-		if args[1] and DoesPlayerHavePermission(source, "player.teleport.single") then
-			PrintDebugMessage("Player Requested Teleport something", 3)
-			-- not yet
-		end
-	end, false)
 	
 	RegisterCommand("setgametype", function(source, args, rawCommand)
 		if args[1] and DoesPlayerHavePermission(source, "server.convars") then
