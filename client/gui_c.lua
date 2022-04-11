@@ -951,6 +951,18 @@ function GenerateMenu() -- this is a big ass function
 
 
 	if DoesPlayerHavePermissionForCategory(-1, "server") then
+		if permissions["server.announce"] then
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("announcement"), GetLocalisedText("announcementguide"))
+			servermanagement:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+				
+				if result then
+					TriggerClientEvent("EasyAdmin:Announce", result)
+				end
+			end
+		end
+
 		if permissions["server.convars"] then
 			local thisItem = NativeUI.CreateItem(GetLocalisedText("setgametype"), GetLocalisedText("setgametypeguide"))
 			servermanagement:AddItem(thisItem)

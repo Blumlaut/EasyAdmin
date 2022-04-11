@@ -97,6 +97,8 @@
     "nongiven": "Non autorisé",
     "newadmin": "Vous êtes maintenant un administrateur",
     "announcement": "Announcement",
+    "announcementguide": "Send an announcement to all players",
+    "adminannouncement": "**%s** sent an announcement: **%s**",
     "playernotfound": "Le joueur n'a pas été trouvé.",
     "done": "Fait!",
     "adminkickedplayer": "**%s** a expulser **%s**, Raison: %s",

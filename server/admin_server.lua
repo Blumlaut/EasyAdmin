@@ -550,6 +550,15 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminchangedconvar'), getName(source, false, true), convarname, convarvalue), "settings", 16777214)
 		end
 	end)
+
+	RegisterServerEvent("EasyAdmin:Announce", function(text)
+		if DoesPlayerHavePermission(source, "server.announce") then
+			PrintDebugMessage("Player "..getName(source,true).." sent a announcement: "..text, 3)
+			announce(text)
+			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminannouncement'), getName(source, false, true), text), "settings", 16777214)
+		end	
+	end)
 	
 	
 	------------------------------ COMMANDS

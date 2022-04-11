@@ -96,6 +96,8 @@
     "nongiven": "No se ha proporcionado",
     "newadmin": "Ahora eres administrador",
     "announcement": "Anuncio",
+    "announcementguide": "Send an announcement to all players",
+    "adminannouncement": "**%s** sent an announcement: **%s**",
     "playernotfound": "No se ha encontrado al jugador.",
     "done": "Hecho",
     "adminkickedplayer": "**%s** a kickeado a **%s**, Razon: %s",
