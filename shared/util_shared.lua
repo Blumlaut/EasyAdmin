@@ -24,6 +24,7 @@ permissions = {
 	["server.permissions.write"] = false,
 	["server.shortcut.add"] = false,
 	["server.reminder.add"] = false,
+	["server.announce"] = false,
 	["server.convars"] = false,
 	["server.resources.start"] = false,
 	["server.resources.stop"] = false,
