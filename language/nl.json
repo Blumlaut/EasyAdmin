@@ -98,6 +98,8 @@
     "nongiven": "Geen reden opgegeven",
     "newadmin": "Je bent nu Admin",
     "announcement": "Mededeling",
+    "announcementguide": "Stuur een mededeling naar alle spelers",
+    "adminannouncement": "**%s** stuurde een mededeling: **%s**",
     "playernotfound": "Speler kan niet gevonden worden.",
     "done": "Gedaan!",
 
