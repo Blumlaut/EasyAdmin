@@ -1099,6 +1099,12 @@ local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 function checkVersion()
 	local remoteVersion,remoteURL = getLatestVersion()
 
+	if GetResourceKvpString('currentVersion') ~= curVersion then
+		PrintDebugMessage('Detected Update or Fresh Install.', 4)
+		SetResourceKvpNoSync('currentVersion', curVersion)
+	end
+
+
 	if isMaster then
 		PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
 	end
