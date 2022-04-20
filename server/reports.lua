@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
                     return
                 end
                 
-                local reason = string.gsub(rawCommand, "calladmin ", "")
+                local reason = string.gsub(rawCommand, GetConvar("ea_callAdminCommandName", "calladmin").." ", "")
                 local reportid = addNewReport(0, source, _,reason)
                 for i,_ in pairs(OnlineAdmins) do 
                     local notificationText = string.format(string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""), getName(source,true,false), reason, reportid)
@@ -84,7 +84,7 @@ Citizen.CreateThread(function()
                 
                 
                 if id and valid then
-                    local reason = string.gsub(rawCommand, "report " ..args[1].." ", "")
+                    local reason = string.gsub(rawCommand, GetConvar("ea_reportCommandName", "report").." " ..args[1].." ", "")
                     if not PlayerReports[id] then
                         PlayerReports[id] = { }
                     end
