@@ -958,7 +958,7 @@ function GenerateMenu() -- this is a big ass function
 				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
 				
 				if result then
-					TriggerClientEvent("EasyAdmin:Announce", result)
+					TriggerServerEvent("EasyAdmin:Announce", result)
 				end
 			end
 		end
