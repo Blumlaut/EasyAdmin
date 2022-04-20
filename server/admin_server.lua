@@ -626,7 +626,7 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("teleportedtoplayer"), getName(source, false, true), getName(id, true, true)), "teleport", 16777214)
 			TriggerClientEvent('EasyAdmin:TeleportRequest', source, id,tgtCoords)
 		else
-			print('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id)
+			PrintDebugMessage('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id, 2)
 		end
 	end)
 	
@@ -1114,7 +1114,7 @@ function checkVersion()
 		print("\n--------------------------------------------------------------------------")
 		updateAvailable = remoteVersion
 	elseif tonumber(curVersion) > tonumber(remoteVersion) then
-		print("Your version of "..resourceName.." seems to be higher than the current stable version.")
+		PrintDebugMessage("Your version of "..resourceName.." seems to be higher than the current stable version.", 2)
 	end
 	
 	if GetResourceState("screenshot-basic") == "missing" then 
