@@ -288,7 +288,7 @@ function GenerateMenu() -- this is a big ass function
 		playermanagement:SetMenuWidthOffset(menuWidth)	
 	end
 
-	if DoesPlayerHavePermissionForCategory(-1, "server") then
+	if DoesPlayerHavePermissionForCategory(-1, "server") or permissions["player.ban.view"] then
 		servermanagement = _menuPool:AddSubMenu(mainMenu, GetLocalisedText("servermanagement"),"",true, true)
 		servermanagement:SetMenuWidthOffset(menuWidth)	
 	end
@@ -1031,257 +1031,258 @@ function GenerateMenu() -- this is a big ass function
 				end
 			end
 		end
-		
-		if permissions["player.ban.view"] then
-			unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
+	end
+
+	if permissions["player.ban.view"] then
+		unbanPlayer = _menuPool:AddSubMenu(servermanagement,GetLocalisedText("viewbanlist"),"",true)
+		local thisMenuWidth = menuWidth
+		if menuWidth < 150 then
+			thisMenuWidth = 150
+		else
+			thisMenuWidth = menuWidth
+		end
+		unbanPlayer:SetMenuWidthOffset(thisMenuWidth)
+		local reason = ""
+		local identifier = ""
+
+		local function generateBanOverview(banId)
+			_menuPool:Remove()
+			TriggerEvent("EasyAdmin:MenuRemoved")
+			_menuPool = NativeUI.CreatePool()
+			collectgarbage()
+			if not GetResourceKvpString("ea_menuorientation") then
+				SetResourceKvp("ea_menuorientation", "middle")
+				SetResourceKvpInt("ea_menuwidth", 0)
+				menuWidth = 0
+				menuOrientation = handleOrientation("middle")
+			else
+				menuWidth = GetResourceKvpInt("ea_menuwidth")
+				menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
+			end 
+			
+			local mainMenu = NativeUI.CreateMenu("", "Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
+			_menuPool:Add(mainMenu)
+			
 			local thisMenuWidth = menuWidth
 			if menuWidth < 150 then
 				thisMenuWidth = 150
 			else
 				thisMenuWidth = menuWidth
 			end
-			unbanPlayer:SetMenuWidthOffset(thisMenuWidth)
-			local reason = ""
-			local identifier = ""
-
-			local function generateBanOverview(banId)
-				_menuPool:Remove()
-				TriggerEvent("EasyAdmin:MenuRemoved")
-				_menuPool = NativeUI.CreatePool()
-				collectgarbage()
-				if not GetResourceKvpString("ea_menuorientation") then
-					SetResourceKvp("ea_menuorientation", "middle")
-					SetResourceKvpInt("ea_menuwidth", 0)
-					menuWidth = 0
-					menuOrientation = handleOrientation("middle")
-				else
-					menuWidth = GetResourceKvpInt("ea_menuwidth")
-					menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
-				end 
-				
-				local mainMenu = NativeUI.CreateMenu("", "Ban Infos", menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
-				_menuPool:Add(mainMenu)
-				
-				local thisMenuWidth = menuWidth
-				if menuWidth < 150 then
-					thisMenuWidth = 150
-				else
-					thisMenuWidth = menuWidth
-				end
-				mainMenu:SetMenuWidthOffset(thisMenuWidth)	
-				_menuPool:ControlDisablingEnabled(false)
-				_menuPool:MouseControlsEnabled(false)
+			mainMenu:SetMenuWidthOffset(thisMenuWidth)	
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:MouseControlsEnabled(false)
 
 
-				if banlist[banId].banid then
-					local thisItem = NativeUI.CreateItem("Ban ID: "..banlist[banId].banid, "")
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						copyToClipboard(banlist[banId].banid)
-					end	
-				end
-
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[banId].reason)
+			if banlist[banId].banid then
+				local thisItem = NativeUI.CreateItem("Ban ID: "..banlist[banId].banid, "")
 				mainMenu:AddItem(thisItem)
 				thisItem.Activated = function(ParentMenu,SelectedItem)
-					--nothing
+					copyToClipboard(banlist[banId].banid)
 				end	
+			end
+
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"),banlist[banId].reason)
+			mainMenu:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				--nothing
+			end	
 
 
-				if banlist[banId].name then
-					local thisItem = NativeUI.CreateItem("Name: "..banlist[banId].name, "")
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						if permissions["player.ban.edit"] then
-							local result = displayKeyboardInput("", banlist[banId].name, 64)
-			
-							if result then
-								banlist[banId].name = result
-							end
-						end
-					end	
-				end
-
-
-				if banlist[banId].banner then
-					local thisItem = NativeUI.CreateItem("Banner: "..banlist[banId].banner, "")
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						if permissions["player.ban.edit"] then
-							local result = displayKeyboardInput("", banlist[banId].banner, 64)
-			
-							if result then
-								banlist[banId].banner = result
-							end
+			if banlist[banId].name then
+				local thisItem = NativeUI.CreateItem("Name: "..banlist[banId].name, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if permissions["player.ban.edit"] then
+						local result = displayKeyboardInput("", banlist[banId].name, 64)
+		
+						if result then
+							banlist[banId].name = result
 						end
 					end
-				end
+				end	
+			end
 
 
-				if banlist[banId].expireString then
-					local thisItem = NativeUI.CreateItem("Expires: "..banlist[banId].expireString, "")
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						if permissions["player.ban.edit"] then
-							AddTextEntry("EA_ENTERTIME", "Enter Unix Timestamp")
-							local result = displayKeyboardInput("EA_ENTERTIME", banlist[banId].expire, 64)
-			
-							if result then
-								banlist[banId].expire = tonumber(result)
-							end
+			if banlist[banId].banner then
+				local thisItem = NativeUI.CreateItem("Banner: "..banlist[banId].banner, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if permissions["player.ban.edit"] then
+						local result = displayKeyboardInput("", banlist[banId].banner, 64)
+		
+						if result then
+							banlist[banId].banner = result
 						end
-					end	
-				end
-
-				
-				for _, identifier in pairs(banlist[banId].identifiers) do
-					if not (GetConvar("ea_IpPrivacy", "true") == "true" and string.split(identifier, ":")[1] == "ip") then
-						local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
-						mainMenu:AddItem(thisItem)
-						thisItem.Activated = function(ParentMenu,SelectedItem)
-							copyToClipboard(identifier)
-						end	
 					end
-				end
-
-				if permissions["player.ban.edit"] then
-					local thisItem = NativeUI.CreateItem(GetLocalisedText("savebanchanges"),GetLocalisedText("savebanguide"))
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						TriggerServerEvent("EasyAdmin:editBan", banlist[banId])
-					end
-				end
-
-				if permissions["player.ban.remove"] then
-					local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
-					mainMenu:AddItem(thisItem)
-					thisItem.Activated = function(ParentMenu,SelectedItem)
-						TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[banId].banid)
-						TriggerServerEvent("EasyAdmin:requestBanlist")
-						_menuPool:CloseAllMenus()
-						Citizen.Wait(800)
-						GenerateMenu()
-						unbanPlayer:Visible(true)
-					end	
-					mainMenu:Visible(true)
 				end
 			end
 
 
-			local thisItem = NativeUI.CreateItem(GetLocalisedText("searchbans"), "")
-			unbanPlayer:AddItem(thisItem)
-			thisItem.Activated = function(ParentMenu,SelectedItem)
-				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
-
-				local foundBan = false
-				if result then
-					for i,theBanned in ipairs(banlist) do
-						if foundBan then
-							break
+			if banlist[banId].expireString then
+				local thisItem = NativeUI.CreateItem("Expires: "..banlist[banId].expireString, "")
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					if permissions["player.ban.edit"] then
+						AddTextEntry("EA_ENTERTIME", "Enter Unix Timestamp")
+						local result = displayKeyboardInput("EA_ENTERTIME", banlist[banId].expire, 64)
+		
+						if result then
+							banlist[banId].expire = tonumber(result)
 						end
-						if tostring(theBanned.banid) == result then
-							foundBan=true
-							foundBanid=i
-							break
-						end 
 					end
-					if not foundBan then
-						for i,theBanned in ipairs(banlist) do
-							if theBanned.name then
-								if string.find(string.lower(theBanned.name), string.lower(result)) then
-									foundBan=true
-									foundBanid=i
-									break
-								end
-							end
-							if string.find((string.lower(theBanned.reason) or "No Reason"), string.lower(result)) then
+				end	
+			end
+
+			
+			for _, identifier in pairs(banlist[banId].identifiers) do
+				if not (GetConvar("ea_IpPrivacy", "true") == "true" and string.split(identifier, ":")[1] == "ip") then
+					local thisItem = NativeUI.CreateItem(string.format(GetLocalisedText("identifier"), string.split(identifier, ":")[1]),identifier)
+					mainMenu:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						copyToClipboard(identifier)
+					end	
+				end
+			end
+
+			if permissions["player.ban.edit"] then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("savebanchanges"),GetLocalisedText("savebanguide"))
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:editBan", banlist[banId])
+				end
+			end
+
+			if permissions["player.ban.remove"] then
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+				mainMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu,SelectedItem)
+					TriggerServerEvent("EasyAdmin:unbanPlayer", banlist[banId].banid)
+					TriggerServerEvent("EasyAdmin:requestBanlist")
+					_menuPool:CloseAllMenus()
+					Citizen.Wait(800)
+					GenerateMenu()
+					unbanPlayer:Visible(true)
+				end	
+				mainMenu:Visible(true)
+			end
+		end
+
+
+		local thisItem = NativeUI.CreateItem(GetLocalisedText("searchbans"), "")
+		unbanPlayer:AddItem(thisItem)
+		thisItem.Activated = function(ParentMenu,SelectedItem)
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+
+			local foundBan = false
+			if result then
+				for i,theBanned in ipairs(banlist) do
+					if foundBan then
+						break
+					end
+					if tostring(theBanned.banid) == result then
+						foundBan=true
+						foundBanid=i
+						break
+					end 
+				end
+				if not foundBan then
+					for i,theBanned in ipairs(banlist) do
+						if theBanned.name then
+							if string.find(string.lower(theBanned.name), string.lower(result)) then
 								foundBan=true
 								foundBanid=i
 								break
 							end
-							for _, identifier in pairs(theBanned.identifiers) do
-								if string.find(identifier, result) then
-									foundBan=true
-									foundBanid=i
-									break
-								end
+						end
+						if string.find((string.lower(theBanned.reason) or "No Reason"), string.lower(result)) then
+							foundBan=true
+							foundBanid=i
+							break
+						end
+						for _, identifier in pairs(theBanned.identifiers) do
+							if string.find(identifier, result) then
+								foundBan=true
+								foundBanid=i
+								break
 							end
 						end
 					end
 				end
+			end
+			_menuPool:CloseAllMenus()
+			Citizen.Wait(300)
+			if foundBan then
+				generateBanOverview(foundBanid)
+			else
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("searchbansfail"))
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end
+
+		end	
+
+		for i,theBanned in ipairs(banlist) do
+			if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
+				if theBanned then
+					reason = theBanned.reason or "No Reason"
+					local thisItem = NativeUI.CreateItem(string.sub(reason, 1,50), "")
+					unbanPlayer:AddItem(thisItem)
+					thisItem.Activated = function(ParentMenu,SelectedItem)
+						generateBanOverview(i)
+					end	
+				end
+			end
+		end
+
+
+		if #banlist > (banlistPage*10) then 
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("lastpage"), "")
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage = math.ceil(#banlist/10)
 				_menuPool:CloseAllMenus()
 				Citizen.Wait(300)
-				if foundBan then
-					generateBanOverview(foundBanid)
-				else
-					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("searchbansfail"))
-					GenerateMenu()
-					unbanPlayer:Visible(true)
-				end
-
+				GenerateMenu()
+				unbanPlayer:Visible(true)
 			end	
-
-			for i,theBanned in ipairs(banlist) do
-				if i<(banlistPage*10)+1 and i>(banlistPage*10)-10 then
-					if theBanned then
-						reason = theBanned.reason or "No Reason"
-						local thisItem = NativeUI.CreateItem(string.sub(reason, 1,50), "")
-						unbanPlayer:AddItem(thisItem)
-						thisItem.Activated = function(ParentMenu,SelectedItem)
-							generateBanOverview(i)
-						end	
-					end
-				end
-			end
-
-
-			if #banlist > (banlistPage*10) then 
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("lastpage"), "")
-				unbanPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					banlistPage = math.ceil(#banlist/10)
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(300)
-					GenerateMenu()
-					unbanPlayer:Visible(true)
-				end	
-			end
-
-			if banlistPage>1 then 
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("firstpage"), "")
-				unbanPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					banlistPage = 1
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(300)
-					GenerateMenu()
-					unbanPlayer:Visible(true)
-				end	
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("previouspage"), "")
-				unbanPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					banlistPage=banlistPage-1
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(300)
-					GenerateMenu()
-					unbanPlayer:Visible(true)
-				end	
-			end
-			if #banlist > (banlistPage*10) then
-				local thisItem = NativeUI.CreateItem(GetLocalisedText("nextpage"), "")
-				unbanPlayer:AddItem(thisItem)
-				thisItem.Activated = function(ParentMenu,SelectedItem)
-					banlistPage=banlistPage+1
-					_menuPool:CloseAllMenus()
-					Citizen.Wait(300)
-					GenerateMenu()
-					unbanPlayer:Visible(true)
-				end	
-			end 
 		end
+
+		if banlistPage>1 then 
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("firstpage"), "")
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage = 1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("previouspage"), "")
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage=banlistPage-1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end
+		if #banlist > (banlistPage*10) then
+			local thisItem = NativeUI.CreateItem(GetLocalisedText("nextpage"), "")
+			unbanPlayer:AddItem(thisItem)
+			thisItem.Activated = function(ParentMenu,SelectedItem)
+				banlistPage=banlistPage+1
+				_menuPool:CloseAllMenus()
+				Citizen.Wait(300)
+				GenerateMenu()
+				unbanPlayer:Visible(true)
+			end	
+		end 
+	end
 		
 
-
+	if DoesPlayerHavePermissionForCategory(-1, "server") then
 
 		local sl = {}
 		if permissions["server.cleanup.cars"] then
