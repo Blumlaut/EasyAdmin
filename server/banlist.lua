@@ -110,7 +110,7 @@ function addBanExport(playerId,reason,expires,banner)
     return ban
 end
 exports('addBan', addBanExport)
-AddEventHandler("EasyAdmin:addBan", addBanExport)
+RegisterNetEvent("EasyAdmin:addBan", addBanExport)
 
 RegisterServerEvent("EasyAdmin:updateBanlist", function(playerId)
     local src = source
