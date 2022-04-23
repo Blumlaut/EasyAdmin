@@ -8,11 +8,10 @@ module.exports = {
 			option.setName('type')
 			.setDescription('Type of Entity to clean up.')
 			.setRequired(true)
-			.addChoices([
-				['Vehicles', "cars"],
-				['Peds', "peds"],
-				["Props", "props"]
-			])),
+			.addChoices(
+				{name:"Vehicles", value:"cars"},
+				{name:"Peds", value:"peds"},
+				{name:"Props", value:"props"})),
 			
 	async execute(interaction, exports) {
 		const type = interaction.options.getString('type')

@@ -102,11 +102,11 @@ module.exports = {
             option.setName('setting')
                 .setDescription('The setting to change')
                 .setRequired(true)
-				.addChoices([
-					['Log Forwarding', 'logfwd'],
-					['Chat Bridge', 'chatbridge'],
-					['Live Server Status', 'serverstatus'],
-				])),
+				.addChoices(
+					{name:'Log Forwarding', value: 'logfwd'},
+					{name:'Chat Bridge', value: 'chatbridge'},
+					{name:'Live Server Status', value: 'serverstatus'}
+				)),
 	async execute(interaction, exports) {
 		const setting = interaction.options.getString('setting')
 
