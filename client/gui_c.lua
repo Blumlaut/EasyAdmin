@@ -751,11 +751,11 @@ function GenerateMenu() -- this is a big ass function
 			reportViewer.ParentItem:RightLabel(tostring(#reports).." "..GetLocalisedText("open"))
 
 			for i, report in pairs(reports) do
-				local reportColor = (report.type == 0 and "~y~" or "~r~")
+				local reportColour = (report.type == 0 and "~y~" or "~r~")
 				if report.claimed then
-					reportColor = "~g~"
+					reportColour = "~g~"
 				end
-				local thisMenu = _menuPool:AddSubMenu(reportViewer, reportColor.. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
+				local thisMenu = _menuPool:AddSubMenu(reportViewer, reportColour.. "#"..report.id.." "..string.sub((report.reportedName or report.reporterName), 1, 12).."~w~", "", true)
 				thisMenu:SetMenuWidthOffset(thisMenuWidth)
 				thisMenu.ParentItem:RightLabel(formatRightString(report.reason, 32))
 				reportMenus[report.id] = thisMenu
