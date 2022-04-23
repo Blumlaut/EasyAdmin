@@ -23,12 +23,12 @@ async function addBotLogForwarding(source,args,rw) {
 RegisterCommand('ea_addBotLogForwarding', addBotLogForwarding)
 
 
-async function LogDiscordMessage(text, feature) {
+async function LogDiscordMessage(text, feature, colour) {
     if (!EasyAdmin) {return} // bot isnt running
     if (GetConvar("ea_botLogChannel", "") == "") {return}
     if (feature == "report" || feature == "calladmin") {return} // we dont care about reports, these get handled in reports.js
     
-    const embed = await prepareGenericEmbed(text)
+    const embed = await prepareGenericEmbed(text,undefined,colour)
     
     
     var channel = await client.channels.cache.get(botLogForwards[feature] || GetConvar("ea_botLogChannel", ""))

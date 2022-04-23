@@ -7,7 +7,7 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
     }
     
     const embed = new EmbedBuilder()
-    .setColor(colour || 65280)
+    .setColor(colour || 16777214)
     if (timestamp != false) {
         embed.setTimestamp()
     }

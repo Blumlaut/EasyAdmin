@@ -40,7 +40,7 @@ function SendWebhookMessage(webhook,message,feature,colour,title,image)
     
     local embed = {
         {
-            ["color"] = (colour or 65280),
+            ["color"] = (colour or 16777214),
             ["title"] = "**"..(title or "EasyAdmin").."**",
             ["description"] = message,
             ["footer"] = {
@@ -53,7 +53,7 @@ function SendWebhookMessage(webhook,message,feature,colour,title,image)
     end
     
     if GetConvar("ea_botLogChannel", "") ~= "" then
-        exports[GetCurrentResourceName()]:LogDiscordMessage(message, feature)
+        exports[GetCurrentResourceName()]:LogDiscordMessage(message, feature, colour)
         return
     end
 
