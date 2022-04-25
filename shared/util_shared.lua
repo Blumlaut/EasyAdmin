@@ -329,3 +329,4 @@ function matchURL(text_with_URLs)
 		end
 	end
 end
+exports('matchURL', matchURL)
