@@ -1,5 +1,5 @@
 --
--- This is an example Plugin to pass EasyAdmin's Internal events to an External Resource as a Notification, in our example pNotify, the reader is expected to form their own functions from this, editing this code is *NOT* recommended,
+-- This is an example Plugin to pass EasyAdmin's Internal events to an External Resource as a Notification, the reader is expected to form their own functions from this, editing this code is *NOT* recommended,
 -- as updates will overwrite it, instead, make your own plugin from this example (copying the file and renaming it is enough.)
 -- the end result will look like this: https://blumlaut.me/s/H9pHGsXgjAFeHDP/preview
 --
