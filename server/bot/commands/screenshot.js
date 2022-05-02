@@ -4,14 +4,14 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('screenshot')
 		.setDescription('Takes a screenshot of the player\'s screen')
-        .addStringOption(option =>
-            option.setName('user')
-                .setDescription('Username or ID')
-                .setRequired(true)),
+		.addStringOption(option =>
+		    option.setName('user')
+				.setDescription('Username or ID')
+				.setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
 		var embed = await prepareGenericEmbed(`Taking Screenshot, please wait.`);
-        
+		
 		await interaction.reply({ embeds: [embed]});
 
 		const user = await findPlayerFromUserInput(userOrId)

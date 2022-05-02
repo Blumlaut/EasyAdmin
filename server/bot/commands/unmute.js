@@ -4,10 +4,10 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('unmute')
 		.setDescription('Unmutes a User')
-        .addStringOption(option =>
-            option.setName('user')
-                .setDescription('Username or ID')
-                .setRequired(true)),
+		.addStringOption(option =>
+		    option.setName('user')
+				.setDescription('Username or ID')
+				.setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
 
@@ -22,11 +22,11 @@ module.exports = {
 
 		if (ret) {
 			var embed = await prepareGenericEmbed(`Successfully unmuted **${user.name}**.`);
-        
+		
 			await interaction.reply({ embeds: [embed]});
 		} else {
 			var embed = await prepareGenericEmbed(`Could not unmute **${user.name}**.`);
-        
+		
 			await interaction.reply({ embeds: [embed]});
 		}
 	},

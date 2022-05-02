@@ -4,10 +4,10 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('playerinfo')
 		.setDescription('Gives Info about a Player')
-        .addStringOption(option =>
-            option.setName('user')
-                .setDescription('Username or ID')
-                .setRequired(true)),
+		.addStringOption(option =>
+		    option.setName('user')
+				.setDescription('Username or ID')
+				.setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
 		
@@ -63,7 +63,7 @@ module.exports = {
 
 
 		  embed.addFields({ name: 'Identifiers', value: `\`\`\`${table}\`\`\``})
-        
+		
 		  await interaction.reply({ embeds: [embed]});
 	},
 };

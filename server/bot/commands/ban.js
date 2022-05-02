@@ -18,7 +18,7 @@ module.exports = {
                 .setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
-        const reason = exports[EasyAdmin].formatShortcuts(interaction.options.getString('reason'))
+		const reason = exports[EasyAdmin].formatShortcuts(interaction.options.getString('reason'))
 		const timeframe = exports[EasyAdmin].formatShortcuts(interaction.options.getString('timeframe'))
 
 		const user = await findPlayerFromUserInput(userOrId)
@@ -53,15 +53,15 @@ module.exports = {
 			interaction.reply({ content: "Insufficient Permissions, you need `easyadmin.player.ban.permanent`.", ephemeral: true })
 			return
 		}
-        
+
 		var ban = exports[EasyAdmin].addBan(user.id, reason, banTime, interaction.user.tag)
 		if (ban) {
 			var embed = await prepareGenericEmbed(`Successfully banned **${user.name}** for **${reason}** until ${ban.expireString} [#${ban.banid}.`)
-        
+
 			await interaction.reply({ embeds: [embed]});
 		} else {
 			var embed = await prepareGenericEmbed(`Failed banning **${user.name}**.`)
-        
+			
 			await interaction.reply({ embeds: [embed]});
 		}
 	},

@@ -1,7 +1,7 @@
 
 async function configForward(interaction, exports) {
 	var embed = await prepareGenericEmbed(`Alright! Now please write the type of log to forward (see <https://easyadmin.readthedocs.io/en/latest/config/> for examples)`);
-        
+
 
 	if (!interaction.replied) {
 		await interaction.reply({ embeds: [embed]});
@@ -40,7 +40,7 @@ async function configForward(interaction, exports) {
 
 async function configBridge(interaction, exports) {
 	var embed = await prepareGenericEmbed(`Alright! Please tag the channel you want me to bridge (like this: <#${interaction.channel.id}>).`);
-        
+
 
 	if (!interaction.replied) {
 		await interaction.reply({ embeds: [embed]});
@@ -68,7 +68,7 @@ async function configBridge(interaction, exports) {
 
 async function configLiveStatus(interaction, exports) {
 	var embed = await prepareGenericEmbed(`Alright! Please tag the channel you want me to post the live status in, make sure its empty and that normal people can't write there! (like this: <#${interaction.channel.id}>).`);
-        
+
 
 	if (!interaction.replied) {
 		await interaction.reply({ embeds: [embed]});
@@ -98,10 +98,10 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('configure')
 		.setDescription('Configure various easyadmin features')
-        .addStringOption(option =>
-            option.setName('setting')
-                .setDescription('The setting to change')
-                .setRequired(true)
+		.addStringOption(option =>
+			option.setName('setting')
+				.setDescription('The setting to change')
+				.setRequired(true)
 				.addChoices(
 					{name:'Log Forwarding', value: 'logfwd'},
 					{name:'Chat Bridge', value: 'chatbridge'},

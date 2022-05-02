@@ -4,10 +4,10 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('slap')
 		.setDescription('Substracts amount of HP from player')
-        .addStringOption(option =>
-            option.setName('user')
-                .setDescription('Username or ID')
-                .setRequired(true))
+		.addStringOption(option =>
+		    option.setName('user')
+				.setDescription('Username or ID')
+				.setRequired(true))
 		.addIntegerOption(option =>
 			option.setName('amount')
 			.setDescription('Amount of HP to slap the user for.')
@@ -27,11 +27,11 @@ module.exports = {
 
 		if (ret) {
 			var embed = await prepareGenericEmbed(`Successfully slapped **${user.name}** for ${slapAmount} HP.`);
-        
+		
 			await interaction.reply({ embeds: [embed]});
 		} else {
 			var embed = await prepareGenericEmbed(`Could not slap **${user.name}**.`);
-        
+		
 			await interaction.reply({ embeds: [embed]});
 		}
 	},
