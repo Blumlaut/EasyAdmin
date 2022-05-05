@@ -3,7 +3,7 @@
     "@discordjs/builders": "0.13.0",
     "@discordjs/rest": "0.4.1",
     "ascii-table": "0.0.9",
-    "discord-api-types": "0.32.0",
+    "discord-api-types": "0.32.1",
     "discord.js": "14.0.0-dev.1649505803-3c0bbac",
     "erlpack": "0.1.4",
     "juration": "0.1.1",
