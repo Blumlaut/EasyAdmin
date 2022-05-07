@@ -175,12 +175,12 @@ local overrideEgg, currentEgg
 -- note: we dont support dui banner and dui logo at the same time yet.
 local eastereggs = {
 	pipes = {
-		duibanner = "http://furfag.de/eggs/pipes",
+		duibanner = "http://legacy.furfag.de/eggs/pipes",
 		banner = false,
 		logo = "dependencies/images/banner-logo.png",
 	},
 	nom = {
-		duilogo = "http://furfag.de/eggs/nom",
+		duilogo = "http://legacy.furfag.de/eggs/nom",
 		banner = "dependencies/images/banner-gradient.png",
 		logo = false,
 	},
