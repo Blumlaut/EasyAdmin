@@ -98,18 +98,20 @@ async function updateServerStatus(why) {
     
     if (!statusMessage) {
         var messagesToDelete = []
-        var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
-            console.error("^7Failed to configure server status channel, please make sure you gave the bot permission to write in the channel!\n\n")
-            console.error(error)
-            return
-        })
-        for (var message of messages.values()) {
-            if (messages.size == 1 && message.author.id == client.user.id) {
-                statusMessage = message
-                break
-            } else {
-                messagesToDelete.push(message.id)
-            }
+        if (!channel.messages == undefined) { // this might be undefined if the channel has no messages
+            var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
+                console.error("^7Failed to configure server status channel, please make sure you gave the bot permission to write in the channel!\n\n")
+                console.error(error)
+                return
+            })
+            for (var message of messages.values()) {
+                if (messages.size == 1 && message.author.id == client.user.id) {
+                    statusMessage = message
+                    break
+                } else {
+                    messagesToDelete.push(message.id)
+                }
+            }   
         }
         try {
             if (statusMessage) {
