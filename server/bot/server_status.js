@@ -99,7 +99,7 @@ async function updateServerStatus(why) {
     
     if (!statusMessage) {
         var messagesToDelete = []
-        if (!channel.messages == undefined) { // this might be undefined if the channel has no messages
+        if (channel.messages != undefined) { // this might be undefined if the channel has no messages? i'm not sure why this would ever be undefined..
             var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
                 console.error("^7Failed to configure server status channel, please make sure you gave the bot permission to write in the channel!\n\n")
                 console.error(error)
