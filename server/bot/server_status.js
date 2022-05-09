@@ -13,16 +13,17 @@ async function getServerStatus(why) {
     var joinURL = GetConvar('web_baseUrl', '')
     var buttonRow = false
     
-    if(joinURL != '' && joinURL.indexOf('cfx.re' != -1)) {
+
+    if(joinURL != '' && joinURL.indexOf('cfx.re' != -1) && joinURL.match(/^[^A-z0-9]/)==null) {
         embed.setURL(`https://${joinURL}`)
         buttonRow = new ActionRowBuilder()
         var button = new ButtonBuilder()
         .setURL(`https://${joinURL}`)
         .setLabel(`Join Server`)
         .setStyle(ButtonStyle.Link)
-        
-        
         buttonRow.addComponents(button)
+    } else {
+        joinURL = ''
     }
     var serverName = GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))
     if (serverName.length > 255) {
