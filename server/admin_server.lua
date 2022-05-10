@@ -473,6 +473,14 @@ Citizen.CreateThread(function()
 		end
 	end)
 	
+
+	scrinprogress = false
+
+	function isScreenshotInProgress()
+		return scrinprogress
+	end
+	exports('isScreenshotInProgress', isScreenshotInProgress)
+
 	RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
 		if scrinprogress then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("screenshotinprogress"))

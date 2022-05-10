@@ -11,11 +11,17 @@ module.exports = {
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
 		var embed = await prepareGenericEmbed(`Taking Screenshot, please wait.`);
-		
 		await interaction.reply({ embeds: [embed]});
 
-		const user = await findPlayerFromUserInput(userOrId)
 
+		var inProgress = await exports[EasyAdmin].isScreenshotInProgress()
+		if (inProgress) {
+			var embed = await prepareGenericEmbed(`A screenshot is already in progress! Please try again later.`);
+			interaction.editReply({ embeds: [embed]});
+			return
+		}
+
+		const user = await findPlayerFromUserInput(userOrId)
 		if (!user || user.dropped) {
 			interaction.editReply({ content: "Sorry, i couldn't find any user with the infos you provided.", ephemeral: true})
 			return
