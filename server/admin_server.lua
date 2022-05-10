@@ -176,24 +176,6 @@ Citizen.CreateThread(function()
 		PrintDebugMessage("Starting in gta5 Mode.", 4)
 	end
 	
-
-	local legacyFiles = {
-		'__resource.lua',
-		'version.json',
-		'admin_server.lua',
-		'admin_client.lua',
-		'gui_c.lua',
-		'util_shared.lua'
-	}
-
-	for i,file in pairs(legacyFiles) do
-		local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
-		if fileExists then
-			os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
-			PrintDebugMessage("Found legacy "..file.." file in EasyAdmin Folder and attempted deletion.", 2)
-		end
-	end
-	
 	AnonymousAdmins = {}
 	
 	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
@@ -903,10 +885,29 @@ function checkVersion()
 	local remoteVersion,remoteURL = getLatestVersion()
 
 	if GetResourceKvpString('currentVersion') ~= curVersion then
-		PrintDebugMessage('Detected Update or Fresh Install.', 4)
+		local legacyFiles = {
+			'__resource.lua',
+			'version.json',
+			'admin_server.lua',
+			'admin_client.lua',
+			'gui_c.lua',
+			'util_shared.lua',
+			'yarn.lock',
+			'.yarn.installed'
+		}
+	
+		for i,file in pairs(legacyFiles) do
+			local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
+			if fileExists then
+				os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
+				PrintDebugMessage("Found "..file.." file in EasyAdmin Folder and attempted deletion.", 2)
+			end
+		end
+
+		PrintDebugMessage('EasyAdmin has been updated, or just been installed for the first time, please restart EasyAdmin to ensure smooth operation.', 1)
+		
 		SetResourceKvpNoSync('currentVersion', curVersion)
 	end
-
 
 	if isMaster then
 		PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
