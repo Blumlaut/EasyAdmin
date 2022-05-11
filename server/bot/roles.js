@@ -35,19 +35,15 @@ if (GetConvar("ea_botToken", "") != "") {
     exports('syncDiscordRoles', syncDiscordRoles)
     
     client.on("guildMemberUpdate", async function(oldMember, newMember){
-        var player = await getPlayerFromDiscordAccount(newMember)
-        if (player) {
-            oldRoles = await oldMember.roles.cache.keys()
-            
-            for (var role of oldRoles) {
-                ExecuteCommand(`remove_principal identifier.discord:${oldMember.id} role:${role}`)
-            }
-            
-            newRoles = await newMember.roles.cache.keys()
-            
-            for (var role of newRoles) {
-                ExecuteCommand(`add_principal identifier.discord:${newMember.id} role:${role}`)
-            }
+        oldRoles = await oldMember.roles.cache.keys()
+        newRoles = await newMember.roles.cache.keys()
+
+        for (var role of oldRoles) {
+            ExecuteCommand(`remove_principal identifier.discord:${oldMember.id} role:${role}`)
+        }
+        
+        for (var role of newRoles) {
+            ExecuteCommand(`add_principal identifier.discord:${newMember.id} role:${role}`)
         }
     });
 }
