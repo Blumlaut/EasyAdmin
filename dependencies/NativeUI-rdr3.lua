@@ -381,8 +381,8 @@ end
 function IsMouseInBounds(X, Y, Width, Height)
     local MX, MY = math.round(GetControlNormal(0, "INPUT_CURSOR_X") * 1920), math.round(GetControlNormal(0, "INPUT_CURSOR_Y") * 1080)
     MX, MY = FormatXWYH(MX, MY)
-    X, Y = FormatXWYH(X, Y)
-    Width, Height = FormatXWYH(Width, Height)
+    local X, Y = FormatXWYH(X, Y)
+    local Width, Height = FormatXWYH(Width, Height)
     return (MX >= X and MX <= X + Width) and (MY > Y and MY < Y + Height)
 end
 
@@ -455,7 +455,7 @@ function UIResRectangle:Draw()
 end
 
 function DrawRectangle(X, Y, Width, Height, R, G, B, A)
-    X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
+    local X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
     X, Y = FormatXWYH(X, Y)
     Width, Height = FormatXWYH(Width, Height)
     DrawRect(X + Width * 0.5, Y + Height * 0.5, Width, Height, tonumber(R) or 255, tonumber(G) or 255, tonumber(B) or 255, tonumber(A) or 255)
@@ -721,7 +721,7 @@ function DrawTexture(TxtDictionary, TxtName, X, Y, Width, Height, Heading, R, G,
     if not HasStreamedTextureDictLoaded(tostring(TxtDictionary) or "") then
         RequestStreamedTextureDict(tostring(TxtDictionary) or "", true)
     end
-    X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
+    local X, Y, Width, Height = X or 0, Y or 0, Width or 0, Height or 0
     X, Y = FormatXWYH(X, Y)
     Width, Height = FormatXWYH(Width, Height)
     DrawSprite(tostring(TxtDictionary) or "", tostring(TxtName) or "", X + Width * 0.5, Y + Height * 0.5, Width, Height, tonumber(Heading) or 0, tonumber(R) or 255, tonumber(G) or 255, tonumber(B) or 255, tonumber(A) or 255)
@@ -1139,7 +1139,7 @@ function UIMenuListItem:Position(Y)
     if tonumber(Y) then
         self.LeftArrow:Position(300 + self.Base._Offset.X + self.Base.ParentMenu.WidthOffset, 147 + Y + self.Base._Offset.Y)
         self.RightArrow:Position(400 + self.Base._Offset.X + self.Base.ParentMenu.WidthOffset, 147 + Y + self.Base._Offset.Y)
-        self.ItemText:Position(600 + self.Base._Offset.X + self.Base.ParentMenu.WidthOffset, 147 + Y + self.Base._Offset.Y)
+        self.ItemText:Position(300 + self.Base._Offset.X + self.Base.ParentMenu.WidthOffset, 147 + Y + self.Base._Offset.Y)
         self.Base:Position(Y)
     end
 end
@@ -1327,8 +1327,8 @@ function UIMenuSliderItem.New(Text, Items, Index, Description, Divider)
         ShowDivider = tobool(Divider),
         LeftArrow = Sprite.New("commonmenutu", "arrowleft", 0, 105, 15, 15),
         RightArrow = Sprite.New("commonmenutu", "arrowright", 0, 105, 15, 15),
-        Background = UIResRectangle.New(0, 0, 150, 9, 4, 32, 57, 255),
-        Slider = UIResRectangle.New(0, 0, 75, 9, 57, 116, 200, 255),
+        Background = UIResRectangle.New(0, 0, 150, 9, 15, 24, 33, 255),
+        Slider = UIResRectangle.New(0, 0, 75, 9, 72,109,149, 255),
         Divider = UIResRectangle.New(0, 0, 2.5, 20, 245, 245, 245, 255),
         _Index = tonumber(Index) or 1,
         OnSliderChanged = function(menu, item, newindex) end,
@@ -3285,7 +3285,7 @@ function UIMenu:Draw()
     if #self.Items <= self.Pagination.Total + 1 then
         local ItemOffset = self.Subtitle.ExtraY - 37 + WindowHeight
         for index = 1, #self.Items do
-            Item = self.Items[index]
+            local Item = self.Items[index]
             Item:Position(ItemOffset)
             Item:Draw()
             ItemOffset = ItemOffset + self:CalculateItemHeightOffset(Item)
@@ -3294,7 +3294,7 @@ function UIMenu:Draw()
         local ItemOffset = self.Subtitle.ExtraY - 37 + WindowHeight
         for index = self.Pagination.Min + 1, self.Pagination.Max, 1 do
             if self.Items[index] then
-                Item = self.Items[index]
+                local Item = self.Items[index]
                 Item:Position(ItemOffset)
                 Item:Draw()
                 ItemOffset = ItemOffset + self:CalculateItemHeightOffset(Item)
