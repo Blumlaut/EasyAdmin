@@ -805,7 +805,6 @@ Citizen.CreateThread(function()
 		end, "POST", json.encode(data))
 		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
 	end
-	RegisterCommand("sendTelemetry", sendTelemetry)
 end)
 
 Citizen.CreateThread(function()
@@ -996,7 +995,7 @@ Citizen.CreateThread(function()
 					return -- stop telemetry if it gets disabled at runtime
 				end
 				sendTelemetry()
-				Wait(math.random(6600000, 12000000))
+				Wait(math.random(11000000, 24000000))
 			end
 		end)
 	end
