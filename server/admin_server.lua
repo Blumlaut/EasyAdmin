@@ -168,7 +168,7 @@ Citizen.CreateThread(function()
 	end
 	
 	
-	if GetConvar("gamename", "not-rdr3") == "rdr3" then 
+	if GetConvar("gamename", "gta5") == "rdr3" then 
 		RedM = true
 		PrintDebugMessage("Starting in rdr3 Mode.", 4)
 	else
@@ -775,6 +775,13 @@ Citizen.CreateThread(function()
 		data.servername = GetConvar("sv_hostname", "Default FXServer")
 		data.usercount = #GetPlayers()
 		data.bancount = #blacklist
+		data.gamename = GetConvar("gamename", "gta5")
+		if GetConvar("ea_botToken", "") ~= "" then
+			data.bot = true
+		else
+			data.bot = false
+		end
+
 		data.time = os.time()
 		if os.getenv('OS') then
 			data.os = os.getenv('OS')
@@ -793,9 +800,14 @@ Citizen.CreateThread(function()
 		end
 		
 		data.zap = GetConvar("is_zap", "false")
-		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?data="..json.encode(data), nil, "POST")
+		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?api=v2", function(err,reply,headers)
+			PrintDebugMessage("Telemetry Reply was: "..reply)
+			
+			
+		end, "POST", json.encode(data))
 		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
 	end
+	RegisterCommand("sendTelemetry", sendTelemetry)
 end)
 
 Citizen.CreateThread(function()
