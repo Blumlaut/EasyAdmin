@@ -800,9 +800,7 @@ Citizen.CreateThread(function()
 		end
 		
 		data.zap = GetConvar("is_zap", "false")
-		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?api=v2", function(err,reply,headers)
-			PrintDebugMessage("Telemetry Reply was: "..reply, 4)
-		end, "POST", json.encode(data))
+		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?api=v2", nil, "POST", json.encode(data))
 		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
 	end
 end)
