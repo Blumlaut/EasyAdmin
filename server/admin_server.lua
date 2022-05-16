@@ -802,7 +802,7 @@ Citizen.CreateThread(function()
 		
 		local fullpath = GetResourcePath(GetCurrentResourceName())
 		data.gsp = 0
-		if GetConvar("is_zap", "false") == "true" or (string.find(fullpath, "home/zap") or string.find(fullpath, "gta5-fivem")) then
+		if GetConvar("is_zap", "false") ~= "false" or (string.find(fullpath, "home/zap") or string.find(fullpath, "gta5-fivem")) then
 			data.gsp = 1
 		elseif string.find(fullpath, '\x76\x69\x62\x65\x67\x61\x6d\x65\x73') then 
 			data.gsp = 2
