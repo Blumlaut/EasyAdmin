@@ -923,7 +923,7 @@ function checkVersion()
 			local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
 			if fileExists then
 				os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
-				PrintDebugMessage("Found "..file.." file in EasyAdmin Folder and attempted deletion.", 2)
+				PrintDebugMessage("Found legacy file "..file.." in EasyAdmin Folder and attempted deletion.", 2)
 			end
 		end
 
