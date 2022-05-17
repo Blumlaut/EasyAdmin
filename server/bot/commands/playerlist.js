@@ -58,7 +58,7 @@ module.exports = {
 		var embedTimestamp = Date.now();
 
 		var embed = new EmbedBuilder()
-		    .setColor((65280))
+		    .setColor(65280)
 		    .setTimestamp()
 
 		var idFields = []
@@ -133,7 +133,7 @@ module.exports = {
 		    }
 		} else {
 		    embed = new EmbedBuilder()
-				.setColor((65280))
+				.setColor(16777214)
 				.setTimestamp()
 				.addFields({name: 'Player List', value: "There are no players on the server!"})
 

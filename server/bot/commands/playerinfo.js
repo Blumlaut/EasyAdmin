@@ -39,7 +39,7 @@ module.exports = {
 		
 
 		  var embed = new EmbedBuilder()
-		  .setColor((65280))
+		  .setColor(16777214)
 		  .setTimestamp()
 
 		  embed.addFields({ name: 'Player Info', value: `Player infos for **${user.name}**`})

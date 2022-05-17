@@ -14,7 +14,7 @@ module.exports = {
 		var ban = await exports[EasyAdmin].fetchBan(banId)
 		if (ban) {
 			var embed = new EmbedBuilder()
-			.setColor((65280))
+			.setColor(16777214)
 			.setTimestamp()
 
 			var discordAccount = false
