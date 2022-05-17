@@ -95,25 +95,28 @@ async function getServerStatus(why) {
 
 async function updateServerStatus(why) {
     if (GetConvar('ea_botStatusChannel', "") == "") { return }
-    var channel = await client.channels.fetch(botStatusChannel)
+    var channel = await client.channels.fetch(GetConvar('ea_botStatusChannel', ""))
+
+    if (channel == undefined) {
+        console.error("Failed to configure bot status channel, please make sure the channel id is correct and the bot has read and write access.")
+        return
+    }
     
     if (!statusMessage) {
         var messagesToDelete = []
-        if (channel.messages != undefined) { // this might be undefined if the channel has no messages? i'm not sure why this would ever be undefined..
-            var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
-                console.error("^7Failed to configure server status channel, please make sure you gave the bot permission to write in the channel!\n\n")
-                console.error(error)
-                return
-            })
-            for (var message of messages.values()) {
-                if (messages.size == 1 && message.author.id == client.user.id) {
-                    statusMessage = message
-                    break
-                } else {
-                    messagesToDelete.push(message.id)
-                }
-            }   
-        }
+        var messages = await channel.messages.fetch({ limit: 10 }).catch((error) => {
+            console.error("^7Failed to configure server status channel, please make sure you gave the bot permission to write in the channel!\n\n")
+            console.error(error)
+            return
+        })
+        for (var message of messages.values()) {
+            if (messages.size == 1 && message.author.id == client.user.id) {
+                statusMessage = message
+                break
+            } else {
+                messagesToDelete.push(message.id)
+            }
+        }   
         try {
             if (statusMessage) {
                 updateServerStatus()
