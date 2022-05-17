@@ -32,11 +32,9 @@ module.exports = {
 		  })
 
 		  var discordAccount = await getDiscordAccountFromPlayer(user)
-		  var discordName = false
+		  var discordName = "N/A"
 		  if (discordAccount) {
 			discordName = discordAccount.tag
-		  } else {
-			discordName = "N/A"
 		  }
 		
 
