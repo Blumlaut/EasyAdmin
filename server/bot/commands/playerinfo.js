@@ -32,10 +32,11 @@ module.exports = {
 		  })
 
 		  var discordAccount = await getDiscordAccountFromPlayer(user)
+		  var discordName = false
 		  if (discordAccount) {
-			discordAccount = discordAccount.tag
+			discordName = discordAccount.tag
 		  } else {
-			discordAccount = "N/A"
+			discordName = "N/A"
 		  }
 		
 
@@ -44,7 +45,10 @@ module.exports = {
 		  .setTimestamp()
 
 		  embed.addFields({ name: 'Player Info', value: `Player infos for **${user.name}**`})
-		  embed.addFields({ name: 'Discord Account', value: `\`\`\`${discordAccount}\`\`\``, inline: true})
+		  embed.addFields({ name: 'Discord Account', value: `\`\`\`${discordName}\`\`\``, inline: true})
+		  if (discordAccount) {
+			embed.setThumbnail(discordAccount.avatarURL())
+		  }
 		  embed.addFields({ name: 'Admin', value: `\`\`\`${exports[EasyAdmin].IsPlayerAdmin(user.id)}\`\`\``, inline: true})
 		  embed.addFields({ name: 'Warnings', value: `\`\`\`${exports[EasyAdmin].getPlayerWarnings(user.id)}\`\`\``, inline: true})
 
