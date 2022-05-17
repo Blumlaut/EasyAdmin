@@ -915,7 +915,8 @@ function checkVersion()
 			'gui_c.lua',
 			'util_shared.lua',
 			'yarn.lock',
-			'.yarn.installed'
+			'.yarn.installed',
+			'server/bot/notifications.js'
 		}
 	
 		for i,file in pairs(legacyFiles) do
