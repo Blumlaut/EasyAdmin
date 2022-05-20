@@ -108,6 +108,8 @@ async function refreshRolesForMember(member) {
     var roles = await member.roles.cache.keys()
 
     for (var role of roles) {
+        emit('debug', `role sync for ${member.user.tag} add_principal identifier.discord:${member.id} role:${role}`)
         ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
     }
+    emit('debug', `roles synced for ${member.user.tag}`)
 }

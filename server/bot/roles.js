@@ -28,11 +28,7 @@ if (GetConvar("ea_botToken", "") != "") {
             return
         }
         
-        for (var role of roles) {
-            emit('debug', `role sync for ${user.tag} add_principal identifier.discord:${member.id} role:${role}`)
-            ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
-        }
-        emit('debug', `roles synced for ${user.tag}`)
+        refreshRolesForMember(member)
     }
     exports('syncDiscordRoles', syncDiscordRoles)
     
