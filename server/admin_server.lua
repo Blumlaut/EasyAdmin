@@ -589,7 +589,7 @@ Citizen.CreateThread(function()
 	
 	-- Very basic function that turns "source" into a useable player name.
 	function getName(src,anonymousdisabled,identifierenabled)
-		local identifierPref = GetConvar("ea_logIdentifier", "steam")
+		local identifierPref = GetConvar("ea_logIdentifier", "steam,discord,license")
 		if identifierPref == "false" then identifierenabled = false end;
 		local identifiers, identifier = {}, "~No Identifier~"
 		if (src == 0 or src == "") then
@@ -599,12 +599,23 @@ Citizen.CreateThread(function()
 				return GetLocalisedText("anonymous")
 			elseif CachedPlayers[src] and CachedPlayers[src].name then
 				if CachedPlayers[src].identifiers then
-					identifiers = CachedPlayers[src].identifiers
-					for i = 1, #identifiers do
-						if identifiers[i]:match(identifierPref) then
-							identifier = identifiers[i]
+					if identifierPref then
+						-- split identifierPref by comma and find first identifier in CachedPlayers[src].identifiers that starts with the split string
+						-- this code was written by GitHub Copilot, neat, huh?
+						for i,v in ipairs(identifierPref:split(",")) do
+							for i2,v2 in ipairs(CachedPlayers[src].identifiers) do
+								if string.sub(v2, 1, string.len(v)) == v then
+									identifier = v2
+									break
+								end
+							end
+							if identifier ~= "~No Identifier~" then break end
 						end
 					end
+				end
+				if identifier:find('discord:') then
+					identifier = string.gsub(identifier, "discord:", "")
+					identifier = "<@"..identifier..">"
 				end
 				if identifierenabled then
 					return (string.format("%s [ %s ]", CachedPlayers[src].name, identifier))
@@ -613,12 +624,18 @@ Citizen.CreateThread(function()
 				end
 			elseif (GetPlayerName(src)) then
 				identifiers = getAllPlayerIdentifiers(src)
-				for i = 1, #identifiers do
-					if identifiers[i]:match(identifierPref) then
-						identifier = identifiers[i]
+				if identifierPref then
+					for i,v in ipairs(identifierPref:split(",")) do
+						for i2,v2 in ipairs(identifiers) do
+							if string.sub(v2, 1, string.len(v)) == v then
+								identifier = v2
+								break
+							end
+						end
+						if identifier ~= "~No Identifier~" then break end
 					end
 				end
-				if identifierPref == "discord" and identifier ~= "~No Identifier~" then
+				if identifier:find('discord:') then
 					identifier = string.gsub(identifier, "discord:", "")
 					identifier = "<@"..identifier..">"
 				end
