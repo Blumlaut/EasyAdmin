@@ -52,14 +52,14 @@ async function getServerStatus(why) {
         }
     }
     
-    // TODO: move this into a single addFields call
-    embed.addFields({ name: 'Players Online', value: `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, inline: true})
-    embed.addFields({ name: 'Admins Online', value: `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, inline: true})
-    embed.addFields({ name: 'Reports', value: `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, inline: true})
-    
-    embed.addFields({ name: 'Active Vehicles', value: `\`\`\`${GetAllVehicles().length}\`\`\``, inline: true})
-    embed.addFields({ name: 'Active Peds', value: `\`\`\`${GetAllPeds().length}\`\`\``, inline: true})
-    embed.addFields({ name: 'Active Objects', value: `\`\`\`${GetAllObjects().length}\`\`\``, inline: true})
+    embed.addFields(
+        { name: 'Players Online', value: `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, inline: true},
+        { name: 'Admins Online', value: `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, inline: true},
+        { name: 'Reports', value: `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, inline: true},
+        { name: 'Active Vehicles', value: `\`\`\`${GetAllVehicles().length}\`\`\``, inline: true},
+        { name: 'Active Peds', value: `\`\`\`${GetAllPeds().length}\`\`\``, inline: true},
+        { name: 'Active Objects', value: `\`\`\`${GetAllObjects().length}\`\`\``, inline: true}
+    )
     
     
     if (joinURL != '') {
