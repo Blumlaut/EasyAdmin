@@ -113,3 +113,11 @@ async function refreshRolesForMember(member) {
     }
     emit('debug', `roles synced for ${member.user.tag}`)
 }
+
+// converts Lua format string to JS format string (e.g. %s -> %s) and replaces %s with arguments
+function format(str, ...args) {
+    let formatted = str.replace(/%s/g, function() {
+        return args.shift();
+    });
+    return formatted;
+}
