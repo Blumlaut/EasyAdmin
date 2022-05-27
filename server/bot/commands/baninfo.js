@@ -24,15 +24,20 @@ module.exports = {
 				}
 			}
 
-			embed.addFields({ name: 'Ban Info', value: `Ban infos for **#${banId}**`})
-			embed.addFields({ name: 'Username', value: `\`\`\`${ban.name}\`\`\``, inline: true})
+			embed.addFields(
+				{ name: 'Ban Info', value: `Ban infos for **#${banId}**`},
+				{ name: 'Username', value: `\`\`\`${ban.name}\`\`\``, inline: true}
+			)
+
 			if (discordAccount) {
 				embed.addFields({ name: 'Discord Account', value: `\`\`\`${discordAccount.tag}\`\`\``, inline: true})
 				embed.setThumbnail(discordAccount.avatarURL())
 			}
-			embed.addFields({ name: 'Banned by', value: `\`\`\`${ban.banner}\`\`\``, inline: true})
-			embed.addFields({ name: 'Reason', value: `\`\`\`\n${ban.reason}\`\`\``, inline: false})
-			embed.addFields({ name: 'Expires', value: `\`\`\`${ban.expireString}\`\`\``, inline: true})
+			embed.addFields(
+				{ name: 'Banned by', value: `\`\`\`${ban.banner}\`\`\``, inline: true},
+				{ name: 'Reason', value: `\`\`\`\n${ban.reason}\`\`\``, inline: false},
+				{ name: 'Expires', value: `\`\`\`${ban.expireString}\`\`\``, inline: true}
+			)
 
 			
 			interaction.reply({ embeds: [embed]})

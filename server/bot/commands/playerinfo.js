@@ -27,45 +27,53 @@ module.exports = {
 		}
 
 		var table = AsciiTable.factory({
-			heading: [ 'Identifiers']
-		  , rows: displayedIdentifiers
-		  })
+			heading: [ 'Identifiers'], 
+			rows: displayedIdentifiers
+		})
 
-		  var discordAccount = await getDiscordAccountFromPlayer(user)
-		  var discordName = "N/A"
-		  if (discordAccount) {
+		var discordAccount = await getDiscordAccountFromPlayer(user)
+		var discordName = "N/A"
+		if (discordAccount) {
 			discordName = discordAccount.tag
-		  }
-		
+		}
+	
 
-		  var embed = new EmbedBuilder()
-		  .setColor(16777214)
-		  .setTimestamp()
+		var embed = new EmbedBuilder()
+			.setColor(16777214)
+			.setTimestamp()
 
-		  embed.addFields({ name: 'Player Info', value: `Player infos for **${user.name}**`})
-		  embed.addFields({ name: 'Discord Account', value: `\`\`\`${discordName}\`\`\``, inline: true})
-		  if (discordAccount) {
+		embed.addFields(
+			{ name: 'Player Info', value: `Player infos for **${user.name}**`},
+			{ name: 'Discord Account', value: `\`\`\`${discordName}\`\`\``, inline: true}
+		)
+
+		if (discordAccount) {
 			embed.setThumbnail(discordAccount.avatarURL())
-		  }
-		  embed.addFields({ name: 'Admin', value: `\`\`\`${exports[EasyAdmin].IsPlayerAdmin(user.id)}\`\`\``, inline: true})
-		  embed.addFields({ name: 'Warnings', value: `\`\`\`${exports[EasyAdmin].getPlayerWarnings(user.id)}\`\`\``, inline: true})
+		}
+
+		embed.addFields(
+			{ name: 'Admin', value: `\`\`\`${exports[EasyAdmin].IsPlayerAdmin(user.id)}\`\`\``, inline: true},
+			{ name: 'Warnings', value: `\`\`\`${exports[EasyAdmin].getPlayerWarnings(user.id)}\`\`\``, inline: true}
+		)
 
 
 
-		  if (!user.dropped) {
+		if (!user.dropped) {
 			var playerPed = GetPlayerPed(user.id)
-			embed.addFields({ name: 'Health', value: `\`\`\`${GetEntityHealth(playerPed)}\`\`\``, inline: true})
-			embed.addFields({ name: 'Armour', value: `\`\`\`${GetPedArmour(playerPed)}\`\`\``, inline: true})
+			embed.addFields(
+				{ name: 'Health', value: `\`\`\`${GetEntityHealth(playerPed)}\`\`\``, inline: true},
+				{ name: 'Armour', value: `\`\`\`${GetPedArmour(playerPed)}\`\`\``, inline: true}
+			)
 			if (GetPlayerInvincible(user.id)) {
 				embed.addFields({ name: 'Godmode', value: '\`\`\`ON\`\`\`', inline: true})
 			}
-		  } else {
-			  embed.addFields({ name: 'Status', value: `\`\`\`Player Disconnected\`\`\``})
-		  }
+		} else {
+			embed.addFields({ name: 'Status', value: `\`\`\`Player Disconnected\`\`\``})
+		}
 
 
-		  embed.addFields({ name: 'Identifiers', value: `\`\`\`${table}\`\`\``})
-		
-		  await interaction.reply({ embeds: [embed]});
+		embed.addFields({ name: 'Identifiers', value: `\`\`\`${table}\`\`\``})
+	
+		await interaction.reply({ embeds: [embed]});
 	},
 };
