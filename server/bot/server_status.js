@@ -21,7 +21,7 @@ async function getServerStatus(why) {
         .setURL(`https://${joinURL}`)
         .setLabel(`Join Server`)
         .setStyle(ButtonStyle.Link)
-        buttonRow.addComponents(button)
+        buttonRow.addComponents([button])
     } else {
         joinURL = ''
     }
@@ -31,7 +31,7 @@ async function getServerStatus(why) {
     }
     serverName = serverName.replace(/\^[0-9]/g, '')
     
-    embed.addFields({name: 'Server Name', value: `\`\`\`${serverName}\`\`\``})
+    embed.addFields([{name: 'Server Name', value: `\`\`\`${serverName}\`\`\``}])
     
     /* this is broken, no idea why.
     var icon = GetConvar('sv_icon', '')
@@ -52,14 +52,14 @@ async function getServerStatus(why) {
         }
     }
     
-    embed.addFields(
+    embed.addFields([
         { name: 'Players Online', value: `\`\`\`${getPlayers().length}/${GetConvar('sv_maxClients', '')}\`\`\``, inline: true},
         { name: 'Admins Online', value: `\`\`\`${Object.values(exports[EasyAdmin].GetOnlineAdmins()).length}\`\`\``, inline: true},
         { name: 'Reports', value: `\`\`\`${activeReports} (${claimedReports} claimed)\`\`\``, inline: true},
         { name: 'Active Vehicles', value: `\`\`\`${GetAllVehicles().length}\`\`\``, inline: true},
         { name: 'Active Peds', value: `\`\`\`${GetAllPeds().length}\`\`\``, inline: true},
         { name: 'Active Objects', value: `\`\`\`${GetAllObjects().length}\`\`\``, inline: true}
-    )
+    ])
     
     
     if (joinURL != '') {
@@ -67,7 +67,7 @@ async function getServerStatus(why) {
             let serverId = joinURL.substring(joinURL.lastIndexOf('-')+1,joinURL.indexOf('.users.cfx.re'))
             let response = await exports[EasyAdmin].HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
             response = JSON.parse(response).Data
-            embed.addFields({ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false})
+            embed.addFields([{ name: `Upvotes`, value: `\`\`\`${response.upvotePower} Upvotes, ${response.burstPower} Bursts\`\`\``, inline: false}])
             
             embed.setAuthor({ name: `${serverName}`, iconURL: response.ownerAvatar, url: `https://${joinURL}`})
             
@@ -75,12 +75,12 @@ async function getServerStatus(why) {
             console.error(error)
         }
     }
-    embed.addFields({ name: 'Uptime', value: `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, inline: false})
+    embed.addFields([{ name: 'Uptime', value: `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, inline: false}])
     
     
     
     if (why) {
-        embed.addFields({name: 'Last Update', value: why})
+        embed.addFields([{name: 'Last Update', value: why}])
     }
     
     if (buttonRow) {

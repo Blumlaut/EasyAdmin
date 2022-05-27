@@ -12,23 +12,23 @@ function generatePaginatorRow(idFields, curPage, embedTimestamp) {
     selector.setPlaceholder(`Page ${curPage+1}/${fieldLength}`)
 
     for (var i = 0; i < fieldLength; i++) {
-		selector.addOptions(
+		selector.addOptions([
 		    {
 				label: `Page ${i+1}/${(fieldLength)}`,
 				value: `${i}`,
-		    })
+		    }])
     }
     if (!idFields[1]) {
 		selector.setDisabled(true)
     }
-    row.addComponents(selector)
+    row.addComponents([selector])
 	return row
     
 }
 
 
 function generateEmbedFields(embed, idFields,usernameFields,discordnamefields, curPage) {
-	embed.addFields({
+	embed.addFields([{
 		name: 'Id',
 		value: idFields[curPage],
 		inline: true
@@ -40,7 +40,7 @@ function generateEmbedFields(embed, idFields,usernameFields,discordnamefields, c
 		name: 'Discord',
 		value: discordnamefields[curPage],
 		inline: true
-	})
+	}])
 }
 
 
@@ -135,7 +135,7 @@ module.exports = {
 		    embed = new EmbedBuilder()
 				.setColor(16777214)
 				.setTimestamp()
-				.addFields({name: 'Player List', value: "There are no players on the server!"})
+				.addFields([{name: 'Player List', value: "There are no players on the server!"}])
 
 			row = generatePaginatorRow(idFields, 0, 0)
 		}

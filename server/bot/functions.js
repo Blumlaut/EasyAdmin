@@ -12,7 +12,7 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
         embed.setTimestamp()
     }
     if (message) {
-        embed.addFields({name: `**${(title || "EasyAdmin")}**`, value: message})
+        embed.addFields([{name: `**${(title || "EasyAdmin")}**`, value: message}])
     }
     if (description) {
         embed.setDescription(description)

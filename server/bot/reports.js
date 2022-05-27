@@ -14,15 +14,15 @@ function generateReportEmbed(report, disabled, closed) {
     }
     
     if (report.type == 1) {
-        embed.addFields({name:"Player Report", value: `**${report.reporterName}** reported **${report.reportedName}**!`})
+        embed.addFields([{name:"Player Report", value: `**${report.reporterName}** reported **${report.reportedName}**!`}])
     } else {
-        embed.addFields({name:"Admin Call", value: `**${report.reporterName}** called for an Admin!`})
+        embed.addFields([{name:"Admin Call", value: `**${report.reporterName}** called for an Admin!`}])
     }
     
-    embed.addFields(
+    embed.addFields([
         {name:"Reason", value: `\`\`\`\n${report.reason}\`\`\``},
         {name:"Report ID", value: `#${report.id}`, inline: true},
-        {name:"Claimed by", value:`${(report.claimedName || "Noone")}`, inline: true})
+        {name:"Claimed by", value:`${(report.claimedName || "Noone")}`, inline: true}])
 
     return {embeds: [embed]}
     
