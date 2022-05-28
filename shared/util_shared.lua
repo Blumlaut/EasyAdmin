@@ -172,7 +172,16 @@ end
 exports('GetVersion', GetVersion)
 
 
-function GetLocalisedText(string)
+function loadLanguageStrings()
+	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
+	if strfile then
+		strings = json.decode(strfile)[1]
+	else
+		strings = {language=GetConvar("ea_LanguageName", "en")}
+	end
+end
+
+function GetLocalisedText(category,string)
 	if not strings then return "Strings not Loaded yet!" end
 	if not string then return "No String!" end
 	if strings[string] then

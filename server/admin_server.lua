@@ -177,15 +177,9 @@ Citizen.CreateThread(function()
 	end
 	
 	AnonymousAdmins = {}
-	
-	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
-	if strfile then
-		strings = json.decode(strfile)[1]
-	else
-		strings = {language=GetConvar("ea_LanguageName", "en")}
-	end
-	
-	
+
+	loadLanguageStrings()
+
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	reportNotification = GetConvar("ea_reportNotification", "false")
 	detailNotification = GetConvar("ea_detailNotification", "false")
