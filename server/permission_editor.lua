@@ -76,38 +76,27 @@ Citizen.CreateThread(function()
 						RemoveFromFile(filename, line)
 					end 
 				end
-				local oldline = line
-				line = string.gsub(line, "	", " ") -- convert tabs to spaces
-				line = string.gsub(line, "  ", " ") -- and then multiple spaces to a single space
-				if not (string.sub(line, 1, 1) == "#" or string.sub(line, 2, 2) == "#") then -- we dont want comments
-					if string.sub(line, 1, 7) == "add_ace" then -- make sure the first few characters match the command we are looking for
-						line = (string.split(line, "#")[1] or line) -- in case there are comments AFTER our commands, strip them out
-						line = string.sub(line, 9, 999) -- strip add_ace, we dont need it
-						local t = {file = filename, oldline = oldline} -- prepare our list of permissions
-						if #(string.split(line, " ")) >= 3 then -- skip invalid/broken lines
-							for i,word in pairs(string.split(line, " ")) do
-								if i>3 then break end -- we dont count past 3
-								table.insert(t,word) -- insert individual "part" of the command
-							end
-							table.insert(aces,t)
-						end
-					elseif string.sub(line, 1, 13) == "add_principal" then
-						line = (string.split(line, "#")[1] or line)
-						line = string.sub(line, 15, 999) -- strip add_principal, we dont need it
-						local t = {file = filename, oldline = oldline}
-						if #(string.split(line, " ")) >= 2 then -- skip invalid/broken lines
-							for i,word in pairs(string.split(line, " ")) do
-								if i>2 then break end
-								table.insert(t,word)
-							end
-							table.insert(principals,t)
-						end
-					elseif string.sub(line, 1, 4) == "exec" then
-						line = (string.split(line, "#")[1] or line)
-						line = string.sub(line, 6, 999) -- strip exec, we dont need it
-						if line ~= "server.cfg" then
-							table.insert(execs, line)
-						end
+
+				-- new filteredLine variable which strips comments and whitespace from the line
+				local filteredLine = string.gsub(line, "%s*#.*$", "")
+				filteredLine = string.gsub(filteredLine, "^%s*(.-)%s*$", "%1")
+
+
+				-- strip the arguments from the "add_ace", "add_principal" and "exec" commands and insert them into their respective tables
+				if string.find(filteredLine, "add_ace", 1, true) then
+					local args = string.split(filteredLine, " ")
+					if args[2] and args[3] and args[4] then
+						table.insert(aces, {file = filename, oldline = line, args[2], args[3], args[4]})
+					end
+				elseif string.find(filteredLine, "add_principal", 1, true) then
+					local args = string.split(filteredLine, " ")
+					if args[2] and args[3] then
+						table.insert(principals, {file = filename, oldline = line, args[2], args[3]})
+					end
+				elseif string.find(filteredLine, "exec", 1, true) then
+					local args = string.split(filteredLine, " ")
+					if args[2] then
+						table.insert(execs, args[2])
 					end
 				end
 			end
