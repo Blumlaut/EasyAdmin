@@ -181,7 +181,7 @@ function loadLanguageStrings()
 	end
 end
 
-function GetLocalisedText(category,string)
+function GetLocalisedText(string)
 	if not strings then return "Strings not Loaded yet!" end
 	if not string then return "No String!" end
 	if strings[string] then
