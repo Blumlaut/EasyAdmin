@@ -77,9 +77,11 @@ Citizen.CreateThread(function()
 					end 
 				end
 
-				-- new filteredLine variable which strips comments and whitespace from the line
-				local filteredLine = string.gsub(line, "%s*#.*$", "")
-				filteredLine = string.gsub(filteredLine, "^%s*(.-)%s*$", "%1")
+				-- filteredLine variable converts tabs to spaces, and multiple spaces to single space
+				local filteredLine = string.gsub(line, "%s+", " ")
+				-- remove comments
+				filteredLine = string.gsub(filteredLine, "%s*#.*$", "")
+				
 
 
 				-- strip the arguments from the "add_ace", "add_principal" and "exec" commands and insert them into their respective tables
