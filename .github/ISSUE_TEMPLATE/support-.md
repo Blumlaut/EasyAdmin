@@ -14,7 +14,7 @@ A clear and concise description of what the issue is.
 Describe what you have done to attempt to fix it.
 
 **Screenshots/Logs**
-If applicable, add screenshots or logs to help explain your problem.
+If applicable, attach screenshots or log files here to help explain your problem.
 
 
 **Server Infos (please complete the following information):**
