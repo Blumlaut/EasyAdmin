@@ -281,10 +281,10 @@ RegisterNetEvent("EasyAdmin:TeleportRequest", function(id, tgtCoords)
 			local tgtPed = GetPlayerPed(GetPlayerFromServerId(id))
 			tgtCoords = GetEntityCoords(tgtPed)
 		end
-		lastLocation = GetEntityCoords(PlayerPedId())
+		lastLocation = tgtCoords
 		SetEntityCoords(PlayerPedId(), tgtCoords,0,0,0, false)
 	else
-		lastLocation = GetEntityCoords(PlayerPedId())
+		lastLocation = tgtCoords
 		SetEntityCoords(PlayerPedId(), tgtCoords,0,0,0, false)
 	end
 end)
