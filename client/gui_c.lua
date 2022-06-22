@@ -344,9 +344,9 @@ function GenerateMenu() -- this is a big ass function
 
 	TriggerEvent("EasyAdmin:BuildMainMenuOptions")
 	for i, plugin in pairs(plugins) do
-		if plugin['functions'].mainMenu then
+		if plugin.functions.mainMenu then
 			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-			local ran, errorMsg = pcall(plugin['functions'].mainMenu)
+			local ran, errorMsg = pcall(plugin.functions.mainMenu)
 			if not ran then
 				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
 			end
@@ -719,9 +719,9 @@ function GenerateMenu() -- this is a big ass function
 		
 					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 					for i, plugin in pairs(plugins) do
-						if plugin['functions'].playerMenu then
+						if plugin.functions.playerMenu then
 							PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-							local ran, errorMsg = pcall(plugin['functions'].playerMenu, thePlayer.id )
+							local ran, errorMsg = pcall(plugin.functions.playerMenu, thePlayer.id )
 							if not ran then
 								PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
 							end
@@ -967,9 +967,9 @@ function GenerateMenu() -- this is a big ass function
 									end	
 									TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
 									for i, plugin in pairs(plugins) do
-										if plugin['functions'].cachedMenu then
+										if plugin.functions.cachedMenu then
 											PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-											local ran, errorMsg = pcall(plugin['functions'].cachedMenu, cachedplayer.id )
+											local ran, errorMsg = pcall(plugin.functions.cachedMenu, cachedplayer.id )
 											if not ran then
 												PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
 											end
@@ -1634,9 +1634,9 @@ function GenerateMenu() -- this is a big ass function
 
 		TriggerEvent("EasyAdmin:BuildServerManagementOptions")
 		for i, plugin in pairs(plugins) do
-			if plugin['functions'].serverMenu then
+			if plugin.functions.serverMenu then
 				PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-				local ran, errorMsg = pcall(plugin['functions'].serverMenu)
+				local ran, errorMsg = pcall(plugin.functions.serverMenu)
 				if not ran then
 					PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
 				end
@@ -1786,9 +1786,9 @@ function GenerateMenu() -- this is a big ass function
 
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")
 	for i, plugin in pairs(plugins) do
-		if plugin['functions'].settingsMenu then
+		if plugin.functions.settingsMenu then
 			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-			local ran, errorMsg = pcall(plugin['functions'].settingsMenu)
+			local ran, errorMsg = pcall(plugin.functions.settingsMenu)
 			if not ran then
 				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
 			end
