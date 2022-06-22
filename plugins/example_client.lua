@@ -51,4 +51,5 @@ local pluginData = {
 	}
 }
 
-addPlugin(pluginData)
+-- uncomment to enable plugin
+-- addPlugin(pluginData)
