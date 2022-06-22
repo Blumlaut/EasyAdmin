@@ -343,6 +343,15 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	TriggerEvent("EasyAdmin:BuildMainMenuOptions")
+	for i, plugin in pairs(plugins) do
+		if plugin['functions'].mainMenu then
+			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
+			local ran, errorMsg = pcall(plugin['functions'].mainMenu)
+			if not ran then
+				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
+			end
+		end
+	end
 
 	if DoesPlayerHavePermissionForCategory(-1, "player") then
 
@@ -709,6 +718,16 @@ function GenerateMenu() -- this is a big ass function
 		
 		
 					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
+					for i, plugin in pairs(plugins) do
+						if plugin['functions'].playerMenu then
+							PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
+							local ran, errorMsg = pcall(plugin['functions'].playerMenu, thePlayer.id )
+							if not ran then
+								PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
+							end
+						end
+					end
+
 					
 					if GetResourceState("es_extended") == "started" and not ESX then
 						local thisItem = NativeUI.CreateItem("~y~[ESX]~s~ Options","You can buy the ESX Plugin from https://blumlaut.tebex.io to use this Feature.")
@@ -947,6 +966,15 @@ function GenerateMenu() -- this is a big ass function
 										playermanagement:Visible(true)
 									end	
 									TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
+									for i, plugin in pairs(plugins) do
+										if plugin['functions'].cachedMenu then
+											PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
+											local ran, errorMsg = pcall(plugin['functions'].cachedMenu, cachedplayer.id )
+											if not ran then
+												PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
+											end
+										end
+									end
 									thisPlayer:RefreshIndexRecursively()
 								end
 							end
@@ -1605,6 +1633,15 @@ function GenerateMenu() -- this is a big ass function
 
 
 		TriggerEvent("EasyAdmin:BuildServerManagementOptions")
+		for i, plugin in pairs(plugins) do
+			if plugin['functions'].serverMenu then
+				PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
+				local ran, errorMsg = pcall(plugin['functions'].serverMenu)
+				if not ran then
+					PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
+				end
+			end
+		end
 	end
 
 	if permissions["player.ban.view"] then
@@ -1748,6 +1785,15 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")
+	for i, plugin in pairs(plugins) do
+		if plugin['functions'].settingsMenu then
+			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
+			local ran, errorMsg = pcall(plugin['functions'].settingsMenu)
+			if not ran then
+				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
+			end
+		end
+	end
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	

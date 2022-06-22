@@ -145,7 +145,7 @@ function DoesPlayerHavePermission(player, object)
 		end
 		return haspermission
 	else
-		return permissions[object]
+		return (permissions[object] or false)
 	end
 end
 exports('DoesPlayerHavePermission', DoesPlayerHavePermission)

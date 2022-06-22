@@ -3,13 +3,7 @@
 
 local somevalue = false
 
-AddEventHandler("EasyAdmin:BuildPlayerOptions", function(playerId) -- BuildPlayerOptions is triggered after building options like kick, ban.. Passes a Player ServerId
-	
-	-- comment this out if you want to see it in action
-	if false == false then return end
-
-
-	
+local function playerOption(playerId)
 	local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId) -- create our new item
 	thisPlayer:AddItem(thisItem) -- thisPlayer is global.
 	thisItem.Activated = function(ParentMenu,SelectedItem)
@@ -18,7 +12,7 @@ AddEventHandler("EasyAdmin:BuildPlayerOptions", function(playerId) -- BuildPlaye
 
 	end
 
-	if permissions["kick"] then -- you can also check if a user has a specific Permission.
+	if DoesPlayerHavePermission(-1, "player.kick") then -- you can also check if a user has a specific Permission.
 		local thisExampleMenu = _menuPool:AddSubMenu(thisPlayer,"Example Submenu","",true) -- Submenus work, too!
 		thisExampleMenu:SetMenuWidthOffset(menuWidth)
 
@@ -26,19 +20,35 @@ AddEventHandler("EasyAdmin:BuildPlayerOptions", function(playerId) -- BuildPlaye
 		thisExampleMenu:AddItem(thisItem) -- Items dont require a trigger.
 
 	end
-end)
+end
 
+local function mainMenu()
+end
 
-AddEventHandler("EasyAdmin:BuildCachedOptions", function(playerId) -- Options for Cached Players, do note that these do not not support Player natives! They're cached BY EASYADMIN
-end)
+local function cachedMenu()
+end
 
-AddEventHandler("EasyAdmin:BuildServerManagementOptions", function() -- Options for the Server Management Submenu, passes nothing.
-end)
+local function serverMenu()
+end
 
-AddEventHandler("EasyAdmin:BuildSettingsOptions", function() -- Options for the Settings Page, once again, passes nothing
-end)
+local function settingsMenu()
+end
 
-AddEventHandler("EasyAdmin:MenuRemoved", function() -- this triggers if a player closes the menu or the menupool gets removed, this CAN trigger multiple times in a row.
+local function menuRemoved()
 	somevalue = false -- reset our value :)
+end
 
-end)
+
+local pluginData = {
+	name = "Demo", 
+	functions = {
+		mainMenu = mainMenu,
+		playerMenu = playerOption,
+		cachedMenu = cachedMenu,
+		serverMenu = serverMenu,
+		settingsMenu = settingsMenu,
+		menuRemoved = menuRemoved,
+	}
+}
+
+addPlugin(pluginData)
