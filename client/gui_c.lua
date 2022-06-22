@@ -191,6 +191,14 @@ local eastereggs = {
 	ukraine = {
 		banner = "dependencies/images/banner-gradient.png",
 		logo = "dependencies/images/ukraine.png"
+	},
+	EOA = {
+		banner = "dependencies/images/banner-eoa.png",
+		logo = "dependencies/images/logo-eoa.png"
+	},
+	HardAdmin = {
+		banner = "dependencies/images/banner-hardadmin.png",
+		logo = "dependencies/images/logo-hardadmin.png"
 	}
 }
 
@@ -1711,10 +1719,17 @@ function GenerateMenu() -- this is a big ass function
 
 	if not RedM then
 		local sl = {"none"}
+		local currentEggIndex = 1
 		for k,v in pairs(eastereggs) do
 			table.insert(sl, k)
 		end
-		local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, 1, "")
+		for k,v in pairs(sl) do
+			if v == overrideEgg or v == currentEgg then 
+				currentEggIndex = k
+			end
+		end
+
+		local thisItem = NativeUI.CreateListItem(GetLocalisedText("forceeasteregg"), sl, currentEggIndex, "")
 		settingsMenu:AddItem(thisItem)
 		thisItem.OnListSelected = function(sender, item, index)
 				if item == thisItem then
