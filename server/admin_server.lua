@@ -249,7 +249,6 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeLogo", "logo-hardadmin")
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeBanner", "banner-hardadmin")
 		end
-		print(os.date("%d"))
 		
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
