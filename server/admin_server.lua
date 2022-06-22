@@ -243,10 +243,13 @@ Citizen.CreateThread(function()
 		if os.date("%d/%m") == "22/08" then
 			local age = tonumber(os.date("%Y"))-2017 local ordinal = "th" last_digit = age % 10 if last_digit == 1 and age ~= 11 then ordinal = 'st' elseif last_digit == 2 and age ~= 12 then ordinal = 'nd' elseif last_digit == 3 and age ~= 13 then ordinal = 'rd' end
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "~b~Today is EasyAdmin's "..age..""..ordinal.." birthday! :)")
-		elseif os.date("%m") == "06" and (tonumber(os.date("%d")) >= 1 and tonumber(os.date("%d")) <= 7)  then
+		elseif os.date("%m") == "06" and (tonumber(os.date("%d")) >= 1 and tonumber(os.date("%d")) <= 14)  then
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeLogo", "pride")
+		elseif os.date("%m") == "04" and os.date("%d") == "01" then
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeLogo", "logo-hardadmin")
+			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeBanner", "banner-hardadmin")
 		end
-		
+		print(os.date("%d"))
 		
 		if (infinity) then 
 			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)

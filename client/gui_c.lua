@@ -252,7 +252,11 @@ function generateTextures()
 			else
 				CreateRuntimeTextureFromImage(txd, 'logo', 'dependencies/images/banner-logo.png')
 			end
-			CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+			if settings.alternativeBanner then
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/'..settings.alternativeBanner..'.png')
+			else
+				CreateRuntimeTextureFromImage(txd, 'banner-gradient', 'dependencies/images/banner-gradient.png')
+			end
 			currentEgg=nil
 		end
 	end
