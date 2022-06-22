@@ -3,6 +3,8 @@
 
 local somevalue = false
 
+-- functions MUST be prefixed with local!
+
 local function playerOption(playerId)
 	local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId) -- create our new item
 	thisPlayer:AddItem(thisItem) -- thisPlayer is global.
