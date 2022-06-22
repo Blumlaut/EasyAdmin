@@ -25,6 +25,7 @@ local function playerOption(playerId)
 end
 
 local function mainMenu()
+	error("You have the example plugin enabled, this is only meant to be used as a template for new plugins.")
 end
 
 local function cachedMenu()
