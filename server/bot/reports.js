@@ -33,7 +33,14 @@ async function logNewReport(report) {
         var reportId = report.id
         reports[reportId] = report
         var reportMessage = generateReportEmbed(report)
-        var msg = await client.channels.cache.get(GetConvar("ea_botLogChannel", "")).send(reportMessage)
+        var channel = await client.channels.cache.get(GetConvar("ea_botLogChannel", ""))
+        if (report.type == 1 && botLogForwards["report"]) {
+            channel = await client.channels.cache.get(botLogForwards["report"])
+        } else if (report.type == 0 && botLogForwards["calladmin"]) {
+            channel = await client.channels.cache.get(botLogForwards["calladmin"])
+        }
+
+        var msg = await channel.send(reportMessage)
         reports[reportId].msg = msg
     } else {
         return false
