@@ -7,7 +7,7 @@
     "discord.js": "13.8.1",
     "erlpack": "0.1.4",
     "juration": "0.1.1",
-    "pretty-ms": "7.0.1",
+    "pretty-ms": "8.0.0",
     "sprintf-js": "1.1.2",
     "zlib-sync": "0.1.7"
   }
