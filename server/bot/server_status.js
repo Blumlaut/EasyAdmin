@@ -20,7 +20,7 @@ async function getServerStatus(why) {
         var button = new ButtonBuilder()
         .setURL(`https://${joinURL}`)
         .setLabel(`Join Server`)
-        .setStyle(ButtonStyle.Link)
+        .setStyle("LINK") // v14: ButtonStyle.Link
         buttonRow.addComponents([button])
     } else {
         joinURL = ''

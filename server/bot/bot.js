@@ -10,13 +10,22 @@ AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
 const prettyMilliseconds = require('pretty-ms');
-const { Client, EmbedBuilder, MessageAttachment, Collection, GatewayIntentBits, Partials, ButtonStyle, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, Guild, Util } = require('discord.js');
+const { Client, MessageEmbed, MessageAttachment, Collection, Intents, Partials, ButtonStyle, MessageActionRow, MessageButton, MessageSelectMenu, Guild, Util, Modal, TextInputComponent } = require('discord.js');
+
+// v14
+EmbedBuilder = MessageEmbed
+ActionRowBuilder =  MessageActionRow
+ButtonBuilder = MessageButton
+SelectMenuBuilder = MessageSelectMenu
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 
 client = new Client({
-    partials: [Partials.GuildMember, Partials.User, Partials.Message, Partials.Channel, Partials.Reaction],
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent]
+    // v14, dont forget to rename Intents to GatewayIntentBits
+    // partials: [Partials.GuildMember, Partials.User, Partials.Message, Partials.Channel, Partials.Reaction],
+    // intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent]
+    partials: ["GUILD_MEMBER", "USER", "MESSAGE", "CHANNEL", "REACTION"],
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS]
 });
 client.commands = new Collection();
 
@@ -83,7 +92,8 @@ if (GetConvar("ea_botToken", "") != "") {
         });
         
         client.on('interactionCreate', async interaction => {
-            if (!interaction.isChatInputCommand()) return;
+            // v14 becomes isChatInputCommand
+            if (!interaction.isCommand()) return;
             
             const command = client.commands.get(interaction.commandName);
             
