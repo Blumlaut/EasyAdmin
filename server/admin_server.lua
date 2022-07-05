@@ -221,6 +221,15 @@ Citizen.CreateThread(function()
 		
 		TriggerLatentClientEvent("EasyAdmin:adminresponse", source, 10000, perms)
 		TriggerClientEvent('chat:addSuggestion', source, '/easyadmin', "EasyAdmin Menu")
+
+		if GetConvar("ea_enableReportCommand", "true") == "true" then
+			TriggerClientEvent('chat:addSuggestion', source, '/'..GetConvar("ea_reportCommandName", "report"), "Report player", {{name='player', help="player name / id"}, {name='reason', help="Reason"}})
+		end
+
+		if GetConvar("ea_enableCallAdminCommand", "true") == "true" then
+			TriggerClientEvent('chat:addSuggestion', source, '/'..GetConvar("ea_callAdminCommandName", "calladmin"), "Call Admin", {{name='reason', help="Reason"}})
+		end
+
 		
 
 		if RedM then
