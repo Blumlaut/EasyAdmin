@@ -227,6 +227,8 @@
     "adminimmune":"Vous n'avez pas la permission d'effectuer cette action, le joueur ciblé est immunisé.",
     "teleportmeback":"Téléporter moi dos",
     "teleportplayerback":"Téléporter le joueur dos",
+    "teleportintoclosestvehicle":"into closest vehicle",
+
     "copiedtoclipboard":"Texte copié dans le presse-papiers!",
 
     "spectatevehicleseatoccupied":"Le siège du véhicule dans lequel vous étiez est maintenant occupé.",

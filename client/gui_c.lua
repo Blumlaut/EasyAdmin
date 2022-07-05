@@ -625,7 +625,7 @@ function GenerateMenu() -- this is a big ass function
 					end
 					
 					if permissions["player.teleport.single"] then
-						local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome"), GetLocalisedText("teleportmeback"), GetLocalisedText("teleportplayerback")}
+						local sl = {GetLocalisedText("teleporttoplayer"), GetLocalisedText("teleportplayertome"), GetLocalisedText("teleportmeback"), GetLocalisedText("teleportplayerback"), GetLocalisedText("teleportintoclosestvehicle")}
 						local thisItem = NativeUI.CreateListItem(GetLocalisedText("teleportplayer"), sl, 1, "")
 						thisPlayer:AddItem(thisItem)
 						thisItem.OnListSelected = function(sender, item, index)
@@ -650,6 +650,29 @@ function GenerateMenu() -- this is a big ass function
 									lastLocation = nil
 								elseif i == GetLocalisedText("teleportplayerback") then 
 									TriggerServerEvent("EasyAdmin:TeleportPlayerBack", thePlayer.id)
+								elseif i == GetLocalisedText("teleportintoclosestvehicle") then
+									local coords = GetEntityCoords(playerPed,true)
+									local vehicles = GetGamePool("CVehicle")
+									local closestDistance = -1
+									local closestVehicle = -1
+									for _,vehicle in pairs(vehicles) do
+										local vehcoords = GetEntityCoords(vehicle,true)
+										local distance = #(coords - vehcoords)
+										if closestDistance == -1 or closestDistance > distance then
+											closestDistance = distance
+											closestVehicle = vehicle
+										end
+									end
+									if closestVehicle ~= -1 then
+										for i=-1, GetVehicleMaxNumberOfPassengers(closestVehicle) do
+											if IsVehicleSeatFree(closestVehicle, i) then
+												SetPedIntoVehicle(playerPed, closestVehicle, i)
+												break
+											end
+										end
+									else
+										TriggerEvent("EasyAdmin:showNotification", "No Vehicles found nearby.")
+									end
 								end
 							end
 						end

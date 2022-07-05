@@ -227,6 +227,8 @@
     "adminimmune":"Je hebt geen permissie dit te doen, die speler is immuun.",
     "teleportmeback":"Teleport jezelf terug",
     "teleportplayerback":"Teleport Speler terug",
+    "teleportintoclosestvehicle":"in het dichtstbijzijnde voertuig",
+
     "copiedtoclipboard":"Tekst gekopieerd naar het klembord!",
 
     "spectatevehicleseatoccupied":"Het voertuig waar je net in zat is nu bezet.",

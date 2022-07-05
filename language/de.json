@@ -225,6 +225,8 @@
     "adminimmune": "Dazu hast du keine Rechte, der ausgewählte Spieler ist Immun",
     "teleportmeback": "Teleportiere mich zurück",
     "teleportplayerback": "Teleportiere Spieler zurück",
+    "teleportintoclosestvehicle":"zum nächstliegenden Auto",
+    
     "copiedtoclipboard": "Text wurde in die Zwischenablage kopiert!",
 
     "spectatevehicleseatoccupied": "Der Fahrzeugsitz auf dem du gesessen hast, ist jetzt besetzt",

@@ -226,6 +226,8 @@
     "adminimmune":"You do not have permission to perform this action, target player is immune.",
     "teleportmeback":"Teleport me back",
     "teleportplayerback":"Teleport Player back",
+    "teleportintoclosestvehicle":"into closest vehicle",
+
     "copiedtoclipboard":"Text copied to Clipboard!",
 
     "spectatevehicleseatoccupied":"The vehicle seat you were in is now occupied.",
