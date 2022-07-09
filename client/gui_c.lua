@@ -290,7 +290,6 @@ function GenerateMenu() -- this is a big ass function
 	mainMenu = NativeUI.CreateMenu(RedM and "EasyAdmin" or "", subtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 	_menuPool:Add(mainMenu)
 	
-		mainMenu:SetMenuWidthOffset(menuWidth)	
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
