@@ -87,6 +87,19 @@ RegisterCommand('easyadmin', function(source, args)
 					table.insert(banLength, {label = GetLocalisedText("customtime"), time = -1})
 				end
 				GenerateMenu()
+
+				if (args[1]) then
+					local id = tonumber(args[1])
+					if (reportMenus[id]) then
+						reportMenus[id]:Visible(true)
+						return
+					elseif playerMenus[args[1]] then
+						local menu = playerMenus[args[1]]
+						menu.generate(menu.menu)
+						menu.menu:Visible(true)
+						return
+					end
+				end
 				mainMenu:Visible(true)
 			else
 				TriggerServerEvent("EasyAdmin:amiadmin")
@@ -100,6 +113,10 @@ RegisterCommand('easyadmin', function(source, args)
 	end)
 end)
 
+
+RegisterCommand('ea', function(source,args)
+	ExecuteCommand('easyadmin '..table.concat(args, " "))
+end)
 
 Citizen.CreateThread(function()
 	if CompendiumHorseObserved then -- https://www.youtube.com/watch?v=r7qovpFAGrQ
