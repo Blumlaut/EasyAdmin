@@ -33,15 +33,7 @@ async function getServerStatus(why) {
     
     embed.addFields([{name: 'Server Name', value: `\`\`\`${serverName}\`\`\``}])
     
-    /* this is broken, no idea why.
-    var icon = GetConvar('sv_icon', '')
-    if(icon != '') {
-        const iconBuffer = Buffer.from(icon, "base64")
-        var attachment = await new MessageAttachment(iconBuffer, 'icon.png');
-        embed.setAuthor({ name: "blah", iconURL: 'attachment://icon.png'})
-    }
-    */
-    
+
     var reports = await exports[EasyAdmin].getAllReports()
     var activeReports = 0
     var claimedReports = 0
