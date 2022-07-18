@@ -11,7 +11,7 @@ module.exports = {
 			.setCustomId('removeaceModal'+timestamp)
 			.setTitle('Remove ACE');
 
-		const groupName = new TextInputComponent()
+		const groupName = new TextInputBuilder()
 			.setCustomId('groupName')
 			.setLabel("Group Name")
 			.setStyle('SHORT')
@@ -19,7 +19,7 @@ module.exports = {
 			.setMaxLength(120)
 			.setPlaceholder('group.admin');
 
-		const permission = new TextInputComponent()
+		const permission = new TextInputBuilder()
 			.setCustomId('permission')
 			// The label is the prompt the user sees for this input
 			.setLabel("Permission")
@@ -29,8 +29,8 @@ module.exports = {
 			.setMaxLength(120)
 			.setPlaceholder('easyadmin.bot.playerlist');
 
-		const firstActionRow = new MessageActionRow().addComponents(groupName);
-		const secondActionRow = new MessageActionRow().addComponents(permission);
+		const firstActionRow = new ActionRowBuilder().addComponents(groupName);
+		const secondActionRow = new ActionRowBuilder().addComponents(permission);
 
 		modal.addComponents(firstActionRow, secondActionRow);
 
