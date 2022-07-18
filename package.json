@@ -1,10 +1,9 @@
 {
   "dependencies": {
-    "@discordjs/builders": "0.15.0",
     "@discordjs/rest": "1.0.0",
     "ascii-table": "0.0.9",
     "discord-api-types": "0.36.2",
-    "discord.js": "13.8.1",
+    "discord.js": "14.0.2",
     "erlpack": "0.1.4",
     "juration": "0.1.1",
     "pretty-ms": "7.0.1",
