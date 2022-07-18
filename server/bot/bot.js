@@ -10,7 +10,7 @@ AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration');
 const prettyMilliseconds = require('pretty-ms');
-const { Client, EmbedBuilder, MessageAttachment, Collection, Intents, Partials, ButtonStyle, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, Guild, Util, Modal, TextInputBuilder, GatewayIntentBits } = require('discord.js');
+const { Client, EmbedBuilder, MessageAttachment, Collection, Intents, Partials, ButtonStyle, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, Guild, Util, ModalBuilder, TextInputBuilder, GatewayIntentBits, InteractionType, TextInputStyle } = require('discord.js');
 
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
@@ -84,7 +84,7 @@ if (GetConvar("ea_botToken", "") != "") {
         });
         
         client.on('interactionCreate', async interaction => {
-            if (interaction.type === InteractionType.ApplicationCommand) return;
+            if (interaction.type != InteractionType.ApplicationCommand) return;
             
             const command = client.commands.get(interaction.commandName);
             

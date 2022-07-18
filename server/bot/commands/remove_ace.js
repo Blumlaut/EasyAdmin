@@ -7,14 +7,14 @@ module.exports = {
 	async execute(interaction, exports) {
 		var timestamp = Date.now()
 
-		const modal = new Modal()
+		const modal = new ModalBuilder()
 			.setCustomId('removeaceModal'+timestamp)
 			.setTitle('Remove ACE');
 
 		const groupName = new TextInputBuilder()
 			.setCustomId('groupName')
 			.setLabel("Group Name")
-			.setStyle('SHORT')
+			.setStyle(TextInputStyle.Short)
 			.setRequired(true)
 			.setMaxLength(120)
 			.setPlaceholder('group.admin');
@@ -24,7 +24,7 @@ module.exports = {
 			// The label is the prompt the user sees for this input
 			.setLabel("Permission")
 			// Short means only a single line of text
-			.setStyle('SHORT')
+			.setStyle(TextInputStyle.Short)
 			.setRequired(true)
 			.setMaxLength(120)
 			.setPlaceholder('easyadmin.bot.playerlist');
