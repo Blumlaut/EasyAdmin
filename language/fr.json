@@ -79,7 +79,7 @@
     "wantedlevel": "Niveau de recherche",
     "exitspectator": "Appuyer sur E pour quitter le mode spectateur",
 
-    "whitelist": "You are not whitelisted on this server",
+    "allowlist": "You are not whitelisted on this server",
     "bannedjoin": "Vous avez été banni du serveur, \nRaison : %s, Expiration du bannissement : %s, Ban ID: %s",
     "kicked": "Éjecté par %s, Raison : %s",
     "banned": "Vous avez été banni du serveur, \nRaison : %s, Expiration du bannissement : %s",
