@@ -79,7 +79,7 @@
     "wantedlevel": "Fahndungslevel",
     "exitspectator": "Drücke E um den Zuschauermodus zu verlassen.",
 
-    "whitelist": "You are not whitelisted on this server",
+    "allowlist": "You are not whitelisted on this server",
     "bannedjoin": "\nDu wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab\nDeine Bann-ID lautet #%s.",
     "kicked": "Gekickt von %s, \nGrund: %s",
     "banned": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",
