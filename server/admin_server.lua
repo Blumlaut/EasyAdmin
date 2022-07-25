@@ -920,7 +920,17 @@ Citizen.CreateThread(function()
 			end
 		end
 		
-		deferrals.done()
+		if GetConvar("ea_whitelist", "false") == "true" then
+			if DoesPlayerHavePermission(player, "player.whitelist") then
+				deferrals.done()
+			else
+				deferrals.done(GetLocalisedText("whitelist"))
+				return
+			end
+		else
+			deferrals.done()
+		end
+		
 	end)
 	
 end)
