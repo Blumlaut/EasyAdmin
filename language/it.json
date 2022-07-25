@@ -78,6 +78,7 @@
     "wantedlevel": "Livello Ricercato",
     "exitspectator": "Premi E per uscire dalla modalità spettatore.",
 
+    "allowlist": "You are not whitelisted on this server",
     "bannedjoin": "Sei stato bandito da questo server, \nMotivo: %s, Il Ban Scade: %s, Ban ID: %s",
     "kicked": "Espulso da %s, Motivo: %s",
     "banned": "Sei stato bandito da questo server, Motivo: %s, Il Ban Scade: %s",
