@@ -921,10 +921,10 @@ Citizen.CreateThread(function()
 		end
 		
 		if GetConvar("ea_enableAllowlist", "false") == "true" then
-			if DoesPlayerHavePermission(player, "player.whitelist") then
+			if DoesPlayerHavePermission(player, "player.allowlist") then
 				deferrals.done()
 			else
-				deferrals.done(GetLocalisedText("whitelist"))
+				deferrals.done(GetLocalisedText("allowlist"))
 				return
 			end
 		else
