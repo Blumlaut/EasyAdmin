@@ -78,7 +78,7 @@
     "wantedlevel": "Wanted Level",
     "exitspectator": "Press E to exit spectator mode",
 
-    "whitelist": "You are not whitelisted on this server",
+    "allowlist": "You are not whitelisted on this server",
     "bannedjoin": "\nYou have been banned from this Server\n\nReason: %s\n\nBan Expires: %s\nYour Ban ID is #%s.",
     "kicked": "Kicked by %s, Reason: %s",
     "banned": "You have been banned from this Server, Reason: %s, Ban Expires: %s",
