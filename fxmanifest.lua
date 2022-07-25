@@ -84,6 +84,6 @@ convar_category 'EasyAdmin' {
         { "Guild ID for Discord bot", "$ea_botGuild", "CV_STRING", "none" },
         { "Channel for Discord bot to log", "$ea_botLogChannel", "CV_STRING", "none" },
         { "Channel for Discord bot to enable live status", "$ea_botStatusChannel", "CV_STRING", "true" },
-        { "Enable Whitelist", "$ea_whitelist", "CV_BOOL", "false" }
+        { "Enable Allowlist", "$ea_enableAllowlist", "CV_BOOL", "false" }
     }
 }
