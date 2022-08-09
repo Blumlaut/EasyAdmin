@@ -100,6 +100,7 @@ RegisterCommand('easyadmin', function(source, args)
 						return
 					end
 				end
+				SendNUIMessage({action= "speak", text="EasyAdmin"})
 				mainMenu:Visible(true)
 			else
 				TriggerServerEvent("EasyAdmin:amiadmin")
@@ -140,6 +141,17 @@ Citizen.CreateThread(function()
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
+	if not GetResourceKvpInt("ea_tts") then
+		SetResourceKvpInt("ea_tts", 0)
+	else 
+		if GetResourceKvpInt("ea_tts") == 1 then
+			SendNUIMessage({
+				action = "toggle_speak",
+				enabled = true
+			})
+		end
+	end
+
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
@@ -1823,6 +1835,17 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	local thisItem = NativeUI.CreateCheckboxItem("Text to Speech", false, "Enables Text to Speech for the GUI")
+	settingsMenu:AddItem(thisItem)
+	thisItem.CheckboxEvent = function(sender, item, checked_)
+		SendNUIMessage({
+			action = "toggle_speak",
+			enabled = checked_
+		})
+		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
+		SendNUIMessage({action= "speak", text="Text to Speech"})
+	end
+	
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")
 	for i, plugin in pairs(plugins) do
 		if plugin.functions.settingsMenu then
