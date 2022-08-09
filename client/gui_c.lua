@@ -412,6 +412,7 @@ function GenerateMenu() -- this is a big ass function
 
 				if found and (#temp > 1) then
 					local searchsubtitle = "Found "..tostring(#temp).." results!"
+					ttsSpeechText(searchsubtitle)
 					local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 					_menuPool:Add(resultMenu)
 					_menuPool:ControlDisablingEnabled(false)
@@ -441,6 +442,7 @@ function GenerateMenu() -- this is a big ass function
 					local thisMenu = temp[1].menu
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(300)
+					ttsSpeechText("Found User.")
 					playerMenus[tostring(temp[1].id)].generate(thisMenu)
 					thisMenu:Visible(true)
 					return
@@ -1835,7 +1837,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	local thisItem = NativeUI.CreateCheckboxItem("Text to Speech", false, "Enables Text to Speech for the GUI")
+	local thisItem = NativeUI.CreateCheckboxItem("Screen Reader (TTS)", GetResourceKvpInt('ea_tts') == 1 and true or false, "Enables Text to Speech for the GUI")
 	settingsMenu:AddItem(thisItem)
 	thisItem.CheckboxEvent = function(sender, item, checked_)
 		SendNUIMessage({
