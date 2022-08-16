@@ -9,8 +9,10 @@
 	<script>
 		
 		var resource = "EasyAdmin"
+		var ttsEnabled = false
 		
 		function open(data){
+			speak("Text Input, "+ data.title)
 			var title = document.getElementById("textTitle");
 			title.textContent = data.title
 			var input = document.getElementById("textInput");
@@ -25,11 +27,13 @@
 		
 		function cancel(){
 			$(`.webflow-style-input`).fadeOut(200);
+			speak("Input cancelled")
 			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: "", state: 1}))
 		}
 		
 		function submit(){
 			$(`.webflow-style-input`).fadeOut(400);
+			speak("Input submitted: " + document.getElementById("textInput").value)
 			var input = document.getElementById("textInput");
 			$.post(`https://`+resource+`/keyboardFinished`, JSON.stringify({result: input.value, state: 0}))
 		}
@@ -60,10 +64,26 @@
 					return open(data);
 				case "clip":
 					return copyToClipboard(data.text)
+				case "speak":
+					return speak(data.text)
+				case "toggle_speak":
+					ttsEnabled = data.enabled
 				default:
 					return;
 			}
 		})
+	
+		
+		// tts function using translate.google.com in an iframe
+		function speak(text) {
+			if (!ttsEnabled) {
+				return;
+			}
+			speaking = new SpeechSynthesisUtterance(strip(text));
+			speaking.rate = 2;
+
+			window.speechSynthesis.speak(speaking);
+		}
 		
 		function copyToClipboard(text) {
 			const el = document.createElement('textarea');
@@ -72,6 +92,10 @@
 			el.select();
 			document.execCommand('copy');
 			document.body.removeChild(el);
+		}
+
+		function strip(text) {
+			return text.replace(/~[A-z0-9]~/g, '')
 		}
 	</script>
 </head>
