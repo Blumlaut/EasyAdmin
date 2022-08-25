@@ -736,7 +736,7 @@ Citizen.CreateThread(function()
 		if not WarnedPlayers[playerId] then
 			return 0
 		else
-			return WarnedPlayers[id].warns
+			return WarnedPlayers[playerId].warns
 		end
 	end
 	exports('getPlayerWarnings', getPlayerWarnings)
