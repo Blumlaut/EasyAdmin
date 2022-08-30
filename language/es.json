@@ -231,6 +231,8 @@
     "copiedtoclipboard":"Texto copiado al clip de notas",
 
     "spectatevehicleseatoccupied":"El asiento en el vehiculo en el que estabas se encuentra ocupado.",
-    "spectatenovehiclefound":"El vehiculo en el que estabas ya no puede ser encontrado."
+    "spectatenovehiclefound":"El vehiculo en el que estabas ya no puede ser encontrado.",
+    "screenreader":"Screen Reader (TTS)",
+    "screenreaderguide":"Enables Text to Speech for the GUI"
 
 }]

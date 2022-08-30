@@ -1818,6 +1818,17 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	
+	local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("screenreader"), GetResourceKvpInt('ea_tts') == 1 and true or false, GetLocalisedText("screenreaderguide"))
+	settingsMenu:AddItem(thisItem)
+	thisItem.CheckboxEvent = function(sender, item, checked_)
+		SendNUIMessage({
+			action = "toggle_speak",
+			enabled = checked_
+		})
+		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
+		SendNUIMessage({action= "speak", text="Text to Speech"})
+	end
 
 	if not RedM then
 		local sl = {"none"}
@@ -1845,16 +1856,6 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	local thisItem = NativeUI.CreateCheckboxItem("Screen Reader (TTS)", GetResourceKvpInt('ea_tts') == 1 and true or false, "Enables Text to Speech for the GUI")
-	settingsMenu:AddItem(thisItem)
-	thisItem.CheckboxEvent = function(sender, item, checked_)
-		SendNUIMessage({
-			action = "toggle_speak",
-			enabled = checked_
-		})
-		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
-		SendNUIMessage({action= "speak", text="Text to Speech"})
-	end
 	
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")
 	for i, plugin in pairs(plugins) do

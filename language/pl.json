@@ -232,6 +232,8 @@
     "copiedtoclipboard":"Tekst skopiowany do schowka!",
 
     "spectatevehicleseatoccupied":"Miejsce w pojeździe, na którym byłeś, jest teraz zajęte.",
-    "spectatenovehiclefound":"Nie można już znaleźć pojazdu, w którym byłeś."
+    "spectatenovehiclefound":"Nie można już znaleźć pojazdu, w którym byłeś.",
+    "screenreader":"Screen Reader (TTS)",
+    "screenreaderguide":"Enables Text to Speech for the GUI"
 
 }]

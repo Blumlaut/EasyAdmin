@@ -41,6 +41,9 @@ dependencies {
     'yarn'
 }
 
+provide 'EasyAdmin'
+
+
 convar_category 'EasyAdmin' {
     "Configuration Options",
     {

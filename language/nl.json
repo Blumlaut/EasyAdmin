@@ -233,6 +233,8 @@
     "copiedtoclipboard":"Tekst gekopieerd naar het klembord!",
 
     "spectatevehicleseatoccupied":"Het voertuig waar je net in zat is nu bezet.",
-    "spectatenovehiclefound":"Het voertuig waar je net in zat kan niet worden gevonden."
+    "spectatenovehiclefound":"Het voertuig waar je net in zat kan niet worden gevonden.",
+    "screenreader":"Screen Reader (TTS)",
+    "screenreaderguide":"Enables Text to Speech for the GUI"
 
 }]

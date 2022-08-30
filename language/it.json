@@ -232,7 +232,9 @@
     "copiedtoclipboard":"Text copied to Clipboard!",
 
     "spectatevehicleseatoccupied":"The vehicle seat you were in is now occupied.",
-    "spectatenovehiclefound":"The vehicle you were in can no longer be found."
+    "spectatenovehiclefound":"The vehicle you were in can no longer be found.",
+    "screenreader":"Screen Reader (TTS)",
+    "screenreaderguide":"Enables Text to Speech for the GUI"
 
 
 }]
