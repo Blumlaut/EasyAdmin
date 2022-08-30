@@ -143,7 +143,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 							pData.developer = true
 						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] then
 							pData.contributor = true
-						elseif
+						end
 					end
 					table.insert(l, pData)
 				end
