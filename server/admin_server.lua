@@ -141,7 +141,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 					for i, v in pairs(cached.identifiers) do
 						if v == "discord:178889658128793600" then 
 							pData.developer = true
-						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] then
+						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] or v == "discord:840695262460641311" --[[ Knight ]] then
 							pData.contributor = true
 						end
 					end
