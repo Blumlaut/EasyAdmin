@@ -238,6 +238,9 @@ function generateTextures()
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
+		CreateRuntimeTextureFromImage(txd, 'badge_dev', 'dependencies/images/pl_badge_dev.png')
+		CreateRuntimeTextureFromImage(txd, 'badge_contrib', 'dependencies/images/pl_badge_contr.png')
+
 		if ((overrideEgg == nil) and easterChance == 100) or (overrideEgg or overrideEgg == false) then
 			local chance = overrideEgg
 			if ((overrideEgg == nil) and easterChance == 100) then
@@ -462,6 +465,11 @@ function GenerateMenu() -- this is a big ass function
 				}
 			end
 			local thisPlayerMenu = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
+			if not RedM and thePlayer.developer then
+				thisPlayerMenu.ParentItem:SetRightBadge(23)
+			elseif not RedM and thePlayer.contributor then 
+				thisPlayerMenu.ParentItem:SetRightBadge(24)
+			end
 			playerMenus[tostring(thePlayer.id)] = {menu = thisPlayerMenu, name = thePlayer.name, id = thePlayer.id }
 
 			thisPlayerMenu:SetMenuWidthOffset(menuWidth)

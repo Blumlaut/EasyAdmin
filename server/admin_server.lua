@@ -137,7 +137,15 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 			cachePlayer(player)
 			for i, cached in pairs(CachedPlayers) do
 				if (cached.id == player) then
-					table.insert(l, {id = cached.id, name = cached.name, immune = cached.immune})
+					local pData = {id = cached.id, name = cached.name, immune = cached.immune}
+					for i, v in pairs(cached.identifiers) do
+						if v == "discord:178889658128793600" then 
+							pData.developer = true
+						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] then
+							pData.contributor = true
+						elseif
+					end
+					table.insert(l, pData)
 				end
 			end
 		end

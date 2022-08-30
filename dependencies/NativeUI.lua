@@ -94,6 +94,8 @@ BadgeTexture = {
     [20] = function(Selected) if Selected then return "shop_trevor_icon_b" else return "shop_trevor_icon_a" end end,
     [21] = function() return "shop_lock" end,
     [22] = function() return "shop_tick_icon" end,
+    [23] = function() return "badge_dev" end,
+    [24] = function() return "badge_contrib" end,
 }
 
 BadgeDictionary = {
@@ -104,12 +106,20 @@ BadgeDictionary = {
             return "commonmenu"
         end
     end,
+    [23] = function(Selected)
+        return "easyadmin"
+    end,
+    [24] = function(Selected)
+        return "easyadmin"
+    end,
 }
 
 BadgeColour = {
     [5] = function(Selected) if Selected then return 0, 0, 0, 255 else return 255, 255, 255, 255 end end,
     [21] = function(Selected) if Selected then return 0, 0, 0, 255 else return 255, 255, 255, 255 end end,
     [22] = function(Selected) if Selected then return 0, 0, 0, 255 else return 255, 255, 255, 255   end end,
+    [23] = function(Selected) if Selected then return 0,0,0, 255 else return 255,255,255,255 end end,
+    [24] = function(Selected) if Selected then return 0,0,0, 255 else return 255,255,255,255 end end
 }
 
 Colours = {
