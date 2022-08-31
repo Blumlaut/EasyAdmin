@@ -233,6 +233,7 @@
     "spectatevehicleseatoccupied":"The vehicle seat you were in is now occupied.",
     "spectatenovehiclefound":"The vehicle you were in can no longer be found.",
     "screenreader":"Screen Reader (TTS)",
-    "screenreaderguide":"Enables Text to Speech for the GUI"
-
+    "screenreaderguide":"Enables Text to Speech for the GUI",
+    "playerinfo": "Player Info",
+    "playerinfoguide": "Shows player ID and Username above players head"
 }]
