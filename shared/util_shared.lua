@@ -83,6 +83,7 @@ if not IsDuplicityVersion() then
 
 	function ttsSpeechItem(item)
 		local ttsText = ""
+		if not item or GetResourceKvpInt('ea_tts') == 0 then return end
 		if type(item.Text) == "table" then
 			if item.Text._Text then
 				ttsText = item.Text._Text
@@ -105,6 +106,7 @@ if not IsDuplicityVersion() then
 	end
 	
 	function ttsSpeechText(text)
+		if not text or GetResourceKvpInt('ea_tts') == 0 then return end
 		SendNUIMessage({action= "speak", text=text})
 	end	
 end
