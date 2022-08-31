@@ -100,6 +100,7 @@ RegisterCommand('easyadmin', function(source, args)
 						return
 					end
 				end
+				SendNUIMessage({action= "speak", text="EasyAdmin"})
 				mainMenu:Visible(true)
 			else
 				TriggerServerEvent("EasyAdmin:amiadmin")
@@ -140,6 +141,17 @@ Citizen.CreateThread(function()
 		menuWidth = GetResourceKvpInt("ea_menuwidth")
 		menuOrientation = handleOrientation(GetResourceKvpString("ea_menuorientation"))
 	end 
+	if not GetResourceKvpInt("ea_tts") then
+		SetResourceKvpInt("ea_tts", 0)
+	else 
+		if GetResourceKvpInt("ea_tts") == 1 then
+			SendNUIMessage({
+				action = "toggle_speak",
+				enabled = true
+			})
+		end
+	end
+
 	local subtitle = "~b~Admin Menu"
 	if settings.updateAvailable then
 		subtitle = "~g~UPDATE "..settings.updateAvailable.." AVAILABLE!"
@@ -226,6 +238,9 @@ function generateTextures()
 			dui = nil
 		end
 		txd = CreateRuntimeTxd("easyadmin")
+		CreateRuntimeTextureFromImage(txd, 'badge_dev', 'dependencies/images/pl_badge_dev.png')
+		CreateRuntimeTextureFromImage(txd, 'badge_contrib', 'dependencies/images/pl_badge_contr.png')
+
 		if ((overrideEgg == nil) and easterChance == 100) or (overrideEgg or overrideEgg == false) then
 			local chance = overrideEgg
 			if ((overrideEgg == nil) and easterChance == 100) then
@@ -400,6 +415,7 @@ function GenerateMenu() -- this is a big ass function
 
 				if found and (#temp > 1) then
 					local searchsubtitle = "Found "..tostring(#temp).." results!"
+					ttsSpeechText(searchsubtitle)
 					local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
 					_menuPool:Add(resultMenu)
 					_menuPool:ControlDisablingEnabled(false)
@@ -429,6 +445,7 @@ function GenerateMenu() -- this is a big ass function
 					local thisMenu = temp[1].menu
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(300)
+					ttsSpeechText("Found User.")
 					playerMenus[tostring(temp[1].id)].generate(thisMenu)
 					thisMenu:Visible(true)
 					return
@@ -448,6 +465,11 @@ function GenerateMenu() -- this is a big ass function
 				}
 			end
 			local thisPlayerMenu = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
+			if not RedM and thePlayer.developer then
+				thisPlayerMenu.ParentItem:SetRightBadge(23)
+			elseif not RedM and thePlayer.contributor then 
+				thisPlayerMenu.ParentItem:SetRightBadge(24)
+			end
 			playerMenus[tostring(thePlayer.id)] = {menu = thisPlayerMenu, name = thePlayer.name, id = thePlayer.id }
 
 			thisPlayerMenu:SetMenuWidthOffset(menuWidth)
@@ -1796,6 +1818,17 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	
+	local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("screenreader"), GetResourceKvpInt('ea_tts') == 1 and true or false, GetLocalisedText("screenreaderguide"))
+	settingsMenu:AddItem(thisItem)
+	thisItem.CheckboxEvent = function(sender, item, checked_)
+		SendNUIMessage({
+			action = "toggle_speak",
+			enabled = checked_
+		})
+		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
+		SendNUIMessage({action= "speak", text="Text to Speech"})
+	end
 
 	if not RedM then
 		local sl = {"none"}
@@ -1823,6 +1856,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	
 	TriggerEvent("EasyAdmin:BuildSettingsOptions")
 	for i, plugin in pairs(plugins) do
 		if plugin.functions.settingsMenu then

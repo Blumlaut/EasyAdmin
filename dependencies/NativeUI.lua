@@ -94,6 +94,8 @@ BadgeTexture = {
     [20] = function(Selected) if Selected then return "shop_trevor_icon_b" else return "shop_trevor_icon_a" end end,
     [21] = function() return "shop_lock" end,
     [22] = function() return "shop_tick_icon" end,
+    [23] = function() return "badge_dev" end,
+    [24] = function() return "badge_contrib" end,
 }
 
 BadgeDictionary = {
@@ -104,12 +106,20 @@ BadgeDictionary = {
             return "commonmenu"
         end
     end,
+    [23] = function(Selected)
+        return "easyadmin"
+    end,
+    [24] = function(Selected)
+        return "easyadmin"
+    end,
 }
 
 BadgeColour = {
     [5] = function(Selected) if Selected then return 0, 0, 0, 255 else return 255, 255, 255, 255 end end,
     [21] = function(Selected) if Selected then return 0, 0, 0, 255 else return 255, 255, 255, 255 end end,
     [22] = function(Selected) if Selected then return 0, 0, 0, 255 else return 255, 255, 255, 255   end end,
+    [23] = function(Selected) if Selected then return 0,0,0, 255 else return 255,255,255,255 end end,
+    [24] = function(Selected) if Selected then return 0,0,0, 255 else return 255,255,255,255 end end
 }
 
 Colours = {
@@ -2865,6 +2875,9 @@ function UIMenu:Visible(bool)
         self.JustOpened = tobool(bool)
         self.Dirty = tobool(bool)
         self:UpdateScaleform()
+        if tobool(bool) == true then
+            ttsSpeechItem(self.Items[self:CurrentSelection()])
+        end
         if self.ParentMenu ~= nil or tobool(bool) == false then
             return
         end
@@ -2893,6 +2906,7 @@ function UIMenu:ProcessControl()
 
     if self.Controls.Back.Enabled and (IsDisabledControlJustReleased(2, 177) or IsDisabledControlJustReleased(2, 199) ) and isInputZeroDisabled then
         self:GoBack()
+
     end
     
     if #self.Items == 0 then
@@ -3026,6 +3040,9 @@ function UIMenu:GoUp()
     self.ActiveItem = self.ActiveItem - 1
     self.Items[self:CurrentSelection()]:Selected(true)
     PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+
+    ttsSpeechItem(self.Items[self:CurrentSelection()])
+
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -3068,6 +3085,9 @@ function UIMenu:GoDown()
     self.ActiveItem = self.ActiveItem + 1
     self.Items[self:CurrentSelection()]:Selected(true) 
     PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+
+    ttsSpeechItem(self.Items[self:CurrentSelection()])
+
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -3088,6 +3108,7 @@ function UIMenu:GoLeft()
         Item:Index(Item._Index - 1)
         self.OnListChange(self, Item, Item._Index)
         Item.OnListChanged(self, Item, Item._Index)
+        ttsSpeechText(Item.Items[Item._Index])
         PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     elseif subtype == "UIMenuSliderItem" then
         local Item = self.Items[self:CurrentSelection()]
@@ -3120,6 +3141,7 @@ function UIMenu:GoRight()
         Item:Index(Item._Index + 1)
         self.OnListChange(self, Item, Item._Index)
         Item.OnListChanged(self, Item, Item._Index)
+        ttsSpeechText(Item.Items[Item._Index])
         PlaySoundFrontend(-1, self.Settings.Audio.LeftRight, self.Settings.Audio.Library, true)
     elseif subtype == "UIMenuSliderItem" then
         local Item = self.Items[self:CurrentSelection()]
@@ -3145,24 +3167,29 @@ function UIMenu:SelectItem()
     local type, subtype = Item()
     if subtype == "UIMenuCheckboxItem" then
         Item.Checked = not Item.Checked
+        ttsSpeechText(Item.Checked and "Checked" or "Unchecked")
         PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnCheckboxChange(self, Item, Item.Checked)
         Item.CheckboxEvent(self, Item, Item.Checked)
     elseif subtype == "UIMenuListItem" then
         PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        ttsSpeechText("Selected")
         self.OnListSelect(self, Item, Item._Index)
         Item.OnListSelected(self, Item, Item._Index)
     elseif subtype == "UIMenuSliderItem" then
         PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        ttsSpeechText("Selected")
         self.OnSliderSelect(self, Item, Item._Index)
         Item.OnSliderSelected(Item._Index)
     elseif subtype == "UIMenuProgressItem" then
         PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
+        ttsSpeechText("Selected")
         self.OnProgressSelect(self, Item, Item.Data.Index)
         Item.OnProgressSelected(Item.Data.Index)        
     else
         PlaySoundFrontend(-1, self.Settings.Audio.Select, self.Settings.Audio.Library, true)
         self.OnItemSelect(self, Item, self:CurrentSelection())
+        ttsSpeechItem(Item)
         Item.Activated(self, Item)
         if not self.Children[Item] then
             return
@@ -3170,6 +3197,7 @@ function UIMenu:SelectItem()
         self:Visible(false)
         self.Children[Item]:Visible(true)
         self.OnMenuChanged(self, self.Children[self.Items[self:CurrentSelection()]], true)
+        
     end
 end
 

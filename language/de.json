@@ -79,7 +79,7 @@
     "wantedlevel": "Fahndungslevel",
     "exitspectator": "Drücke E um den Zuschauermodus zu verlassen.",
 
-    "allowlist": "You are not allowlisted on this server",
+    "allowlist": "Du hast keine Berechtigung diesen Server zu betreten",
     "bannedjoin": "\nDu wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab\nDeine Bann-ID lautet #%s.",
     "kicked": "Gekickt von %s, \nGrund: %s",
     "banned": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",
@@ -231,5 +231,7 @@
     "copiedtoclipboard": "Text wurde in die Zwischenablage kopiert!",
 
     "spectatevehicleseatoccupied": "Der Fahrzeugsitz auf dem du gesessen hast, ist jetzt besetzt",
-    "spectatenovehiclefound": "Das Fahrzeug in dem du gesessen hast, wurde nicht mehr gefunden"
+    "spectatenovehiclefound": "Das Fahrzeug in dem du gesessen hast, wurde nicht mehr gefunden",
+    "screenreader":"Screen Reader (TTS)",
+    "screenreaderguide":"Aktiviert Text to Speech für die GUI"
 }]

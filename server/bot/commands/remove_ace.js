@@ -42,7 +42,7 @@ module.exports = {
 			var group = interaction.fields.getTextInputValue('groupName');
 			var permission = interaction.fields.getTextInputValue('permission');
 			var query = `remove_ace ${group} ${permission} allow`
-			exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `add_ace ${group} ${perm} allow`)
+			exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `add_ace ${group} ${permission} allow`)
 	
 			ExecuteCommand(query)
 	

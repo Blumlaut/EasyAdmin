@@ -80,6 +80,35 @@ if not IsDuplicityVersion() then
 		keyboardState = data.state
 		cb('ok')
 	end)
+
+	function ttsSpeechItem(item)
+		local ttsText = ""
+		if not item or GetResourceKvpInt('ea_tts') == 0 then return end
+		if type(item.Text) == "table" then
+			if item.Text._Text then
+				ttsText = item.Text._Text
+				if item.Label then
+					ttsText = ttsText .. ", " .. item.Label.Text._Text
+				end
+			end
+		elseif type(item.Text) == "function" then
+			ttsText = item.Base.Text._Text
+			if item.Checked == true then
+				ttsText = ttsText .. ", Checked"
+			elseif item.Checked == false then
+				ttsText = ttsText .. ", Unchecked"
+			end
+			if item.ItemText then 
+				ttsText = ttsText .. ", " .. item.ItemText._Text
+			end
+		end
+		SendNUIMessage({action= "speak", text=ttsText})
+	end
+	
+	function ttsSpeechText(text)
+		if not text or GetResourceKvpInt('ea_tts') == 0 then return end
+		SendNUIMessage({action= "speak", text=text})
+	end	
 end
 
 
