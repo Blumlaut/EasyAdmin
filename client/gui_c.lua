@@ -1818,6 +1818,14 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
+	if permissions["plrinfo"] then
+		local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("playerinfo"), playerinfo or false, GetLocalisedText("playerinfoguide"))
+		settingsMenu:AddItem(thisItem)
+		thisItem.CheckboxEvent = function(sender, item, checked_)
+			playerinfo = checked_
+			TriggerServerEvent("EasyAdmin:ShowPlayerInfo", checked_)
+		end
+	end
 	
 	local thisItem = NativeUI.CreateCheckboxItem(GetLocalisedText("screenreader"), GetResourceKvpInt('ea_tts') == 1 and true or false, GetLocalisedText("screenreaderguide"))
 	settingsMenu:AddItem(thisItem)
