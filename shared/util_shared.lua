@@ -32,6 +32,7 @@ permissions = {
 	
 	["immune"] = false,
 	["anon"] = false,
+	["plrinfo"] = false,
 }
 
 
