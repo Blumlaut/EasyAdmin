@@ -422,9 +422,43 @@ function ShowNotification(text)
 	end
 end
 
+function DrawText3D(x, y, z, player)
+    SetDrawOrigin(x, y, z, 0);
+    SetTextFont(0)
+    SetTextScale(0.2, 0.5)
+    SetTextColour(19, 38, 203, 240)
+    SetTextDropshadow(0, 0, 0, 0, 255)
+    SetTextEdge(2, 0, 0, 0, 150)
+    SetTextDropShadow()
+    SetTextOutline()
+    SetTextEntry("STRING")
+    SetTextCentre(1)
+    AddTextComponentString("["+GetPlayerServerId(player)+"] "+GetPlayerName(player))
+    DrawText(0.0, 0.0)
+end
+
 RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
 	TriggerEvent("EasyAdmin:receivedNotification")
 	if not WasEventCanceled() then
 		ShowNotification(text)
+	end
+end)
+
+RegisterNetEvent("EasyAdmin:ShowPlayerInfo", function(checked)
+	while checked do
+		local playerPed = PlayerPedId()
+		local playerCoords = GetEntityCoords(playerPed)
+		
+		for _, player in ipairs(GetActivePlayers()) do
+			local targetPed = GetPlayerPed(player)
+			if targetPed ~= playerPed then
+				local distance = #(playerCoords-GetEntityCoords(targetPed))
+				if distance < 10 then
+					local targetCords = GetEntityCoords(targetPed)
+					DrawText3D(targetCords.x, targetCords.y, targetCords.z, player)
+				end
+			end
+		end
+		Citizen.Wait(1000)
 	end
 end)
