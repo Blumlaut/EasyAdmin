@@ -166,10 +166,10 @@
     "cleaningprop": "Borrando Objetos %s",
     "finishedcleaning": "Limpieza completada con exito %s",
     "admincleanedup": "**%s** Ha realizado una limpieza de todos los **%s** en un radio de **%s**.",
-    "radius": "Radius",
-    "type": "Type",
-    "deepclean":"Deep Clean",
-    "deepcleanguide":"Also deletes clientside entities.",
+    "radius": "Radio",
+    "type": "Tipo",
+    "deepclean":"Limpieza Profunda",
+    "deepcleanguide":"También borra las entidades del cliente.",
 
     "forceeasteregg": "Forzar Easter Egg",
 
@@ -228,11 +228,11 @@
     "teleportplayerback":"Teletransportar al jugador a donde estaba",
     "teleportintoclosestvehicle":"Al vehiculo mas cercano",
 
-    "copiedtoclipboard":"Texto copiado al clip de notas",
+    "copiedtoclipboard":"Texto copiado al portapapeles",
 
     "spectatevehicleseatoccupied":"El asiento en el vehiculo en el que estabas se encuentra ocupado.",
     "spectatenovehiclefound":"El vehiculo en el que estabas ya no puede ser encontrado.",
-    "screenreader":"Screen Reader (TTS)",
-    "screenreaderguide":"Enables Text to Speech for the GUI"
+    "screenreader":"Texto a Voz (TTS)",
+    "screenreaderguide":"Activa el Texto a Voz de la interfaz (GUI)"
 
 }]
