@@ -929,6 +929,7 @@ Citizen.CreateThread(function()
 		end
 		
 		if GetConvar("ea_enableAllowlist", "false") == "true" then
+			Wait(500)
 			if DoesPlayerHavePermission(player, "player.allowlist") then
 				deferrals.done()
 			else
