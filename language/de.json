@@ -80,6 +80,7 @@
     "exitspectator": "Drücke E um den Zuschauermodus zu verlassen.",
 
     "allowlist": "Du hast keine Berechtigung diesen Server zu betreten",
+    "checkingallowlist": "Prüfe Allowlist..",
     "bannedjoin": "\nDu wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab\nDeine Bann-ID lautet #%s.",
     "kicked": "Gekickt von %s, \nGrund: %s",
     "banned": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",

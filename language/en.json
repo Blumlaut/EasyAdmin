@@ -79,6 +79,7 @@
     "exitspectator": "Press E to exit spectator mode",
 
     "allowlist": "You are not allowlisted on this server",
+    "checkingallowlist": "Checking allowlist..",
     "bannedjoin": "\nYou have been banned from this Server\n\nReason: %s\n\nBan Expires: %s\nYour Ban ID is #%s.",
     "kicked": "Kicked by %s, Reason: %s",
     "banned": "You have been banned from this Server, Reason: %s, Ban Expires: %s",

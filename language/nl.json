@@ -80,6 +80,7 @@
     "exitspectator": "Druk op E om spectator mode te verlaten",
 
     "allowlist": "You are not allowlisted on this server",
+    "checkingallowlist": "Checking allowlist..",
     "bannedjoin": "Je bent verbannen van deze Server, \nReden: %s, Ban Vervalt: %s, Ban ID: %s",
     "kicked": "Gekickt door %s, Reden: %s",
     "banned": "Je bent verbannen van deze Server, Reden: %s, Ban Vervalt: %s",
