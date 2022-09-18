@@ -79,7 +79,7 @@
     "exitspectator": "Naciśnij E, aby wyjść z trybu obserwatora",
 
     "allowlist": "Nie ma Cię na białej liście tego serwera",
-    "checkingallowlist": "Checking allowlist..",
+    "checkingallowlist": "Sprawdzanie listy dostępu..",
     "bannedjoin": "Zostałeś zbanowany na tym serwerze, \nPowód: %s, Czas trwania: %s, Ban ID: %s",
     "kicked": "Wyrzucony przez %s, Powód: %s",
     "banned": "Zostałeś zbanowany na tym serwerze, Powód: %s, Czas trwania: %s",
