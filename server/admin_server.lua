@@ -929,6 +929,15 @@ Citizen.CreateThread(function()
 		end
 		
 		if GetConvar("ea_enableAllowlist", "false") == "true" then
+			deferrals.update(GetLocalisedText("checkingallowlist"))
+			local allowlistAttempts = 0
+			local allowlisted = false
+			repeat
+				allowlisted = DoesPlayerHavePermission(player, "player.allowlist")
+				allowlistAttempts = allowlistAttempts+1
+				Wait(100)
+			until (allowlistAttempts >= 15 or allowlisted == true)
+			
 			if DoesPlayerHavePermission(player, "player.allowlist") then
 				deferrals.done()
 			else

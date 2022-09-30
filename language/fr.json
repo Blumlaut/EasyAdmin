@@ -80,6 +80,7 @@
     "exitspectator": "Appuyer sur E pour quitter le mode spectateur",
 
     "allowlist": "You are not allowlisted on this server",
+    "checkingallowlist": "Checking allowlist..",
     "bannedjoin": "Vous avez été banni du serveur, \nRaison : %s, Expiration du bannissement : %s, Ban ID: %s",
     "kicked": "Éjecté par %s, Raison : %s",
     "banned": "Vous avez été banni du serveur, \nRaison : %s, Expiration du bannissement : %s",

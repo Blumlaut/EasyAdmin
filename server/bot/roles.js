@@ -8,7 +8,13 @@ if (GetConvar("ea_botToken", "") != "") {
         var member = undefined
         try {
             var botGuild = await client.guilds.cache.get(guild)
-            var user = await getDiscordAccountFromPlayer(src)
+            var identifiers = await exports[EasyAdmin].getAllPlayerIdentifiers(player)
+            var user = false 
+            for (let identifier of identifiers) {
+                if (identifier.search("discord:") != -1) {
+                    user = await client.users.fetch(identifier.substring(identifier.indexOf(":") + 1))
+                }
+            }
             if (user) {
                 member = await botGuild.members.fetch(user)
             } else {
