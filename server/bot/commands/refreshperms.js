@@ -10,8 +10,9 @@ module.exports = {
 				.setRequired(false)),
 
 	async execute(interaction, exports) {
-		const user = interaction.options.getUser('user')
 		var member = interaction.member
+		let user = interaction.options.getUser('user')
+		if (user && user.id == member.id) user = null
 		if(user && !await DoesGuildMemberHavePermission(interaction.member, `bot.${interaction.commandName}`) == true) {
 		    await interaction.reply({ content: 'You don\'t have permission to refresh other users permissions!', ephemeral: true });
 		    return
