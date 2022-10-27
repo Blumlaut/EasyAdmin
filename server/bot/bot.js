@@ -36,7 +36,7 @@ if (GetConvar("ea_botToken", "") != "") {
         latestVersionInfo = await exports[EasyAdmin].getLatestVersion()
         
         
-        RegisterClientCommands(client.user.id, guild)
+        RegisterClientCommands(client.user.id)
         var startupMessage = `**EasyAdmin ${currentVersion}** has started.`
         if (currentVersion != latestVersionInfo[0]) {
             startupMessage+=`\nVersion ${latestVersionInfo[0]} is Available!\n Download it from ${latestVersionInfo[1]}`
@@ -58,7 +58,7 @@ if (GetConvar("ea_botToken", "") != "") {
     
     
     
-    async function RegisterClientCommands(clientId,guildId) {
+    async function RegisterClientCommands(clientId) {
         const { REST } = require('@discordjs/rest');
         const { Routes } = require('discord-api-types/v10');
         const fs = require('fs');
@@ -73,14 +73,11 @@ if (GetConvar("ea_botToken", "") != "") {
             client.commands.set(command.data.name, command);
         }
         
-        const rest = new REST({ version: '10' }).setToken(GetConvar("ea_botToken", ""));
-        
-        rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-        .catch((error) => {
-            console.error("^7Failed to set bot commands, you likely didn't invite the bot correctly, please kick the bot and re-invite with the link here:\nhttps://easyadmin.readthedocs.io/en/latest/discordbot/#inviting-the-bot\n\n")
-            console.error(error)
-            return
-        });
+        const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+        await rest.put(
+            Routes.applicationCommands(clientId),
+            { body: commands },
+        );
         
         client.on('interactionCreate', async interaction => {
             if (interaction.type != InteractionType.ApplicationCommand) return;
