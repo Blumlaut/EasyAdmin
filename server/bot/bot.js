@@ -73,7 +73,7 @@ if (GetConvar("ea_botToken", "") != "") {
             client.commands.set(command.data.name, command);
         }
         
-        const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+        const rest = new REST({ version: '10' }).setToken(GetConvar("ea_botToken", ""));
         await rest.put(
             Routes.applicationCommands(clientId),
             { body: commands },
