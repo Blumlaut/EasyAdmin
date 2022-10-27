@@ -74,6 +74,10 @@ if (GetConvar("ea_botToken", "") != "") {
         }
         
         const rest = new REST({ version: '10' }).setToken(GetConvar("ea_botToken", ""));
+
+        // compat: remove existing commands for homeguild
+        rest.put(Routes.applicationGuildCommands(clientId, guild), { body: {} })
+
         await rest.put(
             Routes.applicationCommands(clientId),
             { body: commands },
