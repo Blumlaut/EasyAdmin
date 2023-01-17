@@ -212,6 +212,7 @@
     "closesimilarreports": "~r~Cerrar todos los reportes similares~w~",
     "closesimilarreportsguide": "Intentara encontrar y borrar todos los reportes realizados por el mismo usuario.",
     "adminclosedreport": "**%s** ha cerrado el reporte #**%s**",
+    "adminclaimedreport": "**%s** claimed Report #**%s**",
     "entertoopen": "Selecciona para revisar las opciones para este jugador.",
     "refreshreports": "Refrescar Reportes",
     "refreshreportsguide": "Muestra nuevos reportes desde la última vez que se haya abierto el menu.",

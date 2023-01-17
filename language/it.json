@@ -213,6 +213,7 @@
     "closesimilarreports": "~r~Chiudi le segnalazioni simili~w~",
     "closesimilarreportsguide": "Prova a cercare e cancellare segnalazioni fatte dallo stesso utente.",
     "adminclosedreport": "**%s** ha chiuso il report #**%s**",
+    "adminclaimedreport": "**%s** claimed Report #**%s**",
     "entertoopen": "Seleziona per vedere opzioni per questo giocatore.",
     "refreshreports": "Aggiorna Segnalazioni",
     "refreshreportsguide": "Mostra le nuove segnalazioni rispetto all'ultima volta che hai aperto il menù.",

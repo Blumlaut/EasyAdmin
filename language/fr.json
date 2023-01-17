@@ -214,6 +214,7 @@
     "closesimilarreports": "~r~Fermer tous les rapports similaires~w~",
     "closesimilarreportsguide": "Tentera de trouver et de supprimer les rapports créés par le même utilisateur.",
     "adminclosedreport": "**%s** Rapport fermé #**%s**",
+    "adminclaimedreport": "**%s** claimed Report #**%s**",
     "entertoopen": "Sélectionnez pour afficher les options pour ce lecteur.",
     "refreshreports": "Actualiser les rapports",
     "refreshreportsguide": "Affiche de nouveaux rapports au cas où il y en aurait depuis la dernière fois que le menu a été ouvert.",

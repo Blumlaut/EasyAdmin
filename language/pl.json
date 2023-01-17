@@ -213,6 +213,7 @@
     "closesimilarreports": "~r~Zamknij wszystkie podobne zgłoszenia~w~",
     "closesimilarreportsguide": "Spróbuję znaleźć i usunąć raporty wykonane przez tego samego użytkownika.",
     "adminclosedreport": "**%s** zamknięte zgłoszenie #**%s**",
+    "adminclaimedreport": "**%s** claimed Report #**%s**",
     "entertoopen": "Wybierz, aby wyświetlić opcje dla tego gracza.",
     "refreshreports": "Odśwież zgłoszenia",
     "refreshreportsguide": "Pokazuje nowe zgłoszenia, jeśli są jakieś od ostatniego otwarcia menu.",

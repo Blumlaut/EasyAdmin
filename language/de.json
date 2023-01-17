@@ -213,6 +213,7 @@
     "closesimilarreports": "~r~Ähnliche Reports schließen~w~",
     "closesimilarreportsguide": "Versucht ähnliche Reports zu finden und zu löschen.",
     "adminclosedreport": "**%s** hat Report #**%s** geschlossen.",
+    "adminclaimedreport": "**%s** claimed Report #**%s**",
     "refreshreports": "Reports aktualisieren",
     "refreshreportsguide": "Zeigt neue Reports an, falls es neue gibt seitdem das Menü geöffnet wurde.",
     "waitbeforeusingagain": "Du musst warten bevor du das benutzen kannst!",
