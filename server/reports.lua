@@ -159,6 +159,7 @@ Citizen.CreateThread(function()
 					TriggerLatentClientEvent("EasyAdmin:ClaimedReport", admin, 10000, reports[reportId])
 				end
                 TriggerEvent("EasyAdmin:reportClaimed", reports[reportId])
+                SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclaimedreport"), getName(source, false, true), reportId), "reports", 16777214)
 			else
 				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
 			end

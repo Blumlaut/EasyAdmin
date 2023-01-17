@@ -212,6 +212,7 @@
     "closesimilarreports": "~r~Close all similar reports~w~",
     "closesimilarreportsguide": "Will attempt to find and delete reports made by the same user.",
     "adminclosedreport": "**%s** closed Report #**%s**",
+    "adminclaimedreport": "**%s** claimed Report #**%s**",
     "entertoopen": "Select to display options for this player.",
     "refreshreports": "Refresh Reports",
     "refreshreportsguide": "Shows new reports in case there are any since last time the menu was opened.",
