@@ -23,7 +23,7 @@ caseInsensitive: false
 # The bot will only add a label if this property is set.
 label: "invalid"
 # The bot will ignore any issues that are opened or reopened by the user names in exception
-exception:
-  - "Blumlaut"
+#exception:
+#  - "Blumlaut"
 # The issue is judged to be legal if it includes all keywords from any of these two configs.
 # Or it will be closed by the app.
