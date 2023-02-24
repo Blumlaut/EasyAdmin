@@ -106,12 +106,19 @@ async function getPlayerFromDiscordAccount(user) {
 
 async function refreshRolesForMember(member) {
     var roles = await member.roles.cache.keys()
-
     for (var role of roles) {
         emit('debug', `role sync for ${member.user.tag} add_principal identifier.discord:${member.id} role:${role}`)
         ExecuteCommand(`add_principal identifier.discord:${member.id} role:${role}`)
     }
     emit('debug', `roles synced for ${member.user.tag}`)
+}
+
+async function refreshRolesForUser(user,roles) {
+    for (var role of roles) {
+        emit('debug', `role sync for ${user.tag} add_principal identifier.discord:${user.id} role:${role}`)
+        ExecuteCommand(`add_principal identifier.discord:${user.id} role:${role}`)
+    }
+    emit('debug', `roles synced for ${user.tag}`)
 }
 
 // converts Lua format string to JS format string (e.g. %s -> %s) and replaces %s with arguments
