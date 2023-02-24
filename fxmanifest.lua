@@ -84,7 +84,6 @@ convar_category 'EasyAdmin' {
         { "Use Tokens as Identifiers", "$ea_useTokenIdentifiers", "CV_BOOL", "true" },
         { "Enable Ascii Art on Start", "$ea_enableSplash", "CV_BOOL", "true" },
         { "Token for Discord bot", "$ea_botToken", "CV_STRING", "none" },
-        { "Guild ID for Discord bot", "$ea_botGuild", "CV_STRING", "none" },
         { "Channel for Discord bot to log", "$ea_botLogChannel", "CV_STRING", "none" },
         { "Channel for Discord bot to enable live status", "$ea_botStatusChannel", "CV_STRING", "true" },
         { "Enable Allowlist", "$ea_enableAllowlist", "CV_BOOL", "false" }
