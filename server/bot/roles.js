@@ -22,8 +22,9 @@ if (GetConvar("ea_botToken", "") != "") {
         }
         
         var roles = []
-        for (const guild of client.guilds.cache.keys()) {
-            var guildMember = guild.members.cache.get(user.id)
+        for (const id of client.guilds.cache.keys()) {
+            const guild = client.guilds.cache.get(id)
+            var guildMember = await guild.members.fetch(user.id)
             if (guildMember) {
                 roles.push(...guildMember.roles.cache.keys())
             }
