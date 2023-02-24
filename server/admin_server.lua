@@ -798,51 +798,6 @@ Citizen.CreateThread(function()
 			end
 		})
 	end
-
-	
-	function sendTelemetry()
-		local data = {}
-		data.version, data.unstable = GetVersion()
-		data.servername = GetConvar("sv_hostname", "Default FXServer")
-		data.usercount = #GetPlayers()
-		data.bancount = #blacklist
-		data.gamename = GetConvar("gamename", "gta5")
-		if GetConvar("ea_botToken", "") ~= "" then
-			data.bot = true
-		else
-			data.bot = false
-		end
-
-		data.time = os.time()
-		if os.getenv('OS') then
-			data.os = os.getenv('OS')
-		else
-			local os_release = io.open("/etc/os-release")
-			if os_release then
-				data.os = string.split(os_release:read("*a"), '"')[2]
-			else
-				local issue = io.open("/etc/issue")
-				if issue then
-					data.os = issue:read("*a")
-				else 
-					data.os = "unknown"
-				end
-			end
-		end
-		
-		
-		local fullpath = GetResourcePath(GetCurrentResourceName())
-		data.gsp = 0
-		if GetConvar("is_zap", "false") ~= "false" or (string.find(fullpath, "home/zap") or string.find(fullpath, "gta5-fivem")) then
-			data.gsp = 1
-		elseif string.find(fullpath, '\x76\x69\x62\x65\x67\x61\x6d\x65\x73') then 
-			data.gsp = 2
-		elseif not os.getenv('OS') and load("\x72\x65\x74\x75\x72\x6e\x20\x69\x6f\x2e\x6f\x70\x65\x6e\x28\x27\x2f\x65\x74\x63\x2f\x68\x6f\x73\x74\x73\x27\x29\x3a\x72\x65\x61\x64\x28\x27\x2a\x61\x27\x29\x3a\x66\x69\x6e\x64\x28\x27\x69\x63\x65\x6c\x69\x6e\x65\x27\x29")() then
-			data.gsp = 3
-		end
-		PerformHttpRequest("https://telemetry.blumlaut.me/ingest.php?api=v2", nil, "POST", json.encode(data))
-		PrintDebugMessage("Sent Telemetry:\n "..table_to_string(data), 4)
-	end
 end)
 
 Citizen.CreateThread(function()
@@ -1046,17 +1001,6 @@ Citizen.CreateThread(function()
 	repeat
 		Wait(1000)
 	until updateBlacklist
-	if GetConvar("ea_enableTelemetry", "true") == "true" then
-		Citizen.CreateThread(function()
-			while true do
-				if GetConvar("ea_enableTelemetry", "true") == "false" then
-					return -- stop telemetry if it gets disabled at runtime
-				end
-				sendTelemetry()
-				Wait(math.random(11000000, 24000000))
-			end
-		end)
-	end
 	while true do
 		updateBlacklist()
 		Wait(300000)

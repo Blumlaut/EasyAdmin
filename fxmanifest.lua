@@ -80,7 +80,6 @@ convar_category 'EasyAdmin' {
         { "Time before Cached Player Expires", "$ea_playerCacheExpiryTime", "CV_INT", "900" },
         { "Set Debug Level", "$ea_logLevel", "CV_INT", "1" },
         { "Enable Custom Banlist", "$ea_custombanlist", "CV_BOOL", "false" },
-        { "Enable Telemetry", "$ea_enableTelemetry", "CV_BOOL", "true" },
         { "Use Tokens as Identifiers", "$ea_useTokenIdentifiers", "CV_BOOL", "true" },
         { "Enable Ascii Art on Start", "$ea_enableSplash", "CV_BOOL", "true" },
         { "Token for Discord bot", "$ea_botToken", "CV_STRING", "none" },
