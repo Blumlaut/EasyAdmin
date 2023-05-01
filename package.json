@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@discordjs/rest": "1.7.0",
+    "@discordjs/rest": "1.7.1",
     "ascii-table": "0.0.9",
     "discord-api-types": "0.37.40",
     "discord.js": "14.9.0",
