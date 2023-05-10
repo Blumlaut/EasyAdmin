@@ -65,7 +65,7 @@ module.exports = {
 				{ name: 'Armour', value: `\`\`\`${GetPedArmour(playerPed)}\`\`\``, inline: true}
 			])
 			if (GetPlayerInvincible(user.id)) {
-				embed.addFields([{ name: 'Godmode', value: `\`\`\`ON\`\`\``, inline: true}])
+				embed.addFields([{ name: 'Godmode', value: '```ON```', inline: true}])
 			}
 		} else {
 			embed.addFields([{ name: 'Status', value: '```Player Disconnected```'}])
