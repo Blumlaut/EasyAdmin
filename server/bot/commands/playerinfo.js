@@ -14,14 +14,14 @@ module.exports = {
 		const user = await findPlayerFromUserInput(userOrId)
 
 		if (!user) {
-			interaction.reply({ content: "Sorry, i couldn't find any user with the infos you provided, if they have recently left, try using their ID instead of username", ephemeral: true})
+			interaction.reply({ content: 'Sorry, i couldn\'t find any user with the infos you provided, if they have recently left, try using their ID instead of username', ephemeral: true})
 			return
 		}
 
 		var displayedIdentifiers = []
 		
 		for (let identifier of user.identifiers) {
-			if ((isNaN(identifier.charAt(0))) && !(GetConvar("ea_IpPrivacy", "true") == "true" && identifier.search("ip:") != -1)) {
+			if ((isNaN(identifier.charAt(0))) && !(GetConvar('ea_IpPrivacy', 'true') == 'true' && identifier.search('ip:') != -1)) {
 				displayedIdentifiers.push(identifier)
 			}
 		}
@@ -32,7 +32,7 @@ module.exports = {
 		})
 
 		var discordAccount = await getDiscordAccountFromPlayer(user)
-		var discordName = "N/A"
+		var discordName = 'N/A'
 		if (discordAccount) {
 			discordName = discordAccount.tag
 		}
@@ -68,12 +68,12 @@ module.exports = {
 				embed.addFields([{ name: 'Godmode', value: '\`\`\`ON\`\`\`', inline: true}])
 			}
 		} else {
-			embed.addFields([{ name: 'Status', value: `\`\`\`Player Disconnected\`\`\``}])
+			embed.addFields([{ name: 'Status', value: '```Player Disconnected```'}])
 		}
 
 
 		embed.addFields([{ name: 'Identifiers', value: `\`\`\`${table}\`\`\``}])
 	
-		await interaction.reply({ embeds: [embed]});
+		await interaction.reply({ embeds: [embed]})
 	},
-};
+}

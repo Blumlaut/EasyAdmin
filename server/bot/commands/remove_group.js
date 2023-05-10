@@ -18,10 +18,10 @@ module.exports = {
 
 
 		var query = `remove_principal identifier.discord:${user} ${groupName}`
-		exports[EasyAdmin].RemoveFromFile("easyadmin_permissions.cfg", `add_principal identifier.discord:${user} ${groupName}`)
+		exports[EasyAdmin].RemoveFromFile('easyadmin_permissions.cfg', `add_principal identifier.discord:${user} ${groupName}`)
 
 		ExecuteCommand(query)
 
 		interaction.reply(`\`${query}\` has been executed and saved.`)
 	},
-};
+}

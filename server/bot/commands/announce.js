@@ -16,9 +16,9 @@ module.exports = {
 		    var embed = await prepareGenericEmbed(`Succesfully sent an announcement \nreason: ${reason}`)
 		    await interaction.reply({embeds: [embed]})
 		} else {
-		    var embed = await prepareGenericEmbed(`Could not send an annoucement.`)
+		    var embed = await prepareGenericEmbed('Could not send an annoucement.')
 		    await interaction.reply({embeds: [embed]})
 		}
 
 	},
-};
+}

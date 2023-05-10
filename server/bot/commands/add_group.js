@@ -18,10 +18,10 @@ module.exports = {
 
 
 		var query = `add_principal identifier.discord:${user} ${groupName}`
-		exports[EasyAdmin].AddToFile("easyadmin_permissions.cfg", query)
+		exports[EasyAdmin].AddToFile('easyadmin_permissions.cfg', query)
 
 		ExecuteCommand(query)
 
 		interaction.reply(`\`${query}\` has been executed and saved.`)
 	},
-};
+}
