@@ -1,3 +1,4 @@
+/*eslint no-global-assign: "off", no-unused-vars: "off"*/
 // this file contains util functions the bot uses
 
 async function prepareGenericEmbed(message,feature,colour,title,image,customAuthor,description,timestamp) {

@@ -2,8 +2,6 @@
 var reports = []
 
 function generateReportEmbed(report, disabled, closed) {
-	var reportId = report.id
-    
 	var embed = new EmbedBuilder()
 		.setTimestamp()
     
@@ -25,7 +23,6 @@ function generateReportEmbed(report, disabled, closed) {
 		{name:'Claimed by', value:`${(report.claimedName || 'Noone')}`, inline: true}])
 
 	return {embeds: [embed]}
-    
 }
     
 async function logNewReport(report) {

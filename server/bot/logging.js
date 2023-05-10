@@ -1,7 +1,7 @@
 
 
 botLogForwards = []
-async function addBotLogForwarding(source,args,rw) {
+async function addBotLogForwarding(source,args) {
 	var player=source
     
 	if (await exports[GetCurrentResourceName()].DoesPlayerHavePermission(player, 'server')) {

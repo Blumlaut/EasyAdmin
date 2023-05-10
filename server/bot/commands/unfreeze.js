@@ -5,7 +5,7 @@ module.exports = {
 		.setName('unfreeze')
 		.setDescription('Unfreezes player')
 		.addStringOption(option =>
-		    option.setName('user')
+			option.setName('user')
 				.setDescription('Username or ID')
 				.setRequired(true)),
 	async execute(interaction, exports) {
@@ -21,11 +21,11 @@ module.exports = {
 		var ret = await exports[EasyAdmin].freezePlayer(user.id, false)
 
 		if (ret) {
-			var embed = await prepareGenericEmbed(`Successfully unfroze **${user.name}**.`)
+			let embed = await prepareGenericEmbed(`Successfully unfroze **${user.name}**.`)
 		
 			await interaction.reply({ embeds: [embed]})
 		} else {
-			var embed = await prepareGenericEmbed(`Could not unfreeze **${user.name}**.`)
+			let embed = await prepareGenericEmbed(`Could not unfreeze **${user.name}**.`)
 		
 			await interaction.reply({ embeds: [embed]})
 		}

@@ -5,7 +5,7 @@ module.exports = {
 		.setName('slap')
 		.setDescription('Substracts amount of HP from player')
 		.addStringOption(option =>
-		    option.setName('user')
+			option.setName('user')
 				.setDescription('Username or ID')
 				.setRequired(true))
 		.addIntegerOption(option =>
@@ -26,11 +26,11 @@ module.exports = {
 		var ret = exports[EasyAdmin].slapPlayer(user.id, slapAmount)
 
 		if (ret) {
-			var embed = await prepareGenericEmbed(`Successfully slapped **${user.name}** for ${slapAmount} HP.`)
+			let embed = await prepareGenericEmbed(`Successfully slapped **${user.name}** for ${slapAmount} HP.`)
 		
 			await interaction.reply({ embeds: [embed]})
 		} else {
-			var embed = await prepareGenericEmbed(`Could not slap **${user.name}**.`)
+			let embed = await prepareGenericEmbed(`Could not slap **${user.name}**.`)
 		
 			await interaction.reply({ embeds: [embed]})
 		}

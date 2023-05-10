@@ -4,7 +4,7 @@ try {
 	knownAvatars = {} 
     
     
-	exports['chat'].registerMessageHook(async function(source, outMessage, hookRef) {
+	exports['chat'].registerMessageHook(async function(source, outMessage) {
         
 		if (GetConvar('ea_botChatBridge', '') == '') { return }
         

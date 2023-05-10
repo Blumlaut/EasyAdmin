@@ -17,7 +17,7 @@ if (GetConvar('ea_botToken', '') != '') {
 	})
 
 
-	on('playerDropped', (reason) => {
+	on('playerDropped', () => {
 		if (GetConvar('ea_botToken', '') == '') return
 		var player = global.source
 

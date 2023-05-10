@@ -5,11 +5,11 @@ module.exports = {
 		.setName('remove_group')
 		.setDescription('Removes a group from a User (ACE), saves into easyadmin_permissions.cfg')
 		.addUserOption(option =>
-		    option.setName('user')
+			option.setName('user')
 				.setDescription('The user')
 				.setRequired(true))
 		.addStringOption(option =>
-		    option.setName('group')
+			option.setName('group')
 				.setDescription('the group, for example, group.admin')
 				.setRequired(true)),
 	async execute(interaction, exports) {

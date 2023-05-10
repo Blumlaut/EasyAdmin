@@ -5,7 +5,7 @@ module.exports = {
 		.setName('screenshot')
 		.setDescription('Takes a screenshot of the player\'s screen')
 		.addStringOption(option =>
-		    option.setName('user')
+			option.setName('user')
 				.setDescription('Username or ID')
 				.setRequired(true)),
 	async execute(interaction, exports) {
@@ -16,7 +16,7 @@ module.exports = {
 
 		var inProgress = await exports[EasyAdmin].isScreenshotInProgress()
 		if (inProgress) {
-			var embed = await prepareGenericEmbed('A screenshot is already in progress! Please try again later.')
+			let embed = await prepareGenericEmbed('A screenshot is already in progress! Please try again later.')
 			interaction.editReply({ embeds: [embed]})
 			return
 		}
@@ -36,7 +36,7 @@ module.exports = {
 			RemoveEventHandler('EasyAdmin:TookScreenshot', screenshotHandler)
 			clearTimeout(failedTimeout)
 
-			var embed = await prepareGenericEmbed(`Screenshot of **${user.name}**'s game taken.`,undefined,undefined,undefined,screenshotUrl)
+			let embed = await prepareGenericEmbed(`Screenshot of **${user.name}**'s game taken.`,undefined,undefined,undefined,screenshotUrl)
 			await interaction.editReply({ embeds: [embed]})
 		}
 
@@ -45,7 +45,7 @@ module.exports = {
 
 		var failedTimeout = setTimeout(async function () {
 			RemoveEventHandler('EasyAdmin:TookScreenshot', screenshotHandler)
-			var embed = await prepareGenericEmbed(`Screenshot of **${user.name}**'s game failed!`, undefined, 16711680)
+			let embed = await prepareGenericEmbed(`Screenshot of **${user.name}**'s game failed!`, undefined, 16711680)
 			await interaction.editReply({ embeds: [embed]})
 		}, 25000)
 	},
