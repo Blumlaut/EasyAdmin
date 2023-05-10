@@ -1,0 +1,47 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "overrides": [],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "no-undef": "off",
+        "no-else-return": [
+            "warn"
+        ],
+        "no-empty-function": [
+            "error",
+            {"allow": ["arrowFunctions"]}
+        ],
+        "no-implicit-coercion": [
+            "warn"
+        ],
+        "no-useless-return": [
+            "warn"
+        ],
+        "no-undef-init": [
+            "warn"
+        ]
+    }
+}

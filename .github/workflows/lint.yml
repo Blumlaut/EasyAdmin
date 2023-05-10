@@ -1,0 +1,37 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+      - prod
+
+# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+
+      # ESLint and Prettier must be in `package.json`
+      - name: Install Node.js dependencies
+        run: npm i
+
+      - name: Run linters
+        uses: wearerequired/lint-action@v2.3.0
+        with:
+          auto_fix: true
+          commit_message: "style: Fix code style issues with ${linter}"
+          eslint: true
