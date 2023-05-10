@@ -13,7 +13,7 @@ module.exports = {
 
 		var ban = await exports[EasyAdmin].fetchBan(banId)
 		if (ban) {
-			var embed = new EmbedBuilder()
+			let embed = new EmbedBuilder()
 				.setColor(16777214)
 				.setTimestamp()
 
@@ -42,7 +42,7 @@ module.exports = {
 			
 			interaction.reply({ embeds: [embed]})
 		} else {
-			var embed = await prepareGenericEmbed('No ban was found with this ID.')
+			let embed = await prepareGenericEmbed('No ban was found with this ID.')
 			interaction.reply({ embeds: [embed]})
 		}
 	},

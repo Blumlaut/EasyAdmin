@@ -77,7 +77,7 @@ client.on('messageCreate', async msg => {
     
 })
 
-on('playerDropped', (reason) => {
+on('playerDropped', () => {
 	if (GetConvar('ea_botChatBridge', '') == '') { return }
 	knownAvatars[global.source] = undefined
 })

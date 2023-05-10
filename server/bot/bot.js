@@ -1,4 +1,4 @@
-
+/*eslint no-global-assign: "off"*/
 process.on('uncaughtException', function(err) {
 	console.log('Caught exception: ', err.stack)
 })

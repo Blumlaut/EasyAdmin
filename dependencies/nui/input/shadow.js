@@ -16,11 +16,11 @@
 	// Drop Shadow Filter
 	var dropShadowFilter = document.createElementNS('http://www.w3.org/2000/svg', 'filter')
 	dropShadowFilter.setAttribute('id', 'svgDropShadowFilter')
-	var feGaussianFilter = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur')
-	feGaussianFilter.setAttribute('in', 'SourceAlpha')
-	feGaussianFilter.setAttribute('stdDeviation', '3')
-	dropShadowFilter.appendChild(feGaussianFilter)
-	Filters._svgDropshadowFilterBlur = feGaussianFilter
+	var feGaussianFilter1 = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur')
+	feGaussianFilter1.setAttribute('in', 'SourceAlpha')
+	feGaussianFilter1.setAttribute('stdDeviation', '3')
+	dropShadowFilter.appendChild(feGaussianFilter1)
+	Filters._svgDropshadowFilterBlur = feGaussianFilter1
 
 	var feOffset = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset')
 	feOffset.setAttribute('dx', '0')
@@ -38,18 +38,18 @@
 	feComposite.setAttribute('in2', 'offsetblur')
 	feComposite.setAttribute('operator', 'in')
 	dropShadowFilter.appendChild(feComposite)
-	var feComposite = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite')
-	feComposite.setAttribute('in2', 'SourceAlpha')
-	feComposite.setAttribute('operator', 'out')
-	feComposite.setAttribute('result', 'outer')
-	dropShadowFilter.appendChild(feComposite)
+	var feComposite1 = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite')
+	feComposite1.setAttribute('in2', 'SourceAlpha')
+	feComposite1.setAttribute('operator', 'out')
+	feComposite1.setAttribute('result', 'outer')
+	dropShadowFilter.appendChild(feComposite1)
 
 	var feMerge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge')
 	var feMergeNode = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode')
 	feMerge.appendChild(feMergeNode)
-	var feMergeNode = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode')
-	feMerge.appendChild(feMergeNode)
-	Filters._svgDropshadowMergeNode = feMergeNode
+	var feMergeNode1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode')
+	feMerge.appendChild(feMergeNode1)
+	Filters._svgDropshadowMergeNode = feMergeNode1
 	dropShadowFilter.appendChild(feMerge)
 	defs.appendChild(dropShadowFilter)
 	svg.appendChild(defs)

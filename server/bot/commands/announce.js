@@ -5,7 +5,7 @@ module.exports = {
 		.setName('announce')
 		.setDescription('send a announcement to the server')
 		.addStringOption(option =>
-		    option.setName('reason')
+			option.setName('reason')
 				.setDescription('Reason Text')
 				.setRequired(true)),
 	async execute(interaction, exports) {
@@ -13,12 +13,11 @@ module.exports = {
 		
 		var ret = await exports[EasyAdmin].announce(reason)
 		if (ret) {
-		    var embed = await prepareGenericEmbed(`Succesfully sent an announcement \nreason: ${reason}`)
-		    await interaction.reply({embeds: [embed]})
+			let embed = await prepareGenericEmbed(`Succesfully sent an announcement \nreason: ${reason}`)
+			await interaction.reply({embeds: [embed]})
 		} else {
-		    var embed = await prepareGenericEmbed('Could not send an annoucement.')
-		    await interaction.reply({embeds: [embed]})
+			let embed = await prepareGenericEmbed('Could not send an annoucement.')
+			await interaction.reply({embeds: [embed]})
 		}
-
 	},
 }

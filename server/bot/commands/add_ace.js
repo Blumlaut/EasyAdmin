@@ -48,6 +48,6 @@ module.exports = {
 	
 				interaction.reply(`\`${query}\` has been executed and saved.`)
 
-			}).catch(async (error) => {}) // silently catch error, happens if the form times out
+			}).catch(async () => {}) // silently catch error, happens if the form times out
 	},
 }

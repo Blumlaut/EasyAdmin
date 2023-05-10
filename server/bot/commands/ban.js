@@ -56,12 +56,10 @@ module.exports = {
 
 		var ban = exports[EasyAdmin].addBan(user.id, reason, banTime, interaction.user.tag)
 		if (ban) {
-			var embed = await prepareGenericEmbed(`Successfully banned **${user.name}** for **${reason}** until ${ban.expireString} [#${ban.banid}.`)
-
+			let embed = await prepareGenericEmbed(`Successfully banned **${user.name}** for **${reason}** until ${ban.expireString} [#${ban.banid}.`)
 			await interaction.reply({ embeds: [embed]})
 		} else {
-			var embed = await prepareGenericEmbed(`Failed banning **${user.name}**.`)
-			
+			let embed = await prepareGenericEmbed(`Failed banning **${user.name}**.`)
 			await interaction.reply({ embeds: [embed]})
 		}
 	},
