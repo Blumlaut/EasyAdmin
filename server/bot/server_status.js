@@ -1,6 +1,5 @@
 
-var statusMessage = undefined
-var botStatusChannel = GetConvar('ea_botStatusChannel', '')
+var statusMessage
 var startTimestamp = new Date()
 
 
@@ -37,7 +36,7 @@ async function getServerStatus(why) {
 	var reports = await exports[EasyAdmin].getAllReports()
 	var activeReports = 0
 	var claimedReports = 0
-	for (let [i, report] of Object.values(reports).entries()) {
+	for (let report of Object.values(reports).entries()) {
 		activeReports+=1
 		if (report.claimed) {
 			claimedReports+=1

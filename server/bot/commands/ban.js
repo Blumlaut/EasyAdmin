@@ -28,7 +28,7 @@ module.exports = {
 			return
 		}
 
-		var banTime = undefined
+		var banTime
 
 		try {
 			if (timeframe.toLowerCase() == 'permanent') {

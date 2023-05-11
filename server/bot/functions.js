@@ -31,7 +31,7 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
 }
 
 async function findPlayerFromUserInput(input) {
-	var user = undefined
+	var user
     
 	var players = await exports[EasyAdmin].getCachedPlayers()
     

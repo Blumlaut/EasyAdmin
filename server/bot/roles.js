@@ -1,7 +1,7 @@
 
 async function syncDiscordRoles(player) {
 	if (!EasyAdmin) {return} // bot is down
-	var user = undefined
+	var user
 
 
 	try {

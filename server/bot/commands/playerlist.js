@@ -68,7 +68,7 @@ module.exports = {
 		var usernames = ''
 		var discordnames = ''
 		var curPage = 0
-		var row = undefined
+		var row
 
 		if (getPlayers().length != 0) {
 			for (let player of Object.values(players).entries()) {
