@@ -16,7 +16,9 @@ permissions:
 jobs:
   run-linters:
     name: Run linters
-    runs-on: self-hosted
+    runs-on: 
+      - self-hosted
+      - ubuntu-latest
 
     steps:
       - name: Check out Git repository
