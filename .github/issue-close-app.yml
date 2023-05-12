@@ -1,0 +1,29 @@
+# Comment that will be sent if an issue is judged to be closed.
+comment: "Closing this issue since the issue template was not filled in. Please provide us with more information to have this issue reopened."
+issueConfigs:
+# There can be several configs for different kind of issues.
+- content:
+  - "A clear and concise description"
+  - "Scroll down to '....'"
+  - "add screenshots or logs to help explain your problem"
+  - "Add any other context about the problem here"
+- content:
+  - "A clear and concise description of what you want to happen"
+  - "alternative solutions or features you've considered"
+- content:
+  - "A clear and concise description"
+  - "Describe what you have done to attempt to fix it"
+  - "attach screenshots or log files here to help explain your problem"
+# Optional configuration:
+#
+# whether the keywords are case-insensitive
+# default value is false, which means keywords are case-sensitive
+caseInsensitive: false
+# the label that will be added when the bot close an issue
+# The bot will only add a label if this property is set.
+label: "invalid"
+# The bot will ignore any issues that are opened or reopened by the user names in exception
+#exception:
+#  - "Blumlaut"
+# The issue is judged to be legal if it includes all keywords from any of these two configs.
+# Or it will be closed by the app.
