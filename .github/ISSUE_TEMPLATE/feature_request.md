@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+# WARNING: IF YOU DO NOT FILL OUT OR REMOVE THE TEMPLATE YOUR ISSUE WILL GET LOCKED!
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
