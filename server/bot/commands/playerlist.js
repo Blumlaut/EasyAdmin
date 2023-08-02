@@ -4,7 +4,7 @@
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 	const row = new ActionRowBuilder()
 
-	var selector = new SelectMenuBuilder()
+	var selector = new StringSelectMenuBuilder()
     
 	var fieldLength = idFields.length
 	if (fieldLength == 0) {fieldLength = 1}
@@ -71,7 +71,7 @@ module.exports = {
 		var row
 
 		if (getPlayers().length != 0) {
-			for (let player of Object.values(players).entries()) {
+			for (let [_, player] of Object.values(players).entries()) {
 				if (!player.dropped) {
 
 					if (ids.length >= 500 || usernames.length >= 500 || discordnames.length >= 500) {
