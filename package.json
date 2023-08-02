@@ -1,6 +1,12 @@
 {
   "dependencies": {
-    "@discordjs/rest": "1.7.1",
+    "@discordjs/rest": "1.6.0",
+    "@discordjs/core": "0.6.0",
+    "@discordjs/formatters": "0.3.1",
+    "@discordjs/collection": "1.5.1",
+    "@discordjs/builders": "1.6.3",
+    "@discordjs/util": "0.3.1",
+    "@discordjs/ws": "0.8.1",
     "ascii-table": "0.0.9",
     "discord-api-types": "0.37.51",
     "discord.js": "14.12.1",
@@ -12,5 +18,14 @@
   },
   "devDependencies": {
     "eslint": "8.46.0"
+  },
+  "resolutions": {
+    "@discordjs/rest": "1.6.0",
+    "@discordjs/core": "0.6.0",
+    "@discordjs/formatters": "0.3.1",
+    "@discordjs/collection": "1.5.1",
+    "@discordjs/builders": "1.6.3",
+    "@discordjs/util": "0.3.1",
+    "@discordjs/ws": "0.8.1"
   }
 }
