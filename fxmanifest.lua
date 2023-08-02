@@ -4,8 +4,7 @@ games {"rdr3","gta5"}
 
 author 'Blumlaut <blue@furfag.de>'
 description 'EasyAdmin - Admin Menu for FiveM & RedM'
-version '7.01'
-is_master 'yes'
+version '7.02'
 
 
 lua54 'yes'
