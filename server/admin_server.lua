@@ -135,18 +135,17 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 		for i, player in pairs(players) do
 			local player = tonumber(player)
 			cachePlayer(player)
-			for i, cached in pairs(CachedPlayers) do
-				if (cached.id == player) then
-					local pData = {id = cached.id, name = cached.name, immune = cached.immune}
-					for i, v in pairs(cached.identifiers) do
-						if v == "discord:178889658128793600" then 
-							pData.developer = true
-						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] or v == "discord:840695262460641311" --[[ Knight ]] or v == "discord:270731163822325770" --[[ Skypo ]] or v == "discord:186980021850734592" --[[ coleminer0112 ]] then
-							pData.contributor = true
-						end
+			local cached_data = CachedPlayers[player]
+			if cached_data then
+				local pData = {id = cached_data.id, name = cached_data.name, immune = cached_data.immune}
+				for i, v in pairs(cached_data.identifiers) do
+					if v == "discord:178889658128793600" then 
+						pData.developer = true
+					elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] or v == "discord:840695262460641311" --[[ Knight ]] or v == "discord:270731163822325770" --[[ Skypo ]] or v == "discord:186980021850734592" --[[ coleminer0112 ]] then
+						pData.contributor = true
 					end
-					table.insert(l, pData)
 				end
+				l[#l + 1] = pData
 			end
 		end
 		
