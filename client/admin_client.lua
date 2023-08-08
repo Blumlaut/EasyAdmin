@@ -19,6 +19,12 @@ MessageShortcuts = {}
 FrozenPlayers = {}
 MutedPlayers = {}
 
+local cachedInfo = {
+	ped = PlayerPedId(),
+	veh = 0,
+	player = PlayerId(),
+}
+
 local vehicleInfo = {
 	netId = nil,
 	seat = nil,
@@ -126,20 +132,37 @@ RegisterNetEvent('EasyAdmin:SetPlayerMuted', function(player,state)
 	end
 end)
 
-Citizen.CreateThread( function()
-	while true do
-		Citizen.Wait(0)
-		if frozen then
-			local localPlayerPedId = PlayerPedId()
-			FreezeEntityPosition(localPlayerPedId, frozen)
-			if IsPedInAnyVehicle(localPlayerPedId, true) then
-				FreezeEntityPosition(GetVehiclePedIsIn(localPlayerPedId, false), frozen)
-			end 
-		else
-			Citizen.Wait(200)
+function freezeMe()
+
+	Citizen.CreateThread(function()
+	
+		local disableShootingWhileFrozen = GetConvar("ea_disableShootingWhileFrozen", 'false')
+
+		while frozen do 
+
+			FreezeEntityPosition(cachedInfo.ped, frozen)
+			if cachedInfo.veh ~= 0 then
+				FreezeEntityPosition(cachedInfo.veh, frozen)
+			end
+			if disableShootingWhileFrozen == 'true' then
+				DisablePlayerFiring(cachedInfo.player, true)
+			end
+
+			Wait(0)
+
 		end
+
+	end)
+
+end
+
+function unFreezeMe()
+	local localPlayerPedId = PlayerPedId()
+	FreezeEntityPosition(localPlayerPedId, false)
+	if IsPedInAnyVehicle(localPlayerPedId, true) then
+		FreezeEntityPosition(GetVehiclePedIsIn(localPlayerPedId, false), false)
 	end
-end)
+end
 
 RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords)
 	local localPlayerPed = PlayerPedId()
@@ -166,6 +189,7 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords
 		end
 		spectatePlayer(localPlayerPed,GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
 		frozen = false
+		unFreezeMe()
 		return 
 	else
 		if not oldCoords then
@@ -174,6 +198,7 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords
 	end
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	frozen = true
+	freezeMe()
 	stopSpectateUpdate = true
 	local adminPed = localPlayerPed
 	local playerId = GetPlayerFromServerId(playerServerId)
@@ -252,8 +277,8 @@ end)
 Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(500)
+		local localPlayerPed = PlayerPedId()
 		if drawInfo and not stopSpectateUpdate then
-			local localPlayerPed = PlayerPedId()
 			local targetPed = GetPlayerPed(drawTarget)
 			local targetGod = GetPlayerInvincible(drawTarget)
 			
@@ -264,6 +289,11 @@ Citizen.CreateThread( function()
 		else
 			Citizen.Wait(1000)
 		end
+		cachedInfo = {
+			ped = localPlayerPed,
+			veh = GetVehiclePedIsIn(localPlayerPed, false),
+			player = PlayerId(),
+		}
 	end
 end)
 
@@ -328,11 +358,11 @@ end, false)
 
 RegisterNetEvent("EasyAdmin:FreezePlayer", function(toggle)
 	frozen = toggle
-	local playerPed = PlayerPedId()
-	FreezeEntityPosition(playerPed, frozen)
-	if IsPedInAnyVehicle(playerPed, false) then
-		FreezeEntityPosition(GetVehiclePedIsIn(playerPed, false), frozen)
-	end 
+	if frozen then
+		freezeMe()
+	else
+		unFreezeMe()
+	end
 end)
 
 
@@ -376,6 +406,7 @@ function spectatePlayer(targetPed,target,name)
 		StopDrawPlayerInfo()
 		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
 		frozen = false
+		unFreezeMe()
 		Citizen.Wait(200) -- to prevent staying invisible
 		SetEntityVisible(playerPed, true, 0)
 		SetEntityCollision(playerPed, true, true)
