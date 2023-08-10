@@ -71,7 +71,7 @@ module.exports = {
 		var row
 
 		if (getPlayers().length != 0) {
-			for (let [_, player] of Object.values(players).entries()) {
+			for (let [_, player] of Object.values(players).entries()) { // eslint-disable-line no-unused-vars
 				if (!player.dropped) {
 
 					if (ids.length >= 500 || usernames.length >= 500 || discordnames.length >= 500) {
