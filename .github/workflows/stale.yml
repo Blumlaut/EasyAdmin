@@ -10,7 +10,7 @@ jobs:
       - uses: actions/stale@v8
         with:
           exempt-pr-labels: dependencies,review-required
-          exempt-issue-labels: enhancement
+          exempt-issue-labels: enhancement,help-wanted
           days-before-stale: 7
           days-before-close: 14
           
