@@ -13,8 +13,9 @@
 blacklist = {}
 
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
-    if playerId ~= nil then
+    if playerId ~= nil and CheckAdminCooldown(source, "ban") then
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
+            SetAdminCooldown(source, "ban")
             local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
             local username = CachedPlayers[playerId].name or getName(playerId, true)
             if expires and expires < os.time() then
@@ -39,8 +40,9 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
 end)
 
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
-    if playerId ~= nil and not CachedPlayers[playerId].immune then
+    if playerId ~= nil and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "ban") then
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not CachedPlayers[playerId].immune then
+            SetAdminCooldown(source, "ban")
             local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
             local username = CachedPlayers[playerId].name or getName(playerId, true)
             if expires and expires < os.time() then
@@ -131,7 +133,8 @@ RegisterServerEvent("EasyAdmin:requestBanlist", function()
 end)
 
 RegisterCommand("unban", function(source, args, rawCommand)
-    if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") then
+    if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") and CheckAdminCooldown(source, "unban") then
+        SetAdminCooldown(source, "unban")
         PrintDebugMessage("Player "..getName(source,true).." Unbanned "..args[1], 3)
         if tonumber(args[1]) then
             UnbanId(tonumber(args[1]))
@@ -183,7 +186,8 @@ end
 exports('fetchBan', fetchBan)
 
 RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
-    if DoesPlayerHavePermission(source, "player.ban.remove") then
+    if DoesPlayerHavePermission(source, "player.ban.remove") and CheckAdminCooldown(source, "unban") then
+        SetAdminCooldown(source, "unban")
         local thisBan = fetchBan(banId)
         local ret = unbanPlayer(banId)
         if ret then
