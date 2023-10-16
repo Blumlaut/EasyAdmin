@@ -10,6 +10,37 @@
 ------------------------------------
 ------------------------------------
 
+
+-- Cooldowns for Admin Actions
+AdminCooldowns = {}
+-- Returns true if allowed, false if cooldown active
+function CheckAdminCooldown(src, action)
+	local numSrc = tonumber(src)
+	if not numSrc then return true end
+	if AdminCooldowns[numSrc] then
+		if AdminCooldowns[numSrc][action] then
+			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("waitbeforeusingagain"))
+			return false
+		end
+	end
+	return true
+end
+
+function SetAdminCooldown(src, action)
+	local numSrc = tonumber(src)
+	local coolTime = GetConvarInt("ea_adminCooldown:"..tostring(action), 0)
+	if action and numSrc and coolTime > 0 then
+		action = tostring(action)
+		AdminCooldowns[src] = AdminCooldowns[src] or {}
+		AdminCooldowns[src][action] = true
+		Citizen.SetTimeout(1000*coolTime, function()
+			if AdminCooldowns[src] then
+				AdminCooldowns[src][action] = nil
+			end
+		end)
+	end
+end
+
 -- Chat Reminder Code
 function sendRandomReminder()
 	reminderTime = GetConvarInt("ea_chatReminderTime", 0)
