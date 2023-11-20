@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@discordjs/rest": "1.6.0",
+    "@discordjs/rest": "2.2.0",
     "@discordjs/core": "0.6.0",
     "@discordjs/formatters": "0.3.1",
     "@discordjs/collection": "1.5.1",
@@ -20,7 +20,7 @@
     "eslint": "8.46.0"
   },
   "resolutions": {
-    "@discordjs/rest": "1.6.0",
+    "@discordjs/rest": "2.2.0",
     "@discordjs/core": "0.6.0",
     "@discordjs/formatters": "0.3.1",
     "@discordjs/collection": "1.5.1",
