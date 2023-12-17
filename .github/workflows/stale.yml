@@ -7,7 +7,7 @@ jobs:
   stale:
     runs-on: self-hosted
     steps:
-      - uses: actions/stale@v8
+      - uses: actions/stale@v9
         with:
           exempt-pr-labels: dependencies,review-required
           exempt-issue-labels: enhancement,help-wanted
