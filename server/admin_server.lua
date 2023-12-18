@@ -10,6 +10,37 @@
 ------------------------------------
 ------------------------------------
 
+
+-- Cooldowns for Admin Actions
+AdminCooldowns = {}
+-- Returns true if allowed, false if cooldown active
+function CheckAdminCooldown(src, action)
+	local numSrc = tonumber(src)
+	if not numSrc then return true end
+	if AdminCooldowns[numSrc] then
+		if AdminCooldowns[numSrc][action] then
+			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("waitbeforeusingagain"))
+			return false
+		end
+	end
+	return true
+end
+
+function SetAdminCooldown(src, action)
+	local numSrc = tonumber(src)
+	local coolTime = GetConvarInt("ea_adminCooldown:"..tostring(action), 0)
+	if action and numSrc and coolTime > 0 then
+		action = tostring(action)
+		AdminCooldowns[src] = AdminCooldowns[src] or {}
+		AdminCooldowns[src][action] = true
+		Citizen.SetTimeout(1000*coolTime, function()
+			if AdminCooldowns[src] then
+				AdminCooldowns[src][action] = nil
+			end
+		end)
+	end
+end
+
 -- Chat Reminder Code
 function sendRandomReminder()
 	reminderTime = GetConvarInt("ea_chatReminderTime", 0)
@@ -279,7 +310,8 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer", function(playerId,reason)
-		if DoesPlayerHavePermission(source, "player.kick") and not CachedPlayers[playerId].immune then
+		if DoesPlayerHavePermission(source, "player.kick") and CheckAdminCooldown(source, "kick") and not CachedPlayers[playerId].immune then
+			SetAdminCooldown(source, "kick")
 			reason = formatShortcuts(reason)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
@@ -290,7 +322,8 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate", function(playerId)
-		if DoesPlayerHavePermission(source, "player.spectate") then
+		if DoesPlayerHavePermission(source, "player.spectate") and CheckAdminCooldown(source, "spectate") then
+			SetAdminCooldown(source, "spectate")
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
 			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
@@ -405,7 +438,8 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords", function(playerId,tgtCoords)
-		if DoesPlayerHavePermission(source, "player.teleport.single") then
+		if DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
+			SetAdminCooldown(source, "teleport")
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..tgtCoords.x..", "..tgtCoords.y..", "..tgtCoords.z, 3)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			local playerName = getName(playerId, true, true)
@@ -418,7 +452,8 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer", function(id)
-		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") then
+		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
+			SetAdminCooldown(source, "teleport")
 			local tgtPed = GetPlayerPed(id)
 			local tgtCoords = GetEntityCoords(tgtPed)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
@@ -446,7 +481,8 @@ Citizen.CreateThread(function()
 	exports('slapPlayer', slapPlayer)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
-		if DoesPlayerHavePermission(source, "player.slap") and slapPlayer(playerId, slapAmount) then
+		if DoesPlayerHavePermission(source, "player.slap") and CheckAdminCooldown(source, "slap") and slapPlayer(playerId, slapAmount) then
+			SetAdminCooldown(source, "slap")
 			PrintDebugMessage("Player "..getName(source,true).." slapped "..getName(playerId,true).." for "..slapAmount.." HP", 3)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminslappedplayer"), getName(source, false, true), getName(playerId, true, true), slapAmount), "slap", 16777214)
@@ -472,10 +508,11 @@ Citizen.CreateThread(function()
 	exports('freezePlayer', freezePlayer)
 
 	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
-		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune then
+		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "freeze") then
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			freezePlayer(playerId, toggle)
 			if toggle then
+				SetAdminCooldown(source, "freeze")
 				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
 				PrintDebugMessage("Player "..getName(source,true).." froze "..getName(playerId,true), 3)
 			else
@@ -507,7 +544,8 @@ Citizen.CreateThread(function()
 			invokingResource = "`"..GetInvokingResource().."`"
 		end
 		
-		if DoesPlayerHavePermission(source, "player.screenshot") then
+		if DoesPlayerHavePermission(source, "player.screenshot") and CheckAdminCooldown(source, "screenshot") then
+			SetAdminCooldown(source, "screenshot")
 			scrinprogress = true
 			thistemporaryevent = RegisterServerEvent("EasyAdmin:TookScreenshot", function(result)
 				if result == "ERROR" then return false end
@@ -540,7 +578,8 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
 		local src = source
-		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune then
+		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "mute") then
+			SetAdminCooldown(source, "mute")
 			local muted = mutePlayer(playerId, not MutedPlayers[playerId])
 
 			if muted then
@@ -667,7 +706,8 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		local src = source
-		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune then
+		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune and CheckAdminCooldown(source, "warn") then
+			SetAdminCooldown(source, "warn")
 			reason = formatShortcuts(reason)
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
