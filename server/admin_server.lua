@@ -172,7 +172,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 					for i, v in pairs(cached.identifiers) do
 						if v == "discord:178889658128793600" then 
 							pData.developer = true
-						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] or v == "discord:840695262460641311" --[[ Knight ]] or v == "discord:270731163822325770" --[[ Skypo ]] or v == "discord:186980021850734592" --[[ coleminer0112 ]] then
+						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] or v == "discord:840695262460641311" --[[ Knight ]] or v == "discord:270731163822325770" --[[ Skypo ]] or v == "discord:186980021850734592" --[[ coleminer0112 ]] or v == 'discord:469916940710707231' --[[ Grav ]] then
 							pData.contributor = true
 						end
 					end
@@ -326,9 +326,40 @@ Citizen.CreateThread(function()
 			SetAdminCooldown(source, "spectate")
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
 			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
-			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, tgtCoords)
+			local playerBucket = GetPlayerRoutingBucket(playerId)
+			local sourceBucket = GetPlayerRoutingBucket(source)
+			if sourceBucket ~= playerBucket then
+				-- upon spectate request, the admin needs to be set to the target player
+				SetPlayerRoutingBucket(source, playerBucket)
+			end
+			local playerData = { coords = tgtCoords, selfbucket = sourceBucket }
+			TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, playerData)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('spectatedplayer'), getName(source, false, true), getName(playerId, true, true)), "spectate", 16777214)
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:requestBucket", function(playerId)
+		if DoesPlayerHavePermission(source, "player.spectate") then
+			local playerBucket = GetPlayerRoutingBucket(playerId)
+			local sourceBucket = GetPlayerRoutingBucket(source)
+			if sourceBucket ~= playerBucket then
+				-- mismatch in buckets, the admin needs to be set to the target player
+				SetPlayerRoutingBucket(source, playerBucket)
+				local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
+				local playerData = { coords = tgtCoords }
+				TriggerClientEvent("EasyAdmin:requestSpectate", source, playerId, playerData)
+			end
+		end
+	end)
+
+	RegisterServerEvent("EasyAdmin:resetBucket", function(originalBucket)
+		if DoesPlayerHavePermission(source, "player.spectate") then
+			local sourceBucket = GetPlayerRoutingBucket(source)
+			if sourceBucket ~= originalBucket then
+				-- restore the moderator's original bucket to the cached start bucket
+				SetPlayerRoutingBucket(source, originalBucket)
+			end
 		end
 	end)
 	

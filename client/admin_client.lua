@@ -18,6 +18,7 @@ add_aces, add_principals = {}, {}
 MessageShortcuts = {}
 FrozenPlayers = {}
 MutedPlayers = {}
+MyBucket = 0
 
 local cachedInfo = {
 	ped = PlayerPedId(),
@@ -164,9 +165,10 @@ function unFreezeMe()
 	end
 end
 
-RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords)
+RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, playerData)
+	
 	local localPlayerPed = PlayerPedId()
-
+	
 	if IsPedInAnyVehicle(localPlayerPed) then
 		local vehicle = GetVehiclePedIsIn(localPlayerPed, false)
 		local numVehSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
@@ -179,6 +181,13 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords
 		end
 	end
 
+	if playerData.selfbucket then
+		-- cache old bucket to restore at end of spectate
+		MyBucket = playerData.selfbucket
+	end
+
+	local tgtCoords = playerData.coords
+	
 	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId))) end
 	if playerServerId == GetPlayerServerId(PlayerId()) then 
 		if oldCoords then
@@ -193,7 +202,7 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, tgtCoords
 		return 
 	else
 		if not oldCoords then
-			oldCoords = GetEntityCoords(localPlayerPed)
+			oldCoords = GetEntityCoords(PlayerPedId())
 		end
 	end
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)

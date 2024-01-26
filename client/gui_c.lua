@@ -184,12 +184,15 @@ end)
 
 function DrawPlayerInfo(target)
 	drawTarget = target
+	drawServerId = GetPlayerServerId(target)
 	drawInfo = true
+	DrawPlayerInfoLoop()
 end
 
 function StopDrawPlayerInfo()
 	drawInfo = false
 	drawTarget = 0
+	drawServerId = 0
 end
 
 local banlistPage = 1
@@ -1874,10 +1877,12 @@ function GenerateMenu() -- this is a big ass function
 end
 
 
-Citizen.CreateThread( function()
-	while true do
-		Citizen.Wait(0)
-		if drawInfo then
+function DrawPlayerInfoLoop()
+	CreateThread(function()
+		while drawInfo do
+			
+			Wait(0)
+
 			local text = {}
 			-- cheat checks
 			local targetPed = GetPlayerPed(drawTarget)
@@ -1946,9 +1951,22 @@ Citizen.CreateThread( function()
 	
 				StopDrawPlayerInfo()
 				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
+				TriggerServerEvent("EasyAdmin:resetBucket", MyBucket)
 			end
-		else
-			Citizen.Wait(1000)
 		end
-	end
-end)
+	end)
+
+	CreateThread(function()
+		while drawInfo do
+			Wait(5000)
+
+			local targetPed = GetPlayerPed(drawTarget)
+			if not DoesEntityExist(targetPed) and drawServerId ~= 0 then
+				-- player no longer exists, lets contact the server to see if they changed bucket?
+				TriggerServerEvent("EasyAdmin:requestBucket", drawServerId)
+			end
+
+		end
+	end)
+
+end
