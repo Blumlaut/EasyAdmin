@@ -952,7 +952,8 @@ Citizen.CreateThread(function()
 							local banMessageStaffName = blacklist[bi].banner
 							local banMessageFooter = GetConvar("ea_banMessageFooter", "You can appeal this by ban by visiting our discord.")
 							local banMessageSubHeader = GetConvar("ea_banMessageSubHeader", "You have been banned from this server.")
-
+							local banMessageWatermark = GetConvar("ea_banMessageWatermark", "https://i.imgur.com/vRFuxUN.png") 
+ 
 							if banMessageShowStaff == "false" then 
 								banMessageStaffName = 'Server Staff'
 							end
@@ -966,7 +967,7 @@ Citizen.CreateThread(function()
                             ' <br>            <strong>Ban Reason:</strong> ' .. banMessageReason ..
                             ' <br>            <strong>Ban ID:</strong> <code style="letter-spacing: 2px; background-color: #ff7f5059; padding: 2px 4px; border-radius: 6px;">' ..
                             blacklist[bi].banid ..
-                            '</code><br><br>' .. banMessageFooter .. ' <span style="font-style: italic;"></span></p><img src="https://i.imgur.com/vRFuxUN.png" style="position: absolute;right: 15px;bottom: 15px;opacity: 65%;"></div>')
+                            '</code><br><br>' .. banMessageFooter .. ' <span style="font-style: italic;"></span></p><img src="' .. banMessageWatermark ..  '" style="position: absolute;right: 15px;bottom: 15px;opacity: 65%;"></div>')
 							return
 
 						end
