@@ -329,6 +329,15 @@ function mergeTables(t1, t2)
 	return t
 end
 
+-- used to get raw ban reason
+function getStringUntilSuffix(inputStr, suffix)
+	local endPos = string.find(inputStr, suffix)
+	if endPos then
+		return string.sub(inputStr, 1, endPos-1)
+	else
+		return inputStr
+	end
+end
 
 -- terrible function to look for URLs in a string
 function matchURL(text_with_URLs)

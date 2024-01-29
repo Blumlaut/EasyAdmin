@@ -946,8 +946,30 @@ Citizen.CreateThread(function()
 								updateBan(blacklisted.banid,newBanData) -- send it off!
 							end
 							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 3)
-							deferrals.done(string.format( GetLocalisedText("bannedjoin"), blacklist[bi].reason, formatDateString(blacklist[bi].expire), blacklist[bi].banid))
+							
+							local banMessageTitleColour = GetConvar("ea_banMessageTitleColour", "#354557")
+							local banMessageServerName = GetConvar("ea_banMessageServerName", "EasyAdmin")
+							local banMessageShowStaff = GetConvar("ea_banMessageShowStaff", "true")
+							local banMessageStaffName = blacklist[bi].banner
+							local banMessageFooter = GetConvar("ea_banMessageFooter", "You can appeal this by ban by visiting our discord.")
+							local banMessageSubHeader = GetConvar("ea_banMessageSubHeader", "You have been banned from this server.")
+
+							if banMessageShowStaff == "false" then 
+								banMessageStaffName = 'Server Staff'
+							end
+
+							local banMessageReason = getStringUntilSuffix(blacklist[bi].reason, ", Banned by:")
+							-- gives us a raw ban reason with their nickname as we don't want the staff member displayed due to our new convar // "banned by:" field
+
+							deferrals.done(
+                        	'<div style="background-color: rgba(30, 30, 30, 0.5); padding: 20px; border: solid 2px var(--color-modal-border); border-radius: var(--border-radius-normal); margin-top: 25px; position: relative;"><h1 style="color:' .. banMessageTitleColour .. ';">' .. banMessageServerName .. '</h1><br><h2>'.. banMessageSubHeader ..'</h2><br><p style="font-size: 1.25rem; padding: 0px"><strong>Expires:</strong> ' ..
+                            formatDateString(blacklist[bi].expire) .. '<br><strong>Banned By:</strong> ' .. banMessageStaffName ..
+                            ' <br>            <strong>Ban Reason:</strong> ' .. banMessageReason ..
+                            ' <br>            <strong>Ban ID:</strong> <code style="letter-spacing: 2px; background-color: #ff7f5059; padding: 2px 4px; border-radius: 6px;">' ..
+                            blacklist[bi].banid ..
+                            '</code><br><br>' .. banMessageFooter .. ' <span style="font-style: italic;"></span></p><img src="https://i.imgur.com/vRFuxUN.png" style="position: absolute;right: 15px;bottom: 15px;opacity: 65%;"></div>')
 							return
+
 						end
 					end
 				end
