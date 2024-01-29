@@ -948,7 +948,7 @@ Citizen.CreateThread(function()
 							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 3)
 							
 							local banMessageTitleColour = GetConvar("ea_banMessageTitleColour", "#354557")
-							local banMessageServerName = GetConvar("ea_banMessageServerName", "EasyAdmin")
+							local banMessageServerName = GetConvar("sv_projectName", "EasyAdmin")
 							local banMessageShowStaff = GetConvar("ea_banMessageShowStaff", "true")
 							local banMessageStaffName = blacklist[bi].banner
 							local banMessageFooter = GetConvar("ea_banMessageFooter", "You can appeal this by ban by visiting our discord.")
