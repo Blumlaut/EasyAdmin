@@ -948,7 +948,8 @@ Citizen.CreateThread(function()
 							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 3)
 							
 							local banMessageTitleColour = GetConvar("ea_banMessageTitleColour", "#354557")
-							local banMessageServerName = GetConvar("ea_banMessageServerName", GetConvar("sv_projectName", "EasyAdmin"))							local banMessageShowStaff = GetConvar("ea_banMessageShowStaff", "true")
+							local banMessageServerName = GetConvar("ea_banMessageServerName", GetConvar("sv_projectName", "EasyAdmin"))							
+							local banMessageShowStaff = GetConvar("ea_banMessageShowStaff", "true")
 							local banMessageStaffName = blacklist[bi].banner
 							local banMessageFooter = GetConvar("ea_banMessageFooter", "You can appeal this by ban by visiting our discord.")
 							local banMessageSubHeader = GetConvar("ea_banMessageSubHeader", "You have been banned from this server.")
@@ -958,7 +959,7 @@ Citizen.CreateThread(function()
 								banMessageStaffName = 'Server Staff'
 							end
 
-							local banMessageReason = getStringUntilSuffix(blacklist[bi].reason, ", Banned by:")
+							local banMessageReason = getRawBanReason(blacklist[bi].reason, GetLocalisedText("bansuffix"))
 							-- gives us a raw ban reason with their nickname as we don't want the staff member displayed due to our new convar // "banned by:" field
 
 							deferrals.done(

@@ -330,7 +330,7 @@ function mergeTables(t1, t2)
 end
 
 -- used to get raw ban reason
-function getStringUntilSuffix(inputStr, suffix)
+function getRawBanReason(inputStr, suffix)
 	local endPos = string.find(inputStr, suffix)
 	if endPos then
 		return string.sub(inputStr, 1, endPos-1)
