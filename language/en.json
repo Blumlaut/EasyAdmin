@@ -84,6 +84,7 @@
     "kicked": "Kicked by %s, Reason: %s",
     "banned": "You have been banned from this Server, Reason: %s, Ban Expires: %s",
     "reasonadd": " ( Nickname: %s ), Banned by: %s",
+    "bansuffix": ", Banned by: ",
     "nongiven": "None Provided",
     "announcement": "Announcement",
     "announcementguide": "Send an announcement to all players",

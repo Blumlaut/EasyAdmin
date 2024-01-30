@@ -84,6 +84,7 @@
     "kicked": "Has sido kickeado por %s, Razon: %s",
     "banned": "Has sido baneado del servidor, Razon: %s, Expira: %s",
     "reasonadd": " ( El jugador: %s ), ha sido baneado por: %s",
+    "bansuffix": ", ha sido baneado por: ",
     "nongiven": "No se ha proporcionado",
     "announcement": "Anuncio",
     "announcementguide": "Send an announcement to all players",

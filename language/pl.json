@@ -84,6 +84,7 @@
     "kicked": "Wyrzucony przez %s, Powód: %s",
     "banned": "Zostałeś zbanowany na tym serwerze, Powód: %s, Czas trwania: %s",
     "reasonadd": " ( Gracz: %s ), Zablokowany przez: %s",
+    "bansuffix": ", Zablokowany przez: ",
     "nongiven": "Nie podano",
     "announcement": "Ogłoszenie",
     "announcementguide": "Wyślij ogłoszenie do wszystkich graczy",

@@ -84,6 +84,7 @@
     "kicked": "Espulso da %s, Motivo: %s",
     "banned": "Sei stato bandito da questo server, Motivo: %s, Il Ban Scade: %s",
     "reasonadd": " ( Nickname: %s ), Bandito da: %s",
+    "bansuffix": ", Bandito da: ",
     "nongiven": "Non fornito",
     "announcement": "Announcement",
     "announcementguide": "Send an announcement to all players",
