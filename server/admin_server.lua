@@ -959,7 +959,7 @@ Citizen.CreateThread(function()
 								banMessageStaffName = 'Server Staff'
 							end
 
-							local banMessageReason = getRawBanReason(blacklist[bi].reason, GetLocalisedText("bansuffix"))
+							local banMessageReason = blacklist[bi].reason:gsub(string.format(", .*: %s", banMessageStaffName), "")
 							-- gives us a raw ban reason with their nickname as we don't want the staff member displayed due to our new convar // "banned by:" field
 
 							deferrals.done(
