@@ -85,7 +85,6 @@
     "kicked": "Gekickt von %s, \nGrund: %s",
     "banned": "Du wurdest von diesem server gebannt, \nGrund: %s, \nBann Läuft am %s ab.",
     "reasonadd": " ( Spielername: %s ), \nGebannt von: %s",
-    "bansuffix": ", \nGebannt von: ",
     "nongiven": "Keinen gegeben",
     "announcement": "Announcement",
     "announcementguide": "Send an announcement to all players",

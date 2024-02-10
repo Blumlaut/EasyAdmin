@@ -85,7 +85,6 @@
     "kicked": "Éjecté par %s, Raison : %s",
     "banned": "Vous avez été banni du serveur, \nRaison : %s, Expiration du bannissement : %s",
     "reasonadd": " ( Pseudo : %s ), banni par : %s",
-    "bansuffix": ", banni par : ",
     "nongiven": "Non autorisé",
     "announcement": "Announcement",
     "announcementguide": "Send an announcement to all players",
