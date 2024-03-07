@@ -34,7 +34,7 @@ EasyAdmin requires FiveM's default `yarn` resource, this is included in [cfx-ser
 
 Take a look at our Documentation [here](https://easyadmin.readthedocs.io/), we Explain how to Install and Configure EasyAdmin on the Wiki.
 
-## [Support Discord](https://discord.gg/GugyRU8)
+## [Support Discord](https://discord.gg/qq82ZU36XZ)
 
 
 
