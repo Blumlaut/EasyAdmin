@@ -329,7 +329,6 @@ function mergeTables(t1, t2)
 	return t
 end
 
-
 -- terrible function to look for URLs in a string
 function matchURL(text_with_URLs)
 	
