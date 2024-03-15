@@ -10,6 +10,7 @@ permissions = {
 	["player.slap"] = false,
 	["player.freeze"] = false,
 	["player.screenshot"] = false,
+	["player.copydiscord"] = false,
 	["player.mute"] = false,
 	["player.warn"] = false,
 	["player.teleport.everyone"] = false,

@@ -779,7 +779,14 @@ function GenerateMenu() -- this is a big ass function
 							playermanagement:Visible(true)
 						end	
 					end
-		
+					
+					if permissions["player.copydiscord"] then
+						local copyDiscordItem = NativeUI.CreateItem(GetLocalisedText("copydiscord"), "")
+						thisPlayer:AddItem(copyDiscordItem)
+						copyDiscordItem.Activated = function(ParentMenu, SelectedItem)
+							TriggerServerEvent("EasyAdmin:CopyDiscord", thePlayer.id)
+						end
+					end
 		
 					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 					for i, plugin in pairs(plugins) do

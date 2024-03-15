@@ -735,6 +735,23 @@ Citizen.CreateThread(function()
 	end
 	exports('getName', getName)
 	
+	RegisterServerEvent("EasyAdmin:CopyDiscord", function(id)
+
+		local src = source
+
+		if DoesPlayerHavePermission(src, "player.copydiscord") then
+
+			local discord = GetPlayerIdentifierByType(src, "discord") and GetPlayerIdentifierByType(src, "discord"):gsub("discord:", "") or false
+			if discord then
+				TriggerClientEvent("EasyAdmin:CopyDiscord", src, discord)
+			else
+				TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("nodiscordpresent"))
+			end
+
+		end
+
+	end)
+
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		local src = source
 		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune and CheckAdminCooldown(source, "warn") then
