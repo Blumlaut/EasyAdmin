@@ -737,19 +737,6 @@ Citizen.CreateThread(function()
 		end
 	end
 	exports('getName', getName)
-	
-	RegisterServerEvent("EasyAdmin:CopyDiscord", function(id)
-
-		local src = source
-
-		local discord = GetPlayerIdentifierByType(src, "discord") and GetPlayerIdentifierByType(src, "discord"):gsub("discord:", "") or false
-		if discord then
-			TriggerClientEvent("EasyAdmin:CopyDiscord", src, discord)
-		else
-			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("nodiscordpresent"))
-		end
-
-	end)
 
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		local src = source
