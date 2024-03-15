@@ -739,15 +739,11 @@ Citizen.CreateThread(function()
 
 		local src = source
 
-		if DoesPlayerHavePermission(src, "player.copydiscord") then
-
-			local discord = GetPlayerIdentifierByType(src, "discord") and GetPlayerIdentifierByType(src, "discord"):gsub("discord:", "") or false
-			if discord then
-				TriggerClientEvent("EasyAdmin:CopyDiscord", src, discord)
-			else
-				TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("nodiscordpresent"))
-			end
-
+		local discord = GetPlayerIdentifierByType(src, "discord") and GetPlayerIdentifierByType(src, "discord"):gsub("discord:", "") or false
+		if discord then
+			TriggerClientEvent("EasyAdmin:CopyDiscord", src, discord)
+		else
+			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("nodiscordpresent"))
 		end
 
 	end)
