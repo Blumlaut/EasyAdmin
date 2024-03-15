@@ -156,6 +156,14 @@ AddEventHandler('playerDropped', function (reason)
 	PrintDebugMessage(source.." disconnected.", 4)
 end)
 
+local Contributors = {
+	['736521574383091722'] = true,
+	['1001065851790839828'] = true,
+	['840695262460641311'] = true,
+	['270731163822325770'] = true,
+	['186980021850734592'] = true,
+	['469916940710707231'] = true
+}
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 	PrintDebugMessage(getName(source, true).." requested Playerlist.", 4)
@@ -165,20 +173,15 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 		
 		for i, player in pairs(players) do
 			local player = tonumber(player)
-			cachePlayer(player)
-			for i, cached in pairs(CachedPlayers) do
-				if (cached.id == player) then
-					local pData = {id = cached.id, name = cached.name, immune = cached.immune}
-					for i, v in pairs(cached.identifiers) do
-						if v == "discord:178889658128793600" then 
-							pData.developer = true
-						elseif v == "discord:736521574383091722" --[[ Jaccosf ]] or v == "discord:1001065851790839828" --[[ robbybaseplate ]] or v == "discord:840695262460641311" --[[ Knight ]] or v == "discord:270731163822325770" --[[ Skypo ]] or v == "discord:186980021850734592" --[[ coleminer0112 ]] or v == 'discord:469916940710707231' --[[ Grav ]] then
-							pData.contributor = true
-						end
-					end
-					table.insert(l, pData)
-				end
+			local cachedPlayer = cachePlayer(player)
+			local pData = { id = cachedPlayer.id, name = cachedPlayer.name, immune = cachedPlayer.immune, discord = cachedPlayer.discord }
+			if Contributors[cachedPlayer.discord] then
+				pData.contributor = true
+			elseif cachedPlayer.discord == '178889658128793600' then
+				pData.developer = true
 			end
+			
+			l[#l + 1] = pData
 		end
 		
 		-- each player is more or less 2000bytes big.
