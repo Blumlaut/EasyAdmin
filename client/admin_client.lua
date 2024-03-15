@@ -165,6 +165,10 @@ function unFreezeMe()
 	end
 end
 
+RegisterNetEvent("EasyAdmin:CopyDiscord", function(discord)
+	copyToClipboard(discord)
+end)
+
 RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, playerData)
 	
 	local localPlayerPed = PlayerPedId()

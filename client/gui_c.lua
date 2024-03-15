@@ -464,7 +464,8 @@ function GenerateMenu() -- this is a big ass function
 			if RedM and not settings.infinity then
 				thePlayer = {
 					id = GetPlayerServerId(thePlayer), 
-					name = GetPlayerName(thePlayer)
+					name = GetPlayerName(thePlayer),
+					discord = thePlayer.discord,
 				}
 			end
 			local thisPlayerMenu = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
@@ -779,7 +780,16 @@ function GenerateMenu() -- this is a big ass function
 							playermanagement:Visible(true)
 						end	
 					end
-		
+					
+					local copyDiscordItem = NativeUI.CreateItem(GetLocalisedText("copydiscord"), "")
+					thisPlayer:AddItem(copyDiscordItem)
+					copyDiscordItem.Activated = function(ParentMenu, SelectedItem)
+						if thePlayer.discord then
+							copyToClipboard(thePlayer.discord)
+						else
+							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+						end
+					end
 		
 					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
 					for i, plugin in pairs(plugins) do

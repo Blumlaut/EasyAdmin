@@ -33,11 +33,11 @@ end)
 
 function cachePlayer(playerId)
 	if not CachedPlayers[playerId] then
-		CachedPlayers[playerId] = {id = playerId, name = getName(playerId, true), identifiers = getAllPlayerIdentifiers(playerId), immune = DoesPlayerHavePermission(playerId, "immune")}
+		CachedPlayers[playerId] = { id = playerId, name = getName(playerId, true), identifiers = getAllPlayerIdentifiers(playerId), immune = DoesPlayerHavePermission(playerId, "immune"), discord = GetPlayerIdentifierByType(playerId, 'discord') and GetPlayerIdentifierByType(playerId, 'discord'):gsub("discord:", "") or false }
 		PrintDebugMessage(getName(playerId).." has been added to cache.", 4)
-		return true
+		return CachedPlayers[playerId]
 	end
-	return false
+	return CachedPlayers[playerId]
 end
 
 RegisterServerEvent("EasyAdmin:requestCachedPlayers", function()
