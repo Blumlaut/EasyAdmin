@@ -157,12 +157,12 @@ AddEventHandler('playerDropped', function (reason)
 end)
 
 local Contributors = {
-	['736521574383091722'] = true,
-	['1001065851790839828'] = true,
-	['840695262460641311'] = true,
-	['270731163822325770'] = true,
-	['186980021850734592'] = true,
-	['469916940710707231'] = true
+	['736521574383091722'] = true, -- Jaccosf
+	['1001065851790839828'] = true, -- robbybaseplate
+ 	['840695262460641311'] = true, -- Knight
+	['270731163822325770'] = true, -- Skypo
+	['186980021850734592'] = true, -- coleminer0112
+	['469916940710707231'] = true -- Grav
 }
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
