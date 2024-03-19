@@ -45,4 +45,4 @@ Graphic Design by [Team Snaily](https://teamsnaily.com)
 Supported by:
 
 <a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
-10% Discount Code:  blumlaut-a-1757 
+20% Discount Code:  EasyAdmin
