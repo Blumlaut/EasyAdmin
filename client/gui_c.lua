@@ -124,6 +124,9 @@ Citizen.CreateThread(function()
 		RedM = true
 		settings.button = "PhotoModePc"
 	end
+	if not RedM then
+		RegisterKeyMapping('easyadmin', 'Open EasyAdmin', 'keyboard', "")
+	end
 	repeat
 		Wait(100)
 	until NativeUI
