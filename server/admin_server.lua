@@ -327,7 +327,7 @@ Citizen.CreateThread(function()
 			local playerBucket = GetPlayerRoutingBucket(playerId)
 			local sourceBucket = GetPlayerRoutingBucket(source)
 			if sourceBucket ~= playerBucket then
-				-- upon spectate request, the admin needs to be set to the target player
+				-- upon spectate request, the admin needs to be set to the target player's bucket if not already
 				SetPlayerRoutingBucket(source, playerBucket)
 			end
 			local playerData = { coords = tgtCoords, selfbucket = sourceBucket }
