@@ -185,10 +185,13 @@ Citizen.CreateThread(function()
 	end
 end)
 
+IsSpectating = false
+
 function DrawPlayerInfo(target)
 	drawTarget = target
 	drawServerId = GetPlayerServerId(target)
 	drawInfo = true
+	IsSpectating = true
 	DrawPlayerInfoLoop()
 end
 
@@ -196,6 +199,7 @@ function StopDrawPlayerInfo()
 	drawInfo = false
 	drawTarget = 0
 	drawServerId = 0
+	IsSpectating = false
 end
 
 local banlistPage = 1

@@ -183,7 +183,9 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, playerDat
 
 	if playerData.selfbucket then
 		-- cache old bucket to restore at end of spectate
-		MyBucket = playerData.selfbucket
+		if not IsSpectating then
+			MyBucket = playerData.selfbucket
+		end
 	end
 
 	local tgtCoords = playerData.coords
