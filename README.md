@@ -1,22 +1,31 @@
 ![image](https://user-images.githubusercontent.com/13604413/129143671-3ab6a643-faf0-479d-8b97-af71ffb5193c.png)
 
+EasyAdmin is a feature-rich administration suite designed specifically for FiveM and RedM servers.
 
-EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is feature-rich and highly customisable, it includes features such as
+**Key Features:**
 
-- Basic Administration (Kicking,Temp/PermaBanning,Mute,Teleport To/From,Slapping,Freeze Player,Warnings)
-- Ability to Screenshot other Players' Game (requires screenshot-basic)
-- Extensive Banlist System which is highly resilient to ban evasion
-- Basic Ability to modify Server Settings from a GUI.
-- Report / Admin Call System with GUI to view and handle them
-- Extensive Permission system utilising FiveM's inbuilt ACE System.
-- A Permission Editor allowing for realtime modification of Server Permissions, saves to a config!
-- Various Server Admin Tools such as Cleaning up spawned Cars/Peds/Props
-- API to allow Developers to Communicate with EasyAdmin
-- Translation in 7 Languages (Community Driven)
-- Actively Supported & Updated since 2017
-- Plugin Support 
-- Fully integrated Discord Bot, including Discord ACE Permissions, Chat Bridge, Commands and Logs
-- Configurable ban screens allowing server owners to modify to their colours/logo etc via our [easy to use convars](https://easyadmin.readthedocs.io/en/latest/config/#ban-screen-configuration)
+* Basic Administration: Kick players, temp/perma ban, mute, teleport, slap, freeze player, and issue warnings.
+* Screenshot other Players' Game (requires screenshot-basic).
+* Extensive Banlist System to prevent ban evasion.
+* Modify Server Settings from a GUI.
+* Report/ Admin Call System with GUI to view and handle reports.
+* Extensive Permission system utilizing FiveM's inbuilt ACE System.
+* Permission Editor for real-time permission modification, saving changes to a config file.
+* Various Server Admin Tools, including cleaning up spawned vehicles, pedestrians, and props.
+* API for developers to communicate with EasyAdmin.
+* Translation support in 7 languages (community-driven).
+* Actively supported and updated since 2017.
+
+**Additional Features:**
+
+* Plugin Support
+* Fully integrated Discord Bot, featuring:
+	+ Discord ACE Permissions
+	+ Chat Bridge
+	+ Commands
+	+ Logs
+* Configurable ban screens for customizing server branding and colors using easy-to-use convars.
+* [An extensive Documentation](https://easyadmin.readthedocs.io/) for installation and configuration instructions.
 
 ![image](https://user-images.githubusercontent.com/13604413/126916981-1680e5ac-e024-467b-aad3-a5a9658449e0.png)
 
@@ -28,24 +37,24 @@ EasyAdmin is an Administration Suite for FiveM and RedM Servers, EasyAdmin is fe
 
 ![image](https://github.com/Gravxd/EasyAdmin/assets/75702884/8a4e4694-5ff5-429a-986c-ab43148929a8)
 
+
 ### Dependencies
 
-EasyAdmin requires FiveM's default `yarn` resource, this is included in [cfx-server-data](https://github.com/citizenfx/cfx-server-data) when installing the server.
-
+EasyAdmin requires FiveM's default `yarn` resource, which is included in [cfx-server-data](https://github.com/citizenfx/cfx-server-data) when installing the server.
 
 ### Installation
 
-Take a look at our Documentation [here](https://easyadmin.readthedocs.io/), we Explain how to Install and Configure EasyAdmin on the Wiki.
+Visit our Documentation [here](https://easyadmin.readthedocs.io/) for detailed installation and configuration instructions.
 
-## [Support Discord](https://discord.gg/qq82ZU36XZ)
+## Support Us!
 
+Join our Discord community: [https://discord.gg/qq82ZU36XZ](https://discord.gg/qq82ZU36XZ)
 
-
-Graphic Design by [Team Snaily](https://teamsnaily.com)
+**Graphic Design:** Team Snaily (https://teamsnaily.com)
 <a href="https://teamsnaily.com/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
 
+**Supported by:**
 
-Supported by:
-
+ZAP-Hosting (https://zap-hosting.com/easyadmin)
 <a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
-20% Discount Code:  EasyAdmin
+Get 20% off your Zap-Hosting subscription with code: EasyAdmin
