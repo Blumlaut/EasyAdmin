@@ -112,7 +112,7 @@ RegisterCommand('easyadmin', function(source, args)
 			collectgarbage()
 		end
 	end)
-end)
+end, false)
 
 
 RegisterCommand('ea', function(source,args)
