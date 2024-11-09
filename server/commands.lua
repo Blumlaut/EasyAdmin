@@ -54,18 +54,27 @@ RegisterCommand("spectate", function(source, args, rawCommand)
     if(source == 0) then
         Citizen.Trace(GetLocalisedText("badidea")) -- Maybe should be it's own string saying something like "only players can do this" or something
     end
-    
-    PrintDebugMessage("Player "..getName(source,true).." Requested Spectate on "..getName(args[1],true), 3)
-    
-    if args[1] and tonumber(args[1]) and DoesPlayerHavePermission(source, "player.spectate") then
-        if getName(args[1]) then
-            TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1])
-        else
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
-        end
-    end
-end, false)
 
+    local targetId = tonumber(args[1])
+    if not targetId or not DoesPlayerExist(targetId) then
+        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
+        return
+    end
+
+    SetAdminCooldown(source, "spectate")
+    PrintDebugMessage(("Player %s Requested Spectate to %s"):format(getName(source,true), getName(targetId,true)), 3)
+    local tgtCoords = GetEntityCoords(GetPlayerPed(targetId))
+    local playerBucket = GetPlayerRoutingBucket(targetId)
+    local sourceBucket = GetPlayerRoutingBucket(source)
+    if sourceBucket ~= playerBucket then
+        -- upon spectate request, the admin needs to be set to the target player's bucket if not already
+        SetPlayerRoutingBucket(source, playerBucket)
+    end
+    local playerData = { coords = tgtCoords, selfbucket = sourceBucket }
+    TriggerClientEvent("EasyAdmin:requestSpectate", source, targetId, playerData)
+    local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+    SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('spectatedplayer'), getName(source, false, true), getName(targetId, true, true)), "spectate", 16777214)
+end, false)
 
 RegisterCommand("setgametype", function(source, args, rawCommand)
     if args[1] and DoesPlayerHavePermission(source, "server.convars") then
