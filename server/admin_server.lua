@@ -680,52 +680,30 @@ Citizen.CreateThread(function()
 			if AnonymousAdmins[src] and not anonymousdisabled then
 				return GetLocalisedText("anonymous")
 			elseif CachedPlayers[src] and CachedPlayers[src].name then
-				if CachedPlayers[src].identifiers then
-					if identifierPref then
-						-- split identifierPref by comma and find first identifier in CachedPlayers[src].identifiers that starts with the split string
-						-- this code was written by GitHub Copilot, neat, huh?
-						for i,v in ipairs(identifierPref:split(",")) do
-							for i2,v2 in ipairs(CachedPlayers[src].identifiers) do
-								if string.sub(v2, 1, string.len(v)) == v then
-									identifier = v2
-									break
-								end
-							end
-							if identifier ~= "~No Identifier~" then break end
-						end
-					end
-				end
-				if identifier:find('discord:') then
-					identifier = string.gsub(identifier, "discord:", "")
-					identifier = "<@"..identifier..">"
-				end
-				if identifierenabled then
-					return (string.format("%s [ %s ]", CachedPlayers[src].name, identifier))
-				else
+				
+				if not identifierenabled then
 					return CachedPlayers[src].name
 				end
+
+				if not CachedPlayers[src].discord then
+					return CachedPlayers[src].name
+				end
+
+				return (string.format("%s [ %s ]", CachedPlayers[src].name, CachedPlayers[src].discord))
+
 			elseif (GetPlayerName(src)) then
-				identifiers = getAllPlayerIdentifiers(src)
-				if identifierPref then
-					for i,v in ipairs(identifierPref:split(",")) do
-						for i2,v2 in ipairs(identifiers) do
-							if string.sub(v2, 1, string.len(v)) == v then
-								identifier = v2
-								break
-							end
-						end
-						if identifier ~= "~No Identifier~" then break end
-					end
+				local playerName = GetPlayerName(src)
+				if not identifierenabled then
+					return playerName
 				end
-				if identifier:find('discord:') then
-					identifier = string.gsub(identifier, "discord:", "")
-					identifier = "<@"..identifier..">"
+
+				local playerDiscord = GetPlayerIdentifierByType(src, "discord") and GetPlayerIdentifierByType(src, "discord"):gsub("discord:", "") or false
+				if not playerDiscord then
+					return playerName
 				end
-				if identifierenabled then
-					return (string.format("%s [ %s ]", GetPlayerName(src), identifier))
-				else
-					return GetPlayerName(src)
-				end
+
+				return (string.format("%s [ %s ]", playerName, playerDiscord))
+
 			else
 				return "Unknown - " .. src
 			end
