@@ -471,8 +471,7 @@ function GenerateMenu() -- this is a big ass function
 			if RedM and not settings.infinity then
 				thePlayer = {
 					id = GetPlayerServerId(thePlayer), 
-					name = GetPlayerName(thePlayer),
-					discord = thePlayer.discord,
+					name = GetPlayerName(thePlayer)
 				}
 			end
 			local thisPlayerMenu = _menuPool:AddSubMenu(playermanagement,"["..thePlayer.id.."] "..thePlayer.name,"",true)
