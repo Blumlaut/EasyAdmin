@@ -31,7 +31,7 @@
     "confirmkickguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will kick this Player with the specified settings.",
     "banreasonguide": "Add a reason to the ban.",
     "banlength": "Ban Length",
-    "banlengthguide": "Until when should the Player be banned?",
+    "banlengthguide": "Until when should the Player be banned? Select to define a custom time.",
     "confirmban": "Confirm Ban",
     "confirmbanguide": "~r~~h~NOTE:~h~~w~ Pressing Confirm will ban this Player with the specified settings.",
     "mute": "Mute Player",

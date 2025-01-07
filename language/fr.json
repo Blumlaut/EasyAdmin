@@ -32,7 +32,7 @@
     "confirmkickguide": "~r~~h~NOTE :~h~~w~ Appuyer sur confirmer va ~r~~h~expulser~h~~w~ le joueur avec les paramètres spécifiés.",
     "banreasonguide": "Ajouter une raison pour le bannissement.",
     "banlength": "Temps du bannissement",
-    "banlengthguide": "Jusqu'à quand le joueur doit être banni?",
+    "banlengthguide": "Jusqu'à quand le joueur doit être banni? Sélectionnez cette option pour définir une heure personnalisée.",
     "confirmban": "Confirmer le bannissement",
     "mute": "Joueur muet",
     "muteguide": "~r~~h~NOTE:~h~~w~ Cela empêchera le joueur d’utiliser le chat textuel.",

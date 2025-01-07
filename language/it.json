@@ -31,7 +31,7 @@
     "confirmkickguide": "~r~~h~NOTA:~h~~w~ Premendo Conferma si espellera il giocatore con le impostazioni correnti.",
     "banreasonguide": "Aggiugi una ragione per il Ban.",
     "banlength": "Durata del Ban",
-    "banlengthguide": "Fino a quando dovrà essere bandito il giocatore?",
+    "banlengthguide": "Fino a quando dovrà essere bandito il giocatore? Selezionare per definire un orario personalizzato.",
     "confirmban": "Conferma il Ban",
     "confirmbanguide": "~r~~h~NOTA:~h~~w~ Premendo conferma bandirai il giocatore con le impostazioni correnti.",
     "mute": "Muta il Giocatore",

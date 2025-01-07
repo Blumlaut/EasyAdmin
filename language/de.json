@@ -32,7 +32,7 @@
     "confirmkickguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Spieler mit dem angegebenen Grund gekickt.",
     "banreasonguide": "Bann Grund angeben.",
     "banlength": "Bann Länge",
-    "banlengthguide": "Wie lange soll der Spieler gebannt werden?",
+    "banlengthguide": "Wie lange soll der Spieler gebannt werden? Auswählen um eigene Zeit festzulegen.",
     "confirmban": "Bann bestätigen",
     "confirmbanguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Spieler mit dem angegebenen Grund gebannt.",
     "mute": "Spieler stummschalten",

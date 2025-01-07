@@ -31,7 +31,7 @@
     "confirmkickguide": "~r~~h~UWAGA:~h~~w~ Naciśnięcie potwierdź spowoduje wyrzucenie tego Gracza z określonymi ustawieniami.",
     "banreasonguide": "Dodaj powód blokady.",
     "banlength": "Długość bana",
-    "banlengthguide": "Do kiedy powinien zostać zbanowany Gracz?",
+    "banlengthguide": "Do kiedy powinien zostać zbanowany Gracz? Wybierz, aby zdefiniować niestandardowy czas.",
     "confirmban": "Potwierdź bana",
     "confirmbanguide": "~r~~h~UWAGA:~h~~w~ Naciśnięcie potwierdź spowoduje zablokowanie tego gracza z określonymi ustawieniami.",
     "mute": "Niemy Gracz",

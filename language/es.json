@@ -31,7 +31,7 @@
     "confirmkickguide": "~r~~h~NOTA:~h~~w~ Presionando confirmar kickearas a este jugador con la configuración especificada.",
     "banreasonguide": "Añadir una razon de baneo.",
     "banlength": "Duración de baneo",
-    "banlengthguide": "¿Cuanto tiempo deseas banear al jugador?",
+    "banlengthguide": "Hasta cuando deberia el Jugador ser baneado? Selecciona para definir un tiempo personalizado.",
     "confirmban": "Confirmar baneo",
     "confirmbanguide": "~r~~h~NOTA:~h~~w~ Presionando confirmar banearas a este jugador con la configuración especificada.",
     "mute": "Mutear jugador",
