@@ -3,7 +3,18 @@ process.on('uncaughtException', function(err) {
 	console.log('Caught exception: ', err.stack)
 })
 process.on('unhandledRejection', function(err) {
-	console.log('Caught exception: ', err.stack)
+	if (err.message.includes("this.rest.clearHashSweeper is not a function")) {
+		setTimeout(() => { // mandatory delay so idiots can read the error
+			console.log("^1EasyAdmin ^3FATAL ERROR! ^7Your Discord Token is Invalid, EasyAdmin's Discord Bot ^1will not work ^7until this error has been resolved! Please check your Discord Token and try again.")
+		}, 1000);
+		return
+	} else if (err.message.includes("disallowed intents")) {
+		setTimeout(() => {
+			console.log("^1EasyAdmin ^3FATAL ERROR! ^7Your Discord Bot does not have the correct intents enabled, EasyAdmin's Discord Bot ^1will not work ^7until this error has been resolved! Please refer to the documentation: https://easyadmin.readthedocs.io/en/latest/discordbot/#creating-the-bot-user")
+		}, 1000);
+		return
+	}
+	console.log('Caught rejection: ', err.stack)
 })
 
 AsciiTable = require('ascii-table')
