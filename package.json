@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@discordjs/builders": "1.6.3",
+    "@discordjs/builders": "1.10.0",
     "@discordjs/collection": "1.5.1",
     "@discordjs/core": "0.6.0",
     "@discordjs/formatters": "0.3.1",
@@ -27,7 +27,7 @@
     "@discordjs/core": "0.6.0",
     "@discordjs/formatters": "0.3.1",
     "@discordjs/collection": "1.5.1",
-    "@discordjs/builders": "1.6.3",
+    "@discordjs/builders": "1.10.0",
     "@discordjs/util": "0.3.1",
     "@discordjs/ws": "0.8.1",
     "@sapphire/shapeshift": "3.9.2"
