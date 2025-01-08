@@ -108,7 +108,7 @@ RegisterCommand('easyadmin', function(source, args)
 		else
 			mainMenu:Visible(false)
 			_menuPool:Remove()
-			TriggerEvent("EasyAdmin:MenuRemoved")
+			ExecutePluginsFunction("menuRemoved")
 			collectgarbage()
 		end
 	end)
@@ -167,7 +167,7 @@ Citizen.CreateThread(function()
 		if _menuPool then
 			if not _menuPool:IsAnyMenuOpen() then 
 				_menuPool:Remove()
-				TriggerEvent("EasyAdmin:MenuRemoved")
+				ExecutePluginsFunction("menuRemoved")
 				_menuPool = nil
 				collectgarbage()
 			elseif _menuPool:IsAnyMenuOpen() then
@@ -304,13 +304,25 @@ function generateTextures()
 	end
 end
 
+function ExecutePluginsFunction(funcName) 
+	for i, plugin in pairs(plugins) do
+		if plugin.functions[funcName] then
+			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
+			local ran, errorMsg = pcall(plugin.functions[funcName])
+			if not ran then
+				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
+			end
+		end
+	end
+end
+
 function GenerateMenu() -- this is a big ass function
 
 	generateTextures()
 	TriggerServerEvent("EasyAdmin:requestCachedPlayers")
 	if _menuPool then
 		_menuPool:Remove()
-		TriggerEvent("EasyAdmin:MenuRemoved")
+		ExecutePluginsFunction("menuRemoved")
 		collectgarbage()
 	end
 	_menuPool = NativeUI.CreatePool()
@@ -383,16 +395,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 	end
 
-	TriggerEvent("EasyAdmin:BuildMainMenuOptions")
-	for i, plugin in pairs(plugins) do
-		if plugin.functions.mainMenu then
-			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-			local ran, errorMsg = pcall(plugin.functions.mainMenu)
-			if not ran then
-				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
-			end
-		end
-	end
+	ExecutePluginsFunction("mainMenu")
 
 	if DoesPlayerHavePermissionForCategory(-1, "player") then
 
@@ -797,16 +800,7 @@ function GenerateMenu() -- this is a big ass function
 						end
 					end
 		
-					TriggerEvent("EasyAdmin:BuildPlayerOptions", thePlayer.id)
-					for i, plugin in pairs(plugins) do
-						if plugin.functions.playerMenu then
-							PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-							local ran, errorMsg = pcall(plugin.functions.playerMenu, thePlayer.id )
-							if not ran then
-								PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
-							end
-						end
-					end
+					ExecutePluginsFunction("playerMenu")
 
 					
 					if GetResourceState("es_extended") == "started" and not ESX then
@@ -1045,16 +1039,7 @@ function GenerateMenu() -- this is a big ass function
 										GenerateMenu()
 										playermanagement:Visible(true)
 									end	
-									TriggerEvent("EasyAdmin:BuildCachedOptions", cachedplayer.id)
-									for i, plugin in pairs(plugins) do
-										if plugin.functions.cachedMenu then
-											PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-											local ran, errorMsg = pcall(plugin.functions.cachedMenu, cachedplayer.id )
-											if not ran then
-												PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
-											end
-										end
-									end
+									ExecutePluginsFunction("cachedMenu")
 									thisPlayer:RefreshIndexRecursively()
 								end
 							end
@@ -1167,7 +1152,7 @@ function GenerateMenu() -- this is a big ass function
 
 		local function generateBanOverview(banId)
 			_menuPool:Remove()
-			TriggerEvent("EasyAdmin:MenuRemoved")
+			ExecutePluginsFunction("menuRemoved")
 			_menuPool = NativeUI.CreatePool()
 			collectgarbage()
 			if not GetResourceKvpString("ea_menuorientation") then
@@ -1712,16 +1697,7 @@ function GenerateMenu() -- this is a big ass function
 		end
 
 
-		TriggerEvent("EasyAdmin:BuildServerManagementOptions")
-		for i, plugin in pairs(plugins) do
-			if plugin.functions.serverMenu then
-				PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-				local ran, errorMsg = pcall(plugin.functions.serverMenu)
-				if not ran then
-					PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
-				end
-			end
-		end
+		ExecutePluginsFunction("serverMenu")
 	end
 
 	if permissions["player.ban.view"] then
@@ -1876,21 +1852,13 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	
-	TriggerEvent("EasyAdmin:BuildSettingsOptions")
-	for i, plugin in pairs(plugins) do
-		if plugin.functions.settingsMenu then
-			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-			local ran, errorMsg = pcall(plugin.functions.settingsMenu)
-			if not ran then
-				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
-			end
-		end
-	end
+	ExecutePluginsFunction("settingsMenu")
 	_menuPool:ControlDisablingEnabled(false)
 	_menuPool:MouseControlsEnabled(false)
 	
 	_menuPool:RefreshIndex() -- refresh indexes
 end
+
 
 
 function DrawPlayerInfoLoop()
