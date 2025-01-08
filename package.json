@@ -12,7 +12,7 @@
     "discord.js": "14.12.1",
     "erlpack": "0.1.4",
     "juration": "0.1.1",
-    "pretty-ms": "7.0.1",
+    "pretty-ms": "9.2.0",
     "sprintf-js": "1.1.3",
     "zlib-sync": "0.1.9"
   },
