@@ -13,7 +13,7 @@
     "erlpack": "0.1.4",
     "juration": "0.1.1",
     "pretty-ms": "7.0.1",
-    "sprintf-js": "1.1.2",
+    "sprintf-js": "1.1.3",
     "zlib-sync": "0.1.8"
   },
   "devDependencies": {
