@@ -8,13 +8,13 @@
     "@discordjs/util": "0.3.1",
     "@discordjs/ws": "0.8.1",
     "ascii-table": "0.0.9",
-    "discord-api-types": "0.37.51",
+    "discord-api-types": "0.37.115",
     "discord.js": "14.12.1",
     "erlpack": "0.1.4",
     "juration": "0.1.1",
     "pretty-ms": "7.0.1",
-    "sprintf-js": "1.1.2",
-    "zlib-sync": "0.1.8"
+    "sprintf-js": "1.1.3",
+    "zlib-sync": "0.1.9"
   },
   "devDependencies": {
     "eslint": "8.57.1"
