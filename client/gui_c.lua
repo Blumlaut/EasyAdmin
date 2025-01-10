@@ -1821,6 +1821,7 @@ function GenerateMenu() -- this is a big ass function
 	thisItem.CheckboxEvent = function(sender, item, checked_)
 		SendNUIMessage({
 			action = "toggle_speak",
+			speed = GetResourceKvpInt("ea_ttsspeed"),
 			enabled = checked_
 		})
 		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
