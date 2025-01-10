@@ -44,7 +44,6 @@ dependencies {
 
 provide 'EasyAdmin'
 
-
 convar_category 'EasyAdmin' {
     "Configuration Options",
     {

@@ -3028,6 +3028,7 @@ function UIMenu:GoUpOverflow()
         self.Items[self:CurrentSelection()]:Selected(true)
     end
     PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+    ttsSpeechItem(self.Items[self:CurrentSelection()])
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end
@@ -3072,6 +3073,7 @@ function UIMenu:GoDownOverflow()
         self.Items[self:CurrentSelection()]:Selected(true)
     end
     PlaySoundFrontend(-1, self.Settings.Audio.UpDown, self.Settings.Audio.Library, true)
+    ttsSpeechItem(self.Items[self:CurrentSelection()])
     self.OnIndexChange(self, self:CurrentSelection())
     self.ReDraw = true
 end

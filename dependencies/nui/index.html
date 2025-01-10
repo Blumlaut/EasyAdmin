@@ -69,21 +69,30 @@
 					return speak(data.text)
 				case "toggle_speak":
 					ttsEnabled = data.enabled
-					ttsRate = data.rate
+					console.log("toggled:"+data.rate)
+					ttsRate = parseFloat(data.rate)
 				case "speak_rate":
-					ttsRate = data.rate
+					console.log("set speak rate:"+data.rate)
+					ttsRate = parseFloat(data.rate)
 				default:
 					return;
 			}
 		})
 	
-		
+		var currentUtterance
 		// tts function using translate.google.com in an iframe
 		function speak(text) {
 			if (!ttsEnabled) {
 				return;
 			}
-			speaking = new SpeechSynthesisUtterance(strip(text));
+			if (currentUtterance) {
+				currentUtterance.cancel()
+				currentUtterance=undefined
+			}
+			console.log("speaking "+text)
+			speaking = new SpeechSynthesisUtterance(strip(text.toString()));
+			currentUtterance=window.speechSynthesis
+			console.log(ttsRate)
 			speaking.rate = ttsRate;
 
 			window.speechSynthesis.speak(speaking);

@@ -10,7 +10,6 @@
 ----
 ------------------------------------
 ------------------------------------
-
 isAdmin = false
 showLicenses = false
 RedM = false
@@ -146,13 +145,16 @@ Citizen.CreateThread(function()
 	end 
 	if not GetResourceKvpInt("ea_tts") then
 		SetResourceKvpInt("ea_tts", 0)
-		SetResourceKvpInt("ea_ttsspeed", 2.0)
+		SetResourceKvpInt("ea_ttsspeed", 4)
 	else 
+		if GetResourceKvpInt("ea_ttsspeed") == 0 then
+			SetResourceKvpInt("ea_ttsspeed", 4)
+		end
 		if GetResourceKvpInt("ea_tts") == 1 then
 			SendNUIMessage({
 				action = "toggle_speak",
 				enabled = true,
-				speed = GetResourceKvpInt("ea_ttsspeed")
+				rate = GetResourceKvpInt("ea_ttsspeed") or 4
 			})
 		end
 	end
@@ -1821,7 +1823,7 @@ function GenerateMenu() -- this is a big ass function
 	thisItem.CheckboxEvent = function(sender, item, checked_)
 		SendNUIMessage({
 			action = "toggle_speak",
-			speed = GetResourceKvpInt("ea_ttsspeed"),
+			rate = GetResourceKvpInt("ea_ttsspeed") or 4,
 			enabled = checked_
 		})
 		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
@@ -1829,8 +1831,8 @@ function GenerateMenu() -- this is a big ass function
 	end
 
 	local speeds = {}
-	for i = 2, 10 do
-		table.insert(speeds, i / 2)
+	for i = 1, 10 do
+		table.insert(speeds, i)
 	end
 	local thisItem = NativeUI.CreateListItem(GetLocalisedText("screenreaderspeed"), speeds, orientationIndex, GetLocalisedText("screenreaderspeedguide"))
 	settingsMenu:AddItem(thisItem)
@@ -1841,7 +1843,7 @@ function GenerateMenu() -- this is a big ass function
 			rate = item
 		})
 		SetResourceKvpInt("ea_ttsspeed", item)
-		SendNUIMessage({action= "speak", item})
+		SendNUIMessage({action= "speak", tostring(item)})
 	end
 
 	if not RedM then
