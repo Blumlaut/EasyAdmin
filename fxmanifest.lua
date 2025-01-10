@@ -44,7 +44,6 @@ dependencies {
 
 provide 'EasyAdmin'
 
-nui_callback_strict_mode 'true'
 
 convar_category 'EasyAdmin' {
     "Configuration Options",
