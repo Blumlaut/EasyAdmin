@@ -103,22 +103,22 @@ Citizen.CreateThread(function()
 				end
 			end
 			
-			if needsExec or needsResourcePerms or changes then
+			if needsExec or needsResourcePerms or changes then -- disabled as of 7.3, should be added manually.
 				local newLines = {}
-				if needsExec then
-					table.insert(newLines, "exec easyadmin_permissions.cfg")
-					table.insert(execs, "easyadmin_permissions.cfg")
-					PrintDebugMessage("Did not find `exec easyadmin_permissions.cfg`, added it automatically", 4)
-					changes=true
-				end
+				--if needsExec then
+				--	table.insert(newLines, "exec easyadmin_permissions.cfg")
+				--	table.insert(execs, "easyadmin_permissions.cfg")
+				--	PrintDebugMessage("Did not find `exec easyadmin_permissions.cfg`, added it automatically", 4)
+				--	changes=true
+				--end
 				if needsResourcePerms then
-					table.insert(newLines, "# This file was generated automatically by EasyAdmin #")
-					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow")
-					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_ace allow")
-					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_principal allow")
-					table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_principal allow")
-					PrintDebugMessage("Did not find `add_ace resource."..GetCurrentResourceName().."` lines, added them automatically", 4)
-					changes=true
+				--	table.insert(newLines, "# This file was generated automatically by EasyAdmin #")
+				--	table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_ace allow")
+				--	table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_ace allow")
+				--	table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.add_principal allow")
+				--	table.insert(newLines, "add_ace resource."..GetCurrentResourceName().." command.remove_principal allow")
+				--	PrintDebugMessage("Did not find `add_ace resource."..GetCurrentResourceName().."` lines, added them automatically", 4)
+				--	changes=true
 				end
 				local output = "\n"
 				if changes then
