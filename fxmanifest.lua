@@ -38,7 +38,8 @@ files {
 }
 
 dependencies {
-    'yarn'
+    'yarn',
+    '/onesync',
 }
 
 provide 'EasyAdmin'
