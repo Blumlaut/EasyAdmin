@@ -239,6 +239,8 @@
     "spectatevehicleseatoccupied":"Miejsce w pojeździe, na którym byłeś, jest teraz zajęte.",
     "spectatenovehiclefound":"Nie można już znaleźć pojazdu, w którym byłeś.",
     "screenreader":"Narrator (TTS)",
-    "screenreaderguide":"Włącz narratora dla GUI"
+    "screenreaderguide":"Włącz narratora dla GUI",
+    "screenreaderspeed":"Screen Reader Speed",
+    "screenreaderspeedguide":"Adjusts the speed of the text-to-speech feature."
 
 }]

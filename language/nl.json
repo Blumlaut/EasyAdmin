@@ -240,6 +240,8 @@
     "spectatevehicleseatoccupied":"Het voertuig waar je net in zat is nu bezet.",
     "spectatenovehiclefound":"Het voertuig waar je net in zat kan niet worden gevonden.",
     "screenreader":"Screen Reader (TTS)",
-    "screenreaderguide":"Schakelt Text to Speech in voor de GUI"
+    "screenreaderguide":"Schakelt Text to Speech in voor de GUI",
+    "screenreaderspeed":"Screen Reader Speed",
+    "screenreaderspeedguide":"Adjusts the speed of the text-to-speech feature."
 
 }]

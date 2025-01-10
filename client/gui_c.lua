@@ -146,11 +146,13 @@ Citizen.CreateThread(function()
 	end 
 	if not GetResourceKvpInt("ea_tts") then
 		SetResourceKvpInt("ea_tts", 0)
+		SetResourceKvpInt("ea_ttsspeed", 2.0)
 	else 
 		if GetResourceKvpInt("ea_tts") == 1 then
 			SendNUIMessage({
 				action = "toggle_speak",
-				enabled = true
+				enabled = true,
+				speed = GetResourceKvpInt("ea_ttsspeed")
 			})
 		end
 	end
@@ -1823,6 +1825,22 @@ function GenerateMenu() -- this is a big ass function
 		})
 		SetResourceKvpInt("ea_tts", checked_ and 1 or 0)
 		SendNUIMessage({action= "speak", text="Text to Speech"})
+	end
+
+	local speeds = {}
+	for i = 2, 10 do
+		table.insert(speeds, i / 2)
+	end
+	local thisItem = NativeUI.CreateListItem(GetLocalisedText("screenreaderspeed"), speeds, orientationIndex, GetLocalisedText("screenreaderspeedguide"))
+	settingsMenu:AddItem(thisItem)
+	thisItem.OnListSelected = function(sender, item, index)
+		local item = thisItem:IndexToItem(index)
+		SendNUIMessage({
+			action = "speak_rate",
+			rate = item
+		})
+		SetResourceKvpInt("ea_ttsspeed", item)
+		SendNUIMessage({action= "speak", item})
 	end
 
 	if not RedM then

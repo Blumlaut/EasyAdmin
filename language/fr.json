@@ -240,7 +240,9 @@
     "spectatevehicleseatoccupied":"Le siège du véhicule dans lequel vous étiez est maintenant occupé.",
     "spectatenovehiclefound":"Le véhicule dans lequel vous étiez est introuvable.",
     "screenreader":"Screen Reader (TTS)",
-    "screenreaderguide":"Enables Text to Speech for the GUI"
+    "screenreaderguide":"Enables Text to Speech for the GUI",
+    "screenreaderspeed":"Screen Reader Speed",
+    "screenreaderspeedguide":"Adjusts the speed of the text-to-speech feature."
 
 
 }]

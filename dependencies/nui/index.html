@@ -10,6 +10,7 @@
 		
 		var resource = "EasyAdmin"
 		var ttsEnabled = false
+		var ttsRate = 2.0
 		
 		function open(data){
 			speak("Text Input, "+ data.title)
@@ -68,6 +69,9 @@
 					return speak(data.text)
 				case "toggle_speak":
 					ttsEnabled = data.enabled
+					ttsRate = data.rate
+				case "speak_rate":
+					ttsRate = data.rate
 				default:
 					return;
 			}
@@ -80,7 +84,7 @@
 				return;
 			}
 			speaking = new SpeechSynthesisUtterance(strip(text));
-			speaking.rate = 2;
+			speaking.rate = ttsRate;
 
 			window.speechSynthesis.speak(speaking);
 		}

@@ -238,6 +238,8 @@
     "spectatevehicleseatoccupied":"El asiento en el vehiculo en el que estabas se encuentra ocupado.",
     "spectatenovehiclefound":"El vehiculo en el que estabas ya no puede ser encontrado.",
     "screenreader":"Texto a Voz (TTS)",
-    "screenreaderguide":"Activa el Texto a Voz de la interfaz (GUI)"
+    "screenreaderguide":"Activa el Texto a Voz de la interfaz (GUI)",
+    "screenreaderspeed":"Screen Reader Speed",
+    "screenreaderspeedguide":"Adjusts the speed of the text-to-speech feature."
 
 }]
