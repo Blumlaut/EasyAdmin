@@ -1834,7 +1834,7 @@ function GenerateMenu() -- this is a big ass function
 	for i = 1, 10 do
 		table.insert(speeds, i)
 	end
-	local thisItem = NativeUI.CreateListItem(GetLocalisedText("screenreaderspeed"), speeds, orientationIndex, GetLocalisedText("screenreaderspeedguide"))
+	local thisItem = NativeUI.CreateListItem(GetLocalisedText("screenreaderspeed"), speeds, GetResourceKvpInt("ea_ttsspeed"), GetLocalisedText("screenreaderspeedguide"))
 	settingsMenu:AddItem(thisItem)
 	thisItem.OnListSelected = function(sender, item, index)
 		local item = thisItem:IndexToItem(index)
