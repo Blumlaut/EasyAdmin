@@ -15,7 +15,9 @@ EasyAdmin is a feature-rich administration suite designed specifically for FiveM
 * API for developers to communicate with EasyAdmin.
 * Translation support in 7 languages (community-driven).
 * Actively supported and updated since 2017.
+* Screen Reader Mode for visually impaired users
 
+ 
 **Additional Features:**
 
 * Plugin Support
