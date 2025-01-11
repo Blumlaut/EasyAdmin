@@ -308,11 +308,11 @@ function generateTextures()
 	end
 end
 
-function ExecutePluginsFunction(funcName) 
+function ExecutePluginsFunction(funcName, ...) 
 	for i, plugin in pairs(plugins) do
 		if plugin.functions[funcName] then
 			PrintDebugMessage("Processing Plugin: "..plugin.name, 4)
-			local ran, errorMsg = pcall(plugin.functions[funcName])
+			local ran, errorMsg = pcall(plugin.functions[funcName], ...)
 			if not ran then
 				PrintDebugMessage("Error in plugin "..plugin.name..": \n"..errorMsg, 1)
 			end
@@ -804,7 +804,7 @@ function GenerateMenu() -- this is a big ass function
 						end
 					end
 		
-					ExecutePluginsFunction("playerMenu")
+					ExecutePluginsFunction("playerMenu", thePlayer.id)
 
 					
 					if GetResourceState("es_extended") == "started" and not ESX then
@@ -1043,7 +1043,7 @@ function GenerateMenu() -- this is a big ass function
 										GenerateMenu()
 										playermanagement:Visible(true)
 									end	
-									ExecutePluginsFunction("cachedMenu")
+									ExecutePluginsFunction("cachedMenu", cachedplayer.id)
 									thisPlayer:RefreshIndexRecursively()
 								end
 							end
