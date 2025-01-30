@@ -17,7 +17,7 @@
     "zlib-sync": "0.1.9"
   },
   "devDependencies": {
-    "eslint": "8.57.1"
+    "eslint": "9.19.0"
   },
   "engines": {
 		"node": "<=16.9.1"
