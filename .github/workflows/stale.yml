@@ -11,8 +11,8 @@ jobs:
         with:
           exempt-pr-labels: dependencies,review-required
           exempt-issue-labels: enhancement,help-wanted
-          days-before-stale: 7
-          days-before-close: 14
+          days-before-stale: 14
+          days-before-close: 30
           
 permissions:
   issues: write
