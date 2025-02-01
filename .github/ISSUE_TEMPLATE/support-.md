@@ -20,9 +20,11 @@ If applicable, attach screenshots or log files here to help explain your problem
 
 
 ## Server Infos (please complete the following information):
- - OS: [e.g. Windows Server 2019, Debian 10..]
- - FXServer Version [e.g. 5123]
- - EasyAdmin Version
+ - OS: [e.g. Windows Server 2019, Linux]
+ - FXServer Version [e.g. 7120]
+ - EasyAdmin Version [NO Support for outdated versions]
+ - Onesync Mode [On, Legacy, Off]
+ - Hosting Provider or Environment [In case of managed environments, like gameservers, pterodactyl, docker, etc.]
 
 ## Additional context
 Add any other context about the problem here.
