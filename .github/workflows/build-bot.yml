@@ -1,0 +1,40 @@
+name: Build DJS Bot
+
+on:
+  push:
+    branches: [ node-22, master ] # or the branch where changes are being pushed
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          cd src/
+          npm install
+
+      - name: Build project
+        run: |
+          cd src/
+          npm run build
+
+      - name: Commit changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add .
+          if [ -z "$(git status -s)" ]; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(bot): deploy latest build" && git push
+          fi
