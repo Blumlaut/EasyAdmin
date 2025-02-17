@@ -9,6 +9,6 @@ esbuild.build({
   outdir: "../dist",
   treeShaking: true,
   ignoreAnnotations: true,
-  define: { "process.env.NODE_ENV": '"development"' },
+  define: { "process.env.NODE_ENV": '"production"' },
   external: ["zlib-sync"], // These modules may need native bindings and should be installed on the server
 }).catch(() => process.exit(1));
