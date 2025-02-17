@@ -1,7 +1,7 @@
 
 
 botLogForwards = []
-async function addBotLogForwarding(source,args) {
+global.addBotLogForwarding = async function(source,args) {
 	var player=source
     
 	if (await exports[GetCurrentResourceName()].DoesPlayerHavePermission(player, 'server')) {
@@ -20,10 +20,10 @@ async function addBotLogForwarding(source,args) {
 }
 
 
-RegisterCommand('ea_addBotLogForwarding', addBotLogForwarding)
+RegisterCommand('ea_addBotLogForwarding', global.addBotLogForwarding)
 
 
-async function LogDiscordMessage(text, feature, colour) {
+global.LogDiscordMessage = async function (text, feature, colour) {
 	if (!EasyAdmin) {return} // bot isnt running
 	if (GetConvar('ea_botLogChannel', '') == '') {return}
 	if (feature == 'report' || feature == 'calladmin') {return} // we dont care about reports, these get handled in reports.js
@@ -44,5 +44,5 @@ async function LogDiscordMessage(text, feature, colour) {
 		console.error('^7Failed to log message, please make sure you gave the bot permission to write in the log channel!\n\n')
 	}
 }
-exports('LogDiscordMessage', LogDiscordMessage)
+exports('LogDiscordMessage', global.LogDiscordMessage)
 

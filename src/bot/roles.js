@@ -1,5 +1,5 @@
 
-async function syncDiscordRoles(player) {
+global.syncDiscordRoles = async function (player) {
 	if (!EasyAdmin) {return} // bot is down
 	var user
 
@@ -30,7 +30,7 @@ async function syncDiscordRoles(player) {
 	}
 	refreshRolesForUser(user, roles)
 }
-exports('syncDiscordRoles', syncDiscordRoles)
+exports('syncDiscordRoles', global.syncDiscordRoles)
 
 if (GetConvar('ea_botToken', '') != '') {    
 	client.on('guildMemberUpdate', async function(oldMember, newMember){

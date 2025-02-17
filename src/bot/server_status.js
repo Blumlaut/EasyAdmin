@@ -3,7 +3,7 @@ var statusMessage
 var startTimestamp = new Date()
 
 
-async function getServerStatus(why) {
+global.getServerStatus = async function (why) {
 	var embed = new EmbedBuilder()
 		.setColor(65280)
 		.setTimestamp()
@@ -84,7 +84,7 @@ async function getServerStatus(why) {
     
 }
 
-async function updateServerStatus(why) {
+global.updateServerStatus = async function (why) {
 	if (GetConvar('ea_botStatusChannel', '') == '') { return }
 	var channel = await client.channels.fetch(GetConvar('ea_botStatusChannel', ''))
 

@@ -17,7 +17,7 @@ shared_script 'shared/util_shared.lua'
 
 server_scripts {
     "server/*.lua",
-    "server/bot/*.js",
+    "dist/*.js",
     "plugins/**/*_shared.lua",
     "plugins/**/*_server.lua"
 }

@@ -1,4 +1,5 @@
 
+
 async function configForward(interaction, exports) {
 	var embed = await prepareGenericEmbed('Alright! Now please write the type of log to forward (see <https://easyadmin.readthedocs.io/en/latest/config/> for examples)')
 
