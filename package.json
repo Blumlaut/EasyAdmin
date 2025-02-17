@@ -4,7 +4,7 @@
     "@discordjs/collection": "1.5.1",
     "@discordjs/core": "0.6.0",
     "@discordjs/formatters": "0.3.1",
-    "@discordjs/rest": "1.7.1",
+    "@discordjs/rest": "2.4.3",
     "@discordjs/util": "0.3.1",
     "@discordjs/ws": "0.8.1",
     "ascii-table": "0.0.9",
@@ -23,7 +23,7 @@
 		"node": "<=16.9.1"
 	},
   "resolutions": {
-    "@discordjs/rest": "1.7.1",
+    "@discordjs/rest": "2.4.3",
     "@discordjs/core": "0.6.0",
     "@discordjs/formatters": "0.3.1",
     "@discordjs/collection": "1.5.1",
