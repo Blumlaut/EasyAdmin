@@ -39,7 +39,6 @@ files {
 }
 
 dependencies {
-    'yarn',
     '/onesync',
     '/server:12913'
 }
