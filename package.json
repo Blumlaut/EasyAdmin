@@ -20,7 +20,7 @@
     "eslint": "9.20.1"
   },
   "engines": {
-		"node": "22"
+		"node": "^22.0.0"
 	},
   "resolutions": {
     "@discordjs/rest": "1.7.1",
