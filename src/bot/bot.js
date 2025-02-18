@@ -1,5 +1,4 @@
 /*eslint no-global-assign: "off", no-unused-vars: "off"*/
-console.log("hello!")
 process.on('uncaughtException', function(err) {
 	console.log('Caught exception: ', err.stack)
 })
