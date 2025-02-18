@@ -4,19 +4,20 @@ games {"rdr3","gta5"}
 
 author 'Blumlaut <blue@furfag.de>'
 description 'EasyAdmin - Admin Menu for FiveM & RedM'
-version '7.32'
+repository 'https://github.com/Blumlaut/EasyAdmin'
+version '7.4rc1'
 is_master 'yes'
 
 
 lua54 'yes'
-
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
+node_version '22'
 
 shared_script 'shared/util_shared.lua'
 
 server_scripts {
     "server/*.lua",
-    "server/bot/*.js",
+    "dist/*.js",
     "plugins/**/*_shared.lua",
     "plugins/**/*_server.lua"
 }
@@ -38,8 +39,8 @@ files {
 }
 
 dependencies {
-    'yarn',
     '/onesync',
+    '/server:12913'
 }
 
 provide 'EasyAdmin'

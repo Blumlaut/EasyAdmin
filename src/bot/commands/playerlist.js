@@ -1,6 +1,5 @@
 
 
-
 function generatePaginatorRow(idFields, curPage, embedTimestamp) {
 	const row = new ActionRowBuilder()
 

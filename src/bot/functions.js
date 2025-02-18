@@ -1,7 +1,7 @@
 /*eslint no-global-assign: "off", no-unused-vars: "off"*/
 // this file contains util functions the bot uses
 
-async function prepareGenericEmbed(message,feature,colour,title,image,customAuthor,description,timestamp) {
+global.prepareGenericEmbed = async function (message,feature,colour,title,image,customAuthor,description,timestamp) {
     
 	if (feature && await exports[EasyAdmin].isWebhookFeatureExcluded(feature)) {
 		return
@@ -30,7 +30,7 @@ async function prepareGenericEmbed(message,feature,colour,title,image,customAuth
 	return embed
 }
 
-async function findPlayerFromUserInput(input) {
+global.findPlayerFromUserInput = async function (input) {
 	var user
     
 	var players = await exports[EasyAdmin].getCachedPlayers()
@@ -53,7 +53,7 @@ async function findPlayerFromUserInput(input) {
 }
 
 
-async function DoesGuildMemberHavePermission(member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
+global.DoesGuildMemberHavePermission = async function (member, object) { // wrapper for Discord Permissions, use export for Player Permissions.
 	if (!member || !object) { return false }
 	var memberId = member.id
 	if(!memberId) {
@@ -73,7 +73,7 @@ async function DoesGuildMemberHavePermission(member, object) { // wrapper for Di
 }
 
 
-async function getDiscordAccountFromPlayer(user) {
+global.getDiscordAccountFromPlayer = async function (user) {
 	var discordAccount = false
 	if (!isNaN(user)) {
 		user = await exports[EasyAdmin].getCachedPlayer(user)
@@ -89,7 +89,7 @@ async function getDiscordAccountFromPlayer(user) {
 }
 
 
-async function getPlayerFromDiscordAccount(user) {
+global.getPlayerFromDiscordAccount = async function(user) {
 	var id = user.id
     
 	var players = await exports[EasyAdmin].getCachedPlayers()
@@ -105,7 +105,7 @@ async function getPlayerFromDiscordAccount(user) {
 	return false
 }
 
-async function refreshRolesForMember(member) {
+global.refreshRolesForMember = async function (member) {
 	var roles = await member.roles.cache.keys()
 	for (var role of roles) {
 		emit('debug', `role sync for ${member.user.tag} add_principal identifier.discord:${member.id} role:${role}`)
@@ -114,7 +114,7 @@ async function refreshRolesForMember(member) {
 	emit('debug', `roles synced for ${member.user.tag}`)
 }
 
-async function refreshRolesForUser(user,roles) {
+global.refreshRolesForUser = async function (user,roles) {
 	for (var role of roles) {
 		emit('debug', `role sync for ${user.tag} add_principal identifier.discord:${user.id} role:${role}`)
 		ExecuteCommand(`add_principal identifier.discord:${user.id} role:${role}`)
@@ -123,7 +123,8 @@ async function refreshRolesForUser(user,roles) {
 }
 
 // converts Lua format string to JS format string (e.g. %s -> %s) and replaces %s with arguments
-function format(str, ...args) {
+
+global.format = function (str, ...args) {
 	let formatted = str.replace(/%s/g, function() {
 		return args.shift()
 	})

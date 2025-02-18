@@ -27,7 +27,7 @@ if (GetConvar('ea_botToken', '') != '') {
 
 		if (GetConvar('ea_botLogChannel', '') != '') {
 			var msg = `Player **${exports[EasyAdmin].getName(player,true,true)}** left the server!`
-			LogDiscordMessage(msg, 'joinleave')
+			global.LogDiscordMessage(msg, 'joinleave')
 		}
 	})
 

@@ -44,6 +44,7 @@ module.exports = {
 		} else {
 			let embed = await prepareGenericEmbed('No ban was found with this ID.')
 			interaction.reply({ embeds: [embed]})
-		}
+		} 
 	},
 }
+ 

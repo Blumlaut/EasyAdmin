@@ -1,7 +1,7 @@
 
 var reports = []
 
-function generateReportEmbed(report, disabled, closed) {
+global.generateReportEmbed = function (report, disabled, closed) {
 	var embed = new EmbedBuilder()
 		.setTimestamp()
     
@@ -25,7 +25,7 @@ function generateReportEmbed(report, disabled, closed) {
 	return {embeds: [embed]}
 }
     
-async function logNewReport(report) {
+global.logNewReport = async function (report) {
 	if (GetConvar('ea_botToken', '') != '') {
 		var reportId = report.id
 		reports[reportId] = report

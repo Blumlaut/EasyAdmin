@@ -16,7 +16,6 @@ process.on('unhandledRejection', function(err) {
 	}
 	console.log('Caught rejection: ', err.stack)
 })
-
 AsciiTable = require('ascii-table')
 sprintf = require('sprintf-js').sprintf
 juration = require('juration')
@@ -24,9 +23,9 @@ const prettyMilliseconds = require('pretty-ms')
 const { Client, EmbedBuilder, Collection, Intents, Partials, ButtonStyle, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, Guild, Util, ModalBuilder, TextInputBuilder, GatewayIntentBits, InteractionType, TextInputStyle } = require('discord.js')
 
 const { SlashCommandBuilder } = require('@discordjs/builders')
+global.SlashCommandBuilder = SlashCommandBuilder
 
-
-client = new Client({
+global.client = new Client({
 	partials: [Partials.GuildMember, Partials.User, Partials.Message, Partials.Channel, Partials.Reaction],
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent]
 })
@@ -39,11 +38,11 @@ async function RegisterClientCommands(clientId) {
 	const fs = require('fs')
 	
 	const commands = []
-	const commandFiles = fs.readdirSync(`${resourcePath}/server/bot/commands`).filter(file => file.endsWith('.js'))
+	const commandFiles = fs.readdirSync(`${resourcePath}/dist/commands`).filter(file => file.endsWith('.js'))
 	
 	
 	for (const file of commandFiles) {
-		const command = require(`${resourcePath}/server/bot/commands/${file}`)
+		const command = require(`${resourcePath}/dist/commands/${file}`)
 		commands.push(command.data.toJSON())
 		client.commands.set(command.data.name, command)
 	}
@@ -108,7 +107,7 @@ if (GetConvar('ea_botToken', '') != '') {
 		if (currentVersion != latestVersionInfo[0]) {
 			startupMessage+=`\nVersion ${latestVersionInfo[0]} is Available!\n Download it from ${latestVersionInfo[1]}`
 		}
-		LogDiscordMessage(startupMessage, 'startup')
+		global.LogDiscordMessage(startupMessage, 'startup')
 	})
     
 	client.on('debug', function(info){
