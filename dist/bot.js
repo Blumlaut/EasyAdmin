@@ -70085,7 +70085,6 @@ var require_src = __commonJS({
 });
 
 // bot/bot.js
-console.log("hello!");
 process.on("uncaughtException", function(err) {
   console.log("Caught exception: ", err.stack);
 });
