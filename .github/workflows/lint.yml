@@ -29,7 +29,7 @@ jobs:
         run: cd src;npm i
 
       - name: Run linters
-        uses: wearerequired/lint-action@v2.3.0
+        uses: rkuykendall/lint-action@master
         with:
           auto_fix: true
           commit_message: "style: Fix code style issues with ${linter}"
