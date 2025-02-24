@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "@discordjs/builders": "1.10.1",
-    "@discordjs/collection": "2.1.1",
-    "@discordjs/core": "2.0.1",
-    "@discordjs/formatters": "0.6.0",
-    "@discordjs/rest": "2.4.3",
-    "@discordjs/util": "1.1.1",
-    "@discordjs/ws": "1.2.1",
     "ascii-table": "0.0.9",
     "bufferutil": "^4.0.9",
     "discord-api-types": "0.37.119",
@@ -20,16 +13,17 @@
     "zlib-sync": "0.1.9"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.20.0",
+    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/js": "^9.21.0",
     "esbuild": "^0.25.0",
-    "eslint": "^9.20.1",
-    "globals": "^15.15.0"
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0"
   },
   "engines": {
     "node": "^22.0.0"
   },
   "scripts": {
-    "build": "rm -rf ../dist; node build.js"
+    "build": "rm -rf ../dist; npm i; node build.js",
+    "update-deps": "npx npm-check-updates -u --enginesNode"
   }
 }

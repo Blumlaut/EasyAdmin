@@ -23573,9 +23573,9 @@ var require_v106 = __commonJS({
   }
 });
 
-// node_modules/@discordjs/collection/dist/index.js
+// node_modules/@discordjs/rest/node_modules/@discordjs/collection/dist/index.js
 var require_dist2 = __commonJS({
-  "node_modules/@discordjs/collection/dist/index.js"(exports2, module2) {
+  "node_modules/@discordjs/rest/node_modules/@discordjs/collection/dist/index.js"(exports2, module2) {
     "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -24141,47 +24141,38 @@ var require_cjs = __commonJS({
     var __defProp2 = Object.defineProperty;
     var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
     var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    var __publicField = (obj, key, value) => {
+      __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+      return value;
+    };
     var IncrementSymbol = Symbol("@sapphire/snowflake.increment");
     var EpochSymbol = Symbol("@sapphire/snowflake.epoch");
-    var EpochNumberSymbol = Symbol("@sapphire/snowflake.epoch.number");
     var ProcessIdSymbol = Symbol("@sapphire/snowflake.processId");
     var WorkerIdSymbol = Symbol("@sapphire/snowflake.workerId");
     var MaximumWorkerId = 0b11111n;
     var MaximumProcessId = 0b11111n;
     var MaximumIncrement = 0b111111111111n;
-    var TimestampFieldDivisor = 2 ** 22;
     var _a;
     var _b;
     var _c;
     var _d;
-    var _e;
-    _e = EpochSymbol, _d = EpochNumberSymbol, _c = IncrementSymbol, _b = ProcessIdSymbol, _a = WorkerIdSymbol;
     var _Snowflake = class _Snowflake {
       /**
        * @param epoch the epoch to use
        */
       constructor(epoch) {
         __publicField(this, "decode", this.deconstruct);
-        __publicField(this, _e);
-        __publicField(this, _d);
-        __publicField(this, _c, 0n);
-        __publicField(this, _b, 1n);
-        __publicField(this, _a, 0n);
+        __publicField(this, _a);
+        __publicField(this, _b, 0n);
+        __publicField(this, _c, 1n);
+        __publicField(this, _d, 0n);
         this[EpochSymbol] = BigInt(epoch instanceof Date ? epoch.getTime() : epoch);
-        this[EpochNumberSymbol] = Number(this[EpochSymbol]);
       }
       /**
-       * The epoch for this snowflake, as a bigint
+       * The epoch for this snowflake
        */
       get epoch() {
         return this[EpochSymbol];
-      }
-      /**
-       * The epoch for this snowflake, as a number
-       */
-      get epochNumber() {
-        return this[EpochNumberSymbol];
       }
       /**
        * Gets the configured process ID
@@ -24227,8 +24218,10 @@ var require_cjs = __commonJS({
         workerId = this[WorkerIdSymbol],
         processId = this[ProcessIdSymbol]
       } = {}) {
-        if (timestamp instanceof Date) timestamp = BigInt(timestamp.getTime());
-        else if (typeof timestamp === "number") timestamp = BigInt(timestamp);
+        if (timestamp instanceof Date)
+          timestamp = BigInt(timestamp.getTime());
+        else if (typeof timestamp === "number")
+          timestamp = BigInt(timestamp);
         else if (typeof timestamp !== "bigint") {
           throw new TypeError(`"timestamp" argument must be a number, bigint, or Date (received ${typeof timestamp})`);
         }
@@ -24266,7 +24259,7 @@ var require_cjs = __commonJS({
        * @returns The UNIX timestamp that is stored in `id`.
        */
       timestampFrom(id) {
-        return Math.floor(Number(id) / TimestampFieldDivisor) + this[EpochNumberSymbol];
+        return Number((BigInt(id) >> 22n) + this[EpochSymbol]);
       }
       /**
        * Returns a number indicating whether a reference snowflake comes before, or after, or is same as the given
@@ -24292,6 +24285,7 @@ var require_cjs = __commonJS({
         return typeA === typeof b ? typeA === "string" ? cmpString(a, b) : cmpBigInt(a, b) : cmpBigInt(BigInt(a), BigInt(b));
       }
     };
+    _a = EpochSymbol, _b = IncrementSymbol, _c = ProcessIdSymbol, _d = WorkerIdSymbol;
     __name(_Snowflake, "Snowflake");
     var Snowflake = _Snowflake;
     function cmpBigInt(a, b) {
@@ -28572,9 +28566,9 @@ var require_package = __commonJS({
   }
 });
 
-// node_modules/discord.js/node_modules/@discordjs/collection/dist/index.js
+// node_modules/@discordjs/collection/dist/index.js
 var require_dist6 = __commonJS({
-  "node_modules/discord.js/node_modules/@discordjs/collection/dist/index.js"(exports2, module2) {
+  "node_modules/@discordjs/collection/dist/index.js"(exports2, module2) {
     "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -29569,179 +29563,6 @@ var require_Attachment = __commonJS({
   }
 });
 
-// node_modules/discord.js/node_modules/@sapphire/snowflake/dist/cjs/index.cjs
-var require_cjs3 = __commonJS({
-  "node_modules/discord.js/node_modules/@sapphire/snowflake/dist/cjs/index.cjs"(exports2) {
-    "use strict";
-    var __defProp2 = Object.defineProperty;
-    var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __publicField = (obj, key, value) => {
-      __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-      return value;
-    };
-    var IncrementSymbol = Symbol("@sapphire/snowflake.increment");
-    var EpochSymbol = Symbol("@sapphire/snowflake.epoch");
-    var ProcessIdSymbol = Symbol("@sapphire/snowflake.processId");
-    var WorkerIdSymbol = Symbol("@sapphire/snowflake.workerId");
-    var MaximumWorkerId = 0b11111n;
-    var MaximumProcessId = 0b11111n;
-    var MaximumIncrement = 0b111111111111n;
-    var _a;
-    var _b;
-    var _c;
-    var _d;
-    var _Snowflake = class _Snowflake {
-      /**
-       * @param epoch the epoch to use
-       */
-      constructor(epoch) {
-        __publicField(this, "decode", this.deconstruct);
-        __publicField(this, _a);
-        __publicField(this, _b, 0n);
-        __publicField(this, _c, 1n);
-        __publicField(this, _d, 0n);
-        this[EpochSymbol] = BigInt(epoch instanceof Date ? epoch.getTime() : epoch);
-      }
-      /**
-       * The epoch for this snowflake
-       */
-      get epoch() {
-        return this[EpochSymbol];
-      }
-      /**
-       * Gets the configured process ID
-       */
-      get processId() {
-        return this[ProcessIdSymbol];
-      }
-      /**
-       * Sets the process ID that will be used by default for the {@link generate} method
-       * @param value The new value, will be coerced to BigInt and masked with `0b11111n`
-       */
-      set processId(value) {
-        this[ProcessIdSymbol] = BigInt(value) & MaximumProcessId;
-      }
-      /**
-       * Gets the configured worker ID
-       */
-      get workerId() {
-        return this[WorkerIdSymbol];
-      }
-      /**
-       * Sets the worker ID that will be used by default for the {@link generate} method
-       * @param value The new value, will be coerced to BigInt and masked with `0b11111n`
-       */
-      set workerId(value) {
-        this[WorkerIdSymbol] = BigInt(value) & MaximumWorkerId;
-      }
-      /**
-       * Generates a snowflake given an epoch and optionally a timestamp
-       * @param options options to pass into the generator, see {@link SnowflakeGenerateOptions}
-       *
-       * **note** when `increment` is not provided it defaults to the private `increment` of the instance
-       * @example
-       * ```typescript
-       * const epoch = new Date('2000-01-01T00:00:00.000Z');
-       * const snowflake = new Snowflake(epoch).generate();
-       * ```
-       * @returns A unique snowflake
-       */
-      generate({
-        increment,
-        timestamp = Date.now(),
-        workerId = this[WorkerIdSymbol],
-        processId = this[ProcessIdSymbol]
-      } = {}) {
-        if (timestamp instanceof Date)
-          timestamp = BigInt(timestamp.getTime());
-        else if (typeof timestamp === "number")
-          timestamp = BigInt(timestamp);
-        else if (typeof timestamp !== "bigint") {
-          throw new TypeError(`"timestamp" argument must be a number, bigint, or Date (received ${typeof timestamp})`);
-        }
-        if (typeof increment !== "bigint") {
-          increment = this[IncrementSymbol];
-          this[IncrementSymbol] = increment + 1n & MaximumIncrement;
-        }
-        return timestamp - this[EpochSymbol] << 22n | (workerId & MaximumWorkerId) << 17n | (processId & MaximumProcessId) << 12n | increment & MaximumIncrement;
-      }
-      /**
-       * Deconstructs a snowflake given a snowflake ID
-       * @param id the snowflake to deconstruct
-       * @returns a deconstructed snowflake
-       * @example
-       * ```typescript
-       * const epoch = new Date('2000-01-01T00:00:00.000Z');
-       * const snowflake = new Snowflake(epoch).deconstruct('3971046231244935168');
-       * ```
-       */
-      deconstruct(id) {
-        const bigIntId = BigInt(id);
-        const epoch = this[EpochSymbol];
-        return {
-          id: bigIntId,
-          timestamp: (bigIntId >> 22n) + epoch,
-          workerId: bigIntId >> 17n & MaximumWorkerId,
-          processId: bigIntId >> 12n & MaximumProcessId,
-          increment: bigIntId & MaximumIncrement,
-          epoch
-        };
-      }
-      /**
-       * Retrieves the timestamp field's value from a snowflake.
-       * @param id The snowflake to get the timestamp value from.
-       * @returns The UNIX timestamp that is stored in `id`.
-       */
-      timestampFrom(id) {
-        return Number((BigInt(id) >> 22n) + this[EpochSymbol]);
-      }
-      /**
-       * Returns a number indicating whether a reference snowflake comes before, or after, or is same as the given
-       * snowflake in sort order.
-       * @param a The first snowflake to compare.
-       * @param b The second snowflake to compare.
-       * @returns `-1` if `a` is older than `b`, `0` if `a` and `b` are equals, `1` if `a` is newer than `b`.
-       * @example Sort snowflakes in ascending order
-       * ```typescript
-       * const ids = ['737141877803057244', '1056191128120082432', '254360814063058944'];
-       * console.log(ids.sort((a, b) => Snowflake.compare(a, b)));
-       * // → ['254360814063058944', '737141877803057244', '1056191128120082432'];
-       * ```
-       * @example Sort snowflakes in descending order
-       * ```typescript
-       * const ids = ['737141877803057244', '1056191128120082432', '254360814063058944'];
-       * console.log(ids.sort((a, b) => -Snowflake.compare(a, b)));
-       * // → ['1056191128120082432', '737141877803057244', '254360814063058944'];
-       * ```
-       */
-      static compare(a, b) {
-        const typeA = typeof a;
-        return typeA === typeof b ? typeA === "string" ? cmpString(a, b) : cmpBigInt(a, b) : cmpBigInt(BigInt(a), BigInt(b));
-      }
-    };
-    _a = EpochSymbol, _b = IncrementSymbol, _c = ProcessIdSymbol, _d = WorkerIdSymbol;
-    __name(_Snowflake, "Snowflake");
-    var Snowflake = _Snowflake;
-    function cmpBigInt(a, b) {
-      return a === b ? 0 : a < b ? -1 : 1;
-    }
-    __name(cmpBigInt, "cmpBigInt");
-    function cmpString(a, b) {
-      return a === b ? 0 : a.length < b.length ? -1 : a.length > b.length ? 1 : a < b ? -1 : 1;
-    }
-    __name(cmpString, "cmpString");
-    var DiscordSnowflake = new Snowflake(1420070400000n);
-    var TwitterSnowflake = new Snowflake(1288834974657n);
-    exports2.DiscordSnowflake = DiscordSnowflake;
-    exports2.MaximumIncrement = MaximumIncrement;
-    exports2.MaximumProcessId = MaximumProcessId;
-    exports2.MaximumWorkerId = MaximumWorkerId;
-    exports2.Snowflake = Snowflake;
-    exports2.TwitterSnowflake = TwitterSnowflake;
-  }
-});
-
 // node_modules/@discordjs/formatters/dist/index.js
 var require_dist7 = __commonJS({
   "node_modules/@discordjs/formatters/dist/index.js"(exports2, module2) {
@@ -30289,7 +30110,7 @@ var require_BaseChannel = __commonJS({
   "node_modules/discord.js/src/structures/BaseChannel.js"(exports2) {
     "use strict";
     var { channelLink, channelMention } = require_dist7();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { ChannelType, Routes: Routes2 } = require_v106();
     var Base = require_Base();
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
@@ -30653,7 +30474,7 @@ var require_Role = __commonJS({
   "node_modules/discord.js/src/structures/Role.js"(exports2) {
     "use strict";
     var { roleMention } = require_dist7();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { PermissionFlagsBits } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -31306,7 +31127,7 @@ var require_PermissionOverwriteManager = __commonJS({
 var require_GuildChannel = __commonJS({
   "node_modules/discord.js/src/structures/GuildChannel.js"(exports2, module2) {
     "use strict";
-    var { Snowflake } = require_cjs3();
+    var { Snowflake } = require_cjs();
     var { PermissionFlagsBits, ChannelType } = require_v106();
     var { BaseChannel } = require_BaseChannel();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -34198,7 +34019,7 @@ var require_uniqWith = __commonJS({
 });
 
 // node_modules/@sapphire/shapeshift/dist/cjs/index.cjs
-var require_cjs4 = __commonJS({
+var require_cjs3 = __commonJS({
   "node_modules/@sapphire/shapeshift/dist/cjs/index.cjs"(exports2) {
     "use strict";
     var get = require_get();
@@ -37690,7 +37511,7 @@ var require_mixins = __commonJS({
 });
 
 // node_modules/ts-mixer/dist/cjs/index.js
-var require_cjs5 = __commonJS({
+var require_cjs4 = __commonJS({
   "node_modules/ts-mixer/dist/cjs/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -37833,7 +37654,7 @@ var require_dist8 = __commonJS({
       urlPredicate: () => urlPredicate,
       validateFieldLength: () => validateFieldLength
     });
-    var import_shapeshift = require_cjs4();
+    var import_shapeshift = require_cjs3();
     var validate = true;
     function enableValidators() {
       return validate = true;
@@ -38123,7 +37944,7 @@ var require_dist8 = __commonJS({
       validateRequiredSelectMenuOptionParameters: () => validateRequiredSelectMenuOptionParameters,
       validateRequiredSelectMenuParameters: () => validateRequiredSelectMenuParameters
     });
-    var import_shapeshift2 = require_cjs4();
+    var import_shapeshift2 = require_cjs3();
     var import_v10 = require_v106();
     var StringSelectMenuOptionBuilder = class {
       /**
@@ -38914,7 +38735,7 @@ var require_dist8 = __commonJS({
       validateRequiredParameters: () => validateRequiredParameters,
       valueValidator: () => valueValidator
     });
-    var import_shapeshift3 = require_cjs4();
+    var import_shapeshift3 = require_cjs3();
     var import_v108 = require_v106();
     var textInputStyleValidator = import_shapeshift3.s.nativeEnum(import_v108.TextInputStyle);
     var minLengthValidator = import_shapeshift3.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
@@ -39156,7 +38977,7 @@ var require_dist8 = __commonJS({
       titleValidator: () => titleValidator,
       validateRequiredParameters: () => validateRequiredParameters2
     });
-    var import_shapeshift4 = require_cjs4();
+    var import_shapeshift4 = require_cjs3();
     var titleValidator = import_shapeshift4.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
     var componentsValidator = import_shapeshift4.s.instance(ActionRowBuilder2).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
     function validateRequiredParameters2(customId, title, components) {
@@ -39256,7 +39077,7 @@ var require_dist8 = __commonJS({
       validateRequired: () => validateRequired,
       validateRequiredParameters: () => validateRequiredParameters3
     });
-    var import_shapeshift5 = require_cjs4();
+    var import_shapeshift5 = require_cjs3();
     var import_v1012 = require_v106();
     var namePredicate = import_shapeshift5.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^[\p{Ll}\p{Lm}\p{Lo}\p{N}\p{sc=Devanagari}\p{sc=Thai}_-]+$/u).setValidationEnabled(isValidationEnabled);
     function validateName(name) {
@@ -39331,7 +39152,7 @@ var require_dist8 = __commonJS({
     var integrationTypesPredicate = import_shapeshift5.s.array(
       import_shapeshift5.s.nativeEnum(import_v1012.ApplicationIntegrationType).setValidationEnabled(isValidationEnabled)
     );
-    var import_ts_mixer6 = require_cjs5();
+    var import_ts_mixer6 = require_cjs4();
     var SharedNameAndDescription = class {
       static {
         __name(this, "SharedNameAndDescription");
@@ -39618,8 +39439,8 @@ var require_dist8 = __commonJS({
       }
     };
     var import_v1017 = require_v106();
-    var import_ts_mixer = require_cjs5();
-    var import_shapeshift6 = require_cjs4();
+    var import_ts_mixer = require_cjs4();
+    var import_shapeshift6 = require_cjs3();
     var import_v1016 = require_v106();
     var allowedChannelTypes = [
       import_v1016.ChannelType.GuildText,
@@ -39672,9 +39493,9 @@ var require_dist8 = __commonJS({
     SlashCommandChannelOption = __decorateClass([
       (0, import_ts_mixer.mix)(ApplicationCommandOptionChannelTypesMixin)
     ], SlashCommandChannelOption);
-    var import_shapeshift9 = require_cjs4();
+    var import_shapeshift9 = require_cjs3();
     var import_v1019 = require_v106();
-    var import_ts_mixer2 = require_cjs5();
+    var import_ts_mixer2 = require_cjs4();
     var ApplicationCommandNumericOptionMinMaxValueMixin = class {
       static {
         __name(this, "ApplicationCommandNumericOptionMinMaxValueMixin");
@@ -39688,7 +39509,7 @@ var require_dist8 = __commonJS({
        */
       min_value;
     };
-    var import_shapeshift7 = require_cjs4();
+    var import_shapeshift7 = require_cjs3();
     var booleanPredicate2 = import_shapeshift7.s.boolean();
     var ApplicationCommandOptionWithAutocompleteMixin = class {
       static {
@@ -39718,7 +39539,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_shapeshift8 = require_cjs4();
+    var import_shapeshift8 = require_cjs3();
     var import_v1018 = require_v106();
     var stringPredicate = import_shapeshift8.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100);
     var numberPredicate = import_shapeshift8.s.number().greaterThan(Number.NEGATIVE_INFINITY).lessThan(Number.POSITIVE_INFINITY);
@@ -39840,9 +39661,9 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_shapeshift10 = require_cjs4();
+    var import_shapeshift10 = require_cjs3();
     var import_v1021 = require_v106();
-    var import_ts_mixer3 = require_cjs5();
+    var import_ts_mixer3 = require_cjs4();
     var numberValidator2 = import_shapeshift10.s.number();
     var SlashCommandNumberOption = class extends ApplicationCommandOptionBase {
       /**
@@ -39901,9 +39722,9 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_shapeshift11 = require_cjs4();
+    var import_shapeshift11 = require_cjs3();
     var import_v1023 = require_v106();
-    var import_ts_mixer4 = require_cjs5();
+    var import_ts_mixer4 = require_cjs4();
     var minLengthValidator2 = import_shapeshift11.s.number().greaterThanOrEqual(0).lessThanOrEqual(6e3);
     var maxLengthValidator2 = import_shapeshift11.s.number().greaterThanOrEqual(1).lessThanOrEqual(6e3);
     var SlashCommandStringOption = class extends ApplicationCommandOptionBase {
@@ -40065,7 +39886,7 @@ var require_dist8 = __commonJS({
       }
     };
     var import_v1025 = require_v106();
-    var import_ts_mixer5 = require_cjs5();
+    var import_ts_mixer5 = require_cjs4();
     var SlashCommandSubcommandGroupBuilder = class {
       /**
        * The name of this subcommand group.
@@ -40251,7 +40072,7 @@ var require_dist8 = __commonJS({
       validateRequiredParameters: () => validateRequiredParameters4,
       validateType: () => validateType
     });
-    var import_shapeshift12 = require_cjs4();
+    var import_shapeshift12 = require_cjs3();
     var import_v1026 = require_v106();
     var namePredicate2 = import_shapeshift12.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^( *[\p{P}\p{L}\p{N}\p{sc=Devanagari}\p{sc=Thai}]+ *)+$/u).setValidationEnabled(isValidationEnabled);
     var typePredicate = import_shapeshift12.s.union([import_shapeshift12.s.literal(import_v1026.ApplicationCommandType.User), import_shapeshift12.s.literal(import_v1026.ApplicationCommandType.Message)]).setValidationEnabled(isValidationEnabled);
@@ -41089,7 +40910,7 @@ var require_ActionRowBuilder = __commonJS({
 var require_GuildScheduledEvent = __commonJS({
   "node_modules/discord.js/src/structures/GuildScheduledEvent.js"(exports2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { GuildScheduledEventStatus, GuildScheduledEventEntityType, RouteBases } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -41472,7 +41293,7 @@ var require_GuildScheduledEvent = __commonJS({
 var require_Application = __commonJS({
   "node_modules/discord.js/src/structures/interfaces/Application.js"(exports2, module2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var Base = require_Base();
     var Application = class extends Base {
       constructor(client2, data) {
@@ -41678,7 +41499,7 @@ var require_BaseGuild = __commonJS({
   "node_modules/discord.js/src/structures/BaseGuild.js"(exports2, module2) {
     "use strict";
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { Routes: Routes2, GuildFeature } = require_v106();
     var Base = require_Base();
     var BaseGuild = class extends Base {
@@ -41822,7 +41643,7 @@ var require_Emoji = __commonJS({
     "use strict";
     var process2 = require("node:process");
     var { formatEmoji } = require_dist7();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var Base = require_Base();
     var deprecationEmittedForURL = false;
     var Emoji = class extends Base {
@@ -42443,7 +42264,7 @@ var require_BaseInteraction = __commonJS({
     "use strict";
     var { deprecate } = require("node:util");
     var { Collection: Collection3 } = require_dist6();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { InteractionType: InteractionType2, ApplicationCommandType, ComponentType } = require_v106();
     var Base = require_Base();
     var { SelectMenuTypes } = require_Constants();
@@ -42725,7 +42546,7 @@ var require_Team = __commonJS({
   "node_modules/discord.js/src/structures/Team.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var Base = require_Base();
     var TeamMember = require_TeamMember();
     var Team = class extends Base {
@@ -43177,7 +42998,7 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
 var require_ApplicationCommand = __commonJS({
   "node_modules/discord.js/src/structures/ApplicationCommand.js"(exports2, module2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { ApplicationCommandOptionType } = require_v106();
     var isEqual = require_fast_deep_equal();
     var Base = require_Base();
@@ -45380,7 +45201,7 @@ var require_ReactionCollector = __commonJS({
 var require_Sticker = __commonJS({
   "node_modules/discord.js/src/structures/Sticker.js"(exports2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { Routes: Routes2 } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -45842,7 +45663,7 @@ var require_User = __commonJS({
     "use strict";
     var { userMention } = require_dist7();
     var { calculateUserDefaultAvatarIndex } = require_dist5();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var Base = require_Base();
     var TextBasedChannel = require_TextBasedChannel();
     var UserFlagsBitField = require_UserFlagsBitField();
@@ -46369,7 +46190,7 @@ var require_Message = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { messageLink } = require_dist7();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var {
       InteractionType: InteractionType2,
       ChannelType,
@@ -47161,7 +46982,7 @@ var require_Webhook = __commonJS({
     "use strict";
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { lazy } = require_dist();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { Routes: Routes2, WebhookType } = require_v106();
     var MessagePayload = require_MessagePayload();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -48771,7 +48592,7 @@ var require_MessagePayload = __commonJS({
     "use strict";
     var { Buffer: Buffer2 } = require("node:buffer");
     var { lazy, isJSONEncodable } = require_dist();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { MessageFlags, MessageReferenceType } = require_v106();
     var ActionRowBuilder2 = require_ActionRowBuilder();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -49053,7 +48874,7 @@ var require_TextBasedChannel = __commonJS({
   "node_modules/discord.js/src/structures/interfaces/TextBasedChannel.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { InteractionType: InteractionType2, Routes: Routes2 } = require_v106();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { MaxBulkDeletableMessageAge } = require_Constants();
@@ -51994,7 +51815,7 @@ var require_Integration = __commonJS({
 var require_StageInstance = __commonJS({
   "node_modules/discord.js/src/structures/StageInstance.js"(exports2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var Base = require_Base();
     var StageInstance = class extends Base {
       constructor(client2, data) {
@@ -52115,7 +51936,7 @@ var require_StageInstance = __commonJS({
 var require_GuildAuditLogsEntry = __commonJS({
   "node_modules/discord.js/src/structures/GuildAuditLogsEntry.js"(exports2, module2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { AuditLogOptionsType, AuditLogEvent } = require_v106();
     var AutoModerationRule = require_AutoModerationRule();
     var { GuildOnboardingPrompt } = require_GuildOnboardingPrompt();
@@ -53417,7 +53238,7 @@ var require_AutocompleteInteraction = __commonJS({
 var require_InteractionCallback = __commonJS({
   "node_modules/discord.js/src/structures/InteractionCallback.js"(exports2, module2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var InteractionCallback = class {
       constructor(client2, data) {
         Object.defineProperty(this, "client", { value: client2 });
@@ -53492,7 +53313,7 @@ var require_InteractionCallbackResponse = __commonJS({
 var require_InteractionResponse = __commonJS({
   "node_modules/discord.js/src/structures/InteractionResponse.js"(exports2, module2) {
     "use strict";
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { InteractionType: InteractionType2 } = require_v106();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var InteractionResponse = class {
@@ -55505,6 +55326,567 @@ var require_ClientVoiceManager = __commonJS({
       }
     };
     module2.exports = ClientVoiceManager2;
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/@discordjs/collection/dist/index.js
+var require_dist9 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/@discordjs/collection/dist/index.js"(exports2, module2) {
+    "use strict";
+    var __defProp2 = Object.defineProperty;
+    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames2 = Object.getOwnPropertyNames;
+    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
+    var __export2 = (target, all) => {
+      for (var name in all)
+        __defProp2(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps2 = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames2(from))
+          if (!__hasOwnProp2.call(to, key) && key !== except)
+            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+      }
+      return to;
+    };
+    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    var src_exports = {};
+    __export2(src_exports, {
+      Collection: () => Collection3,
+      version: () => version
+    });
+    module2.exports = __toCommonJS2(src_exports);
+    var Collection3 = class _Collection extends Map {
+      static {
+        __name(this, "Collection");
+      }
+      /**
+       * Obtains the value of the given key if it exists, otherwise sets and returns the value provided by the default value generator.
+       *
+       * @param key - The key to get if it exists, or set otherwise
+       * @param defaultValueGenerator - A function that generates the default value
+       * @example
+       * ```ts
+       * collection.ensure(guildId, () => defaultGuildConfig);
+       * ```
+       */
+      ensure(key, defaultValueGenerator) {
+        if (this.has(key)) return this.get(key);
+        if (typeof defaultValueGenerator !== "function") throw new TypeError(`${defaultValueGenerator} is not a function`);
+        const defaultValue = defaultValueGenerator(key, this);
+        this.set(key, defaultValue);
+        return defaultValue;
+      }
+      /**
+       * Checks if all of the elements exist in the collection.
+       *
+       * @param keys - The keys of the elements to check for
+       * @returns `true` if all of the elements exist, `false` if at least one does not exist.
+       */
+      hasAll(...keys) {
+        return keys.every((key) => super.has(key));
+      }
+      /**
+       * Checks if any of the elements exist in the collection.
+       *
+       * @param keys - The keys of the elements to check for
+       * @returns `true` if any of the elements exist, `false` if none exist.
+       */
+      hasAny(...keys) {
+        return keys.some((key) => super.has(key));
+      }
+      first(amount) {
+        if (amount === void 0) return this.values().next().value;
+        if (amount < 0) return this.last(amount * -1);
+        amount = Math.min(this.size, amount);
+        const iter = this.values();
+        return Array.from({ length: amount }, () => iter.next().value);
+      }
+      firstKey(amount) {
+        if (amount === void 0) return this.keys().next().value;
+        if (amount < 0) return this.lastKey(amount * -1);
+        amount = Math.min(this.size, amount);
+        const iter = this.keys();
+        return Array.from({ length: amount }, () => iter.next().value);
+      }
+      last(amount) {
+        const arr = [...this.values()];
+        if (amount === void 0) return arr[arr.length - 1];
+        if (amount < 0) return this.first(amount * -1);
+        if (!amount) return [];
+        return arr.slice(-amount);
+      }
+      lastKey(amount) {
+        const arr = [...this.keys()];
+        if (amount === void 0) return arr[arr.length - 1];
+        if (amount < 0) return this.firstKey(amount * -1);
+        if (!amount) return [];
+        return arr.slice(-amount);
+      }
+      /**
+       * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at | Array.at()}.
+       * Returns the item at a given index, allowing for positive and negative integers.
+       * Negative integers count back from the last item in the collection.
+       *
+       * @param index - The index of the element to obtain
+       */
+      at(index) {
+        index = Math.floor(index);
+        const arr = [...this.values()];
+        return arr.at(index);
+      }
+      /**
+       * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at | Array.at()}.
+       * Returns the key at a given index, allowing for positive and negative integers.
+       * Negative integers count back from the last item in the collection.
+       *
+       * @param index - The index of the key to obtain
+       */
+      keyAt(index) {
+        index = Math.floor(index);
+        const arr = [...this.keys()];
+        return arr.at(index);
+      }
+      random(amount) {
+        const arr = [...this.values()];
+        if (amount === void 0) return arr[Math.floor(Math.random() * arr.length)];
+        if (!arr.length || !amount) return [];
+        return Array.from(
+          { length: Math.min(amount, arr.length) },
+          () => arr.splice(Math.floor(Math.random() * arr.length), 1)[0]
+        );
+      }
+      randomKey(amount) {
+        const arr = [...this.keys()];
+        if (amount === void 0) return arr[Math.floor(Math.random() * arr.length)];
+        if (!arr.length || !amount) return [];
+        return Array.from(
+          { length: Math.min(amount, arr.length) },
+          () => arr.splice(Math.floor(Math.random() * arr.length), 1)[0]
+        );
+      }
+      /**
+       * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse | Array.reverse()}
+       * but returns a Collection instead of an Array.
+       */
+      reverse() {
+        const entries = [...this.entries()].reverse();
+        this.clear();
+        for (const [key, value] of entries) this.set(key, value);
+        return this;
+      }
+      find(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        for (const [key, val] of this) {
+          if (fn(val, key, this)) return val;
+        }
+        return void 0;
+      }
+      findKey(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        for (const [key, val] of this) {
+          if (fn(val, key, this)) return key;
+        }
+        return void 0;
+      }
+      findLast(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const entries = [...this.entries()];
+        for (let index = entries.length - 1; index >= 0; index--) {
+          const val = entries[index][1];
+          const key = entries[index][0];
+          if (fn(val, key, this)) return val;
+        }
+        return void 0;
+      }
+      findLastKey(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const entries = [...this.entries()];
+        for (let index = entries.length - 1; index >= 0; index--) {
+          const key = entries[index][0];
+          const val = entries[index][1];
+          if (fn(val, key, this)) return key;
+        }
+        return void 0;
+      }
+      sweep(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const previousSize = this.size;
+        for (const [key, val] of this) {
+          if (fn(val, key, this)) this.delete(key);
+        }
+        return previousSize - this.size;
+      }
+      filter(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const results = new this.constructor[Symbol.species]();
+        for (const [key, val] of this) {
+          if (fn(val, key, this)) results.set(key, val);
+        }
+        return results;
+      }
+      partition(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const results = [
+          new this.constructor[Symbol.species](),
+          new this.constructor[Symbol.species]()
+        ];
+        for (const [key, val] of this) {
+          if (fn(val, key, this)) {
+            results[0].set(key, val);
+          } else {
+            results[1].set(key, val);
+          }
+        }
+        return results;
+      }
+      flatMap(fn, thisArg) {
+        const collections = this.map(fn, thisArg);
+        return new this.constructor[Symbol.species]().concat(...collections);
+      }
+      map(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const iter = this.entries();
+        return Array.from({ length: this.size }, () => {
+          const [key, value] = iter.next().value;
+          return fn(value, key, this);
+        });
+      }
+      mapValues(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        const coll = new this.constructor[Symbol.species]();
+        for (const [key, val] of this) coll.set(key, fn(val, key, this));
+        return coll;
+      }
+      some(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        for (const [key, val] of this) {
+          if (fn(val, key, this)) return true;
+        }
+        return false;
+      }
+      every(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        for (const [key, val] of this) {
+          if (!fn(val, key, this)) return false;
+        }
+        return true;
+      }
+      reduce(fn, initialValue) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        let accumulator;
+        const iterator = this.entries();
+        if (initialValue === void 0) {
+          if (this.size === 0) throw new TypeError("Reduce of empty collection with no initial value");
+          accumulator = iterator.next().value[1];
+        } else {
+          accumulator = initialValue;
+        }
+        for (const [key, value] of iterator) {
+          accumulator = fn(accumulator, value, key, this);
+        }
+        return accumulator;
+      }
+      reduceRight(fn, initialValue) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        const entries = [...this.entries()];
+        let accumulator;
+        let index;
+        if (initialValue === void 0) {
+          if (entries.length === 0) throw new TypeError("Reduce of empty collection with no initial value");
+          accumulator = entries[entries.length - 1][1];
+          index = entries.length - 1;
+        } else {
+          accumulator = initialValue;
+          index = entries.length;
+        }
+        while (--index >= 0) {
+          const key = entries[index][0];
+          const val = entries[index][1];
+          accumulator = fn(accumulator, val, key, this);
+        }
+        return accumulator;
+      }
+      each(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        for (const [key, value] of this) {
+          fn(value, key, this);
+        }
+        return this;
+      }
+      tap(fn, thisArg) {
+        if (typeof fn !== "function") throw new TypeError(`${fn} is not a function`);
+        if (thisArg !== void 0) fn = fn.bind(thisArg);
+        fn(this);
+        return this;
+      }
+      /**
+       * Creates an identical shallow copy of this collection.
+       *
+       * @example
+       * ```ts
+       * const newColl = someColl.clone();
+       * ```
+       */
+      clone() {
+        return new this.constructor[Symbol.species](this);
+      }
+      /**
+       * Combines this collection with others into a new collection. None of the source collections are modified.
+       *
+       * @param collections - Collections to merge
+       * @example
+       * ```ts
+       * const newColl = someColl.concat(someOtherColl, anotherColl, ohBoyAColl);
+       * ```
+       */
+      concat(...collections) {
+        const newColl = this.clone();
+        for (const coll of collections) {
+          for (const [key, val] of coll) newColl.set(key, val);
+        }
+        return newColl;
+      }
+      /**
+       * Checks if this collection shares identical items with another.
+       * This is different to checking for equality using equal-signs, because
+       * the collections may be different objects, but contain the same data.
+       *
+       * @param collection - Collection to compare with
+       * @returns Whether the collections have identical contents
+       */
+      equals(collection) {
+        if (!collection) return false;
+        if (this === collection) return true;
+        if (this.size !== collection.size) return false;
+        for (const [key, value] of this) {
+          if (!collection.has(key) || value !== collection.get(key)) {
+            return false;
+          }
+        }
+        return true;
+      }
+      /**
+       * The sort method sorts the items of a collection in place and returns it.
+       * The sort is not necessarily stable in Node 10 or older.
+       * The default sort order is according to string Unicode code points.
+       *
+       * @param compareFunction - Specifies a function that defines the sort order.
+       * If omitted, the collection is sorted according to each character's Unicode code point value, according to the string conversion of each element.
+       * @example
+       * ```ts
+       * collection.sort((userA, userB) => userA.createdTimestamp - userB.createdTimestamp);
+       * ```
+       */
+      sort(compareFunction = _Collection.defaultSort) {
+        const entries = [...this.entries()];
+        entries.sort((a, b) => compareFunction(a[1], b[1], a[0], b[0]));
+        super.clear();
+        for (const [key, value] of entries) {
+          super.set(key, value);
+        }
+        return this;
+      }
+      /**
+       * The intersection method returns a new collection containing the items where the key is present in both collections.
+       *
+       * @param other - The other Collection to filter against
+       * @example
+       * ```ts
+       * const col1 = new Collection([['a', 1], ['b', 2]]);
+       * const col2 = new Collection([['a', 1], ['c', 3]]);
+       * const intersection = col1.intersection(col2);
+       * console.log(col1.intersection(col2));
+       * // => Collection { 'a' => 1 }
+       * ```
+       */
+      intersection(other) {
+        const coll = new this.constructor[Symbol.species]();
+        for (const [key, value] of this) {
+          if (other.has(key)) coll.set(key, value);
+        }
+        return coll;
+      }
+      /**
+       * Returns a new collection containing the items where the key is present in either of the collections.
+       *
+       * @remarks
+       *
+       * If the collections have any items with the same key, the value from the first collection will be used.
+       * @param other - The other Collection to filter against
+       * @example
+       * ```ts
+       * const col1 = new Collection([['a', 1], ['b', 2]]);
+       * const col2 = new Collection([['a', 1], ['b', 3], ['c', 3]]);
+       * const union = col1.union(col2);
+       * console.log(union);
+       * // => Collection { 'a' => 1, 'b' => 2, 'c' => 3 }
+       * ```
+       */
+      union(other) {
+        const coll = new this.constructor[Symbol.species](this);
+        for (const [key, value] of other) {
+          if (!coll.has(key)) coll.set(key, value);
+        }
+        return coll;
+      }
+      /**
+       * Returns a new collection containing the items where the key is present in this collection but not the other.
+       *
+       * @param other - The other Collection to filter against
+       * @example
+       * ```ts
+       * const col1 = new Collection([['a', 1], ['b', 2]]);
+       * const col2 = new Collection([['a', 1], ['c', 3]]);
+       * console.log(col1.difference(col2));
+       * // => Collection { 'b' => 2 }
+       * console.log(col2.difference(col1));
+       * // => Collection { 'c' => 3 }
+       * ```
+       */
+      difference(other) {
+        const coll = new this.constructor[Symbol.species]();
+        for (const [key, value] of this) {
+          if (!other.has(key)) coll.set(key, value);
+        }
+        return coll;
+      }
+      /**
+       * Returns a new collection containing only the items where the keys are present in either collection, but not both.
+       *
+       * @param other - The other Collection to filter against
+       * @example
+       * ```ts
+       * const col1 = new Collection([['a', 1], ['b', 2]]);
+       * const col2 = new Collection([['a', 1], ['c', 3]]);
+       * const symmetricDifference = col1.symmetricDifference(col2);
+       * console.log(col1.symmetricDifference(col2));
+       * // => Collection { 'b' => 2, 'c' => 3 }
+       * ```
+       */
+      symmetricDifference(other) {
+        const coll = new this.constructor[Symbol.species]();
+        for (const [key, value] of this) {
+          if (!other.has(key)) coll.set(key, value);
+        }
+        for (const [key, value] of other) {
+          if (!this.has(key)) coll.set(key, value);
+        }
+        return coll;
+      }
+      /**
+       * Merges two Collections together into a new Collection.
+       *
+       * @param other - The other Collection to merge with
+       * @param whenInSelf - Function getting the result if the entry only exists in this Collection
+       * @param whenInOther - Function getting the result if the entry only exists in the other Collection
+       * @param whenInBoth - Function getting the result if the entry exists in both Collections
+       * @example
+       * ```ts
+       * // Sums up the entries in two collections.
+       * coll.merge(
+       *  other,
+       *  x => ({ keep: true, value: x }),
+       *  y => ({ keep: true, value: y }),
+       *  (x, y) => ({ keep: true, value: x + y }),
+       * );
+       * ```
+       * @example
+       * ```ts
+       * // Intersects two collections in a left-biased manner.
+       * coll.merge(
+       *  other,
+       *  x => ({ keep: false }),
+       *  y => ({ keep: false }),
+       *  (x, _) => ({ keep: true, value: x }),
+       * );
+       * ```
+       */
+      merge(other, whenInSelf, whenInOther, whenInBoth) {
+        const coll = new this.constructor[Symbol.species]();
+        const keys = /* @__PURE__ */ new Set([...this.keys(), ...other.keys()]);
+        for (const key of keys) {
+          const hasInSelf = this.has(key);
+          const hasInOther = other.has(key);
+          if (hasInSelf && hasInOther) {
+            const result = whenInBoth(this.get(key), other.get(key), key);
+            if (result.keep) coll.set(key, result.value);
+          } else if (hasInSelf) {
+            const result = whenInSelf(this.get(key), key);
+            if (result.keep) coll.set(key, result.value);
+          } else if (hasInOther) {
+            const result = whenInOther(other.get(key), key);
+            if (result.keep) coll.set(key, result.value);
+          }
+        }
+        return coll;
+      }
+      /**
+       * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toReversed | Array.toReversed()}
+       * but returns a Collection instead of an Array.
+       */
+      toReversed() {
+        return new this.constructor[Symbol.species](this).reverse();
+      }
+      /**
+       * The sorted method sorts the items of a collection and returns it.
+       * The sort is not necessarily stable in Node 10 or older.
+       * The default sort order is according to string Unicode code points.
+       *
+       * @param compareFunction - Specifies a function that defines the sort order.
+       * If omitted, the collection is sorted according to each character's Unicode code point value,
+       * according to the string conversion of each element.
+       * @example
+       * ```ts
+       * collection.sorted((userA, userB) => userA.createdTimestamp - userB.createdTimestamp);
+       * ```
+       */
+      toSorted(compareFunction = _Collection.defaultSort) {
+        return new this.constructor[Symbol.species](this).sort((av, bv, ak, bk) => compareFunction(av, bv, ak, bk));
+      }
+      toJSON() {
+        return [...this.entries()];
+      }
+      static defaultSort(firstValue, secondValue) {
+        return Number(firstValue > secondValue) || Number(firstValue === secondValue) - 1;
+      }
+      /**
+       * Creates a Collection from a list of entries.
+       *
+       * @param entries - The list of entries
+       * @param combine - Function to combine an existing entry with a new one
+       * @example
+       * ```ts
+       * Collection.combineEntries([["a", 1], ["b", 2], ["a", 2]], (x, y) => x + y);
+       * // returns Collection { "a" => 3, "b" => 2 }
+       * ```
+       */
+      static combineEntries(entries, combine) {
+        const coll = new _Collection();
+        for (const [key, value] of entries) {
+          if (coll.has(key)) {
+            coll.set(key, combine(coll.get(key), value, key));
+          } else {
+            coll.set(key, value);
+          }
+        }
+        return coll;
+      }
+    };
+    var version = "2.1.1";
   }
 });
 
@@ -59386,7 +59768,7 @@ var require_ws = __commonJS({
 });
 
 // node_modules/@discordjs/ws/dist/index.js
-var require_dist9 = __commonJS({
+var require_dist10 = __commonJS({
   "node_modules/@discordjs/ws/dist/index.js"(exports2, module2) {
     "use strict";
     var __create2 = Object.create;
@@ -59494,11 +59876,11 @@ var require_dist9 = __commonJS({
       }
     };
     var import_node_worker_threads2 = require("worker_threads");
-    var import_collection2 = require_dist2();
+    var import_collection2 = require_dist9();
     var import_node_events = require("events");
     var import_node_path = require("path");
     var import_node_worker_threads = require("worker_threads");
-    var import_collection = require_dist2();
+    var import_collection = require_dist9();
     var WorkerSendPayloadOp = ((WorkerSendPayloadOp2) => {
       WorkerSendPayloadOp2[WorkerSendPayloadOp2["Connect"] = 0] = "Connect";
       WorkerSendPayloadOp2[WorkerSendPayloadOp2["Destroy"] = 1] = "Destroy";
@@ -59826,7 +60208,7 @@ var require_dist9 = __commonJS({
         }
       }
     };
-    var import_collection6 = require_dist2();
+    var import_collection6 = require_dist9();
     var import_node_buffer = require("buffer");
     var import_node_events2 = require("events");
     var import_node_timers = require("timers");
@@ -59834,18 +60216,18 @@ var require_dist9 = __commonJS({
     var import_node_url = require("url");
     var import_node_util = require("util");
     var import_node_zlib = require("zlib");
-    var import_collection5 = require_dist2();
+    var import_collection5 = require_dist9();
     var import_util2 = require_dist();
     var import_async_queue2 = require_cjs2();
     var import_async_event_emitter = require_dist3();
     var import_v102 = require_v106();
     var import_ws = require_ws();
     var import_node_process = __toESM2(require("process"));
-    var import_collection4 = require_dist2();
+    var import_collection4 = require_dist9();
     var import_util = require_dist();
     var import_v10 = require_v106();
     var import_promises = require("timers/promises");
-    var import_collection3 = require_dist2();
+    var import_collection3 = require_dist9();
     var import_async_queue = require_cjs2();
     var SimpleIdentifyThrottler = class {
       constructor(maxConcurrency) {
@@ -60647,7 +61029,7 @@ var require_dist9 = __commonJS({
       }
     };
     var import_node_worker_threads3 = require("worker_threads");
-    var import_collection7 = require_dist2();
+    var import_collection7 = require_dist9();
     var WorkerBootstrapper = class {
       static {
         __name(this, "WorkerBootstrapper");
@@ -62094,7 +62476,7 @@ var require_WebSocketManager = __commonJS({
       WebSocketShardEvents: WSWebSocketShardEvents,
       CompressionMethod,
       CloseCodes
-    } = require_dist9();
+    } = require_dist10();
     var { GatewayCloseCodes, GatewayDispatchEvents } = require_v106();
     var WebSocketShard = require_WebSocketShard();
     var PacketHandlers = require_handlers();
@@ -62908,7 +63290,7 @@ var require_GuildPreview = __commonJS({
   "node_modules/discord.js/src/structures/GuildPreview.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { Routes: Routes2 } = require_v106();
     var Base = require_Base();
     var GuildPreviewEmoji = require_GuildPreviewEmoji();
@@ -64346,7 +64728,7 @@ var require_GuildMemberManager = __commonJS({
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { Routes: Routes2, GatewayOpcodes } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -66047,7 +66429,7 @@ var require_Guild = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var { ChannelType, GuildPremiumTier, Routes: Routes2, GuildFeature } = require_v106();
     var AnonymousGuild = require_AnonymousGuild();
     var GuildAuditLogs = require_GuildAuditLogs();
@@ -67702,7 +68084,7 @@ var require_StickerPack = __commonJS({
   "node_modules/discord.js/src/structures/StickerPack.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { DiscordSnowflake } = require_cjs3();
+    var { DiscordSnowflake } = require_cjs();
     var Base = require_Base();
     var { Sticker: Sticker2 } = require_Sticker();
     var StickerPack2 = class extends Base {
@@ -69894,7 +70276,7 @@ var require_src = __commonJS({
     exports2.ShardEvents = require_ShardEvents();
     exports2.SKUFlagsBitField = require_SKUFlagsBitField().SKUFlagsBitField;
     exports2.Status = require_Status();
-    exports2.SnowflakeUtil = require_cjs3().DiscordSnowflake;
+    exports2.SnowflakeUtil = require_cjs().DiscordSnowflake;
     exports2.Sweepers = require_Sweepers();
     exports2.SystemChannelFlagsBitField = require_SystemChannelFlagsBitField();
     exports2.ThreadMemberFlagsBitField = require_ThreadMemberFlagsBitField();
@@ -70080,7 +70462,7 @@ var require_src = __commonJS({
     __exportStar2(require_dist7(), exports2);
     __exportStar2(require_dist5(), exports2);
     __exportStar2(require_dist(), exports2);
-    __exportStar2(require_dist9(), exports2);
+    __exportStar2(require_dist10(), exports2);
   }
 });
 
