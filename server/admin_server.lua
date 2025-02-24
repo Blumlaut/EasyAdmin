@@ -1023,7 +1023,7 @@ function checkVersion()
 			'server/bot/commands/unban.js',
 			'server/bot/commands/unfreeze.js',
 			'server/bot/commands/unmute.js',
-			'server/bot/commands/warn.js',´
+			'server/bot/commands/warn.js',
 		}
 	
 		for i,file in pairs(legacyFiles) do
