@@ -1042,7 +1042,10 @@ function checkVersion()
 	if isMaster then
 		PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
 	end
-	if curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+
+	if not tonumber(curVersion) then
+		PrintDebugMessage("EasyAdmin's Version Number is invalid, this usually means you are using a pre-release version")
+	elseif curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
 		print("\n--------------------------------------------------------------------------")
 		print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..remoteURL)
 		print("\n--------------------------------------------------------------------------")
