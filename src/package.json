@@ -6,7 +6,7 @@
     "@discordjs/formatters": "0.6.0",
     "@discordjs/rest": "2.4.3",
     "@discordjs/util": "1.1.1",
-    "@discordjs/ws": "1.2.1",
+    "@discordjs/ws": "2.0.1",
     "ascii-table": "0.0.9",
     "bufferutil": "^4.0.9",
     "discord-api-types": "0.37.119",
