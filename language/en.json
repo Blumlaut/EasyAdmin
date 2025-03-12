@@ -25,6 +25,7 @@
     "kickplayer": "Kick Player",
     "banplayer": "Ban Player",
     "reason": "Reason",
+    "time": "Time",
     "kickreasonguide": "Add a reason to the kick.",
     "noreason": "No Reason Specified",
     "confirmkick": "Confirm Kick",
