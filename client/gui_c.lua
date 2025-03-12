@@ -934,7 +934,7 @@ function GenerateMenu() -- this is a big ass function
 				thisMenu:AddItem(thisItem)
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("time"), "")
-				thisItem:RightLabel(report.time, 48)
+				thisItem:RightLabel(report.reportTime, 48)
 				thisMenu:AddItem(thisItem)
 
 				if permissions["player.reports.process"] then

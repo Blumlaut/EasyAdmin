@@ -30,25 +30,32 @@ Citizen.CreateThread(function()
     if GetConvar("ea_enableCallAdminCommand", "true") == "true" then
         RegisterCommand(GetConvar("ea_callAdminCommandName", "calladmin"), function(source, args, rawCommand)
             if args[1] then
-                local time = os.date("%H:%M:%S")
+                local time = os.time()
+                local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
+                local source=source
+                if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
+                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("waitbeforeusingagain"))
+                    return
+                end
+                local reportTime = os.date("%H:%M:%S")
                 local reason = string.gsub(rawCommand, GetConvar("ea_callAdminCommandName", "calladmin").." ", "")
-                local reportid = addNewReport(0, source, _, reason, time)
+                local reportid = addNewReport(0, source, _, reason, reportTime)
                 
                 for i,_ in pairs(OnlineAdmins) do 
                     local notificationText = string.format(
                         string.gsub(GetLocalisedText("playercalledforadmin"), "```", "") .. "\n🕒 Time: %s",
-                        getName(source, true, false), reason, reportid, time
+                        getName(source, true, false), reason, reportid, reportTime
                     )
                     TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
                 end
                 
                 local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-                SendWebhookMessage(preferredWebhook, string.format(
-                    GetLocalisedText("playercalledforadmin") .. "\n🕒 Time: %s",
-                    getName(source, true, true), reason, reportid, time
-                ), "calladmin", 16776960)
+                SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true, true), reason, reportid, reportT), "calladmin", 16776960)
+                --TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
+                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("admincalled") .. "\n🕒 Time: " .. reportTime)
                 
-                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("admincalled") .. "\n🕒 Time: " .. time)
+                time = os.time()
+                cooldowns[source] = time
             else
                 TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
             end
@@ -62,7 +69,7 @@ Citizen.CreateThread(function()
                 local source = source
                 local id = args[1]
                 local valid = false
-                local time = os.date("%H:%M:%S")
+                local reportTime = os.date("%H:%M:%S")
                 local minimumreports = GetConvarInt("ea_defaultMinReports", 3)
     
                 if GetConvar("ea_MinReportModifierEnabled", "true") == "true" then
@@ -97,13 +104,13 @@ Citizen.CreateThread(function()
                     end
     
                     if addReport then
-                        table.insert(PlayerReports[id], {source = source, sourceName = getName(source, true), reason = reason, time = time})
-                        local reportid = addNewReport(1, source, id, reason, time)
+                        table.insert(PlayerReports[id], {source = source, sourceName = getName(source, true), reason = reason, reportTime = reportTime})
+                        local reportid = addNewReport(1, source, id, reason, reportTime)
     
                         local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
                         SendWebhookMessage(preferredWebhook, string.format(
                             GetLocalisedText("playerreportedplayer") .. "\n🕒 Time: %s",
-                            getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid, time
+                            getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid, reportTime
                         ), "report", 16776960)
     
                         if GetConvar("ea_enableReportScreenshots", "true") == "true" then
@@ -113,12 +120,12 @@ Citizen.CreateThread(function()
                         for i,_ in pairs(OnlineAdmins) do 
                             local notificationText = string.format(
                                 string.gsub(GetLocalisedText("playerreportedplayer"), "```", "") .. "\n🕒 Time: %s",
-                                getName(source, false, false), getName(id, true, false), reason, #PlayerReports[id], minimumreports, reportid, time
+                                getName(source, false, false), getName(id, true, false), reason, #PlayerReports[id], minimumreports, reportid, reportTime
                             )
                             TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
                         end
     
-                        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported") .. "\n🕒 Time: " .. time)
+                        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported") .. "\n🕒 Time: " .. reportTime)
     
                         if #PlayerReports[id] >= minimumreports then
                             TriggerEvent("EasyAdmin:addBan", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
@@ -137,12 +144,12 @@ Citizen.CreateThread(function()
     
 
 
-	function addNewReport(type, reporter, reported, reason, time)
+	function addNewReport(type, reporter, reported, reason, reportTime)
         local t = {}
         if type == 1 then
-            t = {type = type, reporter = reporter, reporterName = getName(reporter, true), reported = reported, reportedName = getName(reported, true), reason = reason, time = time or os.date("%H:%M:%S")}
+            t = {type = type, reporter = reporter, reporterName = getName(reporter, true), reported = reported, reportedName = getName(reported, true), reason = reason, reportTime = reportTime or os.date("%H:%M:%S")}
         else
-            t = {type = type, reporter = reporter, reporterName = getName(reporter, true), reason = reason, time = time or os.date("%H:%M:%S")}
+            t = {type = type, reporter = reporter, reporterName = getName(reporter, true), reason = reason, reportTime = reportTime or os.date("%H:%M:%S")}
         end
         t.id = #reports + 1
         reports[t.id] = t 
