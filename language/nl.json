@@ -26,6 +26,7 @@
     "kickplayer": "Kick Speler",
     "banplayer": "Ban Speler",
     "reason": "Reden",
+    "time": "Tijd",
     "kickreasonguide": "Voeg een reden toe aan de kick.",
     "noreason": "Geen reden opgegeven",
     "confirmkick": "Bevestig Kick",
