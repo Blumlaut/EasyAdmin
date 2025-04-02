@@ -135,6 +135,12 @@ Citizen.CreateThread(function()
 
 
 	function addNewReport(type, reporter, reported, reason)
+		local is_injection, matched_pattern = detect_injection(reason)
+
+	        if is_injection then
+			exports[GetCurrentResourceName()]:addBan(reporter, "Injection detected in calladmin report reason", 10444633200)
+	        	return
+	        end
 		local t = nil
 		if type == 1 then
 			t = {type=type, reporter=reporter, reporterName=getName(reporter, true), reported=reported, reportedName=getName(reported, true),reason=reason}
@@ -246,3 +252,32 @@ Citizen.CreateThread(function()
 	end)
     
 end)
+
+-- Function to detect injection attempts with URL loading for images, videos, and JS
+function detect_injection(input)
+    local patterns = {
+        -- Detect <img> tags with suspicious attributes like onerror or src pointing to a remote URL
+        "<%s*img[^>]-onerror%s*=%s*['\"]?import%([^)]*['\"]?%)",
+        "<%s*img[^>]-src%s*=%s*['\"]?https?://[^'\"]+['\"]?",
+        
+        -- Detect script tags loading from external URLs
+        "<%s*script[^>]-src%s*=%s*['\"]?https?://[^'\"]+['\"]?",
+        "<%s*script[^>]-import%([^)]*%)",
+        
+        -- Inline JS events in any tag (e.g. onclick, onload, onmouseover) possibly containing remote links
+        "on%w+%s*=%s*['\"]?import%([^)]*['\"]?%)",
+        "on%w+%s*=%s*['\"]?https?://[^'\"]+['\"]?",
+        
+        -- Media tags loading remote content
+        "<%s*video[^>]-src%s*=%s*['\"]?https?://[^'\"]+['\"]?",
+        "<%s*audio[^>]-src%s*=%s*['\"]?https?://[^'\"]+['\"]?",
+        "<%s*source[^>]-src%s*=%s*['\"]?https?://[^'\"]+['\"]?"
+    }
+
+    for _, pattern in ipairs(patterns) do
+        if input:lower():match(pattern) then
+            return true, pattern
+        end
+    end
+    return false
+end
