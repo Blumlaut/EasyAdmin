@@ -323,7 +323,13 @@ Citizen.CreateThread(function()
 		if DoesPlayerHavePermission(source, "player.spectate") and CheckAdminCooldown(source, "spectate") then
 			SetAdminCooldown(source, "spectate")
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
-			local tgtCoords = GetEntityCoords(GetPlayerPed(playerId))
+			local tgtPed = GetPlayerPed(playerId)
+			if tgtPed == 0 then
+				-- ped does not exist (left server)
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
+				return
+			end
+			local tgtCoords = GetEntityCoords(tgtPed)
 			local playerBucket = GetPlayerRoutingBucket(playerId)
 			local sourceBucket = GetPlayerRoutingBucket(source)
 			if sourceBucket ~= playerBucket then
