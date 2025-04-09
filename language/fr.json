@@ -26,6 +26,7 @@
     "kickplayer": "Expulser le joueur",
     "banplayer": "Bannir le joueur",
     "reason": "Raison",
+    "time": "Temps",
     "kickreasonguide": "Ajouter une raison pour le kick.",
     "noreason": "Aucune raison spécifiée",
     "confirmkick": "Confirmer le kick",

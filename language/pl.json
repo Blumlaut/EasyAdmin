@@ -25,6 +25,7 @@
     "kickplayer": "Wyrzuć Gracza",
     "banplayer": "Zbanuj Gracza",
     "reason": "Powód",
+    "time": "Czas",
     "kickreasonguide": "Dodaj powód wyrzucenia.",
     "noreason": "Nie określono przyczyny",
     "confirmkick": "Potwierdź wyrzucenie",
