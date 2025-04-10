@@ -3,6 +3,7 @@ name: Build DJS Bot
 on:
   push:
     branches: [ node-22, master ] # or the branch where changes are being pushed
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
