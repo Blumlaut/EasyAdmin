@@ -5,7 +5,6 @@ on:
     branches:
       - master
 
-# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
 permissions:
   checks: write
   contents: write
@@ -24,9 +23,13 @@ jobs:
         with:
           node-version: 22
 
-      # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
-        run: cd src;npm i
+        run: cd src && npm i
+
+      - name: Configure Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Run linters
         uses: rkuykendall/lint-action@master
