@@ -933,6 +933,10 @@ function GenerateMenu() -- this is a big ass function
 				thisItem:RightLabel(formatRightString(report.reason, 48))
 				thisMenu:AddItem(thisItem)
 
+				local thisItem = NativeUI.CreateItem(GetLocalisedText("time"), "")
+				thisItem:RightLabel(report.reportTimeFormatted, 48)
+				thisMenu:AddItem(thisItem)
+
 				if permissions["player.reports.process"] then
 					local thisItem = NativeUI.CreateItem(GetLocalisedText("closereport"), "")
 					thisMenu:AddItem(thisItem)

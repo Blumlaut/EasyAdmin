@@ -25,6 +25,7 @@
     "kickplayer": "Espelli Giocatore",
     "banplayer": "Bandisci Giocatore",
     "reason": "Ragione",
+    "time": "Tempo",
     "kickreasonguide": "Aggiungi una ragione per l'espulsione",
     "noreason": "Nessuna Ragione Specificata",
     "confirmkick": "Conferma espulsione",
