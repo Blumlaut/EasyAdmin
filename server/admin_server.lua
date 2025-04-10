@@ -325,11 +325,22 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
 			local tgtPed = GetPlayerPed(playerId)
 			if tgtPed == 0 then
-				-- ped does not exist (left server)
+				-- ped does not exist left or not loaded in yet
 				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
 				return
 			end
+
+			if playerId == source then
+				return
+			end
+
 			local tgtCoords = GetEntityCoords(tgtPed)
+			if tgtCoords.x == 0.00 and tgtCoords.y == 0.00 then
+				-- loaded in but still spawning
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
+				return
+			end
+
 			local playerBucket = GetPlayerRoutingBucket(playerId)
 			local sourceBucket = GetPlayerRoutingBucket(source)
 			if sourceBucket ~= playerBucket then
@@ -490,11 +501,25 @@ Citizen.CreateThread(function()
 		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
 			SetAdminCooldown(source, "teleport")
 			local tgtPed = GetPlayerPed(id)
+			if tgtPed == 0 then
+				-- ped does not exist left or not loaded in yet
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
+				return
+			end
+			if id == source then
+				return
+			end
 			local tgtCoords = GetEntityCoords(tgtPed)
+			if tgtCoords.x == 0.00 and tgtCoords.y == 0.00 then
+				-- loaded in but still spawning
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
+				return
+			end
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("teleportedtoplayer"), getName(source, false, true), getName(id, true, true)), "teleport", 16777214)
 			TriggerClientEvent('EasyAdmin:TeleportRequest', source, id,tgtCoords)
 		else
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
 			PrintDebugMessage('EASYADMIN FAILED TO TELEPORT'..source..' TO ID: '..id, 2)
 		end
 	end)
