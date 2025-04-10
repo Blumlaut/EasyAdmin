@@ -189,31 +189,25 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, playerDat
 	local tgtCoords = playerData.coords
 	
 	if ((not tgtCoords) or (tgtCoords.z == 0.0)) then tgtCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerServerId))) end
-	if playerServerId == GetPlayerServerId(PlayerId()) then 
-		if oldCoords then
-			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
-			Wait(500)
-			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
-			oldCoords=nil
-		end
-		spectatePlayer(localPlayerPed,GetPlayerFromServerId(PlayerId()),GetPlayerName(PlayerId()))
-		frozen = false
-		FreezeMyself(false)
-		return 
-	else
-		if not oldCoords then
-			oldCoords = GetEntityCoords(PlayerPedId())
-		end
+	
+	if not IsSpectating then
+		oldCoords = GetEntityCoords(PlayerPedId())
 	end
+
 	SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
 	frozen = true
 	FreezeMyself(true)
 	stopSpectateUpdate = true
 	local playerId = GetPlayerFromServerId(playerServerId)
+	local timer = 0
 	repeat
 		Wait(200)
 		playerId = GetPlayerFromServerId(playerServerId)
-	until ((GetPlayerPed(playerId) > 0) and (playerId ~= -1))
+		timer = timer + 1
+	until ( (GetPlayerPed(playerId) > 0) and (playerId ~= -1) or timer > 25)
+	if timer >= 25 then
+		return
+	end
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
 	stopSpectateUpdate = false 
 end)
@@ -388,7 +382,7 @@ function spectatePlayer(targetPed,target,name)
 		SetEntityCollision(playerPed, false, false)
 		SetEntityInvincible(playerPed, true)
 		NetworkSetEntityInvisibleToNetwork(playerPed, true)
-		Citizen.Wait(200) -- to prevent target player seeing you
+		Wait(200) -- to prevent target player seeing you
 		if targetPed == playerPed then
 			Wait(500)
 			targetPed = GetPlayerPed(target)
@@ -404,14 +398,13 @@ function spectatePlayer(targetPed,target,name)
 			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
 			Wait(500)
 			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
-			oldCoords=nil
 		end
 		NetworkSetInSpectatorMode(false, targetPed)
 		StopDrawPlayerInfo()
 		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
 		frozen = false
 		FreezeMyself(false)
-		Citizen.Wait(200) -- to prevent staying invisible
+		Wait(200) -- to prevent staying invisible
 		SetEntityVisible(playerPed, true, 0)
 		SetEntityCollision(playerPed, true, true)
 		SetEntityInvincible(playerPed, false)
