@@ -379,7 +379,9 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent("EasyAdmin:ForcePlayerRoutingBucket", function(playerId)
-		SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))
+		if DoesPlayerHavePermission(source, "player.bucket") then
+			SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))
+		end
 	end)
 
 	function cleanupArea(type, radius, player)
