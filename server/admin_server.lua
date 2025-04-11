@@ -383,10 +383,6 @@ Citizen.CreateThread(function()
 		print(GetPlayerName(playerId))
 		SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))
 	end)
-	
-	RegisterCommand("clobby", function(source, args, rawCommand)
-		print(GetPlayerRoutingBucket(source))
-	end)
 
 	function cleanupArea(type, radius, player)
 		if not radius then radius = "global" end
