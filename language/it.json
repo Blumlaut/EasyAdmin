@@ -108,6 +108,8 @@
     "menuOffsetguide": "Imposta l'offset della dimensione del menù\nRichiede la riapertura del menù.",
     "resetmenuOffset": "Resetta larghezza del menù",
     "takescreenshot": "Prendi uno Screenshot",
+    "forceplayerlobby": "Force Player to Your Lobby",
+    "playerlobbyforced": "Il giocatore è stato costretto ad andare nella tua lobby",
     "copydiscord": "Copy Discord ID",
     "discordcopied": "Discord ID Copiato.",
     "nodiscordpresent": "Nessun ID Discordia trovato.",

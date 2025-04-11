@@ -793,6 +793,15 @@ function GenerateMenu() -- this is a big ass function
 							playermanagement:Visible(true)
 						end	
 					end
+
+					if permissions["player.lobby"] then
+						lobbyItem = NativeUI.CreateItem(GetLocalisedText("forceplayerlobby"), "")
+						thisPlayer:AddItem(lobbyItem)
+						lobbyItem.Activated = function(ParentMenu, SelectedItem)
+							TriggerServerEvent("EasyAdmin:ForcePlayerLobby", thePlayer.id)
+							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerlobbyforced"))
+						end
+					end
 					
 					local copyDiscordItem = NativeUI.CreateItem(GetLocalisedText("copydiscord"), "")
 					thisPlayer:AddItem(copyDiscordItem)

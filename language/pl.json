@@ -108,6 +108,8 @@
     "menuOffsetguide": "Ustaw Przesunięcie menu\nWymaga Ponownego otwarcie menu.",
     "resetmenuOffset": "Resetuj przesunięcie menu ",
     "takescreenshot": "Zrzut ekranu",
+    "forceplayerlobby": "Zmuś gracza do swojego lobby",
+    "playerlobbyforced": "Gracz został zmuszony do wejścia do lobby.",
     "copydiscord": "Skopiuj identyfikator Discord",
     "discordcopied": "Identyfikator Discord został skopiowany do schowka.",
     "nodiscordpresent": "Ten gracz nie ma przypisanego identyfikatora Discord.",

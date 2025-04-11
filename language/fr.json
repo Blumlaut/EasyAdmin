@@ -109,6 +109,8 @@
     "menuOffsetguide": "Définir la taille du menu\nNécessite la réouverture du menu.",
     "resetmenuOffset": "Réinitialiser la largeur du menu",
     "takescreenshot": "Faire une capture d'écran",
+    "forceplayerlobby": "Forcer le joueur à rejoindre votre lobby",
+    "playerlobbyforced": "Le joueur a été forcé de rejoindre votre lobby.",
     "copydiscord": "Copier l'identifiant Discord",
     "discordcopied": "Identifiant Discord copié dans le presse-papiers.",
     "nodiscordpresent": "Aucun identifiant Discord n'a été trouvé.",

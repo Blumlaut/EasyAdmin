@@ -108,6 +108,8 @@
     "menuOffsetguide": "Establecer tamaño del menu\nRequiere reabrir el menú.",
     "resetmenuOffset": "Reestablecer tamaño del menu",
     "takescreenshot": "Sacar una captura",
+    "forceplayerlobby": "Fuerza al jugador a tu lobby",
+    "playerlobbyforced": "El jugador ha sido forzado a ir a tu lobby.",
     "copydiscord": "Copiar ID de Discord",
     "discordcopied": "ID de Discord copiada al portapapeles",
     "nodiscordpresent": "No hay ID de Discord disponible.",
