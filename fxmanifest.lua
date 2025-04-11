@@ -87,5 +87,6 @@ convar_category 'EasyAdmin' {
         { "Channel for Discord bot to log", "$ea_botLogChannel", "CV_STRING", "none" },
         { "Channel for Discord bot to enable live status", "$ea_botStatusChannel", "CV_STRING", "true" },
         { "Enable Allowlist", "$ea_enableAllowlist", "CV_BOOL", "false" },
+        { "Routing Bucket Options", "$ea_routingBucketOptions", "CV_BOOL", "true" },
     }
 }

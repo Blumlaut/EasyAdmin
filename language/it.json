@@ -108,9 +108,14 @@
     "menuOffsetguide": "Imposta l'offset della dimensione del menù\nRichiede la riapertura del menù.",
     "resetmenuOffset": "Resetta larghezza del menù",
     "takescreenshot": "Prendi uno Screenshot",
-    "forceplayerbucket": "Il giocatore è stato costretto a entrare nel tuo bucket.",
-    "forceplayerbucketguide": "Forza il giocatore a spostarsi nel tuo bucket nel caso in cui ti trovi in ​​un bucket diverso.",
+
+    "routingbucket": "Secchio",
+    "joinplayerbucket": "Unisciti al secchio dei giocatori",
+    "forceplayerbucket": "Forza il giocatore a entrare nel tuo bucket",
+    "bucketguide": "Costringe uno dei due giocatori o te stesso a seguire il percorso dell'altro.",
+    "playerbucketjoined": "Gruppo giocatori iscritti.",
     "playerbucketforced": "Il giocatore è stato costretto a entrare nel tuo bucket.",
+
     "copydiscord": "Copy Discord ID",
     "discordcopied": "Discord ID Copiato.",
     "nodiscordpresent": "Nessun ID Discordia trovato.",

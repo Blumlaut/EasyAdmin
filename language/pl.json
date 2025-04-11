@@ -108,9 +108,14 @@
     "menuOffsetguide": "Ustaw Przesunięcie menu\nWymaga Ponownego otwarcie menu.",
     "resetmenuOffset": "Resetuj przesunięcie menu ",
     "takescreenshot": "Zrzut ekranu",
-    "forceplayerbucket": "Gracz został zmuszony do wejścia do twojego wiadra.",
-    "forceplayerbucketguide": "Zmusza gracza do korzystania z twojego koszyka, jeśli jesteś w innym koszyku.",
+
+    "routingbucket": "Wiaderko",
+    "joinplayerbucket": "Dołącz do grupy graczy",
+    "forceplayerbucket": "Zmuś gracza do swojego wiadra",
+    "bucketguide": "Zmusza jednego z graczy lub ciebie do przejścia na stronę drugiej osoby.",
+    "playerbucketjoined": "Dołączyłem do grupy graczy.",
     "playerbucketforced": "Gracz został zmuszony do wejścia do twojego wiadra.",
+
     "copydiscord": "Skopiuj identyfikator Discord",
     "discordcopied": "Identyfikator Discord został skopiowany do schowka.",
     "nodiscordpresent": "Ten gracz nie ma przypisanego identyfikatora Discord.",

@@ -378,6 +378,12 @@ Citizen.CreateThread(function()
 		end
 	end)
 
+	RegisterServerEvent("EasyAdmin:JoinPlayerRoutingBucket", function(playerId)
+		if DoesPlayerHavePermission(source, "player.bucket") then
+			SetPlayerRoutingBucket(source, GetPlayerRoutingBucket(playerId))
+		end
+	end)
+	
 	RegisterServerEvent("EasyAdmin:ForcePlayerRoutingBucket", function(playerId)
 		if DoesPlayerHavePermission(source, "player.bucket") then
 			SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))

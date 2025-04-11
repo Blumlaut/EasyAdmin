@@ -109,9 +109,14 @@
     "menuOffsetguide": "Menü länger machen.\nErfordert erneutes öffnen des Adminpanels.",
     "resetmenuOffset": "Menüoffset Zurücksetzen",
     "takescreenshot": "Screenshot erstellen",
+
+    "routingbucket": "Eimer",
+    "joinplayerbucket": "Treten Sie dem Player Bucket bei",
     "forceplayerbucket": "Spieler zu Ihrem Bucket zwingen",
-    "forceplayerbucketguide": "Zwingt den Spieler zu Ihrem Bucket, falls Sie sich in einem anderen befinden.",
+    "bucketguide": "Zwingt entweder den Spieler oder Sie selbst in den Routing-Bucket des anderen.",
+    "playerbucketjoined": "Dem Spieler-Bucket beigetreten.",
     "playerbucketforced": "Der Spieler wurde zu Ihrem Bucket gezwungen.",
+
     "copydiscord": "Discord-ID kopieren",
     "discordcopied": "Discord-ID in die Zwischenablage kopiert.",
     "nodiscordpresent": "Keine Discord-ID gefunden.",

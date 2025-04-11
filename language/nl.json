@@ -109,9 +109,14 @@
     "menuOffsetguide": "Stel Menu Grootte in\nVereist menu Heropenen",
     "resetmenuOffset": "Reset Menu Grootte",
     "takescreenshot": "Neem Schermafbeelding",
+
+    "routingbucket": "Emmer",
+    "joinplayerbucket": "Sluit je aan bij de spelersbucket",
     "forceplayerbucket": "Dwing speler naar je bucket",
-    "forceplayerbucketguide": "Dwingt de speler om naar jouw bucket te gaan als jij je in een andere bucket bevindt.",
+    "bucketguide": "Dwingt een van de spelers of jezelf om in de route-emmer van de ander te terechtkomen.",
+    "playerbucketjoined": "Speler-bucket toegevoegd.",
     "playerbucketforced": "Speler is gedwongen naar jouw bucket te gaan.",
+
     "copydiscord": "Kopieer Discord-ID",
     "discordcopied": "Discord ID gekopieerd naar klembord.",
     "nodiscordpresent": "Geen Discord ID gevonden.",

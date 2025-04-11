@@ -109,9 +109,14 @@
     "menuOffsetguide": "Définir la taille du menu\nNécessite la réouverture du menu.",
     "resetmenuOffset": "Réinitialiser la largeur du menu",
     "takescreenshot": "Faire une capture d'écran",
+
+    "routingbucket": "Seau",
+    "joinplayerbucket": "Rejoindre le bucket de joueurs",
     "forceplayerbucket": "Forcer le joueur à rejoindre votre bucket",
-    "forceplayerbucketguide": "Force le joueur à rejoindre votre bucket au cas où vous seriez dans un bucket différent.",
+    "bucketguide": "Force l'un des joueurs ou vous-même à entrer dans le compartiment de routage de l'autre.",
+    "playerbucketjoined": "A rejoint le groupe de joueurs.",
     "playerbucketforced": "Le joueur a été forcé de rejoindre votre seau.",
+    
     "copydiscord": "Copier l'identifiant Discord",
     "discordcopied": "Identifiant Discord copié dans le presse-papiers.",
     "nodiscordpresent": "Aucun identifiant Discord n'a été trouvé.",

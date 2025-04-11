@@ -794,12 +794,23 @@ function GenerateMenu() -- this is a big ass function
 						end	
 					end
 
-					if permissions["player.routingbucket"] then
-						bucketItem = NativeUI.CreateItem(GetLocalisedText("forceplayerbucket"), GetLocalisedText("forceplayerbucketguide"))
-						thisPlayer:AddItem(bucketItem)
-						bucketItem.Activated = function(ParentMenu, SelectedItem)
-							TriggerServerEvent("EasyAdmin:ForcePlayerRoutingBucket", thePlayer.id)
-							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketforced"))
+					if GetConvar("ea_routingBucketOptions", "true") == "true" then
+						if permissions["player.bucket"] then
+							local sl = {GetLocalisedText("joinplayerbucket"), GetLocalisedText("forceplayerbucket")}
+							local bucketItem = NativeUI.CreateListItem(GetLocalisedText("routingbucket"), sl, 1, GetLocalisedText("bucketguide"))
+							thisPlayer:AddItem(bucketItem)
+							bucketItem.OnListSelected = function(sender, item, index)
+								if item == bucketItem then
+									i = item:IndexToItem(index)
+									if i == GetLocalisedText("joinplayerbucket") then
+										TriggerServerEvent("EasyAdmin:JoinPlayerRoutingBucket", thePlayer.id)
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketjoined"))
+									elseif i == GetLocalisedText("forceplayerbucket") then
+										TriggerServerEvent("EasyAdmin:ForcePlayerRoutingBucket", thePlayer.id)
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketforced"))
+									end
+								end
+							end
 						end
 					end
 					
