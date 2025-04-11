@@ -794,12 +794,12 @@ function GenerateMenu() -- this is a big ass function
 						end	
 					end
 
-					if permissions["player.lobby"] then
-						lobbyItem = NativeUI.CreateItem(GetLocalisedText("forceplayerlobby"), "")
-						thisPlayer:AddItem(lobbyItem)
-						lobbyItem.Activated = function(ParentMenu, SelectedItem)
-							TriggerServerEvent("EasyAdmin:ForcePlayerLobby", thePlayer.id)
-							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerlobbyforced"))
+					if permissions["player.routingbucket"] then
+						bucketItem = NativeUI.CreateItem(GetLocalisedText("forceplayerbucket"), GetLocalisedText("forceplayerbucketguide"))
+						thisPlayer:AddItem(bucketItem)
+						bucketItem.Activated = function(ParentMenu, SelectedItem)
+							TriggerServerEvent("EasyAdmin:ForcePlayerRoutingBucket", thePlayer.id)
+							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketforced"))
 						end
 					end
 					

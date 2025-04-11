@@ -378,7 +378,7 @@ Citizen.CreateThread(function()
 		end
 	end)
 
-	RegisterServerEvent("EasyAdmin:ForcePlayerLobby", function(playerId)
+	RegisterServerEvent("EasyAdmin:ForcePlayerRoutingBucket", function(playerId)
 		SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))
 	end)
 
