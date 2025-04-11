@@ -108,6 +108,14 @@
     "menuOffsetguide": "Establecer tamaño del menu\nRequiere reabrir el menú.",
     "resetmenuOffset": "Reestablecer tamaño del menu",
     "takescreenshot": "Sacar una captura",
+
+    "routingbucket": "Balde",
+    "joinplayerbucket": "Únete al grupo de jugadores",
+    "forceplayerbucket": "Fuerza al jugador a tu cubo",
+    "bucketguide": "Fuerza a uno de los jugadores o a ti mismo a entrar en el grupo de rutas del otro.",
+    "playerbucketjoined": "Se unió al grupo de jugadores.",
+    "playerbucketforced": "El jugador ha sido forzado a tu balde.",
+
     "copydiscord": "Copiar ID de Discord",
     "discordcopied": "ID de Discord copiada al portapapeles",
     "nodiscordpresent": "No hay ID de Discord disponible.",

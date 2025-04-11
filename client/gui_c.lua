@@ -793,6 +793,26 @@ function GenerateMenu() -- this is a big ass function
 							playermanagement:Visible(true)
 						end	
 					end
+
+					if GetConvar("ea_routingBucketOptions", "true") == "true" then
+						if permissions["player.bucket"] then
+							local sl = {GetLocalisedText("joinplayerbucket"), GetLocalisedText("forceplayerbucket")}
+							local bucketItem = NativeUI.CreateListItem(GetLocalisedText("routingbucket"), sl, 1, GetLocalisedText("bucketguide"))
+							thisPlayer:AddItem(bucketItem)
+							bucketItem.OnListSelected = function(sender, item, index)
+								if item == bucketItem then
+									i = item:IndexToItem(index)
+									if i == GetLocalisedText("joinplayerbucket") then
+										TriggerServerEvent("EasyAdmin:JoinPlayerRoutingBucket", thePlayer.id)
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketjoined"))
+									elseif i == GetLocalisedText("forceplayerbucket") then
+										TriggerServerEvent("EasyAdmin:ForcePlayerRoutingBucket", thePlayer.id)
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketforced"))
+									end
+								end
+							end
+						end
+					end
 					
 					local copyDiscordItem = NativeUI.CreateItem(GetLocalisedText("copydiscord"), "")
 					thisPlayer:AddItem(copyDiscordItem)
