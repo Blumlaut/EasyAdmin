@@ -794,21 +794,25 @@ function GenerateMenu() -- this is a big ass function
 						end	
 					end
 
-					if GetConvar("ea_routingBucketOptions", "false") == "true" then
-						if permissions["player.bucket"] then
-							local sl = {GetLocalisedText("joinplayerbucket"), GetLocalisedText("forceplayerbucket")}
-							local bucketItem = NativeUI.CreateListItem(GetLocalisedText("routingbucket"), sl, 1, GetLocalisedText("bucketguide"))
-							thisPlayer:AddItem(bucketItem)
-							bucketItem.OnListSelected = function(sender, item, index)
-								if item == bucketItem then
-									i = item:IndexToItem(index)
-									if i == GetLocalisedText("joinplayerbucket") then
-										TriggerServerEvent("EasyAdmin:JoinPlayerRoutingBucket", thePlayer.id)
-										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketjoined"))
-									elseif i == GetLocalisedText("forceplayerbucket") then
-										TriggerServerEvent("EasyAdmin:ForcePlayerRoutingBucket", thePlayer.id)
-										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketforced"))
-									end
+					if GetConvar("ea_routingBucketOptions", "false") == "true" and (permissions["player.bucketjoin"] or permissions["player.bucketforce"]) then
+						local options = {}
+						if permissions["player.bucketjoin"] then
+							table.insert(options, GetLocalisedText("joinplayerbucket"))
+						end
+						if permissions["player.bucketforce"] then
+							table.insert(options, GetLocalisedText("forceplayerbucket"))
+						end
+						local bucketItem = NativeUI.CreateListItem(GetLocalisedText("routingbucket"), options, 1, GetLocalisedText("bucketguide"))
+						thisPlayer:AddItem(bucketItem)
+						bucketItem.OnListSelected = function(sender, item, index)
+							if item == bucketItem then
+								i = item:IndexToItem(index)
+								if i == GetLocalisedText("joinplayerbucket") then
+									TriggerServerEvent("EasyAdmin:JoinPlayerRoutingBucket", thePlayer.id)
+									TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketjoined"))
+								elseif i == GetLocalisedText("forceplayerbucket") then
+									TriggerServerEvent("EasyAdmin:ForcePlayerRoutingBucket", thePlayer.id)
+									TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("playerbucketforced"))
 								end
 							end
 						end
