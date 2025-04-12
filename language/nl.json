@@ -110,12 +110,12 @@
     "resetmenuOffset": "Reset Menu Grootte",
     "takescreenshot": "Neem Schermafbeelding",
 
-    "routingbucket": "Emmer",
-    "joinplayerbucket": "Sluit je aan bij de spelersbucket",
-    "forceplayerbucket": "Dwing speler naar je bucket",
-    "bucketguide": "Dwingt een van de spelers of jezelf om in de route-emmer van de ander te terechtkomen.",
-    "playerbucketjoined": "Speler-bucket toegevoegd.",
-    "playerbucketforced": "Speler is gedwongen naar jouw bucket te gaan.",
+    "routingbucket": "Bucket",
+    "joinplayerbucket": "Word lid van de speler Bucket",
+    "forceplayerbucket": "Forceer de speler naar jouw Bucket",
+    "bucketguide": "Dwingt ofwel de speler of jezelf om in de routing Bucket van de ander te stappen.",
+    "playerbucketjoined": "Heeft de speler Bucket betreden.",
+    "playerbucketforced": "De speler is gedwongen tot jouw Bucket.",
 
     "copydiscord": "Kopieer Discord-ID",
     "discordcopied": "Discord ID gekopieerd naar klembord.",

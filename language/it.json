@@ -109,12 +109,12 @@
     "resetmenuOffset": "Resetta larghezza del menù",
     "takescreenshot": "Prendi uno Screenshot",
 
-    "routingbucket": "Secchio",
-    "joinplayerbucket": "Unisciti al secchio dei giocatori",
-    "forceplayerbucket": "Forza il giocatore a entrare nel tuo bucket",
-    "bucketguide": "Costringe uno dei due giocatori o te stesso a seguire il percorso dell'altro.",
-    "playerbucketjoined": "Gruppo giocatori iscritti.",
-    "playerbucketforced": "Il giocatore è stato costretto a entrare nel tuo bucket.",
+    "routingbucket": "Bucket",
+    "joinplayerbucket": "Unisciti al Bucket del giocatore",
+    "forceplayerbucket": "Costringe il giocatore ad entrare nel tuo Bucket",
+    "bucketguide": "Costringe sia il giocatore che te stesso ad entrare nel Routing Bucket dell'altro.",
+    "playerbucketjoined": "È stato unito il Bucket del giocatore.",
+    "playerbucketforced": "Il giocatore è stato costretto nel tuo Bucket.",
 
     "copydiscord": "Copy Discord ID",
     "discordcopied": "Discord ID Copiato.",

@@ -110,12 +110,12 @@
     "resetmenuOffset": "Menüoffset Zurücksetzen",
     "takescreenshot": "Screenshot erstellen",
 
-    "routingbucket": "Eimer",
-    "joinplayerbucket": "Treten Sie dem Player Bucket bei",
-    "forceplayerbucket": "Spieler zu Ihrem Bucket zwingen",
-    "bucketguide": "Zwingt entweder den Spieler oder Sie selbst in den Routing-Bucket des anderen.",
-    "playerbucketjoined": "Dem Spieler-Bucket beigetreten.",
-    "playerbucketforced": "Der Spieler wurde zu Ihrem Bucket gezwungen.",
+    "routingbucket": "Bucket",
+    "joinplayerbucket": "Tritt dem Spieler-Bucket bei",
+    "forceplayerbucket": "Zwinge den Spieler, deinem Bucket beizutreten",
+    "bucketguide": "Zwingt entweder den Spieler oder dich, in den Routing-Bucket des anderen zu gelangen.",
+    "playerbucketjoined": "Dem Spieler-Bucket wurde beigetreten.",
+    "playerbucketforced": "Der Spieler wurde in deinen Bucket gezwungen.",
 
     "copydiscord": "Discord-ID kopieren",
     "discordcopied": "Discord-ID in die Zwischenablage kopiert.",

@@ -109,12 +109,12 @@
     "resetmenuOffset": "Resetuj przesunięcie menu ",
     "takescreenshot": "Zrzut ekranu",
 
-    "routingbucket": "Wiaderko",
-    "joinplayerbucket": "Dołącz do grupy graczy",
-    "forceplayerbucket": "Zmuś gracza do swojego wiadra",
-    "bucketguide": "Zmusza jednego z graczy lub ciebie do przejścia na stronę drugiej osoby.",
-    "playerbucketjoined": "Dołączyłem do grupy graczy.",
-    "playerbucketforced": "Gracz został zmuszony do wejścia do twojego wiadra.",
+    "routingbucket": "Bucket",
+    "joinplayerbucket": "Dołącz do bucket gracza",
+    "forceplayerbucket": "Wymuś dołączenie gracza do twojego bucket",
+    "bucketguide": "Wymusza, aby gracz lub Ty trafili do routing bucket drugiej strony.",
+    "playerbucketjoined": "Dołączono do bucket gracza.",
+    "playerbucketforced": "Gracz został zmuszony do twojego bucket.",
 
     "copydiscord": "Skopiuj identyfikator Discord",
     "discordcopied": "Identyfikator Discord został skopiowany do schowka.",

@@ -109,12 +109,12 @@
     "resetmenuOffset": "Reestablecer tamaño del menu",
     "takescreenshot": "Sacar una captura",
 
-    "routingbucket": "Balde",
-    "joinplayerbucket": "Únete al grupo de jugadores",
-    "forceplayerbucket": "Fuerza al jugador a tu cubo",
-    "bucketguide": "Fuerza a uno de los jugadores o a ti mismo a entrar en el grupo de rutas del otro.",
-    "playerbucketjoined": "Se unió al grupo de jugadores.",
-    "playerbucketforced": "El jugador ha sido forzado a tu balde.",
+    "routingbucket": "Bucket",
+    "joinplayerbucket": "Únete al Bucket del jugador",
+    "forceplayerbucket": "Forza al jugador a unirse a tu Bucket",
+    "bucketguide": "Obliga a que el jugador o tú mismo entren en el Routing Bucket del otro.",
+    "playerbucketjoined": "Se ha unido al Bucket del jugador.",
+    "playerbucketforced": "El jugador ha sido forzado a tu Bucket.",
 
     "copydiscord": "Copiar ID de Discord",
     "discordcopied": "ID de Discord copiada al portapapeles",
