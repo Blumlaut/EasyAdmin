@@ -162,7 +162,8 @@ local Contributors = {
  	['840695262460641311'] = true, -- Knight
 	['270731163822325770'] = true, -- Skypo
 	['186980021850734592'] = true, -- coleminer0112
-	['469916940710707231'] = true -- Grav
+	['469916940710707231'] = true, -- Grav
+	['882247593818726451'] = true, -- DukeOfCheese
 }
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
