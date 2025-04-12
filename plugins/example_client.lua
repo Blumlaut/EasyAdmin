@@ -26,15 +26,23 @@ end
 
 local function mainMenu()
 	error("You have the example plugin enabled, this is only meant to be used as a template for new plugins.")
+	-- local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId)
+	-- mainMenu:AddItem(thisItem)
 end
 
 local function cachedMenu()
+	-- local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId)
+	-- thisPlayer:AddItem(thisItem)
 end
 
 local function serverMenu()
+	-- local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId)
+	-- servermanagement:AddItem(thisItem)
 end
 
 local function settingsMenu()
+	-- local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId)
+	-- settingsMenu:AddItem(thisItem)
 end
 
 local function menuRemoved()
