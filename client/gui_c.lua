@@ -794,7 +794,7 @@ function GenerateMenu() -- this is a big ass function
 						end	
 					end
 
-					if GetConvar("ea_routingBucketOptions", "true") == "true" then
+					if GetConvar("ea_routingBucketOptions", "false") == "true" then
 						if permissions["player.bucket"] then
 							local sl = {GetLocalisedText("joinplayerbucket"), GetLocalisedText("forceplayerbucket")}
 							local bucketItem = NativeUI.CreateListItem(GetLocalisedText("routingbucket"), sl, 1, GetLocalisedText("bucketguide"))
