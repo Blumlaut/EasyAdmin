@@ -162,7 +162,8 @@ local Contributors = {
  	['840695262460641311'] = true, -- Knight
 	['270731163822325770'] = true, -- Skypo
 	['186980021850734592'] = true, -- coleminer0112
-	['469916940710707231'] = true -- Grav
+	['469916940710707231'] = true, -- Grav
+	['882247593818726451'] = true, -- DukeOfCheese
 }
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
@@ -377,7 +378,19 @@ Citizen.CreateThread(function()
 			end
 		end
 	end)
+
+	RegisterServerEvent("EasyAdmin:JoinPlayerRoutingBucket", function(playerId)
+		if DoesPlayerHavePermission(source, "player.bucket") then
+			SetPlayerRoutingBucket(source, GetPlayerRoutingBucket(playerId))
+		end
+	end)
 	
+	RegisterServerEvent("EasyAdmin:ForcePlayerRoutingBucket", function(playerId)
+		if DoesPlayerHavePermission(source, "player.bucket") then
+			SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))
+		end
+	end)
+
 	function cleanupArea(type, radius, player)
 		if not radius then radius = "global" end
 		if (onesync ~= "off" and onesync ~= "legacy") then

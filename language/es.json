@@ -108,6 +108,14 @@
     "menuOffsetguide": "Establecer tamaño del menu\nRequiere reabrir el menú.",
     "resetmenuOffset": "Reestablecer tamaño del menu",
     "takescreenshot": "Sacar una captura",
+
+    "routingbucket": "Bucket",
+    "joinplayerbucket": "Únete al Bucket del jugador",
+    "forceplayerbucket": "Forza al jugador a unirse a tu Bucket",
+    "bucketguide": "Obliga a que el jugador o tú mismo entren en el Routing Bucket del otro.",
+    "playerbucketjoined": "Se ha unido al Bucket del jugador.",
+    "playerbucketforced": "El jugador ha sido forzado a tu Bucket.",
+
     "copydiscord": "Copiar ID de Discord",
     "discordcopied": "ID de Discord copiada al portapapeles",
     "nodiscordpresent": "No hay ID de Discord disponible.",
