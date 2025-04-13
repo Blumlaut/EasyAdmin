@@ -827,6 +827,57 @@ function GenerateMenu() -- this is a big ass function
 							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
 						end
 					end
+
+					if GetConvar("ea_enableActionHistory", "true") == "true" and permissions["player.actionhistory.view"] then
+						local actionHistoryMenu = _menuPool:AddSubMenu(thisPlayer, GetLocalisedText("actionhistory"), GetLocalisedText("actionhistoryguide"), true)
+						actionHistoryMenu:SetMenuWidthOffset(menuWidth)
+						local loadingItem = NativeUI.CreateItem("Loading...", "Please wait while we fetch the data.")
+						actionHistoryMenu:AddItem(loadingItem)
+						TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.discord)
+
+						RegisterNetEvent("EasyAdmin:ReceiveActionHistory")
+						AddEventHandler("EasyAdmin:ReceiveActionHistory", function(actionHistory)
+							actionHistoryMenu:Clear()
+							if #actionHistory == 0 then
+								local noActionsItem = NativeUI.CreateItem(GetLocalisedText("noactions"), GetLocalisedText("noactionsguide"))
+								actionHistoryMenu:AddItem(noActionsItem)
+							end
+							for i, action in ipairs(actionHistory) do
+								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, action.action .. " by " .. action.moderator, "Reason: " ..  action.reason or "", true)
+								actionSubmenu:SetMenuWidthOffset(menuWidth)
+								if permissions["player.actionhistory.delete"] then
+									local actionDelete = NativeUI.CreateItem(GetLocalisedText("deleteaction"), GetLocalisedText("deleteactionguide"))
+									actionDelete.Activated = function(ParentMenu, SelectedItem)
+										TriggerServerEvent("EasyAdmin:DeleteAction", action.action, action.discord, action.reason, action.moderatorId)
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("actiondeleted"))
+										TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.discord)
+										ParentMenu:Visible(false)
+										ParentMenu.ParentMenu:Visible(true)
+									end
+									actionSubmenu:AddItem(actionDelete)
+								end
+								local punishedDiscord = NativeUI.CreateItem(GetLocalisedText("getplayerdiscord"), GetLocalisedText("getplayerdiscordguide"))
+								punishedDiscord.Activated = function(ParentMenu, SelectedItem)
+									if action.discord then
+										copyToClipboard(action.discord)
+									else
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+									end
+								end
+								actionSubmenu:AddItem(punishedDiscord)
+								local moderatorDiscord = NativeUI.CreateItem(GetLocalisedText("getmoderatordiscord"), GetLocalisedText("getmoderatordiscordguide"))
+								moderatorDiscord.Activated = function(ParentMenu, SelectedItem)
+									if action.moderatorId then
+										copyToClipboard(action.moderatorId)
+									else
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+									end
+								end
+								actionSubmenu:AddItem(moderatorDiscord)
+								actionSubmenu:RefreshIndex()
+							end
+						end)
+					end
 		
 					ExecutePluginsFunction("playerMenu", thePlayer.id)
 
