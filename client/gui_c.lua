@@ -843,12 +843,12 @@ function GenerateMenu() -- this is a big ass function
 								actionHistoryMenu:AddItem(noActionsItem)
 							end
 							for i, action in ipairs(actionHistory) do
-								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, action.action .. " by " .. action.moderator, "Reason: " ..  action.reason or "", true)
+								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "["..action.id.."] " .. action.action .. " by " .. action.moderator, "Reason: " ..  action.reason or "", true)
 								actionSubmenu:SetMenuWidthOffset(menuWidth)
 								if permissions["player.actionhistory.delete"] then
 									local actionDelete = NativeUI.CreateItem(GetLocalisedText("deleteaction"), GetLocalisedText("deleteactionguide"))
 									actionDelete.Activated = function(ParentMenu, SelectedItem)
-										TriggerServerEvent("EasyAdmin:DeleteAction", action.action, action.discord, action.reason, action.moderatorId)
+										TriggerServerEvent("EasyAdmin:DeleteAction", action.id)
 										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("actiondeleted"))
 										TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.discord)
 										ParentMenu:Visible(false)
