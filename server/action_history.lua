@@ -100,7 +100,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
                 time = os.time(),
                 id = #actions + 1,
                 banId = data.banId,
-                action = "BAN",
+                action = data.action,
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
@@ -113,7 +113,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
                 time = os.time(),
                 id = #actions + 1,
                 banId = data.banId,
-                action = "OFFLINE BAN",
+                action = data.action,
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
@@ -125,7 +125,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
-                action = "KICK",
+                action = data.action,
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
@@ -135,7 +135,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
-                action = "WARN",
+                action = data.action,
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
@@ -144,7 +144,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
         elseif data.action == "unban" then
             for i, act in ipairs(actions) do
                 if act.banId == data.banId then
-                    act["action"]  = "UNBAN"
+                    act["action"]  = data.action
                     break
                 end
             end
