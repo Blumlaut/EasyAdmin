@@ -47,16 +47,14 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     end
 end)
 
-RegisterNetEvent("EasyAdmin:DeleteAction", function(action, discordId, reason, moderatorId)
+RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
     if DoesPlayerHavePermission(source, "player.actionhistory.delete") then
-        print(action, discordId, reason, moderatorId)
-        if not action or not discordId or not reason or not moderatorId then
-            print("Invalid parameters provided for action deletion.")
+        if not actionId then
             PrintDebugMessage("Invalid parameters provided for action deletion.", 2)
             return
         end
         for i, act in ipairs(actions) do
-            if act.action == action and act.discord == discordId and act.reason == reason and act.moderatorId == moderatorId then
+            if act.id == actionId then
                 table.remove(actions, i)
                 local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode(actions, {indent = true}), -1)
                 if not saved then
@@ -100,6 +98,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
         if data.action == "ban" then
             table.insert(actions, {
                 time = os.time(),
+                id = #actions + 1,
                 action = "Ban",
                 discord = data.discord,
                 reason = data.reason,
@@ -111,6 +110,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
         elseif data.action == "kick" then
             table.insert(actions, {
                 time = os.time(),
+                id = #actions + 1,
                 action = "Kick",
                 discord = data.discord,
                 reason = data.reason,
@@ -120,6 +120,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
         elseif data.action == "warn" then
             table.insert(actions, {
                 time = os.time(),
+                id = #actions + 1,
                 action = "Warn",
                 discord = data.discord,
                 reason = data.reason,
