@@ -88,8 +88,11 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
-            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires }
+            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "offline ban", time = os.time() }
             updateBlacklist( ban )
+            if GetConvar("ea_enableActionHistory", "true") == "true" then
+                TriggerEvent("EasyAdmin:LogAction", ban)
+            end
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -493,9 +496,15 @@ function UnbanId(id)
             if GetConvar("ea_custombanlist", "false") == "true" then 
                 TriggerEvent("ea_data:removeBan", ban)
             end
+<<<<<<< HEAD
             
             -- Rebuild ban index after removing a ban
             rebuildBanIndex()
+=======
+            if GetConvar("ea_enableActionHistory", "true") == "true" then
+                TriggerEvent("EasyAdmin:LogAction", {action = "unban", banId = id })
+            end
+>>>>>>> 5013313 (Enhance action logging by adding detailed ban and unban information to action history)
         end
     end
 end

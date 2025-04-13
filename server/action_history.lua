@@ -99,7 +99,21 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
-                action = "Ban",
+                banId = data.banId,
+                action = "BAN",
+                discord = data.discord,
+                reason = data.reason,
+                moderator = data.moderator,
+                moderatorId = data.moderatorId,
+                expire = data.expire,
+                expireString = data.expireString
+            })
+        elseif data.action == "offline ban" then
+            table.insert(actions, {
+                time = os.time(),
+                id = #actions + 1,
+                banId = data.banId,
+                action = "OFFLINE BAN",
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
@@ -111,7 +125,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
-                action = "Kick",
+                action = "KICK",
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
@@ -121,14 +135,19 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
-                action = "Warn",
+                action = "WARN",
                 discord = data.discord,
                 reason = data.reason,
                 moderator = data.moderator,
                 moderatorId = data.moderatorId,
             })
         elseif data.action == "unban" then
-            return
+            for i, act in ipairs(actions) do
+                if act.banId == data.banId then
+                    act["action"]  = "UNBAN"
+                    break
+                end
+            end
         end
         PrintDebugMessage("Added the following to actions:\n"..table_to_string(data), 4)
         change=true
