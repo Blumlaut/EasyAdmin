@@ -20279,7 +20279,7 @@ var require_common2 = __commonJS({
       /**
        * Allows management and editing of emojis, stickers, and soundboard sounds
        *
-       * @deprecated This is the old name for {@apilink PermissionFlagsBits#ManageGuildExpressions}
+       * @deprecated This is the old name for {@link PermissionFlagsBits.ManageGuildExpressions}
        */
       ManageEmojisAndStickers: 1n << 30n,
       /**
@@ -20335,7 +20335,7 @@ var require_common2 = __commonJS({
        */
       SendMessagesInThreads: 1n << 38n,
       /**
-       * Allows for using Activities (applications with the {@apilink ApplicationFlags.Embedded} flag) in a voice channel
+       * Allows for using Activities (applications with the {@link ApplicationFlags.Embedded} flag) in a voice channel
        *
        * Applies to channel types: Voice
        */
@@ -21202,6 +21202,14 @@ var require_entryPoint = __commonJS({
   }
 });
 
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
+var require_internals = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
 // node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js
 var require_applicationCommands = __commonJS({
   "node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js"(exports2) {
@@ -21228,6 +21236,7 @@ var require_applicationCommands = __commonJS({
     __exportStar2(require_contextMenu(), exports2);
     __exportStar2(require_permissions(), exports2);
     __exportStar2(require_entryPoint(), exports2);
+    __exportStar2(require_internals(), exports2);
     var ApplicationCommandType;
     (function(ApplicationCommandType2) {
       ApplicationCommandType2[ApplicationCommandType2["ChatInput"] = 1] = "ChatInput";
@@ -21433,6 +21442,9 @@ var require_oauth2 = __commonJS({
       OAuth2Scopes3["MessagesRead"] = "messages.read";
       OAuth2Scopes3["RoleConnectionsWrite"] = "role_connections.write";
       OAuth2Scopes3["RPC"] = "rpc";
+      OAuth2Scopes3["RPCActivitiesWrite"] = "rpc.activities.write";
+      OAuth2Scopes3["RPCVoiceRead"] = "rpc.voice.read";
+      OAuth2Scopes3["RPCVoiceWrite"] = "rpc.voice.write";
       OAuth2Scopes3["RPCNotificationsRead"] = "rpc.notifications.read";
       OAuth2Scopes3["WebhookIncoming"] = "webhook.incoming";
       OAuth2Scopes3["Voice"] = "voice";
@@ -21706,7 +21718,7 @@ var require_v102 = __commonJS({
 });
 
 // node_modules/discord-api-types/utils/internals.js
-var require_internals = __commonJS({
+var require_internals2 = __commonJS({
   "node_modules/discord-api-types/utils/internals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -22187,7 +22199,7 @@ var require_v103 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.OAuth2Routes = exports2.RouteBases = exports2.CDNRoutes = exports2.ImageFormat = exports2.StickerPackApplicationId = exports2.Routes = exports2.APIVersion = void 0;
-    var internals_1 = require_internals();
+    var internals_1 = require_internals2();
     __exportStar2(require_common3(), exports2);
     __exportStar2(require_application2(), exports2);
     __exportStar2(require_auditLog2(), exports2);
@@ -22671,7 +22683,7 @@ var require_v103 = __commonJS({
        * - GET   `/users/{user.id}`
        * - PATCH `/users/@me`
        *
-       * @param [userId] The user ID, defaulted to `@me`
+       * @param [userId] - The user ID, defaulted to `@me`
        */
       user(userId = "@me") {
         return `/users/${userId}`;
@@ -23218,7 +23230,7 @@ var require_v103 = __commonJS({
        * Route for:
        * - GET `/embed/avatars/{index}.png`
        *
-       * The value for `index` parameter depends on whether the user is [migrated to the new username system](https://discord.com/developers/docs/change-log#unique-usernames-on-discord).
+       * The value for `index` parameter depends on whether the user is {@link https://discord.com/developers/docs/change-log#unique-usernames-on-discord | migrated to the new username system}.
        * For users on the new username system, `index` will be `(user.id >> 22) % 6`.
        * For users on the legacy username system, `index` will be `user.discriminator % 5`.
        *
@@ -23405,7 +23417,7 @@ var require_v103 = __commonJS({
       authorizationURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2Authorization()}`,
       tokenURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2TokenExchange()}`,
       /**
-       * See https://tools.ietf.org/html/rfc7009
+       * @see {@link https://tools.ietf.org/html/rfc7009}
        */
       tokenRevocationURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2TokenRevocation()}`
     };
@@ -23418,10 +23430,52 @@ var require_common4 = __commonJS({
   "node_modules/discord-api-types/rpc/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.RPCCloseEventCodes = exports2.RPCErrorCodes = void 0;
+    exports2.RPCCloseEventCodes = exports2.RPCErrorCodes = exports2.RelationshipType = exports2.VoiceConnectionStates = exports2.RPCVoiceShortcutKeyComboKeyType = exports2.RPCVoiceSettingsModeType = exports2.RPCDeviceType = void 0;
+    var RPCDeviceType;
+    (function(RPCDeviceType2) {
+      RPCDeviceType2["AudioInput"] = "audioinput";
+      RPCDeviceType2["AudioOutput"] = "audiooutput";
+      RPCDeviceType2["VideoInput"] = "videoinput";
+    })(RPCDeviceType || (exports2.RPCDeviceType = RPCDeviceType = {}));
+    var RPCVoiceSettingsModeType;
+    (function(RPCVoiceSettingsModeType2) {
+      RPCVoiceSettingsModeType2["PushToTalk"] = "PUSH_TO_TALK";
+      RPCVoiceSettingsModeType2["VoiceActivity"] = "VOICE_ACTIVITY";
+    })(RPCVoiceSettingsModeType || (exports2.RPCVoiceSettingsModeType = RPCVoiceSettingsModeType = {}));
+    var RPCVoiceShortcutKeyComboKeyType;
+    (function(RPCVoiceShortcutKeyComboKeyType2) {
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["KeyboardKey"] = 0] = "KeyboardKey";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["MouseButton"] = 1] = "MouseButton";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["KeyboardModifierKey"] = 2] = "KeyboardModifierKey";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["GamepadButton"] = 3] = "GamepadButton";
+    })(RPCVoiceShortcutKeyComboKeyType || (exports2.RPCVoiceShortcutKeyComboKeyType = RPCVoiceShortcutKeyComboKeyType = {}));
+    var VoiceConnectionStates;
+    (function(VoiceConnectionStates2) {
+      VoiceConnectionStates2["Disconnected"] = "DISCONNECTED";
+      VoiceConnectionStates2["AwaitingEndpoint"] = "AWAITING_ENDPOINT";
+      VoiceConnectionStates2["Authenticating"] = "AUTHENTICATING";
+      VoiceConnectionStates2["Connecting"] = "CONNECTING";
+      VoiceConnectionStates2["Connected"] = "CONNECTED";
+      VoiceConnectionStates2["VoiceDisconnected"] = "VOICE_DISCONNECTED";
+      VoiceConnectionStates2["VoiceConnecting"] = "VOICE_CONNECTING";
+      VoiceConnectionStates2["VoiceConnected"] = "VOICE_CONNECTED";
+      VoiceConnectionStates2["NoRoute"] = "NO_ROUTE";
+      VoiceConnectionStates2["IceChecking"] = "ICE_CHECKING";
+    })(VoiceConnectionStates || (exports2.VoiceConnectionStates = VoiceConnectionStates = {}));
+    var RelationshipType;
+    (function(RelationshipType2) {
+      RelationshipType2[RelationshipType2["None"] = 0] = "None";
+      RelationshipType2[RelationshipType2["Friend"] = 1] = "Friend";
+      RelationshipType2[RelationshipType2["Blocked"] = 2] = "Blocked";
+      RelationshipType2[RelationshipType2["PendingIncoming"] = 3] = "PendingIncoming";
+      RelationshipType2[RelationshipType2["PendingOutgoing"] = 4] = "PendingOutgoing";
+      RelationshipType2[RelationshipType2["Implicit"] = 5] = "Implicit";
+    })(RelationshipType || (exports2.RelationshipType = RelationshipType = {}));
     var RPCErrorCodes;
     (function(RPCErrorCodes2) {
       RPCErrorCodes2[RPCErrorCodes2["UnknownError"] = 1e3] = "UnknownError";
+      RPCErrorCodes2[RPCErrorCodes2["ServiceUnavailable"] = 1001] = "ServiceUnavailable";
+      RPCErrorCodes2[RPCErrorCodes2["TransactionAborted"] = 1002] = "TransactionAborted";
       RPCErrorCodes2[RPCErrorCodes2["InvalidPayload"] = 4e3] = "InvalidPayload";
       RPCErrorCodes2[RPCErrorCodes2["InvalidCommand"] = 4002] = "InvalidCommand";
       RPCErrorCodes2[RPCErrorCodes2["InvalidGuild"] = 4003] = "InvalidGuild";
@@ -23432,14 +23486,27 @@ var require_common4 = __commonJS({
       RPCErrorCodes2[RPCErrorCodes2["InvalidOrigin"] = 4008] = "InvalidOrigin";
       RPCErrorCodes2[RPCErrorCodes2["InvalidToken"] = 4009] = "InvalidToken";
       RPCErrorCodes2[RPCErrorCodes2["InvalidUser"] = 4010] = "InvalidUser";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidInvite"] = 4011] = "InvalidInvite";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidActivityJoinRequest"] = 4012] = "InvalidActivityJoinRequest";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidEntitlement"] = 4013] = "InvalidEntitlement";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidGiftCode"] = 4014] = "InvalidGiftCode";
       RPCErrorCodes2[RPCErrorCodes2["OAuth2Error"] = 5e3] = "OAuth2Error";
       RPCErrorCodes2[RPCErrorCodes2["SelectChannelTimedOut"] = 5001] = "SelectChannelTimedOut";
       RPCErrorCodes2[RPCErrorCodes2["GetGuildTimedOut"] = 5002] = "GetGuildTimedOut";
       RPCErrorCodes2[RPCErrorCodes2["SelectVoiceForceRequired"] = 5003] = "SelectVoiceForceRequired";
       RPCErrorCodes2[RPCErrorCodes2["CaptureShortcutAlreadyListening"] = 5004] = "CaptureShortcutAlreadyListening";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidActivitySecret"] = 5005] = "InvalidActivitySecret";
+      RPCErrorCodes2[RPCErrorCodes2["NoEligibleActivity"] = 5006] = "NoEligibleActivity";
+      RPCErrorCodes2[RPCErrorCodes2["PurchaseCanceled"] = 5007] = "PurchaseCanceled";
+      RPCErrorCodes2[RPCErrorCodes2["PurchaseError"] = 5008] = "PurchaseError";
+      RPCErrorCodes2[RPCErrorCodes2["UnauthorizedForAchievement"] = 5009] = "UnauthorizedForAchievement";
+      RPCErrorCodes2[RPCErrorCodes2["RateLimited"] = 5010] = "RateLimited";
     })(RPCErrorCodes || (exports2.RPCErrorCodes = RPCErrorCodes = {}));
     var RPCCloseEventCodes;
     (function(RPCCloseEventCodes2) {
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseNormal"] = 1e3] = "CloseNormal";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseUnsupported"] = 1003] = "CloseUnsupported";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseAbnormal"] = 1006] = "CloseAbnormal";
       RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidClientId"] = 4e3] = "InvalidClientId";
       RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidOrigin"] = 4001] = "InvalidOrigin";
       RPCCloseEventCodes2[RPCCloseEventCodes2["RateLimited"] = 4002] = "RateLimited";
@@ -23471,7 +23538,94 @@ var require_v104 = __commonJS({
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RPCEvents = exports2.RPCCommands = exports2.RPCVersion = void 0;
     __exportStar2(require_common4(), exports2);
+    exports2.RPCVersion = "1";
+    var RPCCommands;
+    (function(RPCCommands2) {
+      RPCCommands2["AcceptActivityInvite"] = "ACCEPT_ACTIVITY_INVITE";
+      RPCCommands2["ActivityInviteUser"] = "ACTIVITY_INVITE_USER";
+      RPCCommands2["Authenticate"] = "AUTHENTICATE";
+      RPCCommands2["Authorize"] = "AUTHORIZE";
+      RPCCommands2["BraintreePopupBridgeCallback"] = "BRAINTREE_POPUP_BRIDGE_CALLBACK";
+      RPCCommands2["BrowserHandoff"] = "BROWSER_HANDOFF";
+      RPCCommands2["CloseActivityJoinRequest"] = "CLOSE_ACTIVITY_JOIN_REQUEST";
+      RPCCommands2["ConnectionsCallback"] = "CONNECTIONS_CALLBACK";
+      RPCCommands2["CreateChannelInvite"] = "CREATE_CHANNEL_INVITE";
+      RPCCommands2["DeepLink"] = "DEEP_LINK";
+      RPCCommands2["Dispatch"] = "DISPATCH";
+      RPCCommands2["GetApplicationTicket"] = "GET_APPLICATION_TICKET";
+      RPCCommands2["GetChannel"] = "GET_CHANNEL";
+      RPCCommands2["GetChannels"] = "GET_CHANNELS";
+      RPCCommands2["GetEntitlementTicket"] = "GET_ENTITLEMENT_TICKET";
+      RPCCommands2["GetEntitlements"] = "GET_ENTITLEMENTS";
+      RPCCommands2["GetGuild"] = "GET_GUILD";
+      RPCCommands2["GetGuilds"] = "GET_GUILDS";
+      RPCCommands2["GetImage"] = "GET_IMAGE";
+      RPCCommands2["GetNetworkingConfig"] = "GET_NETWORKING_CONFIG";
+      RPCCommands2["GetRelationships"] = "GET_RELATIONSHIPS";
+      RPCCommands2["GetSelectedVoiceChannel"] = "GET_SELECTED_VOICE_CHANNEL";
+      RPCCommands2["GetSkus"] = "GET_SKUS";
+      RPCCommands2["GetUser"] = "GET_USER";
+      RPCCommands2["GetVoiceSettings"] = "GET_VOICE_SETTINGS";
+      RPCCommands2["GiftCodeBrowser"] = "GIFT_CODE_BROWSER";
+      RPCCommands2["GuildTemplateBrowser"] = "GUILD_TEMPLATE_BROWSER";
+      RPCCommands2["InviteBrowser"] = "INVITE_BROWSER";
+      RPCCommands2["NetworkingCreateToken"] = "NETWORKING_CREATE_TOKEN";
+      RPCCommands2["NetworkingPeerMetrics"] = "NETWORKING_PEER_METRICS";
+      RPCCommands2["NetworkingSystemMetrics"] = "NETWORKING_SYSTEM_METRICS";
+      RPCCommands2["OpenOverlayActivityInvite"] = "OPEN_OVERLAY_ACTIVITY_INVITE";
+      RPCCommands2["OpenOverlayGuildInvite"] = "OPEN_OVERLAY_GUILD_INVITE";
+      RPCCommands2["OpenOverlayVoiceSettings"] = "OPEN_OVERLAY_VOICE_SETTINGS";
+      RPCCommands2["Overlay"] = "OVERLAY";
+      RPCCommands2["SelectTextChannel"] = "SELECT_TEXT_CHANNEL";
+      RPCCommands2["SelectVoiceChannel"] = "SELECT_VOICE_CHANNEL";
+      RPCCommands2["SendActivityJoinInvite"] = "SEND_ACTIVITY_JOIN_INVITE";
+      RPCCommands2["SetActivity"] = "SET_ACTIVITY";
+      RPCCommands2["SetCertifiedDevices"] = "SET_CERTIFIED_DEVICES";
+      RPCCommands2["SetOverlayLocked"] = "SET_OVERLAY_LOCKED";
+      RPCCommands2["SetUserVoiceSettings"] = "SET_USER_VOICE_SETTINGS";
+      RPCCommands2["SetUserVoiceSettings2"] = "SET_USER_VOICE_SETTINGS_2";
+      RPCCommands2["SetVoiceSettings"] = "SET_VOICE_SETTINGS";
+      RPCCommands2["SetVoiceSettings2"] = "SET_VOICE_SETTINGS_2";
+      RPCCommands2["StartPurchase"] = "START_PURCHASE";
+      RPCCommands2["Subscribe"] = "SUBSCRIBE";
+      RPCCommands2["Unsubscribe"] = "UNSUBSCRIBE";
+      RPCCommands2["ValidateApplication"] = "VALIDATE_APPLICATION";
+    })(RPCCommands || (exports2.RPCCommands = RPCCommands = {}));
+    var RPCEvents;
+    (function(RPCEvents2) {
+      RPCEvents2["ActivityInvite"] = "ACTIVITY_INVITE";
+      RPCEvents2["ActivityJoin"] = "ACTIVITY_JOIN";
+      RPCEvents2["ActivityJoinRequest"] = "ACTIVITY_JOIN_REQUEST";
+      RPCEvents2["ActivitySpectate"] = "ACTIVITY_SPECTATE";
+      RPCEvents2["ChannelCreate"] = "CHANNEL_CREATE";
+      RPCEvents2["CurrentUserUpdate"] = "CURRENT_USER_UPDATE";
+      RPCEvents2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      RPCEvents2["EntitlementDelete"] = "ENTITLEMENT_DELETE";
+      RPCEvents2["Error"] = "ERROR";
+      RPCEvents2["GameJoin"] = "GAME_JOIN";
+      RPCEvents2["GameSpectate"] = "GAME_SPECTATE";
+      RPCEvents2["GuildCreate"] = "GUILD_CREATE";
+      RPCEvents2["GuildStatus"] = "GUILD_STATUS";
+      RPCEvents2["MessageCreate"] = "MESSAGE_CREATE";
+      RPCEvents2["MessageDelete"] = "MESSAGE_DELETE";
+      RPCEvents2["MessageUpdate"] = "MESSAGE_UPDATE";
+      RPCEvents2["NotificationCreate"] = "NOTIFICATION_CREATE";
+      RPCEvents2["Overlay"] = "OVERLAY";
+      RPCEvents2["OverlayUpdate"] = "OVERLAY_UPDATE";
+      RPCEvents2["Ready"] = "READY";
+      RPCEvents2["RelationshipUpdate"] = "RELATIONSHIP_UPDATE";
+      RPCEvents2["SpeakingStart"] = "SPEAKING_START";
+      RPCEvents2["SpeakingStop"] = "SPEAKING_STOP";
+      RPCEvents2["VoiceChannelSelect"] = "VOICE_CHANNEL_SELECT";
+      RPCEvents2["VoiceConnectionStatus"] = "VOICE_CONNECTION_STATUS";
+      RPCEvents2["VoiceSettingsUpdate"] = "VOICE_SETTINGS_UPDATE";
+      RPCEvents2["VoiceSettingsUpdate2"] = "VOICE_SETTINGS_UPDATE_2";
+      RPCEvents2["VoiceStateCreate"] = "VOICE_STATE_CREATE";
+      RPCEvents2["VoiceStateDelete"] = "VOICE_STATE_DELETE";
+      RPCEvents2["VoiceStateUpdate"] = "VOICE_STATE_UPDATE";
+    })(RPCEvents || (exports2.RPCEvents = RPCEvents = {}));
   }
 });
 
@@ -23569,6 +23723,7 @@ var require_v106 = __commonJS({
     __exportStar2(require_v102(), exports2);
     __exportStar2(require_v103(), exports2);
     __exportStar2(require_v104(), exports2);
+    __exportStar2(require_internals2(), exports2);
     exports2.Utils = require_v105();
   }
 });
