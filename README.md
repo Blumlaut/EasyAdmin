@@ -39,11 +39,6 @@ EasyAdmin is a feature-rich administration suite designed specifically for FiveM
 
 ![image](https://github.com/Gravxd/EasyAdmin/assets/75702884/8a4e4694-5ff5-429a-986c-ab43148929a8)
 
-
-### Dependencies
-
-EasyAdmin requires FiveM's default `yarn` resource, which is included in [cfx-server-data](https://github.com/citizenfx/cfx-server-data) when installing the server.
-
 ### Installation
 
 Visit our Documentation [here](https://easyadmin.readthedocs.io/) for detailed installation and configuration instructions.
