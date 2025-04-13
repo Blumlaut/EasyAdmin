@@ -53,10 +53,13 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
-            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires) }
+            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "ban", time = os.time() }
             updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
+            if GetConvar("ea_enableActionHistory", "true") == "true" then
+                TriggerEvent("EasyAdmin:LogAction", ban)
+            end
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif isPlayerImmune(playerId) then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))

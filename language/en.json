@@ -115,6 +115,18 @@
     "bucketguide": "Forces either player or yourself into the other's routing bucket.",
     "playerbucketjoined": "Joined player bucket.",
     "playerbucketforced": "Player has been forced to your bucket.",
+
+    "actionhistory": "Action History",
+    "actionhistoryguide": "View moderation actions against this user.",
+    "noactions": "No actions found.",
+    "noactionsguide": "No past moderation actions for this user.",
+    "deleteaction": "Delete Action",
+    "deleteactionguide": "Delete this action from the history.",
+    "actiondeleted": "Action deleted.",
+    "getplayerdiscord": "Copy Discord of Player",
+    "getplayerdiscordguide": "Copy the Discord ID of the Player.",
+    "getmoderatordiscord": "Copy Discord of Moderator",
+    "getmoderatordiscordguide": "Copy the Discord ID of the Moderator.",
     
     "copydiscord": "Copy Discord ID",
     "discordcopied": "Discord ID copied to clipboard.",

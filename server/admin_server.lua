@@ -338,6 +338,14 @@ Citizen.CreateThread(function()
 			reason = formatShortcuts(reason)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(src, true).." for "..reason, 3)
+			if GetConvar("ea_enableActionHistory", "true") == "true" then
+				local playerDiscord = GetPlayerIdentifierByType(playerId, 'discord')
+				local discordId
+				if playerDiscord then
+					discordId = playerDiscord:match("discord:(%d+)")
+					TriggerEvent("EasyAdmin:LogAction", { action = "kick", license = discordId, reason = reason, banner = getName(src, true, true)})
+				end
+            end
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(src), reason) )
 		elseif isPlayerImmune(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("adminimmune"))
@@ -859,7 +867,7 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("invalidplayer"))
 			return
 		end
-		
+
 		if DoesPlayerHavePermission(src,"player.warn") and not isPlayerImmune(id) and CheckAdminCooldown(src, "warn") then
 			SetAdminCooldown(src, "warn")
 			reason = formatShortcuts(reason)
@@ -874,6 +882,9 @@ Citizen.CreateThread(function()
 			})
 			TriggerClientEvent("txcl:showWarning", id, getName(src), string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings), GetLocalisedText("warnedtitle"), GetLocalisedText("warnedby"),GetLocalisedText("warndismiss"))
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src, false, true), getName(id, true, true), reason, WarnedPlayers[id].warns, maxWarnings), "warn", 16711680)
+			if GetConvar("ea_enableActionHistory", "true") == "true" then
+                TriggerEvent("EasyAdmin:LogAction", { action = "warn", discord = CachedPlayers[id].discord, reason = reason, moderator = getName(source, true, false), moderatorId = CachedPlayers[source].discord })
+            end
 			if WarnedPlayers[id].warns >= maxWarnings then
 				if GetConvar("ea_warnAction", "kick") == "kick" then
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(id, true, true), reason), "kick", 16711680)
