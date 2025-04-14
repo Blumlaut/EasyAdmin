@@ -845,6 +845,17 @@ function GenerateMenu() -- this is a big ass function
 							for i, action in ipairs(actionHistory) do
 								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "["..action.id.."] " .. action.action .. " by " .. action.moderator, "Reason: " ..  action.reason or "", true)
 								actionSubmenu:SetMenuWidthOffset(menuWidth)
+								if action.action == "BAN" and permissions["player.ban.remove"] then
+									local actionUnban = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+									actionUnban.Activated = function(ParentMenu, SelectedItem)
+										TriggerServerEvent("EasyAdmin:UnbanPlayer", action.id)
+										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("unbanplayer"))
+										TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.discord)
+										ParentMenu:Visible(false)
+										ParentMenu.ParentMenu:Visible(true)
+									end
+									actionSubmenu:AddItem(actionUnban)
+								end
 								if permissions["player.actionhistory.delete"] then
 									local actionDelete = NativeUI.CreateItem(GetLocalisedText("deleteaction"), GetLocalisedText("deleteactionguide"))
 									actionDelete.Activated = function(ParentMenu, SelectedItem)
