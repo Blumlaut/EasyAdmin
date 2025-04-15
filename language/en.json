@@ -118,6 +118,8 @@
 
     "actionhistory": "Action History",
     "actionhistoryguide": "View moderation actions against this user.",
+    "actionsloading": "Loading...",
+    "actionsloadingguide": "Please wait while we fetch the data.",
     "noactions": "No actions found.",
     "noactionsguide": "No past moderation actions for this user.",
     "deleteaction": "Delete Action",
