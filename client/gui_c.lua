@@ -831,7 +831,7 @@ function GenerateMenu() -- this is a big ass function
 					if GetConvar("ea_enableActionHistory", "true") == "true" and permissions["player.actionhistory.view"] then
 						local actionHistoryMenu = _menuPool:AddSubMenu(thisPlayer, GetLocalisedText("actionhistory"), GetLocalisedText("actionhistoryguide"), true)
 						actionHistoryMenu:SetMenuWidthOffset(menuWidth)
-						local loadingItem = NativeUI.CreateItem("Loading...", "Please wait while we fetch the data.")
+						local loadingItem = NativeUI.CreateItem(GetLocalisedText("actionsloading"), GetLocalisedText("actionsloadingguide"))
 						actionHistoryMenu:AddItem(loadingItem)
 						TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.discord)
 
