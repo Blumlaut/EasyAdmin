@@ -69,98 +69,100 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
 end)
 
 AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
-    local change = (forceChange or false)
-    local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
-    if not content then
-        PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
-        local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode({}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+    if GetConvar("ea_enableActionHistory", "true") == "true" then
+        local change = (forceChange or false)
+        local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
+        if not content then
+            PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
+            local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode({}), -1)
+            if not saved then
+                PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+            end
+            content = json.encode({})
         end
-        content = json.encode({})
-    end
-    actions = json.decode(content)
+        actions = json.decode(content)
 
-    if not actions then
-        PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
-        PrintDebugMessage("^1Failed^7 to load Actions!\n")
-        PrintDebugMessage("Please check your actions file for errors, ^Action history *will not* work!^7\n")
-        PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
-        return
-    end
+        if not actions then
+            PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+            PrintDebugMessage("^1Failed^7 to load Actions!\n")
+            PrintDebugMessage("Please check your actions file for errors, ^Action history *will not* work!^7\n")
+            PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+            return
+        end
 
-    if data and not remove then
-        if data.action == "BAN" then
-            table.insert(actions, {
-                time = os.time(),
-                id = #actions + 1,
-                banId = data.banId,
-                action = data.action,
-                discord = data.discord,
-                reason = data.reason,
-                moderator = data.moderator,
-                moderatorId = data.moderatorId,
-                expire = data.expire,
-                expireString = data.expireString
-            })
-        elseif data.action == "OFFLINE BAN" then
-            table.insert(actions, {
-                time = os.time(),
-                id = #actions + 1,
-                banId = data.banId,
-                action = data.action,
-                discord = data.discord,
-                reason = data.reason,
-                moderator = data.moderator,
-                moderatorId = data.moderatorId,
-                expire = data.expire,
-                expireString = data.expireString
-            })
-        elseif data.action == "KICK" then
-            table.insert(actions, {
-                time = os.time(),
-                id = #actions + 1,
-                action = data.action,
-                discord = data.discord,
-                reason = data.reason,
-                moderator = data.moderator,
-                moderatorId = data.moderatorId,
-            })
-        elseif data.action == "WARN" then
-            table.insert(actions, {
-                time = os.time(),
-                id = #actions + 1,
-                action = data.action,
-                discord = data.discord,
-                reason = data.reason,
-                moderator = data.moderator,
-                moderatorId = data.moderatorId,
-            })
-        elseif data.action == "UNBAN" then
-            for i, act in ipairs(actions) do
-                if act.banId == data.banId then
-                    act["action"]  = data.action
-                    break
+        if data and not remove then
+            if data.action == "BAN" then
+                table.insert(actions, {
+                    time = os.time(),
+                    id = #actions + 1,
+                    banId = data.banId,
+                    action = data.action,
+                    discord = data.discord,
+                    reason = data.reason,
+                    moderator = data.moderator,
+                    moderatorId = data.moderatorId,
+                    expire = data.expire,
+                    expireString = data.expireString
+                })
+            elseif data.action == "OFFLINE BAN" then
+                table.insert(actions, {
+                    time = os.time(),
+                    id = #actions + 1,
+                    banId = data.banId,
+                    action = data.action,
+                    discord = data.discord,
+                    reason = data.reason,
+                    moderator = data.moderator,
+                    moderatorId = data.moderatorId,
+                    expire = data.expire,
+                    expireString = data.expireString
+                })
+            elseif data.action == "KICK" then
+                table.insert(actions, {
+                    time = os.time(),
+                    id = #actions + 1,
+                    action = data.action,
+                    discord = data.discord,
+                    reason = data.reason,
+                    moderator = data.moderator,
+                    moderatorId = data.moderatorId,
+                })
+            elseif data.action == "WARN" then
+                table.insert(actions, {
+                    time = os.time(),
+                    id = #actions + 1,
+                    action = data.action,
+                    discord = data.discord,
+                    reason = data.reason,
+                    moderator = data.moderator,
+                    moderatorId = data.moderatorId,
+                })
+            elseif data.action == "UNBAN" then
+                for i, act in ipairs(actions) do
+                    if act.banId == data.banId then
+                        act["action"]  = data.action
+                        break
+                    end
                 end
             end
+            PrintDebugMessage("Added the following to actions:\n"..table_to_string(data), 4)
+            change=true
+        elseif not data then
+            return
         end
-        PrintDebugMessage("Added the following to actions:\n"..table_to_string(data), 4)
-        change=true
-    elseif not data then
-        return
-    end
-    if data and remove then
-        PrintDebugMessage("Removed the following data from actions:\n"..table_to_string(data), 4)
-        change = true
-    end
-    if change then
-        PrintDebugMessage("Actions changed, saving..", 4)
-        local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode(actions, {indent = true}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+        if data and remove then
+            PrintDebugMessage("Removed the following data from actions:\n"..table_to_string(data), 4)
+            change = true
         end
+        if change then
+            PrintDebugMessage("Actions changed, saving..", 4)
+            local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode(actions, {indent = true}), -1)
+            if not saved then
+                PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+            end
+        end
+        PrintDebugMessage("Completed Actions Updated.", 4)
     end
-    PrintDebugMessage("Completed Actions Updated.", 4)
 end)
 
 for i, action in ipairs(actions) do

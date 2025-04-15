@@ -57,9 +57,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             Storage:addBan(ban)
             PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
-            if GetConvar("ea_enableActionHistory", "true") == "true" then
-                TriggerEvent("EasyAdmin:LogAction", ban)
-            end
+            TriggerEvent("EasyAdmin:LogAction", ban)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif isPlayerImmune(playerId) then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
@@ -91,9 +89,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
             Storage.addBan(ban)
             -- updateBlacklist( ban )
-            if GetConvar("ea_enableActionHistory", "true") == "true" then
-                TriggerEvent("EasyAdmin:LogAction", ban)
-            end
+            TriggerEvent("EasyAdmin:LogAction", ban)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -498,6 +494,7 @@ function UnbanId(id)
                 TriggerEvent("ea_data:removeBan", ban)
             end
 <<<<<<< HEAD
+<<<<<<< HEAD
             
             -- Rebuild ban index after removing a ban
             rebuildBanIndex()
@@ -506,6 +503,9 @@ function UnbanId(id)
                 TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
             end
 >>>>>>> 5013313 (Enhance action logging by adding detailed ban and unban information to action history)
+=======
+            TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
+>>>>>>> 3680508 (Refactor action logging to ensure action history is recorded consistently, regardless of action history setting)
         end
     end
 end
