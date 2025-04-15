@@ -843,7 +843,7 @@ function GenerateMenu() -- this is a big ass function
 								actionHistoryMenu:AddItem(noActionsItem)
 							end
 							for i, action in ipairs(actionHistory) do
-								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "["..action.id.."] " .. action.action .. " by " .. action.moderator, "Reason: " ..  action.reason or "", true)
+								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "[#"..action.id.."] " .. action.action .. " by " .. action.moderator, "Reason: " ..  action.reason or "", true)
 								actionSubmenu:SetMenuWidthOffset(menuWidth)
 								if permissions["player.actionhistory.delete"] then
 									local actionDelete = NativeUI.CreateItem(GetLocalisedText("deleteaction"), GetLocalisedText("deleteactionguide"))

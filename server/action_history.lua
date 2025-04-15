@@ -10,12 +10,6 @@
 ------------------------------------
 ------------------------------------
 
-local actions = {}
-
-local function SaveActions(actions)
-    
-end
-
 RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     if DoesPlayerHavePermission(source, "player.actionhistory.view") then
         if not discordId then
@@ -28,6 +22,7 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
             for i, action in ipairs(actions) do
                 if tostring(action.discord) == tostring(discordId) then
                     table.insert(history, {
+                        id = action.id,
                         action = action.action,
                         reason = action.reason,
                         discord = action.discord,
@@ -95,7 +90,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
     end
 
     if data and not remove then
-        if data.action == "ban" then
+        if data.action == "BAN" then
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
@@ -108,7 +103,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
                 expire = data.expire,
                 expireString = data.expireString
             })
-        elseif data.action == "offline ban" then
+        elseif data.action == "OFFLINE BAN" then
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
@@ -121,7 +116,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
                 expire = data.expire,
                 expireString = data.expireString
             })
-        elseif data.action == "kick" then
+        elseif data.action == "KICK" then
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
@@ -131,7 +126,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
                 moderator = data.moderator,
                 moderatorId = data.moderatorId,
             })
-        elseif data.action == "warn" then
+        elseif data.action == "WARN" then
             table.insert(actions, {
                 time = os.time(),
                 id = #actions + 1,
@@ -141,7 +136,7 @@ AddEventHandler("EasyAdmin:LogAction", function(data, remove, forceChange)
                 moderator = data.moderator,
                 moderatorId = data.moderatorId,
             })
-        elseif data.action == "unban" then
+        elseif data.action == "UNBAN" then
             for i, act in ipairs(actions) do
                 if act.banId == data.banId then
                     act["action"]  = data.action

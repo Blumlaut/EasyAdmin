@@ -29,7 +29,8 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
-            updateBlacklist( ban )
+            Storage:addBan(ban)
+            -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
             if GetConvar("ea_enableActionHistory", "true") == "true" then
@@ -59,7 +60,8 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
-            updateBlacklist( ban )
+            Storage.addBan(ban)
+            -- updateBlacklist( ban )
             if GetConvar("ea_enableActionHistory", "true") == "true" then
                 TriggerEvent("EasyAdmin:LogAction", ban)
             end
