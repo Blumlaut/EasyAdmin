@@ -33,9 +33,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
-            if GetConvar("ea_enableActionHistory", "true") == "true" then
-                TriggerEvent("EasyAdmin:LogAction", ban)
-            end
+            TriggerEvent("EasyAdmin:LogAction", ban)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif CachedPlayers[playerId].immune then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
@@ -62,9 +60,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
             Storage.addBan(ban)
             -- updateBlacklist( ban )
-            if GetConvar("ea_enableActionHistory", "true") == "true" then
-                TriggerEvent("EasyAdmin:LogAction", ban)
-            end
+            TriggerEvent("EasyAdmin:LogAction", ban)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -422,9 +418,7 @@ function UnbanId(id)
             if GetConvar("ea_custombanlist", "false") == "true" then 
                 TriggerEvent("ea_data:removeBan", ban)
             end
-            if GetConvar("ea_enableActionHistory", "true") == "true" then
-                TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
-            end
+            TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
         end
     end
 end
