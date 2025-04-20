@@ -54,7 +54,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
-            Storage:addBan(ban)
+            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
             PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
             TriggerEvent("EasyAdmin:LogAction", ban)
@@ -87,7 +87,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
-            Storage.addBan(ban)
+            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
             -- updateBlacklist( ban )
             TriggerEvent("EasyAdmin:LogAction", ban)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
@@ -135,8 +135,9 @@ function addBanExport(playerId,reason,expires,banner)
         expires = 10444633200
     end
     reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
-    local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires, expireString = formatDateString(expires) }
-    updateBlacklist( ban )
+    -- local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires, expireString = formatDateString(expires) }
+    -- updateBlacklist( ban )
+    Storage.addBan(GetFreshBanId(), bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
     
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
