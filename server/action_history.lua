@@ -10,6 +10,8 @@
 ------------------------------------
 ------------------------------------
 
+local actions = {}
+
 RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     if DoesPlayerHavePermission(source, "player.actionhistory.view") then
         if not discordId then

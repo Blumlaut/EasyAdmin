@@ -16,6 +16,7 @@ node_version '22'
 shared_script 'shared/util_shared.lua'
 
 server_scripts {
+    "server/storage.lua",
     "server/*.lua",
     "dist/*.js",
     "plugins/**/*_shared.lua",
