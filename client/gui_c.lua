@@ -956,6 +956,9 @@ function GenerateMenu() -- this is a big ass function
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("reason"), "")
 				thisItem:RightLabel(formatRightString(report.reason, 48))
 				thisMenu:AddItem(thisItem)
+				thisItem.Activated = function(ParentMenu, SelectedItem)
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("reason") .. ": " .. report.reason)
+				end
 
 				local thisItem = NativeUI.CreateItem(GetLocalisedText("time"), "")
 				thisItem:RightLabel(report.reportTimeFormatted, 48)
