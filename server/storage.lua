@@ -1,18 +1,6 @@
 local banlist = {}
 local actions = {}
-
-local function SaveList(list, fileName)
-    local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
-    if not content then
-        PrintDebugMessage(fileName .. ".json file was missing, we created a new one.", 2)
-        content = json.encode({})
-    end
-
-    local saved = SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(list, {indent = True}), -1)
-    if not saved then
-        PrintDebugMessage("^1Saving " .. fileName .. ".json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-    end
-end
+local notes = {}
 
 local function LoadList(fileName)
     local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
@@ -26,29 +14,9 @@ end
 
 banlist = LoadList("banlist")
 actions = LoadList("actions")
+notes = LoadList("notes")
 
 Storage = {
-    -- get = function(list, type, input)
-    --     for i, item in ipairs(list) do
-    --         if item[type] == input then
-    --             return item
-    --         end
-    --     end
-    --     return nil
-    -- end,
-    -- add = function(list, input, fileName)
-    --     table.insert(list, input)
-    --     SaveList(list, fileName)
-    -- end,
-    -- remove = function(list, type, input, fileName)
-    --     for i, item in ipairs(list) do
-    --         if item[type] == input then
-    --             table.remove(list, i)
-    --             SaveList(list, fileName)
-    --         end
-    --     end
-    --     return
-    -- end,
     getBan = function(banId)
         for i, ban in ipairs(banlist) do
             if ban.banId == banId then
@@ -118,9 +86,9 @@ Storage = {
         end
         return
     end,
-    removeAction = function(data)
+    removeAction = function(actionId)
         for i, act in ipairs(actions) do
-            if act.id == data.id then
+            if act.id == actionId then
                 table.remove(actions, i)
                 local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
                 if not content then
@@ -134,6 +102,15 @@ Storage = {
             end
         end
         return
+    end,
+    getAction = function(discordId)
+        local actions = {}
+        for i, act in ipairs(actions) do
+            if act.discord == discordId then
+                table.insert(actions, act)
+            end
+        end
+        return actions
     end,
     apiVersion = 1,
 }
