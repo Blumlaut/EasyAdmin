@@ -12,6 +12,11 @@
 
 local actions = {}
 
+moderationNotification = GetConvar("ea_moderationNotification", "false")
+reportNotification = GetConvar("ea_reportNotification", "false")
+detailNotification = GetConvar("ea_detailNotification", "false")
+minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
+
 RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     if DoesPlayerHavePermission(source, "player.actionhistory.view") then
         if not discordId then
@@ -32,6 +37,8 @@ RegisterNetEvent("EasyAdmin:LogAction", function(action)
         if not action then
             PrintDebugMessage("Action not defined.", 2)
         end
+        Storage.addAction(action.type, action.discordId, action.reason, action.moderator, action.moderatorId, action.expire, action.expireString)
+        PrintDebugMessage("Action logged successfully.", 2)
     end
 end)
 
@@ -43,6 +50,8 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
         end
         Storage.removeAction(actionId)
         PrintDebugMessage("Action deleted successfully.", 2)
+        local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+        SendWebhookMessage(preferredWebhook, string.format(GetLocalisedText("actionhistorydeleted"), getName(source, false, true), actionId), "", 16777214)
     else
         PrintDebugMessage("Player does not have permission to delete actions.", 2)
     end
