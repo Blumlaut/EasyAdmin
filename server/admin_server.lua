@@ -764,7 +764,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		local src = source
-		if DoesPlayerHavePermission(src,"player.warn") and CachedPlayers[id].immune and CheckAdminCooldown(source, "warn") then
+		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune and CheckAdminCooldown(source, "warn") then
 			SetAdminCooldown(source, "warn")
 			reason = formatShortcuts(reason)
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
