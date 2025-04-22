@@ -127,7 +127,6 @@ function addBanExport(playerId,reason,expires,banner)
         PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
         return false
     end
-
     
     if expires and expires < os.time() then
         expires = os.time()+expires 
@@ -188,7 +187,6 @@ RegisterCommand("unban", function(source, args, rawCommand)
         SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), args[1], "Unbanned via Command"), "ban", 16711680)
     end
 end, false)
-
 	
 RegisterServerEvent("EasyAdmin:editBan", function(ban)
     if DoesPlayerHavePermission(source, "player.ban.edit") then
@@ -216,9 +214,12 @@ function unbanPlayer(banId)
 end
 exports('unbanPlayer', unbanPlayer)
 
+<<<<<<< HEAD
 ---Fetches a ban entry by its ID
 ---@param banId number @The ID of the ban to fetch
 ---@return table|false @The ban entry if found, false otherwise
+=======
+>>>>>>> 8b0d481 (feat(storage): add action logging functionality and permissions for action history management)
 function fetchBan(banId)
     for i,ban in ipairs(blacklist) do 
         if ban.banid == banId then
@@ -251,7 +252,6 @@ function GetFreshBanId()
     end
 end
 exports('GetFreshBanId', GetFreshBanId)
-
 
 RegisterCommand("convertbanlist", function(source, args, rawCommand)
     if GetConvar("ea_custombanlist", "false") == "true" then
@@ -314,22 +314,28 @@ function updateBan(id,newData)
     end
 end
 
+<<<<<<< HEAD
 
 ---Adds a new ban entry to the banlist
 ---@param data table @The data of the ban to be added
 ---@return nil
+=======
+>>>>>>> 8b0d481 (feat(storage): add action logging functionality and permissions for action history management)
 function addBan(data)
     if data then
         table.insert(blacklist, data)
     end
 end
 
+<<<<<<< HEAD
 
 ---Synchronizes the in-memory banlist with the stored file or external system
 ---@param data table @Optional data to add or remove from the banlist
 ---@param remove boolean @Whether this is a remove operation
 ---@param forceChange boolean @Whether to force a save regardless of changes
 ---@return nil
+=======
+>>>>>>> 8b0d481 (feat(storage): add action logging functionality and permissions for action history management)
 function updateBlacklist(data,remove, forceChange)
     local change = (forceChange or false) --mark if file was changed to save up on disk writes.
     if GetConvar("ea_custombanlist", "false") == "true" then 

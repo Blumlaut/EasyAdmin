@@ -1,3 +1,15 @@
+------------------------------------
+------------------------------------
+---- DONT TOUCH ANY OF THIS IF YOU DON'T KNOW WHAT YOU ARE DOING
+---- THESE ARE **NOT** CONFIG VALUES, USE THE CONVARS IF YOU WANT TO CHANGE SOMETHING
+----
+----
+---- If you are a developer and want to change something, consider writing a plugin instead:
+---- https://easyadmin.readthedocs.io/en/latest/plugins/
+----
+------------------------------------
+------------------------------------
+
 local banlist = {}
 local actions = {}
 local notes = {}
@@ -65,6 +77,15 @@ Storage = {
         end
         return
     end,
+    getAction = function(discordId)
+        local actions = {}
+        for i, act in ipairs(actions) do
+            if act.discord == discordId then
+                table.insert(actions, act)
+            end
+        end
+        return actions
+    end,
     addAction = function(type, identifier, reason, moderator_name, moderator_identifier)
         table.insert(actions, {
             time = os.time(),
@@ -102,15 +123,6 @@ Storage = {
             end
         end
         return
-    end,
-    getAction = function(discordId)
-        local actions = {}
-        for i, act in ipairs(actions) do
-            if act.discord == discordId then
-                table.insert(actions, act)
-            end
-        end
-        return actions
     end,
     apiVersion = 1,
 }

@@ -887,7 +887,7 @@ function GenerateMenu() -- this is a big ass function
 						end)
 					end
 		
-					ExecutePluginsFunction("playerMenu", p.id)
+					ExecutePluginsFunction("playerMenu", thePlayer.id)
 
 					
 					if GetResourceState("es_extended") == "started" and not ESX then

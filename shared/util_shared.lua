@@ -15,6 +15,7 @@ permissions = {
 	["player.mute"] = false,
 	["player.warn"] = false,
 	["player.actionhistory.view"] = false,
+	["player.actionhistory.add"] = false,
 	["player.actionhistory.delete"] = false,
 	["player.teleport.everyone"] = false,
 	["player.reports.view"] = false,
