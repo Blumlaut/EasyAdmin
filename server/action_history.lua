@@ -27,6 +27,14 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     end
 end)
 
+RegisterNetEvent("EasyAdmin:LogAction", function(action)
+    if DoesPlayerHavePermission(source, "player.actionhistory.add") then
+        if not action then
+            PrintDebugMessage("Action not defined.", 2)
+        end
+    end
+end)
+
 RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
     if DoesPlayerHavePermission(source, "player.actionhistory.delete") then
         if not actionId then

@@ -28,7 +28,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
-            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
+            -- local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
             Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
             -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
@@ -72,7 +72,6 @@ AddEventHandler('banCheater', function(playerId,reason)
     Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 end)
 
-
 function addBanExport(playerId,reason,expires,banner)
     local bannedIdentifiers = {}
     local bannedUsername = "Unknown"
@@ -92,7 +91,6 @@ function addBanExport(playerId,reason,expires,banner)
         PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
         return false
     end
-
     
     if expires and expires < os.time() then
         expires = os.time()+expires 
@@ -153,7 +151,6 @@ RegisterCommand("unban", function(source, args, rawCommand)
         SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), args[1], "Unbanned via Command"), "ban", 16711680)
     end
 end, false)
-
 	
 RegisterServerEvent("EasyAdmin:editBan", function(ban)
     if DoesPlayerHavePermission(source, "player.ban.edit") then
@@ -177,7 +174,6 @@ function unbanPlayer(banId)
     return true
 end
 exports('unbanPlayer', unbanPlayer)
-
 
 function fetchBan(banId)
     for i,ban in ipairs(blacklist) do 
@@ -209,7 +205,6 @@ function GetFreshBanId()
     end
 end
 exports('GetFreshBanId', GetFreshBanId)
-
 
 RegisterCommand("convertbanlist", function(source, args, rawCommand)
     if GetConvar("ea_custombanlist", "false") == "true" then
@@ -265,14 +260,11 @@ function updateBan(id,newData)
     end
 end
 
-
 function addBan(data)
     if data then
         table.insert(blacklist, data)
     end
 end
-
-
 
 function updateBlacklist(data,remove, forceChange)
     local change = (forceChange or false) --mark if file was changed to save up on disk writes.
