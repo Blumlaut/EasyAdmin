@@ -30,6 +30,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
             -- local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
             Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
+            Storage.addAction("BAN", CachedPlayers[playerId].discordId, reason, getName(source), source, expires, formatDateString(expires))
             -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
@@ -58,6 +59,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
             --local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
             Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time()) 
+            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discordId, reason, getName(source), source, expires, formatDateString(expires))
             -- updateBlacklist( ban )
             TriggerEvent("EasyAdmin:LogAction", ban)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
@@ -101,7 +103,7 @@ function addBanExport(playerId,reason,expires,banner)
     -- local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = banner or "Unknown", reason = reason, expire = expires, expireString = formatDateString(expires) }
     -- updateBlacklist( ban )
     Storage.addBan(GetFreshBanId(), bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
-    
+    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", source, expires, formatDateString(expires))
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
     end
@@ -116,6 +118,7 @@ end
 exports('addBan', addBanExport)
 AddEventHandler("EasyAdmin:addBan", addBanExport)
 
+-- Is this required anymore with storage updates?
 RegisterServerEvent("EasyAdmin:updateBanlist", function(playerId)
     local src = source
     if DoesPlayerHavePermission(source, "player.ban.view") then
@@ -129,7 +132,7 @@ end)
 RegisterServerEvent("EasyAdmin:requestBanlist", function()
     local src = source
     if DoesPlayerHavePermission(source, "player.ban.view") then
-        TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 100000, blacklist)
+        TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 100000, Storage.getBanlist())
         PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
     end
 end)
@@ -154,34 +157,37 @@ end, false)
 	
 RegisterServerEvent("EasyAdmin:editBan", function(ban)
     if DoesPlayerHavePermission(source, "player.ban.edit") then
-        updateBan(ban.banid,ban)
+        Storage.updateBan(ban.banid, ban)
+        --updateBan(ban.banid,ban)
         -- TODO Webhook
     end
 end)
 
 function unbanPlayer(banId)
-    local thisBan = nil
-    for i,ban in ipairs(blacklist) do 
-        if ban.banid == banId then
-            thisBan = ban
-            break
-        end
-    end
-    if thisBan == nil then
-        return false
-    end
-    UnbanId(banId)
-    return true
+    return Storage.removeBan(banId)
+    -- local thisBan = nil
+    -- for i,ban in ipairs(blacklist) do 
+    --     if ban.banid == banId then
+    --         thisBan = ban
+    --         break
+    --     end
+    -- end
+    -- if thisBan == nil then
+    --     return false
+    -- end
+    -- UnbanId(banId)
+    -- return true
 end
 exports('unbanPlayer', unbanPlayer)
 
 function fetchBan(banId)
-    for i,ban in ipairs(blacklist) do 
-        if ban.banid == banId then
-            return ban
-        end
-    end
-    return false
+    return Storage.getBan(banId)
+    -- for i,ban in ipairs(blacklist) do 
+    --     if ban.banid == banId then
+    --         return ban
+    --     end
+    -- end
+    -- return false
 end
 exports('fetchBan', fetchBan)
 
@@ -206,6 +212,7 @@ function GetFreshBanId()
 end
 exports('GetFreshBanId', GetFreshBanId)
 
+-- Is this required with removal of custom ban list convar?
 RegisterCommand("convertbanlist", function(source, args, rawCommand)
     if GetConvar("ea_custombanlist", "false") == "true" then
         local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
@@ -266,6 +273,7 @@ function addBan(data)
     end
 end
 
+-- Good to remove?
 function updateBlacklist(data,remove, forceChange)
     local change = (forceChange or false) --mark if file was changed to save up on disk writes.
     if GetConvar("ea_custombanlist", "false") == "true" then 
@@ -369,76 +377,83 @@ function updateBlacklist(data,remove, forceChange)
 end
 
 function BanIdentifier(identifier,reason)
-    updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
+    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())`
+    --updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
+-- Unclear what the purpose of this is... converted anyway
 function BanIdentifiers(identifier,reason)
-    updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
+    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())`
+    --updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
 function UnbanIdentifier(identifier)
-    if identifier then
-        for i,ban in pairs(blacklist) do
-            for index,id in pairs(ban.identifiers) do
-                if identifier == id then
-                    table.remove(blacklist,i)
-                    local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-                    if not saved then
-                        PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-                    end
+    Storage.removeBanIdentifier(identifier)
+    -- if identifier then
+    --     for i,ban in pairs(blacklist) do
+    --         for index,id in pairs(ban.identifiers) do
+    --             if identifier == id then
+    --                 table.remove(blacklist,i)
+    --                 local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+    --                 if not saved then
+    --                     PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+    --                 end
                     
-                    if GetConvar("ea_custombanlist", "false") == "true" then 
-                        TriggerEvent("ea_data:removeBan", ban)
-                    end
-                    PrintDebugMessage("removed ban as per unbanidentifier func", 4)
-                    return
-                end 
-            end
-        end
-    end
+    --                 if GetConvar("ea_custombanlist", "false") == "true" then 
+    --                     TriggerEvent("ea_data:removeBan", ban)
+    --                 end
+    --                 PrintDebugMessage("removed ban as per unbanidentifier func", 4)
+    --                 return
+    --             end 
+    --         end
+    --     end
+    -- end
 end
 
 function UnbanId(id)
-    for i,ban in pairs(blacklist) do
-        if ban.banid == id then
-            table.remove(blacklist,i)
-            local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-            if not saved then
-                PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-            end
+    Storage.removeBan(id)
+    -- for i,ban in pairs(blacklist) do
+    --     if ban.banid == id then
+    --         table.remove(blacklist,i)
+    --         local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
+    --         if not saved then
+    --             PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+    --         end
             
-            if GetConvar("ea_custombanlist", "false") == "true" then 
-                TriggerEvent("ea_data:removeBan", ban)
-            end
-            TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
-        end
-    end
+    --         if GetConvar("ea_custombanlist", "false") == "true" then 
+    --             TriggerEvent("ea_data:removeBan", ban)
+    --         end
+    --         TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
+    --     end
+    -- end
 end
 
+
+-- Yet to test this in-game, I believe there might be an issue passing json tables to this pluggable storage
 function performBanlistUpgrades()
     local upgraded = false
-    
+    local banlist = Storage.getBanList()
     local takenIds = {}
-    for i,b in pairs(blacklist) do
+    for i,b in pairs(banlist) do
         if takenIds[b.banid] then
             local freshId = GetFreshBanId()
             PrintDebugMessage("ID "..b.banid.." was assigned twice, reassigned to "..freshId, 4)
-            blacklist[i].banid = freshId
+            banlist[i].banid = freshId
             upgraded = true
         end
         takenIds[b.banid] = true 
     end
     takenIds=nil
 
-    for i,ban in pairs(blacklist) do
+    for i,ban in pairs(banlist) do
         if type(i) == "string" then
             PrintDebugMessage("Ban "..ban.banid.." had a string as indice, fixed it.", 4)
-            blacklist[i] = nil
-            table.insert(blacklist,ban) 
+            banlist[i] = nil
+            table.insert(banlist,ban) 
             upgraded = true
         end
     end
-    for i,ban in ipairs(blacklist) do
+    for i,ban in ipairs(banlist) do
         if ban.identifiers then
             for k, identifier in pairs(ban.identifiers) do
                 if identifier == "" then
@@ -453,9 +468,9 @@ function performBanlistUpgrades()
             ban.expireString = formatDateString(ban.expire)
         end
     end
-    if blacklist[1] and (blacklist[1].identifier or blacklist[1].steam or blacklist[1].discord) then 
+    if banlist[1] and (banlist[1].identifier or banlist[1].steam or banlist[1].discord) then 
         Citizen.Trace("Upgrading Banlist...\n", 4)
-        for i,ban in ipairs(blacklist) do
+        for i,ban in ipairs(banlist) do
             if not ban.identifiers then
                 ban.identifiers = {}
                 PrintDebugMessage("Ban "..ban.banid.." had no identifiers, added one.", 4)
@@ -482,20 +497,22 @@ function performBanlistUpgrades()
         end
         Citizen.Trace("Banlist Upgraded.\n", 4)
     end
+    Storage.updateBanlist(banlist)
     return upgraded
 end
 
 
 
 function IsIdentifierBanned(theIdentifier)
-    local identifierfound = false
-    for index,value in ipairs(blacklist) do
-        for i,identifier in ipairs(value.identifiers) do
-            if theIdentifier == identifier then
-                identifierfound = true
-            end
-        end
-    end
-    return identifierfound
+    return Storage.getBanIdentifier(theIdentifier)
+    -- local identifierfound = false
+    -- for index,value in ipairs(blacklist) do
+    --     for i,identifier in ipairs(value.identifiers) do
+    --         if theIdentifier == identifier then
+    --             identifierfound = true
+    --         end
+    --     end
+    -- end
+    -- return identifierfound
 end
 exports('IsIdentifierBanned', IsIdentifierBanned)

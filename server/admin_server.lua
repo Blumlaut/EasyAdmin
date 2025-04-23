@@ -780,7 +780,8 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src, false, true), getName(id, true, true), reason, WarnedPlayers[id].warns, maxWarnings), "warn", 16711680)
 			local test_name = getName(source, true, false)
 			-- local warn = { action = "WARN", discord = CachedPlayers[id].discord, reason = reason, moderator = test_name, moderatorId = CachedPlayers[source].discord }
-			TriggerEvent("EasyAdmin:LogAction", { action = "WARN", discord = CachedPlayers[id].discord, reason = reason, moderator = getName(source, true, false), moderatorId = CachedPlayers[source].discord })
+			Storage.addAction("WARN", CachedPlayers[id].discord, reason, test_name, CachedPlayers[source].discord)
+			-- TriggerEvent("EasyAdmin:LogAction", { action = "WARN", discord = CachedPlayers[id].discord, reason = reason, moderator = getName(source, true, false), moderatorId = CachedPlayers[source].discord })
 			if WarnedPlayers[id].warns >= maxWarnings then
 				if GetConvar("ea_warnAction", "kick") == "kick" then
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(id, true, true), reason), "kick", 16711680)

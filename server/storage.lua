@@ -35,7 +35,19 @@ Storage = {
                 return ban
             end
         end
-        return nil
+        return false
+    end,
+    getBanIdentifier = function(identifiers)
+        local found = false
+        for i, ban in ipairs(banlist) do
+            for j, identifier in ipairs(identifiers) do
+                if ban.bannedIdentifiers[identifier] then
+                    found = true
+                    break
+                end
+            end
+        end
+        return found
     end,
     addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
         table.insert(banlist, {
@@ -60,6 +72,19 @@ Storage = {
             PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
         end
     end,
+    updateBan = function(banId, .....)
+    end,
+    updateBanlist = function(banlist)
+        local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+        if not content then
+            PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
+            content = json.encode({})
+        end
+        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
+        if not saved then
+            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+        end
+    end,
     removeBan = function(banId)
         for i, ban in ipairs(banlist) do
             if ban.banId == banId then
@@ -72,10 +97,37 @@ Storage = {
                 local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
                 if not saved then
                     PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+                    return false
+                end
+                return true
+            else
+                return false
+            end
+        end
+    end,
+    removeBanIdentifier = function(identifiers) do
+        for i, ban in ipairs(banlist) do
+            for j, identifier in ipairs(identifiers) do
+                if ban.bannedIdentifiers[identifier] then
+                    table.remove(banlist, i)
+                    local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+                    if not content then
+                        PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
+                        content = json.encode({})
+                    end
+                    local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
+                    if not saved then
+                        PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+                        return
+                    end
+                    return
                 end
             end
         end
         return
+    end,
+    getBanlist = function()
+        return banlist
     end,
     getAction = function(discordId)
         local actions = {}
