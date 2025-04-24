@@ -1,0 +1,75 @@
+site_name: EasyAdmin
+site_description: EasyAdmin Documentation
+
+repo_url: "https://github.com/Blumlaut/EasyAdmin"
+edit_uri: "https://github.com/Blumlaut/EasyAdmin/edit/main/docs/docs/"
+
+markdown_extensions:
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.superfences
+  - toc:
+      permalink: True
+  - pymdownx.tabbed:
+      alternate_style: true 
+
+
+plugins:
+  - search
+  - git-revision-date
+
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.expand
+    - search.highlight
+    - toc.integrate
+
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+    - "Index": 'index.md'
+    - 'install.md'
+    - 'Configuration':
+        - 'config.md'
+        - 'permissions.md'
+        - 'discordbot.md'
+    - 'Guides':
+        - "Adding Admins": 'install/#adding-an-admin'
+        - 'keybind.md'
+        - 'steamapikey.md'
+        - 'webhook.md'
+        - 'discord-screenshots.md'
+        - 'commands.md'
+        - 'reminders.md'
+        - 'shortcuts.md'
+        - 'backups.md'
+        - 'updating.md'
+    - 'Troubleshooting':
+      - 'troubleshooting.md'
+    - 'Developer Reference':
+        - 'plugins.md'
+        - 'translating.md'
+  

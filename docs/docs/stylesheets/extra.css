@@ -1,0 +1,28 @@
+.md-grid {
+	max-width: 85%;
+}
+
+.md-nav {
+	font-size: .73rem;
+	line-height: 1.35;
+}
+
+.md-header__button.md-logo {
+	padding: .15rem;
+}
+
+.md-header__button.md-logo img, .md-header__button.md-logo svg {
+    height: 2rem;
+    width: 2rem;
+}
+.md-sidebar {
+	padding-top: 0.4rem;
+}
+
+.md-nav--integrated > .md-nav__list > .md-nav__item--active .md-nav--secondary {
+	border-left: .05rem solid #575757;
+}
+
+.md-nav__link {
+	margin-top: .4em;
+}
