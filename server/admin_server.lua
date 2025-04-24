@@ -1068,6 +1068,7 @@ function checkVersion()
 			'server/bot/commands/unfreeze.js',
 			'server/bot/commands/unmute.js',
 			'server/bot/commands/warn.js',
+			'dist/commands/configure.js'
 		}
 	
 		for i,file in pairs(legacyFiles) do
