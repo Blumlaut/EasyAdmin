@@ -10,7 +10,7 @@
     "pretty-ms": "9.2.0",
     "sprintf-js": "1.1.3",
     "utf-8-validate": "^6.0.5",
-    "zlib-sync": "0.1.9"
+    "zlib-sync": "0.1.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
