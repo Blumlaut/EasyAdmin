@@ -19822,17 +19822,17 @@ var require_undici = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/gateway/common.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/gateway/common.js
 var require_common = __commonJS({
-  "node_modules/discord-api-types/gateway/common.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/gateway/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/gateway/v10.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/gateway/v10.js
 var require_v10 = __commonJS({
-  "node_modules/discord-api-types/gateway/v10.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/gateway/v10.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -19998,9 +19998,9 @@ var require_v10 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/globals.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/globals.js
 var require_globals = __commonJS({
-  "node_modules/discord-api-types/globals.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/globals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.FormattingPatterns = void 0;
@@ -20102,9 +20102,9 @@ var require_globals = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/common.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/common.js
 var require_common2 = __commonJS({
-  "node_modules/discord-api-types/payloads/common.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.PermissionFlagsBits = void 0;
@@ -20394,9 +20394,9 @@ var require_common2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/application.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/application.js
 var require_application = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/application.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/application.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ApplicationWebhookEventStatus = exports2.ApplicationRoleConnectionMetadataType = exports2.ApplicationFlags = void 0;
@@ -20439,9 +20439,9 @@ var require_application = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/auditLog.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/auditLog.js
 var require_auditLog = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/auditLog.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/auditLog.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.AuditLogOptionsType = exports2.AuditLogEvent = void 0;
@@ -20522,9 +20522,9 @@ var require_auditLog = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/autoModeration.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/autoModeration.js
 var require_autoModeration = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/autoModeration.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/autoModeration.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.AutoModerationActionType = exports2.AutoModerationRuleEventType = exports2.AutoModerationRuleKeywordPresetType = exports2.AutoModerationRuleTriggerType = void 0;
@@ -20557,9 +20557,9 @@ var require_autoModeration = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/channel.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/channel.js
 var require_channel = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/channel.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ChannelFlags = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.ThreadMemberFlags = exports2.ThreadAutoArchiveDuration = exports2.OverwriteType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = exports2.VideoQualityMode = exports2.ChannelType = exports2.ForumLayoutType = exports2.SortOrderType = void 0;
@@ -20776,17 +20776,17 @@ var require_channel = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/emoji.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/emoji.js
 var require_emoji = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/emoji.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/emoji.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/gateway.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/gateway.js
 var require_gateway = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ActivityFlags = exports2.ActivityType = exports2.ActivityPlatform = exports2.PresenceUpdateStatus = void 0;
@@ -20833,9 +20833,9 @@ var require_gateway = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/guild.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/guild.js
 var require_guild = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/guild.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/guild.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.GuildOnboardingPromptType = exports2.GuildOnboardingMode = exports2.MembershipScreeningFieldType = exports2.GuildWidgetStyle = exports2.IntegrationExpireBehavior = exports2.GuildMemberFlags = exports2.GuildFeature = exports2.GuildSystemChannelFlags = exports2.GuildHubType = exports2.GuildPremiumTier = exports2.GuildVerificationLevel = exports2.GuildNSFWLevel = exports2.GuildMFALevel = exports2.GuildExplicitContentFilter = exports2.GuildDefaultMessageNotifications = void 0;
@@ -20973,9 +20973,9 @@ var require_guild = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js
 var require_guildScheduledEvent = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.GuildScheduledEventPrivacyLevel = exports2.GuildScheduledEventStatus = exports2.GuildScheduledEventEntityType = exports2.GuildScheduledEventRecurrenceRuleMonth = exports2.GuildScheduledEventRecurrenceRuleWeekday = exports2.GuildScheduledEventRecurrenceRuleFrequency = void 0;
@@ -21031,73 +21031,73 @@ var require_guildScheduledEvent = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js
 var require_attachment = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js
 var require_base = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js
 var require_boolean = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js
 var require_channel2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js
 var require_integer = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js
 var require_mentionable = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js
 var require_number = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js
 var require_role = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js
 var require_shared = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ApplicationCommandOptionType = void 0;
@@ -21118,41 +21118,41 @@ var require_shared = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js
 var require_string = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js
 var require_subcommand = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js
 var require_subcommandGroup = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js
 var require_user = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js
 var require_chatInput = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -21187,17 +21187,17 @@ var require_chatInput = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js
 var require_contextMenu = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js
 var require_permissions = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.APIApplicationCommandPermissionsConstant = exports2.ApplicationCommandPermissionType = void 0;
@@ -21215,25 +21215,25 @@ var require_permissions = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js
 var require_entryPoint = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
 var require_internals = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js
 var require_applicationCommands = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -21284,49 +21284,49 @@ var require_applicationCommands = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js
 var require_autocomplete = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/base.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/base.js
 var require_base2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/base.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/base.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js
 var require_messageComponents = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js
 var require_modalSubmit = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/ping.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/ping.js
 var require_ping = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/ping.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/ping.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/responses.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/responses.js
 var require_responses = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/responses.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/_interactions/responses.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.InteractionResponseType = exports2.InteractionType = void 0;
@@ -21353,9 +21353,9 @@ var require_responses = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/interactions.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/interactions.js
 var require_interactions = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/interactions.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/interactions.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -21384,9 +21384,9 @@ var require_interactions = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/invite.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/invite.js
 var require_invite = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/invite.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/invite.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.InviteTargetType = exports2.InviteType = void 0;
@@ -21404,9 +21404,9 @@ var require_invite = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/monetization.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/monetization.js
 var require_monetization = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/monetization.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/monetization.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SubscriptionStatus = exports2.SKUType = exports2.SKUFlags = exports2.EntitlementType = void 0;
@@ -21443,9 +21443,9 @@ var require_monetization = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/oauth2.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/oauth2.js
 var require_oauth2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/oauth2.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/oauth2.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.OAuth2Scopes = void 0;
@@ -21483,9 +21483,9 @@ var require_oauth2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/permissions.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/permissions.js
 var require_permissions2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/permissions.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/permissions.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.RoleFlags = void 0;
@@ -21496,9 +21496,9 @@ var require_permissions2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/poll.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/poll.js
 var require_poll = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/poll.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/poll.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.PollLayoutType = void 0;
@@ -21509,17 +21509,17 @@ var require_poll = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/soundboard.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/soundboard.js
 var require_soundboard = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/soundboard.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/soundboard.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/stageInstance.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/stageInstance.js
 var require_stageInstance = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/stageInstance.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/stageInstance.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.StageInstancePrivacyLevel = void 0;
@@ -21531,9 +21531,9 @@ var require_stageInstance = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/sticker.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/sticker.js
 var require_sticker = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/sticker.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/sticker.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.StickerFormatType = exports2.StickerType = void 0;
@@ -21552,9 +21552,9 @@ var require_sticker = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/teams.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/teams.js
 var require_teams = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/teams.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/teams.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.TeamMemberRole = exports2.TeamMemberMembershipState = void 0;
@@ -21572,17 +21572,17 @@ var require_teams = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/template.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/template.js
 var require_template = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/template.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/template.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/user.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/user.js
 var require_user2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ConnectionVisibility = exports2.ConnectionService = exports2.UserPremiumType = exports2.UserFlags = void 0;
@@ -21657,17 +21657,17 @@ var require_user2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/voice.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/voice.js
 var require_voice = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/voice.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/voice.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/webhook.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/webhook.js
 var require_webhook = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/webhook.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/webhook.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.WebhookType = exports2.ApplicationWebhookEventType = exports2.ApplicationWebhookType = void 0;
@@ -21691,9 +21691,9 @@ var require_webhook = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/index.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/index.js
 var require_v102 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/index.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/payloads/v10/index.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -21738,9 +21738,9 @@ var require_v102 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/utils/internals.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/utils/internals.js
 var require_internals2 = __commonJS({
-  "node_modules/discord-api-types/utils/internals.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/utils/internals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.urlSafeCharacters = void 0;
@@ -21755,9 +21755,9 @@ var require_internals2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rest/common.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/common.js
 var require_common3 = __commonJS({
-  "node_modules/discord-api-types/rest/common.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.Locale = exports2.RESTJSONErrorCodes = void 0;
@@ -22026,33 +22026,33 @@ var require_common3 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rest/v10/application.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/application.js
 var require_application2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/application.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/application.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/auditLog.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/auditLog.js
 var require_auditLog2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/auditLog.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/auditLog.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/autoModeration.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/autoModeration.js
 var require_autoModeration2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/autoModeration.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/autoModeration.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/channel.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/channel.js
 var require_channel3 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/channel.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ReactionType = void 0;
@@ -22064,57 +22064,57 @@ var require_channel3 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rest/v10/emoji.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/emoji.js
 var require_emoji2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/emoji.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/emoji.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/gateway.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/gateway.js
 var require_gateway2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/gateway.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/gateway.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/guild.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/guild.js
 var require_guild2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/guild.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/guild.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/guildScheduledEvent.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/guildScheduledEvent.js
 var require_guildScheduledEvent2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/guildScheduledEvent.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/guildScheduledEvent.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/interactions.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/interactions.js
 var require_interactions2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/interactions.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/interactions.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/invite.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/invite.js
 var require_invite2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/invite.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/invite.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/monetization.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/monetization.js
 var require_monetization2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/monetization.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/monetization.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.EntitlementOwnerType = void 0;
@@ -22126,81 +22126,81 @@ var require_monetization2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rest/v10/oauth2.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/oauth2.js
 var require_oauth22 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/oauth2.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/oauth2.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/poll.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/poll.js
 var require_poll2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/poll.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/poll.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/soundboard.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/soundboard.js
 var require_soundboard2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/soundboard.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/soundboard.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/stageInstance.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/stageInstance.js
 var require_stageInstance2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/stageInstance.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/stageInstance.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/sticker.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/sticker.js
 var require_sticker2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/sticker.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/sticker.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/template.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/template.js
 var require_template2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/template.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/template.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/user.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/user.js
 var require_user3 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/user.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/voice.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/voice.js
 var require_voice2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/voice.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/voice.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/webhook.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/webhook.js
 var require_webhook2 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/webhook.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/webhook.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/discord-api-types/rest/v10/index.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/index.js
 var require_v103 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/index.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rest/v10/index.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -23446,9 +23446,9 @@ var require_v103 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rpc/common.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rpc/common.js
 var require_common4 = __commonJS({
-  "node_modules/discord-api-types/rpc/common.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rpc/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.RPCCloseEventCodes = exports2.RPCErrorCodes = exports2.RelationshipType = exports2.VoiceConnectionStates = exports2.RPCVoiceShortcutKeyComboKeyType = exports2.RPCVoiceSettingsModeType = exports2.RPCDeviceType = void 0;
@@ -23538,9 +23538,9 @@ var require_common4 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rpc/v10.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/rpc/v10.js
 var require_v104 = __commonJS({
-  "node_modules/discord-api-types/rpc/v10.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/rpc/v10.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -23650,9 +23650,9 @@ var require_v104 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/utils/v10.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/utils/v10.js
 var require_v105 = __commonJS({
-  "node_modules/discord-api-types/utils/v10.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/utils/v10.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.isDMInteraction = isDMInteraction;
@@ -23717,9 +23717,9 @@ var require_v105 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/v10.js
+// node_modules/@discordjs/rest/node_modules/discord-api-types/v10.js
 var require_v106 = __commonJS({
-  "node_modules/discord-api-types/v10.js"(exports2) {
+  "node_modules/@discordjs/rest/node_modules/discord-api-types/v10.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
@@ -27974,6 +27974,3933 @@ ${flattened}` : error.message || flattened || "Unknown Error";
   }
 });
 
+// node_modules/discord-api-types/gateway/common.js
+var require_common5 = __commonJS({
+  "node_modules/discord-api-types/gateway/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/gateway/v10.js
+var require_v107 = __commonJS({
+  "node_modules/discord-api-types/gateway/v10.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.VoiceChannelEffectSendAnimationType = exports2.GatewayDispatchEvents = exports2.GatewayIntentBits = exports2.GatewayCloseCodes = exports2.GatewayOpcodes = exports2.GatewayVersion = void 0;
+    __exportStar2(require_common5(), exports2);
+    exports2.GatewayVersion = "10";
+    var GatewayOpcodes;
+    (function(GatewayOpcodes2) {
+      GatewayOpcodes2[GatewayOpcodes2["Dispatch"] = 0] = "Dispatch";
+      GatewayOpcodes2[GatewayOpcodes2["Heartbeat"] = 1] = "Heartbeat";
+      GatewayOpcodes2[GatewayOpcodes2["Identify"] = 2] = "Identify";
+      GatewayOpcodes2[GatewayOpcodes2["PresenceUpdate"] = 3] = "PresenceUpdate";
+      GatewayOpcodes2[GatewayOpcodes2["VoiceStateUpdate"] = 4] = "VoiceStateUpdate";
+      GatewayOpcodes2[GatewayOpcodes2["Resume"] = 6] = "Resume";
+      GatewayOpcodes2[GatewayOpcodes2["Reconnect"] = 7] = "Reconnect";
+      GatewayOpcodes2[GatewayOpcodes2["RequestGuildMembers"] = 8] = "RequestGuildMembers";
+      GatewayOpcodes2[GatewayOpcodes2["InvalidSession"] = 9] = "InvalidSession";
+      GatewayOpcodes2[GatewayOpcodes2["Hello"] = 10] = "Hello";
+      GatewayOpcodes2[GatewayOpcodes2["HeartbeatAck"] = 11] = "HeartbeatAck";
+      GatewayOpcodes2[GatewayOpcodes2["RequestSoundboardSounds"] = 31] = "RequestSoundboardSounds";
+    })(GatewayOpcodes || (exports2.GatewayOpcodes = GatewayOpcodes = {}));
+    var GatewayCloseCodes;
+    (function(GatewayCloseCodes2) {
+      GatewayCloseCodes2[GatewayCloseCodes2["UnknownError"] = 4e3] = "UnknownError";
+      GatewayCloseCodes2[GatewayCloseCodes2["UnknownOpcode"] = 4001] = "UnknownOpcode";
+      GatewayCloseCodes2[GatewayCloseCodes2["DecodeError"] = 4002] = "DecodeError";
+      GatewayCloseCodes2[GatewayCloseCodes2["NotAuthenticated"] = 4003] = "NotAuthenticated";
+      GatewayCloseCodes2[GatewayCloseCodes2["AuthenticationFailed"] = 4004] = "AuthenticationFailed";
+      GatewayCloseCodes2[GatewayCloseCodes2["AlreadyAuthenticated"] = 4005] = "AlreadyAuthenticated";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidSeq"] = 4007] = "InvalidSeq";
+      GatewayCloseCodes2[GatewayCloseCodes2["RateLimited"] = 4008] = "RateLimited";
+      GatewayCloseCodes2[GatewayCloseCodes2["SessionTimedOut"] = 4009] = "SessionTimedOut";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidShard"] = 4010] = "InvalidShard";
+      GatewayCloseCodes2[GatewayCloseCodes2["ShardingRequired"] = 4011] = "ShardingRequired";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidAPIVersion"] = 4012] = "InvalidAPIVersion";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidIntents"] = 4013] = "InvalidIntents";
+      GatewayCloseCodes2[GatewayCloseCodes2["DisallowedIntents"] = 4014] = "DisallowedIntents";
+    })(GatewayCloseCodes || (exports2.GatewayCloseCodes = GatewayCloseCodes = {}));
+    var GatewayIntentBits2;
+    (function(GatewayIntentBits3) {
+      GatewayIntentBits3[GatewayIntentBits3["Guilds"] = 1] = "Guilds";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMembers"] = 2] = "GuildMembers";
+      GatewayIntentBits3[GatewayIntentBits3["GuildModeration"] = 4] = "GuildModeration";
+      GatewayIntentBits3[GatewayIntentBits3["GuildBans"] = 4] = "GuildBans";
+      GatewayIntentBits3[GatewayIntentBits3["GuildExpressions"] = 8] = "GuildExpressions";
+      GatewayIntentBits3[GatewayIntentBits3["GuildEmojisAndStickers"] = 8] = "GuildEmojisAndStickers";
+      GatewayIntentBits3[GatewayIntentBits3["GuildIntegrations"] = 16] = "GuildIntegrations";
+      GatewayIntentBits3[GatewayIntentBits3["GuildWebhooks"] = 32] = "GuildWebhooks";
+      GatewayIntentBits3[GatewayIntentBits3["GuildInvites"] = 64] = "GuildInvites";
+      GatewayIntentBits3[GatewayIntentBits3["GuildVoiceStates"] = 128] = "GuildVoiceStates";
+      GatewayIntentBits3[GatewayIntentBits3["GuildPresences"] = 256] = "GuildPresences";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessages"] = 512] = "GuildMessages";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessageReactions"] = 1024] = "GuildMessageReactions";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessageTyping"] = 2048] = "GuildMessageTyping";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessages"] = 4096] = "DirectMessages";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessageReactions"] = 8192] = "DirectMessageReactions";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessageTyping"] = 16384] = "DirectMessageTyping";
+      GatewayIntentBits3[GatewayIntentBits3["MessageContent"] = 32768] = "MessageContent";
+      GatewayIntentBits3[GatewayIntentBits3["GuildScheduledEvents"] = 65536] = "GuildScheduledEvents";
+      GatewayIntentBits3[GatewayIntentBits3["AutoModerationConfiguration"] = 1048576] = "AutoModerationConfiguration";
+      GatewayIntentBits3[GatewayIntentBits3["AutoModerationExecution"] = 2097152] = "AutoModerationExecution";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessagePolls"] = 16777216] = "GuildMessagePolls";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessagePolls"] = 33554432] = "DirectMessagePolls";
+    })(GatewayIntentBits2 || (exports2.GatewayIntentBits = GatewayIntentBits2 = {}));
+    var GatewayDispatchEvents;
+    (function(GatewayDispatchEvents2) {
+      GatewayDispatchEvents2["ApplicationCommandPermissionsUpdate"] = "APPLICATION_COMMAND_PERMISSIONS_UPDATE";
+      GatewayDispatchEvents2["AutoModerationActionExecution"] = "AUTO_MODERATION_ACTION_EXECUTION";
+      GatewayDispatchEvents2["AutoModerationRuleCreate"] = "AUTO_MODERATION_RULE_CREATE";
+      GatewayDispatchEvents2["AutoModerationRuleDelete"] = "AUTO_MODERATION_RULE_DELETE";
+      GatewayDispatchEvents2["AutoModerationRuleUpdate"] = "AUTO_MODERATION_RULE_UPDATE";
+      GatewayDispatchEvents2["ChannelCreate"] = "CHANNEL_CREATE";
+      GatewayDispatchEvents2["ChannelDelete"] = "CHANNEL_DELETE";
+      GatewayDispatchEvents2["ChannelPinsUpdate"] = "CHANNEL_PINS_UPDATE";
+      GatewayDispatchEvents2["ChannelUpdate"] = "CHANNEL_UPDATE";
+      GatewayDispatchEvents2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      GatewayDispatchEvents2["EntitlementDelete"] = "ENTITLEMENT_DELETE";
+      GatewayDispatchEvents2["EntitlementUpdate"] = "ENTITLEMENT_UPDATE";
+      GatewayDispatchEvents2["GuildAuditLogEntryCreate"] = "GUILD_AUDIT_LOG_ENTRY_CREATE";
+      GatewayDispatchEvents2["GuildBanAdd"] = "GUILD_BAN_ADD";
+      GatewayDispatchEvents2["GuildBanRemove"] = "GUILD_BAN_REMOVE";
+      GatewayDispatchEvents2["GuildCreate"] = "GUILD_CREATE";
+      GatewayDispatchEvents2["GuildDelete"] = "GUILD_DELETE";
+      GatewayDispatchEvents2["GuildEmojisUpdate"] = "GUILD_EMOJIS_UPDATE";
+      GatewayDispatchEvents2["GuildIntegrationsUpdate"] = "GUILD_INTEGRATIONS_UPDATE";
+      GatewayDispatchEvents2["GuildMemberAdd"] = "GUILD_MEMBER_ADD";
+      GatewayDispatchEvents2["GuildMemberRemove"] = "GUILD_MEMBER_REMOVE";
+      GatewayDispatchEvents2["GuildMembersChunk"] = "GUILD_MEMBERS_CHUNK";
+      GatewayDispatchEvents2["GuildMemberUpdate"] = "GUILD_MEMBER_UPDATE";
+      GatewayDispatchEvents2["GuildRoleCreate"] = "GUILD_ROLE_CREATE";
+      GatewayDispatchEvents2["GuildRoleDelete"] = "GUILD_ROLE_DELETE";
+      GatewayDispatchEvents2["GuildRoleUpdate"] = "GUILD_ROLE_UPDATE";
+      GatewayDispatchEvents2["GuildScheduledEventCreate"] = "GUILD_SCHEDULED_EVENT_CREATE";
+      GatewayDispatchEvents2["GuildScheduledEventDelete"] = "GUILD_SCHEDULED_EVENT_DELETE";
+      GatewayDispatchEvents2["GuildScheduledEventUpdate"] = "GUILD_SCHEDULED_EVENT_UPDATE";
+      GatewayDispatchEvents2["GuildScheduledEventUserAdd"] = "GUILD_SCHEDULED_EVENT_USER_ADD";
+      GatewayDispatchEvents2["GuildScheduledEventUserRemove"] = "GUILD_SCHEDULED_EVENT_USER_REMOVE";
+      GatewayDispatchEvents2["GuildSoundboardSoundCreate"] = "GUILD_SOUNDBOARD_SOUND_CREATE";
+      GatewayDispatchEvents2["GuildSoundboardSoundDelete"] = "GUILD_SOUNDBOARD_SOUND_DELETE";
+      GatewayDispatchEvents2["GuildSoundboardSoundsUpdate"] = "GUILD_SOUNDBOARD_SOUNDS_UPDATE";
+      GatewayDispatchEvents2["GuildSoundboardSoundUpdate"] = "GUILD_SOUNDBOARD_SOUND_UPDATE";
+      GatewayDispatchEvents2["SoundboardSounds"] = "SOUNDBOARD_SOUNDS";
+      GatewayDispatchEvents2["GuildStickersUpdate"] = "GUILD_STICKERS_UPDATE";
+      GatewayDispatchEvents2["GuildUpdate"] = "GUILD_UPDATE";
+      GatewayDispatchEvents2["IntegrationCreate"] = "INTEGRATION_CREATE";
+      GatewayDispatchEvents2["IntegrationDelete"] = "INTEGRATION_DELETE";
+      GatewayDispatchEvents2["IntegrationUpdate"] = "INTEGRATION_UPDATE";
+      GatewayDispatchEvents2["InteractionCreate"] = "INTERACTION_CREATE";
+      GatewayDispatchEvents2["InviteCreate"] = "INVITE_CREATE";
+      GatewayDispatchEvents2["InviteDelete"] = "INVITE_DELETE";
+      GatewayDispatchEvents2["MessageCreate"] = "MESSAGE_CREATE";
+      GatewayDispatchEvents2["MessageDelete"] = "MESSAGE_DELETE";
+      GatewayDispatchEvents2["MessageDeleteBulk"] = "MESSAGE_DELETE_BULK";
+      GatewayDispatchEvents2["MessagePollVoteAdd"] = "MESSAGE_POLL_VOTE_ADD";
+      GatewayDispatchEvents2["MessagePollVoteRemove"] = "MESSAGE_POLL_VOTE_REMOVE";
+      GatewayDispatchEvents2["MessageReactionAdd"] = "MESSAGE_REACTION_ADD";
+      GatewayDispatchEvents2["MessageReactionRemove"] = "MESSAGE_REACTION_REMOVE";
+      GatewayDispatchEvents2["MessageReactionRemoveAll"] = "MESSAGE_REACTION_REMOVE_ALL";
+      GatewayDispatchEvents2["MessageReactionRemoveEmoji"] = "MESSAGE_REACTION_REMOVE_EMOJI";
+      GatewayDispatchEvents2["MessageUpdate"] = "MESSAGE_UPDATE";
+      GatewayDispatchEvents2["PresenceUpdate"] = "PRESENCE_UPDATE";
+      GatewayDispatchEvents2["Ready"] = "READY";
+      GatewayDispatchEvents2["Resumed"] = "RESUMED";
+      GatewayDispatchEvents2["StageInstanceCreate"] = "STAGE_INSTANCE_CREATE";
+      GatewayDispatchEvents2["StageInstanceDelete"] = "STAGE_INSTANCE_DELETE";
+      GatewayDispatchEvents2["StageInstanceUpdate"] = "STAGE_INSTANCE_UPDATE";
+      GatewayDispatchEvents2["SubscriptionCreate"] = "SUBSCRIPTION_CREATE";
+      GatewayDispatchEvents2["SubscriptionDelete"] = "SUBSCRIPTION_DELETE";
+      GatewayDispatchEvents2["SubscriptionUpdate"] = "SUBSCRIPTION_UPDATE";
+      GatewayDispatchEvents2["ThreadCreate"] = "THREAD_CREATE";
+      GatewayDispatchEvents2["ThreadDelete"] = "THREAD_DELETE";
+      GatewayDispatchEvents2["ThreadListSync"] = "THREAD_LIST_SYNC";
+      GatewayDispatchEvents2["ThreadMembersUpdate"] = "THREAD_MEMBERS_UPDATE";
+      GatewayDispatchEvents2["ThreadMemberUpdate"] = "THREAD_MEMBER_UPDATE";
+      GatewayDispatchEvents2["ThreadUpdate"] = "THREAD_UPDATE";
+      GatewayDispatchEvents2["TypingStart"] = "TYPING_START";
+      GatewayDispatchEvents2["UserUpdate"] = "USER_UPDATE";
+      GatewayDispatchEvents2["VoiceChannelEffectSend"] = "VOICE_CHANNEL_EFFECT_SEND";
+      GatewayDispatchEvents2["VoiceServerUpdate"] = "VOICE_SERVER_UPDATE";
+      GatewayDispatchEvents2["VoiceStateUpdate"] = "VOICE_STATE_UPDATE";
+      GatewayDispatchEvents2["WebhooksUpdate"] = "WEBHOOKS_UPDATE";
+    })(GatewayDispatchEvents || (exports2.GatewayDispatchEvents = GatewayDispatchEvents = {}));
+    var VoiceChannelEffectSendAnimationType;
+    (function(VoiceChannelEffectSendAnimationType2) {
+      VoiceChannelEffectSendAnimationType2[VoiceChannelEffectSendAnimationType2["Premium"] = 0] = "Premium";
+      VoiceChannelEffectSendAnimationType2[VoiceChannelEffectSendAnimationType2["Basic"] = 1] = "Basic";
+    })(VoiceChannelEffectSendAnimationType || (exports2.VoiceChannelEffectSendAnimationType = VoiceChannelEffectSendAnimationType = {}));
+  }
+});
+
+// node_modules/discord-api-types/globals.js
+var require_globals2 = __commonJS({
+  "node_modules/discord-api-types/globals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.FormattingPatterns = void 0;
+    exports2.FormattingPatterns = {
+      /**
+       * Regular expression for matching a user mention, strictly without a nickname
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      User: /<@(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a user mention, strictly with a nickname
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       *
+       * @deprecated Passing `!` in user mentions is no longer necessary / supported, and future message contents won't have it
+       */
+      UserWithNickname: /<@!(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a user mention, with or without a nickname
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       *
+       * @deprecated Passing `!` in user mentions is no longer necessary / supported, and future message contents won't have it
+       */
+      UserWithOptionalNickname: /<@!?(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a channel mention
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      Channel: /<#(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a role mention
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      Role: /<@&(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a application command mention
+       *
+       * The `fullName` (possibly including `name`, `subcommandOrGroup` and `subcommand`) and `id` group properties are present on the `exec` result of this expression
+       */
+      SlashCommand: (
+        // eslint-disable-next-line unicorn/no-unsafe-regex
+        /<\/(?<fullName>(?<name>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32})(?: (?<subcommandOrGroup>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?(?: (?<subcommand>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?):(?<id>\d{17,20})>/u
+      ),
+      /**
+       * Regular expression for matching a custom emoji, either static or animated
+       *
+       * The `animated`, `name` and `id` group properties are present on the `exec` result of this expression
+       */
+      Emoji: /<(?<animated>a)?:(?<name>\w{2,32}):(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching strictly an animated custom emoji
+       *
+       * The `animated`, `name` and `id` group properties are present on the `exec` result of this expression
+       */
+      AnimatedEmoji: /<(?<animated>a):(?<name>\w{2,32}):(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching strictly a static custom emoji
+       *
+       * The `name` and `id` group properties are present on the `exec` result of this expression
+       */
+      StaticEmoji: /<:(?<name>\w{2,32}):(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a timestamp, either default or custom styled
+       *
+       * The `timestamp` and `style` group properties are present on the `exec` result of this expression
+       */
+      // eslint-disable-next-line prefer-named-capture-group
+      Timestamp: /<t:(?<timestamp>-?\d{1,13})(:(?<style>[DFRTdft]))?>/,
+      /**
+       * Regular expression for matching strictly default styled timestamps
+       *
+       * The `timestamp` group property is present on the `exec` result of this expression
+       */
+      DefaultStyledTimestamp: /<t:(?<timestamp>-?\d{1,13})>/,
+      /**
+       * Regular expression for matching strictly custom styled timestamps
+       *
+       * The `timestamp` and `style` group properties are present on the `exec` result of this expression
+       */
+      StyledTimestamp: /<t:(?<timestamp>-?\d{1,13}):(?<style>[DFRTdft])>/,
+      /**
+       * Regular expression for matching a guild navigation mention
+       *
+       * The `type` group property is present on the `exec` result of this expression
+       */
+      GuildNavigation: /<id:(?<type>customize|browse|guide|linked-roles)>/,
+      /**
+       * Regular expression for matching a linked role mention
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      LinkedRole: /<id:linked-roles:(?<id>\d{17,20})>/
+    };
+    Object.freeze(exports2.FormattingPatterns);
+  }
+});
+
+// node_modules/discord-api-types/payloads/common.js
+var require_common6 = __commonJS({
+  "node_modules/discord-api-types/payloads/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.PermissionFlagsBits = void 0;
+    exports2.PermissionFlagsBits = {
+      /**
+       * Allows creation of instant invites
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      CreateInstantInvite: 1n << 0n,
+      /**
+       * Allows kicking members
+       */
+      // eslint-disable-next-line sonarjs/no-identical-expressions
+      KickMembers: 1n << 1n,
+      /**
+       * Allows banning members
+       */
+      BanMembers: 1n << 2n,
+      /**
+       * Allows all permissions and bypasses channel permission overwrites
+       */
+      Administrator: 1n << 3n,
+      /**
+       * Allows management and editing of channels
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageChannels: 1n << 4n,
+      /**
+       * Allows management and editing of the guild
+       */
+      ManageGuild: 1n << 5n,
+      /**
+       * Allows for the addition of reactions to messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      AddReactions: 1n << 6n,
+      /**
+       * Allows for viewing of audit logs
+       */
+      ViewAuditLog: 1n << 7n,
+      /**
+       * Allows for using priority speaker in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      PrioritySpeaker: 1n << 8n,
+      /**
+       * Allows the user to go live
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      Stream: 1n << 9n,
+      /**
+       * Allows guild members to view a channel, which includes reading messages in text channels and joining voice channels
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ViewChannel: 1n << 10n,
+      /**
+       * Allows for sending messages in a channel and creating threads in a forum
+       * (does not allow sending messages in threads)
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendMessages: 1n << 11n,
+      /**
+       * Allows for sending of `/tts` messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendTTSMessages: 1n << 12n,
+      /**
+       * Allows for deletion of other users messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageMessages: 1n << 13n,
+      /**
+       * Links sent by users with this permission will be auto-embedded
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      EmbedLinks: 1n << 14n,
+      /**
+       * Allows for uploading images and files
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      AttachFiles: 1n << 15n,
+      /**
+       * Allows for reading of message history
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ReadMessageHistory: 1n << 16n,
+      /**
+       * Allows for using the `@everyone` tag to notify all users in a channel,
+       * and the `@here` tag to notify all online users in a channel
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      MentionEveryone: 1n << 17n,
+      /**
+       * Allows the usage of custom emojis from other servers
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseExternalEmojis: 1n << 18n,
+      /**
+       * Allows for viewing guild insights
+       */
+      ViewGuildInsights: 1n << 19n,
+      /**
+       * Allows for joining of a voice channel
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      Connect: 1n << 20n,
+      /**
+       * Allows for speaking in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      Speak: 1n << 21n,
+      /**
+       * Allows for muting members in a voice channel
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      MuteMembers: 1n << 22n,
+      /**
+       * Allows for deafening of members in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      DeafenMembers: 1n << 23n,
+      /**
+       * Allows for moving of members between voice channels
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      MoveMembers: 1n << 24n,
+      /**
+       * Allows for using voice-activity-detection in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      UseVAD: 1n << 25n,
+      /**
+       * Allows for modification of own nickname
+       */
+      ChangeNickname: 1n << 26n,
+      /**
+       * Allows for modification of other users nicknames
+       */
+      ManageNicknames: 1n << 27n,
+      /**
+       * Allows management and editing of roles
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageRoles: 1n << 28n,
+      /**
+       * Allows management and editing of webhooks
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageWebhooks: 1n << 29n,
+      /**
+       * Allows management and editing of emojis, stickers, and soundboard sounds
+       *
+       * @deprecated This is the old name for {@link PermissionFlagsBits.ManageGuildExpressions}
+       */
+      ManageEmojisAndStickers: 1n << 30n,
+      /**
+       * Allows for editing and deleting emojis, stickers, and soundboard sounds created by all users
+       */
+      ManageGuildExpressions: 1n << 30n,
+      /**
+       * Allows members to use application commands, including slash commands and context menu commands
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseApplicationCommands: 1n << 31n,
+      /**
+       * Allows for requesting to speak in stage channels
+       *
+       * Applies to channel types: Stage
+       */
+      RequestToSpeak: 1n << 32n,
+      /**
+       * Allows for editing and deleting scheduled events created by all users
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      ManageEvents: 1n << 33n,
+      /**
+       * Allows for deleting and archiving threads, and viewing all private threads
+       *
+       * Applies to channel types: Text
+       */
+      ManageThreads: 1n << 34n,
+      /**
+       * Allows for creating public and announcement threads
+       *
+       * Applies to channel types: Text
+       */
+      CreatePublicThreads: 1n << 35n,
+      /**
+       * Allows for creating private threads
+       *
+       * Applies to channel types: Text
+       */
+      CreatePrivateThreads: 1n << 36n,
+      /**
+       * Allows the usage of custom stickers from other servers
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseExternalStickers: 1n << 37n,
+      /**
+       * Allows for sending messages in threads
+       *
+       * Applies to channel types: Text
+       */
+      SendMessagesInThreads: 1n << 38n,
+      /**
+       * Allows for using Activities (applications with the {@link ApplicationFlags.Embedded} flag) in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      UseEmbeddedActivities: 1n << 39n,
+      /**
+       * Allows for timing out users to prevent them from sending or reacting to messages in chat and threads,
+       * and from speaking in voice and stage channels
+       */
+      ModerateMembers: 1n << 40n,
+      /**
+       * Allows for viewing role subscription insights
+       */
+      ViewCreatorMonetizationAnalytics: 1n << 41n,
+      /**
+       * Allows for using soundboard in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      UseSoundboard: 1n << 42n,
+      /**
+       * Allows for creating emojis, stickers, and soundboard sounds, and editing and deleting those created by the current user
+       */
+      CreateGuildExpressions: 1n << 43n,
+      /**
+       * Allows for creating scheduled events, and editing and deleting those created by the current user
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      CreateEvents: 1n << 44n,
+      /**
+       * Allows the usage of custom soundboard sounds from other servers
+       *
+       * Applies to channel types: Voice
+       */
+      UseExternalSounds: 1n << 45n,
+      /**
+       * Allows sending voice messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendVoiceMessages: 1n << 46n,
+      /**
+       * Allows sending polls
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendPolls: 1n << 49n,
+      /**
+       * Allows user-installed apps to send public responses. When disabled, users will still be allowed to use their apps but the responses will be ephemeral. This only applies to apps not also installed to the server
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseExternalApps: 1n << 50n
+    };
+    Object.freeze(exports2.PermissionFlagsBits);
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/application.js
+var require_application3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/application.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ApplicationWebhookEventStatus = exports2.ApplicationRoleConnectionMetadataType = exports2.ApplicationFlags = void 0;
+    var ApplicationFlags;
+    (function(ApplicationFlags2) {
+      ApplicationFlags2[ApplicationFlags2["EmbeddedReleased"] = 2] = "EmbeddedReleased";
+      ApplicationFlags2[ApplicationFlags2["ManagedEmoji"] = 4] = "ManagedEmoji";
+      ApplicationFlags2[ApplicationFlags2["EmbeddedIAP"] = 8] = "EmbeddedIAP";
+      ApplicationFlags2[ApplicationFlags2["GroupDMCreate"] = 16] = "GroupDMCreate";
+      ApplicationFlags2[ApplicationFlags2["ApplicationAutoModerationRuleCreateBadge"] = 64] = "ApplicationAutoModerationRuleCreateBadge";
+      ApplicationFlags2[ApplicationFlags2["RPCHasConnected"] = 2048] = "RPCHasConnected";
+      ApplicationFlags2[ApplicationFlags2["GatewayPresence"] = 4096] = "GatewayPresence";
+      ApplicationFlags2[ApplicationFlags2["GatewayPresenceLimited"] = 8192] = "GatewayPresenceLimited";
+      ApplicationFlags2[ApplicationFlags2["GatewayGuildMembers"] = 16384] = "GatewayGuildMembers";
+      ApplicationFlags2[ApplicationFlags2["GatewayGuildMembersLimited"] = 32768] = "GatewayGuildMembersLimited";
+      ApplicationFlags2[ApplicationFlags2["VerificationPendingGuildLimit"] = 65536] = "VerificationPendingGuildLimit";
+      ApplicationFlags2[ApplicationFlags2["Embedded"] = 131072] = "Embedded";
+      ApplicationFlags2[ApplicationFlags2["GatewayMessageContent"] = 262144] = "GatewayMessageContent";
+      ApplicationFlags2[ApplicationFlags2["GatewayMessageContentLimited"] = 524288] = "GatewayMessageContentLimited";
+      ApplicationFlags2[ApplicationFlags2["EmbeddedFirstParty"] = 1048576] = "EmbeddedFirstParty";
+      ApplicationFlags2[ApplicationFlags2["ApplicationCommandBadge"] = 8388608] = "ApplicationCommandBadge";
+    })(ApplicationFlags || (exports2.ApplicationFlags = ApplicationFlags = {}));
+    var ApplicationRoleConnectionMetadataType;
+    (function(ApplicationRoleConnectionMetadataType2) {
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerLessThanOrEqual"] = 1] = "IntegerLessThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerGreaterThanOrEqual"] = 2] = "IntegerGreaterThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerEqual"] = 3] = "IntegerEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerNotEqual"] = 4] = "IntegerNotEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["DatetimeLessThanOrEqual"] = 5] = "DatetimeLessThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["DatetimeGreaterThanOrEqual"] = 6] = "DatetimeGreaterThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["BooleanEqual"] = 7] = "BooleanEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["BooleanNotEqual"] = 8] = "BooleanNotEqual";
+    })(ApplicationRoleConnectionMetadataType || (exports2.ApplicationRoleConnectionMetadataType = ApplicationRoleConnectionMetadataType = {}));
+    var ApplicationWebhookEventStatus;
+    (function(ApplicationWebhookEventStatus2) {
+      ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["Disabled"] = 1] = "Disabled";
+      ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["Enabled"] = 2] = "Enabled";
+      ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["DisabledByDiscord"] = 3] = "DisabledByDiscord";
+    })(ApplicationWebhookEventStatus || (exports2.ApplicationWebhookEventStatus = ApplicationWebhookEventStatus = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/auditLog.js
+var require_auditLog3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/auditLog.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.AuditLogOptionsType = exports2.AuditLogEvent = void 0;
+    var AuditLogEvent;
+    (function(AuditLogEvent2) {
+      AuditLogEvent2[AuditLogEvent2["GuildUpdate"] = 1] = "GuildUpdate";
+      AuditLogEvent2[AuditLogEvent2["ChannelCreate"] = 10] = "ChannelCreate";
+      AuditLogEvent2[AuditLogEvent2["ChannelUpdate"] = 11] = "ChannelUpdate";
+      AuditLogEvent2[AuditLogEvent2["ChannelDelete"] = 12] = "ChannelDelete";
+      AuditLogEvent2[AuditLogEvent2["ChannelOverwriteCreate"] = 13] = "ChannelOverwriteCreate";
+      AuditLogEvent2[AuditLogEvent2["ChannelOverwriteUpdate"] = 14] = "ChannelOverwriteUpdate";
+      AuditLogEvent2[AuditLogEvent2["ChannelOverwriteDelete"] = 15] = "ChannelOverwriteDelete";
+      AuditLogEvent2[AuditLogEvent2["MemberKick"] = 20] = "MemberKick";
+      AuditLogEvent2[AuditLogEvent2["MemberPrune"] = 21] = "MemberPrune";
+      AuditLogEvent2[AuditLogEvent2["MemberBanAdd"] = 22] = "MemberBanAdd";
+      AuditLogEvent2[AuditLogEvent2["MemberBanRemove"] = 23] = "MemberBanRemove";
+      AuditLogEvent2[AuditLogEvent2["MemberUpdate"] = 24] = "MemberUpdate";
+      AuditLogEvent2[AuditLogEvent2["MemberRoleUpdate"] = 25] = "MemberRoleUpdate";
+      AuditLogEvent2[AuditLogEvent2["MemberMove"] = 26] = "MemberMove";
+      AuditLogEvent2[AuditLogEvent2["MemberDisconnect"] = 27] = "MemberDisconnect";
+      AuditLogEvent2[AuditLogEvent2["BotAdd"] = 28] = "BotAdd";
+      AuditLogEvent2[AuditLogEvent2["RoleCreate"] = 30] = "RoleCreate";
+      AuditLogEvent2[AuditLogEvent2["RoleUpdate"] = 31] = "RoleUpdate";
+      AuditLogEvent2[AuditLogEvent2["RoleDelete"] = 32] = "RoleDelete";
+      AuditLogEvent2[AuditLogEvent2["InviteCreate"] = 40] = "InviteCreate";
+      AuditLogEvent2[AuditLogEvent2["InviteUpdate"] = 41] = "InviteUpdate";
+      AuditLogEvent2[AuditLogEvent2["InviteDelete"] = 42] = "InviteDelete";
+      AuditLogEvent2[AuditLogEvent2["WebhookCreate"] = 50] = "WebhookCreate";
+      AuditLogEvent2[AuditLogEvent2["WebhookUpdate"] = 51] = "WebhookUpdate";
+      AuditLogEvent2[AuditLogEvent2["WebhookDelete"] = 52] = "WebhookDelete";
+      AuditLogEvent2[AuditLogEvent2["EmojiCreate"] = 60] = "EmojiCreate";
+      AuditLogEvent2[AuditLogEvent2["EmojiUpdate"] = 61] = "EmojiUpdate";
+      AuditLogEvent2[AuditLogEvent2["EmojiDelete"] = 62] = "EmojiDelete";
+      AuditLogEvent2[AuditLogEvent2["MessageDelete"] = 72] = "MessageDelete";
+      AuditLogEvent2[AuditLogEvent2["MessageBulkDelete"] = 73] = "MessageBulkDelete";
+      AuditLogEvent2[AuditLogEvent2["MessagePin"] = 74] = "MessagePin";
+      AuditLogEvent2[AuditLogEvent2["MessageUnpin"] = 75] = "MessageUnpin";
+      AuditLogEvent2[AuditLogEvent2["IntegrationCreate"] = 80] = "IntegrationCreate";
+      AuditLogEvent2[AuditLogEvent2["IntegrationUpdate"] = 81] = "IntegrationUpdate";
+      AuditLogEvent2[AuditLogEvent2["IntegrationDelete"] = 82] = "IntegrationDelete";
+      AuditLogEvent2[AuditLogEvent2["StageInstanceCreate"] = 83] = "StageInstanceCreate";
+      AuditLogEvent2[AuditLogEvent2["StageInstanceUpdate"] = 84] = "StageInstanceUpdate";
+      AuditLogEvent2[AuditLogEvent2["StageInstanceDelete"] = 85] = "StageInstanceDelete";
+      AuditLogEvent2[AuditLogEvent2["StickerCreate"] = 90] = "StickerCreate";
+      AuditLogEvent2[AuditLogEvent2["StickerUpdate"] = 91] = "StickerUpdate";
+      AuditLogEvent2[AuditLogEvent2["StickerDelete"] = 92] = "StickerDelete";
+      AuditLogEvent2[AuditLogEvent2["GuildScheduledEventCreate"] = 100] = "GuildScheduledEventCreate";
+      AuditLogEvent2[AuditLogEvent2["GuildScheduledEventUpdate"] = 101] = "GuildScheduledEventUpdate";
+      AuditLogEvent2[AuditLogEvent2["GuildScheduledEventDelete"] = 102] = "GuildScheduledEventDelete";
+      AuditLogEvent2[AuditLogEvent2["ThreadCreate"] = 110] = "ThreadCreate";
+      AuditLogEvent2[AuditLogEvent2["ThreadUpdate"] = 111] = "ThreadUpdate";
+      AuditLogEvent2[AuditLogEvent2["ThreadDelete"] = 112] = "ThreadDelete";
+      AuditLogEvent2[AuditLogEvent2["ApplicationCommandPermissionUpdate"] = 121] = "ApplicationCommandPermissionUpdate";
+      AuditLogEvent2[AuditLogEvent2["SoundboardSoundCreate"] = 130] = "SoundboardSoundCreate";
+      AuditLogEvent2[AuditLogEvent2["SoundboardSoundUpdate"] = 131] = "SoundboardSoundUpdate";
+      AuditLogEvent2[AuditLogEvent2["SoundboardSoundDelete"] = 132] = "SoundboardSoundDelete";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationRuleCreate"] = 140] = "AutoModerationRuleCreate";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationRuleUpdate"] = 141] = "AutoModerationRuleUpdate";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationRuleDelete"] = 142] = "AutoModerationRuleDelete";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationBlockMessage"] = 143] = "AutoModerationBlockMessage";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationFlagToChannel"] = 144] = "AutoModerationFlagToChannel";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationUserCommunicationDisabled"] = 145] = "AutoModerationUserCommunicationDisabled";
+      AuditLogEvent2[AuditLogEvent2["CreatorMonetizationRequestCreated"] = 150] = "CreatorMonetizationRequestCreated";
+      AuditLogEvent2[AuditLogEvent2["CreatorMonetizationTermsAccepted"] = 151] = "CreatorMonetizationTermsAccepted";
+      AuditLogEvent2[AuditLogEvent2["OnboardingPromptCreate"] = 163] = "OnboardingPromptCreate";
+      AuditLogEvent2[AuditLogEvent2["OnboardingPromptUpdate"] = 164] = "OnboardingPromptUpdate";
+      AuditLogEvent2[AuditLogEvent2["OnboardingPromptDelete"] = 165] = "OnboardingPromptDelete";
+      AuditLogEvent2[AuditLogEvent2["OnboardingCreate"] = 166] = "OnboardingCreate";
+      AuditLogEvent2[AuditLogEvent2["OnboardingUpdate"] = 167] = "OnboardingUpdate";
+      AuditLogEvent2[AuditLogEvent2["HomeSettingsCreate"] = 190] = "HomeSettingsCreate";
+      AuditLogEvent2[AuditLogEvent2["HomeSettingsUpdate"] = 191] = "HomeSettingsUpdate";
+    })(AuditLogEvent || (exports2.AuditLogEvent = AuditLogEvent = {}));
+    var AuditLogOptionsType;
+    (function(AuditLogOptionsType2) {
+      AuditLogOptionsType2["Role"] = "0";
+      AuditLogOptionsType2["Member"] = "1";
+    })(AuditLogOptionsType || (exports2.AuditLogOptionsType = AuditLogOptionsType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/autoModeration.js
+var require_autoModeration3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/autoModeration.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.AutoModerationActionType = exports2.AutoModerationRuleEventType = exports2.AutoModerationRuleKeywordPresetType = exports2.AutoModerationRuleTriggerType = void 0;
+    var AutoModerationRuleTriggerType;
+    (function(AutoModerationRuleTriggerType2) {
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["Keyword"] = 1] = "Keyword";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["Spam"] = 3] = "Spam";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["KeywordPreset"] = 4] = "KeywordPreset";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["MentionSpam"] = 5] = "MentionSpam";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["MemberProfile"] = 6] = "MemberProfile";
+    })(AutoModerationRuleTriggerType || (exports2.AutoModerationRuleTriggerType = AutoModerationRuleTriggerType = {}));
+    var AutoModerationRuleKeywordPresetType;
+    (function(AutoModerationRuleKeywordPresetType2) {
+      AutoModerationRuleKeywordPresetType2[AutoModerationRuleKeywordPresetType2["Profanity"] = 1] = "Profanity";
+      AutoModerationRuleKeywordPresetType2[AutoModerationRuleKeywordPresetType2["SexualContent"] = 2] = "SexualContent";
+      AutoModerationRuleKeywordPresetType2[AutoModerationRuleKeywordPresetType2["Slurs"] = 3] = "Slurs";
+    })(AutoModerationRuleKeywordPresetType || (exports2.AutoModerationRuleKeywordPresetType = AutoModerationRuleKeywordPresetType = {}));
+    var AutoModerationRuleEventType;
+    (function(AutoModerationRuleEventType2) {
+      AutoModerationRuleEventType2[AutoModerationRuleEventType2["MessageSend"] = 1] = "MessageSend";
+      AutoModerationRuleEventType2[AutoModerationRuleEventType2["MemberUpdate"] = 2] = "MemberUpdate";
+    })(AutoModerationRuleEventType || (exports2.AutoModerationRuleEventType = AutoModerationRuleEventType = {}));
+    var AutoModerationActionType;
+    (function(AutoModerationActionType2) {
+      AutoModerationActionType2[AutoModerationActionType2["BlockMessage"] = 1] = "BlockMessage";
+      AutoModerationActionType2[AutoModerationActionType2["SendAlertMessage"] = 2] = "SendAlertMessage";
+      AutoModerationActionType2[AutoModerationActionType2["Timeout"] = 3] = "Timeout";
+      AutoModerationActionType2[AutoModerationActionType2["BlockMemberInteraction"] = 4] = "BlockMemberInteraction";
+    })(AutoModerationActionType || (exports2.AutoModerationActionType = AutoModerationActionType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/channel.js
+var require_channel4 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/channel.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ChannelFlags = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.ThreadMemberFlags = exports2.ThreadAutoArchiveDuration = exports2.OverwriteType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = exports2.VideoQualityMode = exports2.ChannelType = exports2.ForumLayoutType = exports2.SortOrderType = void 0;
+    var SortOrderType;
+    (function(SortOrderType2) {
+      SortOrderType2[SortOrderType2["LatestActivity"] = 0] = "LatestActivity";
+      SortOrderType2[SortOrderType2["CreationDate"] = 1] = "CreationDate";
+    })(SortOrderType || (exports2.SortOrderType = SortOrderType = {}));
+    var ForumLayoutType;
+    (function(ForumLayoutType2) {
+      ForumLayoutType2[ForumLayoutType2["NotSet"] = 0] = "NotSet";
+      ForumLayoutType2[ForumLayoutType2["ListView"] = 1] = "ListView";
+      ForumLayoutType2[ForumLayoutType2["GalleryView"] = 2] = "GalleryView";
+    })(ForumLayoutType || (exports2.ForumLayoutType = ForumLayoutType = {}));
+    var ChannelType;
+    (function(ChannelType2) {
+      ChannelType2[ChannelType2["GuildText"] = 0] = "GuildText";
+      ChannelType2[ChannelType2["DM"] = 1] = "DM";
+      ChannelType2[ChannelType2["GuildVoice"] = 2] = "GuildVoice";
+      ChannelType2[ChannelType2["GroupDM"] = 3] = "GroupDM";
+      ChannelType2[ChannelType2["GuildCategory"] = 4] = "GuildCategory";
+      ChannelType2[ChannelType2["GuildAnnouncement"] = 5] = "GuildAnnouncement";
+      ChannelType2[ChannelType2["AnnouncementThread"] = 10] = "AnnouncementThread";
+      ChannelType2[ChannelType2["PublicThread"] = 11] = "PublicThread";
+      ChannelType2[ChannelType2["PrivateThread"] = 12] = "PrivateThread";
+      ChannelType2[ChannelType2["GuildStageVoice"] = 13] = "GuildStageVoice";
+      ChannelType2[ChannelType2["GuildDirectory"] = 14] = "GuildDirectory";
+      ChannelType2[ChannelType2["GuildForum"] = 15] = "GuildForum";
+      ChannelType2[ChannelType2["GuildMedia"] = 16] = "GuildMedia";
+      ChannelType2[ChannelType2["GuildNews"] = 5] = "GuildNews";
+      ChannelType2[ChannelType2["GuildNewsThread"] = 10] = "GuildNewsThread";
+      ChannelType2[ChannelType2["GuildPublicThread"] = 11] = "GuildPublicThread";
+      ChannelType2[ChannelType2["GuildPrivateThread"] = 12] = "GuildPrivateThread";
+    })(ChannelType || (exports2.ChannelType = ChannelType = {}));
+    var VideoQualityMode;
+    (function(VideoQualityMode2) {
+      VideoQualityMode2[VideoQualityMode2["Auto"] = 1] = "Auto";
+      VideoQualityMode2[VideoQualityMode2["Full"] = 2] = "Full";
+    })(VideoQualityMode || (exports2.VideoQualityMode = VideoQualityMode = {}));
+    var MessageType;
+    (function(MessageType2) {
+      MessageType2[MessageType2["Default"] = 0] = "Default";
+      MessageType2[MessageType2["RecipientAdd"] = 1] = "RecipientAdd";
+      MessageType2[MessageType2["RecipientRemove"] = 2] = "RecipientRemove";
+      MessageType2[MessageType2["Call"] = 3] = "Call";
+      MessageType2[MessageType2["ChannelNameChange"] = 4] = "ChannelNameChange";
+      MessageType2[MessageType2["ChannelIconChange"] = 5] = "ChannelIconChange";
+      MessageType2[MessageType2["ChannelPinnedMessage"] = 6] = "ChannelPinnedMessage";
+      MessageType2[MessageType2["UserJoin"] = 7] = "UserJoin";
+      MessageType2[MessageType2["GuildBoost"] = 8] = "GuildBoost";
+      MessageType2[MessageType2["GuildBoostTier1"] = 9] = "GuildBoostTier1";
+      MessageType2[MessageType2["GuildBoostTier2"] = 10] = "GuildBoostTier2";
+      MessageType2[MessageType2["GuildBoostTier3"] = 11] = "GuildBoostTier3";
+      MessageType2[MessageType2["ChannelFollowAdd"] = 12] = "ChannelFollowAdd";
+      MessageType2[MessageType2["GuildDiscoveryDisqualified"] = 14] = "GuildDiscoveryDisqualified";
+      MessageType2[MessageType2["GuildDiscoveryRequalified"] = 15] = "GuildDiscoveryRequalified";
+      MessageType2[MessageType2["GuildDiscoveryGracePeriodInitialWarning"] = 16] = "GuildDiscoveryGracePeriodInitialWarning";
+      MessageType2[MessageType2["GuildDiscoveryGracePeriodFinalWarning"] = 17] = "GuildDiscoveryGracePeriodFinalWarning";
+      MessageType2[MessageType2["ThreadCreated"] = 18] = "ThreadCreated";
+      MessageType2[MessageType2["Reply"] = 19] = "Reply";
+      MessageType2[MessageType2["ChatInputCommand"] = 20] = "ChatInputCommand";
+      MessageType2[MessageType2["ThreadStarterMessage"] = 21] = "ThreadStarterMessage";
+      MessageType2[MessageType2["GuildInviteReminder"] = 22] = "GuildInviteReminder";
+      MessageType2[MessageType2["ContextMenuCommand"] = 23] = "ContextMenuCommand";
+      MessageType2[MessageType2["AutoModerationAction"] = 24] = "AutoModerationAction";
+      MessageType2[MessageType2["RoleSubscriptionPurchase"] = 25] = "RoleSubscriptionPurchase";
+      MessageType2[MessageType2["InteractionPremiumUpsell"] = 26] = "InteractionPremiumUpsell";
+      MessageType2[MessageType2["StageStart"] = 27] = "StageStart";
+      MessageType2[MessageType2["StageEnd"] = 28] = "StageEnd";
+      MessageType2[MessageType2["StageSpeaker"] = 29] = "StageSpeaker";
+      MessageType2[MessageType2["StageRaiseHand"] = 30] = "StageRaiseHand";
+      MessageType2[MessageType2["StageTopic"] = 31] = "StageTopic";
+      MessageType2[MessageType2["GuildApplicationPremiumSubscription"] = 32] = "GuildApplicationPremiumSubscription";
+      MessageType2[MessageType2["GuildIncidentAlertModeEnabled"] = 36] = "GuildIncidentAlertModeEnabled";
+      MessageType2[MessageType2["GuildIncidentAlertModeDisabled"] = 37] = "GuildIncidentAlertModeDisabled";
+      MessageType2[MessageType2["GuildIncidentReportRaid"] = 38] = "GuildIncidentReportRaid";
+      MessageType2[MessageType2["GuildIncidentReportFalseAlarm"] = 39] = "GuildIncidentReportFalseAlarm";
+      MessageType2[MessageType2["PurchaseNotification"] = 44] = "PurchaseNotification";
+      MessageType2[MessageType2["PollResult"] = 46] = "PollResult";
+    })(MessageType || (exports2.MessageType = MessageType = {}));
+    var MessageActivityType;
+    (function(MessageActivityType2) {
+      MessageActivityType2[MessageActivityType2["Join"] = 1] = "Join";
+      MessageActivityType2[MessageActivityType2["Spectate"] = 2] = "Spectate";
+      MessageActivityType2[MessageActivityType2["Listen"] = 3] = "Listen";
+      MessageActivityType2[MessageActivityType2["JoinRequest"] = 5] = "JoinRequest";
+    })(MessageActivityType || (exports2.MessageActivityType = MessageActivityType = {}));
+    var MessageReferenceType;
+    (function(MessageReferenceType2) {
+      MessageReferenceType2[MessageReferenceType2["Default"] = 0] = "Default";
+      MessageReferenceType2[MessageReferenceType2["Forward"] = 1] = "Forward";
+    })(MessageReferenceType || (exports2.MessageReferenceType = MessageReferenceType = {}));
+    var MessageFlags;
+    (function(MessageFlags2) {
+      MessageFlags2[MessageFlags2["Crossposted"] = 1] = "Crossposted";
+      MessageFlags2[MessageFlags2["IsCrosspost"] = 2] = "IsCrosspost";
+      MessageFlags2[MessageFlags2["SuppressEmbeds"] = 4] = "SuppressEmbeds";
+      MessageFlags2[MessageFlags2["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
+      MessageFlags2[MessageFlags2["Urgent"] = 16] = "Urgent";
+      MessageFlags2[MessageFlags2["HasThread"] = 32] = "HasThread";
+      MessageFlags2[MessageFlags2["Ephemeral"] = 64] = "Ephemeral";
+      MessageFlags2[MessageFlags2["Loading"] = 128] = "Loading";
+      MessageFlags2[MessageFlags2["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
+      MessageFlags2[MessageFlags2["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
+      MessageFlags2[MessageFlags2["SuppressNotifications"] = 4096] = "SuppressNotifications";
+      MessageFlags2[MessageFlags2["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
+      MessageFlags2[MessageFlags2["HasSnapshot"] = 16384] = "HasSnapshot";
+      MessageFlags2[MessageFlags2["IsComponentsV2"] = 32768] = "IsComponentsV2";
+    })(MessageFlags || (exports2.MessageFlags = MessageFlags = {}));
+    var OverwriteType;
+    (function(OverwriteType2) {
+      OverwriteType2[OverwriteType2["Role"] = 0] = "Role";
+      OverwriteType2[OverwriteType2["Member"] = 1] = "Member";
+    })(OverwriteType || (exports2.OverwriteType = OverwriteType = {}));
+    var ThreadAutoArchiveDuration;
+    (function(ThreadAutoArchiveDuration2) {
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["OneHour"] = 60] = "OneHour";
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["OneDay"] = 1440] = "OneDay";
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["ThreeDays"] = 4320] = "ThreeDays";
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["OneWeek"] = 10080] = "OneWeek";
+    })(ThreadAutoArchiveDuration || (exports2.ThreadAutoArchiveDuration = ThreadAutoArchiveDuration = {}));
+    var ThreadMemberFlags;
+    (function(ThreadMemberFlags2) {
+      ThreadMemberFlags2[ThreadMemberFlags2["HasInteracted"] = 1] = "HasInteracted";
+      ThreadMemberFlags2[ThreadMemberFlags2["AllMessages"] = 2] = "AllMessages";
+      ThreadMemberFlags2[ThreadMemberFlags2["OnlyMentions"] = 4] = "OnlyMentions";
+      ThreadMemberFlags2[ThreadMemberFlags2["NoMessages"] = 8] = "NoMessages";
+    })(ThreadMemberFlags || (exports2.ThreadMemberFlags = ThreadMemberFlags = {}));
+    var EmbedType;
+    (function(EmbedType2) {
+      EmbedType2["Rich"] = "rich";
+      EmbedType2["Image"] = "image";
+      EmbedType2["Video"] = "video";
+      EmbedType2["GIFV"] = "gifv";
+      EmbedType2["Article"] = "article";
+      EmbedType2["Link"] = "link";
+      EmbedType2["AutoModerationMessage"] = "auto_moderation_message";
+      EmbedType2["PollResult"] = "poll_result";
+    })(EmbedType || (exports2.EmbedType = EmbedType = {}));
+    var AttachmentFlags;
+    (function(AttachmentFlags2) {
+      AttachmentFlags2[AttachmentFlags2["IsRemix"] = 4] = "IsRemix";
+    })(AttachmentFlags || (exports2.AttachmentFlags = AttachmentFlags = {}));
+    var AllowedMentionsTypes;
+    (function(AllowedMentionsTypes2) {
+      AllowedMentionsTypes2["Everyone"] = "everyone";
+      AllowedMentionsTypes2["Role"] = "roles";
+      AllowedMentionsTypes2["User"] = "users";
+    })(AllowedMentionsTypes || (exports2.AllowedMentionsTypes = AllowedMentionsTypes = {}));
+    var ComponentType;
+    (function(ComponentType2) {
+      ComponentType2[ComponentType2["ActionRow"] = 1] = "ActionRow";
+      ComponentType2[ComponentType2["Button"] = 2] = "Button";
+      ComponentType2[ComponentType2["StringSelect"] = 3] = "StringSelect";
+      ComponentType2[ComponentType2["TextInput"] = 4] = "TextInput";
+      ComponentType2[ComponentType2["UserSelect"] = 5] = "UserSelect";
+      ComponentType2[ComponentType2["RoleSelect"] = 6] = "RoleSelect";
+      ComponentType2[ComponentType2["MentionableSelect"] = 7] = "MentionableSelect";
+      ComponentType2[ComponentType2["ChannelSelect"] = 8] = "ChannelSelect";
+      ComponentType2[ComponentType2["Section"] = 9] = "Section";
+      ComponentType2[ComponentType2["TextDisplay"] = 10] = "TextDisplay";
+      ComponentType2[ComponentType2["Thumbnail"] = 11] = "Thumbnail";
+      ComponentType2[ComponentType2["MediaGallery"] = 12] = "MediaGallery";
+      ComponentType2[ComponentType2["File"] = 13] = "File";
+      ComponentType2[ComponentType2["Separator"] = 14] = "Separator";
+      ComponentType2[ComponentType2["ContentInventoryEntry"] = 16] = "ContentInventoryEntry";
+      ComponentType2[ComponentType2["Container"] = 17] = "Container";
+      ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
+    })(ComponentType || (exports2.ComponentType = ComponentType = {}));
+    var ButtonStyle2;
+    (function(ButtonStyle3) {
+      ButtonStyle3[ButtonStyle3["Primary"] = 1] = "Primary";
+      ButtonStyle3[ButtonStyle3["Secondary"] = 2] = "Secondary";
+      ButtonStyle3[ButtonStyle3["Success"] = 3] = "Success";
+      ButtonStyle3[ButtonStyle3["Danger"] = 4] = "Danger";
+      ButtonStyle3[ButtonStyle3["Link"] = 5] = "Link";
+      ButtonStyle3[ButtonStyle3["Premium"] = 6] = "Premium";
+    })(ButtonStyle2 || (exports2.ButtonStyle = ButtonStyle2 = {}));
+    var TextInputStyle2;
+    (function(TextInputStyle3) {
+      TextInputStyle3[TextInputStyle3["Short"] = 1] = "Short";
+      TextInputStyle3[TextInputStyle3["Paragraph"] = 2] = "Paragraph";
+    })(TextInputStyle2 || (exports2.TextInputStyle = TextInputStyle2 = {}));
+    var SelectMenuDefaultValueType;
+    (function(SelectMenuDefaultValueType2) {
+      SelectMenuDefaultValueType2["Channel"] = "channel";
+      SelectMenuDefaultValueType2["Role"] = "role";
+      SelectMenuDefaultValueType2["User"] = "user";
+    })(SelectMenuDefaultValueType || (exports2.SelectMenuDefaultValueType = SelectMenuDefaultValueType = {}));
+    var UnfurledMediaItemLoadingState;
+    (function(UnfurledMediaItemLoadingState2) {
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Unknown"] = 0] = "Unknown";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Loading"] = 1] = "Loading";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedSuccess"] = 2] = "LoadedSuccess";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedNotFound"] = 3] = "LoadedNotFound";
+    })(UnfurledMediaItemLoadingState || (exports2.UnfurledMediaItemLoadingState = UnfurledMediaItemLoadingState = {}));
+    var SeparatorSpacingSize;
+    (function(SeparatorSpacingSize2) {
+      SeparatorSpacingSize2[SeparatorSpacingSize2["Small"] = 1] = "Small";
+      SeparatorSpacingSize2[SeparatorSpacingSize2["Large"] = 2] = "Large";
+    })(SeparatorSpacingSize || (exports2.SeparatorSpacingSize = SeparatorSpacingSize = {}));
+    var ChannelFlags;
+    (function(ChannelFlags2) {
+      ChannelFlags2[ChannelFlags2["GuildFeedRemoved"] = 1] = "GuildFeedRemoved";
+      ChannelFlags2[ChannelFlags2["Pinned"] = 2] = "Pinned";
+      ChannelFlags2[ChannelFlags2["ActiveChannelsRemoved"] = 4] = "ActiveChannelsRemoved";
+      ChannelFlags2[ChannelFlags2["RequireTag"] = 16] = "RequireTag";
+      ChannelFlags2[ChannelFlags2["IsSpam"] = 32] = "IsSpam";
+      ChannelFlags2[ChannelFlags2["IsGuildResourceChannel"] = 128] = "IsGuildResourceChannel";
+      ChannelFlags2[ChannelFlags2["ClydeAI"] = 256] = "ClydeAI";
+      ChannelFlags2[ChannelFlags2["IsScheduledForDeletion"] = 512] = "IsScheduledForDeletion";
+      ChannelFlags2[ChannelFlags2["HideMediaDownloadOptions"] = 32768] = "HideMediaDownloadOptions";
+    })(ChannelFlags || (exports2.ChannelFlags = ChannelFlags = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/emoji.js
+var require_emoji3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/emoji.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/gateway.js
+var require_gateway3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ActivityFlags = exports2.ActivityType = exports2.ActivityPlatform = exports2.PresenceUpdateStatus = void 0;
+    var PresenceUpdateStatus;
+    (function(PresenceUpdateStatus2) {
+      PresenceUpdateStatus2["Online"] = "online";
+      PresenceUpdateStatus2["DoNotDisturb"] = "dnd";
+      PresenceUpdateStatus2["Idle"] = "idle";
+      PresenceUpdateStatus2["Invisible"] = "invisible";
+      PresenceUpdateStatus2["Offline"] = "offline";
+    })(PresenceUpdateStatus || (exports2.PresenceUpdateStatus = PresenceUpdateStatus = {}));
+    var ActivityPlatform;
+    (function(ActivityPlatform2) {
+      ActivityPlatform2["Desktop"] = "desktop";
+      ActivityPlatform2["Xbox"] = "xbox";
+      ActivityPlatform2["Samsung"] = "samsung";
+      ActivityPlatform2["IOS"] = "ios";
+      ActivityPlatform2["Android"] = "android";
+      ActivityPlatform2["Embedded"] = "embedded";
+      ActivityPlatform2["PS4"] = "ps4";
+      ActivityPlatform2["PS5"] = "ps5";
+    })(ActivityPlatform || (exports2.ActivityPlatform = ActivityPlatform = {}));
+    var ActivityType;
+    (function(ActivityType2) {
+      ActivityType2[ActivityType2["Playing"] = 0] = "Playing";
+      ActivityType2[ActivityType2["Streaming"] = 1] = "Streaming";
+      ActivityType2[ActivityType2["Listening"] = 2] = "Listening";
+      ActivityType2[ActivityType2["Watching"] = 3] = "Watching";
+      ActivityType2[ActivityType2["Custom"] = 4] = "Custom";
+      ActivityType2[ActivityType2["Competing"] = 5] = "Competing";
+    })(ActivityType || (exports2.ActivityType = ActivityType = {}));
+    var ActivityFlags;
+    (function(ActivityFlags2) {
+      ActivityFlags2[ActivityFlags2["Instance"] = 1] = "Instance";
+      ActivityFlags2[ActivityFlags2["Join"] = 2] = "Join";
+      ActivityFlags2[ActivityFlags2["Spectate"] = 4] = "Spectate";
+      ActivityFlags2[ActivityFlags2["JoinRequest"] = 8] = "JoinRequest";
+      ActivityFlags2[ActivityFlags2["Sync"] = 16] = "Sync";
+      ActivityFlags2[ActivityFlags2["Play"] = 32] = "Play";
+      ActivityFlags2[ActivityFlags2["PartyPrivacyFriends"] = 64] = "PartyPrivacyFriends";
+      ActivityFlags2[ActivityFlags2["PartyPrivacyVoiceChannel"] = 128] = "PartyPrivacyVoiceChannel";
+      ActivityFlags2[ActivityFlags2["Embedded"] = 256] = "Embedded";
+    })(ActivityFlags || (exports2.ActivityFlags = ActivityFlags = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/guild.js
+var require_guild3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/guild.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.GuildOnboardingPromptType = exports2.GuildOnboardingMode = exports2.MembershipScreeningFieldType = exports2.GuildWidgetStyle = exports2.IntegrationExpireBehavior = exports2.GuildMemberFlags = exports2.GuildFeature = exports2.GuildSystemChannelFlags = exports2.GuildHubType = exports2.GuildPremiumTier = exports2.GuildVerificationLevel = exports2.GuildNSFWLevel = exports2.GuildMFALevel = exports2.GuildExplicitContentFilter = exports2.GuildDefaultMessageNotifications = void 0;
+    var GuildDefaultMessageNotifications;
+    (function(GuildDefaultMessageNotifications2) {
+      GuildDefaultMessageNotifications2[GuildDefaultMessageNotifications2["AllMessages"] = 0] = "AllMessages";
+      GuildDefaultMessageNotifications2[GuildDefaultMessageNotifications2["OnlyMentions"] = 1] = "OnlyMentions";
+    })(GuildDefaultMessageNotifications || (exports2.GuildDefaultMessageNotifications = GuildDefaultMessageNotifications = {}));
+    var GuildExplicitContentFilter;
+    (function(GuildExplicitContentFilter2) {
+      GuildExplicitContentFilter2[GuildExplicitContentFilter2["Disabled"] = 0] = "Disabled";
+      GuildExplicitContentFilter2[GuildExplicitContentFilter2["MembersWithoutRoles"] = 1] = "MembersWithoutRoles";
+      GuildExplicitContentFilter2[GuildExplicitContentFilter2["AllMembers"] = 2] = "AllMembers";
+    })(GuildExplicitContentFilter || (exports2.GuildExplicitContentFilter = GuildExplicitContentFilter = {}));
+    var GuildMFALevel;
+    (function(GuildMFALevel2) {
+      GuildMFALevel2[GuildMFALevel2["None"] = 0] = "None";
+      GuildMFALevel2[GuildMFALevel2["Elevated"] = 1] = "Elevated";
+    })(GuildMFALevel || (exports2.GuildMFALevel = GuildMFALevel = {}));
+    var GuildNSFWLevel;
+    (function(GuildNSFWLevel2) {
+      GuildNSFWLevel2[GuildNSFWLevel2["Default"] = 0] = "Default";
+      GuildNSFWLevel2[GuildNSFWLevel2["Explicit"] = 1] = "Explicit";
+      GuildNSFWLevel2[GuildNSFWLevel2["Safe"] = 2] = "Safe";
+      GuildNSFWLevel2[GuildNSFWLevel2["AgeRestricted"] = 3] = "AgeRestricted";
+    })(GuildNSFWLevel || (exports2.GuildNSFWLevel = GuildNSFWLevel = {}));
+    var GuildVerificationLevel;
+    (function(GuildVerificationLevel2) {
+      GuildVerificationLevel2[GuildVerificationLevel2["None"] = 0] = "None";
+      GuildVerificationLevel2[GuildVerificationLevel2["Low"] = 1] = "Low";
+      GuildVerificationLevel2[GuildVerificationLevel2["Medium"] = 2] = "Medium";
+      GuildVerificationLevel2[GuildVerificationLevel2["High"] = 3] = "High";
+      GuildVerificationLevel2[GuildVerificationLevel2["VeryHigh"] = 4] = "VeryHigh";
+    })(GuildVerificationLevel || (exports2.GuildVerificationLevel = GuildVerificationLevel = {}));
+    var GuildPremiumTier;
+    (function(GuildPremiumTier2) {
+      GuildPremiumTier2[GuildPremiumTier2["None"] = 0] = "None";
+      GuildPremiumTier2[GuildPremiumTier2["Tier1"] = 1] = "Tier1";
+      GuildPremiumTier2[GuildPremiumTier2["Tier2"] = 2] = "Tier2";
+      GuildPremiumTier2[GuildPremiumTier2["Tier3"] = 3] = "Tier3";
+    })(GuildPremiumTier || (exports2.GuildPremiumTier = GuildPremiumTier = {}));
+    var GuildHubType;
+    (function(GuildHubType2) {
+      GuildHubType2[GuildHubType2["Default"] = 0] = "Default";
+      GuildHubType2[GuildHubType2["HighSchool"] = 1] = "HighSchool";
+      GuildHubType2[GuildHubType2["College"] = 2] = "College";
+    })(GuildHubType || (exports2.GuildHubType = GuildHubType = {}));
+    var GuildSystemChannelFlags;
+    (function(GuildSystemChannelFlags2) {
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressJoinNotifications"] = 1] = "SuppressJoinNotifications";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressPremiumSubscriptions"] = 2] = "SuppressPremiumSubscriptions";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressGuildReminderNotifications"] = 4] = "SuppressGuildReminderNotifications";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressJoinNotificationReplies"] = 8] = "SuppressJoinNotificationReplies";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressRoleSubscriptionPurchaseNotifications"] = 16] = "SuppressRoleSubscriptionPurchaseNotifications";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressRoleSubscriptionPurchaseNotificationReplies"] = 32] = "SuppressRoleSubscriptionPurchaseNotificationReplies";
+    })(GuildSystemChannelFlags || (exports2.GuildSystemChannelFlags = GuildSystemChannelFlags = {}));
+    var GuildFeature;
+    (function(GuildFeature2) {
+      GuildFeature2["AnimatedBanner"] = "ANIMATED_BANNER";
+      GuildFeature2["AnimatedIcon"] = "ANIMATED_ICON";
+      GuildFeature2["ApplicationCommandPermissionsV2"] = "APPLICATION_COMMAND_PERMISSIONS_V2";
+      GuildFeature2["AutoModeration"] = "AUTO_MODERATION";
+      GuildFeature2["Banner"] = "BANNER";
+      GuildFeature2["Community"] = "COMMUNITY";
+      GuildFeature2["CreatorMonetizableProvisional"] = "CREATOR_MONETIZABLE_PROVISIONAL";
+      GuildFeature2["CreatorStorePage"] = "CREATOR_STORE_PAGE";
+      GuildFeature2["DeveloperSupportServer"] = "DEVELOPER_SUPPORT_SERVER";
+      GuildFeature2["Discoverable"] = "DISCOVERABLE";
+      GuildFeature2["Featurable"] = "FEATURABLE";
+      GuildFeature2["HasDirectoryEntry"] = "HAS_DIRECTORY_ENTRY";
+      GuildFeature2["Hub"] = "HUB";
+      GuildFeature2["InvitesDisabled"] = "INVITES_DISABLED";
+      GuildFeature2["InviteSplash"] = "INVITE_SPLASH";
+      GuildFeature2["LinkedToHub"] = "LINKED_TO_HUB";
+      GuildFeature2["MemberVerificationGateEnabled"] = "MEMBER_VERIFICATION_GATE_ENABLED";
+      GuildFeature2["MoreSoundboard"] = "MORE_SOUNDBOARD";
+      GuildFeature2["MonetizationEnabled"] = "MONETIZATION_ENABLED";
+      GuildFeature2["MoreStickers"] = "MORE_STICKERS";
+      GuildFeature2["News"] = "NEWS";
+      GuildFeature2["Partnered"] = "PARTNERED";
+      GuildFeature2["PreviewEnabled"] = "PREVIEW_ENABLED";
+      GuildFeature2["PrivateThreads"] = "PRIVATE_THREADS";
+      GuildFeature2["RaidAlertsDisabled"] = "RAID_ALERTS_DISABLED";
+      GuildFeature2["RelayEnabled"] = "RELAY_ENABLED";
+      GuildFeature2["RoleIcons"] = "ROLE_ICONS";
+      GuildFeature2["RoleSubscriptionsAvailableForPurchase"] = "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE";
+      GuildFeature2["RoleSubscriptionsEnabled"] = "ROLE_SUBSCRIPTIONS_ENABLED";
+      GuildFeature2["Soundboard"] = "SOUNDBOARD";
+      GuildFeature2["TicketedEventsEnabled"] = "TICKETED_EVENTS_ENABLED";
+      GuildFeature2["VanityURL"] = "VANITY_URL";
+      GuildFeature2["Verified"] = "VERIFIED";
+      GuildFeature2["VIPRegions"] = "VIP_REGIONS";
+      GuildFeature2["WelcomeScreenEnabled"] = "WELCOME_SCREEN_ENABLED";
+    })(GuildFeature || (exports2.GuildFeature = GuildFeature = {}));
+    var GuildMemberFlags;
+    (function(GuildMemberFlags2) {
+      GuildMemberFlags2[GuildMemberFlags2["DidRejoin"] = 1] = "DidRejoin";
+      GuildMemberFlags2[GuildMemberFlags2["CompletedOnboarding"] = 2] = "CompletedOnboarding";
+      GuildMemberFlags2[GuildMemberFlags2["BypassesVerification"] = 4] = "BypassesVerification";
+      GuildMemberFlags2[GuildMemberFlags2["StartedOnboarding"] = 8] = "StartedOnboarding";
+      GuildMemberFlags2[GuildMemberFlags2["IsGuest"] = 16] = "IsGuest";
+      GuildMemberFlags2[GuildMemberFlags2["StartedHomeActions"] = 32] = "StartedHomeActions";
+      GuildMemberFlags2[GuildMemberFlags2["CompletedHomeActions"] = 64] = "CompletedHomeActions";
+      GuildMemberFlags2[GuildMemberFlags2["AutomodQuarantinedUsernameOrGuildNickname"] = 128] = "AutomodQuarantinedUsernameOrGuildNickname";
+      GuildMemberFlags2[GuildMemberFlags2["AutomodQuarantinedBio"] = 256] = "AutomodQuarantinedBio";
+      GuildMemberFlags2[GuildMemberFlags2["DmSettingsUpsellAcknowledged"] = 512] = "DmSettingsUpsellAcknowledged";
+    })(GuildMemberFlags || (exports2.GuildMemberFlags = GuildMemberFlags = {}));
+    var IntegrationExpireBehavior;
+    (function(IntegrationExpireBehavior2) {
+      IntegrationExpireBehavior2[IntegrationExpireBehavior2["RemoveRole"] = 0] = "RemoveRole";
+      IntegrationExpireBehavior2[IntegrationExpireBehavior2["Kick"] = 1] = "Kick";
+    })(IntegrationExpireBehavior || (exports2.IntegrationExpireBehavior = IntegrationExpireBehavior = {}));
+    var GuildWidgetStyle;
+    (function(GuildWidgetStyle2) {
+      GuildWidgetStyle2["Shield"] = "shield";
+      GuildWidgetStyle2["Banner1"] = "banner1";
+      GuildWidgetStyle2["Banner2"] = "banner2";
+      GuildWidgetStyle2["Banner3"] = "banner3";
+      GuildWidgetStyle2["Banner4"] = "banner4";
+    })(GuildWidgetStyle || (exports2.GuildWidgetStyle = GuildWidgetStyle = {}));
+    var MembershipScreeningFieldType;
+    (function(MembershipScreeningFieldType2) {
+      MembershipScreeningFieldType2["Terms"] = "TERMS";
+    })(MembershipScreeningFieldType || (exports2.MembershipScreeningFieldType = MembershipScreeningFieldType = {}));
+    var GuildOnboardingMode;
+    (function(GuildOnboardingMode2) {
+      GuildOnboardingMode2[GuildOnboardingMode2["OnboardingDefault"] = 0] = "OnboardingDefault";
+      GuildOnboardingMode2[GuildOnboardingMode2["OnboardingAdvanced"] = 1] = "OnboardingAdvanced";
+    })(GuildOnboardingMode || (exports2.GuildOnboardingMode = GuildOnboardingMode = {}));
+    var GuildOnboardingPromptType;
+    (function(GuildOnboardingPromptType2) {
+      GuildOnboardingPromptType2[GuildOnboardingPromptType2["MultipleChoice"] = 0] = "MultipleChoice";
+      GuildOnboardingPromptType2[GuildOnboardingPromptType2["Dropdown"] = 1] = "Dropdown";
+    })(GuildOnboardingPromptType || (exports2.GuildOnboardingPromptType = GuildOnboardingPromptType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js
+var require_guildScheduledEvent3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.GuildScheduledEventPrivacyLevel = exports2.GuildScheduledEventStatus = exports2.GuildScheduledEventEntityType = exports2.GuildScheduledEventRecurrenceRuleMonth = exports2.GuildScheduledEventRecurrenceRuleWeekday = exports2.GuildScheduledEventRecurrenceRuleFrequency = void 0;
+    var GuildScheduledEventRecurrenceRuleFrequency;
+    (function(GuildScheduledEventRecurrenceRuleFrequency2) {
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Yearly"] = 0] = "Yearly";
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Monthly"] = 1] = "Monthly";
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Weekly"] = 2] = "Weekly";
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Daily"] = 3] = "Daily";
+    })(GuildScheduledEventRecurrenceRuleFrequency || (exports2.GuildScheduledEventRecurrenceRuleFrequency = GuildScheduledEventRecurrenceRuleFrequency = {}));
+    var GuildScheduledEventRecurrenceRuleWeekday;
+    (function(GuildScheduledEventRecurrenceRuleWeekday2) {
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Monday"] = 0] = "Monday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Tuesday"] = 1] = "Tuesday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Wednesday"] = 2] = "Wednesday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Thursday"] = 3] = "Thursday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Friday"] = 4] = "Friday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Saturday"] = 5] = "Saturday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Sunday"] = 6] = "Sunday";
+    })(GuildScheduledEventRecurrenceRuleWeekday || (exports2.GuildScheduledEventRecurrenceRuleWeekday = GuildScheduledEventRecurrenceRuleWeekday = {}));
+    var GuildScheduledEventRecurrenceRuleMonth;
+    (function(GuildScheduledEventRecurrenceRuleMonth2) {
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["January"] = 1] = "January";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["February"] = 2] = "February";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["March"] = 3] = "March";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["April"] = 4] = "April";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["May"] = 5] = "May";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["June"] = 6] = "June";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["July"] = 7] = "July";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["August"] = 8] = "August";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["September"] = 9] = "September";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["October"] = 10] = "October";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["November"] = 11] = "November";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["December"] = 12] = "December";
+    })(GuildScheduledEventRecurrenceRuleMonth || (exports2.GuildScheduledEventRecurrenceRuleMonth = GuildScheduledEventRecurrenceRuleMonth = {}));
+    var GuildScheduledEventEntityType;
+    (function(GuildScheduledEventEntityType2) {
+      GuildScheduledEventEntityType2[GuildScheduledEventEntityType2["StageInstance"] = 1] = "StageInstance";
+      GuildScheduledEventEntityType2[GuildScheduledEventEntityType2["Voice"] = 2] = "Voice";
+      GuildScheduledEventEntityType2[GuildScheduledEventEntityType2["External"] = 3] = "External";
+    })(GuildScheduledEventEntityType || (exports2.GuildScheduledEventEntityType = GuildScheduledEventEntityType = {}));
+    var GuildScheduledEventStatus;
+    (function(GuildScheduledEventStatus2) {
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Scheduled"] = 1] = "Scheduled";
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Active"] = 2] = "Active";
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Completed"] = 3] = "Completed";
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Canceled"] = 4] = "Canceled";
+    })(GuildScheduledEventStatus || (exports2.GuildScheduledEventStatus = GuildScheduledEventStatus = {}));
+    var GuildScheduledEventPrivacyLevel;
+    (function(GuildScheduledEventPrivacyLevel2) {
+      GuildScheduledEventPrivacyLevel2[GuildScheduledEventPrivacyLevel2["GuildOnly"] = 2] = "GuildOnly";
+    })(GuildScheduledEventPrivacyLevel || (exports2.GuildScheduledEventPrivacyLevel = GuildScheduledEventPrivacyLevel = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js
+var require_attachment2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js
+var require_base3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js
+var require_boolean2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js
+var require_channel5 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js
+var require_integer2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js
+var require_mentionable2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js
+var require_number2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js
+var require_role2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js
+var require_shared2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ApplicationCommandOptionType = void 0;
+    var ApplicationCommandOptionType;
+    (function(ApplicationCommandOptionType2) {
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Subcommand"] = 1] = "Subcommand";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["SubcommandGroup"] = 2] = "SubcommandGroup";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["String"] = 3] = "String";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Integer"] = 4] = "Integer";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Boolean"] = 5] = "Boolean";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["User"] = 6] = "User";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Channel"] = 7] = "Channel";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Role"] = 8] = "Role";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Mentionable"] = 9] = "Mentionable";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Number"] = 10] = "Number";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Attachment"] = 11] = "Attachment";
+    })(ApplicationCommandOptionType || (exports2.ApplicationCommandOptionType = ApplicationCommandOptionType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js
+var require_string2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js
+var require_subcommand2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js
+var require_subcommandGroup2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js
+var require_user4 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js
+var require_chatInput2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    __exportStar2(require_attachment2(), exports2);
+    __exportStar2(require_base3(), exports2);
+    __exportStar2(require_boolean2(), exports2);
+    __exportStar2(require_channel5(), exports2);
+    __exportStar2(require_integer2(), exports2);
+    __exportStar2(require_mentionable2(), exports2);
+    __exportStar2(require_number2(), exports2);
+    __exportStar2(require_role2(), exports2);
+    __exportStar2(require_shared2(), exports2);
+    __exportStar2(require_string2(), exports2);
+    __exportStar2(require_subcommand2(), exports2);
+    __exportStar2(require_subcommandGroup2(), exports2);
+    __exportStar2(require_user4(), exports2);
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js
+var require_contextMenu2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js
+var require_permissions3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.APIApplicationCommandPermissionsConstant = exports2.ApplicationCommandPermissionType = void 0;
+    var ApplicationCommandPermissionType;
+    (function(ApplicationCommandPermissionType2) {
+      ApplicationCommandPermissionType2[ApplicationCommandPermissionType2["Role"] = 1] = "Role";
+      ApplicationCommandPermissionType2[ApplicationCommandPermissionType2["User"] = 2] = "User";
+      ApplicationCommandPermissionType2[ApplicationCommandPermissionType2["Channel"] = 3] = "Channel";
+    })(ApplicationCommandPermissionType || (exports2.ApplicationCommandPermissionType = ApplicationCommandPermissionType = {}));
+    exports2.APIApplicationCommandPermissionsConstant = {
+      // eslint-disable-next-line unicorn/prefer-native-coercion-functions
+      Everyone: (guildId) => String(guildId),
+      AllChannels: (guildId) => String(BigInt(guildId) - 1n)
+    };
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js
+var require_entryPoint2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
+var require_internals3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js
+var require_applicationCommands2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.EntryPointCommandHandlerType = exports2.InteractionContextType = exports2.ApplicationIntegrationType = exports2.ApplicationCommandType = void 0;
+    __exportStar2(require_chatInput2(), exports2);
+    __exportStar2(require_contextMenu2(), exports2);
+    __exportStar2(require_permissions3(), exports2);
+    __exportStar2(require_entryPoint2(), exports2);
+    __exportStar2(require_internals3(), exports2);
+    var ApplicationCommandType;
+    (function(ApplicationCommandType2) {
+      ApplicationCommandType2[ApplicationCommandType2["ChatInput"] = 1] = "ChatInput";
+      ApplicationCommandType2[ApplicationCommandType2["User"] = 2] = "User";
+      ApplicationCommandType2[ApplicationCommandType2["Message"] = 3] = "Message";
+      ApplicationCommandType2[ApplicationCommandType2["PrimaryEntryPoint"] = 4] = "PrimaryEntryPoint";
+    })(ApplicationCommandType || (exports2.ApplicationCommandType = ApplicationCommandType = {}));
+    var ApplicationIntegrationType;
+    (function(ApplicationIntegrationType2) {
+      ApplicationIntegrationType2[ApplicationIntegrationType2["GuildInstall"] = 0] = "GuildInstall";
+      ApplicationIntegrationType2[ApplicationIntegrationType2["UserInstall"] = 1] = "UserInstall";
+    })(ApplicationIntegrationType || (exports2.ApplicationIntegrationType = ApplicationIntegrationType = {}));
+    var InteractionContextType;
+    (function(InteractionContextType2) {
+      InteractionContextType2[InteractionContextType2["Guild"] = 0] = "Guild";
+      InteractionContextType2[InteractionContextType2["BotDM"] = 1] = "BotDM";
+      InteractionContextType2[InteractionContextType2["PrivateChannel"] = 2] = "PrivateChannel";
+    })(InteractionContextType || (exports2.InteractionContextType = InteractionContextType = {}));
+    var EntryPointCommandHandlerType;
+    (function(EntryPointCommandHandlerType2) {
+      EntryPointCommandHandlerType2[EntryPointCommandHandlerType2["AppHandler"] = 1] = "AppHandler";
+      EntryPointCommandHandlerType2[EntryPointCommandHandlerType2["DiscordLaunchActivity"] = 2] = "DiscordLaunchActivity";
+    })(EntryPointCommandHandlerType || (exports2.EntryPointCommandHandlerType = EntryPointCommandHandlerType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js
+var require_autocomplete2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/base.js
+var require_base4 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/base.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js
+var require_messageComponents2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js
+var require_modalSubmit2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/ping.js
+var require_ping2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/ping.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/_interactions/responses.js
+var require_responses2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/_interactions/responses.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.InteractionResponseType = exports2.InteractionType = void 0;
+    var InteractionType2;
+    (function(InteractionType3) {
+      InteractionType3[InteractionType3["Ping"] = 1] = "Ping";
+      InteractionType3[InteractionType3["ApplicationCommand"] = 2] = "ApplicationCommand";
+      InteractionType3[InteractionType3["MessageComponent"] = 3] = "MessageComponent";
+      InteractionType3[InteractionType3["ApplicationCommandAutocomplete"] = 4] = "ApplicationCommandAutocomplete";
+      InteractionType3[InteractionType3["ModalSubmit"] = 5] = "ModalSubmit";
+    })(InteractionType2 || (exports2.InteractionType = InteractionType2 = {}));
+    var InteractionResponseType;
+    (function(InteractionResponseType2) {
+      InteractionResponseType2[InteractionResponseType2["Pong"] = 1] = "Pong";
+      InteractionResponseType2[InteractionResponseType2["ChannelMessageWithSource"] = 4] = "ChannelMessageWithSource";
+      InteractionResponseType2[InteractionResponseType2["DeferredChannelMessageWithSource"] = 5] = "DeferredChannelMessageWithSource";
+      InteractionResponseType2[InteractionResponseType2["DeferredMessageUpdate"] = 6] = "DeferredMessageUpdate";
+      InteractionResponseType2[InteractionResponseType2["UpdateMessage"] = 7] = "UpdateMessage";
+      InteractionResponseType2[InteractionResponseType2["ApplicationCommandAutocompleteResult"] = 8] = "ApplicationCommandAutocompleteResult";
+      InteractionResponseType2[InteractionResponseType2["Modal"] = 9] = "Modal";
+      InteractionResponseType2[InteractionResponseType2["PremiumRequired"] = 10] = "PremiumRequired";
+      InteractionResponseType2[InteractionResponseType2["LaunchActivity"] = 12] = "LaunchActivity";
+    })(InteractionResponseType || (exports2.InteractionResponseType = InteractionResponseType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/interactions.js
+var require_interactions3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/interactions.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    __exportStar2(require_applicationCommands2(), exports2);
+    __exportStar2(require_autocomplete2(), exports2);
+    __exportStar2(require_base4(), exports2);
+    __exportStar2(require_messageComponents2(), exports2);
+    __exportStar2(require_modalSubmit2(), exports2);
+    __exportStar2(require_ping2(), exports2);
+    __exportStar2(require_responses2(), exports2);
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/invite.js
+var require_invite3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/invite.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.InviteTargetType = exports2.InviteType = void 0;
+    var InviteType;
+    (function(InviteType2) {
+      InviteType2[InviteType2["Guild"] = 0] = "Guild";
+      InviteType2[InviteType2["GroupDM"] = 1] = "GroupDM";
+      InviteType2[InviteType2["Friend"] = 2] = "Friend";
+    })(InviteType || (exports2.InviteType = InviteType = {}));
+    var InviteTargetType;
+    (function(InviteTargetType2) {
+      InviteTargetType2[InviteTargetType2["Stream"] = 1] = "Stream";
+      InviteTargetType2[InviteTargetType2["EmbeddedApplication"] = 2] = "EmbeddedApplication";
+    })(InviteTargetType || (exports2.InviteTargetType = InviteTargetType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/monetization.js
+var require_monetization3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/monetization.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.SubscriptionStatus = exports2.SKUType = exports2.SKUFlags = exports2.EntitlementType = void 0;
+    var EntitlementType;
+    (function(EntitlementType2) {
+      EntitlementType2[EntitlementType2["Purchase"] = 1] = "Purchase";
+      EntitlementType2[EntitlementType2["PremiumSubscription"] = 2] = "PremiumSubscription";
+      EntitlementType2[EntitlementType2["DeveloperGift"] = 3] = "DeveloperGift";
+      EntitlementType2[EntitlementType2["TestModePurchase"] = 4] = "TestModePurchase";
+      EntitlementType2[EntitlementType2["FreePurchase"] = 5] = "FreePurchase";
+      EntitlementType2[EntitlementType2["UserGift"] = 6] = "UserGift";
+      EntitlementType2[EntitlementType2["PremiumPurchase"] = 7] = "PremiumPurchase";
+      EntitlementType2[EntitlementType2["ApplicationSubscription"] = 8] = "ApplicationSubscription";
+    })(EntitlementType || (exports2.EntitlementType = EntitlementType = {}));
+    var SKUFlags;
+    (function(SKUFlags2) {
+      SKUFlags2[SKUFlags2["Available"] = 4] = "Available";
+      SKUFlags2[SKUFlags2["GuildSubscription"] = 128] = "GuildSubscription";
+      SKUFlags2[SKUFlags2["UserSubscription"] = 256] = "UserSubscription";
+    })(SKUFlags || (exports2.SKUFlags = SKUFlags = {}));
+    var SKUType;
+    (function(SKUType2) {
+      SKUType2[SKUType2["Durable"] = 2] = "Durable";
+      SKUType2[SKUType2["Consumable"] = 3] = "Consumable";
+      SKUType2[SKUType2["Subscription"] = 5] = "Subscription";
+      SKUType2[SKUType2["SubscriptionGroup"] = 6] = "SubscriptionGroup";
+    })(SKUType || (exports2.SKUType = SKUType = {}));
+    var SubscriptionStatus;
+    (function(SubscriptionStatus2) {
+      SubscriptionStatus2[SubscriptionStatus2["Active"] = 0] = "Active";
+      SubscriptionStatus2[SubscriptionStatus2["Ending"] = 1] = "Ending";
+      SubscriptionStatus2[SubscriptionStatus2["Inactive"] = 2] = "Inactive";
+    })(SubscriptionStatus || (exports2.SubscriptionStatus = SubscriptionStatus = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/oauth2.js
+var require_oauth23 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/oauth2.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.OAuth2Scopes = void 0;
+    var OAuth2Scopes2;
+    (function(OAuth2Scopes3) {
+      OAuth2Scopes3["Bot"] = "bot";
+      OAuth2Scopes3["Connections"] = "connections";
+      OAuth2Scopes3["DMChannelsRead"] = "dm_channels.read";
+      OAuth2Scopes3["Email"] = "email";
+      OAuth2Scopes3["Identify"] = "identify";
+      OAuth2Scopes3["Guilds"] = "guilds";
+      OAuth2Scopes3["GuildsJoin"] = "guilds.join";
+      OAuth2Scopes3["GuildsMembersRead"] = "guilds.members.read";
+      OAuth2Scopes3["GroupDMJoins"] = "gdm.join";
+      OAuth2Scopes3["MessagesRead"] = "messages.read";
+      OAuth2Scopes3["RoleConnectionsWrite"] = "role_connections.write";
+      OAuth2Scopes3["RPC"] = "rpc";
+      OAuth2Scopes3["RPCActivitiesWrite"] = "rpc.activities.write";
+      OAuth2Scopes3["RPCVoiceRead"] = "rpc.voice.read";
+      OAuth2Scopes3["RPCVoiceWrite"] = "rpc.voice.write";
+      OAuth2Scopes3["RPCNotificationsRead"] = "rpc.notifications.read";
+      OAuth2Scopes3["WebhookIncoming"] = "webhook.incoming";
+      OAuth2Scopes3["Voice"] = "voice";
+      OAuth2Scopes3["ApplicationsBuildsUpload"] = "applications.builds.upload";
+      OAuth2Scopes3["ApplicationsBuildsRead"] = "applications.builds.read";
+      OAuth2Scopes3["ApplicationsStoreUpdate"] = "applications.store.update";
+      OAuth2Scopes3["ApplicationsEntitlements"] = "applications.entitlements";
+      OAuth2Scopes3["RelationshipsRead"] = "relationships.read";
+      OAuth2Scopes3["ActivitiesRead"] = "activities.read";
+      OAuth2Scopes3["ActivitiesWrite"] = "activities.write";
+      OAuth2Scopes3["ApplicationsCommands"] = "applications.commands";
+      OAuth2Scopes3["ApplicationsCommandsUpdate"] = "applications.commands.update";
+      OAuth2Scopes3["ApplicationCommandsPermissionsUpdate"] = "applications.commands.permissions.update";
+    })(OAuth2Scopes2 || (exports2.OAuth2Scopes = OAuth2Scopes2 = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/permissions.js
+var require_permissions4 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/permissions.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RoleFlags = void 0;
+    var RoleFlags;
+    (function(RoleFlags2) {
+      RoleFlags2[RoleFlags2["InPrompt"] = 1] = "InPrompt";
+    })(RoleFlags || (exports2.RoleFlags = RoleFlags = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/poll.js
+var require_poll3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/poll.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.PollLayoutType = void 0;
+    var PollLayoutType;
+    (function(PollLayoutType2) {
+      PollLayoutType2[PollLayoutType2["Default"] = 1] = "Default";
+    })(PollLayoutType || (exports2.PollLayoutType = PollLayoutType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/soundboard.js
+var require_soundboard3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/soundboard.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/stageInstance.js
+var require_stageInstance3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/stageInstance.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.StageInstancePrivacyLevel = void 0;
+    var StageInstancePrivacyLevel;
+    (function(StageInstancePrivacyLevel2) {
+      StageInstancePrivacyLevel2[StageInstancePrivacyLevel2["Public"] = 1] = "Public";
+      StageInstancePrivacyLevel2[StageInstancePrivacyLevel2["GuildOnly"] = 2] = "GuildOnly";
+    })(StageInstancePrivacyLevel || (exports2.StageInstancePrivacyLevel = StageInstancePrivacyLevel = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/sticker.js
+var require_sticker3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/sticker.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.StickerFormatType = exports2.StickerType = void 0;
+    var StickerType;
+    (function(StickerType2) {
+      StickerType2[StickerType2["Standard"] = 1] = "Standard";
+      StickerType2[StickerType2["Guild"] = 2] = "Guild";
+    })(StickerType || (exports2.StickerType = StickerType = {}));
+    var StickerFormatType;
+    (function(StickerFormatType2) {
+      StickerFormatType2[StickerFormatType2["PNG"] = 1] = "PNG";
+      StickerFormatType2[StickerFormatType2["APNG"] = 2] = "APNG";
+      StickerFormatType2[StickerFormatType2["Lottie"] = 3] = "Lottie";
+      StickerFormatType2[StickerFormatType2["GIF"] = 4] = "GIF";
+    })(StickerFormatType || (exports2.StickerFormatType = StickerFormatType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/teams.js
+var require_teams2 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/teams.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.TeamMemberRole = exports2.TeamMemberMembershipState = void 0;
+    var TeamMemberMembershipState;
+    (function(TeamMemberMembershipState2) {
+      TeamMemberMembershipState2[TeamMemberMembershipState2["Invited"] = 1] = "Invited";
+      TeamMemberMembershipState2[TeamMemberMembershipState2["Accepted"] = 2] = "Accepted";
+    })(TeamMemberMembershipState || (exports2.TeamMemberMembershipState = TeamMemberMembershipState = {}));
+    var TeamMemberRole;
+    (function(TeamMemberRole2) {
+      TeamMemberRole2["Admin"] = "admin";
+      TeamMemberRole2["Developer"] = "developer";
+      TeamMemberRole2["ReadOnly"] = "read_only";
+    })(TeamMemberRole || (exports2.TeamMemberRole = TeamMemberRole = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/template.js
+var require_template3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/template.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/user.js
+var require_user5 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ConnectionVisibility = exports2.ConnectionService = exports2.UserPremiumType = exports2.UserFlags = void 0;
+    var UserFlags;
+    (function(UserFlags2) {
+      UserFlags2[UserFlags2["Staff"] = 1] = "Staff";
+      UserFlags2[UserFlags2["Partner"] = 2] = "Partner";
+      UserFlags2[UserFlags2["Hypesquad"] = 4] = "Hypesquad";
+      UserFlags2[UserFlags2["BugHunterLevel1"] = 8] = "BugHunterLevel1";
+      UserFlags2[UserFlags2["MFASMS"] = 16] = "MFASMS";
+      UserFlags2[UserFlags2["PremiumPromoDismissed"] = 32] = "PremiumPromoDismissed";
+      UserFlags2[UserFlags2["HypeSquadOnlineHouse1"] = 64] = "HypeSquadOnlineHouse1";
+      UserFlags2[UserFlags2["HypeSquadOnlineHouse2"] = 128] = "HypeSquadOnlineHouse2";
+      UserFlags2[UserFlags2["HypeSquadOnlineHouse3"] = 256] = "HypeSquadOnlineHouse3";
+      UserFlags2[UserFlags2["PremiumEarlySupporter"] = 512] = "PremiumEarlySupporter";
+      UserFlags2[UserFlags2["TeamPseudoUser"] = 1024] = "TeamPseudoUser";
+      UserFlags2[UserFlags2["HasUnreadUrgentMessages"] = 8192] = "HasUnreadUrgentMessages";
+      UserFlags2[UserFlags2["BugHunterLevel2"] = 16384] = "BugHunterLevel2";
+      UserFlags2[UserFlags2["VerifiedBot"] = 65536] = "VerifiedBot";
+      UserFlags2[UserFlags2["VerifiedDeveloper"] = 131072] = "VerifiedDeveloper";
+      UserFlags2[UserFlags2["CertifiedModerator"] = 262144] = "CertifiedModerator";
+      UserFlags2[UserFlags2["BotHTTPInteractions"] = 524288] = "BotHTTPInteractions";
+      UserFlags2[UserFlags2["Spammer"] = 1048576] = "Spammer";
+      UserFlags2[UserFlags2["DisablePremium"] = 2097152] = "DisablePremium";
+      UserFlags2[UserFlags2["ActiveDeveloper"] = 4194304] = "ActiveDeveloper";
+      UserFlags2[UserFlags2["Quarantined"] = 17592186044416] = "Quarantined";
+      UserFlags2[UserFlags2["Collaborator"] = 1125899906842624] = "Collaborator";
+      UserFlags2[UserFlags2["RestrictedCollaborator"] = 2251799813685248] = "RestrictedCollaborator";
+    })(UserFlags || (exports2.UserFlags = UserFlags = {}));
+    var UserPremiumType;
+    (function(UserPremiumType2) {
+      UserPremiumType2[UserPremiumType2["None"] = 0] = "None";
+      UserPremiumType2[UserPremiumType2["NitroClassic"] = 1] = "NitroClassic";
+      UserPremiumType2[UserPremiumType2["Nitro"] = 2] = "Nitro";
+      UserPremiumType2[UserPremiumType2["NitroBasic"] = 3] = "NitroBasic";
+    })(UserPremiumType || (exports2.UserPremiumType = UserPremiumType = {}));
+    var ConnectionService;
+    (function(ConnectionService2) {
+      ConnectionService2["AmazonMusic"] = "amazon-music";
+      ConnectionService2["BattleNet"] = "battlenet";
+      ConnectionService2["Bluesky"] = "bluesky";
+      ConnectionService2["BungieNet"] = "bungie";
+      ConnectionService2["Crunchyroll"] = "crunchyroll";
+      ConnectionService2["Domain"] = "domain";
+      ConnectionService2["eBay"] = "ebay";
+      ConnectionService2["EpicGames"] = "epicgames";
+      ConnectionService2["Facebook"] = "facebook";
+      ConnectionService2["GitHub"] = "github";
+      ConnectionService2["Instagram"] = "instagram";
+      ConnectionService2["LeagueOfLegends"] = "leagueoflegends";
+      ConnectionService2["Mastodon"] = "mastodon";
+      ConnectionService2["PayPal"] = "paypal";
+      ConnectionService2["PlayStationNetwork"] = "playstation";
+      ConnectionService2["Reddit"] = "reddit";
+      ConnectionService2["RiotGames"] = "riotgames";
+      ConnectionService2["Roblox"] = "roblox";
+      ConnectionService2["Spotify"] = "spotify";
+      ConnectionService2["Skype"] = "skype";
+      ConnectionService2["Steam"] = "steam";
+      ConnectionService2["TikTok"] = "tiktok";
+      ConnectionService2["Twitch"] = "twitch";
+      ConnectionService2["X"] = "twitter";
+      ConnectionService2["Twitter"] = "twitter";
+      ConnectionService2["Xbox"] = "xbox";
+      ConnectionService2["YouTube"] = "youtube";
+    })(ConnectionService || (exports2.ConnectionService = ConnectionService = {}));
+    var ConnectionVisibility;
+    (function(ConnectionVisibility2) {
+      ConnectionVisibility2[ConnectionVisibility2["None"] = 0] = "None";
+      ConnectionVisibility2[ConnectionVisibility2["Everyone"] = 1] = "Everyone";
+    })(ConnectionVisibility || (exports2.ConnectionVisibility = ConnectionVisibility = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/voice.js
+var require_voice3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/voice.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/webhook.js
+var require_webhook3 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/webhook.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.WebhookType = exports2.ApplicationWebhookEventType = exports2.ApplicationWebhookType = void 0;
+    var ApplicationWebhookType;
+    (function(ApplicationWebhookType2) {
+      ApplicationWebhookType2[ApplicationWebhookType2["Ping"] = 0] = "Ping";
+      ApplicationWebhookType2[ApplicationWebhookType2["Event"] = 1] = "Event";
+    })(ApplicationWebhookType || (exports2.ApplicationWebhookType = ApplicationWebhookType = {}));
+    var ApplicationWebhookEventType;
+    (function(ApplicationWebhookEventType2) {
+      ApplicationWebhookEventType2["ApplicationAuthorized"] = "APPLICATION_AUTHORIZED";
+      ApplicationWebhookEventType2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      ApplicationWebhookEventType2["QuestUserEnrollment"] = "QUEST_USER_ENROLLMENT";
+    })(ApplicationWebhookEventType || (exports2.ApplicationWebhookEventType = ApplicationWebhookEventType = {}));
+    var WebhookType;
+    (function(WebhookType2) {
+      WebhookType2[WebhookType2["Incoming"] = 1] = "Incoming";
+      WebhookType2[WebhookType2["ChannelFollower"] = 2] = "ChannelFollower";
+      WebhookType2[WebhookType2["Application"] = 3] = "Application";
+    })(WebhookType || (exports2.WebhookType = WebhookType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/index.js
+var require_v108 = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/index.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    __exportStar2(require_common6(), exports2);
+    __exportStar2(require_application3(), exports2);
+    __exportStar2(require_auditLog3(), exports2);
+    __exportStar2(require_autoModeration3(), exports2);
+    __exportStar2(require_channel4(), exports2);
+    __exportStar2(require_emoji3(), exports2);
+    __exportStar2(require_gateway3(), exports2);
+    __exportStar2(require_guild3(), exports2);
+    __exportStar2(require_guildScheduledEvent3(), exports2);
+    __exportStar2(require_interactions3(), exports2);
+    __exportStar2(require_invite3(), exports2);
+    __exportStar2(require_monetization3(), exports2);
+    __exportStar2(require_oauth23(), exports2);
+    __exportStar2(require_permissions4(), exports2);
+    __exportStar2(require_poll3(), exports2);
+    __exportStar2(require_soundboard3(), exports2);
+    __exportStar2(require_stageInstance3(), exports2);
+    __exportStar2(require_sticker3(), exports2);
+    __exportStar2(require_teams2(), exports2);
+    __exportStar2(require_template3(), exports2);
+    __exportStar2(require_user5(), exports2);
+    __exportStar2(require_voice3(), exports2);
+    __exportStar2(require_webhook3(), exports2);
+  }
+});
+
+// node_modules/discord-api-types/utils/internals.js
+var require_internals4 = __commonJS({
+  "node_modules/discord-api-types/utils/internals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.urlSafeCharacters = void 0;
+    var pattern = /^[\d%A-Za-z-_]+$/g;
+    exports2.urlSafeCharacters = {
+      test(input) {
+        const result = pattern.test(input);
+        pattern.lastIndex = 0;
+        return result;
+      }
+    };
+  }
+});
+
+// node_modules/discord-api-types/rest/common.js
+var require_common7 = __commonJS({
+  "node_modules/discord-api-types/rest/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.Locale = exports2.RESTJSONErrorCodes = void 0;
+    var RESTJSONErrorCodes;
+    (function(RESTJSONErrorCodes2) {
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GeneralError"] = 0] = "GeneralError";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownAccount"] = 10001] = "UnknownAccount";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownApplication"] = 10002] = "UnknownApplication";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownChannel"] = 10003] = "UnknownChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuild"] = 10004] = "UnknownGuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownIntegration"] = 10005] = "UnknownIntegration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownInvite"] = 10006] = "UnknownInvite";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownMember"] = 10007] = "UnknownMember";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownMessage"] = 10008] = "UnknownMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownPermissionOverwrite"] = 10009] = "UnknownPermissionOverwrite";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownProvider"] = 10010] = "UnknownProvider";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownRole"] = 10011] = "UnknownRole";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownToken"] = 10012] = "UnknownToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownUser"] = 10013] = "UnknownUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownEmoji"] = 10014] = "UnknownEmoji";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownWebhook"] = 10015] = "UnknownWebhook";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownWebhookService"] = 10016] = "UnknownWebhookService";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSession"] = 10020] = "UnknownSession";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownAsset"] = 10021] = "UnknownAsset";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownBan"] = 10026] = "UnknownBan";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSKU"] = 10027] = "UnknownSKU";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStoreListing"] = 10028] = "UnknownStoreListing";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownEntitlement"] = 10029] = "UnknownEntitlement";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownBuild"] = 10030] = "UnknownBuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownLobby"] = 10031] = "UnknownLobby";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownBranch"] = 10032] = "UnknownBranch";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStoreDirectoryLayout"] = 10033] = "UnknownStoreDirectoryLayout";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownRedistributable"] = 10036] = "UnknownRedistributable";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGiftCode"] = 10038] = "UnknownGiftCode";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStream"] = 10049] = "UnknownStream";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownPremiumServerSubscribeCooldown"] = 10050] = "UnknownPremiumServerSubscribeCooldown";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildTemplate"] = 10057] = "UnknownGuildTemplate";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownDiscoverableServerCategory"] = 10059] = "UnknownDiscoverableServerCategory";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSticker"] = 10060] = "UnknownSticker";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStickerPack"] = 10061] = "UnknownStickerPack";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownInteraction"] = 10062] = "UnknownInteraction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownApplicationCommand"] = 10063] = "UnknownApplicationCommand";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownVoiceState"] = 10065] = "UnknownVoiceState";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownApplicationCommandPermissions"] = 10066] = "UnknownApplicationCommandPermissions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStageInstance"] = 10067] = "UnknownStageInstance";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildMemberVerificationForm"] = 10068] = "UnknownGuildMemberVerificationForm";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildWelcomeScreen"] = 10069] = "UnknownGuildWelcomeScreen";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildScheduledEvent"] = 10070] = "UnknownGuildScheduledEvent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildScheduledEventUser"] = 10071] = "UnknownGuildScheduledEventUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownTag"] = 10087] = "UnknownTag";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSound"] = 10097] = "UnknownSound";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["BotsCannotUseThisEndpoint"] = 20001] = "BotsCannotUseThisEndpoint";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyBotsCanUseThisEndpoint"] = 20002] = "OnlyBotsCanUseThisEndpoint";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ExplicitContentCannotBeSentToTheDesiredRecipient"] = 20009] = "ExplicitContentCannotBeSentToTheDesiredRecipient";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["NotAuthorizedToPerformThisActionOnThisApplication"] = 20012] = "NotAuthorizedToPerformThisActionOnThisApplication";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ActionCannotBePerformedDueToSlowmodeRateLimit"] = 20016] = "ActionCannotBePerformedDueToSlowmodeRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheMazeIsntMeantForYou"] = 20017] = "TheMazeIsntMeantForYou";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyTheOwnerOfThisAccountCanPerformThisAction"] = 20018] = "OnlyTheOwnerOfThisAccountCanPerformThisAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["AnnouncementEditLimitExceeded"] = 20022] = "AnnouncementEditLimitExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnderMinimumAge"] = 20024] = "UnderMinimumAge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ChannelSendRateLimit"] = 20028] = "ChannelSendRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerSendRateLimit"] = 20029] = "ServerSendRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StageTopicServerNameServerDescriptionOrChannelNamesContainDisallowedWords"] = 20031] = "StageTopicServerNameServerDescriptionOrChannelNamesContainDisallowedWords";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildPremiumSubscriptionLevelTooLow"] = 20035] = "GuildPremiumSubscriptionLevelTooLow";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildsReached"] = 30001] = "MaximumNumberOfGuildsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfFriendsReached"] = 30002] = "MaximumNumberOfFriendsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPinsReachedForTheChannel"] = 30003] = "MaximumNumberOfPinsReachedForTheChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfRecipientsReached"] = 30004] = "MaximumNumberOfRecipientsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildRolesReached"] = 30005] = "MaximumNumberOfGuildRolesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfWebhooksReached"] = 30007] = "MaximumNumberOfWebhooksReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfEmojisReached"] = 30008] = "MaximumNumberOfEmojisReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfReactionsReached"] = 30010] = "MaximumNumberOfReactionsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGroupDMsReached"] = 30011] = "MaximumNumberOfGroupDMsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildChannelsReached"] = 30013] = "MaximumNumberOfGuildChannelsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfAttachmentsInAMessageReached"] = 30015] = "MaximumNumberOfAttachmentsInAMessageReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfInvitesReached"] = 30016] = "MaximumNumberOfInvitesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfAnimatedEmojisReached"] = 30018] = "MaximumNumberOfAnimatedEmojisReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfServerMembersReached"] = 30019] = "MaximumNumberOfServerMembersReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfServerCategoriesReached"] = 30030] = "MaximumNumberOfServerCategoriesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildAlreadyHasTemplate"] = 30031] = "GuildAlreadyHasTemplate";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfApplicationCommandsReached"] = 30032] = "MaximumNumberOfApplicationCommandsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumThreadParticipantsReached"] = 30033] = "MaximumThreadParticipantsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumDailyApplicationCommandCreatesReached"] = 30034] = "MaximumDailyApplicationCommandCreatesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfNonGuildMemberBansHasBeenExceeded"] = 30035] = "MaximumNumberOfNonGuildMemberBansHasBeenExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfBanFetchesHasBeenReached"] = 30037] = "MaximumNumberOfBanFetchesHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfUncompletedGuildScheduledEventsReached"] = 30038] = "MaximumNumberOfUncompletedGuildScheduledEventsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfStickersReached"] = 30039] = "MaximumNumberOfStickersReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPruneRequestsHasBeenReached"] = 30040] = "MaximumNumberOfPruneRequestsHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildWidgetSettingsUpdatesHasBeenReached"] = 30042] = "MaximumNumberOfGuildWidgetSettingsUpdatesHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfSoundboardSoundsReached"] = 30045] = "MaximumNumberOfSoundboardSoundsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfEditsToMessagesOlderThanOneHourReached"] = 30046] = "MaximumNumberOfEditsToMessagesOlderThanOneHourReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPinnedThreadsInForumHasBeenReached"] = 30047] = "MaximumNumberOfPinnedThreadsInForumHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfTagsInForumHasBeenReached"] = 30048] = "MaximumNumberOfTagsInForumHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["BitrateIsTooHighForChannelOfThisType"] = 30052] = "BitrateIsTooHighForChannelOfThisType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPremiumEmojisReached"] = 30056] = "MaximumNumberOfPremiumEmojisReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfWebhooksPerGuildReached"] = 30058] = "MaximumNumberOfWebhooksPerGuildReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfChannelPermissionOverwritesReached"] = 30060] = "MaximumNumberOfChannelPermissionOverwritesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheChannelsForThisGuildAreTooLarge"] = 30061] = "TheChannelsForThisGuildAreTooLarge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["Unauthorized"] = 40001] = "Unauthorized";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VerifyYourAccount"] = 40002] = "VerifyYourAccount";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OpeningDirectMessagesTooFast"] = 40003] = "OpeningDirectMessagesTooFast";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["SendMessagesHasBeenTemporarilyDisabled"] = 40004] = "SendMessagesHasBeenTemporarilyDisabled";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["RequestEntityTooLarge"] = 40005] = "RequestEntityTooLarge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FeatureTemporarilyDisabledServerSide"] = 40006] = "FeatureTemporarilyDisabledServerSide";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UserBannedFromThisGuild"] = 40007] = "UserBannedFromThisGuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ConnectionHasBeenRevoked"] = 40012] = "ConnectionHasBeenRevoked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyConsumableSKUsCanBeConsumed"] = 40018] = "OnlyConsumableSKUsCanBeConsumed";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouCanOnlyDeleteSandboxEntitlements"] = 40019] = "YouCanOnlyDeleteSandboxEntitlements";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TargetUserIsNotConnectedToVoice"] = 40032] = "TargetUserIsNotConnectedToVoice";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThisMessageWasAlreadyCrossposted"] = 40033] = "ThisMessageWasAlreadyCrossposted";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationCommandWithThatNameAlreadyExists"] = 40041] = "ApplicationCommandWithThatNameAlreadyExists";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationInteractionFailedToSend"] = 40043] = "ApplicationInteractionFailedToSend";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendAMessageInAForumChannel"] = 40058] = "CannotSendAMessageInAForumChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InteractionHasAlreadyBeenAcknowledged"] = 40060] = "InteractionHasAlreadyBeenAcknowledged";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TagNamesMustBeUnique"] = 40061] = "TagNamesMustBeUnique";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServiceResourceIsBeingRateLimited"] = 40062] = "ServiceResourceIsBeingRateLimited";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThereAreNoTagsAvailableThatCanBeSetByNonModerators"] = 40066] = "ThereAreNoTagsAvailableThatCanBeSetByNonModerators";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TagRequiredToCreateAForumPostInThisChannel"] = 40067] = "TagRequiredToCreateAForumPostInThisChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["AnEntitlementHasAlreadyBeenGrantedForThisResource"] = 40074] = "AnEntitlementHasAlreadyBeenGrantedForThisResource";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThisInteractionHasHitTheMaximumNumberOfFollowUpMessages"] = 40094] = "ThisInteractionHasHitTheMaximumNumberOfFollowUpMessages";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CloudflareIsBlockingYourRequest"] = 40333] = "CloudflareIsBlockingYourRequest";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MissingAccess"] = 50001] = "MissingAccess";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidAccountType"] = 50002] = "InvalidAccountType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExecuteActionOnDMChannel"] = 50003] = "CannotExecuteActionOnDMChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildWidgetDisabled"] = 50004] = "GuildWidgetDisabled";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditMessageAuthoredByAnotherUser"] = 50005] = "CannotEditMessageAuthoredByAnotherUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendAnEmptyMessage"] = 50006] = "CannotSendAnEmptyMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendMessagesToThisUser"] = 50007] = "CannotSendMessagesToThisUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendMessagesInNonTextChannel"] = 50008] = "CannotSendMessagesInNonTextChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ChannelVerificationLevelTooHighForYouToGainAccess"] = 50009] = "ChannelVerificationLevelTooHighForYouToGainAccess";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OAuth2ApplicationDoesNotHaveBot"] = 50010] = "OAuth2ApplicationDoesNotHaveBot";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OAuth2ApplicationLimitReached"] = 50011] = "OAuth2ApplicationLimitReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidOAuth2State"] = 50012] = "InvalidOAuth2State";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MissingPermissions"] = 50013] = "MissingPermissions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidToken"] = 50014] = "InvalidToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["NoteWasTooLong"] = 50015] = "NoteWasTooLong";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedTooFewOrTooManyMessagesToDelete"] = 50016] = "ProvidedTooFewOrTooManyMessagesToDelete";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidMFALevel"] = 50017] = "InvalidMFALevel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageCanOnlyBePinnedInTheChannelItWasSentIn"] = 50019] = "MessageCanOnlyBePinnedInTheChannelItWasSentIn";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InviteCodeInvalidOrTaken"] = 50020] = "InviteCodeInvalidOrTaken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExecuteActionOnSystemMessage"] = 50021] = "CannotExecuteActionOnSystemMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExecuteActionOnThisChannelType"] = 50024] = "CannotExecuteActionOnThisChannelType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidOAuth2AccessToken"] = 50025] = "InvalidOAuth2AccessToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MissingRequiredOAuth2Scope"] = 50026] = "MissingRequiredOAuth2Scope";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidWebhookToken"] = 50027] = "InvalidWebhookToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidRole"] = 50028] = "InvalidRole";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidRecipients"] = 50033] = "InvalidRecipients";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OneOfTheMessagesProvidedWasTooOldForBulkDelete"] = 50034] = "OneOfTheMessagesProvidedWasTooOldForBulkDelete";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidFormBodyOrContentType"] = 50035] = "InvalidFormBodyOrContentType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InviteAcceptedToGuildWithoutTheBotBeingIn"] = 50036] = "InviteAcceptedToGuildWithoutTheBotBeingIn";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidActivityAction"] = 50039] = "InvalidActivityAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidAPIVersion"] = 50041] = "InvalidAPIVersion";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FileUploadedExceedsMaximumSize"] = 50045] = "FileUploadedExceedsMaximumSize";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidFileUploaded"] = 50046] = "InvalidFileUploaded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSelfRedeemThisGift"] = 50054] = "CannotSelfRedeemThisGift";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidGuild"] = 50055] = "InvalidGuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidSKU"] = 50057] = "InvalidSKU";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidRequestOrigin"] = 50067] = "InvalidRequestOrigin";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidMessageType"] = 50068] = "InvalidMessageType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["PaymentSourceRequiredToRedeemGift"] = 50070] = "PaymentSourceRequiredToRedeemGift";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotModifyASystemWebhook"] = 50073] = "CannotModifyASystemWebhook";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotDeleteChannelRequiredForCommunityGuilds"] = 50074] = "CannotDeleteChannelRequiredForCommunityGuilds";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditStickersWithinMessage"] = 50080] = "CannotEditStickersWithinMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidStickerSent"] = 50081] = "InvalidStickerSent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidActionOnArchivedThread"] = 50083] = "InvalidActionOnArchivedThread";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidThreadNotificationSettings"] = 50084] = "InvalidThreadNotificationSettings";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ParameterEarlierThanCreation"] = 50085] = "ParameterEarlierThanCreation";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CommunityServerChannelsMustBeTextChannels"] = 50086] = "CommunityServerChannelsMustBeTextChannels";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheEntityTypeOfTheEventIsDifferentFromTheEntityYouAreTryingToStartTheEventFor"] = 50091] = "TheEntityTypeOfTheEventIsDifferentFromTheEntityYouAreTryingToStartTheEventFor";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerNotAvailableInYourLocation"] = 50095] = "ServerNotAvailableInYourLocation";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerNeedsMonetizationEnabledToPerformThisAction"] = 50097] = "ServerNeedsMonetizationEnabledToPerformThisAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerNeedsMoreBoostsToPerformThisAction"] = 50101] = "ServerNeedsMoreBoostsToPerformThisAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["RequestBodyContainsInvalidJSON"] = 50109] = "RequestBodyContainsInvalidJSON";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileIsInvalid"] = 50110] = "ProvidedFileIsInvalid";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileTypeIsInvalid"] = 50123] = "ProvidedFileTypeIsInvalid";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileDurationExceedsMaximumLength"] = 50124] = "ProvidedFileDurationExceedsMaximumLength";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OwnerCannotBePendingMember"] = 50131] = "OwnerCannotBePendingMember";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OwnershipCannotBeMovedToABotUser"] = 50132] = "OwnershipCannotBeMovedToABotUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToResizeAssetBelowTheMinimumSize"] = 50138] = "FailedToResizeAssetBelowTheMinimumSize";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotMixSubscriptionAndNonSubscriptionRolesForAnEmoji"] = 50144] = "CannotMixSubscriptionAndNonSubscriptionRolesForAnEmoji";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotConvertBetweenPremiumEmojiAndNormalEmoji"] = 50145] = "CannotConvertBetweenPremiumEmojiAndNormalEmoji";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UploadedFileNotFound"] = 50146] = "UploadedFileNotFound";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["SpecifiedEmojiIsInvalid"] = 50151] = "SpecifiedEmojiIsInvalid";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesDoNotSupportAdditionalContent"] = 50159] = "VoiceMessagesDoNotSupportAdditionalContent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesMustHaveASingleAudioAttachment"] = 50160] = "VoiceMessagesMustHaveASingleAudioAttachment";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesMustHaveSupportingMetadata"] = 50161] = "VoiceMessagesMustHaveSupportingMetadata";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesCannotBeEdited"] = 50162] = "VoiceMessagesCannotBeEdited";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotDeleteGuildSubscriptionIntegration"] = 50163] = "CannotDeleteGuildSubscriptionIntegration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouCannotSendVoiceMessagesInThisChannel"] = 50173] = "YouCannotSendVoiceMessagesInThisChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheUserAccountMustFirstBeVerified"] = 50178] = "TheUserAccountMustFirstBeVerified";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileDoesNotHaveAValidDuration"] = 50192] = "ProvidedFileDoesNotHaveAValidDuration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouDoNotHavePermissionToSendThisSticker"] = 50600] = "YouDoNotHavePermissionToSendThisSticker";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TwoFactorAuthenticationIsRequired"] = 60003] = "TwoFactorAuthenticationIsRequired";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["NoUsersWithDiscordTagExist"] = 80004] = "NoUsersWithDiscordTagExist";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ReactionWasBlocked"] = 90001] = "ReactionWasBlocked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UserCannotUseBurstReactions"] = 90002] = "UserCannotUseBurstReactions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationNotYetAvailable"] = 110001] = "ApplicationNotYetAvailable";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["APIResourceOverloaded"] = 13e4] = "APIResourceOverloaded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheStageIsAlreadyOpen"] = 150006] = "TheStageIsAlreadyOpen";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotReplyWithoutPermissionToReadMessageHistory"] = 160002] = "CannotReplyWithoutPermissionToReadMessageHistory";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThreadAlreadyCreatedForMessage"] = 160004] = "ThreadAlreadyCreatedForMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThreadLocked"] = 160005] = "ThreadLocked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumActiveThreads"] = 160006] = "MaximumActiveThreads";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumActiveAnnouncementThreads"] = 160007] = "MaximumActiveAnnouncementThreads";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidJSONForUploadedLottieFile"] = 170001] = "InvalidJSONForUploadedLottieFile";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UploadedLottiesCannotContainRasterizedImages"] = 170002] = "UploadedLottiesCannotContainRasterizedImages";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerMaximumFramerateExceeded"] = 170003] = "StickerMaximumFramerateExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerFrameCountExceedsMaximumOf1000Frames"] = 170004] = "StickerFrameCountExceedsMaximumOf1000Frames";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["LottieAnimationMaximumDimensionsExceeded"] = 170005] = "LottieAnimationMaximumDimensionsExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerFramerateIsTooSmallOrTooLarge"] = 170006] = "StickerFramerateIsTooSmallOrTooLarge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerAnimationDurationExceedsMaximumOf5Seconds"] = 170007] = "StickerAnimationDurationExceedsMaximumOf5Seconds";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUpdateAFinishedEvent"] = 18e4] = "CannotUpdateAFinishedEvent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToCreateStageNeededForStageEvent"] = 180002] = "FailedToCreateStageNeededForStageEvent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageWasBlockedByAutomaticModeration"] = 2e5] = "MessageWasBlockedByAutomaticModeration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TitleWasBlockedByAutomaticModeration"] = 200001] = "TitleWasBlockedByAutomaticModeration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhooksPostedToForumChannelsMustHaveAThreadNameOrThreadId"] = 220001] = "WebhooksPostedToForumChannelsMustHaveAThreadNameOrThreadId";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhooksPostedToForumChannelsCannotHaveBothAThreadNameAndThreadId"] = 220002] = "WebhooksPostedToForumChannelsCannotHaveBothAThreadNameAndThreadId";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhooksCanOnlyCreateThreadsInForumChannels"] = 220003] = "WebhooksCanOnlyCreateThreadsInForumChannels";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhookServicesCannotBeUsedInForumChannels"] = 220004] = "WebhookServicesCannotBeUsedInForumChannels";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageBlockedByHarmfulLinksFilter"] = 24e4] = "MessageBlockedByHarmfulLinksFilter";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEnableOnboardingRequirementsAreNotMet"] = 35e4] = "CannotEnableOnboardingRequirementsAreNotMet";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUpdateOnboardingWhileBelowRequirements"] = 350001] = "CannotUpdateOnboardingWhileBelowRequirements";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToBanUsers"] = 5e5] = "FailedToBanUsers";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["PollVotingBlocked"] = 52e4] = "PollVotingBlocked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["PollExpired"] = 520001] = "PollExpired";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidChannelTypeForPollCreation"] = 520002] = "InvalidChannelTypeForPollCreation";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditAPollMessage"] = 520003] = "CannotEditAPollMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUseAnEmojiIncludedWithThePoll"] = 520004] = "CannotUseAnEmojiIncludedWithThePoll";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExpireANonPollMessage"] = 520006] = "CannotExpireANonPollMessage";
+    })(RESTJSONErrorCodes || (exports2.RESTJSONErrorCodes = RESTJSONErrorCodes = {}));
+    var Locale;
+    (function(Locale2) {
+      Locale2["Indonesian"] = "id";
+      Locale2["EnglishUS"] = "en-US";
+      Locale2["EnglishGB"] = "en-GB";
+      Locale2["Bulgarian"] = "bg";
+      Locale2["ChineseCN"] = "zh-CN";
+      Locale2["ChineseTW"] = "zh-TW";
+      Locale2["Croatian"] = "hr";
+      Locale2["Czech"] = "cs";
+      Locale2["Danish"] = "da";
+      Locale2["Dutch"] = "nl";
+      Locale2["Finnish"] = "fi";
+      Locale2["French"] = "fr";
+      Locale2["German"] = "de";
+      Locale2["Greek"] = "el";
+      Locale2["Hindi"] = "hi";
+      Locale2["Hungarian"] = "hu";
+      Locale2["Italian"] = "it";
+      Locale2["Japanese"] = "ja";
+      Locale2["Korean"] = "ko";
+      Locale2["Lithuanian"] = "lt";
+      Locale2["Norwegian"] = "no";
+      Locale2["Polish"] = "pl";
+      Locale2["PortugueseBR"] = "pt-BR";
+      Locale2["Romanian"] = "ro";
+      Locale2["Russian"] = "ru";
+      Locale2["SpanishES"] = "es-ES";
+      Locale2["SpanishLATAM"] = "es-419";
+      Locale2["Swedish"] = "sv-SE";
+      Locale2["Thai"] = "th";
+      Locale2["Turkish"] = "tr";
+      Locale2["Ukrainian"] = "uk";
+      Locale2["Vietnamese"] = "vi";
+    })(Locale || (exports2.Locale = Locale = {}));
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/application.js
+var require_application4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/application.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/auditLog.js
+var require_auditLog4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/auditLog.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/autoModeration.js
+var require_autoModeration4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/autoModeration.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/channel.js
+var require_channel6 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/channel.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ReactionType = void 0;
+    var ReactionType;
+    (function(ReactionType2) {
+      ReactionType2[ReactionType2["Normal"] = 0] = "Normal";
+      ReactionType2[ReactionType2["Super"] = 1] = "Super";
+    })(ReactionType || (exports2.ReactionType = ReactionType = {}));
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/emoji.js
+var require_emoji4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/emoji.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/gateway.js
+var require_gateway4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/gateway.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/guild.js
+var require_guild4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/guild.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/guildScheduledEvent.js
+var require_guildScheduledEvent4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/guildScheduledEvent.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/interactions.js
+var require_interactions4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/interactions.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/invite.js
+var require_invite4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/invite.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/monetization.js
+var require_monetization4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/monetization.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.EntitlementOwnerType = void 0;
+    var EntitlementOwnerType;
+    (function(EntitlementOwnerType2) {
+      EntitlementOwnerType2[EntitlementOwnerType2["Guild"] = 1] = "Guild";
+      EntitlementOwnerType2[EntitlementOwnerType2["User"] = 2] = "User";
+    })(EntitlementOwnerType || (exports2.EntitlementOwnerType = EntitlementOwnerType = {}));
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/oauth2.js
+var require_oauth24 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/oauth2.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/poll.js
+var require_poll4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/poll.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/soundboard.js
+var require_soundboard4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/soundboard.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/stageInstance.js
+var require_stageInstance4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/stageInstance.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/sticker.js
+var require_sticker4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/sticker.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/template.js
+var require_template4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/template.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/user.js
+var require_user6 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/user.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/voice.js
+var require_voice4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/voice.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/webhook.js
+var require_webhook4 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/webhook.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/discord-api-types/rest/v10/index.js
+var require_v109 = __commonJS({
+  "node_modules/discord-api-types/rest/v10/index.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.OAuth2Routes = exports2.RouteBases = exports2.CDNRoutes = exports2.ImageFormat = exports2.StickerPackApplicationId = exports2.Routes = exports2.APIVersion = void 0;
+    var internals_1 = require_internals4();
+    __exportStar2(require_common7(), exports2);
+    __exportStar2(require_application4(), exports2);
+    __exportStar2(require_auditLog4(), exports2);
+    __exportStar2(require_autoModeration4(), exports2);
+    __exportStar2(require_channel6(), exports2);
+    __exportStar2(require_emoji4(), exports2);
+    __exportStar2(require_gateway4(), exports2);
+    __exportStar2(require_guild4(), exports2);
+    __exportStar2(require_guildScheduledEvent4(), exports2);
+    __exportStar2(require_interactions4(), exports2);
+    __exportStar2(require_invite4(), exports2);
+    __exportStar2(require_monetization4(), exports2);
+    __exportStar2(require_oauth24(), exports2);
+    __exportStar2(require_poll4(), exports2);
+    __exportStar2(require_soundboard4(), exports2);
+    __exportStar2(require_stageInstance4(), exports2);
+    __exportStar2(require_sticker4(), exports2);
+    __exportStar2(require_template4(), exports2);
+    __exportStar2(require_user6(), exports2);
+    __exportStar2(require_voice4(), exports2);
+    __exportStar2(require_webhook4(), exports2);
+    exports2.APIVersion = "10";
+    exports2.Routes = {
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/role-connections/metadata`
+       * - PUT `/applications/{application.id}/role-connections/metadata`
+       */
+      applicationRoleConnectionMetadata(applicationId) {
+        return `/applications/${applicationId}/role-connections/metadata`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/auto-moderation/rules`
+       * - POST `/guilds/{guild.id}/auto-moderation/rules`
+       */
+      guildAutoModerationRules(guildId) {
+        return `/guilds/${guildId}/auto-moderation/rules`;
+      },
+      /**
+       * Routes for:
+       * - GET    `/guilds/{guild.id}/auto-moderation/rules/{rule.id}`
+       * - PATCH  `/guilds/{guild.id}/auto-moderation/rules/{rule.id}`
+       * - DELETE `/guilds/{guild.id}/auto-moderation/rules/{rule.id}`
+       */
+      guildAutoModerationRule(guildId, ruleId) {
+        return `/guilds/${guildId}/auto-moderation/rules/${ruleId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/audit-logs`
+       */
+      guildAuditLog(guildId) {
+        return `/guilds/${guildId}/audit-logs`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{channel.id}`
+       * - PATCH  `/channels/{channel.id}`
+       * - DELETE `/channels/{channel.id}`
+       */
+      channel(channelId) {
+        return `/channels/${channelId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/channels/{channel.id}/messages`
+       * - POST `/channels/{channel.id}/messages`
+       */
+      channelMessages(channelId) {
+        return `/channels/${channelId}/messages`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{channel.id}/messages/{message.id}`
+       * - PATCH  `/channels/{channel.id}/messages/{message.id}`
+       * - DELETE `/channels/{channel.id}/messages/{message.id}`
+       */
+      channelMessage(channelId, messageId) {
+        return `/channels/${channelId}/messages/${messageId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/messages/{message.id}/crosspost`
+       */
+      channelMessageCrosspost(channelId, messageId) {
+        return `/channels/${channelId}/messages/${messageId}/crosspost`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me`
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me`
+       *
+       * **Note**: You need to URL encode the emoji yourself
+       */
+      channelMessageOwnReaction(channelId, messageId, emoji) {
+        return `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user.id}`
+       *
+       * **Note**: You need to URL encode the emoji yourself
+       */
+      channelMessageUserReaction(channelId, messageId, emoji, userId) {
+        return `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}`
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}`
+       *
+       * **Note**: You need to URL encode the emoji yourself
+       */
+      channelMessageReaction(channelId, messageId, emoji) {
+        return `/channels/${channelId}/messages/${messageId}/reactions/${emoji}`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions`
+       */
+      channelMessageAllReactions(channelId, messageId) {
+        return `/channels/${channelId}/messages/${messageId}/reactions`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/messages/bulk-delete`
+       */
+      channelBulkDelete(channelId) {
+        return `/channels/${channelId}/messages/bulk-delete`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/permissions/{overwrite.id}`
+       * - DELETE `/channels/{channel.id}/permissions/{overwrite.id}`
+       */
+      channelPermission(channelId, overwriteId) {
+        return `/channels/${channelId}/permissions/${overwriteId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/channels/{channel.id}/invites`
+       * - POST `/channels/{channel.id}/invites`
+       */
+      channelInvites(channelId) {
+        return `/channels/${channelId}/invites`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/followers`
+       */
+      channelFollowers(channelId) {
+        return `/channels/${channelId}/followers`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/typing`
+       */
+      channelTyping(channelId) {
+        return `/channels/${channelId}/typing`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/pins`
+       */
+      channelPins(channelId) {
+        return `/channels/${channelId}/pins`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/pins/{message.id}`
+       * - DELETE `/channels/{channel.id}/pins/{message.id}`
+       */
+      channelPin(channelId, messageId) {
+        return `/channels/${channelId}/pins/${messageId}`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/recipients/{user.id}`
+       * - DELETE `/channels/{channel.id}/recipients/{user.id}`
+       */
+      channelRecipient(channelId, userId) {
+        return `/channels/${channelId}/recipients/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/emojis`
+       * - POST `/guilds/{guild.id}/emojis`
+       */
+      guildEmojis(guildId) {
+        return `/guilds/${guildId}/emojis`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/emojis/{emoji.id}`
+       * - PATCH  `/guilds/{guild.id}/emojis/{emoji.id}`
+       * - DELETE `/guilds/{guild.id}/emojis/{emoji.id}`
+       */
+      guildEmoji(guildId, emojiId) {
+        return `/guilds/${guildId}/emojis/${emojiId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/guilds`
+       */
+      guilds() {
+        return "/guilds";
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}`
+       * - PATCH  `/guilds/{guild.id}`
+       * - DELETE `/guilds/{guild.id}`
+       */
+      guild(guildId) {
+        return `/guilds/${guildId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/preview`
+       */
+      guildPreview(guildId) {
+        return `/guilds/${guildId}/preview`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/channels`
+       * - POST  `/guilds/{guild.id}/channels`
+       * - PATCH `/guilds/{guild.id}/channels`
+       */
+      guildChannels(guildId) {
+        return `/guilds/${guildId}/channels`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/members/{user.id}`
+       * - PUT    `/guilds/{guild.id}/members/{user.id}`
+       * - PATCH  `/guilds/{guild.id}/members/@me`
+       * - PATCH  `/guilds/{guild.id}/members/{user.id}`
+       * - DELETE `/guilds/{guild.id}/members/{user.id}`
+       */
+      guildMember(guildId, userId = "@me") {
+        return `/guilds/${guildId}/members/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/members`
+       */
+      guildMembers(guildId) {
+        return `/guilds/${guildId}/members`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/members/search`
+       */
+      guildMembersSearch(guildId) {
+        return `/guilds/${guildId}/members/search`;
+      },
+      /**
+       * Route for:
+       * - PATCH `/guilds/{guild.id}/members/@me/nick`
+       *
+       * @deprecated Use {@link Routes.guildMember} instead.
+       */
+      guildCurrentMemberNickname(guildId) {
+        return `/guilds/${guildId}/members/@me/nick`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/guilds/{guild.id}/members/{user.id}/roles/{role.id}`
+       * - DELETE `/guilds/{guild.id}/members/{user.id}/roles/{role.id}`
+       */
+      guildMemberRole(guildId, memberId, roleId) {
+        return `/guilds/${guildId}/members/${memberId}/roles/${roleId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/guilds/{guild.id}/mfa`
+       */
+      guildMFA(guildId) {
+        return `/guilds/${guildId}/mfa`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/bans`
+       */
+      guildBans(guildId) {
+        return `/guilds/${guildId}/bans`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/bans/{user.id}`
+       * - PUT    `/guilds/{guild.id}/bans/{user.id}`
+       * - DELETE `/guilds/{guild.id}/bans/{user.id}`
+       */
+      guildBan(guildId, userId) {
+        return `/guilds/${guildId}/bans/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/roles`
+       * - POST  `/guilds/{guild.id}/roles`
+       * - PATCH `/guilds/{guild.id}/roles`
+       */
+      guildRoles(guildId) {
+        return `/guilds/${guildId}/roles`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/roles/{role.id}`
+       * - PATCH  `/guilds/{guild.id}/roles/{role.id}`
+       * - DELETE `/guilds/{guild.id}/roles/{role.id}`
+       */
+      guildRole(guildId, roleId) {
+        return `/guilds/${guildId}/roles/${roleId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/prune`
+       * - POST `/guilds/{guild.id}/prune`
+       */
+      guildPrune(guildId) {
+        return `/guilds/${guildId}/prune`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/regions`
+       */
+      guildVoiceRegions(guildId) {
+        return `/guilds/${guildId}/regions`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/invites`
+       */
+      guildInvites(guildId) {
+        return `/guilds/${guildId}/invites`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/integrations`
+       */
+      guildIntegrations(guildId) {
+        return `/guilds/${guildId}/integrations`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/guilds/{guild.id}/integrations/{integration.id}`
+       */
+      guildIntegration(guildId, integrationId) {
+        return `/guilds/${guildId}/integrations/${integrationId}`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/widget`
+       * - PATCH `/guilds/{guild.id}/widget`
+       */
+      guildWidgetSettings(guildId) {
+        return `/guilds/${guildId}/widget`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/widget.json`
+       */
+      guildWidgetJSON(guildId) {
+        return `/guilds/${guildId}/widget.json`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/vanity-url`
+       */
+      guildVanityUrl(guildId) {
+        return `/guilds/${guildId}/vanity-url`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/widget.png`
+       */
+      guildWidgetImage(guildId) {
+        return `/guilds/${guildId}/widget.png`;
+      },
+      /**
+       * Route for:
+       * - GET    `/invites/{invite.code}`
+       * - DELETE `/invites/{invite.code}`
+       */
+      invite(code) {
+        return `/invites/${code}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/templates/{template.code}`
+       * - POST `/guilds/templates/{template.code}`
+       */
+      template(code) {
+        return `/guilds/templates/${code}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/templates`
+       * - POST `/guilds/{guild.id}/templates`
+       */
+      guildTemplates(guildId) {
+        return `/guilds/${guildId}/templates`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/guilds/{guild.id}/templates/{template.code}`
+       * - PATCH  `/guilds/{guild.id}/templates/{template.code}`
+       * - DELETE `/guilds/{guild.id}/templates/{template.code}`
+       */
+      guildTemplate(guildId, code) {
+        return `/guilds/${guildId}/templates/${code}`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/polls/{message.id}/answers/{answer_id}`
+       */
+      pollAnswerVoters(channelId, messageId, answerId) {
+        return `/channels/${channelId}/polls/${messageId}/answers/${answerId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/polls/{message.id}/expire`
+       */
+      expirePoll(channelId, messageId) {
+        return `/channels/${channelId}/polls/${messageId}/expire`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/threads`
+       * - POST `/channels/{channel.id}/messages/{message.id}/threads`
+       */
+      threads(parentId, messageId) {
+        const parts = ["", "channels", parentId];
+        if (messageId)
+          parts.push("messages", messageId);
+        parts.push("threads");
+        return parts.join("/");
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/threads/active`
+       */
+      guildActiveThreads(guildId) {
+        return `/guilds/${guildId}/threads/active`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/threads/archived/public`
+       * - GET `/channels/{channel.id}/threads/archived/private`
+       */
+      channelThreads(channelId, archivedStatus) {
+        return `/channels/${channelId}/threads/archived/${archivedStatus}`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/users/@me/threads/archived/private`
+       */
+      channelJoinedArchivedThreads(channelId) {
+        return `/channels/${channelId}/users/@me/threads/archived/private`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{thread.id}/thread-members`
+       * - GET    `/channels/{thread.id}/thread-members/{user.id}`
+       * - PUT    `/channels/{thread.id}/thread-members/@me`
+       * - PUT    `/channels/{thread.id}/thread-members/{user.id}`
+       * - DELETE `/channels/{thread.id}/thread-members/@me`
+       * - DELETE `/channels/{thread.id}/thread-members/{user.id}`
+       */
+      threadMembers(threadId, userId) {
+        const parts = ["", "channels", threadId, "thread-members"];
+        if (userId)
+          parts.push(userId);
+        return parts.join("/");
+      },
+      /**
+       * Route for:
+       * - GET   `/users/@me`
+       * - GET   `/users/{user.id}`
+       * - PATCH `/users/@me`
+       *
+       * @param [userId] - The user ID, defaulted to `@me`
+       */
+      user(userId = "@me") {
+        return `/users/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/applications/{application.id}/role-connection`
+       * - PUT `/users/@me/applications/{application.id}/role-connection`
+       */
+      userApplicationRoleConnection(applicationId) {
+        return `/users/@me/applications/${applicationId}/role-connection`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/guilds`
+       */
+      userGuilds() {
+        return `/users/@me/guilds`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/guilds/{guild.id}/member`
+       */
+      userGuildMember(guildId) {
+        return `/users/@me/guilds/${guildId}/member`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/users/@me/guilds/{guild.id}`
+       */
+      userGuild(guildId) {
+        return `/users/@me/guilds/${guildId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/users/@me/channels`
+       */
+      userChannels() {
+        return `/users/@me/channels`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/connections`
+       */
+      userConnections() {
+        return `/users/@me/connections`;
+      },
+      /**
+       * Route for:
+       * - GET `/voice/regions`
+       */
+      voiceRegions() {
+        return `/voice/regions`;
+      },
+      /**
+       * Route for:
+       * - GET  `/channels/{channel.id}/webhooks`
+       * - POST `/channels/{channel.id}/webhooks`
+       */
+      channelWebhooks(channelId) {
+        return `/channels/${channelId}/webhooks`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/webhooks`
+       */
+      guildWebhooks(guildId) {
+        return `/guilds/${guildId}/webhooks`;
+      },
+      /**
+       * Route for:
+       * - GET    `/webhooks/{webhook.id}`
+       * - GET    `/webhooks/{webhook.id}/{webhook.token}`
+       * - PATCH  `/webhooks/{webhook.id}`
+       * - PATCH  `/webhooks/{webhook.id}/{webhook.token}`
+       * - DELETE `/webhooks/{webhook.id}`
+       * - DELETE `/webhooks/{webhook.id}/{webhook.token}`
+       * - POST   `/webhooks/{webhook.id}/{webhook.token}`
+       *
+       * - POST   `/webhooks/{application.id}/{interaction.token}`
+       */
+      webhook(webhookId, webhookToken) {
+        const parts = ["", "webhooks", webhookId];
+        if (webhookToken)
+          parts.push(webhookToken);
+        return parts.join("/");
+      },
+      /**
+       * Route for:
+       * - GET    `/webhooks/{webhook.id}/{webhook.token}/messages/@original`
+       * - GET    `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
+       * - PATCH  `/webhooks/{webhook.id}/{webhook.token}/messages/@original`
+       * - PATCH  `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
+       * - DELETE `/webhooks/{webhook.id}/{webhook.token}/messages/@original`
+       * - DELETE `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
+       *
+       * - PATCH  `/webhooks/{application.id}/{interaction.token}/messages/@original`
+       * - PATCH  `/webhooks/{application.id}/{interaction.token}/messages/{message.id}`
+       * - DELETE `/webhooks/{application.id}/{interaction.token}/messages/{message.id}`
+       */
+      webhookMessage(webhookId, webhookToken, messageId = "@original") {
+        return `/webhooks/${webhookId}/${webhookToken}/messages/${messageId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/webhooks/{webhook.id}/{webhook.token}/github`
+       * - POST `/webhooks/{webhook.id}/{webhook.token}/slack`
+       */
+      webhookPlatform(webhookId, webhookToken, platform) {
+        return `/webhooks/${webhookId}/${webhookToken}/${platform}`;
+      },
+      /**
+       * Route for:
+       * - GET `/gateway`
+       */
+      gateway() {
+        return `/gateway`;
+      },
+      /**
+       * Route for:
+       * - GET `/gateway/bot`
+       */
+      gatewayBot() {
+        return `/gateway/bot`;
+      },
+      /**
+       * Route for:
+       * - GET `/oauth2/applications/@me`
+       */
+      oauth2CurrentApplication() {
+        return `/oauth2/applications/@me`;
+      },
+      /**
+       * Route for:
+       * - GET `/oauth2/@me`
+       */
+      oauth2CurrentAuthorization() {
+        return `/oauth2/@me`;
+      },
+      /**
+       * Route for:
+       * - GET `/oauth2/authorize`
+       */
+      oauth2Authorization() {
+        return `/oauth2/authorize`;
+      },
+      /**
+       * Route for:
+       * - POST `/oauth2/token`
+       */
+      oauth2TokenExchange() {
+        return `/oauth2/token`;
+      },
+      /**
+       * Route for:
+       * - POST `/oauth2/token/revoke`
+       */
+      oauth2TokenRevocation() {
+        return `/oauth2/token/revoke`;
+      },
+      /**
+       * Route for:
+       * - GET  `/applications/{application.id}/commands`
+       * - PUT  `/applications/{application.id}/commands`
+       * - POST `/applications/{application.id}/commands`
+       */
+      applicationCommands(applicationId) {
+        return `/applications/${applicationId}/commands`;
+      },
+      /**
+       * Route for:
+       * - GET    `/applications/{application.id}/commands/{command.id}`
+       * - PATCH  `/applications/{application.id}/commands/{command.id}`
+       * - DELETE `/applications/{application.id}/commands/{command.id}`
+       */
+      applicationCommand(applicationId, commandId) {
+        return `/applications/${applicationId}/commands/${commandId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/applications/{application.id}/guilds/{guild.id}/commands`
+       * - PUT  `/applications/{application.id}/guilds/{guild.id}/commands`
+       * - POST `/applications/{application.id}/guilds/{guild.id}/commands`
+       */
+      applicationGuildCommands(applicationId, guildId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands`;
+      },
+      /**
+       * Route for:
+       * - GET    `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}`
+       * - PATCH  `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}`
+       * - DELETE `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}`
+       */
+      applicationGuildCommand(applicationId, guildId, commandId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/interactions/{interaction.id}/{interaction.token}/callback`
+       */
+      interactionCallback(interactionId, interactionToken) {
+        return `/interactions/${interactionId}/${interactionToken}/callback`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/member-verification`
+       * - PATCH `/guilds/{guild.id}/member-verification`
+       */
+      guildMemberVerification(guildId) {
+        return `/guilds/${guildId}/member-verification`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/voice-states/@me`
+       * - GET `/guilds/{guild.id}/voice-states/{user.id}`
+       * - PATCH `/guilds/{guild.id}/voice-states/@me`
+       * - PATCH `/guilds/{guild.id}/voice-states/{user.id}`
+       */
+      guildVoiceState(guildId, userId = "@me") {
+        return `/guilds/${guildId}/voice-states/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/guilds/{guild.id}/commands/permissions`
+       * - PUT `/applications/{application.id}/guilds/{guild.id}/commands/permissions`
+       */
+      guildApplicationCommandsPermissions(applicationId, guildId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands/permissions`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}/permissions`
+       * - PUT `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}/permissions`
+       */
+      applicationCommandPermissions(applicationId, guildId, commandId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}/permissions`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/welcome-screen`
+       * - PATCH `/guilds/{guild.id}/welcome-screen`
+       */
+      guildWelcomeScreen(guildId) {
+        return `/guilds/${guildId}/welcome-screen`;
+      },
+      /**
+       * Route for:
+       * - POST `/stage-instances`
+       */
+      stageInstances() {
+        return `/stage-instances`;
+      },
+      /**
+       * Route for:
+       * - GET `/stage-instances/{channel.id}`
+       * - PATCH `/stage-instances/{channel.id}`
+       * - DELETE `/stage-instances/{channel.id}`
+       */
+      stageInstance(channelId) {
+        return `/stage-instances/${channelId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/stickers/{sticker.id}`
+       */
+      sticker(stickerId) {
+        return `/stickers/${stickerId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/sticker-packs`
+       */
+      stickerPacks() {
+        return "/sticker-packs";
+      },
+      /**
+       * Route for:
+       * - GET `/sticker-packs/{pack.id}`
+       */
+      stickerPack(packId) {
+        return `/sticker-packs/${packId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/sticker-packs`
+       *
+       * @deprecated Use {@link Routes.stickerPacks} instead.
+       */
+      nitroStickerPacks() {
+        return "/sticker-packs";
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/stickers`
+       * - POST `/guilds/{guild.id}/stickers`
+       */
+      guildStickers(guildId) {
+        return `/guilds/${guildId}/stickers`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/stickers/{sticker.id}`
+       * - PATCH  `/guilds/{guild.id}/stickers/{sticker.id}`
+       * - DELETE `/guilds/{guild.id}/stickers/{sticker.id}`
+       */
+      guildSticker(guildId, stickerId) {
+        return `/guilds/${guildId}/stickers/${stickerId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/scheduled-events`
+       * - POST `/guilds/{guild.id}/scheduled-events`
+       */
+      guildScheduledEvents(guildId) {
+        return `/guilds/${guildId}/scheduled-events`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}`
+       * - PATCH `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}`
+       * - DELETE `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}`
+       */
+      guildScheduledEvent(guildId, guildScheduledEventId) {
+        return `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}/users`
+       */
+      guildScheduledEventUsers(guildId, guildScheduledEventId) {
+        return `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}/users`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/onboarding`
+       * - PUT `/guilds/{guild.id}/onboarding`
+       */
+      guildOnboarding(guildId) {
+        return `/guilds/${guildId}/onboarding`;
+      },
+      /**
+       * Route for:
+       * - PUT `/guilds/${guild.id}/incident-actions`
+       */
+      guildIncidentActions(guildId) {
+        return `/guilds/${guildId}/incident-actions`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/@me`
+       * - PATCH `/applications/@me`
+       */
+      currentApplication() {
+        return "/applications/@me";
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/entitlements`
+       * - POST `/applications/{application.id}/entitlements`
+       */
+      entitlements(applicationId) {
+        return `/applications/${applicationId}/entitlements`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/entitlements/{entitlement.id}`
+       * - DELETE `/applications/{application.id}/entitlements/{entitlement.id}`
+       */
+      entitlement(applicationId, entitlementId) {
+        return `/applications/${applicationId}/entitlements/${entitlementId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/skus`
+       */
+      skus(applicationId) {
+        return `/applications/${applicationId}/skus`;
+      },
+      /**
+       * Route for:
+       * - POST `/guilds/{guild.id}/bulk-ban`
+       */
+      guildBulkBan(guildId) {
+        return `/guilds/${guildId}/bulk-ban`;
+      },
+      /**
+       * Route for:
+       * - POST `/applications/{application.id}/entitlements/{entitlement.id}/consume`
+       */
+      consumeEntitlement(applicationId, entitlementId) {
+        return `/applications/${applicationId}/entitlements/${entitlementId}/consume`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/emojis`
+       * - POST `/applications/{application.id}/emojis`
+       */
+      applicationEmojis(applicationId) {
+        return `/applications/${applicationId}/emojis`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/emojis/{emoji.id}`
+       * - PATCH `/applications/{application.id}/emojis/{emoji.id}`
+       * - DELETE `/applications/{application.id}/emojis/{emoji.id}`
+       */
+      applicationEmoji(applicationId, emojiId) {
+        return `/applications/${applicationId}/emojis/${emojiId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/skus/{sku.id}/subscriptions`
+       */
+      skuSubscriptions(skuId) {
+        return `/skus/${skuId}/subscriptions`;
+      },
+      /**
+       * Route for:
+       * - GET `/skus/{sku.id}/subscriptions/{subscription.id}`
+       */
+      skuSubscription(skuId, subscriptionId) {
+        return `/skus/${skuId}/subscriptions/${subscriptionId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/send-soundboard-sound`
+       */
+      sendSoundboardSound(channelId) {
+        return `/channels/${channelId}/send-soundboard-sound`;
+      },
+      /**
+       * Route for:
+       * - GET `/soundboard-default-sounds`
+       */
+      soundboardDefaultSounds() {
+        return "/soundboard-default-sounds";
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/soundboard-sounds`
+       * - POST `/guilds/{guild.id}/soundboard-sounds`
+       */
+      guildSoundboardSounds(guildId) {
+        return `/guilds/${guildId}/soundboard-sounds`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/soundboard-sounds/{sound.id}`
+       * - PATCH `/guilds/{guild.id}/soundboard-sounds/{sound.id}`
+       * - DELETE `/guilds/{guild.id}/soundboard-sounds/{sound.id}`
+       */
+      guildSoundboardSound(guildId, soundId) {
+        return `/guilds/${guildId}/soundboard-sounds/${soundId}`;
+      }
+    };
+    for (const [key, fn] of Object.entries(exports2.Routes)) {
+      exports2.Routes[key] = (...args) => {
+        const escaped = args.map((arg) => {
+          if (arg) {
+            if (internals_1.urlSafeCharacters.test(String(arg))) {
+              return arg;
+            }
+            return encodeURIComponent(arg);
+          }
+          return arg;
+        });
+        return fn.call(null, ...escaped);
+      };
+    }
+    Object.freeze(exports2.Routes);
+    exports2.StickerPackApplicationId = "710982414301790216";
+    var ImageFormat;
+    (function(ImageFormat2) {
+      ImageFormat2["JPEG"] = "jpeg";
+      ImageFormat2["PNG"] = "png";
+      ImageFormat2["WebP"] = "webp";
+      ImageFormat2["GIF"] = "gif";
+      ImageFormat2["Lottie"] = "json";
+    })(ImageFormat || (exports2.ImageFormat = ImageFormat = {}));
+    exports2.CDNRoutes = {
+      /**
+       * Route for:
+       * - GET `/emojis/{emoji.id}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      emoji(emojiId, format) {
+        return `/emojis/${emojiId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/icons/{guild.id}/{guild.icon}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildIcon(guildId, guildIcon, format) {
+        return `/icons/${guildId}/${guildIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/splashes/{guild.id}/{guild.splash}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildSplash(guildId, guildSplash, format) {
+        return `/splashes/${guildId}/${guildSplash}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/discovery-splashes/{guild.id}/{guild.discovery_splash}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildDiscoverySplash(guildId, guildDiscoverySplash, format) {
+        return `/discovery-splashes/${guildId}/${guildDiscoverySplash}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/banners/{guild.id}/{guild.banner}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildBanner(guildId, guildBanner, format) {
+        return `/banners/${guildId}/${guildBanner}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/banners/{user.id}/{user.banner}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      userBanner(userId, userBanner, format) {
+        return `/banners/${userId}/${userBanner}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/embed/avatars/{index}.png`
+       *
+       * The value for `index` parameter depends on whether the user is {@link https://discord.com/developers/docs/change-log#unique-usernames-on-discord | migrated to the new username system}.
+       * For users on the new username system, `index` will be `(user.id >> 22) % 6`.
+       * For users on the legacy username system, `index` will be `user.discriminator % 5`.
+       *
+       * This route supports the extension: PNG
+       */
+      defaultUserAvatar(index) {
+        return `/embed/avatars/${index}.png`;
+      },
+      /**
+       * Route for:
+       * - GET `/avatars/{user.id}/{user.avatar}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      userAvatar(userId, userAvatar, format) {
+        return `/avatars/${userId}/${userAvatar}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/users/{user.id}/avatars/{guild_member.avatar}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildMemberAvatar(guildId, userId, memberAvatar, format) {
+        return `/guilds/${guildId}/users/${userId}/avatars/${memberAvatar}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/avatar-decorations/{user.id}/{user.avatar_decoration}.png`
+       *
+       * This route supports the extension: PNG
+       *
+       * @deprecated Use {@link CDNRoutes.avatarDecoration} instead.
+       */
+      userAvatarDecoration(userId, userAvatarDecoration) {
+        return `/avatar-decorations/${userId}/${userAvatarDecoration}.png`;
+      },
+      /**
+       * Route for:
+       * - GET `/avatar-decoration-presets/{avatar_decoration_data_asset}.png`
+       *
+       * This route supports the extension: PNG
+       */
+      avatarDecoration(avatarDecorationDataAsset) {
+        return `/avatar-decoration-presets/${avatarDecorationDataAsset}.png`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-icons/{application.id}/{application.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      applicationIcon(applicationId, applicationIcon, format) {
+        return `/app-icons/${applicationId}/${applicationIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-icons/{application.id}/{application.cover_image}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      applicationCover(applicationId, applicationCoverImage, format) {
+        return `/app-icons/${applicationId}/${applicationCoverImage}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/{application.id}/{application.asset_id}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      applicationAsset(applicationId, applicationAssetId, format) {
+        return `/app-assets/${applicationId}/${applicationAssetId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/{application.id}/achievements/{achievement.id}/icons/{achievement.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      achievementIcon(applicationId, achievementId, achievementIconHash, format) {
+        return `/app-assets/${applicationId}/achievements/${achievementId}/icons/${achievementIconHash}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/710982414301790216/store/{sticker_pack.banner.asset_id}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      stickerPackBanner(stickerPackBannerAssetId, format) {
+        return `/app-assets/${exports2.StickerPackApplicationId}/store/${stickerPackBannerAssetId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/${application.id}/store/${asset.id}.{png|jpeg|webp}}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      storePageAsset(applicationId, assetId, format = ImageFormat.PNG) {
+        return `/app-assets/${applicationId}/store/${assetId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/team-icons/{team.id}/{team.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      teamIcon(teamId, teamIcon, format) {
+        return `/team-icons/${teamId}/${teamIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/stickers/{sticker.id}.{png|json}`
+       *
+       * This route supports the extensions: PNG, Lottie, GIF
+       */
+      sticker(stickerId, format) {
+        return `/stickers/${stickerId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/role-icons/{role.id}/{role.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      roleIcon(roleId, roleIcon, format) {
+        return `/role-icons/${roleId}/${roleIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guild-events/{guild_scheduled_event.id}/{guild_scheduled_event.image}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildScheduledEventCover(guildScheduledEventId, guildScheduledEventCoverImage, format) {
+        return `/guild-events/${guildScheduledEventId}/${guildScheduledEventCoverImage}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/${guild.id}/users/${user.id}/banners/${guild_member.banner}.{png|jpeg|webp|gif}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildMemberBanner(guildId, userId, guildMemberBanner, format) {
+        return `/guilds/${guildId}/users/${userId}/banners/${guildMemberBanner}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/soundboard-sounds/${sound.id}`
+       */
+      soundboardSound(soundId) {
+        return `/soundboard-sounds/${soundId}`;
+      }
+    };
+    for (const [key, fn] of Object.entries(exports2.CDNRoutes)) {
+      exports2.CDNRoutes[key] = (...args) => {
+        const escaped = args.map((arg) => {
+          if (arg) {
+            if (internals_1.urlSafeCharacters.test(String(arg))) {
+              return arg;
+            }
+            return encodeURIComponent(arg);
+          }
+          return arg;
+        });
+        return fn.call(null, ...escaped);
+      };
+    }
+    Object.freeze(exports2.CDNRoutes);
+    exports2.RouteBases = {
+      api: `https://discord.com/api/v${exports2.APIVersion}`,
+      cdn: "https://cdn.discordapp.com",
+      media: "https://media.discordapp.net",
+      invite: "https://discord.gg",
+      template: "https://discord.new",
+      gift: "https://discord.gift",
+      scheduledEvent: "https://discord.com/events"
+    };
+    Object.freeze(exports2.RouteBases);
+    exports2.OAuth2Routes = {
+      authorizationURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2Authorization()}`,
+      tokenURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2TokenExchange()}`,
+      /**
+       * @see {@link https://tools.ietf.org/html/rfc7009}
+       */
+      tokenRevocationURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2TokenRevocation()}`
+    };
+    Object.freeze(exports2.OAuth2Routes);
+  }
+});
+
+// node_modules/discord-api-types/rpc/common.js
+var require_common8 = __commonJS({
+  "node_modules/discord-api-types/rpc/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RPCCloseEventCodes = exports2.RPCErrorCodes = exports2.RelationshipType = exports2.VoiceConnectionStates = exports2.RPCVoiceShortcutKeyComboKeyType = exports2.RPCVoiceSettingsModeType = exports2.RPCDeviceType = void 0;
+    var RPCDeviceType;
+    (function(RPCDeviceType2) {
+      RPCDeviceType2["AudioInput"] = "audioinput";
+      RPCDeviceType2["AudioOutput"] = "audiooutput";
+      RPCDeviceType2["VideoInput"] = "videoinput";
+    })(RPCDeviceType || (exports2.RPCDeviceType = RPCDeviceType = {}));
+    var RPCVoiceSettingsModeType;
+    (function(RPCVoiceSettingsModeType2) {
+      RPCVoiceSettingsModeType2["PushToTalk"] = "PUSH_TO_TALK";
+      RPCVoiceSettingsModeType2["VoiceActivity"] = "VOICE_ACTIVITY";
+    })(RPCVoiceSettingsModeType || (exports2.RPCVoiceSettingsModeType = RPCVoiceSettingsModeType = {}));
+    var RPCVoiceShortcutKeyComboKeyType;
+    (function(RPCVoiceShortcutKeyComboKeyType2) {
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["KeyboardKey"] = 0] = "KeyboardKey";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["MouseButton"] = 1] = "MouseButton";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["KeyboardModifierKey"] = 2] = "KeyboardModifierKey";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["GamepadButton"] = 3] = "GamepadButton";
+    })(RPCVoiceShortcutKeyComboKeyType || (exports2.RPCVoiceShortcutKeyComboKeyType = RPCVoiceShortcutKeyComboKeyType = {}));
+    var VoiceConnectionStates;
+    (function(VoiceConnectionStates2) {
+      VoiceConnectionStates2["Disconnected"] = "DISCONNECTED";
+      VoiceConnectionStates2["AwaitingEndpoint"] = "AWAITING_ENDPOINT";
+      VoiceConnectionStates2["Authenticating"] = "AUTHENTICATING";
+      VoiceConnectionStates2["Connecting"] = "CONNECTING";
+      VoiceConnectionStates2["Connected"] = "CONNECTED";
+      VoiceConnectionStates2["VoiceDisconnected"] = "VOICE_DISCONNECTED";
+      VoiceConnectionStates2["VoiceConnecting"] = "VOICE_CONNECTING";
+      VoiceConnectionStates2["VoiceConnected"] = "VOICE_CONNECTED";
+      VoiceConnectionStates2["NoRoute"] = "NO_ROUTE";
+      VoiceConnectionStates2["IceChecking"] = "ICE_CHECKING";
+    })(VoiceConnectionStates || (exports2.VoiceConnectionStates = VoiceConnectionStates = {}));
+    var RelationshipType;
+    (function(RelationshipType2) {
+      RelationshipType2[RelationshipType2["None"] = 0] = "None";
+      RelationshipType2[RelationshipType2["Friend"] = 1] = "Friend";
+      RelationshipType2[RelationshipType2["Blocked"] = 2] = "Blocked";
+      RelationshipType2[RelationshipType2["PendingIncoming"] = 3] = "PendingIncoming";
+      RelationshipType2[RelationshipType2["PendingOutgoing"] = 4] = "PendingOutgoing";
+      RelationshipType2[RelationshipType2["Implicit"] = 5] = "Implicit";
+    })(RelationshipType || (exports2.RelationshipType = RelationshipType = {}));
+    var RPCErrorCodes;
+    (function(RPCErrorCodes2) {
+      RPCErrorCodes2[RPCErrorCodes2["UnknownError"] = 1e3] = "UnknownError";
+      RPCErrorCodes2[RPCErrorCodes2["ServiceUnavailable"] = 1001] = "ServiceUnavailable";
+      RPCErrorCodes2[RPCErrorCodes2["TransactionAborted"] = 1002] = "TransactionAborted";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidPayload"] = 4e3] = "InvalidPayload";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidCommand"] = 4002] = "InvalidCommand";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidGuild"] = 4003] = "InvalidGuild";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidEvent"] = 4004] = "InvalidEvent";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidChannel"] = 4005] = "InvalidChannel";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidPermissions"] = 4006] = "InvalidPermissions";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidClientId"] = 4007] = "InvalidClientId";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidOrigin"] = 4008] = "InvalidOrigin";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidToken"] = 4009] = "InvalidToken";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidUser"] = 4010] = "InvalidUser";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidInvite"] = 4011] = "InvalidInvite";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidActivityJoinRequest"] = 4012] = "InvalidActivityJoinRequest";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidEntitlement"] = 4013] = "InvalidEntitlement";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidGiftCode"] = 4014] = "InvalidGiftCode";
+      RPCErrorCodes2[RPCErrorCodes2["OAuth2Error"] = 5e3] = "OAuth2Error";
+      RPCErrorCodes2[RPCErrorCodes2["SelectChannelTimedOut"] = 5001] = "SelectChannelTimedOut";
+      RPCErrorCodes2[RPCErrorCodes2["GetGuildTimedOut"] = 5002] = "GetGuildTimedOut";
+      RPCErrorCodes2[RPCErrorCodes2["SelectVoiceForceRequired"] = 5003] = "SelectVoiceForceRequired";
+      RPCErrorCodes2[RPCErrorCodes2["CaptureShortcutAlreadyListening"] = 5004] = "CaptureShortcutAlreadyListening";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidActivitySecret"] = 5005] = "InvalidActivitySecret";
+      RPCErrorCodes2[RPCErrorCodes2["NoEligibleActivity"] = 5006] = "NoEligibleActivity";
+      RPCErrorCodes2[RPCErrorCodes2["PurchaseCanceled"] = 5007] = "PurchaseCanceled";
+      RPCErrorCodes2[RPCErrorCodes2["PurchaseError"] = 5008] = "PurchaseError";
+      RPCErrorCodes2[RPCErrorCodes2["UnauthorizedForAchievement"] = 5009] = "UnauthorizedForAchievement";
+      RPCErrorCodes2[RPCErrorCodes2["RateLimited"] = 5010] = "RateLimited";
+    })(RPCErrorCodes || (exports2.RPCErrorCodes = RPCErrorCodes = {}));
+    var RPCCloseEventCodes;
+    (function(RPCCloseEventCodes2) {
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseNormal"] = 1e3] = "CloseNormal";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseUnsupported"] = 1003] = "CloseUnsupported";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseAbnormal"] = 1006] = "CloseAbnormal";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidClientId"] = 4e3] = "InvalidClientId";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidOrigin"] = 4001] = "InvalidOrigin";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["RateLimited"] = 4002] = "RateLimited";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["TokenRevoked"] = 4003] = "TokenRevoked";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidVersion"] = 4004] = "InvalidVersion";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidEncoding"] = 4005] = "InvalidEncoding";
+    })(RPCCloseEventCodes || (exports2.RPCCloseEventCodes = RPCCloseEventCodes = {}));
+  }
+});
+
+// node_modules/discord-api-types/rpc/v10.js
+var require_v1010 = __commonJS({
+  "node_modules/discord-api-types/rpc/v10.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RPCEvents = exports2.RPCCommands = exports2.RPCVersion = void 0;
+    __exportStar2(require_common8(), exports2);
+    exports2.RPCVersion = "1";
+    var RPCCommands;
+    (function(RPCCommands2) {
+      RPCCommands2["AcceptActivityInvite"] = "ACCEPT_ACTIVITY_INVITE";
+      RPCCommands2["ActivityInviteUser"] = "ACTIVITY_INVITE_USER";
+      RPCCommands2["Authenticate"] = "AUTHENTICATE";
+      RPCCommands2["Authorize"] = "AUTHORIZE";
+      RPCCommands2["BraintreePopupBridgeCallback"] = "BRAINTREE_POPUP_BRIDGE_CALLBACK";
+      RPCCommands2["BrowserHandoff"] = "BROWSER_HANDOFF";
+      RPCCommands2["CloseActivityJoinRequest"] = "CLOSE_ACTIVITY_JOIN_REQUEST";
+      RPCCommands2["ConnectionsCallback"] = "CONNECTIONS_CALLBACK";
+      RPCCommands2["CreateChannelInvite"] = "CREATE_CHANNEL_INVITE";
+      RPCCommands2["DeepLink"] = "DEEP_LINK";
+      RPCCommands2["Dispatch"] = "DISPATCH";
+      RPCCommands2["GetApplicationTicket"] = "GET_APPLICATION_TICKET";
+      RPCCommands2["GetChannel"] = "GET_CHANNEL";
+      RPCCommands2["GetChannels"] = "GET_CHANNELS";
+      RPCCommands2["GetEntitlementTicket"] = "GET_ENTITLEMENT_TICKET";
+      RPCCommands2["GetEntitlements"] = "GET_ENTITLEMENTS";
+      RPCCommands2["GetGuild"] = "GET_GUILD";
+      RPCCommands2["GetGuilds"] = "GET_GUILDS";
+      RPCCommands2["GetImage"] = "GET_IMAGE";
+      RPCCommands2["GetNetworkingConfig"] = "GET_NETWORKING_CONFIG";
+      RPCCommands2["GetRelationships"] = "GET_RELATIONSHIPS";
+      RPCCommands2["GetSelectedVoiceChannel"] = "GET_SELECTED_VOICE_CHANNEL";
+      RPCCommands2["GetSkus"] = "GET_SKUS";
+      RPCCommands2["GetUser"] = "GET_USER";
+      RPCCommands2["GetVoiceSettings"] = "GET_VOICE_SETTINGS";
+      RPCCommands2["GiftCodeBrowser"] = "GIFT_CODE_BROWSER";
+      RPCCommands2["GuildTemplateBrowser"] = "GUILD_TEMPLATE_BROWSER";
+      RPCCommands2["InviteBrowser"] = "INVITE_BROWSER";
+      RPCCommands2["NetworkingCreateToken"] = "NETWORKING_CREATE_TOKEN";
+      RPCCommands2["NetworkingPeerMetrics"] = "NETWORKING_PEER_METRICS";
+      RPCCommands2["NetworkingSystemMetrics"] = "NETWORKING_SYSTEM_METRICS";
+      RPCCommands2["OpenOverlayActivityInvite"] = "OPEN_OVERLAY_ACTIVITY_INVITE";
+      RPCCommands2["OpenOverlayGuildInvite"] = "OPEN_OVERLAY_GUILD_INVITE";
+      RPCCommands2["OpenOverlayVoiceSettings"] = "OPEN_OVERLAY_VOICE_SETTINGS";
+      RPCCommands2["Overlay"] = "OVERLAY";
+      RPCCommands2["SelectTextChannel"] = "SELECT_TEXT_CHANNEL";
+      RPCCommands2["SelectVoiceChannel"] = "SELECT_VOICE_CHANNEL";
+      RPCCommands2["SendActivityJoinInvite"] = "SEND_ACTIVITY_JOIN_INVITE";
+      RPCCommands2["SetActivity"] = "SET_ACTIVITY";
+      RPCCommands2["SetCertifiedDevices"] = "SET_CERTIFIED_DEVICES";
+      RPCCommands2["SetOverlayLocked"] = "SET_OVERLAY_LOCKED";
+      RPCCommands2["SetUserVoiceSettings"] = "SET_USER_VOICE_SETTINGS";
+      RPCCommands2["SetUserVoiceSettings2"] = "SET_USER_VOICE_SETTINGS_2";
+      RPCCommands2["SetVoiceSettings"] = "SET_VOICE_SETTINGS";
+      RPCCommands2["SetVoiceSettings2"] = "SET_VOICE_SETTINGS_2";
+      RPCCommands2["StartPurchase"] = "START_PURCHASE";
+      RPCCommands2["Subscribe"] = "SUBSCRIBE";
+      RPCCommands2["Unsubscribe"] = "UNSUBSCRIBE";
+      RPCCommands2["ValidateApplication"] = "VALIDATE_APPLICATION";
+    })(RPCCommands || (exports2.RPCCommands = RPCCommands = {}));
+    var RPCEvents;
+    (function(RPCEvents2) {
+      RPCEvents2["ActivityInvite"] = "ACTIVITY_INVITE";
+      RPCEvents2["ActivityJoin"] = "ACTIVITY_JOIN";
+      RPCEvents2["ActivityJoinRequest"] = "ACTIVITY_JOIN_REQUEST";
+      RPCEvents2["ActivitySpectate"] = "ACTIVITY_SPECTATE";
+      RPCEvents2["ChannelCreate"] = "CHANNEL_CREATE";
+      RPCEvents2["CurrentUserUpdate"] = "CURRENT_USER_UPDATE";
+      RPCEvents2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      RPCEvents2["EntitlementDelete"] = "ENTITLEMENT_DELETE";
+      RPCEvents2["Error"] = "ERROR";
+      RPCEvents2["GameJoin"] = "GAME_JOIN";
+      RPCEvents2["GameSpectate"] = "GAME_SPECTATE";
+      RPCEvents2["GuildCreate"] = "GUILD_CREATE";
+      RPCEvents2["GuildStatus"] = "GUILD_STATUS";
+      RPCEvents2["MessageCreate"] = "MESSAGE_CREATE";
+      RPCEvents2["MessageDelete"] = "MESSAGE_DELETE";
+      RPCEvents2["MessageUpdate"] = "MESSAGE_UPDATE";
+      RPCEvents2["NotificationCreate"] = "NOTIFICATION_CREATE";
+      RPCEvents2["Overlay"] = "OVERLAY";
+      RPCEvents2["OverlayUpdate"] = "OVERLAY_UPDATE";
+      RPCEvents2["Ready"] = "READY";
+      RPCEvents2["RelationshipUpdate"] = "RELATIONSHIP_UPDATE";
+      RPCEvents2["SpeakingStart"] = "SPEAKING_START";
+      RPCEvents2["SpeakingStop"] = "SPEAKING_STOP";
+      RPCEvents2["VoiceChannelSelect"] = "VOICE_CHANNEL_SELECT";
+      RPCEvents2["VoiceConnectionStatus"] = "VOICE_CONNECTION_STATUS";
+      RPCEvents2["VoiceSettingsUpdate"] = "VOICE_SETTINGS_UPDATE";
+      RPCEvents2["VoiceSettingsUpdate2"] = "VOICE_SETTINGS_UPDATE_2";
+      RPCEvents2["VoiceStateCreate"] = "VOICE_STATE_CREATE";
+      RPCEvents2["VoiceStateDelete"] = "VOICE_STATE_DELETE";
+      RPCEvents2["VoiceStateUpdate"] = "VOICE_STATE_UPDATE";
+    })(RPCEvents || (exports2.RPCEvents = RPCEvents = {}));
+  }
+});
+
+// node_modules/discord-api-types/utils/v10.js
+var require_v1011 = __commonJS({
+  "node_modules/discord-api-types/utils/v10.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.isDMInteraction = isDMInteraction;
+    exports2.isGuildInteraction = isGuildInteraction;
+    exports2.isApplicationCommandDMInteraction = isApplicationCommandDMInteraction;
+    exports2.isApplicationCommandGuildInteraction = isApplicationCommandGuildInteraction;
+    exports2.isMessageComponentDMInteraction = isMessageComponentDMInteraction;
+    exports2.isMessageComponentGuildInteraction = isMessageComponentGuildInteraction;
+    exports2.isLinkButton = isLinkButton;
+    exports2.isInteractionButton = isInteractionButton;
+    exports2.isMessageComponentInteraction = isMessageComponentInteraction;
+    exports2.isMessageComponentButtonInteraction = isMessageComponentButtonInteraction;
+    exports2.isMessageComponentSelectMenuInteraction = isMessageComponentSelectMenuInteraction;
+    exports2.isChatInputApplicationCommandInteraction = isChatInputApplicationCommandInteraction;
+    exports2.isContextMenuApplicationCommandInteraction = isContextMenuApplicationCommandInteraction;
+    var index_1 = require_v108();
+    function isDMInteraction(interaction) {
+      return Reflect.has(interaction, "user");
+    }
+    function isGuildInteraction(interaction) {
+      return Reflect.has(interaction, "guild_id");
+    }
+    function isApplicationCommandDMInteraction(interaction) {
+      return isDMInteraction(interaction);
+    }
+    function isApplicationCommandGuildInteraction(interaction) {
+      return isGuildInteraction(interaction);
+    }
+    function isMessageComponentDMInteraction(interaction) {
+      return isDMInteraction(interaction);
+    }
+    function isMessageComponentGuildInteraction(interaction) {
+      return isGuildInteraction(interaction);
+    }
+    function isLinkButton(component) {
+      return component.style === index_1.ButtonStyle.Link;
+    }
+    function isInteractionButton(component) {
+      return ![index_1.ButtonStyle.Link, index_1.ButtonStyle.Premium].includes(component.style);
+    }
+    function isMessageComponentInteraction(interaction) {
+      return interaction.type === index_1.InteractionType.MessageComponent;
+    }
+    function isMessageComponentButtonInteraction(interaction) {
+      return interaction.data.component_type === index_1.ComponentType.Button;
+    }
+    function isMessageComponentSelectMenuInteraction(interaction) {
+      return [
+        index_1.ComponentType.StringSelect,
+        index_1.ComponentType.UserSelect,
+        index_1.ComponentType.RoleSelect,
+        index_1.ComponentType.MentionableSelect,
+        index_1.ComponentType.ChannelSelect
+      ].includes(interaction.data.component_type);
+    }
+    function isChatInputApplicationCommandInteraction(interaction) {
+      return interaction.data.type === index_1.ApplicationCommandType.ChatInput;
+    }
+    function isContextMenuApplicationCommandInteraction(interaction) {
+      return interaction.data.type === index_1.ApplicationCommandType.Message || interaction.data.type === index_1.ApplicationCommandType.User;
+    }
+  }
+});
+
+// node_modules/discord-api-types/v10.js
+var require_v1012 = __commonJS({
+  "node_modules/discord-api-types/v10.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.Utils = void 0;
+    __exportStar2(require_v107(), exports2);
+    __exportStar2(require_globals2(), exports2);
+    __exportStar2(require_v108(), exports2);
+    __exportStar2(require_v109(), exports2);
+    __exportStar2(require_v1010(), exports2);
+    __exportStar2(require_internals4(), exports2);
+    exports2.Utils = require_v1011();
+  }
+});
+
 // node_modules/discord.js/src/errors/ErrorCodes.js
 var require_ErrorCodes = __commonJS({
   "node_modules/discord.js/src/errors/ErrorCodes.js"(exports2, module2) {
@@ -28660,7 +32587,7 @@ var require_package = __commonJS({
     module2.exports = {
       $schema: "https://json.schemastore.org/package.json",
       name: "discord.js",
-      version: "14.19.1",
+      version: "14.19.3",
       description: "A powerful library for interacting with the Discord API",
       main: "./src/index.js",
       types: "./typings/index.d.ts",
@@ -28711,7 +32638,7 @@ var require_package = __commonJS({
       homepage: "https://discord.js.org",
       funding: "https://github.com/discordjs/discord.js?sponsor",
       dependencies: {
-        "@discordjs/builders": "^1.11.1",
+        "@discordjs/builders": "^1.11.2",
         "@discordjs/collection": "1.5.3",
         "@discordjs/formatters": "^0.6.1",
         "@discordjs/ws": "^1.2.2",
@@ -28741,8 +32668,8 @@ var require_package = __commonJS({
         turbo: "^2.0.14",
         typescript: "~5.5.4",
         "@discordjs/api-extractor": "^7.38.1",
-        "@discordjs/scripts": "^0.1.0",
-        "@discordjs/docgen": "^0.12.1"
+        "@discordjs/docgen": "^0.12.1",
+        "@discordjs/scripts": "^0.1.0"
       },
       engines: {
         node: ">=18"
@@ -29668,7 +33595,7 @@ var require_BitField = __commonJS({
 var require_AttachmentFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/AttachmentFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { AttachmentFlags } = require_v106();
+    var { AttachmentFlags } = require_v1012();
     var BitField = require_BitField();
     var AttachmentFlagsBitField = class extends BitField {
       /**
@@ -30201,7 +34128,7 @@ var require_Base = __commonJS({
 var require_ChannelFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/ChannelFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { ChannelFlags } = require_v106();
+    var { ChannelFlags } = require_v1012();
     var BitField = require_BitField();
     var ChannelFlagsBitField = class extends BitField {
       /**
@@ -30219,7 +34146,7 @@ var require_ChannelFlagsBitField = __commonJS({
 var require_Constants = __commonJS({
   "node_modules/discord.js/src/util/Constants.js"(exports2) {
     "use strict";
-    var { ChannelType, MessageType, ComponentType, ImageFormat, StickerFormatType } = require_v106();
+    var { ChannelType, MessageType, ComponentType, ImageFormat, StickerFormatType } = require_v1012();
     exports2.MaxBulkDeletableMessageAge = 12096e5;
     exports2.SweeperKeys = [
       "autoModerationRules",
@@ -30311,7 +34238,7 @@ var require_BaseChannel = __commonJS({
     "use strict";
     var { channelLink, channelMention } = require_dist7();
     var { DiscordSnowflake } = require_cjs();
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var { ThreadChannelTypes } = require_Constants();
@@ -30565,7 +34492,7 @@ var require_CachedManager = __commonJS({
 var require_PermissionsBitField = __commonJS({
   "node_modules/discord.js/src/util/PermissionsBitField.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits } = require_v106();
+    var { PermissionFlagsBits } = require_v1012();
     var BitField = require_BitField();
     var PermissionsBitField2 = class extends BitField {
       /**
@@ -30655,7 +34582,7 @@ var require_PermissionsBitField = __commonJS({
 var require_RoleFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/RoleFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { RoleFlags } = require_v106();
+    var { RoleFlags } = require_v1012();
     var BitField = require_BitField();
     var RoleFlagsBitField = class extends BitField {
       /**
@@ -30675,7 +34602,7 @@ var require_Role = __commonJS({
     "use strict";
     var { roleMention } = require_dist7();
     var { DiscordSnowflake } = require_cjs();
-    var { PermissionFlagsBits } = require_v106();
+    var { PermissionFlagsBits } = require_v1012();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionsBitField2 = require_PermissionsBitField();
@@ -31025,7 +34952,7 @@ var require_Role = __commonJS({
 var require_PermissionOverwrites = __commonJS({
   "node_modules/discord.js/src/structures/PermissionOverwrites.js"(exports2, module2) {
     "use strict";
-    var { OverwriteType } = require_v106();
+    var { OverwriteType } = require_v1012();
     var Base = require_Base();
     var { Role } = require_Role();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -31182,7 +35109,7 @@ var require_PermissionOverwriteManager = __commonJS({
     "use strict";
     var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
-    var { OverwriteType, Routes: Routes2 } = require_v106();
+    var { OverwriteType, Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionOverwrites = require_PermissionOverwrites();
@@ -31328,7 +35255,7 @@ var require_GuildChannel = __commonJS({
   "node_modules/discord.js/src/structures/GuildChannel.js"(exports2, module2) {
     "use strict";
     var { Snowflake } = require_cjs();
-    var { PermissionFlagsBits, ChannelType } = require_v106();
+    var { PermissionFlagsBits, ChannelType } = require_v1012();
     var { BaseChannel } = require_BaseChannel();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionOverwriteManager = require_PermissionOverwriteManager();
@@ -31681,7 +35608,7 @@ var require_GuildChannel = __commonJS({
 var require_SKUFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/SKUFlagsBitField.js"(exports2) {
     "use strict";
-    var { SKUFlags } = require_v106();
+    var { SKUFlags } = require_v1012();
     var BitField = require_BitField();
     var SKUFlagsBitField = class extends BitField {
       /**
@@ -31723,7 +35650,7 @@ var require_Util = __commonJS({
     var { parse } = require("node:path");
     var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
-    var { ChannelType, RouteBases, Routes: Routes2 } = require_v106();
+    var { ChannelType, RouteBases, Routes: Routes2 } = require_v1012();
     var { fetch: fetch2 } = require_undici();
     var Colors = require_Colors();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -32006,7 +35933,7 @@ var require_BaseClient = __commonJS({
     "use strict";
     var EventEmitter = require("node:events");
     var { REST } = require_dist5();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Options2 = require_Options();
     var { flatten } = require_Util();
@@ -33125,7 +37052,7 @@ var require_GuildScheduledEvent = __commonJS({
   "node_modules/discord.js/src/structures/GuildScheduledEvent.js"(exports2) {
     "use strict";
     var { DiscordSnowflake } = require_cjs();
-    var { GuildScheduledEventStatus, GuildScheduledEventEntityType, RouteBases } = require_v106();
+    var { GuildScheduledEventStatus, GuildScheduledEventEntityType, RouteBases } = require_v1012();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildScheduledEvent = class extends Base {
@@ -33714,7 +37641,7 @@ var require_BaseGuild = __commonJS({
     "use strict";
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { DiscordSnowflake } = require_cjs();
-    var { Routes: Routes2, GuildFeature } = require_v106();
+    var { Routes: Routes2, GuildFeature } = require_v1012();
     var Base = require_Base();
     var BaseGuild = class extends Base {
       constructor(client2, data) {
@@ -33983,7 +37910,7 @@ var require_WelcomeScreen = __commonJS({
   "node_modules/discord.js/src/structures/WelcomeScreen.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { GuildFeature } = require_v106();
+    var { GuildFeature } = require_v1012();
     var Base = require_Base();
     var WelcomeChannel = require_WelcomeChannel();
     var WelcomeScreen = class extends Base {
@@ -34029,7 +37956,7 @@ var require_InviteGuild = __commonJS({
 var require_Invite = __commonJS({
   "node_modules/discord.js/src/structures/Invite.js"(exports2, module2) {
     "use strict";
-    var { RouteBases, Routes: Routes2, PermissionFlagsBits } = require_v106();
+    var { RouteBases, Routes: Routes2, PermissionFlagsBits } = require_v1012();
     var Base = require_Base();
     var { GuildScheduledEvent } = require_GuildScheduledEvent();
     var IntegrationApplication = require_IntegrationApplication();
@@ -34236,7 +38163,7 @@ var require_GuildTemplate = __commonJS({
   "node_modules/discord.js/src/structures/GuildTemplate.js"(exports2, module2) {
     "use strict";
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
-    var { RouteBases, Routes: Routes2 } = require_v106();
+    var { RouteBases, Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var { resolveImage } = require_DataResolver();
     var Events2 = require_Events();
@@ -34458,7 +38385,7 @@ var require_DataResolver = __commonJS({
 var require_MessageFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/MessageFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { MessageFlags } = require_v106();
+    var { MessageFlags } = require_v1012();
     var BitField = require_BitField();
     var MessageFlagsBitField = class extends BitField {
       /**
@@ -34479,7 +38406,7 @@ var require_BaseInteraction = __commonJS({
     var { deprecate } = require("node:util");
     var { Collection: Collection3 } = require_dist6();
     var { DiscordSnowflake } = require_cjs();
-    var { InteractionType: InteractionType2, ApplicationCommandType, ComponentType } = require_v106();
+    var { InteractionType: InteractionType2, ApplicationCommandType, ComponentType } = require_v1012();
     var Base = require_Base();
     var { SelectMenuTypes } = require_Constants();
     var PermissionsBitField2 = require_PermissionsBitField();
@@ -34845,7 +38772,7 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
   "node_modules/discord.js/src/managers/ApplicationCommandPermissionsManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { ApplicationCommandPermissionType, RESTJSONErrorCodes, Routes: Routes2 } = require_v106();
+    var { ApplicationCommandPermissionType, RESTJSONErrorCodes, Routes: Routes2 } = require_v1012();
     var BaseManager = require_BaseManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ApplicationCommandPermissionsManager = class extends BaseManager {
@@ -35248,7 +39175,7 @@ var require_ApplicationCommand = __commonJS({
   "node_modules/discord.js/src/structures/ApplicationCommand.js"(exports2, module2) {
     "use strict";
     var { DiscordSnowflake } = require_cjs();
-    var { ApplicationCommandOptionType } = require_v106();
+    var { ApplicationCommandOptionType } = require_v1012();
     var isEqual = require_fast_deep_equal();
     var Base = require_Base();
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
@@ -35683,7 +39610,7 @@ var require_ApplicationCommandManager = __commonJS({
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { isJSONEncodable } = require_dist();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -35995,7 +39922,7 @@ var require_ApplicationEmojiManager = __commonJS({
   "node_modules/discord.js/src/managers/ApplicationEmojiManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ApplicationEmoji = require_ApplicationEmoji();
@@ -36237,7 +40164,7 @@ var require_EntitlementManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { Routes: Routes2, EntitlementOwnerType } = require_v106();
+    var { Routes: Routes2, EntitlementOwnerType } = require_v1012();
     var CachedManager = require_CachedManager();
     var { ErrorCodes: ErrorCodes2, DiscordjsTypeError: DiscordjsTypeError2 } = require_errors2();
     var { Entitlement } = require_Entitlement();
@@ -36449,7 +40376,7 @@ var require_SubscriptionManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Subscription } = require_Subscription();
@@ -36515,7 +40442,7 @@ var require_SubscriptionManager = __commonJS({
 var require_ApplicationFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/ApplicationFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { ApplicationFlags } = require_v106();
+    var { ApplicationFlags } = require_v1012();
     var BitField = require_BitField();
     var ApplicationFlagsBitField = class extends BitField {
       /**
@@ -36534,7 +40461,7 @@ var require_ClientApplication = __commonJS({
   "node_modules/discord.js/src/structures/ClientApplication.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var { ApplicationRoleConnectionMetadata } = require_ApplicationRoleConnectionMetadata();
     var { SKU } = require_SKU();
     var Team = require_Team();
@@ -41789,7 +45716,7 @@ var require_dist8 = __commonJS({
       validateRequiredSelectMenuParameters: () => validateRequiredSelectMenuParameters
     });
     var import_shapeshift2 = require_cjs3();
-    var import_v10 = require_v106();
+    var import_v10 = require_v1012();
     var StringSelectMenuOptionBuilder = class {
       /**
        * Creates a new string select menu option from API data.
@@ -41940,7 +45867,7 @@ var require_dist8 = __commonJS({
       }
     }
     __name(validateRequiredButtonParameters, "validateRequiredButtonParameters");
-    var import_v1019 = require_v106();
+    var import_v1019 = require_v1012();
     var ComponentBuilder = class {
       static {
         __name(this, "ComponentBuilder");
@@ -41974,8 +45901,8 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v1018 = require_v106();
-    var import_v102 = require_v106();
+    var import_v1018 = require_v1012();
+    var import_v102 = require_v1012();
     var ButtonBuilder2 = class extends ComponentBuilder {
       static {
         __name(this, "ButtonBuilder");
@@ -42097,7 +46024,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v103 = require_v106();
+    var import_v103 = require_v1012();
     var BaseSelectMenuBuilder = class extends ComponentBuilder {
       static {
         __name(this, "BaseSelectMenuBuilder");
@@ -42250,7 +46177,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v104 = require_v106();
+    var import_v104 = require_v1012();
     var MentionableSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "MentionableSelectMenuBuilder");
@@ -42338,7 +46265,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v105 = require_v106();
+    var import_v105 = require_v1012();
     var RoleSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "RoleSelectMenuBuilder");
@@ -42400,7 +46327,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v106 = require_v106();
+    var import_v106 = require_v1012();
     var StringSelectMenuBuilder2 = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "StringSelectMenuBuilder");
@@ -42520,7 +46447,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v107 = require_v106();
+    var import_v107 = require_v1012();
     var UserSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "UserSelectMenuBuilder");
@@ -42583,7 +46510,7 @@ var require_dist8 = __commonJS({
       }
     };
     var import_util = require_dist();
-    var import_v109 = require_v106();
+    var import_v109 = require_v1012();
     var import_fast_deep_equal = __toESM2(require_fast_deep_equal());
     var Assertions_exports3 = {};
     __export2(Assertions_exports3, {
@@ -42597,7 +46524,7 @@ var require_dist8 = __commonJS({
       valueValidator: () => valueValidator
     });
     var import_shapeshift3 = require_cjs3();
-    var import_v108 = require_v106();
+    var import_v108 = require_v1012();
     var textInputStyleValidator = import_shapeshift3.s.nativeEnum(import_v108.TextInputStyle);
     var minLengthValidator = import_shapeshift3.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
     var maxLengthValidator = import_shapeshift3.s.number().int().greaterThanOrEqual(1).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
@@ -42732,7 +46659,7 @@ var require_dist8 = __commonJS({
         return (0, import_fast_deep_equal.default)(other, this.data);
       }
     };
-    var import_v1015 = require_v106();
+    var import_v1015 = require_v1012();
     var Assertions_exports4 = {};
     __export2(Assertions_exports4, {
       accessoryPredicate: () => accessoryPredicate,
@@ -42748,8 +46675,8 @@ var require_dist8 = __commonJS({
       validateComponentArray: () => validateComponentArray
     });
     var import_shapeshift4 = require_cjs3();
-    var import_v1011 = require_v106();
-    var import_v1010 = require_v106();
+    var import_v1011 = require_v1012();
+    var import_v1010 = require_v1012();
     var ThumbnailBuilder = class extends ComponentBuilder {
       static {
         __name(this, "ThumbnailBuilder");
@@ -42761,7 +46688,7 @@ var require_dist8 = __commonJS({
        * @example
        * Creating a thumbnail from an API data object:
        * ```ts
-       * const thumbnaik = new ThumbnailBuilder({
+       * const thumbnail = new ThumbnailBuilder({
        * 	description: 'some text',
        *  media: {
        *      url: 'https://cdn.discordapp.com/embed/avatars/4.png',
@@ -42845,14 +46772,14 @@ var require_dist8 = __commonJS({
     var accessoryPredicate = import_shapeshift4.s.instance(ButtonBuilder2).or(import_shapeshift4.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
     var containerColorPredicate = colorPredicate.nullish();
     function assertReturnOfBuilder(input, ExpectedInstanceOf) {
-      import_shapeshift4.s.instance(ExpectedInstanceOf).parse(input);
+      import_shapeshift4.s.instance(ExpectedInstanceOf).setValidationEnabled(isValidationEnabled).parse(input);
     }
     __name(assertReturnOfBuilder, "assertReturnOfBuilder");
     function validateComponentArray(input, min, max, ExpectedInstanceOf) {
-      (ExpectedInstanceOf ? import_shapeshift4.s.instance(ExpectedInstanceOf) : import_shapeshift4.s.instance(ComponentBuilder)).array().lengthGreaterThanOrEqual(min).lengthLessThanOrEqual(max).parse(input);
+      (ExpectedInstanceOf ? import_shapeshift4.s.instance(ExpectedInstanceOf) : import_shapeshift4.s.instance(ComponentBuilder)).array().lengthGreaterThanOrEqual(min).lengthLessThanOrEqual(max).setValidationEnabled(isValidationEnabled).parse(input);
     }
     __name(validateComponentArray, "validateComponentArray");
-    var import_v1012 = require_v106();
+    var import_v1012 = require_v1012();
     var FileBuilder = class extends ComponentBuilder {
       static {
         __name(this, "FileBuilder");
@@ -42911,7 +46838,7 @@ var require_dist8 = __commonJS({
         return { ...this.data, file: { ...this.data.file } };
       }
     };
-    var import_v1013 = require_v106();
+    var import_v1013 = require_v1012();
     var SeparatorBuilder = class extends ComponentBuilder {
       static {
         __name(this, "SeparatorBuilder");
@@ -42975,7 +46902,7 @@ var require_dist8 = __commonJS({
         return { ...this.data };
       }
     };
-    var import_v1014 = require_v106();
+    var import_v1014 = require_v1012();
     var TextDisplayBuilder = class extends ComponentBuilder {
       static {
         __name(this, "TextDisplayBuilder");
@@ -43177,14 +47104,13 @@ var require_dist8 = __commonJS({
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
-        validateComponentArray(this.components, 1, 10);
         return {
           ...this.data,
           components: this.components.map((component) => component.toJSON())
         };
       }
     };
-    var import_v1016 = require_v106();
+    var import_v1016 = require_v1012();
     var MediaGalleryItemBuilder = class {
       static {
         __name(this, "MediaGalleryItemBuilder");
@@ -43358,7 +47284,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v1017 = require_v106();
+    var import_v1017 = require_v1012();
     var SectionBuilder = class extends ComponentBuilder {
       static {
         __name(this, "SectionBuilder");
@@ -43710,7 +47636,7 @@ var require_dist8 = __commonJS({
       validateRequiredParameters: () => validateRequiredParameters3
     });
     var import_shapeshift6 = require_cjs3();
-    var import_v1020 = require_v106();
+    var import_v1020 = require_v1012();
     var namePredicate = import_shapeshift6.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^[\p{Ll}\p{Lm}\p{Lo}\p{N}\p{sc=Devanagari}\p{sc=Thai}_-]+$/u).setValidationEnabled(isValidationEnabled);
     function validateName(name) {
       namePredicate.parse(name);
@@ -43896,7 +47822,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v1021 = require_v106();
+    var import_v1021 = require_v1012();
     var SharedSlashCommand = class {
       static {
         __name(this, "SharedSlashCommand");
@@ -44006,7 +47932,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v1022 = require_v106();
+    var import_v1022 = require_v1012();
     var ApplicationCommandOptionBase = class extends SharedNameAndDescription {
       static {
         __name(this, "ApplicationCommandOptionBase");
@@ -44053,7 +47979,7 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_v1023 = require_v106();
+    var import_v1023 = require_v1012();
     var SlashCommandBooleanOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandBooleanOption");
@@ -44070,10 +47996,10 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_v1025 = require_v106();
+    var import_v1025 = require_v1012();
     var import_ts_mixer = require_cjs4();
     var import_shapeshift7 = require_cjs3();
-    var import_v1024 = require_v106();
+    var import_v1024 = require_v1012();
     var allowedChannelTypes = [
       import_v1024.ChannelType.GuildText,
       import_v1024.ChannelType.GuildVoice,
@@ -44126,7 +48052,7 @@ var require_dist8 = __commonJS({
       (0, import_ts_mixer.mix)(ApplicationCommandOptionChannelTypesMixin)
     ], SlashCommandChannelOption);
     var import_shapeshift10 = require_cjs3();
-    var import_v1027 = require_v106();
+    var import_v1027 = require_v1012();
     var import_ts_mixer2 = require_cjs4();
     var ApplicationCommandNumericOptionMinMaxValueMixin = class {
       static {
@@ -44172,7 +48098,7 @@ var require_dist8 = __commonJS({
       }
     };
     var import_shapeshift9 = require_cjs3();
-    var import_v1026 = require_v106();
+    var import_v1026 = require_v1012();
     var stringPredicate = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100);
     var numberPredicate = import_shapeshift9.s.number().greaterThan(Number.NEGATIVE_INFINITY).lessThan(Number.POSITIVE_INFINITY);
     var choicesPredicate = import_shapeshift9.s.object({
@@ -44276,7 +48202,7 @@ var require_dist8 = __commonJS({
         ApplicationCommandOptionWithChoicesMixin
       )
     ], SlashCommandIntegerOption);
-    var import_v1028 = require_v106();
+    var import_v1028 = require_v1012();
     var SlashCommandMentionableOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandMentionableOption");
@@ -44294,7 +48220,7 @@ var require_dist8 = __commonJS({
       }
     };
     var import_shapeshift11 = require_cjs3();
-    var import_v1029 = require_v106();
+    var import_v1029 = require_v1012();
     var import_ts_mixer3 = require_cjs4();
     var numberValidator2 = import_shapeshift11.s.number();
     var SlashCommandNumberOption = class extends ApplicationCommandOptionBase {
@@ -44337,7 +48263,7 @@ var require_dist8 = __commonJS({
         ApplicationCommandOptionWithChoicesMixin
       )
     ], SlashCommandNumberOption);
-    var import_v1030 = require_v106();
+    var import_v1030 = require_v1012();
     var SlashCommandRoleOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandRoleOption");
@@ -44355,7 +48281,7 @@ var require_dist8 = __commonJS({
       }
     };
     var import_shapeshift12 = require_cjs3();
-    var import_v1031 = require_v106();
+    var import_v1031 = require_v1012();
     var import_ts_mixer4 = require_cjs4();
     var minLengthValidator2 = import_shapeshift12.s.number().greaterThanOrEqual(0).lessThanOrEqual(6e3);
     var maxLengthValidator2 = import_shapeshift12.s.number().greaterThanOrEqual(1).lessThanOrEqual(6e3);
@@ -44407,7 +48333,7 @@ var require_dist8 = __commonJS({
     SlashCommandStringOption = __decorateClass([
       (0, import_ts_mixer4.mix)(ApplicationCommandOptionWithAutocompleteMixin, ApplicationCommandOptionWithChoicesMixin)
     ], SlashCommandStringOption);
-    var import_v1032 = require_v106();
+    var import_v1032 = require_v1012();
     var SlashCommandUserOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandUserOption");
@@ -44517,7 +48443,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v1033 = require_v106();
+    var import_v1033 = require_v1012();
     var import_ts_mixer5 = require_cjs4();
     var SlashCommandSubcommandGroupBuilder = class {
       /**
@@ -44705,7 +48631,7 @@ var require_dist8 = __commonJS({
       validateType: () => validateType
     });
     var import_shapeshift13 = require_cjs3();
-    var import_v1034 = require_v106();
+    var import_v1034 = require_v1012();
     var namePredicate2 = import_shapeshift13.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^( *[\p{P}\p{L}\p{N}\p{sc=Devanagari}\p{sc=Thai}]+ *)+$/u).setValidationEnabled(isValidationEnabled);
     var typePredicate = import_shapeshift13.s.union([import_shapeshift13.s.literal(import_v1034.ApplicationCommandType.User), import_shapeshift13.s.literal(import_v1034.ApplicationCommandType.Message)]).setValidationEnabled(isValidationEnabled);
     var booleanPredicate3 = import_shapeshift13.s.boolean();
@@ -44919,7 +48845,7 @@ var require_dist8 = __commonJS({
       return (data.title?.length ?? 0) + (data.description?.length ?? 0) + (data.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data.footer?.text.length ?? 0) + (data.author?.name.length ?? 0);
     }
     __name(embedLength, "embedLength");
-    var version = "1.11.1";
+    var version = "1.11.2";
   }
 });
 
@@ -45122,7 +49048,7 @@ var require_MessageMentions = __commonJS({
   "node_modules/discord.js/src/structures/MessageMentions.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { FormattingPatterns } = require_v106();
+    var { FormattingPatterns } = require_v1012();
     var { flatten } = require_Util();
     var MessageMentions = class {
       /**
@@ -45595,7 +49521,7 @@ var require_Sticker = __commonJS({
   "node_modules/discord.js/src/structures/Sticker.js"(exports2) {
     "use strict";
     var { DiscordSnowflake } = require_cjs();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { StickerFormatExtensionMap } = require_Constants();
@@ -45905,7 +49831,7 @@ var require_GuildEmojiRoleManager = __commonJS({
 var require_GuildEmoji = __commonJS({
   "node_modules/discord.js/src/structures/GuildEmoji.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits } = require_v106();
+    var { PermissionFlagsBits } = require_v1012();
     var BaseGuildEmoji = require_BaseGuildEmoji();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildEmojiRoleManager = require_GuildEmojiRoleManager();
@@ -46036,7 +49962,7 @@ var require_ReactionEmoji = __commonJS({
 var require_UserFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/UserFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { UserFlags } = require_v106();
+    var { UserFlags } = require_v1012();
     var BitField = require_BitField();
     var UserFlagsBitField = class extends BitField {
       /**
@@ -46323,7 +50249,7 @@ var require_ReactionUserManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { ReactionType, Routes: Routes2 } = require_v106();
+    var { ReactionType, Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var User = require_User();
@@ -46386,7 +50312,7 @@ var require_ReactionUserManager = __commonJS({
 var require_MessageReaction = __commonJS({
   "node_modules/discord.js/src/structures/MessageReaction.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var ApplicationEmoji = require_ApplicationEmoji();
     var GuildEmoji = require_GuildEmoji();
     var ReactionEmoji = require_ReactionEmoji();
@@ -46525,7 +50451,7 @@ var require_MessageReaction = __commonJS({
 var require_ReactionManager = __commonJS({
   "node_modules/discord.js/src/managers/ReactionManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var MessageReaction = require_MessageReaction();
     var ReactionManager = class extends CachedManager {
@@ -46942,6 +50868,13 @@ var require_UnfurledMediaItem = __commonJS({
       get url() {
         return this.data.url;
       }
+      /**
+       * Returns the API-compatible JSON for this media item
+       * @returns {APIUnfurledMediaItem}
+       */
+      toJSON() {
+        return { ...this.data };
+      }
     };
     module2.exports = UnfurledMediaItem;
   }
@@ -47142,7 +51075,7 @@ var require_SectionComponent = __commonJS({
 var require_SeparatorComponent = __commonJS({
   "node_modules/discord.js/src/structures/SeparatorComponent.js"(exports2, module2) {
     "use strict";
-    var { SeparatorSpacingSize } = require_v106();
+    var { SeparatorSpacingSize } = require_v1012();
     var Component = require_Component();
     var SeparatorComponent = class extends Component {
       /**
@@ -47402,7 +51335,7 @@ var require_Components = __commonJS({
   "node_modules/discord.js/src/util/Components.js"(exports2, module2) {
     "use strict";
     var { ComponentBuilder } = require_dist8();
-    var { ComponentType } = require_v106();
+    var { ComponentType } = require_v1012();
     function createComponent(data) {
       if (data instanceof Component) {
         return data;
@@ -47467,17 +51400,20 @@ var require_Components = __commonJS({
           return new ComponentBuilder(data);
       }
     }
+    function extractInteractiveComponents(component) {
+      switch (component.type) {
+        case ComponentType.ActionRow:
+          return component.components;
+        case ComponentType.Section:
+          return [...component.components, component.accessory];
+        case ComponentType.Container:
+          return component.components.flatMap(extractInteractiveComponents);
+        default:
+          return [component];
+      }
+    }
     function findComponentByCustomId(components, customId) {
-      return components.flatMap((component) => {
-        switch (component.type) {
-          case ComponentType.ActionRow:
-            return component.components;
-          case ComponentType.Section:
-            return [...component.components, component.accessory];
-          default:
-            return [component];
-        }
-      }).find((component) => (component.customId ?? component.custom_id) === customId) ?? null;
+      return components.flatMap(extractInteractiveComponents).find((component) => (component.customId ?? component.custom_id) === customId) ?? null;
     }
     module2.exports = { createComponent, createComponentBuilder, findComponentByCustomId };
     var ActionRow = require_ActionRow();
@@ -47521,7 +51457,7 @@ var require_Message = __commonJS({
       MessageFlags,
       PermissionFlagsBits,
       MessageReferenceType
-    } = require_v106();
+    } = require_v1012();
     var Attachment = require_Attachment();
     var Base = require_Base();
     var ClientApplication = require_ClientApplication();
@@ -48306,7 +52242,7 @@ var require_Webhook = __commonJS({
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { lazy } = require_dist();
     var { DiscordSnowflake } = require_cjs();
-    var { Routes: Routes2, WebhookType } = require_v106();
+    var { Routes: Routes2, WebhookType } = require_v1012();
     var MessagePayload = require_MessagePayload();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveImage } = require_DataResolver();
@@ -48783,7 +52719,7 @@ var require_WebhookClient = __commonJS({
 var require_VoiceState = __commonJS({
   "node_modules/discord.js/src/structures/VoiceState.js"(exports2, module2) {
     "use strict";
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var VoiceState = class extends Base {
@@ -49011,7 +52947,7 @@ var require_GuildMemberRoleManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildMemberRoleManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var DataManager = require_DataManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
@@ -49190,7 +53126,7 @@ var require_GuildMemberRoleManager = __commonJS({
 var require_GuildMemberFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/GuildMemberFlagsBitField.js"(exports2) {
     "use strict";
-    var { GuildMemberFlags } = require_v106();
+    var { GuildMemberFlags } = require_v1012();
     var BitField = require_BitField();
     var GuildMemberFlagsBitField = class extends BitField {
       /**
@@ -49208,7 +53144,7 @@ var require_GuildMemberFlagsBitField = __commonJS({
 var require_GuildMember = __commonJS({
   "node_modules/discord.js/src/structures/GuildMember.js"(exports2) {
     "use strict";
-    var { PermissionFlagsBits } = require_v106();
+    var { PermissionFlagsBits } = require_v1012();
     var Base = require_Base();
     var VoiceState = require_VoiceState();
     var TextBasedChannel = require_TextBasedChannel();
@@ -49623,7 +53559,7 @@ var require_MessageManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Message } = require_Message();
@@ -49925,7 +53861,7 @@ var require_MessagePayload = __commonJS({
     var { Buffer: Buffer2 } = require("node:buffer");
     var { lazy, isJSONEncodable } = require_dist();
     var { DiscordSnowflake } = require_cjs();
-    var { MessageFlags, MessageReferenceType } = require_v106();
+    var { MessageFlags, MessageReferenceType } = require_v1012();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveFile } = require_DataResolver();
     var MessageFlagsBitField = require_MessageFlagsBitField();
@@ -50118,7 +54054,7 @@ var require_MessagePayload = __commonJS({
           components,
           username,
           avatar_url: avatarURL,
-          allowed_mentions: content === void 0 && message_reference === void 0 ? void 0 : allowedMentions,
+          allowed_mentions: this.isMessage && message_reference === void 0 && this.target.author.id !== this.target.client.user.id ? void 0 : allowedMentions,
           flags,
           message_reference,
           attachments: this.options.attachments,
@@ -50206,7 +54142,7 @@ var require_TextBasedChannel = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { DiscordSnowflake } = require_cjs();
-    var { InteractionType: InteractionType2, Routes: Routes2 } = require_v106();
+    var { InteractionType: InteractionType2, Routes: Routes2 } = require_v1012();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { MaxBulkDeletableMessageAge } = require_Constants();
     var InteractionCollector = require_InteractionCollector();
@@ -50617,7 +54553,7 @@ var require_DMChannel = __commonJS({
   "node_modules/discord.js/src/structures/DMChannel.js"(exports2, module2) {
     "use strict";
     var { userMention } = require_dist7();
-    var { ChannelType } = require_v106();
+    var { ChannelType } = require_v1012();
     var { BaseChannel } = require_BaseChannel();
     var TextBasedChannel = require_TextBasedChannel();
     var DMMessageManager = require_DMMessageManager();
@@ -50720,7 +54656,7 @@ var require_DMChannel = __commonJS({
 var require_GuildForumThreadManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildForumThreadManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var ThreadManager = require_ThreadManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessagePayload = require_MessagePayload();
@@ -51059,7 +54995,7 @@ var require_ThreadMemberManager = __commonJS({
     var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ThreadMember = require_ThreadMember();
@@ -51232,7 +55168,7 @@ var require_ThreadChannel = __commonJS({
     "use strict";
     var { DiscordAPIError } = require_dist5();
     var { lazy } = require_dist();
-    var { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits, Routes: Routes2 } = require_v106();
+    var { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits, Routes: Routes2 } = require_v1012();
     var { BaseChannel } = require_BaseChannel();
     var getThreadOnlyChannel = lazy(() => require_ThreadOnlyChannel());
     var TextBasedChannel = require_TextBasedChannel();
@@ -51685,7 +55621,7 @@ var require_ThreadManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ThreadChannel = require_ThreadChannel();
@@ -51850,7 +55786,7 @@ var require_ThreadManager = __commonJS({
 var require_GuildTextThreadManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildTextThreadManager.js"(exports2, module2) {
     "use strict";
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes2 } = require_v1012();
     var ThreadManager = require_ThreadManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildTextThreadManager = class extends ThreadManager {
@@ -52089,7 +56025,7 @@ var require_BaseGuildTextChannel = __commonJS({
 var require_NewsChannel = __commonJS({
   "node_modules/discord.js/src/structures/NewsChannel.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var BaseGuildTextChannel = require_BaseGuildTextChannel();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var NewsChannel = class extends BaseGuildTextChannel {
@@ -52121,7 +56057,7 @@ var require_BaseGuildVoiceChannel = __commonJS({
   "node_modules/discord.js/src/structures/BaseGuildVoiceChannel.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { PermissionFlagsBits } = require_v106();
+    var { PermissionFlagsBits } = require_v1012();
     var GuildChannel = require_GuildChannel();
     var TextBasedChannel = require_TextBasedChannel();
     var GuildMessageManager = require_GuildMessageManager();
@@ -52377,7 +56313,7 @@ var require_TextChannel = __commonJS({
 var require_VoiceChannel = __commonJS({
   "node_modules/discord.js/src/structures/VoiceChannel.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits, Routes: Routes2 } = require_v106();
+    var { PermissionFlagsBits, Routes: Routes2 } = require_v1012();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var VoiceChannel = class extends BaseGuildVoiceChannel {
       /**
@@ -52583,7 +56519,7 @@ var require_Channels = __commonJS({
   "node_modules/discord.js/src/util/Channels.js"(exports2, module2) {
     "use strict";
     var { lazy } = require_dist();
-    var { ChannelType } = require_v106();
+    var { ChannelType } = require_v1012();
     var getCategoryChannel = lazy(() => require_CategoryChannel());
     var getDMChannel = lazy(() => require_DMChannel());
     var getNewsChannel = lazy(() => require_NewsChannel());
@@ -53056,7 +56992,7 @@ var require_GuildOnboardingPrompt = __commonJS({
 var require_Integration = __commonJS({
   "node_modules/discord.js/src/structures/Integration.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var IntegrationApplication = require_IntegrationApplication();
     var Integration = class extends Base {
@@ -53291,7 +57227,7 @@ var require_GuildAuditLogsEntry = __commonJS({
   "node_modules/discord.js/src/structures/GuildAuditLogsEntry.js"(exports2, module2) {
     "use strict";
     var { DiscordSnowflake } = require_cjs();
-    var { AuditLogOptionsType, AuditLogEvent } = require_v106();
+    var { AuditLogOptionsType, AuditLogEvent } = require_v1012();
     var AutoModerationRule = require_AutoModerationRule();
     var { GuildOnboardingPrompt } = require_GuildOnboardingPrompt();
     var { GuildScheduledEvent } = require_GuildScheduledEvent();
@@ -53591,7 +57527,6 @@ var require_GuildAuditLogsEntry = __commonJS({
           AuditLogEvent.ThreadUpdate,
           AuditLogEvent.SoundboardSoundUpdate,
           AuditLogEvent.ApplicationCommandPermissionUpdate,
-          AuditLogEvent.SoundboardSoundUpdate,
           AuditLogEvent.AutoModerationRuleUpdate,
           AuditLogEvent.AutoModerationBlockMessage,
           AuditLogEvent.AutoModerationFlagToChannel,
@@ -54318,7 +58253,7 @@ var require_GuildUpdate = __commonJS({
 var require_CommandInteractionOptionResolver = __commonJS({
   "node_modules/discord.js/src/structures/CommandInteractionOptionResolver.js"(exports2, module2) {
     "use strict";
-    var { ApplicationCommandOptionType } = require_v106();
+    var { ApplicationCommandOptionType } = require_v1012();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var CommandInteractionOptionResolver = class {
       constructor(client2, options, resolved) {
@@ -54566,7 +58501,7 @@ var require_CommandInteractionOptionResolver = __commonJS({
 var require_AutocompleteInteraction = __commonJS({
   "node_modules/discord.js/src/structures/AutocompleteInteraction.js"(exports2, module2) {
     "use strict";
-    var { InteractionResponseType, Routes: Routes2 } = require_v106();
+    var { InteractionResponseType, Routes: Routes2 } = require_v1012();
     var BaseInteraction = require_BaseInteraction();
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -54704,7 +58639,7 @@ var require_InteractionResponse = __commonJS({
   "node_modules/discord.js/src/structures/InteractionResponse.js"(exports2, module2) {
     "use strict";
     var { DiscordSnowflake } = require_cjs();
-    var { InteractionType: InteractionType2 } = require_v106();
+    var { InteractionType: InteractionType2 } = require_v1012();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var InteractionResponse = class {
       constructor(interaction, id) {
@@ -54793,7 +58728,7 @@ var require_InteractionResponses = __commonJS({
     var { deprecate } = require("node:util");
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { isJSONEncodable } = require_dist();
-    var { InteractionResponseType, MessageFlags, Routes: Routes2, InteractionType: InteractionType2 } = require_v106();
+    var { InteractionResponseType, MessageFlags, Routes: Routes2, InteractionType: InteractionType2 } = require_v1012();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessageFlagsBitField = require_MessageFlagsBitField();
     var InteractionCallbackResponse = require_InteractionCallbackResponse();
@@ -55481,7 +59416,7 @@ var require_ContextMenuCommandInteraction = __commonJS({
   "node_modules/discord.js/src/structures/ContextMenuCommandInteraction.js"(exports2, module2) {
     "use strict";
     var { lazy } = require_dist();
-    var { ApplicationCommandOptionType } = require_v106();
+    var { ApplicationCommandOptionType } = require_v1012();
     var CommandInteraction = require_CommandInteraction();
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { transformResolved } = require_Util();
@@ -55548,7 +59483,7 @@ var require_ModalSubmitFields = __commonJS({
   "node_modules/discord.js/src/structures/ModalSubmitFields.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { ComponentType } = require_v106();
+    var { ComponentType } = require_v1012();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ModalSubmitFields = class {
       constructor(components) {
@@ -55757,7 +59692,7 @@ var require_UserSelectMenuInteraction = __commonJS({
 var require_InteractionCreate = __commonJS({
   "node_modules/discord.js/src/client/actions/InteractionCreate.js"(exports2, module2) {
     "use strict";
-    var { InteractionType: InteractionType2, ComponentType, ApplicationCommandType } = require_v106();
+    var { InteractionType: InteractionType2, ComponentType, ApplicationCommandType } = require_v1012();
     var Action = require_Action();
     var AutocompleteInteraction = require_AutocompleteInteraction();
     var ButtonInteraction = require_ButtonInteraction();
@@ -57279,6 +61214,3933 @@ var require_dist9 = __commonJS({
       }
     };
     var version = "2.1.1";
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/gateway/common.js
+var require_common9 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/gateway/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/gateway/v10.js
+var require_v1013 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/gateway/v10.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.VoiceChannelEffectSendAnimationType = exports2.GatewayDispatchEvents = exports2.GatewayIntentBits = exports2.GatewayCloseCodes = exports2.GatewayOpcodes = exports2.GatewayVersion = void 0;
+    __exportStar2(require_common9(), exports2);
+    exports2.GatewayVersion = "10";
+    var GatewayOpcodes;
+    (function(GatewayOpcodes2) {
+      GatewayOpcodes2[GatewayOpcodes2["Dispatch"] = 0] = "Dispatch";
+      GatewayOpcodes2[GatewayOpcodes2["Heartbeat"] = 1] = "Heartbeat";
+      GatewayOpcodes2[GatewayOpcodes2["Identify"] = 2] = "Identify";
+      GatewayOpcodes2[GatewayOpcodes2["PresenceUpdate"] = 3] = "PresenceUpdate";
+      GatewayOpcodes2[GatewayOpcodes2["VoiceStateUpdate"] = 4] = "VoiceStateUpdate";
+      GatewayOpcodes2[GatewayOpcodes2["Resume"] = 6] = "Resume";
+      GatewayOpcodes2[GatewayOpcodes2["Reconnect"] = 7] = "Reconnect";
+      GatewayOpcodes2[GatewayOpcodes2["RequestGuildMembers"] = 8] = "RequestGuildMembers";
+      GatewayOpcodes2[GatewayOpcodes2["InvalidSession"] = 9] = "InvalidSession";
+      GatewayOpcodes2[GatewayOpcodes2["Hello"] = 10] = "Hello";
+      GatewayOpcodes2[GatewayOpcodes2["HeartbeatAck"] = 11] = "HeartbeatAck";
+      GatewayOpcodes2[GatewayOpcodes2["RequestSoundboardSounds"] = 31] = "RequestSoundboardSounds";
+    })(GatewayOpcodes || (exports2.GatewayOpcodes = GatewayOpcodes = {}));
+    var GatewayCloseCodes;
+    (function(GatewayCloseCodes2) {
+      GatewayCloseCodes2[GatewayCloseCodes2["UnknownError"] = 4e3] = "UnknownError";
+      GatewayCloseCodes2[GatewayCloseCodes2["UnknownOpcode"] = 4001] = "UnknownOpcode";
+      GatewayCloseCodes2[GatewayCloseCodes2["DecodeError"] = 4002] = "DecodeError";
+      GatewayCloseCodes2[GatewayCloseCodes2["NotAuthenticated"] = 4003] = "NotAuthenticated";
+      GatewayCloseCodes2[GatewayCloseCodes2["AuthenticationFailed"] = 4004] = "AuthenticationFailed";
+      GatewayCloseCodes2[GatewayCloseCodes2["AlreadyAuthenticated"] = 4005] = "AlreadyAuthenticated";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidSeq"] = 4007] = "InvalidSeq";
+      GatewayCloseCodes2[GatewayCloseCodes2["RateLimited"] = 4008] = "RateLimited";
+      GatewayCloseCodes2[GatewayCloseCodes2["SessionTimedOut"] = 4009] = "SessionTimedOut";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidShard"] = 4010] = "InvalidShard";
+      GatewayCloseCodes2[GatewayCloseCodes2["ShardingRequired"] = 4011] = "ShardingRequired";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidAPIVersion"] = 4012] = "InvalidAPIVersion";
+      GatewayCloseCodes2[GatewayCloseCodes2["InvalidIntents"] = 4013] = "InvalidIntents";
+      GatewayCloseCodes2[GatewayCloseCodes2["DisallowedIntents"] = 4014] = "DisallowedIntents";
+    })(GatewayCloseCodes || (exports2.GatewayCloseCodes = GatewayCloseCodes = {}));
+    var GatewayIntentBits2;
+    (function(GatewayIntentBits3) {
+      GatewayIntentBits3[GatewayIntentBits3["Guilds"] = 1] = "Guilds";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMembers"] = 2] = "GuildMembers";
+      GatewayIntentBits3[GatewayIntentBits3["GuildModeration"] = 4] = "GuildModeration";
+      GatewayIntentBits3[GatewayIntentBits3["GuildBans"] = 4] = "GuildBans";
+      GatewayIntentBits3[GatewayIntentBits3["GuildExpressions"] = 8] = "GuildExpressions";
+      GatewayIntentBits3[GatewayIntentBits3["GuildEmojisAndStickers"] = 8] = "GuildEmojisAndStickers";
+      GatewayIntentBits3[GatewayIntentBits3["GuildIntegrations"] = 16] = "GuildIntegrations";
+      GatewayIntentBits3[GatewayIntentBits3["GuildWebhooks"] = 32] = "GuildWebhooks";
+      GatewayIntentBits3[GatewayIntentBits3["GuildInvites"] = 64] = "GuildInvites";
+      GatewayIntentBits3[GatewayIntentBits3["GuildVoiceStates"] = 128] = "GuildVoiceStates";
+      GatewayIntentBits3[GatewayIntentBits3["GuildPresences"] = 256] = "GuildPresences";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessages"] = 512] = "GuildMessages";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessageReactions"] = 1024] = "GuildMessageReactions";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessageTyping"] = 2048] = "GuildMessageTyping";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessages"] = 4096] = "DirectMessages";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessageReactions"] = 8192] = "DirectMessageReactions";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessageTyping"] = 16384] = "DirectMessageTyping";
+      GatewayIntentBits3[GatewayIntentBits3["MessageContent"] = 32768] = "MessageContent";
+      GatewayIntentBits3[GatewayIntentBits3["GuildScheduledEvents"] = 65536] = "GuildScheduledEvents";
+      GatewayIntentBits3[GatewayIntentBits3["AutoModerationConfiguration"] = 1048576] = "AutoModerationConfiguration";
+      GatewayIntentBits3[GatewayIntentBits3["AutoModerationExecution"] = 2097152] = "AutoModerationExecution";
+      GatewayIntentBits3[GatewayIntentBits3["GuildMessagePolls"] = 16777216] = "GuildMessagePolls";
+      GatewayIntentBits3[GatewayIntentBits3["DirectMessagePolls"] = 33554432] = "DirectMessagePolls";
+    })(GatewayIntentBits2 || (exports2.GatewayIntentBits = GatewayIntentBits2 = {}));
+    var GatewayDispatchEvents;
+    (function(GatewayDispatchEvents2) {
+      GatewayDispatchEvents2["ApplicationCommandPermissionsUpdate"] = "APPLICATION_COMMAND_PERMISSIONS_UPDATE";
+      GatewayDispatchEvents2["AutoModerationActionExecution"] = "AUTO_MODERATION_ACTION_EXECUTION";
+      GatewayDispatchEvents2["AutoModerationRuleCreate"] = "AUTO_MODERATION_RULE_CREATE";
+      GatewayDispatchEvents2["AutoModerationRuleDelete"] = "AUTO_MODERATION_RULE_DELETE";
+      GatewayDispatchEvents2["AutoModerationRuleUpdate"] = "AUTO_MODERATION_RULE_UPDATE";
+      GatewayDispatchEvents2["ChannelCreate"] = "CHANNEL_CREATE";
+      GatewayDispatchEvents2["ChannelDelete"] = "CHANNEL_DELETE";
+      GatewayDispatchEvents2["ChannelPinsUpdate"] = "CHANNEL_PINS_UPDATE";
+      GatewayDispatchEvents2["ChannelUpdate"] = "CHANNEL_UPDATE";
+      GatewayDispatchEvents2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      GatewayDispatchEvents2["EntitlementDelete"] = "ENTITLEMENT_DELETE";
+      GatewayDispatchEvents2["EntitlementUpdate"] = "ENTITLEMENT_UPDATE";
+      GatewayDispatchEvents2["GuildAuditLogEntryCreate"] = "GUILD_AUDIT_LOG_ENTRY_CREATE";
+      GatewayDispatchEvents2["GuildBanAdd"] = "GUILD_BAN_ADD";
+      GatewayDispatchEvents2["GuildBanRemove"] = "GUILD_BAN_REMOVE";
+      GatewayDispatchEvents2["GuildCreate"] = "GUILD_CREATE";
+      GatewayDispatchEvents2["GuildDelete"] = "GUILD_DELETE";
+      GatewayDispatchEvents2["GuildEmojisUpdate"] = "GUILD_EMOJIS_UPDATE";
+      GatewayDispatchEvents2["GuildIntegrationsUpdate"] = "GUILD_INTEGRATIONS_UPDATE";
+      GatewayDispatchEvents2["GuildMemberAdd"] = "GUILD_MEMBER_ADD";
+      GatewayDispatchEvents2["GuildMemberRemove"] = "GUILD_MEMBER_REMOVE";
+      GatewayDispatchEvents2["GuildMembersChunk"] = "GUILD_MEMBERS_CHUNK";
+      GatewayDispatchEvents2["GuildMemberUpdate"] = "GUILD_MEMBER_UPDATE";
+      GatewayDispatchEvents2["GuildRoleCreate"] = "GUILD_ROLE_CREATE";
+      GatewayDispatchEvents2["GuildRoleDelete"] = "GUILD_ROLE_DELETE";
+      GatewayDispatchEvents2["GuildRoleUpdate"] = "GUILD_ROLE_UPDATE";
+      GatewayDispatchEvents2["GuildScheduledEventCreate"] = "GUILD_SCHEDULED_EVENT_CREATE";
+      GatewayDispatchEvents2["GuildScheduledEventDelete"] = "GUILD_SCHEDULED_EVENT_DELETE";
+      GatewayDispatchEvents2["GuildScheduledEventUpdate"] = "GUILD_SCHEDULED_EVENT_UPDATE";
+      GatewayDispatchEvents2["GuildScheduledEventUserAdd"] = "GUILD_SCHEDULED_EVENT_USER_ADD";
+      GatewayDispatchEvents2["GuildScheduledEventUserRemove"] = "GUILD_SCHEDULED_EVENT_USER_REMOVE";
+      GatewayDispatchEvents2["GuildSoundboardSoundCreate"] = "GUILD_SOUNDBOARD_SOUND_CREATE";
+      GatewayDispatchEvents2["GuildSoundboardSoundDelete"] = "GUILD_SOUNDBOARD_SOUND_DELETE";
+      GatewayDispatchEvents2["GuildSoundboardSoundsUpdate"] = "GUILD_SOUNDBOARD_SOUNDS_UPDATE";
+      GatewayDispatchEvents2["GuildSoundboardSoundUpdate"] = "GUILD_SOUNDBOARD_SOUND_UPDATE";
+      GatewayDispatchEvents2["SoundboardSounds"] = "SOUNDBOARD_SOUNDS";
+      GatewayDispatchEvents2["GuildStickersUpdate"] = "GUILD_STICKERS_UPDATE";
+      GatewayDispatchEvents2["GuildUpdate"] = "GUILD_UPDATE";
+      GatewayDispatchEvents2["IntegrationCreate"] = "INTEGRATION_CREATE";
+      GatewayDispatchEvents2["IntegrationDelete"] = "INTEGRATION_DELETE";
+      GatewayDispatchEvents2["IntegrationUpdate"] = "INTEGRATION_UPDATE";
+      GatewayDispatchEvents2["InteractionCreate"] = "INTERACTION_CREATE";
+      GatewayDispatchEvents2["InviteCreate"] = "INVITE_CREATE";
+      GatewayDispatchEvents2["InviteDelete"] = "INVITE_DELETE";
+      GatewayDispatchEvents2["MessageCreate"] = "MESSAGE_CREATE";
+      GatewayDispatchEvents2["MessageDelete"] = "MESSAGE_DELETE";
+      GatewayDispatchEvents2["MessageDeleteBulk"] = "MESSAGE_DELETE_BULK";
+      GatewayDispatchEvents2["MessagePollVoteAdd"] = "MESSAGE_POLL_VOTE_ADD";
+      GatewayDispatchEvents2["MessagePollVoteRemove"] = "MESSAGE_POLL_VOTE_REMOVE";
+      GatewayDispatchEvents2["MessageReactionAdd"] = "MESSAGE_REACTION_ADD";
+      GatewayDispatchEvents2["MessageReactionRemove"] = "MESSAGE_REACTION_REMOVE";
+      GatewayDispatchEvents2["MessageReactionRemoveAll"] = "MESSAGE_REACTION_REMOVE_ALL";
+      GatewayDispatchEvents2["MessageReactionRemoveEmoji"] = "MESSAGE_REACTION_REMOVE_EMOJI";
+      GatewayDispatchEvents2["MessageUpdate"] = "MESSAGE_UPDATE";
+      GatewayDispatchEvents2["PresenceUpdate"] = "PRESENCE_UPDATE";
+      GatewayDispatchEvents2["Ready"] = "READY";
+      GatewayDispatchEvents2["Resumed"] = "RESUMED";
+      GatewayDispatchEvents2["StageInstanceCreate"] = "STAGE_INSTANCE_CREATE";
+      GatewayDispatchEvents2["StageInstanceDelete"] = "STAGE_INSTANCE_DELETE";
+      GatewayDispatchEvents2["StageInstanceUpdate"] = "STAGE_INSTANCE_UPDATE";
+      GatewayDispatchEvents2["SubscriptionCreate"] = "SUBSCRIPTION_CREATE";
+      GatewayDispatchEvents2["SubscriptionDelete"] = "SUBSCRIPTION_DELETE";
+      GatewayDispatchEvents2["SubscriptionUpdate"] = "SUBSCRIPTION_UPDATE";
+      GatewayDispatchEvents2["ThreadCreate"] = "THREAD_CREATE";
+      GatewayDispatchEvents2["ThreadDelete"] = "THREAD_DELETE";
+      GatewayDispatchEvents2["ThreadListSync"] = "THREAD_LIST_SYNC";
+      GatewayDispatchEvents2["ThreadMembersUpdate"] = "THREAD_MEMBERS_UPDATE";
+      GatewayDispatchEvents2["ThreadMemberUpdate"] = "THREAD_MEMBER_UPDATE";
+      GatewayDispatchEvents2["ThreadUpdate"] = "THREAD_UPDATE";
+      GatewayDispatchEvents2["TypingStart"] = "TYPING_START";
+      GatewayDispatchEvents2["UserUpdate"] = "USER_UPDATE";
+      GatewayDispatchEvents2["VoiceChannelEffectSend"] = "VOICE_CHANNEL_EFFECT_SEND";
+      GatewayDispatchEvents2["VoiceServerUpdate"] = "VOICE_SERVER_UPDATE";
+      GatewayDispatchEvents2["VoiceStateUpdate"] = "VOICE_STATE_UPDATE";
+      GatewayDispatchEvents2["WebhooksUpdate"] = "WEBHOOKS_UPDATE";
+    })(GatewayDispatchEvents || (exports2.GatewayDispatchEvents = GatewayDispatchEvents = {}));
+    var VoiceChannelEffectSendAnimationType;
+    (function(VoiceChannelEffectSendAnimationType2) {
+      VoiceChannelEffectSendAnimationType2[VoiceChannelEffectSendAnimationType2["Premium"] = 0] = "Premium";
+      VoiceChannelEffectSendAnimationType2[VoiceChannelEffectSendAnimationType2["Basic"] = 1] = "Basic";
+    })(VoiceChannelEffectSendAnimationType || (exports2.VoiceChannelEffectSendAnimationType = VoiceChannelEffectSendAnimationType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/globals.js
+var require_globals3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/globals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.FormattingPatterns = void 0;
+    exports2.FormattingPatterns = {
+      /**
+       * Regular expression for matching a user mention, strictly without a nickname
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      User: /<@(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a user mention, strictly with a nickname
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       *
+       * @deprecated Passing `!` in user mentions is no longer necessary / supported, and future message contents won't have it
+       */
+      UserWithNickname: /<@!(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a user mention, with or without a nickname
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       *
+       * @deprecated Passing `!` in user mentions is no longer necessary / supported, and future message contents won't have it
+       */
+      UserWithOptionalNickname: /<@!?(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a channel mention
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      Channel: /<#(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a role mention
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      Role: /<@&(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a application command mention
+       *
+       * The `fullName` (possibly including `name`, `subcommandOrGroup` and `subcommand`) and `id` group properties are present on the `exec` result of this expression
+       */
+      SlashCommand: (
+        // eslint-disable-next-line unicorn/no-unsafe-regex
+        /<\/(?<fullName>(?<name>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32})(?: (?<subcommandOrGroup>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?(?: (?<subcommand>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?):(?<id>\d{17,20})>/u
+      ),
+      /**
+       * Regular expression for matching a custom emoji, either static or animated
+       *
+       * The `animated`, `name` and `id` group properties are present on the `exec` result of this expression
+       */
+      Emoji: /<(?<animated>a)?:(?<name>\w{2,32}):(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching strictly an animated custom emoji
+       *
+       * The `animated`, `name` and `id` group properties are present on the `exec` result of this expression
+       */
+      AnimatedEmoji: /<(?<animated>a):(?<name>\w{2,32}):(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching strictly a static custom emoji
+       *
+       * The `name` and `id` group properties are present on the `exec` result of this expression
+       */
+      StaticEmoji: /<:(?<name>\w{2,32}):(?<id>\d{17,20})>/,
+      /**
+       * Regular expression for matching a timestamp, either default or custom styled
+       *
+       * The `timestamp` and `style` group properties are present on the `exec` result of this expression
+       */
+      // eslint-disable-next-line prefer-named-capture-group
+      Timestamp: /<t:(?<timestamp>-?\d{1,13})(:(?<style>[DFRTdft]))?>/,
+      /**
+       * Regular expression for matching strictly default styled timestamps
+       *
+       * The `timestamp` group property is present on the `exec` result of this expression
+       */
+      DefaultStyledTimestamp: /<t:(?<timestamp>-?\d{1,13})>/,
+      /**
+       * Regular expression for matching strictly custom styled timestamps
+       *
+       * The `timestamp` and `style` group properties are present on the `exec` result of this expression
+       */
+      StyledTimestamp: /<t:(?<timestamp>-?\d{1,13}):(?<style>[DFRTdft])>/,
+      /**
+       * Regular expression for matching a guild navigation mention
+       *
+       * The `type` group property is present on the `exec` result of this expression
+       */
+      GuildNavigation: /<id:(?<type>customize|browse|guide|linked-roles)>/,
+      /**
+       * Regular expression for matching a linked role mention
+       *
+       * The `id` group property is present on the `exec` result of this expression
+       */
+      LinkedRole: /<id:linked-roles:(?<id>\d{17,20})>/
+    };
+    Object.freeze(exports2.FormattingPatterns);
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/common.js
+var require_common10 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.PermissionFlagsBits = void 0;
+    exports2.PermissionFlagsBits = {
+      /**
+       * Allows creation of instant invites
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      CreateInstantInvite: 1n << 0n,
+      /**
+       * Allows kicking members
+       */
+      // eslint-disable-next-line sonarjs/no-identical-expressions
+      KickMembers: 1n << 1n,
+      /**
+       * Allows banning members
+       */
+      BanMembers: 1n << 2n,
+      /**
+       * Allows all permissions and bypasses channel permission overwrites
+       */
+      Administrator: 1n << 3n,
+      /**
+       * Allows management and editing of channels
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageChannels: 1n << 4n,
+      /**
+       * Allows management and editing of the guild
+       */
+      ManageGuild: 1n << 5n,
+      /**
+       * Allows for the addition of reactions to messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      AddReactions: 1n << 6n,
+      /**
+       * Allows for viewing of audit logs
+       */
+      ViewAuditLog: 1n << 7n,
+      /**
+       * Allows for using priority speaker in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      PrioritySpeaker: 1n << 8n,
+      /**
+       * Allows the user to go live
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      Stream: 1n << 9n,
+      /**
+       * Allows guild members to view a channel, which includes reading messages in text channels and joining voice channels
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ViewChannel: 1n << 10n,
+      /**
+       * Allows for sending messages in a channel and creating threads in a forum
+       * (does not allow sending messages in threads)
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendMessages: 1n << 11n,
+      /**
+       * Allows for sending of `/tts` messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendTTSMessages: 1n << 12n,
+      /**
+       * Allows for deletion of other users messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageMessages: 1n << 13n,
+      /**
+       * Links sent by users with this permission will be auto-embedded
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      EmbedLinks: 1n << 14n,
+      /**
+       * Allows for uploading images and files
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      AttachFiles: 1n << 15n,
+      /**
+       * Allows for reading of message history
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ReadMessageHistory: 1n << 16n,
+      /**
+       * Allows for using the `@everyone` tag to notify all users in a channel,
+       * and the `@here` tag to notify all online users in a channel
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      MentionEveryone: 1n << 17n,
+      /**
+       * Allows the usage of custom emojis from other servers
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseExternalEmojis: 1n << 18n,
+      /**
+       * Allows for viewing guild insights
+       */
+      ViewGuildInsights: 1n << 19n,
+      /**
+       * Allows for joining of a voice channel
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      Connect: 1n << 20n,
+      /**
+       * Allows for speaking in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      Speak: 1n << 21n,
+      /**
+       * Allows for muting members in a voice channel
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      MuteMembers: 1n << 22n,
+      /**
+       * Allows for deafening of members in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      DeafenMembers: 1n << 23n,
+      /**
+       * Allows for moving of members between voice channels
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      MoveMembers: 1n << 24n,
+      /**
+       * Allows for using voice-activity-detection in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      UseVAD: 1n << 25n,
+      /**
+       * Allows for modification of own nickname
+       */
+      ChangeNickname: 1n << 26n,
+      /**
+       * Allows for modification of other users nicknames
+       */
+      ManageNicknames: 1n << 27n,
+      /**
+       * Allows management and editing of roles
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageRoles: 1n << 28n,
+      /**
+       * Allows management and editing of webhooks
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      ManageWebhooks: 1n << 29n,
+      /**
+       * Allows management and editing of emojis, stickers, and soundboard sounds
+       *
+       * @deprecated This is the old name for {@link PermissionFlagsBits.ManageGuildExpressions}
+       */
+      ManageEmojisAndStickers: 1n << 30n,
+      /**
+       * Allows for editing and deleting emojis, stickers, and soundboard sounds created by all users
+       */
+      ManageGuildExpressions: 1n << 30n,
+      /**
+       * Allows members to use application commands, including slash commands and context menu commands
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseApplicationCommands: 1n << 31n,
+      /**
+       * Allows for requesting to speak in stage channels
+       *
+       * Applies to channel types: Stage
+       */
+      RequestToSpeak: 1n << 32n,
+      /**
+       * Allows for editing and deleting scheduled events created by all users
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      ManageEvents: 1n << 33n,
+      /**
+       * Allows for deleting and archiving threads, and viewing all private threads
+       *
+       * Applies to channel types: Text
+       */
+      ManageThreads: 1n << 34n,
+      /**
+       * Allows for creating public and announcement threads
+       *
+       * Applies to channel types: Text
+       */
+      CreatePublicThreads: 1n << 35n,
+      /**
+       * Allows for creating private threads
+       *
+       * Applies to channel types: Text
+       */
+      CreatePrivateThreads: 1n << 36n,
+      /**
+       * Allows the usage of custom stickers from other servers
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseExternalStickers: 1n << 37n,
+      /**
+       * Allows for sending messages in threads
+       *
+       * Applies to channel types: Text
+       */
+      SendMessagesInThreads: 1n << 38n,
+      /**
+       * Allows for using Activities (applications with the {@link ApplicationFlags.Embedded} flag) in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      UseEmbeddedActivities: 1n << 39n,
+      /**
+       * Allows for timing out users to prevent them from sending or reacting to messages in chat and threads,
+       * and from speaking in voice and stage channels
+       */
+      ModerateMembers: 1n << 40n,
+      /**
+       * Allows for viewing role subscription insights
+       */
+      ViewCreatorMonetizationAnalytics: 1n << 41n,
+      /**
+       * Allows for using soundboard in a voice channel
+       *
+       * Applies to channel types: Voice
+       */
+      UseSoundboard: 1n << 42n,
+      /**
+       * Allows for creating emojis, stickers, and soundboard sounds, and editing and deleting those created by the current user
+       */
+      CreateGuildExpressions: 1n << 43n,
+      /**
+       * Allows for creating scheduled events, and editing and deleting those created by the current user
+       *
+       * Applies to channel types: Voice, Stage
+       */
+      CreateEvents: 1n << 44n,
+      /**
+       * Allows the usage of custom soundboard sounds from other servers
+       *
+       * Applies to channel types: Voice
+       */
+      UseExternalSounds: 1n << 45n,
+      /**
+       * Allows sending voice messages
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendVoiceMessages: 1n << 46n,
+      /**
+       * Allows sending polls
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      SendPolls: 1n << 49n,
+      /**
+       * Allows user-installed apps to send public responses. When disabled, users will still be allowed to use their apps but the responses will be ephemeral. This only applies to apps not also installed to the server
+       *
+       * Applies to channel types: Text, Voice, Stage
+       */
+      UseExternalApps: 1n << 50n
+    };
+    Object.freeze(exports2.PermissionFlagsBits);
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/application.js
+var require_application5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/application.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ApplicationWebhookEventStatus = exports2.ApplicationRoleConnectionMetadataType = exports2.ApplicationFlags = void 0;
+    var ApplicationFlags;
+    (function(ApplicationFlags2) {
+      ApplicationFlags2[ApplicationFlags2["EmbeddedReleased"] = 2] = "EmbeddedReleased";
+      ApplicationFlags2[ApplicationFlags2["ManagedEmoji"] = 4] = "ManagedEmoji";
+      ApplicationFlags2[ApplicationFlags2["EmbeddedIAP"] = 8] = "EmbeddedIAP";
+      ApplicationFlags2[ApplicationFlags2["GroupDMCreate"] = 16] = "GroupDMCreate";
+      ApplicationFlags2[ApplicationFlags2["ApplicationAutoModerationRuleCreateBadge"] = 64] = "ApplicationAutoModerationRuleCreateBadge";
+      ApplicationFlags2[ApplicationFlags2["RPCHasConnected"] = 2048] = "RPCHasConnected";
+      ApplicationFlags2[ApplicationFlags2["GatewayPresence"] = 4096] = "GatewayPresence";
+      ApplicationFlags2[ApplicationFlags2["GatewayPresenceLimited"] = 8192] = "GatewayPresenceLimited";
+      ApplicationFlags2[ApplicationFlags2["GatewayGuildMembers"] = 16384] = "GatewayGuildMembers";
+      ApplicationFlags2[ApplicationFlags2["GatewayGuildMembersLimited"] = 32768] = "GatewayGuildMembersLimited";
+      ApplicationFlags2[ApplicationFlags2["VerificationPendingGuildLimit"] = 65536] = "VerificationPendingGuildLimit";
+      ApplicationFlags2[ApplicationFlags2["Embedded"] = 131072] = "Embedded";
+      ApplicationFlags2[ApplicationFlags2["GatewayMessageContent"] = 262144] = "GatewayMessageContent";
+      ApplicationFlags2[ApplicationFlags2["GatewayMessageContentLimited"] = 524288] = "GatewayMessageContentLimited";
+      ApplicationFlags2[ApplicationFlags2["EmbeddedFirstParty"] = 1048576] = "EmbeddedFirstParty";
+      ApplicationFlags2[ApplicationFlags2["ApplicationCommandBadge"] = 8388608] = "ApplicationCommandBadge";
+    })(ApplicationFlags || (exports2.ApplicationFlags = ApplicationFlags = {}));
+    var ApplicationRoleConnectionMetadataType;
+    (function(ApplicationRoleConnectionMetadataType2) {
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerLessThanOrEqual"] = 1] = "IntegerLessThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerGreaterThanOrEqual"] = 2] = "IntegerGreaterThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerEqual"] = 3] = "IntegerEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["IntegerNotEqual"] = 4] = "IntegerNotEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["DatetimeLessThanOrEqual"] = 5] = "DatetimeLessThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["DatetimeGreaterThanOrEqual"] = 6] = "DatetimeGreaterThanOrEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["BooleanEqual"] = 7] = "BooleanEqual";
+      ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["BooleanNotEqual"] = 8] = "BooleanNotEqual";
+    })(ApplicationRoleConnectionMetadataType || (exports2.ApplicationRoleConnectionMetadataType = ApplicationRoleConnectionMetadataType = {}));
+    var ApplicationWebhookEventStatus;
+    (function(ApplicationWebhookEventStatus2) {
+      ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["Disabled"] = 1] = "Disabled";
+      ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["Enabled"] = 2] = "Enabled";
+      ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["DisabledByDiscord"] = 3] = "DisabledByDiscord";
+    })(ApplicationWebhookEventStatus || (exports2.ApplicationWebhookEventStatus = ApplicationWebhookEventStatus = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/auditLog.js
+var require_auditLog5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/auditLog.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.AuditLogOptionsType = exports2.AuditLogEvent = void 0;
+    var AuditLogEvent;
+    (function(AuditLogEvent2) {
+      AuditLogEvent2[AuditLogEvent2["GuildUpdate"] = 1] = "GuildUpdate";
+      AuditLogEvent2[AuditLogEvent2["ChannelCreate"] = 10] = "ChannelCreate";
+      AuditLogEvent2[AuditLogEvent2["ChannelUpdate"] = 11] = "ChannelUpdate";
+      AuditLogEvent2[AuditLogEvent2["ChannelDelete"] = 12] = "ChannelDelete";
+      AuditLogEvent2[AuditLogEvent2["ChannelOverwriteCreate"] = 13] = "ChannelOverwriteCreate";
+      AuditLogEvent2[AuditLogEvent2["ChannelOverwriteUpdate"] = 14] = "ChannelOverwriteUpdate";
+      AuditLogEvent2[AuditLogEvent2["ChannelOverwriteDelete"] = 15] = "ChannelOverwriteDelete";
+      AuditLogEvent2[AuditLogEvent2["MemberKick"] = 20] = "MemberKick";
+      AuditLogEvent2[AuditLogEvent2["MemberPrune"] = 21] = "MemberPrune";
+      AuditLogEvent2[AuditLogEvent2["MemberBanAdd"] = 22] = "MemberBanAdd";
+      AuditLogEvent2[AuditLogEvent2["MemberBanRemove"] = 23] = "MemberBanRemove";
+      AuditLogEvent2[AuditLogEvent2["MemberUpdate"] = 24] = "MemberUpdate";
+      AuditLogEvent2[AuditLogEvent2["MemberRoleUpdate"] = 25] = "MemberRoleUpdate";
+      AuditLogEvent2[AuditLogEvent2["MemberMove"] = 26] = "MemberMove";
+      AuditLogEvent2[AuditLogEvent2["MemberDisconnect"] = 27] = "MemberDisconnect";
+      AuditLogEvent2[AuditLogEvent2["BotAdd"] = 28] = "BotAdd";
+      AuditLogEvent2[AuditLogEvent2["RoleCreate"] = 30] = "RoleCreate";
+      AuditLogEvent2[AuditLogEvent2["RoleUpdate"] = 31] = "RoleUpdate";
+      AuditLogEvent2[AuditLogEvent2["RoleDelete"] = 32] = "RoleDelete";
+      AuditLogEvent2[AuditLogEvent2["InviteCreate"] = 40] = "InviteCreate";
+      AuditLogEvent2[AuditLogEvent2["InviteUpdate"] = 41] = "InviteUpdate";
+      AuditLogEvent2[AuditLogEvent2["InviteDelete"] = 42] = "InviteDelete";
+      AuditLogEvent2[AuditLogEvent2["WebhookCreate"] = 50] = "WebhookCreate";
+      AuditLogEvent2[AuditLogEvent2["WebhookUpdate"] = 51] = "WebhookUpdate";
+      AuditLogEvent2[AuditLogEvent2["WebhookDelete"] = 52] = "WebhookDelete";
+      AuditLogEvent2[AuditLogEvent2["EmojiCreate"] = 60] = "EmojiCreate";
+      AuditLogEvent2[AuditLogEvent2["EmojiUpdate"] = 61] = "EmojiUpdate";
+      AuditLogEvent2[AuditLogEvent2["EmojiDelete"] = 62] = "EmojiDelete";
+      AuditLogEvent2[AuditLogEvent2["MessageDelete"] = 72] = "MessageDelete";
+      AuditLogEvent2[AuditLogEvent2["MessageBulkDelete"] = 73] = "MessageBulkDelete";
+      AuditLogEvent2[AuditLogEvent2["MessagePin"] = 74] = "MessagePin";
+      AuditLogEvent2[AuditLogEvent2["MessageUnpin"] = 75] = "MessageUnpin";
+      AuditLogEvent2[AuditLogEvent2["IntegrationCreate"] = 80] = "IntegrationCreate";
+      AuditLogEvent2[AuditLogEvent2["IntegrationUpdate"] = 81] = "IntegrationUpdate";
+      AuditLogEvent2[AuditLogEvent2["IntegrationDelete"] = 82] = "IntegrationDelete";
+      AuditLogEvent2[AuditLogEvent2["StageInstanceCreate"] = 83] = "StageInstanceCreate";
+      AuditLogEvent2[AuditLogEvent2["StageInstanceUpdate"] = 84] = "StageInstanceUpdate";
+      AuditLogEvent2[AuditLogEvent2["StageInstanceDelete"] = 85] = "StageInstanceDelete";
+      AuditLogEvent2[AuditLogEvent2["StickerCreate"] = 90] = "StickerCreate";
+      AuditLogEvent2[AuditLogEvent2["StickerUpdate"] = 91] = "StickerUpdate";
+      AuditLogEvent2[AuditLogEvent2["StickerDelete"] = 92] = "StickerDelete";
+      AuditLogEvent2[AuditLogEvent2["GuildScheduledEventCreate"] = 100] = "GuildScheduledEventCreate";
+      AuditLogEvent2[AuditLogEvent2["GuildScheduledEventUpdate"] = 101] = "GuildScheduledEventUpdate";
+      AuditLogEvent2[AuditLogEvent2["GuildScheduledEventDelete"] = 102] = "GuildScheduledEventDelete";
+      AuditLogEvent2[AuditLogEvent2["ThreadCreate"] = 110] = "ThreadCreate";
+      AuditLogEvent2[AuditLogEvent2["ThreadUpdate"] = 111] = "ThreadUpdate";
+      AuditLogEvent2[AuditLogEvent2["ThreadDelete"] = 112] = "ThreadDelete";
+      AuditLogEvent2[AuditLogEvent2["ApplicationCommandPermissionUpdate"] = 121] = "ApplicationCommandPermissionUpdate";
+      AuditLogEvent2[AuditLogEvent2["SoundboardSoundCreate"] = 130] = "SoundboardSoundCreate";
+      AuditLogEvent2[AuditLogEvent2["SoundboardSoundUpdate"] = 131] = "SoundboardSoundUpdate";
+      AuditLogEvent2[AuditLogEvent2["SoundboardSoundDelete"] = 132] = "SoundboardSoundDelete";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationRuleCreate"] = 140] = "AutoModerationRuleCreate";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationRuleUpdate"] = 141] = "AutoModerationRuleUpdate";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationRuleDelete"] = 142] = "AutoModerationRuleDelete";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationBlockMessage"] = 143] = "AutoModerationBlockMessage";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationFlagToChannel"] = 144] = "AutoModerationFlagToChannel";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationUserCommunicationDisabled"] = 145] = "AutoModerationUserCommunicationDisabled";
+      AuditLogEvent2[AuditLogEvent2["CreatorMonetizationRequestCreated"] = 150] = "CreatorMonetizationRequestCreated";
+      AuditLogEvent2[AuditLogEvent2["CreatorMonetizationTermsAccepted"] = 151] = "CreatorMonetizationTermsAccepted";
+      AuditLogEvent2[AuditLogEvent2["OnboardingPromptCreate"] = 163] = "OnboardingPromptCreate";
+      AuditLogEvent2[AuditLogEvent2["OnboardingPromptUpdate"] = 164] = "OnboardingPromptUpdate";
+      AuditLogEvent2[AuditLogEvent2["OnboardingPromptDelete"] = 165] = "OnboardingPromptDelete";
+      AuditLogEvent2[AuditLogEvent2["OnboardingCreate"] = 166] = "OnboardingCreate";
+      AuditLogEvent2[AuditLogEvent2["OnboardingUpdate"] = 167] = "OnboardingUpdate";
+      AuditLogEvent2[AuditLogEvent2["HomeSettingsCreate"] = 190] = "HomeSettingsCreate";
+      AuditLogEvent2[AuditLogEvent2["HomeSettingsUpdate"] = 191] = "HomeSettingsUpdate";
+    })(AuditLogEvent || (exports2.AuditLogEvent = AuditLogEvent = {}));
+    var AuditLogOptionsType;
+    (function(AuditLogOptionsType2) {
+      AuditLogOptionsType2["Role"] = "0";
+      AuditLogOptionsType2["Member"] = "1";
+    })(AuditLogOptionsType || (exports2.AuditLogOptionsType = AuditLogOptionsType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/autoModeration.js
+var require_autoModeration5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/autoModeration.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.AutoModerationActionType = exports2.AutoModerationRuleEventType = exports2.AutoModerationRuleKeywordPresetType = exports2.AutoModerationRuleTriggerType = void 0;
+    var AutoModerationRuleTriggerType;
+    (function(AutoModerationRuleTriggerType2) {
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["Keyword"] = 1] = "Keyword";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["Spam"] = 3] = "Spam";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["KeywordPreset"] = 4] = "KeywordPreset";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["MentionSpam"] = 5] = "MentionSpam";
+      AutoModerationRuleTriggerType2[AutoModerationRuleTriggerType2["MemberProfile"] = 6] = "MemberProfile";
+    })(AutoModerationRuleTriggerType || (exports2.AutoModerationRuleTriggerType = AutoModerationRuleTriggerType = {}));
+    var AutoModerationRuleKeywordPresetType;
+    (function(AutoModerationRuleKeywordPresetType2) {
+      AutoModerationRuleKeywordPresetType2[AutoModerationRuleKeywordPresetType2["Profanity"] = 1] = "Profanity";
+      AutoModerationRuleKeywordPresetType2[AutoModerationRuleKeywordPresetType2["SexualContent"] = 2] = "SexualContent";
+      AutoModerationRuleKeywordPresetType2[AutoModerationRuleKeywordPresetType2["Slurs"] = 3] = "Slurs";
+    })(AutoModerationRuleKeywordPresetType || (exports2.AutoModerationRuleKeywordPresetType = AutoModerationRuleKeywordPresetType = {}));
+    var AutoModerationRuleEventType;
+    (function(AutoModerationRuleEventType2) {
+      AutoModerationRuleEventType2[AutoModerationRuleEventType2["MessageSend"] = 1] = "MessageSend";
+      AutoModerationRuleEventType2[AutoModerationRuleEventType2["MemberUpdate"] = 2] = "MemberUpdate";
+    })(AutoModerationRuleEventType || (exports2.AutoModerationRuleEventType = AutoModerationRuleEventType = {}));
+    var AutoModerationActionType;
+    (function(AutoModerationActionType2) {
+      AutoModerationActionType2[AutoModerationActionType2["BlockMessage"] = 1] = "BlockMessage";
+      AutoModerationActionType2[AutoModerationActionType2["SendAlertMessage"] = 2] = "SendAlertMessage";
+      AutoModerationActionType2[AutoModerationActionType2["Timeout"] = 3] = "Timeout";
+      AutoModerationActionType2[AutoModerationActionType2["BlockMemberInteraction"] = 4] = "BlockMemberInteraction";
+    })(AutoModerationActionType || (exports2.AutoModerationActionType = AutoModerationActionType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/channel.js
+var require_channel7 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/channel.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ChannelFlags = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.ThreadMemberFlags = exports2.ThreadAutoArchiveDuration = exports2.OverwriteType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = exports2.VideoQualityMode = exports2.ChannelType = exports2.ForumLayoutType = exports2.SortOrderType = void 0;
+    var SortOrderType;
+    (function(SortOrderType2) {
+      SortOrderType2[SortOrderType2["LatestActivity"] = 0] = "LatestActivity";
+      SortOrderType2[SortOrderType2["CreationDate"] = 1] = "CreationDate";
+    })(SortOrderType || (exports2.SortOrderType = SortOrderType = {}));
+    var ForumLayoutType;
+    (function(ForumLayoutType2) {
+      ForumLayoutType2[ForumLayoutType2["NotSet"] = 0] = "NotSet";
+      ForumLayoutType2[ForumLayoutType2["ListView"] = 1] = "ListView";
+      ForumLayoutType2[ForumLayoutType2["GalleryView"] = 2] = "GalleryView";
+    })(ForumLayoutType || (exports2.ForumLayoutType = ForumLayoutType = {}));
+    var ChannelType;
+    (function(ChannelType2) {
+      ChannelType2[ChannelType2["GuildText"] = 0] = "GuildText";
+      ChannelType2[ChannelType2["DM"] = 1] = "DM";
+      ChannelType2[ChannelType2["GuildVoice"] = 2] = "GuildVoice";
+      ChannelType2[ChannelType2["GroupDM"] = 3] = "GroupDM";
+      ChannelType2[ChannelType2["GuildCategory"] = 4] = "GuildCategory";
+      ChannelType2[ChannelType2["GuildAnnouncement"] = 5] = "GuildAnnouncement";
+      ChannelType2[ChannelType2["AnnouncementThread"] = 10] = "AnnouncementThread";
+      ChannelType2[ChannelType2["PublicThread"] = 11] = "PublicThread";
+      ChannelType2[ChannelType2["PrivateThread"] = 12] = "PrivateThread";
+      ChannelType2[ChannelType2["GuildStageVoice"] = 13] = "GuildStageVoice";
+      ChannelType2[ChannelType2["GuildDirectory"] = 14] = "GuildDirectory";
+      ChannelType2[ChannelType2["GuildForum"] = 15] = "GuildForum";
+      ChannelType2[ChannelType2["GuildMedia"] = 16] = "GuildMedia";
+      ChannelType2[ChannelType2["GuildNews"] = 5] = "GuildNews";
+      ChannelType2[ChannelType2["GuildNewsThread"] = 10] = "GuildNewsThread";
+      ChannelType2[ChannelType2["GuildPublicThread"] = 11] = "GuildPublicThread";
+      ChannelType2[ChannelType2["GuildPrivateThread"] = 12] = "GuildPrivateThread";
+    })(ChannelType || (exports2.ChannelType = ChannelType = {}));
+    var VideoQualityMode;
+    (function(VideoQualityMode2) {
+      VideoQualityMode2[VideoQualityMode2["Auto"] = 1] = "Auto";
+      VideoQualityMode2[VideoQualityMode2["Full"] = 2] = "Full";
+    })(VideoQualityMode || (exports2.VideoQualityMode = VideoQualityMode = {}));
+    var MessageType;
+    (function(MessageType2) {
+      MessageType2[MessageType2["Default"] = 0] = "Default";
+      MessageType2[MessageType2["RecipientAdd"] = 1] = "RecipientAdd";
+      MessageType2[MessageType2["RecipientRemove"] = 2] = "RecipientRemove";
+      MessageType2[MessageType2["Call"] = 3] = "Call";
+      MessageType2[MessageType2["ChannelNameChange"] = 4] = "ChannelNameChange";
+      MessageType2[MessageType2["ChannelIconChange"] = 5] = "ChannelIconChange";
+      MessageType2[MessageType2["ChannelPinnedMessage"] = 6] = "ChannelPinnedMessage";
+      MessageType2[MessageType2["UserJoin"] = 7] = "UserJoin";
+      MessageType2[MessageType2["GuildBoost"] = 8] = "GuildBoost";
+      MessageType2[MessageType2["GuildBoostTier1"] = 9] = "GuildBoostTier1";
+      MessageType2[MessageType2["GuildBoostTier2"] = 10] = "GuildBoostTier2";
+      MessageType2[MessageType2["GuildBoostTier3"] = 11] = "GuildBoostTier3";
+      MessageType2[MessageType2["ChannelFollowAdd"] = 12] = "ChannelFollowAdd";
+      MessageType2[MessageType2["GuildDiscoveryDisqualified"] = 14] = "GuildDiscoveryDisqualified";
+      MessageType2[MessageType2["GuildDiscoveryRequalified"] = 15] = "GuildDiscoveryRequalified";
+      MessageType2[MessageType2["GuildDiscoveryGracePeriodInitialWarning"] = 16] = "GuildDiscoveryGracePeriodInitialWarning";
+      MessageType2[MessageType2["GuildDiscoveryGracePeriodFinalWarning"] = 17] = "GuildDiscoveryGracePeriodFinalWarning";
+      MessageType2[MessageType2["ThreadCreated"] = 18] = "ThreadCreated";
+      MessageType2[MessageType2["Reply"] = 19] = "Reply";
+      MessageType2[MessageType2["ChatInputCommand"] = 20] = "ChatInputCommand";
+      MessageType2[MessageType2["ThreadStarterMessage"] = 21] = "ThreadStarterMessage";
+      MessageType2[MessageType2["GuildInviteReminder"] = 22] = "GuildInviteReminder";
+      MessageType2[MessageType2["ContextMenuCommand"] = 23] = "ContextMenuCommand";
+      MessageType2[MessageType2["AutoModerationAction"] = 24] = "AutoModerationAction";
+      MessageType2[MessageType2["RoleSubscriptionPurchase"] = 25] = "RoleSubscriptionPurchase";
+      MessageType2[MessageType2["InteractionPremiumUpsell"] = 26] = "InteractionPremiumUpsell";
+      MessageType2[MessageType2["StageStart"] = 27] = "StageStart";
+      MessageType2[MessageType2["StageEnd"] = 28] = "StageEnd";
+      MessageType2[MessageType2["StageSpeaker"] = 29] = "StageSpeaker";
+      MessageType2[MessageType2["StageRaiseHand"] = 30] = "StageRaiseHand";
+      MessageType2[MessageType2["StageTopic"] = 31] = "StageTopic";
+      MessageType2[MessageType2["GuildApplicationPremiumSubscription"] = 32] = "GuildApplicationPremiumSubscription";
+      MessageType2[MessageType2["GuildIncidentAlertModeEnabled"] = 36] = "GuildIncidentAlertModeEnabled";
+      MessageType2[MessageType2["GuildIncidentAlertModeDisabled"] = 37] = "GuildIncidentAlertModeDisabled";
+      MessageType2[MessageType2["GuildIncidentReportRaid"] = 38] = "GuildIncidentReportRaid";
+      MessageType2[MessageType2["GuildIncidentReportFalseAlarm"] = 39] = "GuildIncidentReportFalseAlarm";
+      MessageType2[MessageType2["PurchaseNotification"] = 44] = "PurchaseNotification";
+      MessageType2[MessageType2["PollResult"] = 46] = "PollResult";
+    })(MessageType || (exports2.MessageType = MessageType = {}));
+    var MessageActivityType;
+    (function(MessageActivityType2) {
+      MessageActivityType2[MessageActivityType2["Join"] = 1] = "Join";
+      MessageActivityType2[MessageActivityType2["Spectate"] = 2] = "Spectate";
+      MessageActivityType2[MessageActivityType2["Listen"] = 3] = "Listen";
+      MessageActivityType2[MessageActivityType2["JoinRequest"] = 5] = "JoinRequest";
+    })(MessageActivityType || (exports2.MessageActivityType = MessageActivityType = {}));
+    var MessageReferenceType;
+    (function(MessageReferenceType2) {
+      MessageReferenceType2[MessageReferenceType2["Default"] = 0] = "Default";
+      MessageReferenceType2[MessageReferenceType2["Forward"] = 1] = "Forward";
+    })(MessageReferenceType || (exports2.MessageReferenceType = MessageReferenceType = {}));
+    var MessageFlags;
+    (function(MessageFlags2) {
+      MessageFlags2[MessageFlags2["Crossposted"] = 1] = "Crossposted";
+      MessageFlags2[MessageFlags2["IsCrosspost"] = 2] = "IsCrosspost";
+      MessageFlags2[MessageFlags2["SuppressEmbeds"] = 4] = "SuppressEmbeds";
+      MessageFlags2[MessageFlags2["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
+      MessageFlags2[MessageFlags2["Urgent"] = 16] = "Urgent";
+      MessageFlags2[MessageFlags2["HasThread"] = 32] = "HasThread";
+      MessageFlags2[MessageFlags2["Ephemeral"] = 64] = "Ephemeral";
+      MessageFlags2[MessageFlags2["Loading"] = 128] = "Loading";
+      MessageFlags2[MessageFlags2["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
+      MessageFlags2[MessageFlags2["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
+      MessageFlags2[MessageFlags2["SuppressNotifications"] = 4096] = "SuppressNotifications";
+      MessageFlags2[MessageFlags2["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
+      MessageFlags2[MessageFlags2["HasSnapshot"] = 16384] = "HasSnapshot";
+      MessageFlags2[MessageFlags2["IsComponentsV2"] = 32768] = "IsComponentsV2";
+    })(MessageFlags || (exports2.MessageFlags = MessageFlags = {}));
+    var OverwriteType;
+    (function(OverwriteType2) {
+      OverwriteType2[OverwriteType2["Role"] = 0] = "Role";
+      OverwriteType2[OverwriteType2["Member"] = 1] = "Member";
+    })(OverwriteType || (exports2.OverwriteType = OverwriteType = {}));
+    var ThreadAutoArchiveDuration;
+    (function(ThreadAutoArchiveDuration2) {
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["OneHour"] = 60] = "OneHour";
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["OneDay"] = 1440] = "OneDay";
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["ThreeDays"] = 4320] = "ThreeDays";
+      ThreadAutoArchiveDuration2[ThreadAutoArchiveDuration2["OneWeek"] = 10080] = "OneWeek";
+    })(ThreadAutoArchiveDuration || (exports2.ThreadAutoArchiveDuration = ThreadAutoArchiveDuration = {}));
+    var ThreadMemberFlags;
+    (function(ThreadMemberFlags2) {
+      ThreadMemberFlags2[ThreadMemberFlags2["HasInteracted"] = 1] = "HasInteracted";
+      ThreadMemberFlags2[ThreadMemberFlags2["AllMessages"] = 2] = "AllMessages";
+      ThreadMemberFlags2[ThreadMemberFlags2["OnlyMentions"] = 4] = "OnlyMentions";
+      ThreadMemberFlags2[ThreadMemberFlags2["NoMessages"] = 8] = "NoMessages";
+    })(ThreadMemberFlags || (exports2.ThreadMemberFlags = ThreadMemberFlags = {}));
+    var EmbedType;
+    (function(EmbedType2) {
+      EmbedType2["Rich"] = "rich";
+      EmbedType2["Image"] = "image";
+      EmbedType2["Video"] = "video";
+      EmbedType2["GIFV"] = "gifv";
+      EmbedType2["Article"] = "article";
+      EmbedType2["Link"] = "link";
+      EmbedType2["AutoModerationMessage"] = "auto_moderation_message";
+      EmbedType2["PollResult"] = "poll_result";
+    })(EmbedType || (exports2.EmbedType = EmbedType = {}));
+    var AttachmentFlags;
+    (function(AttachmentFlags2) {
+      AttachmentFlags2[AttachmentFlags2["IsRemix"] = 4] = "IsRemix";
+    })(AttachmentFlags || (exports2.AttachmentFlags = AttachmentFlags = {}));
+    var AllowedMentionsTypes;
+    (function(AllowedMentionsTypes2) {
+      AllowedMentionsTypes2["Everyone"] = "everyone";
+      AllowedMentionsTypes2["Role"] = "roles";
+      AllowedMentionsTypes2["User"] = "users";
+    })(AllowedMentionsTypes || (exports2.AllowedMentionsTypes = AllowedMentionsTypes = {}));
+    var ComponentType;
+    (function(ComponentType2) {
+      ComponentType2[ComponentType2["ActionRow"] = 1] = "ActionRow";
+      ComponentType2[ComponentType2["Button"] = 2] = "Button";
+      ComponentType2[ComponentType2["StringSelect"] = 3] = "StringSelect";
+      ComponentType2[ComponentType2["TextInput"] = 4] = "TextInput";
+      ComponentType2[ComponentType2["UserSelect"] = 5] = "UserSelect";
+      ComponentType2[ComponentType2["RoleSelect"] = 6] = "RoleSelect";
+      ComponentType2[ComponentType2["MentionableSelect"] = 7] = "MentionableSelect";
+      ComponentType2[ComponentType2["ChannelSelect"] = 8] = "ChannelSelect";
+      ComponentType2[ComponentType2["Section"] = 9] = "Section";
+      ComponentType2[ComponentType2["TextDisplay"] = 10] = "TextDisplay";
+      ComponentType2[ComponentType2["Thumbnail"] = 11] = "Thumbnail";
+      ComponentType2[ComponentType2["MediaGallery"] = 12] = "MediaGallery";
+      ComponentType2[ComponentType2["File"] = 13] = "File";
+      ComponentType2[ComponentType2["Separator"] = 14] = "Separator";
+      ComponentType2[ComponentType2["ContentInventoryEntry"] = 16] = "ContentInventoryEntry";
+      ComponentType2[ComponentType2["Container"] = 17] = "Container";
+      ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
+    })(ComponentType || (exports2.ComponentType = ComponentType = {}));
+    var ButtonStyle2;
+    (function(ButtonStyle3) {
+      ButtonStyle3[ButtonStyle3["Primary"] = 1] = "Primary";
+      ButtonStyle3[ButtonStyle3["Secondary"] = 2] = "Secondary";
+      ButtonStyle3[ButtonStyle3["Success"] = 3] = "Success";
+      ButtonStyle3[ButtonStyle3["Danger"] = 4] = "Danger";
+      ButtonStyle3[ButtonStyle3["Link"] = 5] = "Link";
+      ButtonStyle3[ButtonStyle3["Premium"] = 6] = "Premium";
+    })(ButtonStyle2 || (exports2.ButtonStyle = ButtonStyle2 = {}));
+    var TextInputStyle2;
+    (function(TextInputStyle3) {
+      TextInputStyle3[TextInputStyle3["Short"] = 1] = "Short";
+      TextInputStyle3[TextInputStyle3["Paragraph"] = 2] = "Paragraph";
+    })(TextInputStyle2 || (exports2.TextInputStyle = TextInputStyle2 = {}));
+    var SelectMenuDefaultValueType;
+    (function(SelectMenuDefaultValueType2) {
+      SelectMenuDefaultValueType2["Channel"] = "channel";
+      SelectMenuDefaultValueType2["Role"] = "role";
+      SelectMenuDefaultValueType2["User"] = "user";
+    })(SelectMenuDefaultValueType || (exports2.SelectMenuDefaultValueType = SelectMenuDefaultValueType = {}));
+    var UnfurledMediaItemLoadingState;
+    (function(UnfurledMediaItemLoadingState2) {
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Unknown"] = 0] = "Unknown";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Loading"] = 1] = "Loading";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedSuccess"] = 2] = "LoadedSuccess";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedNotFound"] = 3] = "LoadedNotFound";
+    })(UnfurledMediaItemLoadingState || (exports2.UnfurledMediaItemLoadingState = UnfurledMediaItemLoadingState = {}));
+    var SeparatorSpacingSize;
+    (function(SeparatorSpacingSize2) {
+      SeparatorSpacingSize2[SeparatorSpacingSize2["Small"] = 1] = "Small";
+      SeparatorSpacingSize2[SeparatorSpacingSize2["Large"] = 2] = "Large";
+    })(SeparatorSpacingSize || (exports2.SeparatorSpacingSize = SeparatorSpacingSize = {}));
+    var ChannelFlags;
+    (function(ChannelFlags2) {
+      ChannelFlags2[ChannelFlags2["GuildFeedRemoved"] = 1] = "GuildFeedRemoved";
+      ChannelFlags2[ChannelFlags2["Pinned"] = 2] = "Pinned";
+      ChannelFlags2[ChannelFlags2["ActiveChannelsRemoved"] = 4] = "ActiveChannelsRemoved";
+      ChannelFlags2[ChannelFlags2["RequireTag"] = 16] = "RequireTag";
+      ChannelFlags2[ChannelFlags2["IsSpam"] = 32] = "IsSpam";
+      ChannelFlags2[ChannelFlags2["IsGuildResourceChannel"] = 128] = "IsGuildResourceChannel";
+      ChannelFlags2[ChannelFlags2["ClydeAI"] = 256] = "ClydeAI";
+      ChannelFlags2[ChannelFlags2["IsScheduledForDeletion"] = 512] = "IsScheduledForDeletion";
+      ChannelFlags2[ChannelFlags2["HideMediaDownloadOptions"] = 32768] = "HideMediaDownloadOptions";
+    })(ChannelFlags || (exports2.ChannelFlags = ChannelFlags = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/emoji.js
+var require_emoji5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/emoji.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/gateway.js
+var require_gateway5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ActivityFlags = exports2.ActivityType = exports2.ActivityPlatform = exports2.PresenceUpdateStatus = void 0;
+    var PresenceUpdateStatus;
+    (function(PresenceUpdateStatus2) {
+      PresenceUpdateStatus2["Online"] = "online";
+      PresenceUpdateStatus2["DoNotDisturb"] = "dnd";
+      PresenceUpdateStatus2["Idle"] = "idle";
+      PresenceUpdateStatus2["Invisible"] = "invisible";
+      PresenceUpdateStatus2["Offline"] = "offline";
+    })(PresenceUpdateStatus || (exports2.PresenceUpdateStatus = PresenceUpdateStatus = {}));
+    var ActivityPlatform;
+    (function(ActivityPlatform2) {
+      ActivityPlatform2["Desktop"] = "desktop";
+      ActivityPlatform2["Xbox"] = "xbox";
+      ActivityPlatform2["Samsung"] = "samsung";
+      ActivityPlatform2["IOS"] = "ios";
+      ActivityPlatform2["Android"] = "android";
+      ActivityPlatform2["Embedded"] = "embedded";
+      ActivityPlatform2["PS4"] = "ps4";
+      ActivityPlatform2["PS5"] = "ps5";
+    })(ActivityPlatform || (exports2.ActivityPlatform = ActivityPlatform = {}));
+    var ActivityType;
+    (function(ActivityType2) {
+      ActivityType2[ActivityType2["Playing"] = 0] = "Playing";
+      ActivityType2[ActivityType2["Streaming"] = 1] = "Streaming";
+      ActivityType2[ActivityType2["Listening"] = 2] = "Listening";
+      ActivityType2[ActivityType2["Watching"] = 3] = "Watching";
+      ActivityType2[ActivityType2["Custom"] = 4] = "Custom";
+      ActivityType2[ActivityType2["Competing"] = 5] = "Competing";
+    })(ActivityType || (exports2.ActivityType = ActivityType = {}));
+    var ActivityFlags;
+    (function(ActivityFlags2) {
+      ActivityFlags2[ActivityFlags2["Instance"] = 1] = "Instance";
+      ActivityFlags2[ActivityFlags2["Join"] = 2] = "Join";
+      ActivityFlags2[ActivityFlags2["Spectate"] = 4] = "Spectate";
+      ActivityFlags2[ActivityFlags2["JoinRequest"] = 8] = "JoinRequest";
+      ActivityFlags2[ActivityFlags2["Sync"] = 16] = "Sync";
+      ActivityFlags2[ActivityFlags2["Play"] = 32] = "Play";
+      ActivityFlags2[ActivityFlags2["PartyPrivacyFriends"] = 64] = "PartyPrivacyFriends";
+      ActivityFlags2[ActivityFlags2["PartyPrivacyVoiceChannel"] = 128] = "PartyPrivacyVoiceChannel";
+      ActivityFlags2[ActivityFlags2["Embedded"] = 256] = "Embedded";
+    })(ActivityFlags || (exports2.ActivityFlags = ActivityFlags = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guild.js
+var require_guild5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guild.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.GuildOnboardingPromptType = exports2.GuildOnboardingMode = exports2.MembershipScreeningFieldType = exports2.GuildWidgetStyle = exports2.IntegrationExpireBehavior = exports2.GuildMemberFlags = exports2.GuildFeature = exports2.GuildSystemChannelFlags = exports2.GuildHubType = exports2.GuildPremiumTier = exports2.GuildVerificationLevel = exports2.GuildNSFWLevel = exports2.GuildMFALevel = exports2.GuildExplicitContentFilter = exports2.GuildDefaultMessageNotifications = void 0;
+    var GuildDefaultMessageNotifications;
+    (function(GuildDefaultMessageNotifications2) {
+      GuildDefaultMessageNotifications2[GuildDefaultMessageNotifications2["AllMessages"] = 0] = "AllMessages";
+      GuildDefaultMessageNotifications2[GuildDefaultMessageNotifications2["OnlyMentions"] = 1] = "OnlyMentions";
+    })(GuildDefaultMessageNotifications || (exports2.GuildDefaultMessageNotifications = GuildDefaultMessageNotifications = {}));
+    var GuildExplicitContentFilter;
+    (function(GuildExplicitContentFilter2) {
+      GuildExplicitContentFilter2[GuildExplicitContentFilter2["Disabled"] = 0] = "Disabled";
+      GuildExplicitContentFilter2[GuildExplicitContentFilter2["MembersWithoutRoles"] = 1] = "MembersWithoutRoles";
+      GuildExplicitContentFilter2[GuildExplicitContentFilter2["AllMembers"] = 2] = "AllMembers";
+    })(GuildExplicitContentFilter || (exports2.GuildExplicitContentFilter = GuildExplicitContentFilter = {}));
+    var GuildMFALevel;
+    (function(GuildMFALevel2) {
+      GuildMFALevel2[GuildMFALevel2["None"] = 0] = "None";
+      GuildMFALevel2[GuildMFALevel2["Elevated"] = 1] = "Elevated";
+    })(GuildMFALevel || (exports2.GuildMFALevel = GuildMFALevel = {}));
+    var GuildNSFWLevel;
+    (function(GuildNSFWLevel2) {
+      GuildNSFWLevel2[GuildNSFWLevel2["Default"] = 0] = "Default";
+      GuildNSFWLevel2[GuildNSFWLevel2["Explicit"] = 1] = "Explicit";
+      GuildNSFWLevel2[GuildNSFWLevel2["Safe"] = 2] = "Safe";
+      GuildNSFWLevel2[GuildNSFWLevel2["AgeRestricted"] = 3] = "AgeRestricted";
+    })(GuildNSFWLevel || (exports2.GuildNSFWLevel = GuildNSFWLevel = {}));
+    var GuildVerificationLevel;
+    (function(GuildVerificationLevel2) {
+      GuildVerificationLevel2[GuildVerificationLevel2["None"] = 0] = "None";
+      GuildVerificationLevel2[GuildVerificationLevel2["Low"] = 1] = "Low";
+      GuildVerificationLevel2[GuildVerificationLevel2["Medium"] = 2] = "Medium";
+      GuildVerificationLevel2[GuildVerificationLevel2["High"] = 3] = "High";
+      GuildVerificationLevel2[GuildVerificationLevel2["VeryHigh"] = 4] = "VeryHigh";
+    })(GuildVerificationLevel || (exports2.GuildVerificationLevel = GuildVerificationLevel = {}));
+    var GuildPremiumTier;
+    (function(GuildPremiumTier2) {
+      GuildPremiumTier2[GuildPremiumTier2["None"] = 0] = "None";
+      GuildPremiumTier2[GuildPremiumTier2["Tier1"] = 1] = "Tier1";
+      GuildPremiumTier2[GuildPremiumTier2["Tier2"] = 2] = "Tier2";
+      GuildPremiumTier2[GuildPremiumTier2["Tier3"] = 3] = "Tier3";
+    })(GuildPremiumTier || (exports2.GuildPremiumTier = GuildPremiumTier = {}));
+    var GuildHubType;
+    (function(GuildHubType2) {
+      GuildHubType2[GuildHubType2["Default"] = 0] = "Default";
+      GuildHubType2[GuildHubType2["HighSchool"] = 1] = "HighSchool";
+      GuildHubType2[GuildHubType2["College"] = 2] = "College";
+    })(GuildHubType || (exports2.GuildHubType = GuildHubType = {}));
+    var GuildSystemChannelFlags;
+    (function(GuildSystemChannelFlags2) {
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressJoinNotifications"] = 1] = "SuppressJoinNotifications";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressPremiumSubscriptions"] = 2] = "SuppressPremiumSubscriptions";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressGuildReminderNotifications"] = 4] = "SuppressGuildReminderNotifications";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressJoinNotificationReplies"] = 8] = "SuppressJoinNotificationReplies";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressRoleSubscriptionPurchaseNotifications"] = 16] = "SuppressRoleSubscriptionPurchaseNotifications";
+      GuildSystemChannelFlags2[GuildSystemChannelFlags2["SuppressRoleSubscriptionPurchaseNotificationReplies"] = 32] = "SuppressRoleSubscriptionPurchaseNotificationReplies";
+    })(GuildSystemChannelFlags || (exports2.GuildSystemChannelFlags = GuildSystemChannelFlags = {}));
+    var GuildFeature;
+    (function(GuildFeature2) {
+      GuildFeature2["AnimatedBanner"] = "ANIMATED_BANNER";
+      GuildFeature2["AnimatedIcon"] = "ANIMATED_ICON";
+      GuildFeature2["ApplicationCommandPermissionsV2"] = "APPLICATION_COMMAND_PERMISSIONS_V2";
+      GuildFeature2["AutoModeration"] = "AUTO_MODERATION";
+      GuildFeature2["Banner"] = "BANNER";
+      GuildFeature2["Community"] = "COMMUNITY";
+      GuildFeature2["CreatorMonetizableProvisional"] = "CREATOR_MONETIZABLE_PROVISIONAL";
+      GuildFeature2["CreatorStorePage"] = "CREATOR_STORE_PAGE";
+      GuildFeature2["DeveloperSupportServer"] = "DEVELOPER_SUPPORT_SERVER";
+      GuildFeature2["Discoverable"] = "DISCOVERABLE";
+      GuildFeature2["Featurable"] = "FEATURABLE";
+      GuildFeature2["HasDirectoryEntry"] = "HAS_DIRECTORY_ENTRY";
+      GuildFeature2["Hub"] = "HUB";
+      GuildFeature2["InvitesDisabled"] = "INVITES_DISABLED";
+      GuildFeature2["InviteSplash"] = "INVITE_SPLASH";
+      GuildFeature2["LinkedToHub"] = "LINKED_TO_HUB";
+      GuildFeature2["MemberVerificationGateEnabled"] = "MEMBER_VERIFICATION_GATE_ENABLED";
+      GuildFeature2["MoreSoundboard"] = "MORE_SOUNDBOARD";
+      GuildFeature2["MonetizationEnabled"] = "MONETIZATION_ENABLED";
+      GuildFeature2["MoreStickers"] = "MORE_STICKERS";
+      GuildFeature2["News"] = "NEWS";
+      GuildFeature2["Partnered"] = "PARTNERED";
+      GuildFeature2["PreviewEnabled"] = "PREVIEW_ENABLED";
+      GuildFeature2["PrivateThreads"] = "PRIVATE_THREADS";
+      GuildFeature2["RaidAlertsDisabled"] = "RAID_ALERTS_DISABLED";
+      GuildFeature2["RelayEnabled"] = "RELAY_ENABLED";
+      GuildFeature2["RoleIcons"] = "ROLE_ICONS";
+      GuildFeature2["RoleSubscriptionsAvailableForPurchase"] = "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE";
+      GuildFeature2["RoleSubscriptionsEnabled"] = "ROLE_SUBSCRIPTIONS_ENABLED";
+      GuildFeature2["Soundboard"] = "SOUNDBOARD";
+      GuildFeature2["TicketedEventsEnabled"] = "TICKETED_EVENTS_ENABLED";
+      GuildFeature2["VanityURL"] = "VANITY_URL";
+      GuildFeature2["Verified"] = "VERIFIED";
+      GuildFeature2["VIPRegions"] = "VIP_REGIONS";
+      GuildFeature2["WelcomeScreenEnabled"] = "WELCOME_SCREEN_ENABLED";
+    })(GuildFeature || (exports2.GuildFeature = GuildFeature = {}));
+    var GuildMemberFlags;
+    (function(GuildMemberFlags2) {
+      GuildMemberFlags2[GuildMemberFlags2["DidRejoin"] = 1] = "DidRejoin";
+      GuildMemberFlags2[GuildMemberFlags2["CompletedOnboarding"] = 2] = "CompletedOnboarding";
+      GuildMemberFlags2[GuildMemberFlags2["BypassesVerification"] = 4] = "BypassesVerification";
+      GuildMemberFlags2[GuildMemberFlags2["StartedOnboarding"] = 8] = "StartedOnboarding";
+      GuildMemberFlags2[GuildMemberFlags2["IsGuest"] = 16] = "IsGuest";
+      GuildMemberFlags2[GuildMemberFlags2["StartedHomeActions"] = 32] = "StartedHomeActions";
+      GuildMemberFlags2[GuildMemberFlags2["CompletedHomeActions"] = 64] = "CompletedHomeActions";
+      GuildMemberFlags2[GuildMemberFlags2["AutomodQuarantinedUsernameOrGuildNickname"] = 128] = "AutomodQuarantinedUsernameOrGuildNickname";
+      GuildMemberFlags2[GuildMemberFlags2["AutomodQuarantinedBio"] = 256] = "AutomodQuarantinedBio";
+      GuildMemberFlags2[GuildMemberFlags2["DmSettingsUpsellAcknowledged"] = 512] = "DmSettingsUpsellAcknowledged";
+    })(GuildMemberFlags || (exports2.GuildMemberFlags = GuildMemberFlags = {}));
+    var IntegrationExpireBehavior;
+    (function(IntegrationExpireBehavior2) {
+      IntegrationExpireBehavior2[IntegrationExpireBehavior2["RemoveRole"] = 0] = "RemoveRole";
+      IntegrationExpireBehavior2[IntegrationExpireBehavior2["Kick"] = 1] = "Kick";
+    })(IntegrationExpireBehavior || (exports2.IntegrationExpireBehavior = IntegrationExpireBehavior = {}));
+    var GuildWidgetStyle;
+    (function(GuildWidgetStyle2) {
+      GuildWidgetStyle2["Shield"] = "shield";
+      GuildWidgetStyle2["Banner1"] = "banner1";
+      GuildWidgetStyle2["Banner2"] = "banner2";
+      GuildWidgetStyle2["Banner3"] = "banner3";
+      GuildWidgetStyle2["Banner4"] = "banner4";
+    })(GuildWidgetStyle || (exports2.GuildWidgetStyle = GuildWidgetStyle = {}));
+    var MembershipScreeningFieldType;
+    (function(MembershipScreeningFieldType2) {
+      MembershipScreeningFieldType2["Terms"] = "TERMS";
+    })(MembershipScreeningFieldType || (exports2.MembershipScreeningFieldType = MembershipScreeningFieldType = {}));
+    var GuildOnboardingMode;
+    (function(GuildOnboardingMode2) {
+      GuildOnboardingMode2[GuildOnboardingMode2["OnboardingDefault"] = 0] = "OnboardingDefault";
+      GuildOnboardingMode2[GuildOnboardingMode2["OnboardingAdvanced"] = 1] = "OnboardingAdvanced";
+    })(GuildOnboardingMode || (exports2.GuildOnboardingMode = GuildOnboardingMode = {}));
+    var GuildOnboardingPromptType;
+    (function(GuildOnboardingPromptType2) {
+      GuildOnboardingPromptType2[GuildOnboardingPromptType2["MultipleChoice"] = 0] = "MultipleChoice";
+      GuildOnboardingPromptType2[GuildOnboardingPromptType2["Dropdown"] = 1] = "Dropdown";
+    })(GuildOnboardingPromptType || (exports2.GuildOnboardingPromptType = GuildOnboardingPromptType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js
+var require_guildScheduledEvent5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.GuildScheduledEventPrivacyLevel = exports2.GuildScheduledEventStatus = exports2.GuildScheduledEventEntityType = exports2.GuildScheduledEventRecurrenceRuleMonth = exports2.GuildScheduledEventRecurrenceRuleWeekday = exports2.GuildScheduledEventRecurrenceRuleFrequency = void 0;
+    var GuildScheduledEventRecurrenceRuleFrequency;
+    (function(GuildScheduledEventRecurrenceRuleFrequency2) {
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Yearly"] = 0] = "Yearly";
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Monthly"] = 1] = "Monthly";
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Weekly"] = 2] = "Weekly";
+      GuildScheduledEventRecurrenceRuleFrequency2[GuildScheduledEventRecurrenceRuleFrequency2["Daily"] = 3] = "Daily";
+    })(GuildScheduledEventRecurrenceRuleFrequency || (exports2.GuildScheduledEventRecurrenceRuleFrequency = GuildScheduledEventRecurrenceRuleFrequency = {}));
+    var GuildScheduledEventRecurrenceRuleWeekday;
+    (function(GuildScheduledEventRecurrenceRuleWeekday2) {
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Monday"] = 0] = "Monday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Tuesday"] = 1] = "Tuesday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Wednesday"] = 2] = "Wednesday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Thursday"] = 3] = "Thursday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Friday"] = 4] = "Friday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Saturday"] = 5] = "Saturday";
+      GuildScheduledEventRecurrenceRuleWeekday2[GuildScheduledEventRecurrenceRuleWeekday2["Sunday"] = 6] = "Sunday";
+    })(GuildScheduledEventRecurrenceRuleWeekday || (exports2.GuildScheduledEventRecurrenceRuleWeekday = GuildScheduledEventRecurrenceRuleWeekday = {}));
+    var GuildScheduledEventRecurrenceRuleMonth;
+    (function(GuildScheduledEventRecurrenceRuleMonth2) {
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["January"] = 1] = "January";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["February"] = 2] = "February";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["March"] = 3] = "March";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["April"] = 4] = "April";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["May"] = 5] = "May";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["June"] = 6] = "June";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["July"] = 7] = "July";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["August"] = 8] = "August";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["September"] = 9] = "September";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["October"] = 10] = "October";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["November"] = 11] = "November";
+      GuildScheduledEventRecurrenceRuleMonth2[GuildScheduledEventRecurrenceRuleMonth2["December"] = 12] = "December";
+    })(GuildScheduledEventRecurrenceRuleMonth || (exports2.GuildScheduledEventRecurrenceRuleMonth = GuildScheduledEventRecurrenceRuleMonth = {}));
+    var GuildScheduledEventEntityType;
+    (function(GuildScheduledEventEntityType2) {
+      GuildScheduledEventEntityType2[GuildScheduledEventEntityType2["StageInstance"] = 1] = "StageInstance";
+      GuildScheduledEventEntityType2[GuildScheduledEventEntityType2["Voice"] = 2] = "Voice";
+      GuildScheduledEventEntityType2[GuildScheduledEventEntityType2["External"] = 3] = "External";
+    })(GuildScheduledEventEntityType || (exports2.GuildScheduledEventEntityType = GuildScheduledEventEntityType = {}));
+    var GuildScheduledEventStatus;
+    (function(GuildScheduledEventStatus2) {
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Scheduled"] = 1] = "Scheduled";
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Active"] = 2] = "Active";
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Completed"] = 3] = "Completed";
+      GuildScheduledEventStatus2[GuildScheduledEventStatus2["Canceled"] = 4] = "Canceled";
+    })(GuildScheduledEventStatus || (exports2.GuildScheduledEventStatus = GuildScheduledEventStatus = {}));
+    var GuildScheduledEventPrivacyLevel;
+    (function(GuildScheduledEventPrivacyLevel2) {
+      GuildScheduledEventPrivacyLevel2[GuildScheduledEventPrivacyLevel2["GuildOnly"] = 2] = "GuildOnly";
+    })(GuildScheduledEventPrivacyLevel || (exports2.GuildScheduledEventPrivacyLevel = GuildScheduledEventPrivacyLevel = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js
+var require_attachment3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js
+var require_base5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js
+var require_boolean3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js
+var require_channel8 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js
+var require_integer3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js
+var require_mentionable3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js
+var require_number3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js
+var require_role3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js
+var require_shared3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ApplicationCommandOptionType = void 0;
+    var ApplicationCommandOptionType;
+    (function(ApplicationCommandOptionType2) {
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Subcommand"] = 1] = "Subcommand";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["SubcommandGroup"] = 2] = "SubcommandGroup";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["String"] = 3] = "String";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Integer"] = 4] = "Integer";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Boolean"] = 5] = "Boolean";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["User"] = 6] = "User";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Channel"] = 7] = "Channel";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Role"] = 8] = "Role";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Mentionable"] = 9] = "Mentionable";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Number"] = 10] = "Number";
+      ApplicationCommandOptionType2[ApplicationCommandOptionType2["Attachment"] = 11] = "Attachment";
+    })(ApplicationCommandOptionType || (exports2.ApplicationCommandOptionType = ApplicationCommandOptionType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js
+var require_string3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js
+var require_subcommand3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js
+var require_subcommandGroup3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js
+var require_user7 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js
+var require_chatInput3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    __exportStar2(require_attachment3(), exports2);
+    __exportStar2(require_base5(), exports2);
+    __exportStar2(require_boolean3(), exports2);
+    __exportStar2(require_channel8(), exports2);
+    __exportStar2(require_integer3(), exports2);
+    __exportStar2(require_mentionable3(), exports2);
+    __exportStar2(require_number3(), exports2);
+    __exportStar2(require_role3(), exports2);
+    __exportStar2(require_shared3(), exports2);
+    __exportStar2(require_string3(), exports2);
+    __exportStar2(require_subcommand3(), exports2);
+    __exportStar2(require_subcommandGroup3(), exports2);
+    __exportStar2(require_user7(), exports2);
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js
+var require_contextMenu3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js
+var require_permissions5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/permissions.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.APIApplicationCommandPermissionsConstant = exports2.ApplicationCommandPermissionType = void 0;
+    var ApplicationCommandPermissionType;
+    (function(ApplicationCommandPermissionType2) {
+      ApplicationCommandPermissionType2[ApplicationCommandPermissionType2["Role"] = 1] = "Role";
+      ApplicationCommandPermissionType2[ApplicationCommandPermissionType2["User"] = 2] = "User";
+      ApplicationCommandPermissionType2[ApplicationCommandPermissionType2["Channel"] = 3] = "Channel";
+    })(ApplicationCommandPermissionType || (exports2.ApplicationCommandPermissionType = ApplicationCommandPermissionType = {}));
+    exports2.APIApplicationCommandPermissionsConstant = {
+      // eslint-disable-next-line unicorn/prefer-native-coercion-functions
+      Everyone: (guildId) => String(guildId),
+      AllChannels: (guildId) => String(BigInt(guildId) - 1n)
+    };
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js
+var require_entryPoint3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
+var require_internals5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js
+var require_applicationCommands3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.EntryPointCommandHandlerType = exports2.InteractionContextType = exports2.ApplicationIntegrationType = exports2.ApplicationCommandType = void 0;
+    __exportStar2(require_chatInput3(), exports2);
+    __exportStar2(require_contextMenu3(), exports2);
+    __exportStar2(require_permissions5(), exports2);
+    __exportStar2(require_entryPoint3(), exports2);
+    __exportStar2(require_internals5(), exports2);
+    var ApplicationCommandType;
+    (function(ApplicationCommandType2) {
+      ApplicationCommandType2[ApplicationCommandType2["ChatInput"] = 1] = "ChatInput";
+      ApplicationCommandType2[ApplicationCommandType2["User"] = 2] = "User";
+      ApplicationCommandType2[ApplicationCommandType2["Message"] = 3] = "Message";
+      ApplicationCommandType2[ApplicationCommandType2["PrimaryEntryPoint"] = 4] = "PrimaryEntryPoint";
+    })(ApplicationCommandType || (exports2.ApplicationCommandType = ApplicationCommandType = {}));
+    var ApplicationIntegrationType;
+    (function(ApplicationIntegrationType2) {
+      ApplicationIntegrationType2[ApplicationIntegrationType2["GuildInstall"] = 0] = "GuildInstall";
+      ApplicationIntegrationType2[ApplicationIntegrationType2["UserInstall"] = 1] = "UserInstall";
+    })(ApplicationIntegrationType || (exports2.ApplicationIntegrationType = ApplicationIntegrationType = {}));
+    var InteractionContextType;
+    (function(InteractionContextType2) {
+      InteractionContextType2[InteractionContextType2["Guild"] = 0] = "Guild";
+      InteractionContextType2[InteractionContextType2["BotDM"] = 1] = "BotDM";
+      InteractionContextType2[InteractionContextType2["PrivateChannel"] = 2] = "PrivateChannel";
+    })(InteractionContextType || (exports2.InteractionContextType = InteractionContextType = {}));
+    var EntryPointCommandHandlerType;
+    (function(EntryPointCommandHandlerType2) {
+      EntryPointCommandHandlerType2[EntryPointCommandHandlerType2["AppHandler"] = 1] = "AppHandler";
+      EntryPointCommandHandlerType2[EntryPointCommandHandlerType2["DiscordLaunchActivity"] = 2] = "DiscordLaunchActivity";
+    })(EntryPointCommandHandlerType || (exports2.EntryPointCommandHandlerType = EntryPointCommandHandlerType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js
+var require_autocomplete3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/base.js
+var require_base6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/base.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js
+var require_messageComponents3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js
+var require_modalSubmit3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/ping.js
+var require_ping3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/ping.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/responses.js
+var require_responses3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/responses.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.InteractionResponseType = exports2.InteractionType = void 0;
+    var InteractionType2;
+    (function(InteractionType3) {
+      InteractionType3[InteractionType3["Ping"] = 1] = "Ping";
+      InteractionType3[InteractionType3["ApplicationCommand"] = 2] = "ApplicationCommand";
+      InteractionType3[InteractionType3["MessageComponent"] = 3] = "MessageComponent";
+      InteractionType3[InteractionType3["ApplicationCommandAutocomplete"] = 4] = "ApplicationCommandAutocomplete";
+      InteractionType3[InteractionType3["ModalSubmit"] = 5] = "ModalSubmit";
+    })(InteractionType2 || (exports2.InteractionType = InteractionType2 = {}));
+    var InteractionResponseType;
+    (function(InteractionResponseType2) {
+      InteractionResponseType2[InteractionResponseType2["Pong"] = 1] = "Pong";
+      InteractionResponseType2[InteractionResponseType2["ChannelMessageWithSource"] = 4] = "ChannelMessageWithSource";
+      InteractionResponseType2[InteractionResponseType2["DeferredChannelMessageWithSource"] = 5] = "DeferredChannelMessageWithSource";
+      InteractionResponseType2[InteractionResponseType2["DeferredMessageUpdate"] = 6] = "DeferredMessageUpdate";
+      InteractionResponseType2[InteractionResponseType2["UpdateMessage"] = 7] = "UpdateMessage";
+      InteractionResponseType2[InteractionResponseType2["ApplicationCommandAutocompleteResult"] = 8] = "ApplicationCommandAutocompleteResult";
+      InteractionResponseType2[InteractionResponseType2["Modal"] = 9] = "Modal";
+      InteractionResponseType2[InteractionResponseType2["PremiumRequired"] = 10] = "PremiumRequired";
+      InteractionResponseType2[InteractionResponseType2["LaunchActivity"] = 12] = "LaunchActivity";
+    })(InteractionResponseType || (exports2.InteractionResponseType = InteractionResponseType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/interactions.js
+var require_interactions5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/interactions.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    __exportStar2(require_applicationCommands3(), exports2);
+    __exportStar2(require_autocomplete3(), exports2);
+    __exportStar2(require_base6(), exports2);
+    __exportStar2(require_messageComponents3(), exports2);
+    __exportStar2(require_modalSubmit3(), exports2);
+    __exportStar2(require_ping3(), exports2);
+    __exportStar2(require_responses3(), exports2);
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/invite.js
+var require_invite5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/invite.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.InviteTargetType = exports2.InviteType = void 0;
+    var InviteType;
+    (function(InviteType2) {
+      InviteType2[InviteType2["Guild"] = 0] = "Guild";
+      InviteType2[InviteType2["GroupDM"] = 1] = "GroupDM";
+      InviteType2[InviteType2["Friend"] = 2] = "Friend";
+    })(InviteType || (exports2.InviteType = InviteType = {}));
+    var InviteTargetType;
+    (function(InviteTargetType2) {
+      InviteTargetType2[InviteTargetType2["Stream"] = 1] = "Stream";
+      InviteTargetType2[InviteTargetType2["EmbeddedApplication"] = 2] = "EmbeddedApplication";
+    })(InviteTargetType || (exports2.InviteTargetType = InviteTargetType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/monetization.js
+var require_monetization5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/monetization.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.SubscriptionStatus = exports2.SKUType = exports2.SKUFlags = exports2.EntitlementType = void 0;
+    var EntitlementType;
+    (function(EntitlementType2) {
+      EntitlementType2[EntitlementType2["Purchase"] = 1] = "Purchase";
+      EntitlementType2[EntitlementType2["PremiumSubscription"] = 2] = "PremiumSubscription";
+      EntitlementType2[EntitlementType2["DeveloperGift"] = 3] = "DeveloperGift";
+      EntitlementType2[EntitlementType2["TestModePurchase"] = 4] = "TestModePurchase";
+      EntitlementType2[EntitlementType2["FreePurchase"] = 5] = "FreePurchase";
+      EntitlementType2[EntitlementType2["UserGift"] = 6] = "UserGift";
+      EntitlementType2[EntitlementType2["PremiumPurchase"] = 7] = "PremiumPurchase";
+      EntitlementType2[EntitlementType2["ApplicationSubscription"] = 8] = "ApplicationSubscription";
+    })(EntitlementType || (exports2.EntitlementType = EntitlementType = {}));
+    var SKUFlags;
+    (function(SKUFlags2) {
+      SKUFlags2[SKUFlags2["Available"] = 4] = "Available";
+      SKUFlags2[SKUFlags2["GuildSubscription"] = 128] = "GuildSubscription";
+      SKUFlags2[SKUFlags2["UserSubscription"] = 256] = "UserSubscription";
+    })(SKUFlags || (exports2.SKUFlags = SKUFlags = {}));
+    var SKUType;
+    (function(SKUType2) {
+      SKUType2[SKUType2["Durable"] = 2] = "Durable";
+      SKUType2[SKUType2["Consumable"] = 3] = "Consumable";
+      SKUType2[SKUType2["Subscription"] = 5] = "Subscription";
+      SKUType2[SKUType2["SubscriptionGroup"] = 6] = "SubscriptionGroup";
+    })(SKUType || (exports2.SKUType = SKUType = {}));
+    var SubscriptionStatus;
+    (function(SubscriptionStatus2) {
+      SubscriptionStatus2[SubscriptionStatus2["Active"] = 0] = "Active";
+      SubscriptionStatus2[SubscriptionStatus2["Ending"] = 1] = "Ending";
+      SubscriptionStatus2[SubscriptionStatus2["Inactive"] = 2] = "Inactive";
+    })(SubscriptionStatus || (exports2.SubscriptionStatus = SubscriptionStatus = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/oauth2.js
+var require_oauth25 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/oauth2.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.OAuth2Scopes = void 0;
+    var OAuth2Scopes2;
+    (function(OAuth2Scopes3) {
+      OAuth2Scopes3["Bot"] = "bot";
+      OAuth2Scopes3["Connections"] = "connections";
+      OAuth2Scopes3["DMChannelsRead"] = "dm_channels.read";
+      OAuth2Scopes3["Email"] = "email";
+      OAuth2Scopes3["Identify"] = "identify";
+      OAuth2Scopes3["Guilds"] = "guilds";
+      OAuth2Scopes3["GuildsJoin"] = "guilds.join";
+      OAuth2Scopes3["GuildsMembersRead"] = "guilds.members.read";
+      OAuth2Scopes3["GroupDMJoins"] = "gdm.join";
+      OAuth2Scopes3["MessagesRead"] = "messages.read";
+      OAuth2Scopes3["RoleConnectionsWrite"] = "role_connections.write";
+      OAuth2Scopes3["RPC"] = "rpc";
+      OAuth2Scopes3["RPCActivitiesWrite"] = "rpc.activities.write";
+      OAuth2Scopes3["RPCVoiceRead"] = "rpc.voice.read";
+      OAuth2Scopes3["RPCVoiceWrite"] = "rpc.voice.write";
+      OAuth2Scopes3["RPCNotificationsRead"] = "rpc.notifications.read";
+      OAuth2Scopes3["WebhookIncoming"] = "webhook.incoming";
+      OAuth2Scopes3["Voice"] = "voice";
+      OAuth2Scopes3["ApplicationsBuildsUpload"] = "applications.builds.upload";
+      OAuth2Scopes3["ApplicationsBuildsRead"] = "applications.builds.read";
+      OAuth2Scopes3["ApplicationsStoreUpdate"] = "applications.store.update";
+      OAuth2Scopes3["ApplicationsEntitlements"] = "applications.entitlements";
+      OAuth2Scopes3["RelationshipsRead"] = "relationships.read";
+      OAuth2Scopes3["ActivitiesRead"] = "activities.read";
+      OAuth2Scopes3["ActivitiesWrite"] = "activities.write";
+      OAuth2Scopes3["ApplicationsCommands"] = "applications.commands";
+      OAuth2Scopes3["ApplicationsCommandsUpdate"] = "applications.commands.update";
+      OAuth2Scopes3["ApplicationCommandsPermissionsUpdate"] = "applications.commands.permissions.update";
+    })(OAuth2Scopes2 || (exports2.OAuth2Scopes = OAuth2Scopes2 = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/permissions.js
+var require_permissions6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/permissions.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RoleFlags = void 0;
+    var RoleFlags;
+    (function(RoleFlags2) {
+      RoleFlags2[RoleFlags2["InPrompt"] = 1] = "InPrompt";
+    })(RoleFlags || (exports2.RoleFlags = RoleFlags = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/poll.js
+var require_poll5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/poll.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.PollLayoutType = void 0;
+    var PollLayoutType;
+    (function(PollLayoutType2) {
+      PollLayoutType2[PollLayoutType2["Default"] = 1] = "Default";
+    })(PollLayoutType || (exports2.PollLayoutType = PollLayoutType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/soundboard.js
+var require_soundboard5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/soundboard.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/stageInstance.js
+var require_stageInstance5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/stageInstance.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.StageInstancePrivacyLevel = void 0;
+    var StageInstancePrivacyLevel;
+    (function(StageInstancePrivacyLevel2) {
+      StageInstancePrivacyLevel2[StageInstancePrivacyLevel2["Public"] = 1] = "Public";
+      StageInstancePrivacyLevel2[StageInstancePrivacyLevel2["GuildOnly"] = 2] = "GuildOnly";
+    })(StageInstancePrivacyLevel || (exports2.StageInstancePrivacyLevel = StageInstancePrivacyLevel = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/sticker.js
+var require_sticker5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/sticker.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.StickerFormatType = exports2.StickerType = void 0;
+    var StickerType;
+    (function(StickerType2) {
+      StickerType2[StickerType2["Standard"] = 1] = "Standard";
+      StickerType2[StickerType2["Guild"] = 2] = "Guild";
+    })(StickerType || (exports2.StickerType = StickerType = {}));
+    var StickerFormatType;
+    (function(StickerFormatType2) {
+      StickerFormatType2[StickerFormatType2["PNG"] = 1] = "PNG";
+      StickerFormatType2[StickerFormatType2["APNG"] = 2] = "APNG";
+      StickerFormatType2[StickerFormatType2["Lottie"] = 3] = "Lottie";
+      StickerFormatType2[StickerFormatType2["GIF"] = 4] = "GIF";
+    })(StickerFormatType || (exports2.StickerFormatType = StickerFormatType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/teams.js
+var require_teams3 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/teams.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.TeamMemberRole = exports2.TeamMemberMembershipState = void 0;
+    var TeamMemberMembershipState;
+    (function(TeamMemberMembershipState2) {
+      TeamMemberMembershipState2[TeamMemberMembershipState2["Invited"] = 1] = "Invited";
+      TeamMemberMembershipState2[TeamMemberMembershipState2["Accepted"] = 2] = "Accepted";
+    })(TeamMemberMembershipState || (exports2.TeamMemberMembershipState = TeamMemberMembershipState = {}));
+    var TeamMemberRole;
+    (function(TeamMemberRole2) {
+      TeamMemberRole2["Admin"] = "admin";
+      TeamMemberRole2["Developer"] = "developer";
+      TeamMemberRole2["ReadOnly"] = "read_only";
+    })(TeamMemberRole || (exports2.TeamMemberRole = TeamMemberRole = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/template.js
+var require_template5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/template.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/user.js
+var require_user8 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ConnectionVisibility = exports2.ConnectionService = exports2.UserPremiumType = exports2.UserFlags = void 0;
+    var UserFlags;
+    (function(UserFlags2) {
+      UserFlags2[UserFlags2["Staff"] = 1] = "Staff";
+      UserFlags2[UserFlags2["Partner"] = 2] = "Partner";
+      UserFlags2[UserFlags2["Hypesquad"] = 4] = "Hypesquad";
+      UserFlags2[UserFlags2["BugHunterLevel1"] = 8] = "BugHunterLevel1";
+      UserFlags2[UserFlags2["MFASMS"] = 16] = "MFASMS";
+      UserFlags2[UserFlags2["PremiumPromoDismissed"] = 32] = "PremiumPromoDismissed";
+      UserFlags2[UserFlags2["HypeSquadOnlineHouse1"] = 64] = "HypeSquadOnlineHouse1";
+      UserFlags2[UserFlags2["HypeSquadOnlineHouse2"] = 128] = "HypeSquadOnlineHouse2";
+      UserFlags2[UserFlags2["HypeSquadOnlineHouse3"] = 256] = "HypeSquadOnlineHouse3";
+      UserFlags2[UserFlags2["PremiumEarlySupporter"] = 512] = "PremiumEarlySupporter";
+      UserFlags2[UserFlags2["TeamPseudoUser"] = 1024] = "TeamPseudoUser";
+      UserFlags2[UserFlags2["HasUnreadUrgentMessages"] = 8192] = "HasUnreadUrgentMessages";
+      UserFlags2[UserFlags2["BugHunterLevel2"] = 16384] = "BugHunterLevel2";
+      UserFlags2[UserFlags2["VerifiedBot"] = 65536] = "VerifiedBot";
+      UserFlags2[UserFlags2["VerifiedDeveloper"] = 131072] = "VerifiedDeveloper";
+      UserFlags2[UserFlags2["CertifiedModerator"] = 262144] = "CertifiedModerator";
+      UserFlags2[UserFlags2["BotHTTPInteractions"] = 524288] = "BotHTTPInteractions";
+      UserFlags2[UserFlags2["Spammer"] = 1048576] = "Spammer";
+      UserFlags2[UserFlags2["DisablePremium"] = 2097152] = "DisablePremium";
+      UserFlags2[UserFlags2["ActiveDeveloper"] = 4194304] = "ActiveDeveloper";
+      UserFlags2[UserFlags2["Quarantined"] = 17592186044416] = "Quarantined";
+      UserFlags2[UserFlags2["Collaborator"] = 1125899906842624] = "Collaborator";
+      UserFlags2[UserFlags2["RestrictedCollaborator"] = 2251799813685248] = "RestrictedCollaborator";
+    })(UserFlags || (exports2.UserFlags = UserFlags = {}));
+    var UserPremiumType;
+    (function(UserPremiumType2) {
+      UserPremiumType2[UserPremiumType2["None"] = 0] = "None";
+      UserPremiumType2[UserPremiumType2["NitroClassic"] = 1] = "NitroClassic";
+      UserPremiumType2[UserPremiumType2["Nitro"] = 2] = "Nitro";
+      UserPremiumType2[UserPremiumType2["NitroBasic"] = 3] = "NitroBasic";
+    })(UserPremiumType || (exports2.UserPremiumType = UserPremiumType = {}));
+    var ConnectionService;
+    (function(ConnectionService2) {
+      ConnectionService2["AmazonMusic"] = "amazon-music";
+      ConnectionService2["BattleNet"] = "battlenet";
+      ConnectionService2["Bluesky"] = "bluesky";
+      ConnectionService2["BungieNet"] = "bungie";
+      ConnectionService2["Crunchyroll"] = "crunchyroll";
+      ConnectionService2["Domain"] = "domain";
+      ConnectionService2["eBay"] = "ebay";
+      ConnectionService2["EpicGames"] = "epicgames";
+      ConnectionService2["Facebook"] = "facebook";
+      ConnectionService2["GitHub"] = "github";
+      ConnectionService2["Instagram"] = "instagram";
+      ConnectionService2["LeagueOfLegends"] = "leagueoflegends";
+      ConnectionService2["Mastodon"] = "mastodon";
+      ConnectionService2["PayPal"] = "paypal";
+      ConnectionService2["PlayStationNetwork"] = "playstation";
+      ConnectionService2["Reddit"] = "reddit";
+      ConnectionService2["RiotGames"] = "riotgames";
+      ConnectionService2["Roblox"] = "roblox";
+      ConnectionService2["Spotify"] = "spotify";
+      ConnectionService2["Skype"] = "skype";
+      ConnectionService2["Steam"] = "steam";
+      ConnectionService2["TikTok"] = "tiktok";
+      ConnectionService2["Twitch"] = "twitch";
+      ConnectionService2["X"] = "twitter";
+      ConnectionService2["Twitter"] = "twitter";
+      ConnectionService2["Xbox"] = "xbox";
+      ConnectionService2["YouTube"] = "youtube";
+    })(ConnectionService || (exports2.ConnectionService = ConnectionService = {}));
+    var ConnectionVisibility;
+    (function(ConnectionVisibility2) {
+      ConnectionVisibility2[ConnectionVisibility2["None"] = 0] = "None";
+      ConnectionVisibility2[ConnectionVisibility2["Everyone"] = 1] = "Everyone";
+    })(ConnectionVisibility || (exports2.ConnectionVisibility = ConnectionVisibility = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/voice.js
+var require_voice5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/voice.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/webhook.js
+var require_webhook5 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/webhook.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.WebhookType = exports2.ApplicationWebhookEventType = exports2.ApplicationWebhookType = void 0;
+    var ApplicationWebhookType;
+    (function(ApplicationWebhookType2) {
+      ApplicationWebhookType2[ApplicationWebhookType2["Ping"] = 0] = "Ping";
+      ApplicationWebhookType2[ApplicationWebhookType2["Event"] = 1] = "Event";
+    })(ApplicationWebhookType || (exports2.ApplicationWebhookType = ApplicationWebhookType = {}));
+    var ApplicationWebhookEventType;
+    (function(ApplicationWebhookEventType2) {
+      ApplicationWebhookEventType2["ApplicationAuthorized"] = "APPLICATION_AUTHORIZED";
+      ApplicationWebhookEventType2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      ApplicationWebhookEventType2["QuestUserEnrollment"] = "QUEST_USER_ENROLLMENT";
+    })(ApplicationWebhookEventType || (exports2.ApplicationWebhookEventType = ApplicationWebhookEventType = {}));
+    var WebhookType;
+    (function(WebhookType2) {
+      WebhookType2[WebhookType2["Incoming"] = 1] = "Incoming";
+      WebhookType2[WebhookType2["ChannelFollower"] = 2] = "ChannelFollower";
+      WebhookType2[WebhookType2["Application"] = 3] = "Application";
+    })(WebhookType || (exports2.WebhookType = WebhookType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/index.js
+var require_v1014 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/index.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    __exportStar2(require_common10(), exports2);
+    __exportStar2(require_application5(), exports2);
+    __exportStar2(require_auditLog5(), exports2);
+    __exportStar2(require_autoModeration5(), exports2);
+    __exportStar2(require_channel7(), exports2);
+    __exportStar2(require_emoji5(), exports2);
+    __exportStar2(require_gateway5(), exports2);
+    __exportStar2(require_guild5(), exports2);
+    __exportStar2(require_guildScheduledEvent5(), exports2);
+    __exportStar2(require_interactions5(), exports2);
+    __exportStar2(require_invite5(), exports2);
+    __exportStar2(require_monetization5(), exports2);
+    __exportStar2(require_oauth25(), exports2);
+    __exportStar2(require_permissions6(), exports2);
+    __exportStar2(require_poll5(), exports2);
+    __exportStar2(require_soundboard5(), exports2);
+    __exportStar2(require_stageInstance5(), exports2);
+    __exportStar2(require_sticker5(), exports2);
+    __exportStar2(require_teams3(), exports2);
+    __exportStar2(require_template5(), exports2);
+    __exportStar2(require_user8(), exports2);
+    __exportStar2(require_voice5(), exports2);
+    __exportStar2(require_webhook5(), exports2);
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/utils/internals.js
+var require_internals6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/utils/internals.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.urlSafeCharacters = void 0;
+    var pattern = /^[\d%A-Za-z-_]+$/g;
+    exports2.urlSafeCharacters = {
+      test(input) {
+        const result = pattern.test(input);
+        pattern.lastIndex = 0;
+        return result;
+      }
+    };
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/common.js
+var require_common11 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.Locale = exports2.RESTJSONErrorCodes = void 0;
+    var RESTJSONErrorCodes;
+    (function(RESTJSONErrorCodes2) {
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GeneralError"] = 0] = "GeneralError";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownAccount"] = 10001] = "UnknownAccount";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownApplication"] = 10002] = "UnknownApplication";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownChannel"] = 10003] = "UnknownChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuild"] = 10004] = "UnknownGuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownIntegration"] = 10005] = "UnknownIntegration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownInvite"] = 10006] = "UnknownInvite";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownMember"] = 10007] = "UnknownMember";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownMessage"] = 10008] = "UnknownMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownPermissionOverwrite"] = 10009] = "UnknownPermissionOverwrite";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownProvider"] = 10010] = "UnknownProvider";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownRole"] = 10011] = "UnknownRole";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownToken"] = 10012] = "UnknownToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownUser"] = 10013] = "UnknownUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownEmoji"] = 10014] = "UnknownEmoji";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownWebhook"] = 10015] = "UnknownWebhook";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownWebhookService"] = 10016] = "UnknownWebhookService";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSession"] = 10020] = "UnknownSession";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownAsset"] = 10021] = "UnknownAsset";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownBan"] = 10026] = "UnknownBan";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSKU"] = 10027] = "UnknownSKU";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStoreListing"] = 10028] = "UnknownStoreListing";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownEntitlement"] = 10029] = "UnknownEntitlement";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownBuild"] = 10030] = "UnknownBuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownLobby"] = 10031] = "UnknownLobby";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownBranch"] = 10032] = "UnknownBranch";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStoreDirectoryLayout"] = 10033] = "UnknownStoreDirectoryLayout";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownRedistributable"] = 10036] = "UnknownRedistributable";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGiftCode"] = 10038] = "UnknownGiftCode";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStream"] = 10049] = "UnknownStream";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownPremiumServerSubscribeCooldown"] = 10050] = "UnknownPremiumServerSubscribeCooldown";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildTemplate"] = 10057] = "UnknownGuildTemplate";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownDiscoverableServerCategory"] = 10059] = "UnknownDiscoverableServerCategory";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSticker"] = 10060] = "UnknownSticker";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStickerPack"] = 10061] = "UnknownStickerPack";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownInteraction"] = 10062] = "UnknownInteraction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownApplicationCommand"] = 10063] = "UnknownApplicationCommand";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownVoiceState"] = 10065] = "UnknownVoiceState";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownApplicationCommandPermissions"] = 10066] = "UnknownApplicationCommandPermissions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownStageInstance"] = 10067] = "UnknownStageInstance";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildMemberVerificationForm"] = 10068] = "UnknownGuildMemberVerificationForm";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildWelcomeScreen"] = 10069] = "UnknownGuildWelcomeScreen";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildScheduledEvent"] = 10070] = "UnknownGuildScheduledEvent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownGuildScheduledEventUser"] = 10071] = "UnknownGuildScheduledEventUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownTag"] = 10087] = "UnknownTag";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnknownSound"] = 10097] = "UnknownSound";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["BotsCannotUseThisEndpoint"] = 20001] = "BotsCannotUseThisEndpoint";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyBotsCanUseThisEndpoint"] = 20002] = "OnlyBotsCanUseThisEndpoint";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ExplicitContentCannotBeSentToTheDesiredRecipient"] = 20009] = "ExplicitContentCannotBeSentToTheDesiredRecipient";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["NotAuthorizedToPerformThisActionOnThisApplication"] = 20012] = "NotAuthorizedToPerformThisActionOnThisApplication";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ActionCannotBePerformedDueToSlowmodeRateLimit"] = 20016] = "ActionCannotBePerformedDueToSlowmodeRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheMazeIsntMeantForYou"] = 20017] = "TheMazeIsntMeantForYou";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyTheOwnerOfThisAccountCanPerformThisAction"] = 20018] = "OnlyTheOwnerOfThisAccountCanPerformThisAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["AnnouncementEditLimitExceeded"] = 20022] = "AnnouncementEditLimitExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnderMinimumAge"] = 20024] = "UnderMinimumAge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ChannelSendRateLimit"] = 20028] = "ChannelSendRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerSendRateLimit"] = 20029] = "ServerSendRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StageTopicServerNameServerDescriptionOrChannelNamesContainDisallowedWords"] = 20031] = "StageTopicServerNameServerDescriptionOrChannelNamesContainDisallowedWords";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildPremiumSubscriptionLevelTooLow"] = 20035] = "GuildPremiumSubscriptionLevelTooLow";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildsReached"] = 30001] = "MaximumNumberOfGuildsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfFriendsReached"] = 30002] = "MaximumNumberOfFriendsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPinsReachedForTheChannel"] = 30003] = "MaximumNumberOfPinsReachedForTheChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfRecipientsReached"] = 30004] = "MaximumNumberOfRecipientsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildRolesReached"] = 30005] = "MaximumNumberOfGuildRolesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfWebhooksReached"] = 30007] = "MaximumNumberOfWebhooksReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfEmojisReached"] = 30008] = "MaximumNumberOfEmojisReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfReactionsReached"] = 30010] = "MaximumNumberOfReactionsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGroupDMsReached"] = 30011] = "MaximumNumberOfGroupDMsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildChannelsReached"] = 30013] = "MaximumNumberOfGuildChannelsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfAttachmentsInAMessageReached"] = 30015] = "MaximumNumberOfAttachmentsInAMessageReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfInvitesReached"] = 30016] = "MaximumNumberOfInvitesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfAnimatedEmojisReached"] = 30018] = "MaximumNumberOfAnimatedEmojisReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfServerMembersReached"] = 30019] = "MaximumNumberOfServerMembersReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfServerCategoriesReached"] = 30030] = "MaximumNumberOfServerCategoriesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildAlreadyHasTemplate"] = 30031] = "GuildAlreadyHasTemplate";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfApplicationCommandsReached"] = 30032] = "MaximumNumberOfApplicationCommandsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumThreadParticipantsReached"] = 30033] = "MaximumThreadParticipantsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumDailyApplicationCommandCreatesReached"] = 30034] = "MaximumDailyApplicationCommandCreatesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfNonGuildMemberBansHasBeenExceeded"] = 30035] = "MaximumNumberOfNonGuildMemberBansHasBeenExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfBanFetchesHasBeenReached"] = 30037] = "MaximumNumberOfBanFetchesHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfUncompletedGuildScheduledEventsReached"] = 30038] = "MaximumNumberOfUncompletedGuildScheduledEventsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfStickersReached"] = 30039] = "MaximumNumberOfStickersReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPruneRequestsHasBeenReached"] = 30040] = "MaximumNumberOfPruneRequestsHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfGuildWidgetSettingsUpdatesHasBeenReached"] = 30042] = "MaximumNumberOfGuildWidgetSettingsUpdatesHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfSoundboardSoundsReached"] = 30045] = "MaximumNumberOfSoundboardSoundsReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfEditsToMessagesOlderThanOneHourReached"] = 30046] = "MaximumNumberOfEditsToMessagesOlderThanOneHourReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPinnedThreadsInForumHasBeenReached"] = 30047] = "MaximumNumberOfPinnedThreadsInForumHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfTagsInForumHasBeenReached"] = 30048] = "MaximumNumberOfTagsInForumHasBeenReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["BitrateIsTooHighForChannelOfThisType"] = 30052] = "BitrateIsTooHighForChannelOfThisType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfPremiumEmojisReached"] = 30056] = "MaximumNumberOfPremiumEmojisReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfWebhooksPerGuildReached"] = 30058] = "MaximumNumberOfWebhooksPerGuildReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumNumberOfChannelPermissionOverwritesReached"] = 30060] = "MaximumNumberOfChannelPermissionOverwritesReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheChannelsForThisGuildAreTooLarge"] = 30061] = "TheChannelsForThisGuildAreTooLarge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["Unauthorized"] = 40001] = "Unauthorized";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VerifyYourAccount"] = 40002] = "VerifyYourAccount";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OpeningDirectMessagesTooFast"] = 40003] = "OpeningDirectMessagesTooFast";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["SendMessagesHasBeenTemporarilyDisabled"] = 40004] = "SendMessagesHasBeenTemporarilyDisabled";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["RequestEntityTooLarge"] = 40005] = "RequestEntityTooLarge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FeatureTemporarilyDisabledServerSide"] = 40006] = "FeatureTemporarilyDisabledServerSide";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UserBannedFromThisGuild"] = 40007] = "UserBannedFromThisGuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ConnectionHasBeenRevoked"] = 40012] = "ConnectionHasBeenRevoked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyConsumableSKUsCanBeConsumed"] = 40018] = "OnlyConsumableSKUsCanBeConsumed";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouCanOnlyDeleteSandboxEntitlements"] = 40019] = "YouCanOnlyDeleteSandboxEntitlements";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TargetUserIsNotConnectedToVoice"] = 40032] = "TargetUserIsNotConnectedToVoice";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThisMessageWasAlreadyCrossposted"] = 40033] = "ThisMessageWasAlreadyCrossposted";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationCommandWithThatNameAlreadyExists"] = 40041] = "ApplicationCommandWithThatNameAlreadyExists";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationInteractionFailedToSend"] = 40043] = "ApplicationInteractionFailedToSend";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendAMessageInAForumChannel"] = 40058] = "CannotSendAMessageInAForumChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InteractionHasAlreadyBeenAcknowledged"] = 40060] = "InteractionHasAlreadyBeenAcknowledged";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TagNamesMustBeUnique"] = 40061] = "TagNamesMustBeUnique";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServiceResourceIsBeingRateLimited"] = 40062] = "ServiceResourceIsBeingRateLimited";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThereAreNoTagsAvailableThatCanBeSetByNonModerators"] = 40066] = "ThereAreNoTagsAvailableThatCanBeSetByNonModerators";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TagRequiredToCreateAForumPostInThisChannel"] = 40067] = "TagRequiredToCreateAForumPostInThisChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["AnEntitlementHasAlreadyBeenGrantedForThisResource"] = 40074] = "AnEntitlementHasAlreadyBeenGrantedForThisResource";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThisInteractionHasHitTheMaximumNumberOfFollowUpMessages"] = 40094] = "ThisInteractionHasHitTheMaximumNumberOfFollowUpMessages";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CloudflareIsBlockingYourRequest"] = 40333] = "CloudflareIsBlockingYourRequest";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MissingAccess"] = 50001] = "MissingAccess";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidAccountType"] = 50002] = "InvalidAccountType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExecuteActionOnDMChannel"] = 50003] = "CannotExecuteActionOnDMChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildWidgetDisabled"] = 50004] = "GuildWidgetDisabled";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditMessageAuthoredByAnotherUser"] = 50005] = "CannotEditMessageAuthoredByAnotherUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendAnEmptyMessage"] = 50006] = "CannotSendAnEmptyMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendMessagesToThisUser"] = 50007] = "CannotSendMessagesToThisUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendMessagesInNonTextChannel"] = 50008] = "CannotSendMessagesInNonTextChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ChannelVerificationLevelTooHighForYouToGainAccess"] = 50009] = "ChannelVerificationLevelTooHighForYouToGainAccess";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OAuth2ApplicationDoesNotHaveBot"] = 50010] = "OAuth2ApplicationDoesNotHaveBot";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OAuth2ApplicationLimitReached"] = 50011] = "OAuth2ApplicationLimitReached";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidOAuth2State"] = 50012] = "InvalidOAuth2State";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MissingPermissions"] = 50013] = "MissingPermissions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidToken"] = 50014] = "InvalidToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["NoteWasTooLong"] = 50015] = "NoteWasTooLong";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedTooFewOrTooManyMessagesToDelete"] = 50016] = "ProvidedTooFewOrTooManyMessagesToDelete";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidMFALevel"] = 50017] = "InvalidMFALevel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageCanOnlyBePinnedInTheChannelItWasSentIn"] = 50019] = "MessageCanOnlyBePinnedInTheChannelItWasSentIn";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InviteCodeInvalidOrTaken"] = 50020] = "InviteCodeInvalidOrTaken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExecuteActionOnSystemMessage"] = 50021] = "CannotExecuteActionOnSystemMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExecuteActionOnThisChannelType"] = 50024] = "CannotExecuteActionOnThisChannelType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidOAuth2AccessToken"] = 50025] = "InvalidOAuth2AccessToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MissingRequiredOAuth2Scope"] = 50026] = "MissingRequiredOAuth2Scope";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidWebhookToken"] = 50027] = "InvalidWebhookToken";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidRole"] = 50028] = "InvalidRole";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidRecipients"] = 50033] = "InvalidRecipients";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OneOfTheMessagesProvidedWasTooOldForBulkDelete"] = 50034] = "OneOfTheMessagesProvidedWasTooOldForBulkDelete";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidFormBodyOrContentType"] = 50035] = "InvalidFormBodyOrContentType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InviteAcceptedToGuildWithoutTheBotBeingIn"] = 50036] = "InviteAcceptedToGuildWithoutTheBotBeingIn";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidActivityAction"] = 50039] = "InvalidActivityAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidAPIVersion"] = 50041] = "InvalidAPIVersion";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FileUploadedExceedsMaximumSize"] = 50045] = "FileUploadedExceedsMaximumSize";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidFileUploaded"] = 50046] = "InvalidFileUploaded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSelfRedeemThisGift"] = 50054] = "CannotSelfRedeemThisGift";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidGuild"] = 50055] = "InvalidGuild";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidSKU"] = 50057] = "InvalidSKU";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidRequestOrigin"] = 50067] = "InvalidRequestOrigin";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidMessageType"] = 50068] = "InvalidMessageType";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["PaymentSourceRequiredToRedeemGift"] = 50070] = "PaymentSourceRequiredToRedeemGift";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotModifyASystemWebhook"] = 50073] = "CannotModifyASystemWebhook";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotDeleteChannelRequiredForCommunityGuilds"] = 50074] = "CannotDeleteChannelRequiredForCommunityGuilds";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditStickersWithinMessage"] = 50080] = "CannotEditStickersWithinMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidStickerSent"] = 50081] = "InvalidStickerSent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidActionOnArchivedThread"] = 50083] = "InvalidActionOnArchivedThread";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidThreadNotificationSettings"] = 50084] = "InvalidThreadNotificationSettings";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ParameterEarlierThanCreation"] = 50085] = "ParameterEarlierThanCreation";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CommunityServerChannelsMustBeTextChannels"] = 50086] = "CommunityServerChannelsMustBeTextChannels";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheEntityTypeOfTheEventIsDifferentFromTheEntityYouAreTryingToStartTheEventFor"] = 50091] = "TheEntityTypeOfTheEventIsDifferentFromTheEntityYouAreTryingToStartTheEventFor";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerNotAvailableInYourLocation"] = 50095] = "ServerNotAvailableInYourLocation";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerNeedsMonetizationEnabledToPerformThisAction"] = 50097] = "ServerNeedsMonetizationEnabledToPerformThisAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerNeedsMoreBoostsToPerformThisAction"] = 50101] = "ServerNeedsMoreBoostsToPerformThisAction";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["RequestBodyContainsInvalidJSON"] = 50109] = "RequestBodyContainsInvalidJSON";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileIsInvalid"] = 50110] = "ProvidedFileIsInvalid";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileTypeIsInvalid"] = 50123] = "ProvidedFileTypeIsInvalid";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileDurationExceedsMaximumLength"] = 50124] = "ProvidedFileDurationExceedsMaximumLength";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OwnerCannotBePendingMember"] = 50131] = "OwnerCannotBePendingMember";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["OwnershipCannotBeMovedToABotUser"] = 50132] = "OwnershipCannotBeMovedToABotUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToResizeAssetBelowTheMinimumSize"] = 50138] = "FailedToResizeAssetBelowTheMinimumSize";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotMixSubscriptionAndNonSubscriptionRolesForAnEmoji"] = 50144] = "CannotMixSubscriptionAndNonSubscriptionRolesForAnEmoji";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotConvertBetweenPremiumEmojiAndNormalEmoji"] = 50145] = "CannotConvertBetweenPremiumEmojiAndNormalEmoji";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UploadedFileNotFound"] = 50146] = "UploadedFileNotFound";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["SpecifiedEmojiIsInvalid"] = 50151] = "SpecifiedEmojiIsInvalid";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesDoNotSupportAdditionalContent"] = 50159] = "VoiceMessagesDoNotSupportAdditionalContent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesMustHaveASingleAudioAttachment"] = 50160] = "VoiceMessagesMustHaveASingleAudioAttachment";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesMustHaveSupportingMetadata"] = 50161] = "VoiceMessagesMustHaveSupportingMetadata";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["VoiceMessagesCannotBeEdited"] = 50162] = "VoiceMessagesCannotBeEdited";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotDeleteGuildSubscriptionIntegration"] = 50163] = "CannotDeleteGuildSubscriptionIntegration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouCannotSendVoiceMessagesInThisChannel"] = 50173] = "YouCannotSendVoiceMessagesInThisChannel";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheUserAccountMustFirstBeVerified"] = 50178] = "TheUserAccountMustFirstBeVerified";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileDoesNotHaveAValidDuration"] = 50192] = "ProvidedFileDoesNotHaveAValidDuration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouDoNotHavePermissionToSendThisSticker"] = 50600] = "YouDoNotHavePermissionToSendThisSticker";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TwoFactorAuthenticationIsRequired"] = 60003] = "TwoFactorAuthenticationIsRequired";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["NoUsersWithDiscordTagExist"] = 80004] = "NoUsersWithDiscordTagExist";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ReactionWasBlocked"] = 90001] = "ReactionWasBlocked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UserCannotUseBurstReactions"] = 90002] = "UserCannotUseBurstReactions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationNotYetAvailable"] = 110001] = "ApplicationNotYetAvailable";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["APIResourceOverloaded"] = 13e4] = "APIResourceOverloaded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheStageIsAlreadyOpen"] = 150006] = "TheStageIsAlreadyOpen";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotReplyWithoutPermissionToReadMessageHistory"] = 160002] = "CannotReplyWithoutPermissionToReadMessageHistory";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThreadAlreadyCreatedForMessage"] = 160004] = "ThreadAlreadyCreatedForMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThreadLocked"] = 160005] = "ThreadLocked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumActiveThreads"] = 160006] = "MaximumActiveThreads";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumActiveAnnouncementThreads"] = 160007] = "MaximumActiveAnnouncementThreads";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidJSONForUploadedLottieFile"] = 170001] = "InvalidJSONForUploadedLottieFile";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["UploadedLottiesCannotContainRasterizedImages"] = 170002] = "UploadedLottiesCannotContainRasterizedImages";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerMaximumFramerateExceeded"] = 170003] = "StickerMaximumFramerateExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerFrameCountExceedsMaximumOf1000Frames"] = 170004] = "StickerFrameCountExceedsMaximumOf1000Frames";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["LottieAnimationMaximumDimensionsExceeded"] = 170005] = "LottieAnimationMaximumDimensionsExceeded";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerFramerateIsTooSmallOrTooLarge"] = 170006] = "StickerFramerateIsTooSmallOrTooLarge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerAnimationDurationExceedsMaximumOf5Seconds"] = 170007] = "StickerAnimationDurationExceedsMaximumOf5Seconds";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUpdateAFinishedEvent"] = 18e4] = "CannotUpdateAFinishedEvent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToCreateStageNeededForStageEvent"] = 180002] = "FailedToCreateStageNeededForStageEvent";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageWasBlockedByAutomaticModeration"] = 2e5] = "MessageWasBlockedByAutomaticModeration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["TitleWasBlockedByAutomaticModeration"] = 200001] = "TitleWasBlockedByAutomaticModeration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhooksPostedToForumChannelsMustHaveAThreadNameOrThreadId"] = 220001] = "WebhooksPostedToForumChannelsMustHaveAThreadNameOrThreadId";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhooksPostedToForumChannelsCannotHaveBothAThreadNameAndThreadId"] = 220002] = "WebhooksPostedToForumChannelsCannotHaveBothAThreadNameAndThreadId";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhooksCanOnlyCreateThreadsInForumChannels"] = 220003] = "WebhooksCanOnlyCreateThreadsInForumChannels";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["WebhookServicesCannotBeUsedInForumChannels"] = 220004] = "WebhookServicesCannotBeUsedInForumChannels";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageBlockedByHarmfulLinksFilter"] = 24e4] = "MessageBlockedByHarmfulLinksFilter";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEnableOnboardingRequirementsAreNotMet"] = 35e4] = "CannotEnableOnboardingRequirementsAreNotMet";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUpdateOnboardingWhileBelowRequirements"] = 350001] = "CannotUpdateOnboardingWhileBelowRequirements";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToBanUsers"] = 5e5] = "FailedToBanUsers";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["PollVotingBlocked"] = 52e4] = "PollVotingBlocked";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["PollExpired"] = 520001] = "PollExpired";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidChannelTypeForPollCreation"] = 520002] = "InvalidChannelTypeForPollCreation";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditAPollMessage"] = 520003] = "CannotEditAPollMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUseAnEmojiIncludedWithThePoll"] = 520004] = "CannotUseAnEmojiIncludedWithThePoll";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExpireANonPollMessage"] = 520006] = "CannotExpireANonPollMessage";
+    })(RESTJSONErrorCodes || (exports2.RESTJSONErrorCodes = RESTJSONErrorCodes = {}));
+    var Locale;
+    (function(Locale2) {
+      Locale2["Indonesian"] = "id";
+      Locale2["EnglishUS"] = "en-US";
+      Locale2["EnglishGB"] = "en-GB";
+      Locale2["Bulgarian"] = "bg";
+      Locale2["ChineseCN"] = "zh-CN";
+      Locale2["ChineseTW"] = "zh-TW";
+      Locale2["Croatian"] = "hr";
+      Locale2["Czech"] = "cs";
+      Locale2["Danish"] = "da";
+      Locale2["Dutch"] = "nl";
+      Locale2["Finnish"] = "fi";
+      Locale2["French"] = "fr";
+      Locale2["German"] = "de";
+      Locale2["Greek"] = "el";
+      Locale2["Hindi"] = "hi";
+      Locale2["Hungarian"] = "hu";
+      Locale2["Italian"] = "it";
+      Locale2["Japanese"] = "ja";
+      Locale2["Korean"] = "ko";
+      Locale2["Lithuanian"] = "lt";
+      Locale2["Norwegian"] = "no";
+      Locale2["Polish"] = "pl";
+      Locale2["PortugueseBR"] = "pt-BR";
+      Locale2["Romanian"] = "ro";
+      Locale2["Russian"] = "ru";
+      Locale2["SpanishES"] = "es-ES";
+      Locale2["SpanishLATAM"] = "es-419";
+      Locale2["Swedish"] = "sv-SE";
+      Locale2["Thai"] = "th";
+      Locale2["Turkish"] = "tr";
+      Locale2["Ukrainian"] = "uk";
+      Locale2["Vietnamese"] = "vi";
+    })(Locale || (exports2.Locale = Locale = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/application.js
+var require_application6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/application.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/auditLog.js
+var require_auditLog6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/auditLog.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/autoModeration.js
+var require_autoModeration6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/autoModeration.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/channel.js
+var require_channel9 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/channel.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ReactionType = void 0;
+    var ReactionType;
+    (function(ReactionType2) {
+      ReactionType2[ReactionType2["Normal"] = 0] = "Normal";
+      ReactionType2[ReactionType2["Super"] = 1] = "Super";
+    })(ReactionType || (exports2.ReactionType = ReactionType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/emoji.js
+var require_emoji6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/emoji.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/gateway.js
+var require_gateway6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/gateway.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guild.js
+var require_guild6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guild.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guildScheduledEvent.js
+var require_guildScheduledEvent6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guildScheduledEvent.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/interactions.js
+var require_interactions6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/interactions.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/invite.js
+var require_invite6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/invite.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/monetization.js
+var require_monetization6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/monetization.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.EntitlementOwnerType = void 0;
+    var EntitlementOwnerType;
+    (function(EntitlementOwnerType2) {
+      EntitlementOwnerType2[EntitlementOwnerType2["Guild"] = 1] = "Guild";
+      EntitlementOwnerType2[EntitlementOwnerType2["User"] = 2] = "User";
+    })(EntitlementOwnerType || (exports2.EntitlementOwnerType = EntitlementOwnerType = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/oauth2.js
+var require_oauth26 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/oauth2.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/poll.js
+var require_poll6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/poll.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/soundboard.js
+var require_soundboard6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/soundboard.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/stageInstance.js
+var require_stageInstance6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/stageInstance.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/sticker.js
+var require_sticker6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/sticker.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/template.js
+var require_template6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/template.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/user.js
+var require_user9 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/user.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/voice.js
+var require_voice6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/voice.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/webhook.js
+var require_webhook6 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/webhook.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/index.js
+var require_v1015 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/index.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.OAuth2Routes = exports2.RouteBases = exports2.CDNRoutes = exports2.ImageFormat = exports2.StickerPackApplicationId = exports2.Routes = exports2.APIVersion = void 0;
+    var internals_1 = require_internals6();
+    __exportStar2(require_common11(), exports2);
+    __exportStar2(require_application6(), exports2);
+    __exportStar2(require_auditLog6(), exports2);
+    __exportStar2(require_autoModeration6(), exports2);
+    __exportStar2(require_channel9(), exports2);
+    __exportStar2(require_emoji6(), exports2);
+    __exportStar2(require_gateway6(), exports2);
+    __exportStar2(require_guild6(), exports2);
+    __exportStar2(require_guildScheduledEvent6(), exports2);
+    __exportStar2(require_interactions6(), exports2);
+    __exportStar2(require_invite6(), exports2);
+    __exportStar2(require_monetization6(), exports2);
+    __exportStar2(require_oauth26(), exports2);
+    __exportStar2(require_poll6(), exports2);
+    __exportStar2(require_soundboard6(), exports2);
+    __exportStar2(require_stageInstance6(), exports2);
+    __exportStar2(require_sticker6(), exports2);
+    __exportStar2(require_template6(), exports2);
+    __exportStar2(require_user9(), exports2);
+    __exportStar2(require_voice6(), exports2);
+    __exportStar2(require_webhook6(), exports2);
+    exports2.APIVersion = "10";
+    exports2.Routes = {
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/role-connections/metadata`
+       * - PUT `/applications/{application.id}/role-connections/metadata`
+       */
+      applicationRoleConnectionMetadata(applicationId) {
+        return `/applications/${applicationId}/role-connections/metadata`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/auto-moderation/rules`
+       * - POST `/guilds/{guild.id}/auto-moderation/rules`
+       */
+      guildAutoModerationRules(guildId) {
+        return `/guilds/${guildId}/auto-moderation/rules`;
+      },
+      /**
+       * Routes for:
+       * - GET    `/guilds/{guild.id}/auto-moderation/rules/{rule.id}`
+       * - PATCH  `/guilds/{guild.id}/auto-moderation/rules/{rule.id}`
+       * - DELETE `/guilds/{guild.id}/auto-moderation/rules/{rule.id}`
+       */
+      guildAutoModerationRule(guildId, ruleId) {
+        return `/guilds/${guildId}/auto-moderation/rules/${ruleId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/audit-logs`
+       */
+      guildAuditLog(guildId) {
+        return `/guilds/${guildId}/audit-logs`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{channel.id}`
+       * - PATCH  `/channels/{channel.id}`
+       * - DELETE `/channels/{channel.id}`
+       */
+      channel(channelId) {
+        return `/channels/${channelId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/channels/{channel.id}/messages`
+       * - POST `/channels/{channel.id}/messages`
+       */
+      channelMessages(channelId) {
+        return `/channels/${channelId}/messages`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{channel.id}/messages/{message.id}`
+       * - PATCH  `/channels/{channel.id}/messages/{message.id}`
+       * - DELETE `/channels/{channel.id}/messages/{message.id}`
+       */
+      channelMessage(channelId, messageId) {
+        return `/channels/${channelId}/messages/${messageId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/messages/{message.id}/crosspost`
+       */
+      channelMessageCrosspost(channelId, messageId) {
+        return `/channels/${channelId}/messages/${messageId}/crosspost`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me`
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me`
+       *
+       * **Note**: You need to URL encode the emoji yourself
+       */
+      channelMessageOwnReaction(channelId, messageId, emoji) {
+        return `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user.id}`
+       *
+       * **Note**: You need to URL encode the emoji yourself
+       */
+      channelMessageUserReaction(channelId, messageId, emoji, userId) {
+        return `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}`
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions/{emoji}`
+       *
+       * **Note**: You need to URL encode the emoji yourself
+       */
+      channelMessageReaction(channelId, messageId, emoji) {
+        return `/channels/${channelId}/messages/${messageId}/reactions/${emoji}`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/channels/{channel.id}/messages/{message.id}/reactions`
+       */
+      channelMessageAllReactions(channelId, messageId) {
+        return `/channels/${channelId}/messages/${messageId}/reactions`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/messages/bulk-delete`
+       */
+      channelBulkDelete(channelId) {
+        return `/channels/${channelId}/messages/bulk-delete`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/permissions/{overwrite.id}`
+       * - DELETE `/channels/{channel.id}/permissions/{overwrite.id}`
+       */
+      channelPermission(channelId, overwriteId) {
+        return `/channels/${channelId}/permissions/${overwriteId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/channels/{channel.id}/invites`
+       * - POST `/channels/{channel.id}/invites`
+       */
+      channelInvites(channelId) {
+        return `/channels/${channelId}/invites`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/followers`
+       */
+      channelFollowers(channelId) {
+        return `/channels/${channelId}/followers`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/typing`
+       */
+      channelTyping(channelId) {
+        return `/channels/${channelId}/typing`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/pins`
+       */
+      channelPins(channelId) {
+        return `/channels/${channelId}/pins`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/pins/{message.id}`
+       * - DELETE `/channels/{channel.id}/pins/{message.id}`
+       */
+      channelPin(channelId, messageId) {
+        return `/channels/${channelId}/pins/${messageId}`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/recipients/{user.id}`
+       * - DELETE `/channels/{channel.id}/recipients/{user.id}`
+       */
+      channelRecipient(channelId, userId) {
+        return `/channels/${channelId}/recipients/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/emojis`
+       * - POST `/guilds/{guild.id}/emojis`
+       */
+      guildEmojis(guildId) {
+        return `/guilds/${guildId}/emojis`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/emojis/{emoji.id}`
+       * - PATCH  `/guilds/{guild.id}/emojis/{emoji.id}`
+       * - DELETE `/guilds/{guild.id}/emojis/{emoji.id}`
+       */
+      guildEmoji(guildId, emojiId) {
+        return `/guilds/${guildId}/emojis/${emojiId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/guilds`
+       */
+      guilds() {
+        return "/guilds";
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}`
+       * - PATCH  `/guilds/{guild.id}`
+       * - DELETE `/guilds/{guild.id}`
+       */
+      guild(guildId) {
+        return `/guilds/${guildId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/preview`
+       */
+      guildPreview(guildId) {
+        return `/guilds/${guildId}/preview`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/channels`
+       * - POST  `/guilds/{guild.id}/channels`
+       * - PATCH `/guilds/{guild.id}/channels`
+       */
+      guildChannels(guildId) {
+        return `/guilds/${guildId}/channels`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/members/{user.id}`
+       * - PUT    `/guilds/{guild.id}/members/{user.id}`
+       * - PATCH  `/guilds/{guild.id}/members/@me`
+       * - PATCH  `/guilds/{guild.id}/members/{user.id}`
+       * - DELETE `/guilds/{guild.id}/members/{user.id}`
+       */
+      guildMember(guildId, userId = "@me") {
+        return `/guilds/${guildId}/members/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/members`
+       */
+      guildMembers(guildId) {
+        return `/guilds/${guildId}/members`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/members/search`
+       */
+      guildMembersSearch(guildId) {
+        return `/guilds/${guildId}/members/search`;
+      },
+      /**
+       * Route for:
+       * - PATCH `/guilds/{guild.id}/members/@me/nick`
+       *
+       * @deprecated Use {@link Routes.guildMember} instead.
+       */
+      guildCurrentMemberNickname(guildId) {
+        return `/guilds/${guildId}/members/@me/nick`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/guilds/{guild.id}/members/{user.id}/roles/{role.id}`
+       * - DELETE `/guilds/{guild.id}/members/{user.id}/roles/{role.id}`
+       */
+      guildMemberRole(guildId, memberId, roleId) {
+        return `/guilds/${guildId}/members/${memberId}/roles/${roleId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/guilds/{guild.id}/mfa`
+       */
+      guildMFA(guildId) {
+        return `/guilds/${guildId}/mfa`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/bans`
+       */
+      guildBans(guildId) {
+        return `/guilds/${guildId}/bans`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/bans/{user.id}`
+       * - PUT    `/guilds/{guild.id}/bans/{user.id}`
+       * - DELETE `/guilds/{guild.id}/bans/{user.id}`
+       */
+      guildBan(guildId, userId) {
+        return `/guilds/${guildId}/bans/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/roles`
+       * - POST  `/guilds/{guild.id}/roles`
+       * - PATCH `/guilds/{guild.id}/roles`
+       */
+      guildRoles(guildId) {
+        return `/guilds/${guildId}/roles`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/roles/{role.id}`
+       * - PATCH  `/guilds/{guild.id}/roles/{role.id}`
+       * - DELETE `/guilds/{guild.id}/roles/{role.id}`
+       */
+      guildRole(guildId, roleId) {
+        return `/guilds/${guildId}/roles/${roleId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/prune`
+       * - POST `/guilds/{guild.id}/prune`
+       */
+      guildPrune(guildId) {
+        return `/guilds/${guildId}/prune`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/regions`
+       */
+      guildVoiceRegions(guildId) {
+        return `/guilds/${guildId}/regions`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/invites`
+       */
+      guildInvites(guildId) {
+        return `/guilds/${guildId}/invites`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/integrations`
+       */
+      guildIntegrations(guildId) {
+        return `/guilds/${guildId}/integrations`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/guilds/{guild.id}/integrations/{integration.id}`
+       */
+      guildIntegration(guildId, integrationId) {
+        return `/guilds/${guildId}/integrations/${integrationId}`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/widget`
+       * - PATCH `/guilds/{guild.id}/widget`
+       */
+      guildWidgetSettings(guildId) {
+        return `/guilds/${guildId}/widget`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/widget.json`
+       */
+      guildWidgetJSON(guildId) {
+        return `/guilds/${guildId}/widget.json`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/vanity-url`
+       */
+      guildVanityUrl(guildId) {
+        return `/guilds/${guildId}/vanity-url`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/widget.png`
+       */
+      guildWidgetImage(guildId) {
+        return `/guilds/${guildId}/widget.png`;
+      },
+      /**
+       * Route for:
+       * - GET    `/invites/{invite.code}`
+       * - DELETE `/invites/{invite.code}`
+       */
+      invite(code) {
+        return `/invites/${code}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/templates/{template.code}`
+       * - POST `/guilds/templates/{template.code}`
+       */
+      template(code) {
+        return `/guilds/templates/${code}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/templates`
+       * - POST `/guilds/{guild.id}/templates`
+       */
+      guildTemplates(guildId) {
+        return `/guilds/${guildId}/templates`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/guilds/{guild.id}/templates/{template.code}`
+       * - PATCH  `/guilds/{guild.id}/templates/{template.code}`
+       * - DELETE `/guilds/{guild.id}/templates/{template.code}`
+       */
+      guildTemplate(guildId, code) {
+        return `/guilds/${guildId}/templates/${code}`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/polls/{message.id}/answers/{answer_id}`
+       */
+      pollAnswerVoters(channelId, messageId, answerId) {
+        return `/channels/${channelId}/polls/${messageId}/answers/${answerId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/polls/{message.id}/expire`
+       */
+      expirePoll(channelId, messageId) {
+        return `/channels/${channelId}/polls/${messageId}/expire`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/threads`
+       * - POST `/channels/{channel.id}/messages/{message.id}/threads`
+       */
+      threads(parentId, messageId) {
+        const parts = ["", "channels", parentId];
+        if (messageId)
+          parts.push("messages", messageId);
+        parts.push("threads");
+        return parts.join("/");
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/threads/active`
+       */
+      guildActiveThreads(guildId) {
+        return `/guilds/${guildId}/threads/active`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/threads/archived/public`
+       * - GET `/channels/{channel.id}/threads/archived/private`
+       */
+      channelThreads(channelId, archivedStatus) {
+        return `/channels/${channelId}/threads/archived/${archivedStatus}`;
+      },
+      /**
+       * Route for:
+       * - GET `/channels/{channel.id}/users/@me/threads/archived/private`
+       */
+      channelJoinedArchivedThreads(channelId) {
+        return `/channels/${channelId}/users/@me/threads/archived/private`;
+      },
+      /**
+       * Route for:
+       * - GET    `/channels/{thread.id}/thread-members`
+       * - GET    `/channels/{thread.id}/thread-members/{user.id}`
+       * - PUT    `/channels/{thread.id}/thread-members/@me`
+       * - PUT    `/channels/{thread.id}/thread-members/{user.id}`
+       * - DELETE `/channels/{thread.id}/thread-members/@me`
+       * - DELETE `/channels/{thread.id}/thread-members/{user.id}`
+       */
+      threadMembers(threadId, userId) {
+        const parts = ["", "channels", threadId, "thread-members"];
+        if (userId)
+          parts.push(userId);
+        return parts.join("/");
+      },
+      /**
+       * Route for:
+       * - GET   `/users/@me`
+       * - GET   `/users/{user.id}`
+       * - PATCH `/users/@me`
+       *
+       * @param [userId] - The user ID, defaulted to `@me`
+       */
+      user(userId = "@me") {
+        return `/users/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/applications/{application.id}/role-connection`
+       * - PUT `/users/@me/applications/{application.id}/role-connection`
+       */
+      userApplicationRoleConnection(applicationId) {
+        return `/users/@me/applications/${applicationId}/role-connection`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/guilds`
+       */
+      userGuilds() {
+        return `/users/@me/guilds`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/guilds/{guild.id}/member`
+       */
+      userGuildMember(guildId) {
+        return `/users/@me/guilds/${guildId}/member`;
+      },
+      /**
+       * Route for:
+       * - DELETE `/users/@me/guilds/{guild.id}`
+       */
+      userGuild(guildId) {
+        return `/users/@me/guilds/${guildId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/users/@me/channels`
+       */
+      userChannels() {
+        return `/users/@me/channels`;
+      },
+      /**
+       * Route for:
+       * - GET `/users/@me/connections`
+       */
+      userConnections() {
+        return `/users/@me/connections`;
+      },
+      /**
+       * Route for:
+       * - GET `/voice/regions`
+       */
+      voiceRegions() {
+        return `/voice/regions`;
+      },
+      /**
+       * Route for:
+       * - GET  `/channels/{channel.id}/webhooks`
+       * - POST `/channels/{channel.id}/webhooks`
+       */
+      channelWebhooks(channelId) {
+        return `/channels/${channelId}/webhooks`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/webhooks`
+       */
+      guildWebhooks(guildId) {
+        return `/guilds/${guildId}/webhooks`;
+      },
+      /**
+       * Route for:
+       * - GET    `/webhooks/{webhook.id}`
+       * - GET    `/webhooks/{webhook.id}/{webhook.token}`
+       * - PATCH  `/webhooks/{webhook.id}`
+       * - PATCH  `/webhooks/{webhook.id}/{webhook.token}`
+       * - DELETE `/webhooks/{webhook.id}`
+       * - DELETE `/webhooks/{webhook.id}/{webhook.token}`
+       * - POST   `/webhooks/{webhook.id}/{webhook.token}`
+       *
+       * - POST   `/webhooks/{application.id}/{interaction.token}`
+       */
+      webhook(webhookId, webhookToken) {
+        const parts = ["", "webhooks", webhookId];
+        if (webhookToken)
+          parts.push(webhookToken);
+        return parts.join("/");
+      },
+      /**
+       * Route for:
+       * - GET    `/webhooks/{webhook.id}/{webhook.token}/messages/@original`
+       * - GET    `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
+       * - PATCH  `/webhooks/{webhook.id}/{webhook.token}/messages/@original`
+       * - PATCH  `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
+       * - DELETE `/webhooks/{webhook.id}/{webhook.token}/messages/@original`
+       * - DELETE `/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}`
+       *
+       * - PATCH  `/webhooks/{application.id}/{interaction.token}/messages/@original`
+       * - PATCH  `/webhooks/{application.id}/{interaction.token}/messages/{message.id}`
+       * - DELETE `/webhooks/{application.id}/{interaction.token}/messages/{message.id}`
+       */
+      webhookMessage(webhookId, webhookToken, messageId = "@original") {
+        return `/webhooks/${webhookId}/${webhookToken}/messages/${messageId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/webhooks/{webhook.id}/{webhook.token}/github`
+       * - POST `/webhooks/{webhook.id}/{webhook.token}/slack`
+       */
+      webhookPlatform(webhookId, webhookToken, platform) {
+        return `/webhooks/${webhookId}/${webhookToken}/${platform}`;
+      },
+      /**
+       * Route for:
+       * - GET `/gateway`
+       */
+      gateway() {
+        return `/gateway`;
+      },
+      /**
+       * Route for:
+       * - GET `/gateway/bot`
+       */
+      gatewayBot() {
+        return `/gateway/bot`;
+      },
+      /**
+       * Route for:
+       * - GET `/oauth2/applications/@me`
+       */
+      oauth2CurrentApplication() {
+        return `/oauth2/applications/@me`;
+      },
+      /**
+       * Route for:
+       * - GET `/oauth2/@me`
+       */
+      oauth2CurrentAuthorization() {
+        return `/oauth2/@me`;
+      },
+      /**
+       * Route for:
+       * - GET `/oauth2/authorize`
+       */
+      oauth2Authorization() {
+        return `/oauth2/authorize`;
+      },
+      /**
+       * Route for:
+       * - POST `/oauth2/token`
+       */
+      oauth2TokenExchange() {
+        return `/oauth2/token`;
+      },
+      /**
+       * Route for:
+       * - POST `/oauth2/token/revoke`
+       */
+      oauth2TokenRevocation() {
+        return `/oauth2/token/revoke`;
+      },
+      /**
+       * Route for:
+       * - GET  `/applications/{application.id}/commands`
+       * - PUT  `/applications/{application.id}/commands`
+       * - POST `/applications/{application.id}/commands`
+       */
+      applicationCommands(applicationId) {
+        return `/applications/${applicationId}/commands`;
+      },
+      /**
+       * Route for:
+       * - GET    `/applications/{application.id}/commands/{command.id}`
+       * - PATCH  `/applications/{application.id}/commands/{command.id}`
+       * - DELETE `/applications/{application.id}/commands/{command.id}`
+       */
+      applicationCommand(applicationId, commandId) {
+        return `/applications/${applicationId}/commands/${commandId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/applications/{application.id}/guilds/{guild.id}/commands`
+       * - PUT  `/applications/{application.id}/guilds/{guild.id}/commands`
+       * - POST `/applications/{application.id}/guilds/{guild.id}/commands`
+       */
+      applicationGuildCommands(applicationId, guildId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands`;
+      },
+      /**
+       * Route for:
+       * - GET    `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}`
+       * - PATCH  `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}`
+       * - DELETE `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}`
+       */
+      applicationGuildCommand(applicationId, guildId, commandId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/interactions/{interaction.id}/{interaction.token}/callback`
+       */
+      interactionCallback(interactionId, interactionToken) {
+        return `/interactions/${interactionId}/${interactionToken}/callback`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/member-verification`
+       * - PATCH `/guilds/{guild.id}/member-verification`
+       */
+      guildMemberVerification(guildId) {
+        return `/guilds/${guildId}/member-verification`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/voice-states/@me`
+       * - GET `/guilds/{guild.id}/voice-states/{user.id}`
+       * - PATCH `/guilds/{guild.id}/voice-states/@me`
+       * - PATCH `/guilds/{guild.id}/voice-states/{user.id}`
+       */
+      guildVoiceState(guildId, userId = "@me") {
+        return `/guilds/${guildId}/voice-states/${userId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/guilds/{guild.id}/commands/permissions`
+       * - PUT `/applications/{application.id}/guilds/{guild.id}/commands/permissions`
+       */
+      guildApplicationCommandsPermissions(applicationId, guildId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands/permissions`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}/permissions`
+       * - PUT `/applications/{application.id}/guilds/{guild.id}/commands/{command.id}/permissions`
+       */
+      applicationCommandPermissions(applicationId, guildId, commandId) {
+        return `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}/permissions`;
+      },
+      /**
+       * Route for:
+       * - GET   `/guilds/{guild.id}/welcome-screen`
+       * - PATCH `/guilds/{guild.id}/welcome-screen`
+       */
+      guildWelcomeScreen(guildId) {
+        return `/guilds/${guildId}/welcome-screen`;
+      },
+      /**
+       * Route for:
+       * - POST `/stage-instances`
+       */
+      stageInstances() {
+        return `/stage-instances`;
+      },
+      /**
+       * Route for:
+       * - GET `/stage-instances/{channel.id}`
+       * - PATCH `/stage-instances/{channel.id}`
+       * - DELETE `/stage-instances/{channel.id}`
+       */
+      stageInstance(channelId) {
+        return `/stage-instances/${channelId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/stickers/{sticker.id}`
+       */
+      sticker(stickerId) {
+        return `/stickers/${stickerId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/sticker-packs`
+       */
+      stickerPacks() {
+        return "/sticker-packs";
+      },
+      /**
+       * Route for:
+       * - GET `/sticker-packs/{pack.id}`
+       */
+      stickerPack(packId) {
+        return `/sticker-packs/${packId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/sticker-packs`
+       *
+       * @deprecated Use {@link Routes.stickerPacks} instead.
+       */
+      nitroStickerPacks() {
+        return "/sticker-packs";
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/stickers`
+       * - POST `/guilds/{guild.id}/stickers`
+       */
+      guildStickers(guildId) {
+        return `/guilds/${guildId}/stickers`;
+      },
+      /**
+       * Route for:
+       * - GET    `/guilds/{guild.id}/stickers/{sticker.id}`
+       * - PATCH  `/guilds/{guild.id}/stickers/{sticker.id}`
+       * - DELETE `/guilds/{guild.id}/stickers/{sticker.id}`
+       */
+      guildSticker(guildId, stickerId) {
+        return `/guilds/${guildId}/stickers/${stickerId}`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/scheduled-events`
+       * - POST `/guilds/{guild.id}/scheduled-events`
+       */
+      guildScheduledEvents(guildId) {
+        return `/guilds/${guildId}/scheduled-events`;
+      },
+      /**
+       * Route for:
+       * - GET  `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}`
+       * - PATCH `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}`
+       * - DELETE `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}`
+       */
+      guildScheduledEvent(guildId, guildScheduledEventId) {
+        return `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/scheduled-events/{guildScheduledEvent.id}/users`
+       */
+      guildScheduledEventUsers(guildId, guildScheduledEventId) {
+        return `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}/users`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/onboarding`
+       * - PUT `/guilds/{guild.id}/onboarding`
+       */
+      guildOnboarding(guildId) {
+        return `/guilds/${guildId}/onboarding`;
+      },
+      /**
+       * Route for:
+       * - PUT `/guilds/${guild.id}/incident-actions`
+       */
+      guildIncidentActions(guildId) {
+        return `/guilds/${guildId}/incident-actions`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/@me`
+       * - PATCH `/applications/@me`
+       */
+      currentApplication() {
+        return "/applications/@me";
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/entitlements`
+       * - POST `/applications/{application.id}/entitlements`
+       */
+      entitlements(applicationId) {
+        return `/applications/${applicationId}/entitlements`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/entitlements/{entitlement.id}`
+       * - DELETE `/applications/{application.id}/entitlements/{entitlement.id}`
+       */
+      entitlement(applicationId, entitlementId) {
+        return `/applications/${applicationId}/entitlements/${entitlementId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/skus`
+       */
+      skus(applicationId) {
+        return `/applications/${applicationId}/skus`;
+      },
+      /**
+       * Route for:
+       * - POST `/guilds/{guild.id}/bulk-ban`
+       */
+      guildBulkBan(guildId) {
+        return `/guilds/${guildId}/bulk-ban`;
+      },
+      /**
+       * Route for:
+       * - POST `/applications/{application.id}/entitlements/{entitlement.id}/consume`
+       */
+      consumeEntitlement(applicationId, entitlementId) {
+        return `/applications/${applicationId}/entitlements/${entitlementId}/consume`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/emojis`
+       * - POST `/applications/{application.id}/emojis`
+       */
+      applicationEmojis(applicationId) {
+        return `/applications/${applicationId}/emojis`;
+      },
+      /**
+       * Route for:
+       * - GET `/applications/{application.id}/emojis/{emoji.id}`
+       * - PATCH `/applications/{application.id}/emojis/{emoji.id}`
+       * - DELETE `/applications/{application.id}/emojis/{emoji.id}`
+       */
+      applicationEmoji(applicationId, emojiId) {
+        return `/applications/${applicationId}/emojis/${emojiId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/skus/{sku.id}/subscriptions`
+       */
+      skuSubscriptions(skuId) {
+        return `/skus/${skuId}/subscriptions`;
+      },
+      /**
+       * Route for:
+       * - GET `/skus/{sku.id}/subscriptions/{subscription.id}`
+       */
+      skuSubscription(skuId, subscriptionId) {
+        return `/skus/${skuId}/subscriptions/${subscriptionId}`;
+      },
+      /**
+       * Route for:
+       * - POST `/channels/{channel.id}/send-soundboard-sound`
+       */
+      sendSoundboardSound(channelId) {
+        return `/channels/${channelId}/send-soundboard-sound`;
+      },
+      /**
+       * Route for:
+       * - GET `/soundboard-default-sounds`
+       */
+      soundboardDefaultSounds() {
+        return "/soundboard-default-sounds";
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/soundboard-sounds`
+       * - POST `/guilds/{guild.id}/soundboard-sounds`
+       */
+      guildSoundboardSounds(guildId) {
+        return `/guilds/${guildId}/soundboard-sounds`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/soundboard-sounds/{sound.id}`
+       * - PATCH `/guilds/{guild.id}/soundboard-sounds/{sound.id}`
+       * - DELETE `/guilds/{guild.id}/soundboard-sounds/{sound.id}`
+       */
+      guildSoundboardSound(guildId, soundId) {
+        return `/guilds/${guildId}/soundboard-sounds/${soundId}`;
+      }
+    };
+    for (const [key, fn] of Object.entries(exports2.Routes)) {
+      exports2.Routes[key] = (...args) => {
+        const escaped = args.map((arg) => {
+          if (arg) {
+            if (internals_1.urlSafeCharacters.test(String(arg))) {
+              return arg;
+            }
+            return encodeURIComponent(arg);
+          }
+          return arg;
+        });
+        return fn.call(null, ...escaped);
+      };
+    }
+    Object.freeze(exports2.Routes);
+    exports2.StickerPackApplicationId = "710982414301790216";
+    var ImageFormat;
+    (function(ImageFormat2) {
+      ImageFormat2["JPEG"] = "jpeg";
+      ImageFormat2["PNG"] = "png";
+      ImageFormat2["WebP"] = "webp";
+      ImageFormat2["GIF"] = "gif";
+      ImageFormat2["Lottie"] = "json";
+    })(ImageFormat || (exports2.ImageFormat = ImageFormat = {}));
+    exports2.CDNRoutes = {
+      /**
+       * Route for:
+       * - GET `/emojis/{emoji.id}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      emoji(emojiId, format) {
+        return `/emojis/${emojiId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/icons/{guild.id}/{guild.icon}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildIcon(guildId, guildIcon, format) {
+        return `/icons/${guildId}/${guildIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/splashes/{guild.id}/{guild.splash}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildSplash(guildId, guildSplash, format) {
+        return `/splashes/${guildId}/${guildSplash}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/discovery-splashes/{guild.id}/{guild.discovery_splash}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildDiscoverySplash(guildId, guildDiscoverySplash, format) {
+        return `/discovery-splashes/${guildId}/${guildDiscoverySplash}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/banners/{guild.id}/{guild.banner}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildBanner(guildId, guildBanner, format) {
+        return `/banners/${guildId}/${guildBanner}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/banners/{user.id}/{user.banner}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      userBanner(userId, userBanner, format) {
+        return `/banners/${userId}/${userBanner}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/embed/avatars/{index}.png`
+       *
+       * The value for `index` parameter depends on whether the user is {@link https://discord.com/developers/docs/change-log#unique-usernames-on-discord | migrated to the new username system}.
+       * For users on the new username system, `index` will be `(user.id >> 22) % 6`.
+       * For users on the legacy username system, `index` will be `user.discriminator % 5`.
+       *
+       * This route supports the extension: PNG
+       */
+      defaultUserAvatar(index) {
+        return `/embed/avatars/${index}.png`;
+      },
+      /**
+       * Route for:
+       * - GET `/avatars/{user.id}/{user.avatar}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      userAvatar(userId, userAvatar, format) {
+        return `/avatars/${userId}/${userAvatar}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/users/{user.id}/avatars/{guild_member.avatar}.{png|jpeg|webp|gif}`
+       *
+       * As this route supports GIFs, the hash will begin with `a_` if it is available in GIF format
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildMemberAvatar(guildId, userId, memberAvatar, format) {
+        return `/guilds/${guildId}/users/${userId}/avatars/${memberAvatar}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/avatar-decorations/{user.id}/{user.avatar_decoration}.png`
+       *
+       * This route supports the extension: PNG
+       *
+       * @deprecated Use {@link CDNRoutes.avatarDecoration} instead.
+       */
+      userAvatarDecoration(userId, userAvatarDecoration) {
+        return `/avatar-decorations/${userId}/${userAvatarDecoration}.png`;
+      },
+      /**
+       * Route for:
+       * - GET `/avatar-decoration-presets/{avatar_decoration_data_asset}.png`
+       *
+       * This route supports the extension: PNG
+       */
+      avatarDecoration(avatarDecorationDataAsset) {
+        return `/avatar-decoration-presets/${avatarDecorationDataAsset}.png`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-icons/{application.id}/{application.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      applicationIcon(applicationId, applicationIcon, format) {
+        return `/app-icons/${applicationId}/${applicationIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-icons/{application.id}/{application.cover_image}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      applicationCover(applicationId, applicationCoverImage, format) {
+        return `/app-icons/${applicationId}/${applicationCoverImage}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/{application.id}/{application.asset_id}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      applicationAsset(applicationId, applicationAssetId, format) {
+        return `/app-assets/${applicationId}/${applicationAssetId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/{application.id}/achievements/{achievement.id}/icons/{achievement.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      achievementIcon(applicationId, achievementId, achievementIconHash, format) {
+        return `/app-assets/${applicationId}/achievements/${achievementId}/icons/${achievementIconHash}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/710982414301790216/store/{sticker_pack.banner.asset_id}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      stickerPackBanner(stickerPackBannerAssetId, format) {
+        return `/app-assets/${exports2.StickerPackApplicationId}/store/${stickerPackBannerAssetId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/app-assets/${application.id}/store/${asset.id}.{png|jpeg|webp}}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      storePageAsset(applicationId, assetId, format = ImageFormat.PNG) {
+        return `/app-assets/${applicationId}/store/${assetId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/team-icons/{team.id}/{team.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      teamIcon(teamId, teamIcon, format) {
+        return `/team-icons/${teamId}/${teamIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/stickers/{sticker.id}.{png|json}`
+       *
+       * This route supports the extensions: PNG, Lottie, GIF
+       */
+      sticker(stickerId, format) {
+        return `/stickers/${stickerId}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/role-icons/{role.id}/{role.icon}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      roleIcon(roleId, roleIcon, format) {
+        return `/role-icons/${roleId}/${roleIcon}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guild-events/{guild_scheduled_event.id}/{guild_scheduled_event.image}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildScheduledEventCover(guildScheduledEventId, guildScheduledEventCoverImage, format) {
+        return `/guild-events/${guildScheduledEventId}/${guildScheduledEventCoverImage}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/${guild.id}/users/${user.id}/banners/${guild_member.banner}.{png|jpeg|webp|gif}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP, GIF
+       */
+      guildMemberBanner(guildId, userId, guildMemberBanner, format) {
+        return `/guilds/${guildId}/users/${userId}/banners/${guildMemberBanner}.${format}`;
+      },
+      /**
+       * Route for:
+       * - GET `/soundboard-sounds/${sound.id}`
+       */
+      soundboardSound(soundId) {
+        return `/soundboard-sounds/${soundId}`;
+      }
+    };
+    for (const [key, fn] of Object.entries(exports2.CDNRoutes)) {
+      exports2.CDNRoutes[key] = (...args) => {
+        const escaped = args.map((arg) => {
+          if (arg) {
+            if (internals_1.urlSafeCharacters.test(String(arg))) {
+              return arg;
+            }
+            return encodeURIComponent(arg);
+          }
+          return arg;
+        });
+        return fn.call(null, ...escaped);
+      };
+    }
+    Object.freeze(exports2.CDNRoutes);
+    exports2.RouteBases = {
+      api: `https://discord.com/api/v${exports2.APIVersion}`,
+      cdn: "https://cdn.discordapp.com",
+      media: "https://media.discordapp.net",
+      invite: "https://discord.gg",
+      template: "https://discord.new",
+      gift: "https://discord.gift",
+      scheduledEvent: "https://discord.com/events"
+    };
+    Object.freeze(exports2.RouteBases);
+    exports2.OAuth2Routes = {
+      authorizationURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2Authorization()}`,
+      tokenURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2TokenExchange()}`,
+      /**
+       * @see {@link https://tools.ietf.org/html/rfc7009}
+       */
+      tokenRevocationURL: `${exports2.RouteBases.api}${exports2.Routes.oauth2TokenRevocation()}`
+    };
+    Object.freeze(exports2.OAuth2Routes);
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rpc/common.js
+var require_common12 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rpc/common.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RPCCloseEventCodes = exports2.RPCErrorCodes = exports2.RelationshipType = exports2.VoiceConnectionStates = exports2.RPCVoiceShortcutKeyComboKeyType = exports2.RPCVoiceSettingsModeType = exports2.RPCDeviceType = void 0;
+    var RPCDeviceType;
+    (function(RPCDeviceType2) {
+      RPCDeviceType2["AudioInput"] = "audioinput";
+      RPCDeviceType2["AudioOutput"] = "audiooutput";
+      RPCDeviceType2["VideoInput"] = "videoinput";
+    })(RPCDeviceType || (exports2.RPCDeviceType = RPCDeviceType = {}));
+    var RPCVoiceSettingsModeType;
+    (function(RPCVoiceSettingsModeType2) {
+      RPCVoiceSettingsModeType2["PushToTalk"] = "PUSH_TO_TALK";
+      RPCVoiceSettingsModeType2["VoiceActivity"] = "VOICE_ACTIVITY";
+    })(RPCVoiceSettingsModeType || (exports2.RPCVoiceSettingsModeType = RPCVoiceSettingsModeType = {}));
+    var RPCVoiceShortcutKeyComboKeyType;
+    (function(RPCVoiceShortcutKeyComboKeyType2) {
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["KeyboardKey"] = 0] = "KeyboardKey";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["MouseButton"] = 1] = "MouseButton";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["KeyboardModifierKey"] = 2] = "KeyboardModifierKey";
+      RPCVoiceShortcutKeyComboKeyType2[RPCVoiceShortcutKeyComboKeyType2["GamepadButton"] = 3] = "GamepadButton";
+    })(RPCVoiceShortcutKeyComboKeyType || (exports2.RPCVoiceShortcutKeyComboKeyType = RPCVoiceShortcutKeyComboKeyType = {}));
+    var VoiceConnectionStates;
+    (function(VoiceConnectionStates2) {
+      VoiceConnectionStates2["Disconnected"] = "DISCONNECTED";
+      VoiceConnectionStates2["AwaitingEndpoint"] = "AWAITING_ENDPOINT";
+      VoiceConnectionStates2["Authenticating"] = "AUTHENTICATING";
+      VoiceConnectionStates2["Connecting"] = "CONNECTING";
+      VoiceConnectionStates2["Connected"] = "CONNECTED";
+      VoiceConnectionStates2["VoiceDisconnected"] = "VOICE_DISCONNECTED";
+      VoiceConnectionStates2["VoiceConnecting"] = "VOICE_CONNECTING";
+      VoiceConnectionStates2["VoiceConnected"] = "VOICE_CONNECTED";
+      VoiceConnectionStates2["NoRoute"] = "NO_ROUTE";
+      VoiceConnectionStates2["IceChecking"] = "ICE_CHECKING";
+    })(VoiceConnectionStates || (exports2.VoiceConnectionStates = VoiceConnectionStates = {}));
+    var RelationshipType;
+    (function(RelationshipType2) {
+      RelationshipType2[RelationshipType2["None"] = 0] = "None";
+      RelationshipType2[RelationshipType2["Friend"] = 1] = "Friend";
+      RelationshipType2[RelationshipType2["Blocked"] = 2] = "Blocked";
+      RelationshipType2[RelationshipType2["PendingIncoming"] = 3] = "PendingIncoming";
+      RelationshipType2[RelationshipType2["PendingOutgoing"] = 4] = "PendingOutgoing";
+      RelationshipType2[RelationshipType2["Implicit"] = 5] = "Implicit";
+    })(RelationshipType || (exports2.RelationshipType = RelationshipType = {}));
+    var RPCErrorCodes;
+    (function(RPCErrorCodes2) {
+      RPCErrorCodes2[RPCErrorCodes2["UnknownError"] = 1e3] = "UnknownError";
+      RPCErrorCodes2[RPCErrorCodes2["ServiceUnavailable"] = 1001] = "ServiceUnavailable";
+      RPCErrorCodes2[RPCErrorCodes2["TransactionAborted"] = 1002] = "TransactionAborted";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidPayload"] = 4e3] = "InvalidPayload";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidCommand"] = 4002] = "InvalidCommand";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidGuild"] = 4003] = "InvalidGuild";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidEvent"] = 4004] = "InvalidEvent";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidChannel"] = 4005] = "InvalidChannel";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidPermissions"] = 4006] = "InvalidPermissions";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidClientId"] = 4007] = "InvalidClientId";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidOrigin"] = 4008] = "InvalidOrigin";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidToken"] = 4009] = "InvalidToken";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidUser"] = 4010] = "InvalidUser";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidInvite"] = 4011] = "InvalidInvite";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidActivityJoinRequest"] = 4012] = "InvalidActivityJoinRequest";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidEntitlement"] = 4013] = "InvalidEntitlement";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidGiftCode"] = 4014] = "InvalidGiftCode";
+      RPCErrorCodes2[RPCErrorCodes2["OAuth2Error"] = 5e3] = "OAuth2Error";
+      RPCErrorCodes2[RPCErrorCodes2["SelectChannelTimedOut"] = 5001] = "SelectChannelTimedOut";
+      RPCErrorCodes2[RPCErrorCodes2["GetGuildTimedOut"] = 5002] = "GetGuildTimedOut";
+      RPCErrorCodes2[RPCErrorCodes2["SelectVoiceForceRequired"] = 5003] = "SelectVoiceForceRequired";
+      RPCErrorCodes2[RPCErrorCodes2["CaptureShortcutAlreadyListening"] = 5004] = "CaptureShortcutAlreadyListening";
+      RPCErrorCodes2[RPCErrorCodes2["InvalidActivitySecret"] = 5005] = "InvalidActivitySecret";
+      RPCErrorCodes2[RPCErrorCodes2["NoEligibleActivity"] = 5006] = "NoEligibleActivity";
+      RPCErrorCodes2[RPCErrorCodes2["PurchaseCanceled"] = 5007] = "PurchaseCanceled";
+      RPCErrorCodes2[RPCErrorCodes2["PurchaseError"] = 5008] = "PurchaseError";
+      RPCErrorCodes2[RPCErrorCodes2["UnauthorizedForAchievement"] = 5009] = "UnauthorizedForAchievement";
+      RPCErrorCodes2[RPCErrorCodes2["RateLimited"] = 5010] = "RateLimited";
+    })(RPCErrorCodes || (exports2.RPCErrorCodes = RPCErrorCodes = {}));
+    var RPCCloseEventCodes;
+    (function(RPCCloseEventCodes2) {
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseNormal"] = 1e3] = "CloseNormal";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseUnsupported"] = 1003] = "CloseUnsupported";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["CloseAbnormal"] = 1006] = "CloseAbnormal";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidClientId"] = 4e3] = "InvalidClientId";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidOrigin"] = 4001] = "InvalidOrigin";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["RateLimited"] = 4002] = "RateLimited";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["TokenRevoked"] = 4003] = "TokenRevoked";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidVersion"] = 4004] = "InvalidVersion";
+      RPCCloseEventCodes2[RPCCloseEventCodes2["InvalidEncoding"] = 4005] = "InvalidEncoding";
+    })(RPCCloseEventCodes || (exports2.RPCCloseEventCodes = RPCCloseEventCodes = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/rpc/v10.js
+var require_v1016 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/rpc/v10.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.RPCEvents = exports2.RPCCommands = exports2.RPCVersion = void 0;
+    __exportStar2(require_common12(), exports2);
+    exports2.RPCVersion = "1";
+    var RPCCommands;
+    (function(RPCCommands2) {
+      RPCCommands2["AcceptActivityInvite"] = "ACCEPT_ACTIVITY_INVITE";
+      RPCCommands2["ActivityInviteUser"] = "ACTIVITY_INVITE_USER";
+      RPCCommands2["Authenticate"] = "AUTHENTICATE";
+      RPCCommands2["Authorize"] = "AUTHORIZE";
+      RPCCommands2["BraintreePopupBridgeCallback"] = "BRAINTREE_POPUP_BRIDGE_CALLBACK";
+      RPCCommands2["BrowserHandoff"] = "BROWSER_HANDOFF";
+      RPCCommands2["CloseActivityJoinRequest"] = "CLOSE_ACTIVITY_JOIN_REQUEST";
+      RPCCommands2["ConnectionsCallback"] = "CONNECTIONS_CALLBACK";
+      RPCCommands2["CreateChannelInvite"] = "CREATE_CHANNEL_INVITE";
+      RPCCommands2["DeepLink"] = "DEEP_LINK";
+      RPCCommands2["Dispatch"] = "DISPATCH";
+      RPCCommands2["GetApplicationTicket"] = "GET_APPLICATION_TICKET";
+      RPCCommands2["GetChannel"] = "GET_CHANNEL";
+      RPCCommands2["GetChannels"] = "GET_CHANNELS";
+      RPCCommands2["GetEntitlementTicket"] = "GET_ENTITLEMENT_TICKET";
+      RPCCommands2["GetEntitlements"] = "GET_ENTITLEMENTS";
+      RPCCommands2["GetGuild"] = "GET_GUILD";
+      RPCCommands2["GetGuilds"] = "GET_GUILDS";
+      RPCCommands2["GetImage"] = "GET_IMAGE";
+      RPCCommands2["GetNetworkingConfig"] = "GET_NETWORKING_CONFIG";
+      RPCCommands2["GetRelationships"] = "GET_RELATIONSHIPS";
+      RPCCommands2["GetSelectedVoiceChannel"] = "GET_SELECTED_VOICE_CHANNEL";
+      RPCCommands2["GetSkus"] = "GET_SKUS";
+      RPCCommands2["GetUser"] = "GET_USER";
+      RPCCommands2["GetVoiceSettings"] = "GET_VOICE_SETTINGS";
+      RPCCommands2["GiftCodeBrowser"] = "GIFT_CODE_BROWSER";
+      RPCCommands2["GuildTemplateBrowser"] = "GUILD_TEMPLATE_BROWSER";
+      RPCCommands2["InviteBrowser"] = "INVITE_BROWSER";
+      RPCCommands2["NetworkingCreateToken"] = "NETWORKING_CREATE_TOKEN";
+      RPCCommands2["NetworkingPeerMetrics"] = "NETWORKING_PEER_METRICS";
+      RPCCommands2["NetworkingSystemMetrics"] = "NETWORKING_SYSTEM_METRICS";
+      RPCCommands2["OpenOverlayActivityInvite"] = "OPEN_OVERLAY_ACTIVITY_INVITE";
+      RPCCommands2["OpenOverlayGuildInvite"] = "OPEN_OVERLAY_GUILD_INVITE";
+      RPCCommands2["OpenOverlayVoiceSettings"] = "OPEN_OVERLAY_VOICE_SETTINGS";
+      RPCCommands2["Overlay"] = "OVERLAY";
+      RPCCommands2["SelectTextChannel"] = "SELECT_TEXT_CHANNEL";
+      RPCCommands2["SelectVoiceChannel"] = "SELECT_VOICE_CHANNEL";
+      RPCCommands2["SendActivityJoinInvite"] = "SEND_ACTIVITY_JOIN_INVITE";
+      RPCCommands2["SetActivity"] = "SET_ACTIVITY";
+      RPCCommands2["SetCertifiedDevices"] = "SET_CERTIFIED_DEVICES";
+      RPCCommands2["SetOverlayLocked"] = "SET_OVERLAY_LOCKED";
+      RPCCommands2["SetUserVoiceSettings"] = "SET_USER_VOICE_SETTINGS";
+      RPCCommands2["SetUserVoiceSettings2"] = "SET_USER_VOICE_SETTINGS_2";
+      RPCCommands2["SetVoiceSettings"] = "SET_VOICE_SETTINGS";
+      RPCCommands2["SetVoiceSettings2"] = "SET_VOICE_SETTINGS_2";
+      RPCCommands2["StartPurchase"] = "START_PURCHASE";
+      RPCCommands2["Subscribe"] = "SUBSCRIBE";
+      RPCCommands2["Unsubscribe"] = "UNSUBSCRIBE";
+      RPCCommands2["ValidateApplication"] = "VALIDATE_APPLICATION";
+    })(RPCCommands || (exports2.RPCCommands = RPCCommands = {}));
+    var RPCEvents;
+    (function(RPCEvents2) {
+      RPCEvents2["ActivityInvite"] = "ACTIVITY_INVITE";
+      RPCEvents2["ActivityJoin"] = "ACTIVITY_JOIN";
+      RPCEvents2["ActivityJoinRequest"] = "ACTIVITY_JOIN_REQUEST";
+      RPCEvents2["ActivitySpectate"] = "ACTIVITY_SPECTATE";
+      RPCEvents2["ChannelCreate"] = "CHANNEL_CREATE";
+      RPCEvents2["CurrentUserUpdate"] = "CURRENT_USER_UPDATE";
+      RPCEvents2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      RPCEvents2["EntitlementDelete"] = "ENTITLEMENT_DELETE";
+      RPCEvents2["Error"] = "ERROR";
+      RPCEvents2["GameJoin"] = "GAME_JOIN";
+      RPCEvents2["GameSpectate"] = "GAME_SPECTATE";
+      RPCEvents2["GuildCreate"] = "GUILD_CREATE";
+      RPCEvents2["GuildStatus"] = "GUILD_STATUS";
+      RPCEvents2["MessageCreate"] = "MESSAGE_CREATE";
+      RPCEvents2["MessageDelete"] = "MESSAGE_DELETE";
+      RPCEvents2["MessageUpdate"] = "MESSAGE_UPDATE";
+      RPCEvents2["NotificationCreate"] = "NOTIFICATION_CREATE";
+      RPCEvents2["Overlay"] = "OVERLAY";
+      RPCEvents2["OverlayUpdate"] = "OVERLAY_UPDATE";
+      RPCEvents2["Ready"] = "READY";
+      RPCEvents2["RelationshipUpdate"] = "RELATIONSHIP_UPDATE";
+      RPCEvents2["SpeakingStart"] = "SPEAKING_START";
+      RPCEvents2["SpeakingStop"] = "SPEAKING_STOP";
+      RPCEvents2["VoiceChannelSelect"] = "VOICE_CHANNEL_SELECT";
+      RPCEvents2["VoiceConnectionStatus"] = "VOICE_CONNECTION_STATUS";
+      RPCEvents2["VoiceSettingsUpdate"] = "VOICE_SETTINGS_UPDATE";
+      RPCEvents2["VoiceSettingsUpdate2"] = "VOICE_SETTINGS_UPDATE_2";
+      RPCEvents2["VoiceStateCreate"] = "VOICE_STATE_CREATE";
+      RPCEvents2["VoiceStateDelete"] = "VOICE_STATE_DELETE";
+      RPCEvents2["VoiceStateUpdate"] = "VOICE_STATE_UPDATE";
+    })(RPCEvents || (exports2.RPCEvents = RPCEvents = {}));
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/utils/v10.js
+var require_v1017 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/utils/v10.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.isDMInteraction = isDMInteraction;
+    exports2.isGuildInteraction = isGuildInteraction;
+    exports2.isApplicationCommandDMInteraction = isApplicationCommandDMInteraction;
+    exports2.isApplicationCommandGuildInteraction = isApplicationCommandGuildInteraction;
+    exports2.isMessageComponentDMInteraction = isMessageComponentDMInteraction;
+    exports2.isMessageComponentGuildInteraction = isMessageComponentGuildInteraction;
+    exports2.isLinkButton = isLinkButton;
+    exports2.isInteractionButton = isInteractionButton;
+    exports2.isMessageComponentInteraction = isMessageComponentInteraction;
+    exports2.isMessageComponentButtonInteraction = isMessageComponentButtonInteraction;
+    exports2.isMessageComponentSelectMenuInteraction = isMessageComponentSelectMenuInteraction;
+    exports2.isChatInputApplicationCommandInteraction = isChatInputApplicationCommandInteraction;
+    exports2.isContextMenuApplicationCommandInteraction = isContextMenuApplicationCommandInteraction;
+    var index_1 = require_v1014();
+    function isDMInteraction(interaction) {
+      return Reflect.has(interaction, "user");
+    }
+    function isGuildInteraction(interaction) {
+      return Reflect.has(interaction, "guild_id");
+    }
+    function isApplicationCommandDMInteraction(interaction) {
+      return isDMInteraction(interaction);
+    }
+    function isApplicationCommandGuildInteraction(interaction) {
+      return isGuildInteraction(interaction);
+    }
+    function isMessageComponentDMInteraction(interaction) {
+      return isDMInteraction(interaction);
+    }
+    function isMessageComponentGuildInteraction(interaction) {
+      return isGuildInteraction(interaction);
+    }
+    function isLinkButton(component) {
+      return component.style === index_1.ButtonStyle.Link;
+    }
+    function isInteractionButton(component) {
+      return ![index_1.ButtonStyle.Link, index_1.ButtonStyle.Premium].includes(component.style);
+    }
+    function isMessageComponentInteraction(interaction) {
+      return interaction.type === index_1.InteractionType.MessageComponent;
+    }
+    function isMessageComponentButtonInteraction(interaction) {
+      return interaction.data.component_type === index_1.ComponentType.Button;
+    }
+    function isMessageComponentSelectMenuInteraction(interaction) {
+      return [
+        index_1.ComponentType.StringSelect,
+        index_1.ComponentType.UserSelect,
+        index_1.ComponentType.RoleSelect,
+        index_1.ComponentType.MentionableSelect,
+        index_1.ComponentType.ChannelSelect
+      ].includes(interaction.data.component_type);
+    }
+    function isChatInputApplicationCommandInteraction(interaction) {
+      return interaction.data.type === index_1.ApplicationCommandType.ChatInput;
+    }
+    function isContextMenuApplicationCommandInteraction(interaction) {
+      return interaction.data.type === index_1.ApplicationCommandType.Message || interaction.data.type === index_1.ApplicationCommandType.User;
+    }
+  }
+});
+
+// node_modules/@discordjs/ws/node_modules/discord-api-types/v10.js
+var require_v1018 = __commonJS({
+  "node_modules/@discordjs/ws/node_modules/discord-api-types/v10.js"(exports2) {
+    "use strict";
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.Utils = void 0;
+    __exportStar2(require_v1013(), exports2);
+    __exportStar2(require_globals3(), exports2);
+    __exportStar2(require_v1014(), exports2);
+    __exportStar2(require_v1015(), exports2);
+    __exportStar2(require_v1016(), exports2);
+    __exportStar2(require_internals6(), exports2);
+    exports2.Utils = require_v1017();
   }
 });
 
@@ -61613,12 +69475,12 @@ var require_dist10 = __commonJS({
     var import_util2 = require_dist();
     var import_async_queue2 = require_cjs2();
     var import_async_event_emitter = require_dist3();
-    var import_v102 = require_v106();
+    var import_v102 = require_v1018();
     var import_ws = require_ws();
     var import_node_process = __toESM2(require("process"));
     var import_collection4 = require_dist9();
     var import_util = require_dist();
-    var import_v10 = require_v106();
+    var import_v10 = require_v1018();
     var import_promises = require("timers/promises");
     var import_collection3 = require_dist9();
     var import_async_queue = require_cjs2();
@@ -62547,7 +70409,7 @@ var require_dist10 = __commonJS({
     var import_util3 = require_dist();
     var import_util4 = require_dist();
     var import_async_event_emitter2 = require_dist3();
-    var import_v103 = require_v106();
+    var import_v103 = require_v1018();
     (0, import_util4.polyfillDispose)();
     var WebSocketManager2 = class extends import_async_event_emitter2.AsyncEventEmitter {
       static {
@@ -62688,7 +70550,7 @@ var require_WebSocketShard = __commonJS({
     var EventEmitter = require("node:events");
     var process2 = require("node:process");
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
-    var { GatewayIntentBits: GatewayIntentBits2 } = require_v106();
+    var { GatewayIntentBits: GatewayIntentBits2 } = require_v1012();
     var Status2 = require_Status();
     var WebSocketShardEvents = require_WebSocketShardEvents();
     var deprecationEmittedForImportant = false;
@@ -63396,7 +71258,7 @@ var require_PRESENCE_UPDATE = __commonJS({
 var require_ClientUser = __commonJS({
   "node_modules/discord.js/src/structures/ClientUser.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var User = require_User();
     var { resolveImage } = require_DataResolver();
     var ClientUser = class extends User {
@@ -63958,7 +71820,7 @@ var require_WebSocketManager = __commonJS({
       CompressionMethod,
       CloseCodes
     } = require_dist10();
-    var { GatewayCloseCodes, GatewayDispatchEvents } = require_v106();
+    var { GatewayCloseCodes, GatewayDispatchEvents } = require_v1012();
     var WebSocketShard = require_WebSocketShard();
     var PacketHandlers = require_handlers();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -63980,10 +71842,13 @@ var require_WebSocketManager = __commonJS({
       GatewayDispatchEvents.GuildMemberRemove
     ];
     var WaitingForGuildEvents = [GatewayDispatchEvents.GuildCreate, GatewayDispatchEvents.GuildDelete];
-    var UNRESUMABLE_CLOSE_CODES = [
-      CloseCodes.Normal,
-      GatewayCloseCodes.AlreadyAuthenticated,
-      GatewayCloseCodes.InvalidSeq
+    var UNRECOVERABLE_CLOSE_CODES = [
+      GatewayCloseCodes.AuthenticationFailed,
+      GatewayCloseCodes.InvalidShard,
+      GatewayCloseCodes.ShardingRequired,
+      GatewayCloseCodes.InvalidAPIVersion,
+      GatewayCloseCodes.InvalidIntents,
+      GatewayCloseCodes.DisallowedIntents
     ];
     var reasonIsDeprecated = "the reason property is deprecated, use the code property to determine the reason";
     var deprecationEmittedForInvalidSessionEvent = false;
@@ -64116,10 +71981,10 @@ var require_WebSocketManager = __commonJS({
         this._ws.on(WSWebSocketShardEvents.Closed, ({ code, shardId }) => {
           const shard = this.shards.get(shardId);
           shard.emit(WebSocketShardEvents.Close, { code, reason: reasonIsDeprecated, wasClean: true });
-          if (UNRESUMABLE_CLOSE_CODES.includes(code) && this.destroyed) {
+          if (UNRECOVERABLE_CLOSE_CODES.includes(code)) {
             shard.status = Status2.Disconnected;
             this.client.emit(Events2.ShardDisconnect, { code, reason: reasonIsDeprecated, wasClean: true }, shardId);
-            this.debug([`Shard not resumable: ${code} (${GatewayCloseCodes[code] ?? CloseCodes[code]})`], shardId);
+            this.debug([`Shard not recoverable: ${code} (${GatewayCloseCodes[code] ?? CloseCodes[code]})`], shardId);
             return;
           }
           this.shards.get(shardId).status = Status2.Connecting;
@@ -64301,7 +72166,7 @@ var require_ChannelManager = __commonJS({
   "node_modules/discord.js/src/managers/ChannelManager.js"(exports2, module2) {
     "use strict";
     var process2 = require("node:process");
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { BaseChannel } = require_BaseChannel();
     var { createChannel } = require_Channels();
@@ -64772,7 +72637,7 @@ var require_GuildPreview = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { DiscordSnowflake } = require_cjs();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var GuildPreviewEmoji = require_GuildPreviewEmoji();
     var { Sticker: Sticker2 } = require_Sticker();
@@ -64898,7 +72763,7 @@ var require_AutoModerationRuleManager = __commonJS({
   "node_modules/discord.js/src/managers/AutoModerationRuleManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var AutoModerationRule = require_AutoModerationRule();
     var AutoModerationRuleManager = class extends CachedManager {
@@ -65177,7 +73042,7 @@ var require_GuildBanManager = __commonJS({
     var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildBan = require_GuildBan();
@@ -65392,7 +73257,7 @@ var require_GuildChannelManager = __commonJS({
     "use strict";
     var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var GuildTextThreadManager = require_GuildTextThreadManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -65863,7 +73728,7 @@ var require_GuildEmojiManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildEmojiManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2, PermissionFlagsBits } = require_v106();
+    var { Routes: Routes2, PermissionFlagsBits } = require_v1012();
     var BaseGuildEmojiManager2 = require_BaseGuildEmojiManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveImage } = require_DataResolver();
@@ -66019,7 +73884,7 @@ var require_GuildInviteManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildInviteManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Invite2 = require_Invite();
@@ -66210,7 +74075,7 @@ var require_GuildMemberManager = __commonJS({
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { DiscordSnowflake } = require_cjs();
-    var { Routes: Routes2, GatewayOpcodes } = require_v106();
+    var { Routes: Routes2, GatewayOpcodes } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
@@ -66700,7 +74565,7 @@ var require_GuildScheduledEventManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { GuildScheduledEventEntityType, Routes: Routes2 } = require_v106();
+    var { GuildScheduledEventEntityType, Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { GuildScheduledEvent } = require_GuildScheduledEvent();
@@ -67097,9 +74962,9 @@ var require_SoundboardSound = __commonJS({
        */
       equals(other) {
         if (other instanceof _SoundboardSound) {
-          return this.soundId === other.soundId && this.available === other.available && this.name === other.name && this.volume === other.volume && this.emojiId === other.emojiId && this.emojiName === other.emojiName && this.guildId === other.guildId && this.user?.id === other.user?.id;
+          return this.soundId === other.soundId && this.available === other.available && this.name === other.name && this.volume === other.volume && this._emoji?.id === other._emoji?.id && this._emoji?.name === other._emoji?.name && this.guildId === other.guildId && this.user?.id === other.user?.id;
         }
-        return this.soundId === other.sound_id && this.available === other.available && this.name === other.name && this.volume === other.volume && this.emojiId === other.emoji_id && this.emojiName === other.emoji_name && this.guildId === other.guild_id && this.user?.id === other.user?.id;
+        return this.soundId === other.sound_id && this.available === other.available && this.name === other.name && this.volume === other.volume && (this._emoji?.id ?? null) === other.emoji_id && (this._emoji?.name ?? null) === other.emoji_name && this.guildId === other.guild_id && this.user?.id === other.user?.id;
       }
     };
     exports2.SoundboardSound = SoundboardSound2;
@@ -67112,7 +74977,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist6();
     var { lazy } = require_dist();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { SoundboardSound: SoundboardSound2 } = require_SoundboardSound();
@@ -67191,7 +75056,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
        * Data for editing a soundboard sound.
        * @typedef {Object} GuildSoundboardSoundEditOptions
        * @property {string} [name] The name of the soundboard sound
-       * @property {?number} [volume] The volume of the soundboard sound, from 0 to 1
+       * @property {?number} [volume] The volume (a double) of the soundboard sound, from 0 (inclusive) to 1
        * @property {?Snowflake} [emojiId] The emoji id of the soundboard sound
        * @property {?string} [emojiName] The emoji name of the soundboard sound
        * @property {string} [reason] The reason for editing the soundboard sound
@@ -67261,7 +75126,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
         if (!options) return this._fetchMany();
         const { cache, force, soundboardSound } = options;
         const resolvedSoundboardSound = this.resolveId(soundboardSound ?? options);
-        if (resolvedSoundboardSound) return this._fetchSingle({ cache, force, soundboardSound });
+        if (resolvedSoundboardSound) return this._fetchSingle({ cache, force, soundboardSound: resolvedSoundboardSound });
         return this._fetchMany({ cache });
       }
       async _fetchSingle({ cache, force, soundboardSound } = {}) {
@@ -67286,7 +75151,7 @@ var require_GuildStickerManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildStickerManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessagePayload = require_MessagePayload();
@@ -67444,7 +75309,7 @@ var require_GuildStickerManager = __commonJS({
 var require_ActivityFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/ActivityFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { ActivityFlags } = require_v106();
+    var { ActivityFlags } = require_v1012();
     var BitField = require_BitField();
     var ActivityFlagsBitField = class extends BitField {
       /**
@@ -67688,7 +75553,7 @@ var require_RoleManager = __commonJS({
     var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
     var { DiscordAPIError } = require_dist5();
-    var { RESTJSONErrorCodes, Routes: Routes2 } = require_v106();
+    var { RESTJSONErrorCodes, Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
@@ -68016,7 +75881,7 @@ var require_RoleManager = __commonJS({
 var require_StageInstanceManager = __commonJS({
   "node_modules/discord.js/src/managers/StageInstanceManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { StageInstance } = require_StageInstance();
@@ -68151,7 +76016,7 @@ var require_StageInstanceManager = __commonJS({
 var require_VoiceStateManager = __commonJS({
   "node_modules/discord.js/src/managers/VoiceStateManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var VoiceState = require_VoiceState();
     var VoiceStateManager = class extends CachedManager {
@@ -68200,7 +76065,7 @@ var require_VoiceStateManager = __commonJS({
 var require_SystemChannelFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/SystemChannelFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { GuildSystemChannelFlags } = require_v106();
+    var { GuildSystemChannelFlags } = require_v1012();
     var BitField = require_BitField();
     var SystemChannelFlagsBitField = class extends BitField {
       /**
@@ -68221,7 +76086,7 @@ var require_Guild = __commonJS({
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { DiscordSnowflake } = require_cjs();
-    var { ChannelType, GuildPremiumTier, Routes: Routes2, GuildFeature } = require_v106();
+    var { ChannelType, GuildPremiumTier, Routes: Routes2, GuildFeature } = require_v1012();
     var AnonymousGuild = require_AnonymousGuild();
     var GuildAuditLogs = require_GuildAuditLogs();
     var { GuildOnboarding } = require_GuildOnboarding();
@@ -68456,6 +76321,12 @@ var require_Guild = __commonJS({
           this.incidentsData = data.incidents_data && _transformAPIIncidentsData(data.incidents_data);
         } else {
           this.incidentsData ??= null;
+        }
+        if (data.soundboard_sounds) {
+          this.soundboardSounds.cache.clear();
+          for (const soundboardSound of data.soundboard_sounds) {
+            this.soundboardSounds._add(soundboardSound);
+          }
         }
       }
       /**
@@ -69386,7 +77257,7 @@ var require_GuildManager = __commonJS({
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
-    var { GatewayOpcodes, Routes: Routes2, RouteBases } = require_v106();
+    var { GatewayOpcodes, Routes: Routes2, RouteBases } = require_v1012();
     var CachedManager = require_CachedManager();
     var { ErrorCodes: ErrorCodes2, DiscordjsError: DiscordjsError2 } = require_errors2();
     var ShardClientUtil2 = require_ShardClientUtil();
@@ -69729,7 +77600,7 @@ var require_GuildManager = __commonJS({
 var require_UserManager = __commonJS({
   "node_modules/discord.js/src/managers/UserManager.js"(exports2, module2) {
     "use strict";
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes2 } = require_v1012();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { GuildMember } = require_GuildMember();
@@ -69858,7 +77729,7 @@ var require_UserManager = __commonJS({
 var require_ClientPresence = __commonJS({
   "node_modules/discord.js/src/structures/ClientPresence.js"(exports2, module2) {
     "use strict";
-    var { GatewayOpcodes, ActivityType } = require_v106();
+    var { GatewayOpcodes, ActivityType } = require_v1012();
     var { Presence } = require_Presence();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ClientPresence2 = class extends Presence {
@@ -70045,7 +77916,7 @@ var require_Widget = __commonJS({
   "node_modules/discord.js/src/structures/Widget.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection3 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes2 } = require_v1012();
     var Base = require_Base();
     var WidgetMember = require_WidgetMember();
     var Widget2 = class extends Base {
@@ -70106,7 +77977,7 @@ var require_Widget = __commonJS({
 var require_IntentsBitField = __commonJS({
   "node_modules/discord.js/src/util/IntentsBitField.js"(exports2, module2) {
     "use strict";
-    var { GatewayIntentBits: GatewayIntentBits2 } = require_v106();
+    var { GatewayIntentBits: GatewayIntentBits2 } = require_v1012();
     var BitField = require_BitField();
     var IntentsBitField2 = class extends BitField {
       /**
@@ -70538,7 +78409,7 @@ var require_Client = __commonJS({
     var process = require("node:process");
     var { Collection } = require_dist6();
     var { makeURLSearchParams } = require_dist5();
-    var { OAuth2Scopes, Routes } = require_v106();
+    var { OAuth2Scopes, Routes } = require_v1012();
     var BaseClient = require_BaseClient();
     var ActionsManager = require_ActionsManager();
     var ClientVoiceManager = require_ClientVoiceManager();
@@ -72333,7 +80204,7 @@ var require_src = __commonJS({
     exports2.WidgetMember = require_WidgetMember();
     exports2.WelcomeChannel = require_WelcomeChannel();
     exports2.WelcomeScreen = require_WelcomeScreen();
-    __exportStar2(require_v106(), exports2);
+    __exportStar2(require_v1012(), exports2);
     __exportStar2(require_dist8(), exports2);
     __exportStar2(require_dist7(), exports2);
     __exportStar2(require_dist5(), exports2);
@@ -72374,7 +80245,7 @@ global.client = new Client2({
 client.commands = new Collection2();
 async function RegisterClientCommands(clientId) {
   const { REST } = require_dist5();
-  const { Routes: Routes2 } = require_v106();
+  const { Routes: Routes2 } = require_v1012();
   const fs = require("fs");
   const commands = [];
   const commandFiles = fs.readdirSync(`${resourcePath}/dist/commands`).filter((file) => file.endsWith(".js"));
