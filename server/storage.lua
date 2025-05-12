@@ -72,8 +72,9 @@ Storage = {
             PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
         end
     end,
-    updateBan = function(banId, .....)
-    end,
+    -- Not too sure what this one does
+    -- updateBan = function(banId, .....)
+    -- end,
     updateBanlist = function(banlist)
         local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
         if not content then
@@ -105,7 +106,7 @@ Storage = {
             end
         end
     end,
-    removeBanIdentifier = function(identifiers) do
+    removeBanIdentifier = function(identifiers)
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
                 if ban.bannedIdentifiers[identifier] then

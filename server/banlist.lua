@@ -457,7 +457,7 @@ end
 ---@param reason string @The reason for the ban
 ---@return nil
 function BanIdentifier(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())`
+    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
     --updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
@@ -470,7 +470,7 @@ end
 -- Unclear what the purpose of this is... converted anyway
 >>>>>>> df983c8 (feat(storage): enhance storage functionality with new ban management methods and action logging)
 function BanIdentifiers(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())`
+    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
     --updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
