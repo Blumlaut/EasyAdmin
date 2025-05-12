@@ -377,13 +377,13 @@ function updateBlacklist(data,remove, forceChange)
 end
 
 function BanIdentifier(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())`
+    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
     --updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
 -- Unclear what the purpose of this is... converted anyway
 function BanIdentifiers(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())`
+    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
     --updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
