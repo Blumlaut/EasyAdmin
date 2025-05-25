@@ -30856,7 +30856,7 @@ var require_v109 = __commonJS({
        * - GET   `/users/{user.id}`
        * - PATCH `/users/@me`
        *
-       * @param [userId] - The user ID, defaulted to `@me`
+       * @param userId - The user ID, defaulted to `@me`
        */
       user(userId = "@me") {
         return `/users/${userId}`;
