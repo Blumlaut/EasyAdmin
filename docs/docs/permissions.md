@@ -14,15 +14,15 @@ add_ace group.moderator easyadmin.player.slap allow
 add_ace group.moderator easyadmin.player.freeze allow
 ```
 
-You can also allow all permissions by allowing the entire `easyadmin` category.
-
-**This is heavily discouraged for anyone but the server owner, as it gives access to potentially destructive functions which only trusted people should have.**
+You can also allow all permissions by allowing the entire `easyadmin` category:
 
 ```
 add_ace group.admin easyadmin allow
 ```
 
 **Note:** This will also make you immune from being kicked/banned as it grants you the `easyadmin.immune` permission.
+
+**This is heavily discouraged for anyone but the server owner, as it gives access to potentially destructive functions which only trusted people should have.**
 
 
 
