@@ -40,4 +40,10 @@ add_ace group.admin easyadmin allow
 add_ace resource.EasyAdmin command allow
 ```
 
+## Saving banlist backup failed! Please check if EasyAdmin has Permission to write in the backups folder!
+
+Your Server does not have permission to write into the `backups` folder inside the EasyAdmin Folder, make sure that your server has read and write permissions for this folder
+
+If you are using ZAP-Hosting, use the "Set FTP Permissions" button in the ZAP-Hosting Panel.
+
 ## Getting a different problem? Join the [Support Discord](https://discord.gg/qq82ZU36XZ)! 
