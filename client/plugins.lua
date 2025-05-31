@@ -1,5 +1,7 @@
 plugins = {}
 
+---Adds a new plugin to the plugins list
+---@param data table @The plugin data to add
 function addPlugin(data)
     table.insert(plugins, data)
     -- sort plugins table by name (alphabetically)

@@ -427,6 +427,8 @@ function spectatePlayer(targetPed,target,name)
 	end
 end
 
+---Displays a notification message to the player with EasyAdmin branding.
+---@param text string @The message text to display in the notification
 function ShowNotification(text)
 	if not RedM then
 		local notificationTxd = CreateRuntimeTxd("easyadmin_notification")

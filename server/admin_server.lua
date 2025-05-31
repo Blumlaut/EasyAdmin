@@ -13,7 +13,11 @@
 
 -- Cooldowns for Admin Actions
 AdminCooldowns = {}
--- Returns true if allowed, false if cooldown active
+
+
+---@param src number|string @The player source
+---@param action string @The name of the admin action
+---@return boolean @True if allowed to perform action, false if cooldown is active
 function CheckAdminCooldown(src, action)
 	local numSrc = tonumber(src)
 	if not numSrc then return true end
@@ -26,6 +30,10 @@ function CheckAdminCooldown(src, action)
 	return true
 end
 
+
+-- Sets a cooldown for a specific admin action
+---@param src number|string
+---@param action string
 function SetAdminCooldown(src, action)
 	local numSrc = tonumber(src)
 	local coolTime = GetConvarInt("ea_adminCooldown:"..tostring(action), 0)
@@ -73,6 +81,9 @@ function sendRandomReminder()
 	end
 end
 
+-- Sends a global announcement
+---@param text string
+---@return boolean
 function announce(reason)
 	if reason then
 		TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("announcement") .. "] " .. reason)
@@ -101,6 +112,9 @@ Citizen.CreateThread(function()
 end)
 
 
+-- Gets all identifiers for a player
+---@param src number
+---@return table
 function getAllPlayerIdentifiers(playerId) --Gets all info that could identify a player
 	local identifiers = GetPlayerIdentifiers(playerId)
 	local tokens = {}
@@ -543,6 +557,10 @@ Citizen.CreateThread(function()
 		end
 	end)
 
+	-- Slaps a player for a given amount of HP
+	---@param playerId number
+	---@param slapAmount number
+	---@return boolean
 	function slapPlayer(playerId,slapAmount)
 		if not CachedPlayers[playerId].immune then
 			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
@@ -565,6 +583,10 @@ Citizen.CreateThread(function()
 	end)
 	
 
+	-- Freezes or unfreezes a player
+	---@param playerId number
+	---@param toggle boolean
+	---@return boolean
 	function freezePlayer(playerId, toggle)
 		if not toggle then toggle = not FrozenPlayers[playerId] end
 		if not CachedPlayers[playerId].immune then
@@ -599,7 +621,8 @@ Citizen.CreateThread(function()
 	
 
 	scrinprogress = false
-
+	-- Checks if a screenshot is in progress
+	---@return boolean
 	function isScreenshotInProgress()
 		return scrinprogress
 	end
@@ -669,6 +692,10 @@ Citizen.CreateThread(function()
 		end
 	end)
 
+	-- Mutes or unmutes a player
+	---@param playerId number
+	---@param toggle boolean
+	---@return boolean
 	function mutePlayer(playerId, toggle)
 		if not CachedPlayers[playerId].immune then 
 			if toggle and not MutedPlayers[playerId] then
@@ -713,7 +740,11 @@ Citizen.CreateThread(function()
 	end)
 
 	
-	-- Very basic function that turns "source" into a useable player name.
+	-- Gets the name of a player, optionally including identifiers
+	---@param src number|string
+	---@param anonymousdisabled boolean
+	---@param identifierenabled boolean
+	---@return string
 	function getName(src,anonymousdisabled,identifierenabled)
 		local identifierPref = GetConvar("ea_logIdentifier", "steam,discord,license")
 		if identifierPref == "false" then identifierenabled = false end;
@@ -799,6 +830,12 @@ Citizen.CreateThread(function()
 		end
 	end)
 
+
+	-- Warns a player and handles kick/ban logic if max warnings are reached
+	---@param src number
+	---@param id number
+	---@param reason string
+	---@return boolean
 	function warnPlayerExport(src, id, reason)
 		if not CachedPlayers[id].immune then
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
@@ -831,6 +868,9 @@ Citizen.CreateThread(function()
 
 	exports('warnPlayer', warnPlayerExport)
 
+	-- Gets the number of warnings a player has
+	---@param playerId number
+	---@return number
 	function getPlayerWarnings(playerId)
 		if not WarnedPlayers[playerId] then
 			return 0
@@ -899,6 +939,10 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+	-- Makes an HTTP request and returns the result
+	---@param url string
+	---@param ... any
+	---@return string
 	function HTTPRequest(url, ...)
 		local err,response,headers
 		

@@ -12,6 +12,11 @@
 
 blacklist = {}
 
+---Handles the banning of a player
+---@param playerId number @The ID of the player to ban
+---@param reason string @The reason for the ban
+---@param expires number @The timestamp when the ban should expire
+---@return nil
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     if playerId ~= nil and CheckAdminCooldown(source, "ban") then
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
@@ -39,6 +44,11 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     end
 end)
 
+---Handles the banning of an offline player
+---@param playerId number @The ID of the offline player to ban
+---@param reason string @The reason for the ban
+---@param expires number @The timestamp when the ban should expire
+---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
     if playerId ~= nil and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "ban") then
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not CachedPlayers[playerId].immune then
@@ -69,7 +79,12 @@ AddEventHandler('banCheater', function(playerId,reason)
     Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 end)
 
-
+---Adds a ban to the banlist, either for an online or offline player
+---@param playerId number|string|table @The ID of the player or a table of identifiers if the player is offline
+---@param reason string @The reason for the ban
+---@param expires number @The timestamp when the ban should expire
+---@param banner string @The name of the administrator who issued the ban
+---@return table @The created ban entry
 function addBanExport(playerId,reason,expires,banner)
     local bannedIdentifiers = {}
     local bannedUsername = "Unknown"
@@ -158,6 +173,9 @@ RegisterServerEvent("EasyAdmin:editBan", function(ban)
     end
 end)
 
+---Unbans a player using their ban ID
+---@param banId number @The ID of the ban to be removed
+---@return boolean @True if the unban was successful, false otherwise
 function unbanPlayer(banId)
     local thisBan = nil
     for i,ban in ipairs(blacklist) do 
@@ -174,7 +192,9 @@ function unbanPlayer(banId)
 end
 exports('unbanPlayer', unbanPlayer)
 
-
+---Fetches a ban entry by its ID
+---@param banId number @The ID of the ban to fetch
+---@return table|false @The ban entry if found, false otherwise
 function fetchBan(banId)
     for i,ban in ipairs(blacklist) do 
         if ban.banid == banId then
@@ -197,6 +217,8 @@ RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
     end
 end)
 	
+---Generates a new unique ban ID
+---@return number @The next available ban ID
 function GetFreshBanId()
     if blacklist[#blacklist] then 
         return blacklist[#blacklist].banid+1
@@ -243,6 +265,10 @@ RegisterCommand("convertbanlist", function(source, args, rawCommand)
     end
 end, true)
 
+---Updates a ban entry in the banlist
+---@param id number @The ID of the ban to update
+---@param newData table @The new data to apply to the ban
+---@return nil
 function updateBan(id,newData)
     if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then 
         for i, ban in pairs(blacklist) do
@@ -262,6 +288,9 @@ function updateBan(id,newData)
 end
 
 
+---Adds a new ban entry to the banlist
+---@param data table @The data of the ban to be added
+---@return nil
 function addBan(data)
     if data then
         table.insert(blacklist, data)
@@ -269,7 +298,11 @@ function addBan(data)
 end
 
 
-
+---Synchronizes the in-memory banlist with the stored file or external system
+---@param data table @Optional data to add or remove from the banlist
+---@param remove boolean @Whether this is a remove operation
+---@param forceChange boolean @Whether to force a save regardless of changes
+---@return nil
 function updateBlacklist(data,remove, forceChange)
     local change = (forceChange or false) --mark if file was changed to save up on disk writes.
     if GetConvar("ea_custombanlist", "false") == "true" then 
@@ -372,14 +405,25 @@ function updateBlacklist(data,remove, forceChange)
     PrintDebugMessage("Completed Banlist Update.", 4)
 end
 
+---Bans a player using their identifier
+---@param identifier string @The identifier of the player to ban
+---@param reason string @The reason for the ban
+---@return nil
 function BanIdentifier(identifier,reason)
     updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
+---Bans a player using multiple identifiers
+---@param identifier table @A table of identifiers for the player to ban
+---@param reason string @The reason for the ban
+---@return nil
 function BanIdentifiers(identifier,reason)
     updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
+---Unbans a player using their identifier
+---@param identifier string @The identifier of the player to unban
+---@return nil
 function UnbanIdentifier(identifier)
     if identifier then
         for i,ban in pairs(blacklist) do
@@ -402,6 +446,9 @@ function UnbanIdentifier(identifier)
     end
 end
 
+---Unbans a player using their ban ID
+---@param id number @The ID of the ban to remove
+---@return nil
 function UnbanId(id)
     for i,ban in pairs(blacklist) do
         if ban.banid == id then
@@ -418,6 +465,8 @@ function UnbanId(id)
     end
 end
 
+---Performs upgrades on the banlist format if necessary
+---@return boolean @True if the banlist was upgraded, false otherwise
 function performBanlistUpgrades()
     local upgraded = false
     
@@ -489,7 +538,9 @@ function performBanlistUpgrades()
 end
 
 
-
+---Checks if a given identifier is banned
+---@param theIdentifier string @The identifier to check
+---@return boolean @True if the identifier is banned, false otherwise
 function IsIdentifierBanned(theIdentifier)
     local identifierfound = false
     for index,value in ipairs(blacklist) do

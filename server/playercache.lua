@@ -48,11 +48,17 @@ RegisterServerEvent("EasyAdmin:requestCachedPlayers", function()
 	end
 end)
 
+
+---Returns a table of all cached players.
+---@return table @A table containing all cached player data.
 function getCachedPlayers() -- this is server-only for security reasons.
     return CachedPlayers
 end
 exports('getCachedPlayers', getCachedPlayers)
 
+---Returns the cached player data for a specific player ID.
+---@param id number|string @The player ID (number or string representation).
+---@return table? @The cached player data, or nil if not found.
 function getCachedPlayer(id)
 	cachePlayer(tonumber(id))
     return CachedPlayers[tonumber(id)]

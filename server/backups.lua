@@ -31,6 +31,7 @@ Citizen.CreateThread(function()
 end)
 
 
+---@param name string @Name of the backup file to load
 function loadBackupName(name)
 	local backup = LoadResourceFile(GetCurrentResourceName(), "backups/"..name)
 	if backup then
@@ -65,6 +66,8 @@ function loadBackupName(name)
 end
 
 
+---@return number @Backup ID
+---@return number @Backup timestamp
 function createBackup()
 	local backupTime = os.time()
 	local backupDate = os.date("%H_%M_%d_%m_%Y")
@@ -99,6 +102,8 @@ function createBackup()
 	return id,timestamp
 end
 
+---@param backupData table @Table containing backup information
+---@param id number @Index of the backup to delete
 function deleteBackup(backupData,id)
 	local expiredBackup = backupData.backups[id]
 	table.remove(backupData.backups, id)
@@ -111,6 +116,8 @@ function deleteBackup(backupData,id)
 	
 end
 
+---@param backupData table @Table containing backup information
+---@return number @New backup ID
 function getNewBackupid(backupData)
 	if backupData then
 		local lastBackup = backupData.lastbackup
