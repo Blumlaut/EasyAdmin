@@ -27974,37 +27974,12 @@ ${flattened}` : error.message || flattened || "Unknown Error";
   }
 });
 
-// node_modules/discord-api-types/gateway/common.js
-var require_common5 = __commonJS({
-  "node_modules/discord-api-types/gateway/common.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/gateway/v10.js
 var require_v107 = __commonJS({
   "node_modules/discord-api-types/gateway/v10.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      var desc = Object.getOwnPropertyDescriptor(m, k);
-      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
-          return m[k];
-        } };
-      }
-      Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.VoiceChannelEffectSendAnimationType = exports2.GatewayDispatchEvents = exports2.GatewayIntentBits = exports2.GatewayCloseCodes = exports2.GatewayOpcodes = exports2.GatewayVersion = void 0;
-    __exportStar2(require_common5(), exports2);
     exports2.GatewayVersion = "10";
     var GatewayOpcodes;
     (function(GatewayOpcodes2) {
@@ -28196,10 +28171,7 @@ var require_globals2 = __commonJS({
        *
        * The `fullName` (possibly including `name`, `subcommandOrGroup` and `subcommand`) and `id` group properties are present on the `exec` result of this expression
        */
-      SlashCommand: (
-        // eslint-disable-next-line unicorn/no-unsafe-regex
-        /<\/(?<fullName>(?<name>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32})(?: (?<subcommandOrGroup>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?(?: (?<subcommand>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?):(?<id>\d{17,20})>/u
-      ),
+      SlashCommand: /<\/(?<fullName>(?<name>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32})(?: (?<subcommandOrGroup>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?(?: (?<subcommand>[-_\p{Letter}\p{Number}\p{sc=Deva}\p{sc=Thai}]{1,32}))?):(?<id>\d{17,20})>/u,
       /**
        * Regular expression for matching a custom emoji, either static or animated
        *
@@ -28255,7 +28227,7 @@ var require_globals2 = __commonJS({
 });
 
 // node_modules/discord-api-types/payloads/common.js
-var require_common6 = __commonJS({
+var require_common5 = __commonJS({
   "node_modules/discord-api-types/payloads/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -28270,7 +28242,6 @@ var require_common6 = __commonJS({
       /**
        * Allows kicking members
        */
-      // eslint-disable-next-line sonarjs/no-identical-expressions
       KickMembers: 1n << 1n,
       /**
        * Allows banning members
@@ -28928,14 +28899,6 @@ var require_channel4 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/emoji.js
-var require_emoji3 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/emoji.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/payloads/v10/gateway.js
 var require_gateway3 = __commonJS({
   "node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
@@ -29183,70 +29146,6 @@ var require_guildScheduledEvent3 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js
-var require_attachment2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js
-var require_base3 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js
-var require_boolean2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js
-var require_channel5 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js
-var require_integer2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js
-var require_mentionable2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js
-var require_number2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js
-var require_role2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js
 var require_shared2 = __commonJS({
   "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/shared.js"(exports2) {
@@ -29267,38 +29166,6 @@ var require_shared2 = __commonJS({
       ApplicationCommandOptionType2[ApplicationCommandOptionType2["Number"] = 10] = "Number";
       ApplicationCommandOptionType2[ApplicationCommandOptionType2["Attachment"] = 11] = "Attachment";
     })(ApplicationCommandOptionType || (exports2.ApplicationCommandOptionType = ApplicationCommandOptionType = {}));
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js
-var require_string2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js
-var require_subcommand2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js
-var require_subcommandGroup2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js
-var require_user4 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -29323,27 +29190,7 @@ var require_chatInput2 = __commonJS({
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar2(require_attachment2(), exports2);
-    __exportStar2(require_base3(), exports2);
-    __exportStar2(require_boolean2(), exports2);
-    __exportStar2(require_channel5(), exports2);
-    __exportStar2(require_integer2(), exports2);
-    __exportStar2(require_mentionable2(), exports2);
-    __exportStar2(require_number2(), exports2);
-    __exportStar2(require_role2(), exports2);
     __exportStar2(require_shared2(), exports2);
-    __exportStar2(require_string2(), exports2);
-    __exportStar2(require_subcommand2(), exports2);
-    __exportStar2(require_subcommandGroup2(), exports2);
-    __exportStar2(require_user4(), exports2);
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js
-var require_contextMenu2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -29364,22 +29211,6 @@ var require_permissions3 = __commonJS({
       Everyone: (guildId) => String(guildId),
       AllChannels: (guildId) => String(BigInt(guildId) - 1n)
     };
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js
-var require_entryPoint2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
-var require_internals3 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -29406,10 +29237,7 @@ var require_applicationCommands2 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.EntryPointCommandHandlerType = exports2.InteractionContextType = exports2.ApplicationIntegrationType = exports2.ApplicationCommandType = void 0;
     __exportStar2(require_chatInput2(), exports2);
-    __exportStar2(require_contextMenu2(), exports2);
     __exportStar2(require_permissions3(), exports2);
-    __exportStar2(require_entryPoint2(), exports2);
-    __exportStar2(require_internals3(), exports2);
     var ApplicationCommandType;
     (function(ApplicationCommandType2) {
       ApplicationCommandType2[ApplicationCommandType2["ChatInput"] = 1] = "ChatInput";
@@ -29433,46 +29261,6 @@ var require_applicationCommands2 = __commonJS({
       EntryPointCommandHandlerType2[EntryPointCommandHandlerType2["AppHandler"] = 1] = "AppHandler";
       EntryPointCommandHandlerType2[EntryPointCommandHandlerType2["DiscordLaunchActivity"] = 2] = "DiscordLaunchActivity";
     })(EntryPointCommandHandlerType || (exports2.EntryPointCommandHandlerType = EntryPointCommandHandlerType = {}));
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js
-var require_autocomplete2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/base.js
-var require_base4 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/base.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js
-var require_messageComponents2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js
-var require_modalSubmit2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/payloads/v10/_interactions/ping.js
-var require_ping2 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/_interactions/ping.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -29527,11 +29315,6 @@ var require_interactions3 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_applicationCommands2(), exports2);
-    __exportStar2(require_autocomplete2(), exports2);
-    __exportStar2(require_base4(), exports2);
-    __exportStar2(require_messageComponents2(), exports2);
-    __exportStar2(require_modalSubmit2(), exports2);
-    __exportStar2(require_ping2(), exports2);
     __exportStar2(require_responses2(), exports2);
   }
 });
@@ -29661,14 +29444,6 @@ var require_poll3 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/soundboard.js
-var require_soundboard3 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/soundboard.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/payloads/v10/stageInstance.js
 var require_stageInstance3 = __commonJS({
   "node_modules/discord-api-types/payloads/v10/stageInstance.js"(exports2) {
@@ -29724,16 +29499,8 @@ var require_teams2 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/template.js
-var require_template3 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/template.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/payloads/v10/user.js
-var require_user5 = __commonJS({
+var require_user4 = __commonJS({
   "node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -29809,14 +29576,6 @@ var require_user5 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/payloads/v10/voice.js
-var require_voice3 = __commonJS({
-  "node_modules/discord-api-types/payloads/v10/voice.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/payloads/v10/webhook.js
 var require_webhook3 = __commonJS({
   "node_modules/discord-api-types/payloads/v10/webhook.js"(exports2) {
@@ -29831,6 +29590,7 @@ var require_webhook3 = __commonJS({
     var ApplicationWebhookEventType;
     (function(ApplicationWebhookEventType2) {
       ApplicationWebhookEventType2["ApplicationAuthorized"] = "APPLICATION_AUTHORIZED";
+      ApplicationWebhookEventType2["ApplicationDeauthorized"] = "APPLICATION_DEAUTHORIZED";
       ApplicationWebhookEventType2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
       ApplicationWebhookEventType2["QuestUserEnrollment"] = "QUEST_USER_ENROLLMENT";
     })(ApplicationWebhookEventType || (exports2.ApplicationWebhookEventType = ApplicationWebhookEventType = {}));
@@ -29864,12 +29624,11 @@ var require_v108 = __commonJS({
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar2(require_common6(), exports2);
+    __exportStar2(require_common5(), exports2);
     __exportStar2(require_application3(), exports2);
     __exportStar2(require_auditLog3(), exports2);
     __exportStar2(require_autoModeration3(), exports2);
     __exportStar2(require_channel4(), exports2);
-    __exportStar2(require_emoji3(), exports2);
     __exportStar2(require_gateway3(), exports2);
     __exportStar2(require_guild3(), exports2);
     __exportStar2(require_guildScheduledEvent3(), exports2);
@@ -29879,19 +29638,16 @@ var require_v108 = __commonJS({
     __exportStar2(require_oauth23(), exports2);
     __exportStar2(require_permissions4(), exports2);
     __exportStar2(require_poll3(), exports2);
-    __exportStar2(require_soundboard3(), exports2);
     __exportStar2(require_stageInstance3(), exports2);
     __exportStar2(require_sticker3(), exports2);
     __exportStar2(require_teams2(), exports2);
-    __exportStar2(require_template3(), exports2);
-    __exportStar2(require_user5(), exports2);
-    __exportStar2(require_voice3(), exports2);
+    __exportStar2(require_user4(), exports2);
     __exportStar2(require_webhook3(), exports2);
   }
 });
 
 // node_modules/discord-api-types/utils/internals.js
-var require_internals4 = __commonJS({
+var require_internals3 = __commonJS({
   "node_modules/discord-api-types/utils/internals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -29908,7 +29664,7 @@ var require_internals4 = __commonJS({
 });
 
 // node_modules/discord-api-types/rest/common.js
-var require_common7 = __commonJS({
+var require_common6 = __commonJS({
   "node_modules/discord-api-types/rest/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -30178,32 +29934,8 @@ var require_common7 = __commonJS({
   }
 });
 
-// node_modules/discord-api-types/rest/v10/application.js
-var require_application4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/application.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/auditLog.js
-var require_auditLog4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/auditLog.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/autoModeration.js
-var require_autoModeration4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/autoModeration.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/discord-api-types/rest/v10/channel.js
-var require_channel6 = __commonJS({
+var require_channel5 = __commonJS({
   "node_modules/discord-api-types/rest/v10/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -30213,54 +29945,6 @@ var require_channel6 = __commonJS({
       ReactionType2[ReactionType2["Normal"] = 0] = "Normal";
       ReactionType2[ReactionType2["Super"] = 1] = "Super";
     })(ReactionType || (exports2.ReactionType = ReactionType = {}));
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/emoji.js
-var require_emoji4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/emoji.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/gateway.js
-var require_gateway4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/gateway.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/guild.js
-var require_guild4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/guild.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/guildScheduledEvent.js
-var require_guildScheduledEvent4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/guildScheduledEvent.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/interactions.js
-var require_interactions4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/interactions.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/invite.js
-var require_invite4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/invite.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -30275,78 +29959,6 @@ var require_monetization4 = __commonJS({
       EntitlementOwnerType2[EntitlementOwnerType2["Guild"] = 1] = "Guild";
       EntitlementOwnerType2[EntitlementOwnerType2["User"] = 2] = "User";
     })(EntitlementOwnerType || (exports2.EntitlementOwnerType = EntitlementOwnerType = {}));
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/oauth2.js
-var require_oauth24 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/oauth2.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/poll.js
-var require_poll4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/poll.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/soundboard.js
-var require_soundboard4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/soundboard.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/stageInstance.js
-var require_stageInstance4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/stageInstance.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/sticker.js
-var require_sticker4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/sticker.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/template.js
-var require_template4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/template.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/user.js
-var require_user6 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/user.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/voice.js
-var require_voice4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/voice.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/discord-api-types/rest/v10/webhook.js
-var require_webhook4 = __commonJS({
-  "node_modules/discord-api-types/rest/v10/webhook.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -30372,28 +29984,10 @@ var require_v109 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.OAuth2Routes = exports2.RouteBases = exports2.CDNRoutes = exports2.ImageFormat = exports2.StickerPackApplicationId = exports2.Routes = exports2.APIVersion = void 0;
-    var internals_1 = require_internals4();
-    __exportStar2(require_common7(), exports2);
-    __exportStar2(require_application4(), exports2);
-    __exportStar2(require_auditLog4(), exports2);
-    __exportStar2(require_autoModeration4(), exports2);
-    __exportStar2(require_channel6(), exports2);
-    __exportStar2(require_emoji4(), exports2);
-    __exportStar2(require_gateway4(), exports2);
-    __exportStar2(require_guild4(), exports2);
-    __exportStar2(require_guildScheduledEvent4(), exports2);
-    __exportStar2(require_interactions4(), exports2);
-    __exportStar2(require_invite4(), exports2);
+    var internals_1 = require_internals3();
+    __exportStar2(require_common6(), exports2);
+    __exportStar2(require_channel5(), exports2);
     __exportStar2(require_monetization4(), exports2);
-    __exportStar2(require_oauth24(), exports2);
-    __exportStar2(require_poll4(), exports2);
-    __exportStar2(require_soundboard4(), exports2);
-    __exportStar2(require_stageInstance4(), exports2);
-    __exportStar2(require_sticker4(), exports2);
-    __exportStar2(require_template4(), exports2);
-    __exportStar2(require_user6(), exports2);
-    __exportStar2(require_voice4(), exports2);
-    __exportStar2(require_webhook4(), exports2);
     exports2.APIVersion = "10";
     exports2.Routes = {
       /**
@@ -31599,7 +31193,7 @@ var require_v109 = __commonJS({
 });
 
 // node_modules/discord-api-types/rpc/common.js
-var require_common8 = __commonJS({
+var require_common7 = __commonJS({
   "node_modules/discord-api-types/rpc/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -31712,7 +31306,7 @@ var require_v1010 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.RPCEvents = exports2.RPCCommands = exports2.RPCVersion = void 0;
-    __exportStar2(require_common8(), exports2);
+    __exportStar2(require_common7(), exports2);
     exports2.RPCVersion = "1";
     var RPCCommands;
     (function(RPCCommands2) {
@@ -31896,7 +31490,7 @@ var require_v1012 = __commonJS({
     __exportStar2(require_v108(), exports2);
     __exportStar2(require_v109(), exports2);
     __exportStar2(require_v1010(), exports2);
-    __exportStar2(require_internals4(), exports2);
+    __exportStar2(require_internals3(), exports2);
     exports2.Utils = require_v1011();
   }
 });
@@ -61218,7 +60812,7 @@ var require_dist9 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/gateway/common.js
-var require_common9 = __commonJS({
+var require_common8 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/gateway/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -61247,7 +60841,7 @@ var require_v1013 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.VoiceChannelEffectSendAnimationType = exports2.GatewayDispatchEvents = exports2.GatewayIntentBits = exports2.GatewayCloseCodes = exports2.GatewayOpcodes = exports2.GatewayVersion = void 0;
-    __exportStar2(require_common9(), exports2);
+    __exportStar2(require_common8(), exports2);
     exports2.GatewayVersion = "10";
     var GatewayOpcodes;
     (function(GatewayOpcodes2) {
@@ -61498,7 +61092,7 @@ var require_globals3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/common.js
-var require_common10 = __commonJS({
+var require_common9 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -61790,7 +61384,7 @@ var require_common10 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/application.js
-var require_application5 = __commonJS({
+var require_application4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/application.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -61835,7 +61429,7 @@ var require_application5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/auditLog.js
-var require_auditLog5 = __commonJS({
+var require_auditLog4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/auditLog.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -61918,7 +61512,7 @@ var require_auditLog5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/autoModeration.js
-var require_autoModeration5 = __commonJS({
+var require_autoModeration4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/autoModeration.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -61953,7 +61547,7 @@ var require_autoModeration5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/channel.js
-var require_channel7 = __commonJS({
+var require_channel6 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62172,7 +61766,7 @@ var require_channel7 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/emoji.js
-var require_emoji5 = __commonJS({
+var require_emoji3 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/emoji.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62180,7 +61774,7 @@ var require_emoji5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/gateway.js
-var require_gateway5 = __commonJS({
+var require_gateway4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62229,7 +61823,7 @@ var require_gateway5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guild.js
-var require_guild5 = __commonJS({
+var require_guild4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guild.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62369,7 +61963,7 @@ var require_guild5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js
-var require_guildScheduledEvent5 = __commonJS({
+var require_guildScheduledEvent4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/guildScheduledEvent.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62427,7 +62021,7 @@ var require_guildScheduledEvent5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js
-var require_attachment3 = __commonJS({
+var require_attachment2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/attachment.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62435,7 +62029,7 @@ var require_attachment3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js
-var require_base5 = __commonJS({
+var require_base3 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/base.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62443,7 +62037,7 @@ var require_base5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js
-var require_boolean3 = __commonJS({
+var require_boolean2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/boolean.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62451,7 +62045,7 @@ var require_boolean3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js
-var require_channel8 = __commonJS({
+var require_channel7 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62459,7 +62053,7 @@ var require_channel8 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js
-var require_integer3 = __commonJS({
+var require_integer2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/integer.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62467,7 +62061,7 @@ var require_integer3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js
-var require_mentionable3 = __commonJS({
+var require_mentionable2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/mentionable.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62475,7 +62069,7 @@ var require_mentionable3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js
-var require_number3 = __commonJS({
+var require_number2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/number.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62483,7 +62077,7 @@ var require_number3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js
-var require_role3 = __commonJS({
+var require_role2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/role.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62514,7 +62108,7 @@ var require_shared3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js
-var require_string3 = __commonJS({
+var require_string2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/string.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62522,7 +62116,7 @@ var require_string3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js
-var require_subcommand3 = __commonJS({
+var require_subcommand2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62530,7 +62124,7 @@ var require_subcommand3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js
-var require_subcommandGroup3 = __commonJS({
+var require_subcommandGroup2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommandGroup.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62538,7 +62132,7 @@ var require_subcommandGroup3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js
-var require_user7 = __commonJS({
+var require_user5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62566,24 +62160,24 @@ var require_chatInput3 = __commonJS({
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar2(require_attachment3(), exports2);
-    __exportStar2(require_base5(), exports2);
-    __exportStar2(require_boolean3(), exports2);
-    __exportStar2(require_channel8(), exports2);
-    __exportStar2(require_integer3(), exports2);
-    __exportStar2(require_mentionable3(), exports2);
-    __exportStar2(require_number3(), exports2);
-    __exportStar2(require_role3(), exports2);
+    __exportStar2(require_attachment2(), exports2);
+    __exportStar2(require_base3(), exports2);
+    __exportStar2(require_boolean2(), exports2);
+    __exportStar2(require_channel7(), exports2);
+    __exportStar2(require_integer2(), exports2);
+    __exportStar2(require_mentionable2(), exports2);
+    __exportStar2(require_number2(), exports2);
+    __exportStar2(require_role2(), exports2);
     __exportStar2(require_shared3(), exports2);
-    __exportStar2(require_string3(), exports2);
-    __exportStar2(require_subcommand3(), exports2);
-    __exportStar2(require_subcommandGroup3(), exports2);
-    __exportStar2(require_user7(), exports2);
+    __exportStar2(require_string2(), exports2);
+    __exportStar2(require_subcommand2(), exports2);
+    __exportStar2(require_subcommandGroup2(), exports2);
+    __exportStar2(require_user5(), exports2);
   }
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js
-var require_contextMenu3 = __commonJS({
+var require_contextMenu2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/contextMenu.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62611,7 +62205,7 @@ var require_permissions5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js
-var require_entryPoint3 = __commonJS({
+var require_entryPoint2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/entryPoint.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62619,7 +62213,7 @@ var require_entryPoint3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js
-var require_internals5 = __commonJS({
+var require_internals4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/internals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62649,10 +62243,10 @@ var require_applicationCommands3 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.EntryPointCommandHandlerType = exports2.InteractionContextType = exports2.ApplicationIntegrationType = exports2.ApplicationCommandType = void 0;
     __exportStar2(require_chatInput3(), exports2);
-    __exportStar2(require_contextMenu3(), exports2);
+    __exportStar2(require_contextMenu2(), exports2);
     __exportStar2(require_permissions5(), exports2);
-    __exportStar2(require_entryPoint3(), exports2);
-    __exportStar2(require_internals5(), exports2);
+    __exportStar2(require_entryPoint2(), exports2);
+    __exportStar2(require_internals4(), exports2);
     var ApplicationCommandType;
     (function(ApplicationCommandType2) {
       ApplicationCommandType2[ApplicationCommandType2["ChatInput"] = 1] = "ChatInput";
@@ -62680,7 +62274,7 @@ var require_applicationCommands3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js
-var require_autocomplete3 = __commonJS({
+var require_autocomplete2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/autocomplete.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62688,7 +62282,7 @@ var require_autocomplete3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/base.js
-var require_base6 = __commonJS({
+var require_base4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/base.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62696,7 +62290,7 @@ var require_base6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js
-var require_messageComponents3 = __commonJS({
+var require_messageComponents2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/messageComponents.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62704,7 +62298,7 @@ var require_messageComponents3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js
-var require_modalSubmit3 = __commonJS({
+var require_modalSubmit2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/modalSubmit.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62712,7 +62306,7 @@ var require_modalSubmit3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/ping.js
-var require_ping3 = __commonJS({
+var require_ping2 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/_interactions/ping.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62749,7 +62343,7 @@ var require_responses3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/interactions.js
-var require_interactions5 = __commonJS({
+var require_interactions4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/interactions.js"(exports2) {
     "use strict";
     var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -62770,17 +62364,17 @@ var require_interactions5 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_applicationCommands3(), exports2);
-    __exportStar2(require_autocomplete3(), exports2);
-    __exportStar2(require_base6(), exports2);
-    __exportStar2(require_messageComponents3(), exports2);
-    __exportStar2(require_modalSubmit3(), exports2);
-    __exportStar2(require_ping3(), exports2);
+    __exportStar2(require_autocomplete2(), exports2);
+    __exportStar2(require_base4(), exports2);
+    __exportStar2(require_messageComponents2(), exports2);
+    __exportStar2(require_modalSubmit2(), exports2);
+    __exportStar2(require_ping2(), exports2);
     __exportStar2(require_responses3(), exports2);
   }
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/invite.js
-var require_invite5 = __commonJS({
+var require_invite4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/invite.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62839,7 +62433,7 @@ var require_monetization5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/oauth2.js
-var require_oauth25 = __commonJS({
+var require_oauth24 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/oauth2.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62892,7 +62486,7 @@ var require_permissions6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/poll.js
-var require_poll5 = __commonJS({
+var require_poll4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/poll.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62905,7 +62499,7 @@ var require_poll5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/soundboard.js
-var require_soundboard5 = __commonJS({
+var require_soundboard3 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/soundboard.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62913,7 +62507,7 @@ var require_soundboard5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/stageInstance.js
-var require_stageInstance5 = __commonJS({
+var require_stageInstance4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/stageInstance.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62927,7 +62521,7 @@ var require_stageInstance5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/sticker.js
-var require_sticker5 = __commonJS({
+var require_sticker4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/sticker.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62968,7 +62562,7 @@ var require_teams3 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/template.js
-var require_template5 = __commonJS({
+var require_template3 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/template.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -62976,7 +62570,7 @@ var require_template5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/user.js
-var require_user8 = __commonJS({
+var require_user6 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63053,7 +62647,7 @@ var require_user8 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/voice.js
-var require_voice5 = __commonJS({
+var require_voice3 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/voice.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63061,7 +62655,7 @@ var require_voice5 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/webhook.js
-var require_webhook5 = __commonJS({
+var require_webhook4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/payloads/v10/webhook.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63107,34 +62701,34 @@ var require_v1014 = __commonJS({
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar2(require_common10(), exports2);
-    __exportStar2(require_application5(), exports2);
-    __exportStar2(require_auditLog5(), exports2);
-    __exportStar2(require_autoModeration5(), exports2);
-    __exportStar2(require_channel7(), exports2);
-    __exportStar2(require_emoji5(), exports2);
-    __exportStar2(require_gateway5(), exports2);
-    __exportStar2(require_guild5(), exports2);
-    __exportStar2(require_guildScheduledEvent5(), exports2);
-    __exportStar2(require_interactions5(), exports2);
-    __exportStar2(require_invite5(), exports2);
+    __exportStar2(require_common9(), exports2);
+    __exportStar2(require_application4(), exports2);
+    __exportStar2(require_auditLog4(), exports2);
+    __exportStar2(require_autoModeration4(), exports2);
+    __exportStar2(require_channel6(), exports2);
+    __exportStar2(require_emoji3(), exports2);
+    __exportStar2(require_gateway4(), exports2);
+    __exportStar2(require_guild4(), exports2);
+    __exportStar2(require_guildScheduledEvent4(), exports2);
+    __exportStar2(require_interactions4(), exports2);
+    __exportStar2(require_invite4(), exports2);
     __exportStar2(require_monetization5(), exports2);
-    __exportStar2(require_oauth25(), exports2);
+    __exportStar2(require_oauth24(), exports2);
     __exportStar2(require_permissions6(), exports2);
-    __exportStar2(require_poll5(), exports2);
-    __exportStar2(require_soundboard5(), exports2);
-    __exportStar2(require_stageInstance5(), exports2);
-    __exportStar2(require_sticker5(), exports2);
+    __exportStar2(require_poll4(), exports2);
+    __exportStar2(require_soundboard3(), exports2);
+    __exportStar2(require_stageInstance4(), exports2);
+    __exportStar2(require_sticker4(), exports2);
     __exportStar2(require_teams3(), exports2);
-    __exportStar2(require_template5(), exports2);
-    __exportStar2(require_user8(), exports2);
-    __exportStar2(require_voice5(), exports2);
-    __exportStar2(require_webhook5(), exports2);
+    __exportStar2(require_template3(), exports2);
+    __exportStar2(require_user6(), exports2);
+    __exportStar2(require_voice3(), exports2);
+    __exportStar2(require_webhook4(), exports2);
   }
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/utils/internals.js
-var require_internals6 = __commonJS({
+var require_internals5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/utils/internals.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63151,7 +62745,7 @@ var require_internals6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/common.js
-var require_common11 = __commonJS({
+var require_common10 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63422,7 +63016,7 @@ var require_common11 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/application.js
-var require_application6 = __commonJS({
+var require_application5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/application.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63430,7 +63024,7 @@ var require_application6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/auditLog.js
-var require_auditLog6 = __commonJS({
+var require_auditLog5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/auditLog.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63438,7 +63032,7 @@ var require_auditLog6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/autoModeration.js
-var require_autoModeration6 = __commonJS({
+var require_autoModeration5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/autoModeration.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63446,7 +63040,7 @@ var require_autoModeration6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/channel.js
-var require_channel9 = __commonJS({
+var require_channel8 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63460,7 +63054,7 @@ var require_channel9 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/emoji.js
-var require_emoji6 = __commonJS({
+var require_emoji4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/emoji.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63468,7 +63062,7 @@ var require_emoji6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/gateway.js
-var require_gateway6 = __commonJS({
+var require_gateway5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/gateway.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63476,7 +63070,7 @@ var require_gateway6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guild.js
-var require_guild6 = __commonJS({
+var require_guild5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guild.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63484,7 +63078,7 @@ var require_guild6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guildScheduledEvent.js
-var require_guildScheduledEvent6 = __commonJS({
+var require_guildScheduledEvent5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/guildScheduledEvent.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63492,7 +63086,7 @@ var require_guildScheduledEvent6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/interactions.js
-var require_interactions6 = __commonJS({
+var require_interactions5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/interactions.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63500,7 +63094,7 @@ var require_interactions6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/invite.js
-var require_invite6 = __commonJS({
+var require_invite5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/invite.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63522,7 +63116,7 @@ var require_monetization6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/oauth2.js
-var require_oauth26 = __commonJS({
+var require_oauth25 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/oauth2.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63530,7 +63124,7 @@ var require_oauth26 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/poll.js
-var require_poll6 = __commonJS({
+var require_poll5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/poll.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63538,7 +63132,7 @@ var require_poll6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/soundboard.js
-var require_soundboard6 = __commonJS({
+var require_soundboard4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/soundboard.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63546,7 +63140,7 @@ var require_soundboard6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/stageInstance.js
-var require_stageInstance6 = __commonJS({
+var require_stageInstance5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/stageInstance.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63554,7 +63148,7 @@ var require_stageInstance6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/sticker.js
-var require_sticker6 = __commonJS({
+var require_sticker5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/sticker.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63562,7 +63156,7 @@ var require_sticker6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/template.js
-var require_template6 = __commonJS({
+var require_template4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/template.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63570,7 +63164,7 @@ var require_template6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/user.js
-var require_user9 = __commonJS({
+var require_user7 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63578,7 +63172,7 @@ var require_user9 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/voice.js
-var require_voice6 = __commonJS({
+var require_voice4 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/voice.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63586,7 +63180,7 @@ var require_voice6 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/webhook.js
-var require_webhook6 = __commonJS({
+var require_webhook5 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rest/v10/webhook.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -63615,28 +63209,28 @@ var require_v1015 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.OAuth2Routes = exports2.RouteBases = exports2.CDNRoutes = exports2.ImageFormat = exports2.StickerPackApplicationId = exports2.Routes = exports2.APIVersion = void 0;
-    var internals_1 = require_internals6();
-    __exportStar2(require_common11(), exports2);
-    __exportStar2(require_application6(), exports2);
-    __exportStar2(require_auditLog6(), exports2);
-    __exportStar2(require_autoModeration6(), exports2);
-    __exportStar2(require_channel9(), exports2);
-    __exportStar2(require_emoji6(), exports2);
-    __exportStar2(require_gateway6(), exports2);
-    __exportStar2(require_guild6(), exports2);
-    __exportStar2(require_guildScheduledEvent6(), exports2);
-    __exportStar2(require_interactions6(), exports2);
-    __exportStar2(require_invite6(), exports2);
+    var internals_1 = require_internals5();
+    __exportStar2(require_common10(), exports2);
+    __exportStar2(require_application5(), exports2);
+    __exportStar2(require_auditLog5(), exports2);
+    __exportStar2(require_autoModeration5(), exports2);
+    __exportStar2(require_channel8(), exports2);
+    __exportStar2(require_emoji4(), exports2);
+    __exportStar2(require_gateway5(), exports2);
+    __exportStar2(require_guild5(), exports2);
+    __exportStar2(require_guildScheduledEvent5(), exports2);
+    __exportStar2(require_interactions5(), exports2);
+    __exportStar2(require_invite5(), exports2);
     __exportStar2(require_monetization6(), exports2);
-    __exportStar2(require_oauth26(), exports2);
-    __exportStar2(require_poll6(), exports2);
-    __exportStar2(require_soundboard6(), exports2);
-    __exportStar2(require_stageInstance6(), exports2);
-    __exportStar2(require_sticker6(), exports2);
-    __exportStar2(require_template6(), exports2);
-    __exportStar2(require_user9(), exports2);
-    __exportStar2(require_voice6(), exports2);
-    __exportStar2(require_webhook6(), exports2);
+    __exportStar2(require_oauth25(), exports2);
+    __exportStar2(require_poll5(), exports2);
+    __exportStar2(require_soundboard4(), exports2);
+    __exportStar2(require_stageInstance5(), exports2);
+    __exportStar2(require_sticker5(), exports2);
+    __exportStar2(require_template4(), exports2);
+    __exportStar2(require_user7(), exports2);
+    __exportStar2(require_voice4(), exports2);
+    __exportStar2(require_webhook5(), exports2);
     exports2.APIVersion = "10";
     exports2.Routes = {
       /**
@@ -64842,7 +64436,7 @@ var require_v1015 = __commonJS({
 });
 
 // node_modules/@discordjs/ws/node_modules/discord-api-types/rpc/common.js
-var require_common12 = __commonJS({
+var require_common11 = __commonJS({
   "node_modules/@discordjs/ws/node_modules/discord-api-types/rpc/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -64955,7 +64549,7 @@ var require_v1016 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.RPCEvents = exports2.RPCCommands = exports2.RPCVersion = void 0;
-    __exportStar2(require_common12(), exports2);
+    __exportStar2(require_common11(), exports2);
     exports2.RPCVersion = "1";
     var RPCCommands;
     (function(RPCCommands2) {
@@ -65139,7 +64733,7 @@ var require_v1018 = __commonJS({
     __exportStar2(require_v1014(), exports2);
     __exportStar2(require_v1015(), exports2);
     __exportStar2(require_v1016(), exports2);
-    __exportStar2(require_internals6(), exports2);
+    __exportStar2(require_internals5(), exports2);
     exports2.Utils = require_v1017();
   }
 });
