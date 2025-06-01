@@ -1,5 +1,5 @@
 
-# 🛠 Common Issues, Questions & Answers
+# Common Issues, Questions & Answers
 
 Below are some frequently asked questions and known issues related to **EasyAdmin**. If your issue isn't listed here, feel free to join the [Support Discord](https://discord.gg/qq82ZU36XZ) for help.
 
