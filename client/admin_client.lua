@@ -41,6 +41,13 @@ RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	end
 end)
 
+function DoesPlayerHavePermission(player,perm)
+	if player != -1 then
+		return false
+	end
+	return permissions[perm]
+end
+
 RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
 end)
