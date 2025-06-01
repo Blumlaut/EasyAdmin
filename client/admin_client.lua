@@ -51,7 +51,7 @@ RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
 end)
 
-AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
+RegisterNetEvent('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
 end)
 
