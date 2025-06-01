@@ -1159,8 +1159,6 @@ function checkVersion()
 	if GetConvar("ea_defaultKey", "none") == "none" and RedM then
 		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
 	end
-	
-	readAcePermissions()
 end
 
 
