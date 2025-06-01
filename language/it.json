@@ -187,9 +187,6 @@
 
     "forceeasteregg": "Force Easter Egg",
 
-    "permissioneditor": "Editor permessi",
-    "permissioneditorguide": "Modifica i permessi nel server, e li salva in ~g~easyadmin_permissions.cfg~w~",
-
     "aces": "ACEs",
     "permission": "Permission",
     "principals": "Principals",

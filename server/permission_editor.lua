@@ -10,6 +10,10 @@
 ------------------------------------
 ------------------------------------
 
+-- none of this code works anymore.
+
+--[[
+
 Citizen.CreateThread(function()
 	local add_aces = {}
 	local add_principals = {}
@@ -340,3 +344,6 @@ Citizen.CreateThread(function()
 		end
 	end)
 end)
+
+
+-- ]] 
