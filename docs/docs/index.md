@@ -2,7 +2,7 @@
 
 ![EasyAdmin Logo](https://user-images.githubusercontent.com/13604413/129143671-3ab6a643-faf0-479d-8b97-af71ffb5193c.png)
 
-## Welcome
+## 👋 Welcome
 
 Welcome to the **EasyAdmin** documentation!  
 EasyAdmin is a powerful and highly customizable administration system for **FiveM** and **RedM** servers.  
@@ -11,7 +11,7 @@ These docs will guide you through **configuration**, **usage**, **customization*
 
 ---
 
-## Features
+## 🖥️ Features
 
 EasyAdmin is packed with features that help server admins manage their communities efficiently. Here's a list of some core features:
 
@@ -33,30 +33,30 @@ EasyAdmin is packed with features that help server admins manage their communiti
 
 ---
 
-## Installation
+## 🔧 Installation
 
 For step-by-step installation instructions, see our [Installation Guide](install.md).
 
 ---
 
-## Support
+## 🤷‍♂️ Support
 
-- 🛠 **Discord Support**: Join our [Support Discord](https://discord.gg/qq82ZU36XZ) for help and updates.
-- 🐞 **Issue Tracker**: Report bugs or feature requests on our [GitHub Issues page](https://github.com/Blumlaut/EasyAdmin/issues/new).
+- **Discord Support**: Join our [Support Discord](https://discord.gg/qq82ZU36XZ) for help and updates.
+- **Issue Tracker**: Report bugs or feature requests on our [GitHub Issues page](https://github.com/Blumlaut/EasyAdmin/issues/new).
 
 ---
 
-## Contributing
+## ✨ Contributing
 
 EasyAdmin and its documentation are **open source**.
 
-- ✨ Found a typo or want to improve a page?  
+- Found a typo or want to improve a page?  
   Click the **"Edit"** button at the top right and create a **Pull Request**.
-- 🚀 All contributions are welcome! ![contribution emoji](https://cdn.discordapp.com/emojis/652536385500086284.png?size=20)
+- All contributions are welcome! ![contribution emoji](https://cdn.discordapp.com/emojis/652536385500086284.png?size=20)
 
 ---
 
-## Host with ZAP-Hosting
+## ⚡ Host with ZAP-Hosting
 
 You can rent your own **FiveM server** with **EasyAdmin pre-installed** from [ZAP-Hosting](https://zap-hosting.com/easyadmin).  
 
