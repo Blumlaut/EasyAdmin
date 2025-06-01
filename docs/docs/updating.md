@@ -4,6 +4,19 @@ This guide provides instructions for updating EasyAdmin between versions.
 
 ---
 
+## Updating to 7.5
+
+**EasyAdmin 7.5** removes the Permission Editor due to a new security feature by FiveM.
+
+To update you must delete the following folders before updating EasyAdmin:
+
+```
+src/
+dist/
+```
+
+This ensures that the Discord Commands are properly updated.
+
 ## Updating to 7.4
 
 **EasyAdmin 7.4** brings major structural changes to the resource and introduces a completely rewritten Discord Bot system. Dependencies are no longer installed via `yarn`; they are now included directly with the EasyAdmin package.
