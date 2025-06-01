@@ -1,4 +1,4 @@
-# EasyAdmin Update Guide
+# Update Guide
 
 This guide provides instructions for updating EasyAdmin between versions.
 
