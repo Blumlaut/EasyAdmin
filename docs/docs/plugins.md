@@ -222,7 +222,6 @@ These are used internally by EasyAdmin and may not be stable or documented in de
 | `EasyAdmin:fillBanlist` | S->C | Ban list as a table |
 | `EasyAdmin:fillCachedPlayers` | S->C | Table of cached players |
 | `EasyAdmin:GetInfinityPlayerList` | S->C | Table of all players |
-| `EasyAdmin:getServerAces` | S->C | Two tables: aces and principals |
 | `EasyAdmin:NewReport` | S->C | Adds a new report |
 | `EasyAdmin:RemoveReport` | S->C | Removes a report |
 | `EasyAdmin:requestSpectate` | S<->C | Starts spectating a player |

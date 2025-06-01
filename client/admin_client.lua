@@ -14,7 +14,6 @@ players = {}
 banlist = {}
 cachedplayers = {}
 reports = {}
-add_aces, add_principals = {}, {}
 MessageShortcuts = {}
 FrozenPlayers = {}
 MutedPlayers = {}
@@ -69,18 +68,6 @@ end)
 
 RegisterNetEvent("EasyAdmin:GetInfinityPlayerList", function(players)
 	playerlist = players
-end)
-
-RegisterNetEvent("EasyAdmin:getServerAces", function(aces,principals)
-	add_aces = aces
-	add_principals = principals
-	PrintDebugMessage("Recieved ACE Permissions list", 4)
-end)
-
-RegisterNetEvent("EasyAdmin:SetLanguage", function()
-	if permissions["server.permissions.read"] then
-		TriggerServerEvent("EasyAdmin:getServerAces")
-	end
 end)
 
 RegisterNetEvent("EasyAdmin:NewReport", function(reportData)
