@@ -1,27 +1,37 @@
-
 # Installing EasyAdmin
-
 
 ## Requirements
 
-EasyAdmin is standalone, it does not require any other resoruces to function.
+EasyAdmin is a standalone resource. It does **not** require any additional libraries or dependencies to work.
 
 ## Installation
 
+Choose one of the following installation methods based on your setup.
+
 === "Manually (FTP)"
 
-	Download the latest source code from [here](https://github.com/Blumlaut/EasyAdmin/releases/latest)
+	1. Go to the [latest release page](https://github.com/Blumlaut/EasyAdmin/releases/latest) and download the source code.
+	2. Extract the downloaded folder (it will be named something like `EasyAdmin-*version*`).
+	3. Rename the folder to `EasyAdmin`.
+	4. Upload the folder to your FiveM server's `resources` directory using FTP.
 
-	Extract the EasyAdmin-*version* folder onto your workspace, rename the folder to `EasyAdmin` and upload it to your FiveM Server's `resources` folder using FTP, then follow the rest of the Guide.
+Then continue with the rest of the setup guide.
 
 === "Manually on Linux (CLI)"
 
-	First, we install the required packages using our preferred package manager, you will need the following packages:
+	1. Install the required packages:
+
 	```
 	tar jq curl wget
 	```
 
-	Once these packages are installed, `cd` into your server's `resources` folder and run the following bash script:
+	2. Navigate to your FiveM server's `resources` folder using the terminal:
+
+	```bash
+	cd /path/to/your/resources
+	```
+
+	3. Run the following script to download and install EasyAdmin:
 
 	```bash
 	dl=$(curl -sSL https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest | jq -r .tarball_url )
@@ -32,76 +42,94 @@ EasyAdmin is standalone, it does not require any other resoruces to function.
 	rm -rf *Blumlaut-EasyAdmin*
 	```
 
-	This script can also be used to update EasyAdmin, however, reading changelogs is always recommended.
-
+	> This script can also be used to update EasyAdmin. Always check the [changelog](https://github.com/Blumlaut/EasyAdmin/releases) before updating.
 
 === "Manually on Windows (GUI)"
 
-	Download the latest source code from [here](https://github.com/Blumlaut/EasyAdmin/releases/latest)
-
-	Extract the EasyAdmin-*version* folder into your resources, then rename the folder to `EasyAdmin`.
-
-
+	1. Go to the [latest release page](https://github.com/Blumlaut/EasyAdmin/releases/latest) and download the source code.
+	2. Extract the folder (named something like `EasyAdmin-*version*`) into your `resources` folder.
+	3. Rename the extracted folder to `EasyAdmin`.
 
 === "ZAP-Hosting Webinterface"
-	
-	> If you are using txAdmin, then please follow the "Manually (FTP)" or "Manually on Linux (CLI)" Guides.
 
-	Open the "Resources" tab in your ZAP-Hosting Dashboard, search for EasyAdmin and click the install button.
+	> ⚠️ If you're using **txAdmin**, skip this tab and use the "Manually (FTP)" or "Manually on Linux (CLI)" guides.
 
+	1. Log in to your ZAP-Hosting dashboard.
+	2. Go to the **Resources** tab.
+	3. Search for **EasyAdmin** and click the **Install** button.
 
+---
 
 ## Getting Started
 
-To get started with EasyAdmin, copypaste this template into your `server.cfg` file and restart your server.
+To start using EasyAdmin, add the following to your `server.cfg` file and restart your server:
 
-```
+```cfg
 ensure EasyAdmin
 
 add_ace group.admin easyadmin allow
 add_ace resource.EasyAdmin command allow
 ```
 
-All available configuration options can be found [here](config.md).
+All available configuration options are in the [Config Guide](config.md).
 
-To configure a key to open EasyAdmin with, see [Keybind](keybind.md).
+If you want to set a key to open EasyAdmin in-game, see the [Keybind Guide](keybind.md).
+
+---
 
 ## Adding an Admin
 
+Choose your method based on your hosting environment.
 
 === "Manually"
 
-	You can use this template to fill out your desired Values
+	1. Use this template to assign admin access:
 
 	```
 	add_principal identifier.IDENTIFIERNAME:IDENTIFIER group.admin
 	```
 
+	2. Replace `IDENTIFIERNAME` with the type of identifier you're using (e.g., `steam`, `discord`, `license`).
+	3. Replace `IDENTIFIER` with the actual identifier value.
 
-	You can use any Identifier available in FiveM for this, however, in this example we will describe how to use your Steam ID.
+	> To get your identifier:
+	> - Start the server and connect to it.
+	> - In the **server console**, run:
+	>
+	>   ```lua
+	>   ea_printIdentifiers 1
+	>   ```
+	>   (Replace `1` with your in-game ID.)
 
-	After installing EasyAdmin, start EasyAdmin and join your Server, once you are connected enter `ea_printIdentifiers 1` in your Server Console, 1 represents your ingame ID, so make sure you use the correct id, EasyAdmin will then print a list of your identifiers:
- 
-	![grafik](https://user-images.githubusercontent.com/13604413/139588546-a64da751-7f1c-41ae-8abd-f6c7e7b0735e.png)
+	> Example output:
+	>
+	> ```
+	> identifier.steam:1100001018c7433
+	> identifier.discord:123456789012345678
+	> identifier.license:ABCD1234EFGH5678
+	> ```
 
-	we can now fill out the value described above, it will look like this:
+	> To use **Steam IDs**, you need a **Steam WebAPIKey**. Follow this [guide](steamapikey.md) to get one.
 
-	```
+	You can also use other identifiers like `discord`, `xbl`, `license`, etc.
+
+	Example (using Steam):
+
+	```cfg
 	add_principal identifier.steam:1100001018c7433 group.admin
 	```
 
-	> To use Steam IDs as an identifier, a Steam WebAPIKey needs to be set up. Follow this [guide](steamapikey.md) to create one.
-
-	You can also use other identifiers, as EasyAdmin is not specifically limited to SteamIDs, all available identifiers can be used, such as `discord`, `xbl` or `license`, to name a few examples.
-
 === "ZAP-Hosting"
 
-    > Note: This **only** works for ZAP-Hosting's FiveM Windows or Linux Server see the "Manually" Tab for txAdmin
-    
-    Enter your Steam ID (64, not Hex) in the Settings Page under Admins, add a new line for each SteamId.
+	> 📌 This method **only works** for ZAP-Hosting's FiveM Linux/Windows servers. For txAdmin, use the "Manually" tab.
+
+	1. Go to the **Settings** page in your ZAP-Hosting dashboard.
+	2. Under the **Admins** section, enter your **Steam ID (64-bit, not Hex)**.
+	3. Add a new line for each admin.
 
 === "Discord ACE Permissions"
 
-	EasyAdmin ships with a Discord Permission implementation by default, to use this, the [Discord Bot](discordbot.md) has to be configured.
+	EasyAdmin includes support for Discord ACE permissions by default.
 
-	Once the bot has been configured, follow [this guide](https://easyadmin.readthedocs.io/en/latest/discordbot/#discord-ace-permissions) to set it up.
+	1. Set up the [Discord Bot](discordbot.md) first.
+	2. Once the bot is running, follow [this guide](https://easyadmin.readthedocs.io/en/latest/discordbot/#discord-ace-permissions) to configure Discord ACE permissions.

@@ -1,5 +1,5 @@
 # Setting a Keybind
 
-As of version 6.5, EasyAdmin creates an empty keybind that has to be configured by each user individually, this can be done as shown here:
+Starting with **version 6.5**, EasyAdmin no longer includes a default keybind. Instead, it creates an empty keybind that you must configure yourself. 
 
 ![](assets/keybind.gif)

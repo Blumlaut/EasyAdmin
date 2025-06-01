@@ -1,12 +1,19 @@
 # Permissions
 
+You can manage permissions in your server configuration file using **ACE (Access Control Entry)** commands.
 
-You can modify Permissions by using ACE in your server config file, each permission can be have an `allow` value or be denied by not including permission at all, you can add infinite groups, just make sure to add permissions for each group. 
+Each permission can be assigned an `allow` value. Permissions **not assigned** are considered **denied**.
 
-**Note:** Do NOT deny permissions using `deny` this is broken and will not work.
+> ❗ **Important:**  
+> Do **not** use `deny` to deny permissions — it doesn't work.
 
-Here is a set of example permissions that limit users in the "moderator" group to only kick, spectate, teleport, slap and freeze permissions:
-```
+---
+
+## Example: Limiting a Moderator Group
+
+Here's an example of how to grant a "moderator" group only specific permissions like kick, spectate, teleport, slap, and freeze:
+
+```plaintext
 add_ace group.moderator easyadmin.player.kick allow
 add_ace group.moderator easyadmin.player.spectate allow
 add_ace group.moderator easyadmin.player.teleport allow
@@ -14,55 +21,64 @@ add_ace group.moderator easyadmin.player.slap allow
 add_ace group.moderator easyadmin.player.freeze allow
 ```
 
-You can also allow all permissions by allowing the entire `easyadmin` category:
+---
 
-```
+## Granting Full Access
+
+If you want a group (like "admin") to have all permissions, you can allow the full `easyadmin` category:
+
+```plaintext
 add_ace group.admin easyadmin allow
 ```
 
-**Note:** This will also make you immune from being kicked/banned as it grants you the `easyadmin.immune` permission.
+> ⚠️ **Warning:**  
+> This also grants the `easyadmin.immune` permission, meaning the user cannot be kicked or banned.  
+> ⚠️ **Only the server owner should have full admin access**, as it includes potentially destructive functions.
 
-**This is heavily discouraged for anyone but the server owner, as it gives access to potentially destructive functions which only trusted people should have.**
+---
 
+# Available Permissions
 
+Here is a list of all available permissions and what they do:
 
+| Permission | Description |
+|------------|-------------|
+| `easyadmin.player.ban.temporary` | Allows temporarily banning users |
+| `easyadmin.player.ban.permanent` | Allows permanently banning users |
+| `easyadmin.player.ban.view` | Allows viewing the ban list |
+| `easyadmin.player.ban.edit` | Allows editing ban entries |
+| `easyadmin.player.ban.remove` | Allows unbanning users |
+| `easyadmin.player.kick` | Allows kicking users |
+| `easyadmin.player.spectate` | Allows spectating users |
+| `easyadmin.player.teleport.single` | Allows teleporting to or from a player |
+| `easyadmin.player.teleport.everyone` | Allows teleporting *everyone* at once |
+| `easyadmin.player.slap` | Allows slapping users (removing health) |
+| `easyadmin.player.freeze` | Allows freezing players in place |
+| `easyadmin.player.mute` | Allows muting players in chat |
+| `easyadmin.player.warn` | Allows warning players |
+| `easyadmin.player.screenshot` | Allows taking screenshots of users (uploaded via configured service) |
+| `easyadmin.player.reports.view` | Allows viewing user reports |
+| `easyadmin.player.reports.claim` | Allows claiming user reports |
+| `easyadmin.player.reports.process` | Allows deleting user reports |
+| `easyadmin.player.allowlist` | Allows joining the server even when allowlist is enabled |
+| `easyadmin.server.shortcut.add` | Allows using the `ea_addShortcut` command (non-persistent) |
+| `easyadmin.server.reminder.add` | Allows using the `ea_addReminder` command (non-persistent) |
+| `easyadmin.server.permissions.read` | Allows viewing all ACE and principal permissions |
+| `easyadmin.server.permissions.write` | Allows editing and deleting ACE and principal permissions |
+| `easyadmin.server.cleanup.cars` | Allows cleaning up all vehicles not in use |
+| `easyadmin.server.cleanup.props` | Allows cleaning up all props (excluding map props) |
+| `easyadmin.server.cleanup.peds` | Allows cleaning up all NPCs (peds) |
+| `easyadmin.server.announce` | Allows sending announcements to all players |
+| `easyadmin.server.convars` | Allows editing server convars (use with caution) |
+| `easyadmin.server.resources.start` | Allows starting server resources |
+| `easyadmin.server.resources.stop` | Allows stopping server resources |
+| `easyadmin.server.chat` | Allows using the admin-only chat channel |
+| `easyadmin.immune` | Prevents being kicked or banned by other admins |
+| `easyadmin.anon` | Allows hiding admin username in logs and actions |
+| `easyadmin.bot.(command name)` | Allows a Discord user access to a specific bot command (replace `(command name)` with the actual command) |
+| `easyadmin.player.bucket.join` | Allows joining another player's routing bucket (if enabled) |
+| `easyadmin.player.bucket.force` | Allows forcing a player into a different routing bucket (if enabled) |
 
-# Available permission
+---
 
-|         Permission          |                                                  Description                                                   |
-|-----------------------------|----------------------------------------------------------------------------------------------------------------|
-| easyadmin.player.ban.temporary | Allows to Temporarily Ban Users |
-| easyadmin.player.ban.permanent | Allows to Permanently Ban Users |
-| easyadmin.player.ban.view | Allows to View Banlist |
-| easyadmin.player.ban.edit | Allows to Edit Bans |
-| easyadmin.player.ban.remove | Allows to Unban Users |
-| easyadmin.player.kick | Allows to Kick Users |
-| easyadmin.player.spectate | Allows to Spectate Users |
-| easyadmin.player.teleport.single | Allows to Teleport To/From Players |
-| easyadmin.player.teleport.everyone | Allows to Teleport *everyone* at once. |
-| easyadmin.player.slap | Allows Slapping of Users (take away hp) |
-| easyadmin.player.freeze | Allows to Freeze Players in place |
-| easyadmin.player.mute | Allows to "Mute" other Players from chat activity. |
-| easyadmin.player.warn | Allows to "Warn" other Players. |
-| easyadmin.player.screenshot | Allows to Create Screenshots of users, these will be generated and uploaded to your Configured Uploader |
-| easyadmin.player.reports.view | Allows Admins to View Reports made by Users |
-| easyadmin.player.reports.claim | Allows Admins to Claim Reports made by Users |
-| easyadmin.player.reports.process | Allows to Delete Reports made by Users |
-| easyadmin.player.allowlist | Allows to join server while Allowlist is enabled |
-| easyadmin.server.shortcut.add | Allows to use the ea_addShortcut command, however, these are not persistant |
-| easyadmin.server.reminder.add | Allows to use the ea_addReminder command, these are also not persistan |
-| easyadmin.server.permissions.read | Allows to view all (add_ace & add_principal) Permissions the server has configured |
-| easyadmin.server.permissions.write | Allows to edit and delete (add_ace & add_principal) Permissions |
-| easyadmin.server.cleanup.cars | Allows to cleanup all Vehicles on the Server, except ones currently occupied by players |
-| easyadmin.server.cleanup.props | Allows to cleanup all Props on the Server, including ones spawned by resources or hacks, does not include maps |
-| easyadmin.server.cleanup.peds | Allows to cleanup all Peds on the Server |
-| easyadmin.server.announce | Allows to send an announcement to all players |
-| easyadmin.server.convars | Allows to edit Server Convars, this is a dangerous permission, only assign to people you trust! |
-| easyadmin.server.resources.start | Allows to start Resources on the Server |
-| easyadmin.server.resources.stop | Allows to stop Resources on the Server |
-| easyadmin.server.chat | allows to use the "Admin Chat" Channel |
-| easyadmin.immune | Prevents from being kicked/banned by other admins. |
-| easyadmin.anon | Allows the "Anonymous Admin" Feature, will hide Username in Kicks/Bans/Admin Logs |
-| easyadmin.bot.(command name) | Allows Discord User access to a specific bot command, replace (command name) with the actual name |
-| easyadmin.player.bucket.join | Allows to join another player's bucket, given `ea_routingBucketOptions` is enabled |
-| easyadmin.player.bucket.force | Allows to change another player's bucket, given `ea_routingBucketOptions` is enabled |
+Let me know if you want this converted into a downloadable file or formatted for a specific platform like GitHub or a wiki.

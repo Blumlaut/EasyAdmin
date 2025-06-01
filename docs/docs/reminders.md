@@ -1,25 +1,35 @@
 # Chat Reminders
 
+EasyAdmin supports **Chat Reminders**, which are messages automatically sent in the chat at regular intervals defined by the `ea_chatReminderTime` setting (in minutes).
 
-EasyAdmin Supports Chat Reminders, these get Sent in the Chat according to `ea_chatReminderTime` (in minutes).
+## How to Use
 
-`ea_addReminder` is a command, so it needs to be put AFTER EasyAdmin starts in your server.cfg
+- The command `ea_addReminder` is used to define a reminder.
+- This command **must be placed after EasyAdmin has started** in your `server.cfg` file.
 
-Following placeholders can be used:
+## Available Placeholders
 
-```
-@admins - Shows all Online Admins in chat, if no admins are online, it just prints @admins
-@bancount - Shows the amount of Bans in the Banlist
-@time - Shows the Current Time
-@date - Shows the Current Date
-```
+You can use the following placeholders in your reminder messages:
 
-This also supports colour codes from ^1-^9.
+| Placeholder | Description |
+|-------------|-------------|
+| `@admins` | Shows all online admins in chat. If no admins are online, it will just show `@admins` |
+| `@bancount` | Shows the number of bans in the banlist |
+| `@time` | Displays the current time |
+| `@date` | Displays the current date |
 
-Example of reminders would be:
+## Colours
 
-```
+You can also use color codes like `^1` to `^9` to style your messages.
+
+---
+
+## Example Usage
+
+```plaintext
 ea_addReminder "This Server is watched by ^3@admins^7"
 ea_addReminder "Current Time: ^5@time^7."
 ea_addReminder "Our Banlist has @bancount Entries!"
 ```
+
+---

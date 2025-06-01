@@ -1,18 +1,41 @@
 # Reason Shortcuts
 
-As of 6.02, EasyAdmin can resolve abbreviated reasons into longer texts.
+Starting with **EasyAdmin version 6.02**, you can use **shortcuts** for commonly used moderation reasons. This makes it faster to fill in reasons in the GUI without having to type full sentences each time.
 
-These shortcuts can be used to make writing reason a lot faster, "Random Deathmatch, please read our rules using /rules" can simply become "rdm", here is an example:
+For example, instead of typing out:
 
+> "RDMing is not allowed, please read our Rules! (/rules)"
 
-|                                   Command                                   | Shortcut |                     Displayed Reason                     |
-|-----------------------------------------------------------------------------|----------|----------------------------------------------------------|
-| `ea_addShortcut mod Modding&Cheating is not tolerated on this Server.`      | `mod`    | `Modding&Cheating is not tolerated on this Server`       |
-| `ea_addShortcut rdm RDMing is not allowed, please read our Rules! (/rules)` | `rdm`    | `RDMing is not allowed, please read our Rules! (/rules)` |
-| `ea_addShortcut stfu Please be respectful in Voice&Text Chat! (/rules)`     | `stfu`   | `Please be respectful in Voice&Text Chat! (/rules)`      |
+You can simply use the shortcut:
 
+> `rdm`
 
-The commands have to be added to the server's config file, after EasyAdmin has started.
+---
 
+## How to Set Up Shortcuts
 
-These shortcuts work in every "reason" field in the EasyAdmin GUI.
+To create a shortcut, use the `ea_addShortcut` command in your server's configuration file. The command format is:
+
+```
+ea_addShortcut <shortcut> <full reason>
+```
+
+Here are some examples:
+
+| Command | Shortcut | Displayed Reason |
+|--------|----------|------------------|
+| `ea_addShortcut mod Modding&Cheating is not tolerated on this Server.` | `mod` | Modding & Cheating is not tolerated on this Server |
+| `ea_addShortcut rdm RDMing is not allowed, please read our Rules! (/rules)` | `rdm` | RDMing is not allowed, please read our Rules! (/rules) |
+| `ea_addShortcut stfu Please be respectful in Voice&Text Chat! (/rules)` | `stfu` | Please be respectful in Voice & Text Chat! (/rules) |
+
+---
+
+## Where to Add the Commands
+
+These commands **must be added to the server's config file**. You should do this **after EasyAdmin has started**.
+
+---
+
+## Usage
+
+Once set up, these shortcuts will work **in every "reason" field** in the EasyAdmin GUI. Just type the shortcut and it will be replaced with the full reason automatically.

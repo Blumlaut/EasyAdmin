@@ -1,5 +1,8 @@
 # Translating EasyAdmin
 
+> ⚠️ This Guide is outdated is missing information. If you want to help us update this guide, please open a Pull Request with your changes.
+
+
 EasyAdmin supports translations, it has already been fully translated into multiple Languages, and thanks to community contributions, is being translated to many more!
 
 If you want to try your hand at translating it yourself, follow this guide, your changes might be included in EasyAdmin's next update then!

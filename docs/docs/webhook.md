@@ -1,35 +1,69 @@
-# Discord Webhook
+# Discord Webhook Integration
 
-**Note:** The Discord Webhook is not active when Bot Logging is configured.
+> **Note:** The Discord Webhook is disabled when Bot Logging is enabled.
 
-EasyAdmin Supports Monitoring of Admin Actions by using Discord's Webhook feature, this can be enabled by adding
+EasyAdmin allows you to monitor admin actions using Discord's Webhook feature. This can be enabled by modifying your server's configuration file.
 
-```
-set ea_moderationNotification "false"
-```
+---
 
-To your server's config file, then you need to create a discord webhook, like this:
 
-![](https://blumlaut.me/s/MteHc7YXnpZgc9W/preview)
+## Creating a Webhook
 
-Once the webhook has been created, copy the webhook url and paste it where "false" is in the config file, so it looks like this:
+### Create the Webhook
 
-```
-set ea_moderationNotification "https://discordapp.com/api/webhooks/fas4fsa65gs489sdg23bcv44htjh546"
-```
+1. Go to the Discord channel you want to use.
+2. Right-click the channel name again.
+3. Click **Edit Channel**.
+4. Scroll down and click **Webhooks**.
+5. Click the **Create Webhook** button.
+6. Fill in a name and optionally select an avatar.
+7. Click **Create**.
 
-Then just restart your server and kick yourself to see if the notification works correctly.
-If it works correctly, a message detailing the kick should now appear in the discord channel.
+---
 
+### Copy the Webhook URL
+
+1. After creating the webhook, you'll see a **URL** under the webhook name.
+2. Click **Copy** to copy the full URL.
+
+> 🔒 Keep this URL safe. Anyone with it can post messages to your channel.
+
+## Enabling the Webhook
+
+To enable the webhook:
+
+1. Open your server's configuration file.
+2. Find and change this line:
+   ```text
+   set ea_moderationNotification "false"
+   ```
+   to:
+   ```text
+   set ea_moderationNotification "https://discordapp.com/api/webhooks/fas4fsa65gs489sdg23bcv44htjh546"
+   ```
+3. Replace the `false` value with your **actual Discord webhook URL**.
+4. Save the file and **restart your server**.
+
+To test if it's working, you can **kick yourself** and check if a notification appears in your Discord channel.
+
+---
 
 ## Disabling Specific Alerts
 
-See [ea_excludeWebhookFeature](config.md)
+If you want to disable specific types of alerts, refer to the `ea_excludeWebhookFeature` configuration option in the configuration guide:
 
+- [ea_excludeWebhookFeature](config.md)
 
-## Seperate Webhook Channels
+---
 
-As of 5.81 EasyAdmin Supports 3 different Webhooks which can be used. `ea_moderationNotification` for general Notifications, `ea_reportNotification` for Reports and `ea_detailNotification` for Convar/Settings Changes and Freezing/Spectating Notifications.
+## Separate Webhook Channels (Version 5.81+)
 
-These are set the same as ea_moderationNotification, if they are not configured then moderationNotification will be used instead.
+Starting from version **5.81**, EasyAdmin supports **three different webhooks**, allowing you to send notifications to separate Discord channels:
 
+| Webhook Variable              | Purpose                                           |
+|-------------------------------|---------------------------------------------------|
+| `ea_moderationNotification`   | General moderation notifications (e.g., kicks)    |
+| `ea_reportNotification`       | Notifications for player reports                  |
+| `ea_detailNotification`       | Notifications for convar/settings changes and spectator/freezing events |
+
+Each webhook is set in the same way as `ea_moderationNotification`. If a specific webhook is not configured, EasyAdmin will fall back to using `ea_moderationNotification`.

@@ -1,106 +1,122 @@
-# Updating Instructions
+# EasyAdmin Update Guide
 
-This page outlines instructions on how to update EasyAdmin between versions.
+This guide provides instructions for updating EasyAdmin between versions.
 
-## To 7.4
+---
 
-EasyAdmin 7.4 majorly restructures the resource and completely changes how the Discord Bot works, dependencies are no longer installed through yarn but are shipped with EasyAdmin directly.
+## Updating to 7.4
 
-Before updating EasyAdmin, you should delete the following files and folders in your EasyAdmin:
+**EasyAdmin 7.4** brings major structural changes to the resource and introduces a completely rewritten Discord Bot system. Dependencies are no longer installed via `yarn`; they are now included directly with the EasyAdmin package.
+
+### Before Updating
+
+Make sure to delete the following files and folders from your EasyAdmin installation:
 
 ```
 server/bot/
 package.json
 ```
 
-EasyAdmin 7.4 requires FiveM Server version **12913 or higher** and **Onesync**.
+### Requirements
 
-## To 7.3
+- **FiveM Server Version**: 12913 or higher
+- **Onesync**: Required
 
-The v1 Plugin API has been removed entirely, if plugins were still using the v1 API, refer to the [Porting Docs](plugins.md#porting-plugins-to-68).
+---
 
-EasyAdmin will no longer attempt to give itself permissions using the server.cfg file, this must now be done manually by adding the following line to the server.cfg:
+## Updating to 7.3
 
-```
+- The **v1 Plugin API** has been completely removed. If your plugins were using the v1 API, you must update them. See the [Porting Docs](plugins.md#porting-plugins-to-68) for help.
+- EasyAdmin **no longer automatically assigns permissions** via the `server.cfg`. You must now manually add this line to your `server.cfg`:
+
+```cfg
 add_ace resource.EasyAdmin command allow
 ```
 
+---
 
-## To 6.8 & 6.81
+## Updating to 6.8 & 6.81
 
-`ea_logIdentifier` has been changed to accept a list of identifiers, comma seperated
+- `ea_logIdentifier` now accepts a **list of identifiers**, separated by commas.
+
+Example:
 
 ```diff
 - setr ea_logIdentifier "discord"
 + setr ea_logIdentifier "discord,steam,license"
 ```
 
-EasyAdmin Plugins have been changed significantly and should be updated to the new Plugin System, check the [Porting Docs](plugins.md#porting-plugins-to-68) if you are a Developer.
+- EasyAdmin Plugins have undergone **significant changes**. If you're a developer, refer to the [Porting Docs](plugins.md#porting-plugins-to-68) to update your plugins.
 
-## To 6.6
+---
 
-EasyAdmin 6.6 requires a recent version of `yarn` from [cfx-server-data](https://github.com/citizenfx/cfx-server-data).
+## Updating to 6.6
 
-## To 6.5
+- This version requires a **recent version of `yarn`** from [cfx-server-data](https://github.com/citizenfx/cfx-server-data). Make sure you're using the latest version.
 
-### ea_defaultKey removal
+---
 
-Due to continued confusion about what `ea_defaultKey` actually does, it has been **removed** in version 6.5, the key is now registered as empty by default and [has to be set through the FiveM Settings individually](keybind.md).
+## Updating to 6.5
 
-RedM is not affected by this change.
+### `ea_defaultKey` Removal
 
+- `ea_defaultKey` has been **removed** due to confusion over its purpose. It is now empty by default and must be set **manually via FiveM Settings**.
+- **RedM is not affected** by this change.
 
-## To 6.3
+---
 
-### ea_MenuButton to ea_defaultKey
+## Updating to 6.3
 
-`ea_MenuButton` has been renamed to `ea_defaultKey`, syntax has been kept, so the change is as simple as the following in your server config:
+### `ea_MenuButton` → `ea_defaultKey`
+
+- `ea_MenuButton` has been renamed to `ea_defaultKey`. The syntax remains the same.
 
 ```diff
 - setr ea_MenuButton "F2"
 + setr ea_defaultKey "F2"
 ```
 
+---
 
 ### Ban Permission Change
 
-The `player.ban` permission has been changed and now also includes `.view`, `.edit` and `.remove`
+- The `player.ban` permission has been updated to include `.view`, `.edit`, and `.remove`.
 
 ```diff
 - add_ace group.admin easyadmin.unban allow
 + add_ace group.admin easyadmin.ban.remove allow
 ```
 
-Do note that giving a group `easyadmin.ban` permissions will now also give them permission to edit/unban players.
+> Note: Granting `easyadmin.ban` now also grants the ability to edit and unban players.
 
+---
 
-### Reports 'claim' permission
+### Reports 'claim' Permission
 
-Reports can now be claimed with the `.claim` permission:
+- Reports can now be claimed using the `.claim` permission.
 
-```diff
-+ add_ace group.moderator easyadmin.player.reports.claim
+```cfg
+add_ace group.moderator easyadmin.player.reports.claim
 ```
 
+---
 
+## Updating to 6.2
 
-## To 6.2
+### Major Permission Changes
 
-### Permissions change
+- Permissions have been restructured into **categories** (e.g., `player`, `server`) and new permissions have been added.
+- The `manageserver` permission is **no longer available**.
+- `teleport.player` has been renamed to `player.teleport.single`.
 
-Permissions have been changed majorly from 5.* to 6.2 and above, Permissions now have a "category" they belong to, there have also been new permissions added for existing features.
-
-As an example:
+#### Example of Permission Change
 
 ```diff
 - add_ace group.moderator easyadmin.kick allow
 + add_ace group.moderator easyadmin.player.kick allow
 ```
 
-Existing Permissions now have either "player" or "server" as a prefix, here is a list of Permissions as of 6.2, do note that they should all be prefixed with `easyadmin.`
-
-Important to note is that `manageserver` no longer exists, and `teleport.player` has been renamed to `player.teleport.single`, implying the ability to teleport a single player at once.
-
+#### Permission List (All prefixed with `easyadmin.`)
 
 ```
 player.ban.temporary
@@ -131,17 +147,17 @@ immune
 anon
 ```
 
-___
+---
 
 ### FiveM Keybinds
 
-The ea_MenuButton convar has been changed and now requires a string for a key, as per [this docs entry](https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/), as an example:
+- `ea_MenuButton` now requires a **string representation of a key**, as per [FiveM docs](https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/).
+
+Example:
 
 ```diff
 - setr ea_MenuButton "289"
 + setr ea_MenuButton "f2"
 ```
 
-**Note:** This is a one-time action, once a player joins with that Keybind set they will have to change it from their Control Settings inside of FiveM, FiveM currently does not provide any way to override this for all players.
-
-This **does not** apply to RedM.
+> ⚠️ This change is **one-time only**. Once a player joins with the keybind set, they must change it manually in their FiveM settings. This does **not apply to RedM**.

@@ -1,213 +1,237 @@
 # Plugin API
 
-Since 5.9 EasyAdmin Supports creating custom Plugins which allow Developers to create new Items in the Menu and add custom Functions, this is a Quick-Start Guide for Developers.
+Since version 5.9, **EasyAdmin** supports the creation of **custom plugins**. These allow developers to add new items to the EasyAdmin menu and implement custom functionality. This document serves as a **quick-start guide** for developers.
 
+---
 
-## Foreword
+## Introduction
 
-EasyAdmin is based on [Frazzle's NativeUILua](https://github.com/FrazzIe/NativeUILua), so when creating Menus, make sure that you follow it's API Properly.
+EasyAdmin is built on [Frazzle's NativeUILua](https://github.com/FrazzIe/NativeUILua). When creating menus, ensure you follow the NativeUI API correctly.
 
-Menu Items are generated when the Button for it is pressed, do note that the menu can and WILL be generated multiple times, so do not store any variables which may affect the menu generation on later iterations.
+> 🚨 **Important**: Menu items are created when their corresponding button is pressed. Menus can be generated multiple times, so **do not store state in global variables** that might affect future menu generations.
 
+---
 
 ## Boilerplate Script
 
-Here is a Boilerplate Script that can help you get started with EasyAdmin Plugins:
+Here's a basic template to help you get started with creating an EasyAdmin plugin:
 
-```Lua
+```lua
 local somevalue = false
 
--- functions MUST be prefixed with local!
+-- Functions MUST be prefixed with `local`
 
 local function playerOptions(playerId)
-	local thisItem = NativeUI.CreateItem("Example Item","Player ID is "..playerId) -- create our new item
-	thisPlayer:AddItem(thisItem) -- thisPlayer is global.
-	thisItem.Activated = function(ParentMenu,SelectedItem)
-		-- enter your clientside code here, this will be run once the button has been activated.
-		somevalue = true -- set some value we want to undo once the menu closes.
+    local thisItem = NativeUI.CreateItem("Example Item", "Player ID is " .. playerId)
+    thisPlayer:AddItem(thisItem) -- `thisPlayer` is a global variable
+    thisItem.Activated = function(ParentMenu, SelectedItem)
+        -- Your client-side logic goes here
+        somevalue = true -- Example state change
+    end
 
-	end
+    if DoesPlayerHavePermission(-1, "player.kick") then
+        local thisExampleMenu = _menuPool:AddSubMenu(thisPlayer, "Example Submenu", "", true)
+        thisExampleMenu:SetMenuWidthOffset(menuWidth)
 
-	if DoesPlayerHavePermission(-1, "player.kick") then -- you can also check if a user has a specific Permission.
-		local thisExampleMenu = _menuPool:AddSubMenu(thisPlayer,"Example Submenu","",true) -- Submenus work, too!
-		thisExampleMenu:SetMenuWidthOffset(menuWidth)
-
-		local thisItem = NativeUI.CreateItem("Example Submenu Item","")
-		thisExampleMenu:AddItem(thisItem) -- Items dont require a trigger.
-
-	end
+        local thisItem = NativeUI.CreateItem("Example Submenu Item", "")
+        thisExampleMenu:AddItem(thisItem)
+    end
 end
 
 local function mainMenuOptions()
-	error("help me i have become self aware") -- you can also cast arbitrary errors, this will be visible in the console, with a proper stack trace, and easyadmin will not fail due to it.
+    error("help me I have become self-aware") -- Example error
 end
 
 local function cachedMenuOptions()
+    -- Logic for cached players
+	-- uses the same menu as the player menu
 end
 
 local function serverMenuOptions()
+	local thisItem = NativeUI.CreateItem("Example Item", "Example Description")
+	servermanagement:AddItem(thisItem)
+	thisItem.Activated = function(ParentMenu,SelectedItem)
+		local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 128)
+		
+		if result then
+			print("Keyboard input: " .. result)
+		else
+			print("Keyboard input cancelled")
+		end
+	end
 end
 
 local function settingsMenuOptions()
+    -- Logic for settings menu, Menu ID is "settingsMenu"
 end
 
 local function menuRemoved()
-	somevalue = false -- reset our value :)
+    somevalue = false -- Reset state
 end
 
-
-local pluginData = { -- enter your plugin infos, and any optional data, here.
-	name = "Demo", -- your plugin name
-	functions = { -- functions which dont exist dont need to be added here.
-		mainMenu = mainMenuOptions,
-		playerMenu = playerOptions,
-		cachedMenu = cachedMenuOptions,
-		serverMenu = serverMenuOptions,
-		settingsMenu = settingsMenuOptions,
-		menuRemoved = menuRemoved,
-	}
+-- Plugin metadata
+local pluginData = {
+    name = "Demo",
+    functions = {
+        mainMenu = mainMenuOptions,
+        playerMenu = playerOptions,
+        cachedMenu = cachedMenuOptions,
+        serverMenu = serverMenuOptions,
+        settingsMenu = settingsMenuOptions,
+        menuRemoved = menuRemoved,
+    }
 }
 
-
-addPlugin(pluginData) -- this function will add the plugin to EasyAdmin
+addPlugin(pluginData) -- Registers the plugin with EasyAdmin
 ```
 
-### Adding new Permissions
+---
 
-Permissions can be added to EasyAdmin by making a `shared` file using the following boilerplate:
-```Lua
+## Adding Custom Permissions
+
+Permissions can be added using a shared Lua file with the following structure:
+
+```lua
 Citizen.CreateThread(function()
-	repeat
-		Wait(0)
-	until permissions
-	permissions["your.custom.permission"] = false
+    repeat
+        Wait(0)
+    until permissions
+    permissions["your.custom.permission"] = false
 end)
 ```
 
-Of note is that all permissions are prefixed with `easyadmin` automatically, so `your.custom.permission` becomes `easyadmin.your.custom.permission`
+> ⚠️ All permissions are automatically prefixed with `easyadmin`, so `your.custom.permission` becomes `easyadmin.your.custom.permission`.
 
-You can then use the permission you added by simply checking it server-side using `DoesPlayerHavePermission(source, "your.custom.permission")` or clientside using `permissions["your.custom.permission"]`, these will return a true/false boolean.
+You can check if a user has a permission server-side using:
+```lua
+DoesPlayerHavePermission(source, "your.custom.permission")
+```
+Or client-side using:
+```lua
+DoesPlayerHavePermission(-1, "your.custom.permission")
+```
 
+---
 
 ## Porting Plugins to 6.8
 
-Porting your Plugin to 6.8 is fairly trivial, the menu generation event handlers have been replaced with functions:
+Porting your plugin to version 6.8 is straightforward. Replace event handlers with local functions:
 
 ```diff
 - AddEventHandler("EasyAdmin:BuildPlayerOptions", function(playerId)
 + local function playerOptions(playerId)
 
-- AddEventHandler("EasyAdmin:MenuRemoved", function() 
+- AddEventHandler("EasyAdmin:MenuRemoved", function()
 + local function menuRemoved()
 ```
 
-Actual menu syntax has not changed, so no code changes in the UI generation are required.
+After updating your functions, add the plugin registration block at the bottom of your script:
 
-After you have changed all your EasyAdmin-related event handlers to local functions, add the following to the bottom of the script:
-
-```Lua
+```lua
 local pluginData = {
-	name = "Demo",
-	functions = {
-		mainMenu = mainMenuOptions,
-		playerMenu = playerOptions,
-		cachedMenu = cachedMenuOptions,
-		serverMenu = serverMenuOptions,
-		settingsMenu = settingsMenuOptions,
-		menuRemoved = menuRemoved,
-	}
+    name = "Demo",
+    functions = {
+        mainMenu = mainMenuOptions,
+        playerMenu = playerOptions,
+        cachedMenu = cachedMenuOptions,
+        serverMenu = serverMenuOptions,
+        settingsMenu = settingsMenuOptions,
+        menuRemoved = menuRemoved,
+    }
 }
-
 
 addPlugin(pluginData)
 ```
 
-the "name" property would be the name of your plugin, this can be any arbitrary string, your function names must also match the ones defined in the functions table.
+> 📌 Ensure your function names in the `functions` table match the actual function names. For example, if your function is named `generatePlayerMenu`, the key should be `playerMenu = generatePlayerMenu`.
 
-For example, if your playerMenu function is called `generatePlayerMenu`, then your should reflect that as `playerMenu = generatePlayerMenu,` in the functions table.
-
-Legacy Plugins are expected to stop working around Q1 2023.
+---
 
 ## Replacing Notifications
 
-EasyAdmin supports replacing the native Notifications with custom ones, to do this the `EasyAdmin:receivedNotification` event has to be cancelled and the text from `EasyAdmin:showNotification` to be forwarded to your Notification Script, for examples see [EasyAdmin/plugins/notifications](https://github.com/Blumlaut/EasyAdmin/tree/master/plugins/notifications)
+EasyAdmin allows you to replace its built-in notifications with custom ones.
 
-**Do you have two different notification systems being triggered at the same time?**
-Choose which notification system you want to keep, and remove the other scripts in the [plugins folder](https://github.com/Blumlaut/EasyAdmin/tree/master/plugins/notifications)
+To do this, cancel the `EasyAdmin:receivedNotification` event and forward the notification text to your custom script.
 
+Example:
+- See [EasyAdmin/plugins/notifications](https://github.com/Blumlaut/EasyAdmin/tree/master/plugins/notifications) for working implementations.
+
+> 🤯 If two notification systems are active at the same time, **remove the one you don’t want** from the `plugins` folder.
+
+---
 
 ## Functions and Events
 
 ### Utility Functions
 
-EasyAdmin ships with some Utility functions that can be run in Plugins, here is a table of examples:
-
 | Function | Arguments | Description |
-|-------|-------|-------|
-| PrintDebugMessage | content, level | Prints a message in the client/server log, depending on if their ea_logLevel matches or is above the level provided |
-| displayKeyboardInput | title,defaultText,maxLength | added in EasyAdmin 6.4, displays a keyboard, executing this function halts execution, make sure to run this in a thread if you want to run it asynchronously |
-| copyToClipboard | text | Pastes a text to player's clipboard |
-| DoesPlayerHavePermission | player, permission | returns weither or not a player has a permission, for example `player.ban.view` |
-| DoesPlayerHavePermissionForCategory | player, permission | Same as above, but checks if player has **any** permission in that category, for example `player.ban` |
-| GetVersion | N/A | Returns 2 variables, Version string and if EasyAdmin was cloned from master instead of downloading a release |
-| GetLocalisedText | string | returns a translated string for a language variable. |
-| formatDateString | unix timestamp | Converts a unix timestamp into a Time/Datestring |
-| math.round | number, decimals | rounds a number to the amount of decimals |
-| string.split | string, seperator | splits a string via the given seperator |
-| string.reverse | string | gnirts a sesrever |
-| UIMenu:RefreshIndexRecursively() | N/A | Refreshes the Indices of the Menu and (if any) Child Menus, forcing the cursor to reset in those menus, this is required when adding/removing items while the menu is open.  |
+|----------|-----------|-------------|
+| `PrintDebugMessage` | content, level | Prints debug messages to logs if the player's log level is appropriate |
+| `displayKeyboardInput` | title, defaultText, maxLength | Displays a keyboard input dialog (added in 6.4) |
+| `copyToClipboard` | text | Copies text to the player's clipboard |
+| `DoesPlayerHavePermission` | player, permission | Checks if a player has a specific permission |
+| `DoesPlayerHavePermissionForCategory` | player, permission | Checks if the player has **any** permission in a category |
+| `GetVersion` | N/A | Returns the EasyAdmin version and whether it's from a release or master branch |
+| `GetLocalisedText` | string | Returns a translated string |
+| `formatDateString` | unix timestamp | Converts a timestamp to a readable date/time |
+| `math.round` | number, decimals | Rounds a number to a specific decimal place |
+| `string.split` | string, separator | Splits a string using a separator |
+| `string.reverse` | string | Reverses a string |
+| `UIMenu:RefreshIndexRecursively()` | N/A | Forces menu index refresh, needed when items are added/removed while menu is open |
 
-### Recieving Events
+---
 
-These are the events that your script can recieve and use, but should never trigger.
+### Events You Can Receive (but shouldn't trigger)
 
+| Event | Arguments | Description |
+|-------|-----------|-------------|
+| `EasyAdmin:BuildPlayerOptions` | playerId | Used to build player-specific menu options |
+| `EasyAdmin:BuildCachedOptions` | cachedId | Used to build cached player options (not real players) |
+| `EasyAdmin:BuildServerManagementOptions` | none | Used to build server management menu options |
+| `EasyAdmin:BuildSettingsOptions` | none | Used to build settings menu options |
+| `EasyAdmin:MenuRemoved` | none | Triggered when the main menu is closed |
 
-|                 Event                  | Arguments | Function |
-|----------------------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| EasyAdmin:BuildPlayerOptions           | playerId  | This event is meant to be used if new Menu options are meant to be created inside a player's submenu, the playerId is passed, you can use the "thisPlayer" variable to access the Menu.                         |
-| EasyAdmin:BuildCachedOptions           | cachedId  | This event is for adding Menu Options to cached players, do note that these are not real players and the Id cannot be interacted with with Natives. Menu is "thisPlayer".                              |
-| EasyAdmin:BuildServerManagementOptions | none      | This event is meant to be used for adding menu options to the "Server Management" Submenu, the menu is called "servermanagement"                                                                       |
-| EasyAdmin:BuildSettingsOptions         | none      | This event is meant to be used for adding menu options to the "Settings" Submenu, the menu is called "settingsMenu"                                                                                    |
-| EasyAdmin:MenuRemoved                  | none      | This event is used when the EasyAdmin Menu is closed and/or Removed, this happens if the menu is closed and not active. This can trigger multiple times in a row so be careful what code you put here. |
+---
 
-### Sending Events
+### Events You Can Trigger
 
-EasyAdmin has a powerful API with which you can already do lots of things, here are a few Server Events which you can Trigger:
+| Event | Arguments | Returns | Description |
+|-------|-----------|---------|-------------|
+| `EasyAdmin:amiadmin` | none | none | Resends permissions for a player |
+| `EasyAdmin:GetInfinityPlayerList` | none | Table(PlayerCache) | Gets all players on the server |
+| `EasyAdmin:requestCachedPlayers` | none | Table(PlayerCache) | Gets all cached players |
+| `EasyAdmin:kickPlayer` | playerId, reason | none | Kicks a player with a reason and logs it |
+| `EasyAdmin:addBan` | playerId, reason, expires, banner | none | Bans a player (both online and cached) |
+| `EasyAdmin:requestBanlist` | none | table(banlist) | Gets the current ban list |
+| `EasyAdmin:SlapPlayer` | playerId, slapAmount | none | Slaps a player (removes HP) |
+| `EasyAdmin:TakeScreenshot` | playerId | httpResponse | Takes a screenshot of a player's screen |
+| `EasyAdmin:unbanPlayer` | banId | none | Unbans a player by ID |
+| `EasyAdmin:mutePlayer` | playerId | none | Toggles a mute on a player |
 
-
-|              Event              |             Arguments              |      Returns       |                                                                            Function                                                                                                                                    |
-|---------------------------------|------------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| EasyAdmin:amiadmin              | none                               | none               | Re-send Permissions list on a Player, this also gets done sometimes if a player opens the menu.                                                                                                                        |
-| EasyAdmin:GetInfinityPlayerList | none                               | Table(PlayerCache) | This Event sends a Clientside event with the same name back, containing a Table of all Players                                                                                                                         |
-| EasyAdmin:requestCachedPlayers  | none                               | Table(PlayerCache) | This Event sends an Event called `EasyAdmin:fillCachedPlayers` back which is a table of all cached Players, this includes active and not active players.                                                               |
-| EasyAdmin:kickPlayer            | playerId,reason                    | none               | This Event Kicks a Player if the User has permissions to do so and sends a Webhook Message with it.                                                                                                                    |
-| EasyAdmin:addBan                | playerId,reason,expires,banner | none               | This Event Bans a player (both online and cached) using EasyAdmin's Ban Feature, "Expires" has to be a timeframe(for ex. 1 week) in Unix Time. |
-| EasyAdmin:requestBanlist        | none                               | table(banlist)     | This Event sends an event called `EasyAdmin:fillBanlist` back with a table of all Bans.                                                                                                                                |
-| EasyAdmin:SlapPlayer            | playerId,slapAmount                | none               | This Event Slaps a player, taking away HP according to "SlapAmount".                                                                                                                                                   |
-| EasyAdmin:TakeScreenshot        | playerId                           | httpResponse       | This Event Takes a screenshot of the player's screen and once successful, triggers `EasyAdmin:TookScreenshot` with the HTTP Response, screenshot-basic is required.                                                    |
-| EasyAdmin:unbanPlayer           | banId                              | none               | Unbans a Player according to their Ban Id                                                                                                                                                                              |
-| EasyAdmin:mutePlayer   		  | playerId                           | none               | Toggles a Mute on a Player. |
-
+---
 
 ### Internal Events
 
-These are events that EasyAdmin may trigger to internally send informations to the server or clients, these may not be up to date, reading the source code to be sure is recommended.
+These are used internally by EasyAdmin and may not be stable or documented in detail.
 
 | Event | Direction | Arguments |
-|-------|-------|-------|
-| EasyAdmin:adminresponse | S->C | A Table of Permissions and their respective values `[permissionName = true/false]` |
-| EasyAdmin:SetSetting | S->C | A Function and a State, contains options such as Menu Keybind |
-| EasyAdmin:SetLanguage | S->C | Passes a table of Strings from the Language Configured. |
-| EasyAdmin:fillBanlist | S->C | Passes the Banlist as a Table |
-| EasyAdmin:fillCachedPlayers | S->C | Same as above, but with Cached Players. |
-| EasyAdmin:GetInfinityPlayerList | S->C | Same, but with Players. |
-| EasyAdmin:getServerAces | S->C | Sends 2 tables, of aces and principals respectively |
-| EasyAdmin:NewReport | S->C | Adds a new Report to the current Table of Reports | 
-| EasyAdmin:RemoveReport | S->C | Removes a Report from the table of Reports |
-| EasyAdmin:requestSpectate | S<->C | Is both the event to Request and start the spectate process | EasyAdmin:TeleportRequest | S->C | Tells a player to teleport to a specific location. Passes a target ID and/or Coordiantes |
-| EasyAdmin:SlapPlayer | S->C | Slaps the current Player for the amount of HP |
-| EasyAdmin:FreezePlayer | S->C | Same as above, except Freezing | 
-| EasyAdmin:amiadmin | C->S | Will check all Permissions for a player and send back the permissions in `EasyAdmin:adminresponse` |
-| EasyAdmin:reportAdded | S->S | Passes the report that has been created |
-| EasyAdmin:reportClaimed | S->S | Passes the report that has been claimed | 
-| EasyAdmin:reportRemoved | S->S | Passes the report that has been removed | 
+|-------|-----------|-----------|
+| `EasyAdmin:adminresponse` | S->C | Table of permissions and values |
+| `EasyAdmin:SetSetting` | S->C | Function and state (e.g., keybind settings) |
+| `EasyAdmin:SetLanguage` | S->C | Language strings for the current locale |
+| `EasyAdmin:fillBanlist` | S->C | Ban list as a table |
+| `EasyAdmin:fillCachedPlayers` | S->C | Table of cached players |
+| `EasyAdmin:GetInfinityPlayerList` | S->C | Table of all players |
+| `EasyAdmin:getServerAces` | S->C | Two tables: aces and principals |
+| `EasyAdmin:NewReport` | S->C | Adds a new report |
+| `EasyAdmin:RemoveReport` | S->C | Removes a report |
+| `EasyAdmin:requestSpectate` | S<->C | Starts spectating a player |
+| `EasyAdmin:TeleportRequest` | S->C | Teleports a player to a location |
+| `EasyAdmin:SlapPlayer` | S->C | Slaps a player |
+| `EasyAdmin:FreezePlayer` | S->C | Freezes a player |
+| `EasyAdmin:amiadmin` | C->S | Requests permissions for a player |
+| `EasyAdmin:reportAdded` | S->S | Adds a report to the server |
+| `EasyAdmin:reportClaimed` | S->S | Claims a report |
+| `EasyAdmin:reportRemoved` | S->S | Removes a report |
+
+---

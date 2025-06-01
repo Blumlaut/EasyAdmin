@@ -1,25 +1,66 @@
 # Creating a Steam API Key
 
-When using Steam as an Identifier, a Steam WebAPIKey is required.
+When using Steam to identify players on your server, you'll need a **Steam WebAPI Key**.
 
-If you are using ZAP-Hosting (non-txAdmin), then the Steam WebAPIKey is already configured in the "Settings" Page of your server, you do not have to follow this guide then.
+---
 
-**Note: you will need a full steam account to be able to do this, it'll require purchasing a game of £5+ to change your account from limited to full access**
+### 📌 Important Note
 
-To create your SteamWebAPI Key head over to [steamcommunity.com](https://steamcommunity.com/dev/apikey) and log in with your account.
+You must have a **full Steam account** to get a Steam WebAPI Key. If your account is "limited" (usually because you haven't spent at least £5 on Steam), you won't be able to generate a key.  
+To upgrade, simply buy any game that costs £5 or more.
 
-When creating a new Key, enter your Server's IP Address (without Port) in the `Domain Name` field.
+---
 
-Then agree to the Terms of Use and click Register.
+## Step-by-Step Instructions
 
-Next, open your server.cfg and scroll down until you see a `steam_WebApiKey` line, then copy the key you just generated and paste it between the quotes.
+### 1. Go to the Steam API Key Page
 
-If no `steam_WebApiKey` line exists then it can simply be added.
+Open your browser and go to:  
+[https://steamcommunity.com/dev/apikey](https://steamcommunity.com/dev/apikey)
 
-for example,
+Log in with your **Steam account**.
+
+---
+
+### 2. Generate the API Key
+
+- Click on the **"Register new key"** button.
+- In the **"Domain Name"** field:
+  - If you're hosting on a **dedicated server**, enter your server's **IP address** (without the port).
+  - If you're running the server on your **own PC**, enter `localhost`.
+- Read and agree to the **Terms of Use**.
+- Click **Register**.
+
+You will now see your new **Steam WebAPI Key**. Copy it.
+
+---
+
+### 3. Add the Key to Your Server
+
+Open your server configuration file:
+
 ```
+server.cfg
+```
+
+Look for a line that says:
+
+```
+steam_WebApiKey ""
+```
+
+If it's there, **paste your key between the quotes**.
+
+If it's not there, **add the line manually** at the end of the file like this:
+
+```cfg
+steam_WebApiKey "YOUR_KEY_GOES_HERE"
+```
+
+**Example:**
+
+```cfg
 steam_WebApiKey "ECBB82291CEF372F0CBC66DD11D66DA5"
 ```
 
-> If you're hosting your server on your local machine (your PC) then you can enter `localhost` into the Domain Name field.
-
+Save the file and restart your server for the changes to take effect.

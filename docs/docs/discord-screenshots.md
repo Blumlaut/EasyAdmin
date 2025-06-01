@@ -1,20 +1,41 @@
-# Discord as Screenshot Uploader
+# Using Discord as a Screenshot Uploader
 
-### Security Notice: Using this _will_ expose your webhook to players in form of code, if you are concerned about security for your webhook this method is not recommended.
+> **⚠️ Security Warning:**  
+> If you use this method, your **Discord webhook URL will be visible to players** through the game's console or scripts. If you're concerned about webhook security, it's not recommended to use this method.
 
-By Default, wew.wtf is configured as the standard image uploader, as this service no longer exists an alternative will have to be set, EasyAdmin supports setting Discord as an uploader, this will upload the image to a Discord channel using webhooks.
+---
 
-Configuring the Screenshot Uploader is easy, simply paste the following in your server config file:
+## Overview
 
-```
-setr ea_screenshoturl "https://discordapp.com/api/webhooks/YOUR_WEBHOOK/URL"
-setr ea_screenshotfield "files[]"
-```
+By default, EasyAdmin uses `wew.wtf` as the screenshot image uploader. However, since this service is no longer available, you'll need an alternative.
 
-Make sure to enter your full webhook URL in `ea_screenshoturl`.
+EasyAdmin supports using **Discord** as a screenshot uploader. This means screenshots will be uploaded directly to a Discord channel via a **webhook**.
 
-How to create your own Discord webhook is outlined in [this guide](webhook.md).
+---
 
-After a server restart, screenshots should show as follows:
+## Configuration
 
-![](https://blumlaut.me/s/WQHwnJ2PWW2nsCe/preview)
+To set up Discord as your screenshot uploader, follow these steps:
+
+1. **Obtain a Discord Webhook URL**  
+   Follow [this guide](webhook.md) to create and retrieve your Discord webhook URL.
+
+2. **Edit Your Server Configuration File**  
+   Add the following two lines to your server configuration file (usually `server.cfg` or similar):
+
+   ```ini
+   setr ea_screenshoturl "https://discordapp.com/api/webhooks/YOUR_WEBHOOK/URL"
+   setr ea_screenshotfield "files[]"
+   ```
+
+   - Replace `YOUR_WEBHOOK/URL` with your full Discord webhook URL.
+   - The `ea_screenshotfield` value should remain as `"files[]"` unless you're using a custom setup.
+
+3. **Restart Your Server**  
+   After saving the configuration, restart your server for the changes to take effect.
+
+---
+
+## Result
+
+Once configured, screenshots taken in-game should now be uploaded to the Discord channel associated with your webhook. 

@@ -1,49 +1,108 @@
-# Frequent Issues, Questions & Answers
 
-### I'm getting yarn build errors!
+# 🛠 Common Issues, Questions & Answers
 
-Update to EasyAdmin 7.4 or higher.
+Below are some frequently asked questions and known issues related to **EasyAdmin**. If your issue isn't listed here, feel free to join the [Support Discord](https://discord.gg/qq82ZU36XZ) for help.
 
-### How can i change the menu key?
+---
 
-[Click](keybind.md)
+## 🔧 I'm getting `yarn build` errors!
 
-### EasyAdmins deferral is conflicting with my adaptive card!
+**Fix:**  
+Update to **EasyAdmin 7.4 or higher**.
 
-If your EasyAdmin is conflicting with another adaptive card resource, you can try adding
-```
+---
+
+## 🔑 How can I change the menu key?
+
+**Answer:**  
+[Read more about changing keybinds here](keybind.md)
+
+---
+
+## ⚠️ EasyAdmin's deferral is conflicting with my adaptive card!
+
+**Fix:**  
+If EasyAdmin is causing flickering or conflicts with another adaptive card resource, try adding this line to your server config (`server.cfg`):
+
+```cfg
 set ea_presentDeferral "false"
 ```
-to your server config, this will disable the progress display after EasyAdmin defers the connection and hopefully fix the flicker.
 
-### My EasyAdmin only opens if i press and hold the menu key.
+This disables the progress display after EasyAdmin defers the connection, which should resolve the flickering issue.
 
-Most likely one of your keybinds are messed up, delete any lines mentioning `EasyAdmin` in this file: `%appdata%/CitizenFX/fivem.cfg`
+---
 
-### I can't connect, EasyAdmin says to contact an administrator , what do i do?
+## 🕹 My EasyAdmin only opens if I press and hold the menu key.
 
-Your Banlist has an error, most likely due to an edit that broke the formatting, use a JSON Validator and fix the Formatting inside the file, or remove any broken bans.
+**Fix:**  
+This is likely due to an incorrect keybind setup. Delete any lines mentioning `EasyAdmin` in the following file:
 
-
-### I found a bug, where do i report it?
-
-https://github.com/Blumlaut/EasyAdmin/issues
-
-### I gave myself Admin Permissions, but i cant open the menu
-
-Add `setr ea_logLevel 3` to your server config and restart the Server, then try connecting, EasyAdmin will show which permissions it's aware of, if your permissions all return `false` then you did something wrong, double check your configured permissions.
-
-## I'm getting "Access denied" errors when someone joins the server!
-Make sure the following lines are present in your server.cfg:
 ```
+%appdata%/CitizenFX/fivem.cfg
+```
+
+Then restart your client.
+
+---
+
+## ❌ I can't connect, and EasyAdmin says to contact an administrator. What do I do?
+
+**Fix:**  
+Your **banlist** file has a formatting error. This often happens after manual edits. To fix:
+
+1. Use a [JSON Validator](https://jsonlint.com/) to check the file.
+2. Correct any syntax errors.
+3. If unsure, remove any recently added or broken bans.
+
+---
+
+## 🐞 I found a bug, where do I report it?
+
+**Answer:**  
+Report it on the [EasyAdmin GitHub Issues page](https://github.com/Blumlaut/EasyAdmin/issues).
+
+---
+
+## 🔐 I gave myself admin permissions, but I can't open the menu.
+
+**Fix:**  
+Add the following line to your `server.cfg` and restart the server:
+
+```cfg
+setr ea_logLevel 3
+```
+
+This enables detailed logging. After reconnecting, check the console to see which permissions EasyAdmin recognizes.
+
+- If all permissions return `false`, you may have misconfigured them.
+- Double-check your `server.cfg` and permission setup.
+
+---
+
+## 🚫 I'm getting "Access denied" errors when someone joins the server!
+
+**Fix:**  
+Make sure the following lines are in your `server.cfg`:
+
+```cfg
 add_ace group.admin easyadmin allow
 add_ace resource.EasyAdmin command allow
 ```
 
-## Saving banlist backup failed! Please check if EasyAdmin has Permission to write in the backups folder!
+These lines grant necessary permissions for the admin group to use EasyAdmin.
 
-Your Server does not have permission to write into the `backups` folder inside the EasyAdmin Folder, make sure that your server has read and write permissions for this folder
+---
 
-If you are using ZAP-Hosting, use the "Set FTP Permissions" button in the ZAP-Hosting Panel.
+## 📁 Saving banlist backup failed! Please check if EasyAdmin has permission to write in the backups folder!
 
-## Getting a different problem? Join the [Support Discord](https://discord.gg/qq82ZU36XZ)! 
+**Fix:**  
+EasyAdmin can't write to the `backups` folder because it lacks permissions.
+
+- Ensure your server has **read and write access** to the `backups` folder inside the EasyAdmin directory.
+- If you're on **ZAP-Hosting**, use the **"Set FTP Permissions"** button in your control panel.
+
+---
+
+## 🤷‍♂️ Getting a different problem?
+
+Join the [EasyAdmin Support Discord](https://discord.gg/qq82ZU36XZ) for real-time help from the community and developers.
