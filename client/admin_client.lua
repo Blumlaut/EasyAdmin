@@ -42,7 +42,7 @@ RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 end)
 
 function DoesPlayerHavePermission(player,perm)
-	if player != -1 then
+	if not player == -1 then
 		return false
 	end
 	return permissions[perm]
