@@ -15,7 +15,7 @@ Choose one of the following installation methods based on your setup.
 	3. Rename the folder to `EasyAdmin`.
 	4. Upload the folder to your FiveM server's `resources` directory using FTP.
 
-Then continue with the rest of the setup guide.
+	Then continue with the rest of the setup guide.
 
 === "Manually on Linux (CLI)"
 
