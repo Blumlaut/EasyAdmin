@@ -508,6 +508,7 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords", function(playerId,tgtCoords)
+		local source=source
 		if DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
 			SetAdminCooldown(source, "teleport")
 			PrintDebugMessage("Player "..getName(source,true).." requsted teleport to "..tgtCoords.x..", "..tgtCoords.y..", "..tgtCoords.z, 3)
@@ -522,6 +523,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer", function(id)
+		local source=source
 		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
 			SetAdminCooldown(source, "teleport")
 			local tgtPed = GetPlayerPed(id)
@@ -549,6 +551,7 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerBack", function(id)
+		local source=source
 		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") then
 			TriggerClientEvent('EasyAdmin:TeleportPlayerBack', id)
 		end
