@@ -45,6 +45,27 @@ local routes = {
         end
         response.send(json.encode(allPlayers))
     end,
+    ['POST', '/player'] = function(request, response)
+        local body = json.decode(request.data)
+        local target = tonumber(body.target)
+        if not target or type(target) ~= 'number' or not CachedPlayers[target] then
+            response.writeHead(400, {
+                ['Content-Type'] = 'application/json'
+            })
+            response.send(json.encode({ error = "Invalid target" }))
+            return
+        end
+        local targetData = {
+            id = target,
+            name = CachedPlayers[target].name,
+            health = GetEntityHealth(GetPlayerPed(target)),
+            armor = GetPedArmour(GetPlayerPed(target)),
+            identifiers = CachedPlayers[target].identifiers,
+            immune = CachedPlayers[target].immune,
+            position = GetEntityCoords(GetPlayerPed(target))
+        }
+        response.send(json.encode(targetData))
+    end,
     ['POST', '/admin/teleport'] = function(request, response)
         local body = json.decode(request.data)
         local target = tonumber(body.target)
