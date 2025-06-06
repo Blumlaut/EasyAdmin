@@ -14,7 +14,6 @@ players = {}
 banlist = {}
 cachedplayers = {}
 reports = {}
-add_aces, add_principals = {}, {}
 MessageShortcuts = {}
 FrozenPlayers = {}
 MutedPlayers = {}
@@ -41,11 +40,18 @@ RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	end
 end)
 
+function DoesPlayerHavePermission(player,perm)
+	if not player == -1 then
+		return false
+	end
+	return permissions[perm]
+end
+
 RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
 end)
 
-AddEventHandler('EasyAdmin:SetLanguage', function(newstrings)
+RegisterNetEvent('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
 end)
 
@@ -62,18 +68,6 @@ end)
 
 RegisterNetEvent("EasyAdmin:GetInfinityPlayerList", function(players)
 	playerlist = players
-end)
-
-RegisterNetEvent("EasyAdmin:getServerAces", function(aces,principals)
-	add_aces = aces
-	add_principals = principals
-	PrintDebugMessage("Recieved ACE Permissions list", 4)
-end)
-
-RegisterNetEvent("EasyAdmin:SetLanguage", function()
-	if permissions["server.permissions.read"] then
-		TriggerServerEvent("EasyAdmin:getServerAces")
-	end
 end)
 
 RegisterNetEvent("EasyAdmin:NewReport", function(reportData)
@@ -427,6 +421,8 @@ function spectatePlayer(targetPed,target,name)
 	end
 end
 
+---Displays a notification message to the player with EasyAdmin branding.
+---@param text string @The message text to display in the notification
 function ShowNotification(text)
 	if not RedM then
 		local notificationTxd = CreateRuntimeTxd("easyadmin_notification")

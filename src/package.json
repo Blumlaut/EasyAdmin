@@ -2,22 +2,22 @@
   "dependencies": {
     "ascii-table": "0.0.9",
     "bufferutil": "^4.0.9",
-    "discord-api-types": "0.37.120",
-    "discord.js": "14.18.0",
+    "discord-api-types": "0.38.10",
+    "discord.js": "14.19.3",
     "erlpack": "0.1.4",
     "juration": "0.1.1",
     "path-browserify": "^1.0.1",
     "pretty-ms": "9.2.0",
     "sprintf-js": "1.1.3",
     "utf-8-validate": "^6.0.5",
-    "zlib-sync": "0.1.9"
+    "zlib-sync": "0.1.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.25.1",
-    "esbuild": "^0.25.2",
-    "eslint": "^9.25.1",
-    "globals": "^16.0.0"
+    "@eslint/js": "^9.27.0",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.28.0",
+    "globals": "^16.2.0"
   },
   "engines": {
     "node": "^22.0.0"

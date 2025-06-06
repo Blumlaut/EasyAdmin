@@ -141,6 +141,7 @@ Citizen.CreateThread(function()
         end, false)
     end
 
+
     function timeAgo(timestamp)
         local diff = os.time() - timestamp
         local minutes = math.floor(diff / 60)
@@ -254,7 +255,9 @@ Citizen.CreateThread(function()
             end
         end
     end
-
+    
+    ---Returns a table containing all reports.
+    ---@return table @A table of all reports.
     function getAllReports()
         return reports
     end

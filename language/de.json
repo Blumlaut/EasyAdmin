@@ -186,10 +186,7 @@
     "deepcleanguide":"Löscht auch clientseitige Gegenstände.",
 
     "forceeasteregg": "Easter Egg aktivieren",
-
-    "permissioneditor": "Permissions anpassen",
-    "permissioneditorguide": "Permissions auf dem Server editieren, speichert nach ~g~easyadmin_permissions.cfg~w~.",
-
+    
     "aces": "ACEs",
     "permission": "Permission",
     "principals": "Principals",
