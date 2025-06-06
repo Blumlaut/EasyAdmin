@@ -12,7 +12,6 @@
 
 local banlist = {}
 local actions = {}
-local notes = {}
 
 local function LoadList(fileName)
     local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
@@ -26,7 +25,6 @@ end
 
 banlist = LoadList("banlist")
 actions = LoadList("actions")
-notes = LoadList("notes")
 
 Storage = {
     getBan = function(banId)
@@ -127,7 +125,7 @@ Storage = {
         end
         return
     end,
-    getBanlist = function()
+    getBanList = function()
         return banlist
     end,
     getAction = function(discordId)
