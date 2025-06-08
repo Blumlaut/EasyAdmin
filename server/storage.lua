@@ -129,13 +129,16 @@ Storage = {
         return banlist
     end,
     getAction = function(discordId)
-        local actions = {}
-        for i, act in ipairs(actions) do
+        local userActions = {}
+        for _, act in ipairs(actions) do
+            print(act)
             if act.discord == discordId then
-                table.insert(actions, act)
+                print(discordId, type(discordId))
+                print(act.discord, type(act.discord))
+                table.insert(userActions, act)
             end
         end
-        return actions
+        return userActions
     end,
     addAction = function(type, identifier, reason, moderator_name, moderator_identifier)
         table.insert(actions, {
