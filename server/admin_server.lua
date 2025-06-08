@@ -338,12 +338,7 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(src, true).." for "..reason, 3)
 			if GetConvar("ea_enableActionHistory", "true") == "true" then
-				local playerDiscord = GetPlayerIdentifierByType(playerId, 'discord')
-				local discordId
-				if playerDiscord then
-					discordId = playerDiscord:match("discord:(%d+)")
-					TriggerEvent("EasyAdmin:LogAction", { action = "kick", license = discordId, reason = reason, banner = getName(src, true, true)})
-				end
+				Storage.addAction("KICK", CachedPlayers[playerId].discord, reason, getName(src), CachedPlayers[src].discord)
             end
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(src), reason) )
 		elseif isPlayerImmune(playerId) then
