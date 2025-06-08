@@ -843,7 +843,7 @@ function GenerateMenu() -- this is a big ass function
 								actionHistoryMenu:AddItem(noActionsItem)
 							end
 							for i, action in ipairs(actionHistory) do
-								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "[#"..action.id.."] " .. action.action .. " by " .. action.moderator, GetLocalisedText("reason")": " ..  action.reason or "", true)
+								local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "[#"..action.id.."] " .. action.action .. " by " .. action.moderator, GetLocalisedText("reason") .. ": " ..  action.reason or "", true)
 								actionSubmenu:SetMenuWidthOffset(menuWidth)
 								if action.action == "BAN" and permissions["player.ban.remove"] then
 									local actionUnban = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))

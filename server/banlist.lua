@@ -149,7 +149,7 @@ end)
 RegisterServerEvent("EasyAdmin:requestBanlist", function()
     local src = source
     if DoesPlayerHavePermission(source, "player.ban.view") then
-        TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 100000, Storage.getBanlist())
+        TriggerLatentClientEvent("EasyAdmin:fillBanlist", src, 100000, Storage.getBanList())
         PrintDebugMessage("Banlist Requested by "..getName(src,true), 3)
     end
 end)
