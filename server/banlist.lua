@@ -53,12 +53,13 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
-            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
-            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
-            Storage.addAction("BAN", CachedPlayers[playerId].discordId, reason, getName(source), source, expires, formatDateString(expires))
+            local banId = GetFreshBanId()
+            -- local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
+            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
+            Storage.addAction("BAN", CachedPlayers[playerId].discordId, reason, getName(source), CachedPlayers[source].discordId)
+            -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
-            TriggerEvent("EasyAdmin:LogAction", ban)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif isPlayerImmune(playerId) then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
@@ -87,11 +88,11 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
-            local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
-            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
-            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discordId, reason, getName(source), source, expires, formatDateString(expires))
+            --local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
+            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time()) 
+            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discordId, reason, getName(source), CachedPlayers[source].discordId)
             -- updateBlacklist( ban )
-            TriggerEvent("EasyAdmin:LogAction", ban)
+            
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -219,12 +220,9 @@ function unbanPlayer(banId)
 end
 exports('unbanPlayer', unbanPlayer)
 
-<<<<<<< HEAD
 ---Fetches a ban entry by its ID
 ---@param banId number @The ID of the ban to fetch
 ---@return table|false @The ban entry if found, false otherwise
-=======
->>>>>>> 8b0d481 (feat(storage): add action logging functionality and permissions for action history management)
 function fetchBan(banId)
     return Storage.getBan(banId)
     -- for i,ban in ipairs(blacklist) do 
@@ -251,6 +249,7 @@ end)
 ---Generates a new unique ban ID
 ---@return number @The next available ban ID
 function GetFreshBanId()
+    local blacklist = Storage.getBanList()
     if blacklist[#blacklist] then 
         return blacklist[#blacklist].banid+1
     else
@@ -321,57 +320,24 @@ function updateBan(id,newData)
     end
 end
 
-<<<<<<< HEAD
 
 ---Adds a new ban entry to the banlist
 ---@param data table @The data of the ban to be added
 ---@return nil
-=======
->>>>>>> 8b0d481 (feat(storage): add action logging functionality and permissions for action history management)
 function addBan(data)
     if data then
         table.insert(blacklist, data)
     end
 end
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 ---Synchronizes the in-memory banlist with the stored file or external system
 ---@param data table @Optional data to add or remove from the banlist
 ---@param remove boolean @Whether this is a remove operation
 ---@param forceChange boolean @Whether to force a save regardless of changes
 ---@return nil
-=======
->>>>>>> 8b0d481 (feat(storage): add action logging functionality and permissions for action history management)
-=======
--- Good to remove?
->>>>>>> df983c8 (feat(storage): enhance storage functionality with new ban management methods and action logging)
 function updateBlacklist(data,remove, forceChange)
     local change = (forceChange or false) --mark if file was changed to save up on disk writes.
-    if GetConvar("ea_custombanlist", "false") == "true" then 
-        PrintDebugMessage("You are using a Custom Banlist System, this is ^3not currently supported^7 and WILL cause issues! Only use this if you know what you are doing, otherwise, disable ea_custombanlist.", 1)
-        if data and not remove then
-            addBan(data)
-            TriggerEvent("ea_data:addBan", data)
-            
-        elseif data and remove then
-            UnbanId(data.banid)
-        elseif not data then
-            TriggerEvent('ea_data:retrieveBanlist', function(banlist)
-                blacklist = banlist
-                PrintDebugMessage("updated banlist custom banlist", 4)
-                for i,theBan in ipairs(blacklist) do
-                    if theBan.expire < os.time() then
-                        table.remove(blacklist,i)
-                        PrintDebugMessage("removing old ban custom banlist", 4)
-                        TriggerEvent("ea_data:removeBan", theBan)
-                    end
-                end
-            end)
-        end
-        return
-    end
     
     local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
     if not content then
@@ -461,14 +427,10 @@ function BanIdentifier(identifier,reason)
     --updateBlacklist( {identifiers = {identifier} , banner = "Unknown", reason = reason, expire = 10444633200} )
 end
 
-<<<<<<< HEAD
 ---Bans a player using multiple identifiers
 ---@param identifier table @A table of identifiers for the player to ban
 ---@param reason string @The reason for the ban
 ---@return nil
-=======
--- Unclear what the purpose of this is... converted anyway
->>>>>>> df983c8 (feat(storage): enhance storage functionality with new ban management methods and action logging)
 function BanIdentifiers(identifier,reason)
     Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
     --updateBlacklist( {identifiers = identifier , banner = "Unknown", reason = reason, expire = 10444633200} )
@@ -489,7 +451,6 @@ function UnbanIdentifier(identifier)
     --                     PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
     --                 end
                     
-<<<<<<< HEAD
                     if GetConvar("ea_custombanlist", "false") == "true" then 
                         TriggerEvent("ea_data:removeBan", ban)
                     end
@@ -502,17 +463,6 @@ function UnbanIdentifier(identifier)
             end
         end
     end
-=======
-    --                 if GetConvar("ea_custombanlist", "false") == "true" then 
-    --                     TriggerEvent("ea_data:removeBan", ban)
-    --                 end
-    --                 PrintDebugMessage("removed ban as per unbanidentifier func", 4)
-    --                 return
-    --             end 
-    --         end
-    --     end
-    -- end
->>>>>>> df983c8 (feat(storage): enhance storage functionality with new ban management methods and action logging)
 end
 
 ---Unbans a player using their ban ID
@@ -528,41 +478,13 @@ function UnbanId(id)
     --             PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
     --         end
             
-<<<<<<< HEAD
-            if GetConvar("ea_custombanlist", "false") == "true" then 
-                TriggerEvent("ea_data:removeBan", ban)
-            end
-<<<<<<< HEAD
-<<<<<<< HEAD
-            
-            -- Rebuild ban index after removing a ban
-            rebuildBanIndex()
-=======
-            if GetConvar("ea_enableActionHistory", "true") == "true" then
-                TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
-            end
->>>>>>> 5013313 (Enhance action logging by adding detailed ban and unban information to action history)
-=======
-            TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
->>>>>>> 3680508 (Refactor action logging to ensure action history is recorded consistently, regardless of action history setting)
-        end
-    end
-end
-
----Performs upgrades on the banlist format if necessary
----@return boolean @True if the banlist was upgraded, false otherwise
-=======
-    --         if GetConvar("ea_custombanlist", "false") == "true" then 
+    --         if GetConvar("ea_custombanlist", "false") == "true" then
     --             TriggerEvent("ea_data:removeBan", ban)
     --         end
     --         TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
     --     end
     -- end
 end
-
-
--- Yet to test this in-game, I believe there might be an issue passing json tables to this pluggable storage
->>>>>>> df983c8 (feat(storage): enhance storage functionality with new ban management methods and action logging)
 function performBanlistUpgrades()
     local upgraded = false
     local banlist = Storage.getBanList()
@@ -639,9 +561,6 @@ end
 ---@param theIdentifier string @The identifier to check
 ---@return boolean @True if the identifier is banned, false otherwise
 function IsIdentifierBanned(theIdentifier)
-<<<<<<< HEAD
-    return banIndex[theIdentifier] ~= nil
-=======
     return Storage.getBanIdentifier(theIdentifier)
     -- local identifierfound = false
     -- for index,value in ipairs(blacklist) do
@@ -652,6 +571,5 @@ function IsIdentifierBanned(theIdentifier)
     --     end
     -- end
     -- return identifierfound
->>>>>>> df983c8 (feat(storage): enhance storage functionality with new ban management methods and action logging)
 end
 exports('IsIdentifierBanned', IsIdentifierBanned)

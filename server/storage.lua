@@ -10,8 +10,8 @@
 ------------------------------------
 ------------------------------------
 
-local banlist = {}
-local actions = {}
+banlist = {}
+actions = {}
 
 local function LoadList(fileName)
     local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
@@ -29,7 +29,7 @@ actions = LoadList("actions")
 Storage = {
     getBan = function(banId)
         for i, ban in ipairs(banlist) do
-            if ban.banId == banId then
+            if ban.banid == banId then
                 return ban
             end
         end
@@ -39,7 +39,7 @@ Storage = {
         local found = false
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
-                if ban.bannedIdentifiers[identifier] then
+                if ban.identifiers[identifier] then
                     found = true
                     break
                 end
@@ -50,12 +50,12 @@ Storage = {
     addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
         table.insert(banlist, {
             time = os.time(),
-            banId = banId,
+            banid = banId,
             username = username,
-            bannedIdentifiers = bannedIdentifiers,
-            moderator = moderator,
+            identifiers = bannedIdentifiers,
+            banner = moderator,
             reason = reason,
-            expires = expires,
+            expire = expires,
             expiryString = expiryString,
             type = type,
             timeLeft = time,
@@ -86,7 +86,7 @@ Storage = {
     end,
     removeBan = function(banId)
         for i, ban in ipairs(banlist) do
-            if ban.banId == banId then
+            if ban.banid == banId then
                 table.remove(banlist, i)
                 local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
                 if not content then
@@ -107,7 +107,7 @@ Storage = {
     removeBanIdentifier = function(identifiers)
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
-                if ban.bannedIdentifiers[identifier] then
+                if ban.identifiers[identifier] then
                     table.remove(banlist, i)
                     local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
                     if not content then
@@ -131,10 +131,7 @@ Storage = {
     getAction = function(discordId)
         local userActions = {}
         for _, act in ipairs(actions) do
-            print(act)
             if act.discord == discordId then
-                print(discordId, type(discordId))
-                print(act.discord, type(act.discord))
                 table.insert(userActions, act)
             end
         end
