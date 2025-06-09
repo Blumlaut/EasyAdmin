@@ -56,7 +56,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             local banId = GetFreshBanId()
             -- local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
             Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
-            Storage.addAction("BAN", CachedPlayers[playerId].discordId, reason, getName(source), CachedPlayers[source].discordId)
+            Storage.addAction("BAN", CachedPlayers[playerId].discord, reason, getName(source), CachedPlayers[source].discord)
             -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
@@ -90,7 +90,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
             --local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
             Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time()) 
-            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discordId, reason, getName(source), CachedPlayers[source].discordId)
+            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discord, reason, getName(source), CachedPlayers[source].discord)
             -- updateBlacklist( ban )
             
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
