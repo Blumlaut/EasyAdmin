@@ -325,7 +325,12 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
 			if GetConvar("ea_enableActionHistory", "true") == "true" then
-				Storage.addAction("KICK", CachedPlayers[playerId].discord, reason, getName(source), CachedPlayers[source].discord)
+				local playerDiscord = GetPlayerIdentifierByType(playerId, 'discord')
+				local discordId
+				if playerDiscord then
+					discordId = playerDiscord:match("discord:(%d+)")
+					TriggerEvent("EasyAdmin:LogAction", { action = "kick", license = discordId, reason = reason, banner = getName(source, true, true)})
+				end
             end
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
 		elseif CachedPlayers[playerId].immune then
@@ -972,6 +977,7 @@ Citizen.CreateThread(function()
 		local matchingIdentifierCount = 0
 		local matchingIdentifiers = {}
 		local showProgress = GetConvar("ea_presentDeferral", "true")
+		local blacklist = Storage.getBanList()
 		
 		deferrals.defer()
 		Wait(0)

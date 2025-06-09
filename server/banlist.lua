@@ -33,12 +33,13 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+            local banId = GetFreshBanId()
             -- local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires), action = "BAN", time = os.time() }
-            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
-            Storage.addAction("BAN", CachedPlayers[playerId].discordId, reason, getName(source), source, expires, formatDateString(expires))
+            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
+            Storage.addAction("BAN", CachedPlayers[playerId].discordId, reason, getName(source), CachedPlayers[source].discordId)
             -- updateBlacklist( ban )
             PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif CachedPlayers[playerId].immune then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
@@ -69,9 +70,9 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
             --local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires, action = "OFFLINE BAN", time = os.time() }
             Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time()) 
-            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discordId, reason, getName(source), source, expires, formatDateString(expires))
+            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discordId, reason, getName(source), CachedPlayers[source].discordId)
             -- updateBlacklist( ban )
-            TriggerEvent("EasyAdmin:LogAction", ban)
+            -- TriggerEvent("EasyAdmin:LogAction", ban)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -230,6 +231,7 @@ end)
 ---Generates a new unique ban ID
 ---@return number @The next available ban ID
 function GetFreshBanId()
+    local blacklist = Storage.getBanList()
     if blacklist[#blacklist] then 
         return blacklist[#blacklist].banid+1
     else
@@ -315,29 +317,6 @@ end
 ---@return nil
 function updateBlacklist(data,remove, forceChange)
     local change = (forceChange or false) --mark if file was changed to save up on disk writes.
-    if GetConvar("ea_custombanlist", "false") == "true" then 
-        PrintDebugMessage("You are using a Custom Banlist System, this is ^3not currently supported^7 and WILL cause issues! Only use this if you know what you are doing, otherwise, disable ea_custombanlist.", 1)
-        if data and not remove then
-            addBan(data)
-            TriggerEvent("ea_data:addBan", data)
-            
-        elseif data and remove then
-            UnbanId(data.banid)
-        elseif not data then
-            TriggerEvent('ea_data:retrieveBanlist', function(banlist)
-                blacklist = banlist
-                PrintDebugMessage("updated banlist custom banlist", 4)
-                for i,theBan in ipairs(blacklist) do
-                    if theBan.expire < os.time() then
-                        table.remove(blacklist,i)
-                        PrintDebugMessage("removing old ban custom banlist", 4)
-                        TriggerEvent("ea_data:removeBan", theBan)
-                    end
-                end
-            end)
-        end
-        return
-    end
     
     local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
     if not content then
