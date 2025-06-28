@@ -21361,7 +21361,7 @@ var require_user = __commonJS({
   "node_modules/discord-api-types/payloads/v10/user.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ConnectionVisibility = exports2.ConnectionService = exports2.UserPremiumType = exports2.UserFlags = void 0;
+    exports2.NameplatePalette = exports2.ConnectionVisibility = exports2.ConnectionService = exports2.UserPremiumType = exports2.UserFlags = void 0;
     var UserFlags;
     (function(UserFlags2) {
       UserFlags2[UserFlags2["Staff"] = 1] = "Staff";
@@ -21430,6 +21430,20 @@ var require_user = __commonJS({
       ConnectionVisibility2[ConnectionVisibility2["None"] = 0] = "None";
       ConnectionVisibility2[ConnectionVisibility2["Everyone"] = 1] = "Everyone";
     })(ConnectionVisibility || (exports2.ConnectionVisibility = ConnectionVisibility = {}));
+    var NameplatePalette;
+    (function(NameplatePalette2) {
+      NameplatePalette2["Berry"] = "berry";
+      NameplatePalette2["BubbleGum"] = "bubble_gum";
+      NameplatePalette2["Clover"] = "clover";
+      NameplatePalette2["Cobalt"] = "cobalt";
+      NameplatePalette2["Crimson"] = "crimson";
+      NameplatePalette2["Forest"] = "forest";
+      NameplatePalette2["Lemon"] = "lemon";
+      NameplatePalette2["Sky"] = "sky";
+      NameplatePalette2["Teal"] = "teal";
+      NameplatePalette2["Violet"] = "violet";
+      NameplatePalette2["White"] = "white";
+    })(NameplatePalette || (exports2.NameplatePalette = NameplatePalette = {}));
   }
 });
 
