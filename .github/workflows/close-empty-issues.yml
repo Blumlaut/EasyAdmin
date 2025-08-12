@@ -11,7 +11,7 @@ jobs:
     name: Close empty issues and templates
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v4 # NOTE: Retrieve issue templates.
+    - uses: actions/checkout@v5 # NOTE: Retrieve issue templates.
     - name: Run empty issues closer action
       uses: rickstaa/empty-issues-closer-action@v1
       env:
