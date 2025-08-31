@@ -45,6 +45,10 @@ local function LoadList(fileName)
     end
 end
 
+local function updateList(fileName)
+
+end
+
 banlist = LoadList("banlist").data
 actions = LoadList("actions").data
 
@@ -208,7 +212,7 @@ Citizen.CreateThread(function()
     if banContent then
         local data = json.decode(banContent)
         if data.version ~= currentVersion then
-            -- Update logic
+            updateList('banlist')
         end
     end
 
@@ -216,7 +220,7 @@ Citizen.CreateThread(function()
     if actionContent then
         local data = json.decode(actionContent)
         if data.version ~= currentVersion then
-            -- Update logic
+            updateList('actions')
         end
     end
 end)
