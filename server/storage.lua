@@ -10,21 +10,43 @@
 ------------------------------------
 ------------------------------------
 
+local currentVersion = 1
 banlist = {}
 actions = {}
 
 local function LoadList(fileName)
     local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
+    local defaultData = {
+        version = currentVersion,
+        data = {}
+    }
     if content then
-        return json.decode(content)
+        local decoded = json.decode(content)
+
+        if not decoded then
+            decoded = defaultData
+
+        elseif not decoded.version then
+            if decoded[1] or next(decoded) ~= nil then
+                decoded = {
+                    version = currentVersion,
+                    data = decoded
+                }
+            else
+                decoded = defaultData
+            end            
+        end
+
+        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(decoded, { indent=true }), -1)
+        return decoded
     else
-        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode({}), -1)
-        return {}
+        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(defaultData, { indent=true }), -1)
+        return defaultData
     end
 end
 
-banlist = LoadList("banlist")
-actions = LoadList("actions")
+banlist = LoadList("banlist").data
+actions = LoadList("actions").data
 
 Storage = {
     getBan = function(banId)
@@ -63,7 +85,10 @@ Storage = {
         local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
         if not content then
             PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-            content = json.encode({})
+            content = json.encode({
+                version = 1,
+                bans = {}
+            })
         end
         local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
         if not saved then
@@ -177,3 +202,21 @@ Storage = {
     end,
     apiVersion = 1,
 }
+
+Citizen.CreateThread(function()
+    local banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+    if banContent then
+        local data = json.decode(banContent)
+        if data.version ~= currentVersion then
+            -- Update logic
+        end
+    end
+
+    local actionContent = LoadResourceFile(GetCurrentResourceName(), "actions.json")
+    if actionContent then
+        local data = json.decode(actionContent)
+        if data.version ~= currentVersion then
+            -- Update logic
+        end
+    end
+end)
