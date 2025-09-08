@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.29.0",
+    "@eslint/js": "^9.35.0",
     "esbuild": "^0.25.5",
     "eslint": "^9.29.0",
     "globals": "^16.2.0"
