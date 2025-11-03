@@ -325,7 +325,7 @@ var require_ascii_table2 = __commonJS({
 // node_modules/sprintf-js/src/sprintf.js
 var require_sprintf = __commonJS({
   "node_modules/sprintf-js/src/sprintf.js"(exports2) {
-    !function() {
+    !(function() {
       "use strict";
       var re = {
         not_string: /[^s]/,
@@ -521,7 +521,7 @@ var require_sprintf = __commonJS({
           });
         }
       }
-    }();
+    })();
   }
 });
 
@@ -1080,7 +1080,7 @@ function prettyMilliseconds(milliseconds, options) {
   }
   add(Number(parsed.minutes), "minute", "m");
   if (!options.hideSeconds) {
-    if (options.separateMilliseconds || options.formatSubMilliseconds || !options.colonNotation && milliseconds < 1e3) {
+    if (options.separateMilliseconds || options.formatSubMilliseconds || !options.colonNotation && milliseconds < 1e3 && !options.subSecondsAsDecimals) {
       const seconds = Number(parsed.seconds);
       const milliseconds2 = Number(parsed.milliseconds);
       const microseconds = Number(parsed.microseconds);
@@ -1705,7 +1705,7 @@ var init_tslib_es6 = __esm({
       };
       return __assign.apply(this, arguments);
     };
-    __createBinding = Object.create ? function(o, m, k, k2) {
+    __createBinding = Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -1714,13 +1714,13 @@ var init_tslib_es6 = __esm({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    };
-    __setModuleDefault = Object.create ? function(o, v) {
+    });
+    __setModuleDefault = Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     };
     ownKeys = function(o) {
@@ -15323,7 +15323,7 @@ var require_fetch = __commonJS({
             fetchParams.controller.terminate(e);
           }
         };
-        requestBody = async function* () {
+        requestBody = (async function* () {
           try {
             for await (const bytes of request.body.stream) {
               yield* processBodyChunk(bytes);
@@ -15332,7 +15332,7 @@ var require_fetch = __commonJS({
           } catch (err) {
             processBodyError(err);
           }
-        }();
+        })();
       }
       try {
         const { body, status, statusText, headersList, socket } = await dispatch({ body: requestBody });
@@ -19953,6 +19953,7 @@ var require_v10 = __commonJS({
       GatewayDispatchEvents2["MessageReactionRemoveEmoji"] = "MESSAGE_REACTION_REMOVE_EMOJI";
       GatewayDispatchEvents2["MessageUpdate"] = "MESSAGE_UPDATE";
       GatewayDispatchEvents2["PresenceUpdate"] = "PRESENCE_UPDATE";
+      GatewayDispatchEvents2["RateLimited"] = "RATE_LIMITED";
       GatewayDispatchEvents2["Ready"] = "READY";
       GatewayDispatchEvents2["Resumed"] = "RESUMED";
       GatewayDispatchEvents2["StageInstanceCreate"] = "STAGE_INSTANCE_CREATE";
@@ -20052,8 +20053,8 @@ var require_globals = __commonJS({
        *
        * The `timestamp` and `style` group properties are present on the `exec` result of this expression
        */
-      // eslint-disable-next-line prefer-named-capture-group
-      Timestamp: /<t:(?<timestamp>-?\d{1,13})(:(?<style>[DFRTdft]))?>/,
+      // eslint-disable-next-line prefer-named-capture-group, unicorn/better-regex
+      Timestamp: /<t:(?<timestamp>-?\d{1,13})(:(?<style>[DFRSTdfst]))?>/,
       /**
        * Regular expression for matching strictly default styled timestamps
        *
@@ -20368,7 +20369,13 @@ var require_common = __commonJS({
        *
        * Applies to channel types: Text, Voice, Stage
        */
-      UseExternalApps: 1n << 50n
+      UseExternalApps: 1n << 50n,
+      /**
+       * Allows pinning and unpinning messages
+       *
+       * Applies to channel types: Text
+       */
+      PinMessages: 1n << 51n
     };
     Object.freeze(exports2.PermissionFlagsBits);
   }
@@ -20484,6 +20491,7 @@ var require_auditLog = __commonJS({
       AuditLogEvent2[AuditLogEvent2["AutoModerationBlockMessage"] = 143] = "AutoModerationBlockMessage";
       AuditLogEvent2[AuditLogEvent2["AutoModerationFlagToChannel"] = 144] = "AutoModerationFlagToChannel";
       AuditLogEvent2[AuditLogEvent2["AutoModerationUserCommunicationDisabled"] = 145] = "AutoModerationUserCommunicationDisabled";
+      AuditLogEvent2[AuditLogEvent2["AutoModerationQuarantineUser"] = 146] = "AutoModerationQuarantineUser";
       AuditLogEvent2[AuditLogEvent2["CreatorMonetizationRequestCreated"] = 150] = "CreatorMonetizationRequestCreated";
       AuditLogEvent2[AuditLogEvent2["CreatorMonetizationTermsAccepted"] = 151] = "CreatorMonetizationTermsAccepted";
       AuditLogEvent2[AuditLogEvent2["OnboardingPromptCreate"] = 163] = "OnboardingPromptCreate";
@@ -20542,7 +20550,7 @@ var require_channel = __commonJS({
   "node_modules/discord-api-types/payloads/v10/channel.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ChannelFlags = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.ThreadMemberFlags = exports2.ThreadAutoArchiveDuration = exports2.OverwriteType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = exports2.VideoQualityMode = exports2.ChannelType = exports2.ForumLayoutType = exports2.SortOrderType = void 0;
+    exports2.ChannelFlags = exports2.ThreadMemberFlags = exports2.ThreadAutoArchiveDuration = exports2.OverwriteType = exports2.VideoQualityMode = exports2.ChannelType = exports2.ForumLayoutType = exports2.SortOrderType = void 0;
     var SortOrderType;
     (function(SortOrderType2) {
       SortOrderType2[SortOrderType2["LatestActivity"] = 0] = "LatestActivity";
@@ -20579,76 +20587,6 @@ var require_channel = __commonJS({
       VideoQualityMode2[VideoQualityMode2["Auto"] = 1] = "Auto";
       VideoQualityMode2[VideoQualityMode2["Full"] = 2] = "Full";
     })(VideoQualityMode || (exports2.VideoQualityMode = VideoQualityMode = {}));
-    var MessageType;
-    (function(MessageType2) {
-      MessageType2[MessageType2["Default"] = 0] = "Default";
-      MessageType2[MessageType2["RecipientAdd"] = 1] = "RecipientAdd";
-      MessageType2[MessageType2["RecipientRemove"] = 2] = "RecipientRemove";
-      MessageType2[MessageType2["Call"] = 3] = "Call";
-      MessageType2[MessageType2["ChannelNameChange"] = 4] = "ChannelNameChange";
-      MessageType2[MessageType2["ChannelIconChange"] = 5] = "ChannelIconChange";
-      MessageType2[MessageType2["ChannelPinnedMessage"] = 6] = "ChannelPinnedMessage";
-      MessageType2[MessageType2["UserJoin"] = 7] = "UserJoin";
-      MessageType2[MessageType2["GuildBoost"] = 8] = "GuildBoost";
-      MessageType2[MessageType2["GuildBoostTier1"] = 9] = "GuildBoostTier1";
-      MessageType2[MessageType2["GuildBoostTier2"] = 10] = "GuildBoostTier2";
-      MessageType2[MessageType2["GuildBoostTier3"] = 11] = "GuildBoostTier3";
-      MessageType2[MessageType2["ChannelFollowAdd"] = 12] = "ChannelFollowAdd";
-      MessageType2[MessageType2["GuildDiscoveryDisqualified"] = 14] = "GuildDiscoveryDisqualified";
-      MessageType2[MessageType2["GuildDiscoveryRequalified"] = 15] = "GuildDiscoveryRequalified";
-      MessageType2[MessageType2["GuildDiscoveryGracePeriodInitialWarning"] = 16] = "GuildDiscoveryGracePeriodInitialWarning";
-      MessageType2[MessageType2["GuildDiscoveryGracePeriodFinalWarning"] = 17] = "GuildDiscoveryGracePeriodFinalWarning";
-      MessageType2[MessageType2["ThreadCreated"] = 18] = "ThreadCreated";
-      MessageType2[MessageType2["Reply"] = 19] = "Reply";
-      MessageType2[MessageType2["ChatInputCommand"] = 20] = "ChatInputCommand";
-      MessageType2[MessageType2["ThreadStarterMessage"] = 21] = "ThreadStarterMessage";
-      MessageType2[MessageType2["GuildInviteReminder"] = 22] = "GuildInviteReminder";
-      MessageType2[MessageType2["ContextMenuCommand"] = 23] = "ContextMenuCommand";
-      MessageType2[MessageType2["AutoModerationAction"] = 24] = "AutoModerationAction";
-      MessageType2[MessageType2["RoleSubscriptionPurchase"] = 25] = "RoleSubscriptionPurchase";
-      MessageType2[MessageType2["InteractionPremiumUpsell"] = 26] = "InteractionPremiumUpsell";
-      MessageType2[MessageType2["StageStart"] = 27] = "StageStart";
-      MessageType2[MessageType2["StageEnd"] = 28] = "StageEnd";
-      MessageType2[MessageType2["StageSpeaker"] = 29] = "StageSpeaker";
-      MessageType2[MessageType2["StageRaiseHand"] = 30] = "StageRaiseHand";
-      MessageType2[MessageType2["StageTopic"] = 31] = "StageTopic";
-      MessageType2[MessageType2["GuildApplicationPremiumSubscription"] = 32] = "GuildApplicationPremiumSubscription";
-      MessageType2[MessageType2["GuildIncidentAlertModeEnabled"] = 36] = "GuildIncidentAlertModeEnabled";
-      MessageType2[MessageType2["GuildIncidentAlertModeDisabled"] = 37] = "GuildIncidentAlertModeDisabled";
-      MessageType2[MessageType2["GuildIncidentReportRaid"] = 38] = "GuildIncidentReportRaid";
-      MessageType2[MessageType2["GuildIncidentReportFalseAlarm"] = 39] = "GuildIncidentReportFalseAlarm";
-      MessageType2[MessageType2["PurchaseNotification"] = 44] = "PurchaseNotification";
-      MessageType2[MessageType2["PollResult"] = 46] = "PollResult";
-    })(MessageType || (exports2.MessageType = MessageType = {}));
-    var MessageActivityType;
-    (function(MessageActivityType2) {
-      MessageActivityType2[MessageActivityType2["Join"] = 1] = "Join";
-      MessageActivityType2[MessageActivityType2["Spectate"] = 2] = "Spectate";
-      MessageActivityType2[MessageActivityType2["Listen"] = 3] = "Listen";
-      MessageActivityType2[MessageActivityType2["JoinRequest"] = 5] = "JoinRequest";
-    })(MessageActivityType || (exports2.MessageActivityType = MessageActivityType = {}));
-    var MessageReferenceType;
-    (function(MessageReferenceType2) {
-      MessageReferenceType2[MessageReferenceType2["Default"] = 0] = "Default";
-      MessageReferenceType2[MessageReferenceType2["Forward"] = 1] = "Forward";
-    })(MessageReferenceType || (exports2.MessageReferenceType = MessageReferenceType = {}));
-    var MessageFlags;
-    (function(MessageFlags2) {
-      MessageFlags2[MessageFlags2["Crossposted"] = 1] = "Crossposted";
-      MessageFlags2[MessageFlags2["IsCrosspost"] = 2] = "IsCrosspost";
-      MessageFlags2[MessageFlags2["SuppressEmbeds"] = 4] = "SuppressEmbeds";
-      MessageFlags2[MessageFlags2["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
-      MessageFlags2[MessageFlags2["Urgent"] = 16] = "Urgent";
-      MessageFlags2[MessageFlags2["HasThread"] = 32] = "HasThread";
-      MessageFlags2[MessageFlags2["Ephemeral"] = 64] = "Ephemeral";
-      MessageFlags2[MessageFlags2["Loading"] = 128] = "Loading";
-      MessageFlags2[MessageFlags2["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
-      MessageFlags2[MessageFlags2["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
-      MessageFlags2[MessageFlags2["SuppressNotifications"] = 4096] = "SuppressNotifications";
-      MessageFlags2[MessageFlags2["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
-      MessageFlags2[MessageFlags2["HasSnapshot"] = 16384] = "HasSnapshot";
-      MessageFlags2[MessageFlags2["IsComponentsV2"] = 32768] = "IsComponentsV2";
-    })(MessageFlags || (exports2.MessageFlags = MessageFlags = {}));
     var OverwriteType;
     (function(OverwriteType2) {
       OverwriteType2[OverwriteType2["Role"] = 0] = "Role";
@@ -20668,79 +20606,6 @@ var require_channel = __commonJS({
       ThreadMemberFlags2[ThreadMemberFlags2["OnlyMentions"] = 4] = "OnlyMentions";
       ThreadMemberFlags2[ThreadMemberFlags2["NoMessages"] = 8] = "NoMessages";
     })(ThreadMemberFlags || (exports2.ThreadMemberFlags = ThreadMemberFlags = {}));
-    var EmbedType;
-    (function(EmbedType2) {
-      EmbedType2["Rich"] = "rich";
-      EmbedType2["Image"] = "image";
-      EmbedType2["Video"] = "video";
-      EmbedType2["GIFV"] = "gifv";
-      EmbedType2["Article"] = "article";
-      EmbedType2["Link"] = "link";
-      EmbedType2["AutoModerationMessage"] = "auto_moderation_message";
-      EmbedType2["PollResult"] = "poll_result";
-    })(EmbedType || (exports2.EmbedType = EmbedType = {}));
-    var AttachmentFlags;
-    (function(AttachmentFlags2) {
-      AttachmentFlags2[AttachmentFlags2["IsRemix"] = 4] = "IsRemix";
-    })(AttachmentFlags || (exports2.AttachmentFlags = AttachmentFlags = {}));
-    var AllowedMentionsTypes;
-    (function(AllowedMentionsTypes2) {
-      AllowedMentionsTypes2["Everyone"] = "everyone";
-      AllowedMentionsTypes2["Role"] = "roles";
-      AllowedMentionsTypes2["User"] = "users";
-    })(AllowedMentionsTypes || (exports2.AllowedMentionsTypes = AllowedMentionsTypes = {}));
-    var ComponentType;
-    (function(ComponentType2) {
-      ComponentType2[ComponentType2["ActionRow"] = 1] = "ActionRow";
-      ComponentType2[ComponentType2["Button"] = 2] = "Button";
-      ComponentType2[ComponentType2["StringSelect"] = 3] = "StringSelect";
-      ComponentType2[ComponentType2["TextInput"] = 4] = "TextInput";
-      ComponentType2[ComponentType2["UserSelect"] = 5] = "UserSelect";
-      ComponentType2[ComponentType2["RoleSelect"] = 6] = "RoleSelect";
-      ComponentType2[ComponentType2["MentionableSelect"] = 7] = "MentionableSelect";
-      ComponentType2[ComponentType2["ChannelSelect"] = 8] = "ChannelSelect";
-      ComponentType2[ComponentType2["Section"] = 9] = "Section";
-      ComponentType2[ComponentType2["TextDisplay"] = 10] = "TextDisplay";
-      ComponentType2[ComponentType2["Thumbnail"] = 11] = "Thumbnail";
-      ComponentType2[ComponentType2["MediaGallery"] = 12] = "MediaGallery";
-      ComponentType2[ComponentType2["File"] = 13] = "File";
-      ComponentType2[ComponentType2["Separator"] = 14] = "Separator";
-      ComponentType2[ComponentType2["ContentInventoryEntry"] = 16] = "ContentInventoryEntry";
-      ComponentType2[ComponentType2["Container"] = 17] = "Container";
-      ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
-    })(ComponentType || (exports2.ComponentType = ComponentType = {}));
-    var ButtonStyle2;
-    (function(ButtonStyle3) {
-      ButtonStyle3[ButtonStyle3["Primary"] = 1] = "Primary";
-      ButtonStyle3[ButtonStyle3["Secondary"] = 2] = "Secondary";
-      ButtonStyle3[ButtonStyle3["Success"] = 3] = "Success";
-      ButtonStyle3[ButtonStyle3["Danger"] = 4] = "Danger";
-      ButtonStyle3[ButtonStyle3["Link"] = 5] = "Link";
-      ButtonStyle3[ButtonStyle3["Premium"] = 6] = "Premium";
-    })(ButtonStyle2 || (exports2.ButtonStyle = ButtonStyle2 = {}));
-    var TextInputStyle2;
-    (function(TextInputStyle3) {
-      TextInputStyle3[TextInputStyle3["Short"] = 1] = "Short";
-      TextInputStyle3[TextInputStyle3["Paragraph"] = 2] = "Paragraph";
-    })(TextInputStyle2 || (exports2.TextInputStyle = TextInputStyle2 = {}));
-    var SelectMenuDefaultValueType;
-    (function(SelectMenuDefaultValueType2) {
-      SelectMenuDefaultValueType2["Channel"] = "channel";
-      SelectMenuDefaultValueType2["Role"] = "role";
-      SelectMenuDefaultValueType2["User"] = "user";
-    })(SelectMenuDefaultValueType || (exports2.SelectMenuDefaultValueType = SelectMenuDefaultValueType = {}));
-    var UnfurledMediaItemLoadingState;
-    (function(UnfurledMediaItemLoadingState2) {
-      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Unknown"] = 0] = "Unknown";
-      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Loading"] = 1] = "Loading";
-      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedSuccess"] = 2] = "LoadedSuccess";
-      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedNotFound"] = 3] = "LoadedNotFound";
-    })(UnfurledMediaItemLoadingState || (exports2.UnfurledMediaItemLoadingState = UnfurledMediaItemLoadingState = {}));
-    var SeparatorSpacingSize;
-    (function(SeparatorSpacingSize2) {
-      SeparatorSpacingSize2[SeparatorSpacingSize2["Small"] = 1] = "Small";
-      SeparatorSpacingSize2[SeparatorSpacingSize2["Large"] = 2] = "Large";
-    })(SeparatorSpacingSize || (exports2.SeparatorSpacingSize = SeparatorSpacingSize = {}));
     var ChannelFlags;
     (function(ChannelFlags2) {
       ChannelFlags2[ChannelFlags2["GuildFeedRemoved"] = 1] = "GuildFeedRemoved";
@@ -20761,7 +20626,7 @@ var require_gateway = __commonJS({
   "node_modules/discord-api-types/payloads/v10/gateway.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ActivityFlags = exports2.ActivityType = exports2.ActivityPlatform = exports2.PresenceUpdateStatus = void 0;
+    exports2.ActivityFlags = exports2.StatusDisplayType = exports2.ActivityType = exports2.ActivityPlatform = exports2.PresenceUpdateStatus = void 0;
     var PresenceUpdateStatus;
     (function(PresenceUpdateStatus2) {
       PresenceUpdateStatus2["Online"] = "online";
@@ -20790,6 +20655,12 @@ var require_gateway = __commonJS({
       ActivityType2[ActivityType2["Custom"] = 4] = "Custom";
       ActivityType2[ActivityType2["Competing"] = 5] = "Competing";
     })(ActivityType || (exports2.ActivityType = ActivityType = {}));
+    var StatusDisplayType;
+    (function(StatusDisplayType2) {
+      StatusDisplayType2[StatusDisplayType2["Name"] = 0] = "Name";
+      StatusDisplayType2[StatusDisplayType2["State"] = 1] = "State";
+      StatusDisplayType2[StatusDisplayType2["Details"] = 2] = "Details";
+    })(StatusDisplayType || (exports2.StatusDisplayType = StatusDisplayType = {}));
     var ActivityFlags;
     (function(ActivityFlags2) {
       ActivityFlags2[ActivityFlags2["Instance"] = 1] = "Instance";
@@ -20901,6 +20772,10 @@ var require_guild = __commonJS({
       GuildFeature2["Verified"] = "VERIFIED";
       GuildFeature2["VIPRegions"] = "VIP_REGIONS";
       GuildFeature2["WelcomeScreenEnabled"] = "WELCOME_SCREEN_ENABLED";
+      GuildFeature2["GuildTags"] = "GUILD_TAGS";
+      GuildFeature2["EnhancedRoleColors"] = "ENHANCED_ROLE_COLORS";
+      GuildFeature2["GuestsEnabled"] = "GUESTS_ENABLED";
+      GuildFeature2["PinPermissionMigrationComplete"] = "PIN_PERMISSION_MIGRATION_COMPLETE";
     })(GuildFeature || (exports2.GuildFeature = GuildFeature = {}));
     var GuildMemberFlags;
     (function(GuildMemberFlags2) {
@@ -20914,6 +20789,7 @@ var require_guild = __commonJS({
       GuildMemberFlags2[GuildMemberFlags2["AutomodQuarantinedUsernameOrGuildNickname"] = 128] = "AutomodQuarantinedUsernameOrGuildNickname";
       GuildMemberFlags2[GuildMemberFlags2["AutomodQuarantinedBio"] = 256] = "AutomodQuarantinedBio";
       GuildMemberFlags2[GuildMemberFlags2["DmSettingsUpsellAcknowledged"] = 512] = "DmSettingsUpsellAcknowledged";
+      GuildMemberFlags2[GuildMemberFlags2["AutoModQuarantinedGuildTag"] = 1024] = "AutoModQuarantinedGuildTag";
     })(GuildMemberFlags || (exports2.GuildMemberFlags = GuildMemberFlags = {}));
     var IntegrationExpireBehavior;
     (function(IntegrationExpireBehavior2) {
@@ -21030,7 +20906,7 @@ var require_shared = __commonJS({
 var require_chatInput = __commonJS({
   "node_modules/discord-api-types/payloads/v10/_interactions/_applicationCommands/chatInput.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -21039,10 +20915,10 @@ var require_chatInput = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -21075,7 +20951,7 @@ var require_permissions = __commonJS({
 var require_applicationCommands = __commonJS({
   "node_modules/discord-api-types/payloads/v10/_interactions/applicationCommands.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -21084,10 +20960,10 @@ var require_applicationCommands = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -21154,7 +21030,7 @@ var require_responses = __commonJS({
 var require_interactions = __commonJS({
   "node_modules/discord-api-types/payloads/v10/interactions.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -21163,10 +21039,10 @@ var require_interactions = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -21181,7 +21057,11 @@ var require_invite = __commonJS({
   "node_modules/discord-api-types/payloads/v10/invite.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.InviteTargetType = exports2.InviteType = void 0;
+    exports2.InviteTargetType = exports2.InviteType = exports2.InviteFlags = void 0;
+    var InviteFlags;
+    (function(InviteFlags2) {
+      InviteFlags2[InviteFlags2["IsGuestInvite"] = 1] = "IsGuestInvite";
+    })(InviteFlags || (exports2.InviteFlags = InviteFlags = {}));
     var InviteType;
     (function(InviteType2) {
       InviteType2[InviteType2["Guild"] = 0] = "Guild";
@@ -21193,6 +21073,160 @@ var require_invite = __commonJS({
       InviteTargetType2[InviteTargetType2["Stream"] = 1] = "Stream";
       InviteTargetType2[InviteTargetType2["EmbeddedApplication"] = 2] = "EmbeddedApplication";
     })(InviteTargetType || (exports2.InviteTargetType = InviteTargetType = {}));
+  }
+});
+
+// node_modules/discord-api-types/payloads/v10/message.js
+var require_message = __commonJS({
+  "node_modules/discord-api-types/payloads/v10/message.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = void 0;
+    var MessageType;
+    (function(MessageType2) {
+      MessageType2[MessageType2["Default"] = 0] = "Default";
+      MessageType2[MessageType2["RecipientAdd"] = 1] = "RecipientAdd";
+      MessageType2[MessageType2["RecipientRemove"] = 2] = "RecipientRemove";
+      MessageType2[MessageType2["Call"] = 3] = "Call";
+      MessageType2[MessageType2["ChannelNameChange"] = 4] = "ChannelNameChange";
+      MessageType2[MessageType2["ChannelIconChange"] = 5] = "ChannelIconChange";
+      MessageType2[MessageType2["ChannelPinnedMessage"] = 6] = "ChannelPinnedMessage";
+      MessageType2[MessageType2["UserJoin"] = 7] = "UserJoin";
+      MessageType2[MessageType2["GuildBoost"] = 8] = "GuildBoost";
+      MessageType2[MessageType2["GuildBoostTier1"] = 9] = "GuildBoostTier1";
+      MessageType2[MessageType2["GuildBoostTier2"] = 10] = "GuildBoostTier2";
+      MessageType2[MessageType2["GuildBoostTier3"] = 11] = "GuildBoostTier3";
+      MessageType2[MessageType2["ChannelFollowAdd"] = 12] = "ChannelFollowAdd";
+      MessageType2[MessageType2["GuildDiscoveryDisqualified"] = 14] = "GuildDiscoveryDisqualified";
+      MessageType2[MessageType2["GuildDiscoveryRequalified"] = 15] = "GuildDiscoveryRequalified";
+      MessageType2[MessageType2["GuildDiscoveryGracePeriodInitialWarning"] = 16] = "GuildDiscoveryGracePeriodInitialWarning";
+      MessageType2[MessageType2["GuildDiscoveryGracePeriodFinalWarning"] = 17] = "GuildDiscoveryGracePeriodFinalWarning";
+      MessageType2[MessageType2["ThreadCreated"] = 18] = "ThreadCreated";
+      MessageType2[MessageType2["Reply"] = 19] = "Reply";
+      MessageType2[MessageType2["ChatInputCommand"] = 20] = "ChatInputCommand";
+      MessageType2[MessageType2["ThreadStarterMessage"] = 21] = "ThreadStarterMessage";
+      MessageType2[MessageType2["GuildInviteReminder"] = 22] = "GuildInviteReminder";
+      MessageType2[MessageType2["ContextMenuCommand"] = 23] = "ContextMenuCommand";
+      MessageType2[MessageType2["AutoModerationAction"] = 24] = "AutoModerationAction";
+      MessageType2[MessageType2["RoleSubscriptionPurchase"] = 25] = "RoleSubscriptionPurchase";
+      MessageType2[MessageType2["InteractionPremiumUpsell"] = 26] = "InteractionPremiumUpsell";
+      MessageType2[MessageType2["StageStart"] = 27] = "StageStart";
+      MessageType2[MessageType2["StageEnd"] = 28] = "StageEnd";
+      MessageType2[MessageType2["StageSpeaker"] = 29] = "StageSpeaker";
+      MessageType2[MessageType2["StageRaiseHand"] = 30] = "StageRaiseHand";
+      MessageType2[MessageType2["StageTopic"] = 31] = "StageTopic";
+      MessageType2[MessageType2["GuildApplicationPremiumSubscription"] = 32] = "GuildApplicationPremiumSubscription";
+      MessageType2[MessageType2["GuildIncidentAlertModeEnabled"] = 36] = "GuildIncidentAlertModeEnabled";
+      MessageType2[MessageType2["GuildIncidentAlertModeDisabled"] = 37] = "GuildIncidentAlertModeDisabled";
+      MessageType2[MessageType2["GuildIncidentReportRaid"] = 38] = "GuildIncidentReportRaid";
+      MessageType2[MessageType2["GuildIncidentReportFalseAlarm"] = 39] = "GuildIncidentReportFalseAlarm";
+      MessageType2[MessageType2["PurchaseNotification"] = 44] = "PurchaseNotification";
+      MessageType2[MessageType2["PollResult"] = 46] = "PollResult";
+    })(MessageType || (exports2.MessageType = MessageType = {}));
+    var MessageActivityType;
+    (function(MessageActivityType2) {
+      MessageActivityType2[MessageActivityType2["Join"] = 1] = "Join";
+      MessageActivityType2[MessageActivityType2["Spectate"] = 2] = "Spectate";
+      MessageActivityType2[MessageActivityType2["Listen"] = 3] = "Listen";
+      MessageActivityType2[MessageActivityType2["JoinRequest"] = 5] = "JoinRequest";
+    })(MessageActivityType || (exports2.MessageActivityType = MessageActivityType = {}));
+    var MessageReferenceType;
+    (function(MessageReferenceType2) {
+      MessageReferenceType2[MessageReferenceType2["Default"] = 0] = "Default";
+      MessageReferenceType2[MessageReferenceType2["Forward"] = 1] = "Forward";
+    })(MessageReferenceType || (exports2.MessageReferenceType = MessageReferenceType = {}));
+    var MessageFlags;
+    (function(MessageFlags2) {
+      MessageFlags2[MessageFlags2["Crossposted"] = 1] = "Crossposted";
+      MessageFlags2[MessageFlags2["IsCrosspost"] = 2] = "IsCrosspost";
+      MessageFlags2[MessageFlags2["SuppressEmbeds"] = 4] = "SuppressEmbeds";
+      MessageFlags2[MessageFlags2["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
+      MessageFlags2[MessageFlags2["Urgent"] = 16] = "Urgent";
+      MessageFlags2[MessageFlags2["HasThread"] = 32] = "HasThread";
+      MessageFlags2[MessageFlags2["Ephemeral"] = 64] = "Ephemeral";
+      MessageFlags2[MessageFlags2["Loading"] = 128] = "Loading";
+      MessageFlags2[MessageFlags2["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
+      MessageFlags2[MessageFlags2["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
+      MessageFlags2[MessageFlags2["SuppressNotifications"] = 4096] = "SuppressNotifications";
+      MessageFlags2[MessageFlags2["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
+      MessageFlags2[MessageFlags2["HasSnapshot"] = 16384] = "HasSnapshot";
+      MessageFlags2[MessageFlags2["IsComponentsV2"] = 32768] = "IsComponentsV2";
+    })(MessageFlags || (exports2.MessageFlags = MessageFlags = {}));
+    var EmbedType;
+    (function(EmbedType2) {
+      EmbedType2["Rich"] = "rich";
+      EmbedType2["Image"] = "image";
+      EmbedType2["Video"] = "video";
+      EmbedType2["GIFV"] = "gifv";
+      EmbedType2["Article"] = "article";
+      EmbedType2["Link"] = "link";
+      EmbedType2["AutoModerationMessage"] = "auto_moderation_message";
+      EmbedType2["PollResult"] = "poll_result";
+    })(EmbedType || (exports2.EmbedType = EmbedType = {}));
+    var AttachmentFlags;
+    (function(AttachmentFlags2) {
+      AttachmentFlags2[AttachmentFlags2["IsRemix"] = 4] = "IsRemix";
+    })(AttachmentFlags || (exports2.AttachmentFlags = AttachmentFlags = {}));
+    var AllowedMentionsTypes;
+    (function(AllowedMentionsTypes2) {
+      AllowedMentionsTypes2["Everyone"] = "everyone";
+      AllowedMentionsTypes2["Role"] = "roles";
+      AllowedMentionsTypes2["User"] = "users";
+    })(AllowedMentionsTypes || (exports2.AllowedMentionsTypes = AllowedMentionsTypes = {}));
+    var ComponentType;
+    (function(ComponentType2) {
+      ComponentType2[ComponentType2["ActionRow"] = 1] = "ActionRow";
+      ComponentType2[ComponentType2["Button"] = 2] = "Button";
+      ComponentType2[ComponentType2["StringSelect"] = 3] = "StringSelect";
+      ComponentType2[ComponentType2["TextInput"] = 4] = "TextInput";
+      ComponentType2[ComponentType2["UserSelect"] = 5] = "UserSelect";
+      ComponentType2[ComponentType2["RoleSelect"] = 6] = "RoleSelect";
+      ComponentType2[ComponentType2["MentionableSelect"] = 7] = "MentionableSelect";
+      ComponentType2[ComponentType2["ChannelSelect"] = 8] = "ChannelSelect";
+      ComponentType2[ComponentType2["Section"] = 9] = "Section";
+      ComponentType2[ComponentType2["TextDisplay"] = 10] = "TextDisplay";
+      ComponentType2[ComponentType2["Thumbnail"] = 11] = "Thumbnail";
+      ComponentType2[ComponentType2["MediaGallery"] = 12] = "MediaGallery";
+      ComponentType2[ComponentType2["File"] = 13] = "File";
+      ComponentType2[ComponentType2["Separator"] = 14] = "Separator";
+      ComponentType2[ComponentType2["ContentInventoryEntry"] = 16] = "ContentInventoryEntry";
+      ComponentType2[ComponentType2["Container"] = 17] = "Container";
+      ComponentType2[ComponentType2["Label"] = 18] = "Label";
+      ComponentType2[ComponentType2["FileUpload"] = 19] = "FileUpload";
+      ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
+    })(ComponentType || (exports2.ComponentType = ComponentType = {}));
+    var ButtonStyle2;
+    (function(ButtonStyle3) {
+      ButtonStyle3[ButtonStyle3["Primary"] = 1] = "Primary";
+      ButtonStyle3[ButtonStyle3["Secondary"] = 2] = "Secondary";
+      ButtonStyle3[ButtonStyle3["Success"] = 3] = "Success";
+      ButtonStyle3[ButtonStyle3["Danger"] = 4] = "Danger";
+      ButtonStyle3[ButtonStyle3["Link"] = 5] = "Link";
+      ButtonStyle3[ButtonStyle3["Premium"] = 6] = "Premium";
+    })(ButtonStyle2 || (exports2.ButtonStyle = ButtonStyle2 = {}));
+    var TextInputStyle2;
+    (function(TextInputStyle3) {
+      TextInputStyle3[TextInputStyle3["Short"] = 1] = "Short";
+      TextInputStyle3[TextInputStyle3["Paragraph"] = 2] = "Paragraph";
+    })(TextInputStyle2 || (exports2.TextInputStyle = TextInputStyle2 = {}));
+    var SelectMenuDefaultValueType;
+    (function(SelectMenuDefaultValueType2) {
+      SelectMenuDefaultValueType2["Channel"] = "channel";
+      SelectMenuDefaultValueType2["Role"] = "role";
+      SelectMenuDefaultValueType2["User"] = "user";
+    })(SelectMenuDefaultValueType || (exports2.SelectMenuDefaultValueType = SelectMenuDefaultValueType = {}));
+    var UnfurledMediaItemLoadingState;
+    (function(UnfurledMediaItemLoadingState2) {
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Unknown"] = 0] = "Unknown";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["Loading"] = 1] = "Loading";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedSuccess"] = 2] = "LoadedSuccess";
+      UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedNotFound"] = 3] = "LoadedNotFound";
+    })(UnfurledMediaItemLoadingState || (exports2.UnfurledMediaItemLoadingState = UnfurledMediaItemLoadingState = {}));
+    var SeparatorSpacingSize;
+    (function(SeparatorSpacingSize2) {
+      SeparatorSpacingSize2[SeparatorSpacingSize2["Small"] = 1] = "Small";
+      SeparatorSpacingSize2[SeparatorSpacingSize2["Large"] = 2] = "Large";
+    })(SeparatorSpacingSize || (exports2.SeparatorSpacingSize = SeparatorSpacingSize = {}));
   }
 });
 
@@ -21463,6 +21497,8 @@ var require_webhook = __commonJS({
       ApplicationWebhookEventType2["ApplicationAuthorized"] = "APPLICATION_AUTHORIZED";
       ApplicationWebhookEventType2["ApplicationDeauthorized"] = "APPLICATION_DEAUTHORIZED";
       ApplicationWebhookEventType2["EntitlementCreate"] = "ENTITLEMENT_CREATE";
+      ApplicationWebhookEventType2["EntitlementUpdate"] = "ENTITLEMENT_UPDATE";
+      ApplicationWebhookEventType2["EntitlementDelete"] = "ENTITLEMENT_DELETE";
       ApplicationWebhookEventType2["QuestUserEnrollment"] = "QUEST_USER_ENROLLMENT";
     })(ApplicationWebhookEventType || (exports2.ApplicationWebhookEventType = ApplicationWebhookEventType = {}));
     var WebhookType;
@@ -21478,7 +21514,7 @@ var require_webhook = __commonJS({
 var require_v102 = __commonJS({
   "node_modules/discord-api-types/payloads/v10/index.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -21487,10 +21523,10 @@ var require_v102 = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -21505,6 +21541,7 @@ var require_v102 = __commonJS({
     __exportStar2(require_guildScheduledEvent(), exports2);
     __exportStar2(require_interactions(), exports2);
     __exportStar2(require_invite(), exports2);
+    __exportStar2(require_message(), exports2);
     __exportStar2(require_monetization(), exports2);
     __exportStar2(require_oauth2(), exports2);
     __exportStar2(require_permissions2(), exports2);
@@ -21759,6 +21796,7 @@ var require_common2 = __commonJS({
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["MessageBlockedByHarmfulLinksFilter"] = 24e4] = "MessageBlockedByHarmfulLinksFilter";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEnableOnboardingRequirementsAreNotMet"] = 35e4] = "CannotEnableOnboardingRequirementsAreNotMet";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUpdateOnboardingWhileBelowRequirements"] = 350001] = "CannotUpdateOnboardingWhileBelowRequirements";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["AccessToFileUploadsHasBeenLimitedForThisGuild"] = 400001] = "AccessToFileUploadsHasBeenLimitedForThisGuild";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToBanUsers"] = 5e5] = "FailedToBanUsers";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["PollVotingBlocked"] = 52e4] = "PollVotingBlocked";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["PollExpired"] = 520001] = "PollExpired";
@@ -21837,7 +21875,7 @@ var require_monetization2 = __commonJS({
 var require_v103 = __commonJS({
   "node_modules/discord-api-types/rest/v10/index.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -21846,10 +21884,10 @@ var require_v103 = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -22001,7 +22039,24 @@ var require_v103 = __commonJS({
       },
       /**
        * Route for:
+       * - GET `/channels/{channel.id}/messages/pins`
+       */
+      channelMessagesPins(channelId) {
+        return `/channels/${channelId}/messages/pins`;
+      },
+      /**
+       * Route for:
+       * - PUT    `/channels/{channel.id}/messages/pins/{message.id}`
+       * - DELETE `/channels/{channel.id}/messages/pins/{message.id}`
+       */
+      channelMessagesPin(channelId, messageId) {
+        return `/channels/${channelId}/messages/pins/${messageId}`;
+      },
+      /**
+       * Route for:
        * - GET `/channels/{channel.id}/pins`
+       *
+       * @deprecated Use {@link Routes.channelMessagesPins} instead.
        */
       channelPins(channelId) {
         return `/channels/${channelId}/pins`;
@@ -22010,6 +22065,8 @@ var require_v103 = __commonJS({
        * Route for:
        * - PUT    `/channels/{channel.id}/pins/{message.id}`
        * - DELETE `/channels/{channel.id}/pins/{message.id}`
+       *
+       * @deprecated Use {@link Routes.channelMessagesPin} instead.
        */
       channelPin(channelId, messageId) {
         return `/channels/${channelId}/pins/${messageId}`;
@@ -22042,6 +22099,8 @@ var require_v103 = __commonJS({
       /**
        * Route for:
        * - POST `/guilds`
+       *
+       * @deprecated {@link https://discord.com/developers/docs/change-log#guild-create-deprecation}
        */
       guilds() {
         return "/guilds";
@@ -22050,7 +22109,7 @@ var require_v103 = __commonJS({
        * Route for:
        * - GET    `/guilds/{guild.id}`
        * - PATCH  `/guilds/{guild.id}`
-       * - DELETE `/guilds/{guild.id}`
+       * - DELETE `/guilds/{guild.id}` (**deprecated**)
        */
       guild(guildId) {
         return `/guilds/${guildId}`;
@@ -22116,6 +22175,8 @@ var require_v103 = __commonJS({
       /**
        * Route for:
        * - POST `/guilds/{guild.id}/mfa`
+       *
+       * @deprecated
        */
       guildMFA(guildId) {
         return `/guilds/${guildId}/mfa`;
@@ -22153,6 +22214,15 @@ var require_v103 = __commonJS({
        */
       guildRole(guildId, roleId) {
         return `/guilds/${guildId}/roles/${roleId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/roles/member-counts`
+       *
+       * @unstable
+       */
+      guildRoleMemberCounts(guildId) {
+        return `/guilds/${guildId}/roles/member-counts`;
       },
       /**
        * Route for:
@@ -22230,7 +22300,7 @@ var require_v103 = __commonJS({
       /**
        * Route for:
        * - GET  `/guilds/templates/{template.code}`
-       * - POST `/guilds/templates/{template.code}`
+       * - POST `/guilds/templates/{template.code}` (**deprecated**)
        */
       template(code) {
         return `/guilds/templates/${code}`;
@@ -22529,6 +22599,8 @@ var require_v103 = __commonJS({
        * Route for:
        * - GET   `/guilds/{guild.id}/member-verification`
        * - PATCH `/guilds/{guild.id}/member-verification`
+       *
+       * @unstable https://github.com/discord/discord-api-docs/pull/2547
        */
       guildMemberVerification(guildId) {
         return `/guilds/${guildId}/member-verification`;
@@ -23024,6 +23096,15 @@ var require_v103 = __commonJS({
        */
       soundboardSound(soundId) {
         return `/soundboard-sounds/${soundId}`;
+      },
+      /**
+       * Route for:
+       * - GET `/guild-tag-badges/{guild.id}/{badge}.{png|jpeg|webp}`
+       *
+       * This route supports the extensions: PNG, JPEG, WebP
+       */
+      guildTagBadge(guildId, guildTagBadge, format) {
+        return `/guild-tag-badges/${guildId}/${guildTagBadge}.${format}`;
       }
     };
     for (const [key, fn] of Object.entries(exports2.CDNRoutes)) {
@@ -23159,7 +23240,7 @@ var require_common3 = __commonJS({
 var require_v104 = __commonJS({
   "node_modules/discord-api-types/rpc/v10.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -23168,10 +23249,10 @@ var require_v104 = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -23338,7 +23419,7 @@ var require_v105 = __commonJS({
 var require_v106 = __commonJS({
   "node_modules/discord-api-types/v10.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -23347,10 +23428,10 @@ var require_v106 = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -26238,7 +26319,7 @@ var require_dist5 = __commonJS({
     var import_v102 = require_v106();
     var import_util = require_dist();
     var import_v10 = require_v106();
-    var DefaultUserAgent = `DiscordBot (https://discord.js.org, 2.5.1)`;
+    var DefaultUserAgent = `DiscordBot (https://discord.js.org, 2.6.0)`;
     var DefaultUserAgentAppendix = (0, import_util.getUserAgentAppendix)();
     var DefaultRestOptions = {
       agent: null,
@@ -26647,6 +26728,16 @@ var require_dist5 = __commonJS({
         return `${this.cdn}${import_v102.CDNRoutes.soundboardSound(soundId)}`;
       }
       /**
+       * Generates a URL for a guild tag badge.
+       *
+       * @param guildId - The guild id
+       * @param badgeHash - The hash of the badge
+       * @param options - Optional options for the badge
+       */
+      guildTagBadge(guildId, badgeHash, options) {
+        return this.makeURL(`/guild-tag-badges/${guildId}/${badgeHash}`, options);
+      }
+      /**
        * Constructs the URL for the resource, checking whether or not `hash` starts with `a_` if `dynamic` is set to `true`.
        *
        * @param route - The base cdn route
@@ -26666,7 +26757,8 @@ var require_dist5 = __commonJS({
         allowedExtensions = ALLOWED_EXTENSIONS,
         base = this.cdn,
         extension = "webp",
-        size
+        size,
+        animated
       } = {}) {
         extension = String(extension).toLowerCase();
         if (!allowedExtensions.includes(extension)) {
@@ -26678,6 +26770,9 @@ Must be one of: ${allowedExtensions.join(", ")}`);
 Must be one of: ${ALLOWED_SIZES.join(", ")}`);
         }
         const url = new URL(`${base}${route}.${extension}`);
+        if (animated !== void 0) {
+          url.searchParams.set("animated", String(animated));
+        }
         if (size) {
           url.searchParams.set("size", String(size));
         }
@@ -27584,7 +27679,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         };
       }
     };
-    var version = "2.5.1";
+    var version = "2.6.0";
     globalThis.FormData ??= import_undici2.FormData;
     globalThis.Blob ??= import_node_buffer.Blob;
     setDefaultStrategy((0, import_util2.shouldUseGlobalFetchAndWebSocket)() ? fetch : makeRequest);
@@ -27702,6 +27797,8 @@ var require_ErrorCodes = __commonJS({
       "AutocompleteInteractionOptionNoFocusedOption",
       "ModalSubmitInteractionFieldNotFound",
       "ModalSubmitInteractionFieldType",
+      "ModalSubmitInteractionFieldEmpty",
+      "ModalSubmitInteractionFieldInvalidChannelType",
       "InvalidMissingScopes",
       "InvalidScopesWithPermissions",
       "NotImplemented",
@@ -27827,6 +27924,8 @@ var require_Messages = __commonJS({
       [DjsErrorCodes.AutocompleteInteractionOptionNoFocusedOption]: "No focused option for autocomplete interaction.",
       [DjsErrorCodes.ModalSubmitInteractionFieldNotFound]: (customId) => `Required field with custom id "${customId}" not found.`,
       [DjsErrorCodes.ModalSubmitInteractionFieldType]: (customId, type, expected) => `Field with custom id "${customId}" is of type: ${type}; expected ${expected}.`,
+      [DjsErrorCodes.ModalSubmitInteractionFieldEmpty]: (customId, type) => `Required field with custom id "${customId}" is of type: ${type}; expected a non-empty value.`,
+      [DjsErrorCodes.ModalSubmitInteractionFieldInvalidChannelType]: (customId, type, expected) => `The type of channel of the field with custom id "${customId}" is: ${type}; expected ${expected}.`,
       [DjsErrorCodes.InvalidMissingScopes]: "At least one valid scope must be provided for the invite",
       [DjsErrorCodes.InvalidScopesWithPermissions]: "Permissions cannot be set without the bot scope.",
       [DjsErrorCodes.NotImplemented]: (what, name) => `Method ${what} not implemented on ${name}.`,
@@ -29580,6 +29679,11 @@ var require_Constants = __commonJS({
       [StickerFormatType.Lottie]: ImageFormat.Lottie,
       [StickerFormatType.GIF]: ImageFormat.GIF
     };
+    exports2.HolographicStyle = {
+      Primary: 11127295,
+      Secondary: 16759788,
+      Tertiary: 16761760
+    };
   }
 });
 
@@ -29974,6 +30078,13 @@ var require_Role = __commonJS({
         if ("color" in data) {
           this.color = data.color;
         }
+        if ("colors" in data) {
+          this.colors = {
+            primaryColor: data.colors.primary_color,
+            secondaryColor: data.colors.secondary_color,
+            tertiaryColor: data.colors.tertiary_color
+          };
+        }
         if ("hoist" in data) {
           this.hoist = data.hoist;
         }
@@ -30040,7 +30151,7 @@ var require_Role = __commonJS({
        * @readonly
        */
       get hexColor() {
-        return `#${this.color.toString(16).padStart(6, "0")}`;
+        return `#${this.colors.primaryColor.toString(16).padStart(6, "0")}`;
       }
       /**
        * The cached guild members that have this role
@@ -30090,6 +30201,8 @@ var require_Role = __commonJS({
        * @typedef {Object} RoleData
        * @property {string} [name] The name of the role
        * @property {ColorResolvable} [color] The color of the role, either a hex string or a base 10 number
+       * <warn>This property is deprecated. Use `colors` instead.</warn>
+       * @property {RoleColorsResolvable} [colors] The colors of the role
        * @property {boolean} [hoist] Whether or not the role should be hoisted
        * @property {number} [position] The position of the role
        * @property {PermissionResolvable} [permissions] The permissions of the role
@@ -30141,17 +30254,38 @@ var require_Role = __commonJS({
       }
       /**
        * Sets a new color for the role.
+       *
        * @param {ColorResolvable} color The color of the role
        * @param {string} [reason] Reason for changing the role's color
        * @returns {Promise<Role>}
+       * @deprecated Use {@link Role#setColors} instead.
+       */
+      async setColor(color, reason) {
+        return this.edit({ color, reason });
+      }
+      /**
+       * Sets new colors for the role.
+       *
+       * @param {RoleColorsResolvable} colors The colors of the role
+       * @param {string} [reason] Reason for changing the role's colors
+       * @returns {Promise<Role>}
        * @example
-       * // Set the color of a role
-       * role.setColor('#FF0000')
-       *   .then(updated => console.log(`Set color of role to ${updated.color}`))
+       * // Set the colors of a role
+       * role.setColors({ primaryColor: '#FF0000', secondaryColor: '#00FF00', tertiaryColor: '#0000FF' })
+       *   .then(updated => console.log(`Set colors of role to ${updated.colors}`))
+       *   .catch(console.error);
+       * @example
+       * // Set holographic colors using constants
+       * role.setColors({
+       *   primaryColor: Constants.HolographicStyle.Primary,
+       *   secondaryColor: Constants.HolographicStyle.Secondary,
+       *   tertiaryColor: Constants.HolographicStyle.Tertiary,
+       * })
+       *   .then(updated => console.log(`Set holographic colors for role ${updated.name}`))
        *   .catch(console.error);
        */
-      setColor(color, reason) {
-        return this.edit({ color, reason });
+      async setColors(colors, reason) {
+        return this.edit({ colors, reason });
       }
       /**
        * Sets whether or not the role should be hoisted.
@@ -30275,7 +30409,7 @@ var require_Role = __commonJS({
        * @returns {boolean}
        */
       equals(role) {
-        return role && this.id === role.id && this.name === role.name && this.color === role.color && this.hoist === role.hoist && this.position === role.position && this.permissions.bitfield === role.permissions.bitfield && this.managed === role.managed && this.icon === role.icon && this.unicodeEmoji === role.unicodeEmoji;
+        return role && this.id === role.id && this.name === role.name && this.colors.primaryColor === role.colors.primaryColor && this.colors.secondaryColor === role.colors.secondaryColor && this.colors.tertiaryColor === role.colors.tertiaryColor && this.hoist === role.hoist && this.position === role.position && this.permissions.bitfield === role.permissions.bitfield && this.managed === role.managed && this.icon === role.icon && this.unicodeEmoji === role.unicodeEmoji;
       }
       /**
        * When concatenated with a string, this automatically returns the role's mention instead of the Role object.
@@ -30764,9 +30898,10 @@ var require_GuildChannel = __commonJS({
         if (checkAdmin && role.permissions.has(PermissionFlagsBits.Administrator)) {
           return new PermissionsBitField2(PermissionsBitField2.All).freeze();
         }
+        const basePermissions = new PermissionsBitField2([role.permissions, role.guild.roles.everyone.permissions]);
         const everyoneOverwrites = this.permissionOverwrites.cache.get(this.guild.id);
         const roleOverwrites = this.permissionOverwrites.cache.get(role.id);
-        return role.permissions.remove(everyoneOverwrites?.deny ?? PermissionsBitField2.DefaultBit).add(everyoneOverwrites?.allow ?? PermissionsBitField2.DefaultBit).remove(roleOverwrites?.deny ?? PermissionsBitField2.DefaultBit).add(roleOverwrites?.allow ?? PermissionsBitField2.DefaultBit).freeze();
+        return basePermissions.remove(everyoneOverwrites?.deny ?? PermissionsBitField2.DefaultBit).add(everyoneOverwrites?.allow ?? PermissionsBitField2.DefaultBit).remove(roleOverwrites?.deny ?? PermissionsBitField2.DefaultBit).add(roleOverwrites?.allow ?? PermissionsBitField2.DefaultBit).freeze();
       }
       /**
        * Locks in the permission overwrites from the parent channel.
@@ -31339,12 +31474,24 @@ var require_Transformers = __commonJS({
         raidDetectedAt: data.raid_detected_at ? new Date(data.raid_detected_at) : null
       };
     }
+    function _transformCollectibles(collectibles) {
+      if (!collectibles.nameplate) return { nameplate: null };
+      return {
+        nameplate: {
+          skuId: collectibles.nameplate.sku_id,
+          asset: collectibles.nameplate.asset,
+          label: collectibles.nameplate.label,
+          palette: collectibles.nameplate.palette
+        }
+      };
+    }
     module2.exports = {
       toSnakeCase,
       _transformAPIAutoModerationAction,
       _transformAPIMessageInteractionMetadata,
       _transformGuildScheduledEventRecurrenceRule,
-      _transformAPIIncidentsData
+      _transformAPIIncidentsData,
+      _transformCollectibles
     };
   }
 });
@@ -31355,7 +31502,7 @@ var require_package = __commonJS({
     module2.exports = {
       $schema: "https://json.schemastore.org/package.json",
       name: "discord.js",
-      version: "14.20.0",
+      version: "14.24.2",
       description: "A powerful library for interacting with the Discord API",
       main: "./src/index.js",
       types: "./typings/index.d.ts",
@@ -31407,18 +31554,18 @@ var require_package = __commonJS({
       homepage: "https://discord.js.org",
       funding: "https://github.com/discordjs/discord.js?sponsor",
       dependencies: {
-        "@discordjs/builders": "^1.11.2",
+        "@discordjs/builders": "^1.13.0",
         "@discordjs/collection": "1.5.3",
         "@discordjs/formatters": "^0.6.1",
         "@discordjs/ws": "^1.2.3",
         "@sapphire/snowflake": "3.5.3",
-        "discord-api-types": "^0.38.1",
+        "discord-api-types": "^0.38.31",
         "fast-deep-equal": "3.1.3",
         "lodash.snakecase": "4.1.1",
         "magic-bytes.js": "^1.10.0",
         tslib: "^2.6.3",
         undici: "6.21.3",
-        "@discordjs/rest": "^2.5.1",
+        "@discordjs/rest": "^2.6.0",
         "@discordjs/util": "^1.1.1"
       },
       devDependencies: {
@@ -31437,8 +31584,8 @@ var require_package = __commonJS({
         turbo: "^2.0.14",
         typescript: "~5.5.4",
         "@discordjs/api-extractor": "^7.38.1",
-        "@discordjs/docgen": "^0.12.1",
-        "@discordjs/scripts": "^0.1.0"
+        "@discordjs/scripts": "^0.1.0",
+        "@discordjs/docgen": "^0.12.1"
       },
       engines: {
         node: ">=18"
@@ -31720,546 +31867,94 @@ var require_BaseClient = __commonJS({
   }
 });
 
-// node_modules/discord.js/src/util/Enums.js
-var require_Enums = __commonJS({
-  "node_modules/discord.js/src/util/Enums.js"(exports2, module2) {
+// node_modules/discord.js/src/structures/Emoji.js
+var require_Emoji = __commonJS({
+  "node_modules/discord.js/src/structures/Emoji.js"(exports2) {
     "use strict";
-    function createEnum(keys) {
-      const obj = {};
-      for (const [index, key] of keys.entries()) {
-        if (key === null) continue;
-        obj[key] = index;
-        obj[index] = key;
+    var process2 = require("node:process");
+    var { formatEmoji } = require_dist7();
+    var { DiscordSnowflake } = require_cjs();
+    var Base = require_Base();
+    var deprecationEmittedForURL = false;
+    var Emoji = class extends Base {
+      constructor(client2, emoji) {
+        super(client2);
+        this.animated = emoji.animated ?? null;
+        this.name = emoji.name ?? null;
+        this.id = emoji.id ?? null;
       }
-      return obj;
-    }
-    module2.exports = { createEnum };
-  }
-});
-
-// node_modules/discord.js/src/util/Partials.js
-var require_Partials = __commonJS({
-  "node_modules/discord.js/src/util/Partials.js"(exports2, module2) {
-    "use strict";
-    var { createEnum } = require_Enums();
-    module2.exports = createEnum([
-      "User",
-      "Channel",
-      "GuildMember",
-      "Message",
-      "Reaction",
-      "GuildScheduledEvent",
-      "ThreadMember",
-      "SoundboardSound"
-    ]);
-  }
-});
-
-// node_modules/discord.js/src/client/actions/Action.js
-var require_Action = __commonJS({
-  "node_modules/discord.js/src/client/actions/Action.js"(exports2, module2) {
-    "use strict";
-    var Partials2 = require_Partials();
-    var GenericAction = class {
-      constructor(client2) {
-        this.client = client2;
+      /**
+       * The identifier of this emoji, used for message reactions
+       * @type {string}
+       * @readonly
+       */
+      get identifier() {
+        if (this.id) return `${this.animated ? "a:" : ""}${this.name}:${this.id}`;
+        return encodeURIComponent(this.name);
       }
-      handle(data) {
-        return data;
+      /**
+       * Returns a URL for the emoji or `null` if this is not a custom emoji.
+       * @param {EmojiURLOptions} [options] Options for the emoji URL
+       * @returns {?string}
+       */
+      imageURL(options) {
+        return this.id && this.client.rest.cdn.emoji(this.id, options);
       }
-      getPayload(data, manager, id, partialType, cache) {
-        return this.client.options.partials.includes(partialType) ? manager._add(data, cache) : manager.cache.get(id);
-      }
-      getChannel(data) {
-        const payloadData = {};
-        const id = data.channel_id ?? data.id;
-        if (!("recipients" in data)) {
-          const recipient = data.author ?? data.user ?? { id: data.user_id };
-          if (recipient.id !== this.client.user.id) payloadData.recipients = [recipient];
+      /**
+       * Returns a URL for the emoji or `null` if this is not a custom emoji.
+       * @type {?string}
+       * @readonly
+       * @deprecated Use {@link Emoji#imageURL} instead.
+       */
+      get url() {
+        if (!deprecationEmittedForURL) {
+          process2.emitWarning("The Emoji#url getter is deprecated. Use Emoji#imageURL() instead.", "DeprecationWarning");
+          deprecationEmittedForURL = true;
         }
-        if (id !== void 0) payloadData.id = id;
-        return data[this.client.actions.injectedChannel] ?? this.getPayload({ ...data, ...payloadData }, this.client.channels, id, Partials2.Channel);
+        return this.imageURL({ extension: this.animated ? "gif" : "png" });
       }
-      getMessage(data, channel, cache) {
-        const id = data.message_id ?? data.id;
-        return data[this.client.actions.injectedMessage] ?? this.getPayload(
-          {
-            id,
-            channel_id: channel.id,
-            guild_id: data.guild_id ?? channel.guild?.id
-          },
-          channel.messages,
-          id,
-          Partials2.Message,
-          cache
-        );
+      /**
+       * The timestamp the emoji was created at, or null if unicode
+       * @type {?number}
+       * @readonly
+       */
+      get createdTimestamp() {
+        return this.id && DiscordSnowflake.timestampFrom(this.id);
       }
-      getReaction(data, message, user) {
-        const id = data.emoji.id ?? decodeURIComponent(data.emoji.name);
-        return this.getPayload(
-          {
-            emoji: data.emoji,
-            count: message.partial ? null : 0,
-            me: user?.id === this.client.user.id
-          },
-          message.reactions,
-          id,
-          Partials2.Reaction
-        );
+      /**
+       * The time the emoji was created at, or null if unicode
+       * @type {?Date}
+       * @readonly
+       */
+      get createdAt() {
+        return this.id && new Date(this.createdTimestamp);
       }
-      getMember(data, guild2) {
-        return this.getPayload(data, guild2.members, data.user.id, Partials2.GuildMember);
+      /**
+       * When concatenated with a string, this automatically returns the text required to form a graphical emoji on Discord
+       * instead of the Emoji object.
+       * @returns {string}
+       * @example
+       * // Send a custom emoji from a guild:
+       * const emoji = guild.emojis.cache.first();
+       * msg.channel.send(`Hello! ${emoji}`);
+       * @example
+       * // Send the emoji used in a reaction to the channel the reaction is part of
+       * reaction.message.channel.send(`The emoji used was: ${reaction.emoji}`);
+       */
+      toString() {
+        return this.id ? formatEmoji({ animated: this.animated, id: this.id, name: this.name }) : this.name;
       }
-      getUser(data) {
-        const id = data.user_id;
-        return data[this.client.actions.injectedUser] ?? this.getPayload({ id }, this.client.users, id, Partials2.User);
-      }
-      getUserFromMember(data) {
-        if (data.guild_id && data.member?.user) {
-          const guild2 = this.client.guilds.cache.get(data.guild_id);
-          if (guild2) {
-            return guild2.members._add(data.member).user;
-          } else {
-            return this.client.users._add(data.member.user);
-          }
-        }
-        return this.getUser(data);
-      }
-      getScheduledEvent(data, guild2) {
-        const id = data.guild_scheduled_event_id ?? data.id;
-        return this.getPayload(
-          { id, guild_id: data.guild_id ?? guild2.id },
-          guild2.scheduledEvents,
-          id,
-          Partials2.GuildScheduledEvent
-        );
-      }
-      getThreadMember(id, manager) {
-        return this.getPayload({ user_id: id }, manager, id, Partials2.ThreadMember, false);
-      }
-      getSoundboardSound(data, guild2) {
-        return this.getPayload(data, guild2.soundboardSounds, data.sound_id, Partials2.SoundboardSound);
-      }
-      spreadInjectedData(data) {
-        return Object.fromEntries(Object.getOwnPropertySymbols(data).map((symbol) => [symbol, data[symbol]]));
-      }
-    };
-    module2.exports = GenericAction;
-  }
-});
-
-// node_modules/discord.js/src/util/Events.js
-var require_Events = __commonJS({
-  "node_modules/discord.js/src/util/Events.js"(exports2, module2) {
-    "use strict";
-    module2.exports = {
-      ApplicationCommandPermissionsUpdate: "applicationCommandPermissionsUpdate",
-      AutoModerationActionExecution: "autoModerationActionExecution",
-      AutoModerationRuleCreate: "autoModerationRuleCreate",
-      AutoModerationRuleDelete: "autoModerationRuleDelete",
-      AutoModerationRuleUpdate: "autoModerationRuleUpdate",
-      CacheSweep: "cacheSweep",
-      ChannelCreate: "channelCreate",
-      ChannelDelete: "channelDelete",
-      ChannelPinsUpdate: "channelPinsUpdate",
-      ChannelUpdate: "channelUpdate",
-      ClientReady: "ready",
-      Debug: "debug",
-      EntitlementCreate: "entitlementCreate",
-      EntitlementUpdate: "entitlementUpdate",
-      EntitlementDelete: "entitlementDelete",
-      Error: "error",
-      GuildAuditLogEntryCreate: "guildAuditLogEntryCreate",
-      GuildAvailable: "guildAvailable",
-      GuildBanAdd: "guildBanAdd",
-      GuildBanRemove: "guildBanRemove",
-      GuildCreate: "guildCreate",
-      GuildDelete: "guildDelete",
-      GuildEmojiCreate: "emojiCreate",
-      GuildEmojiDelete: "emojiDelete",
-      GuildEmojiUpdate: "emojiUpdate",
-      GuildIntegrationsUpdate: "guildIntegrationsUpdate",
-      GuildMemberAdd: "guildMemberAdd",
-      GuildMemberAvailable: "guildMemberAvailable",
-      GuildMemberRemove: "guildMemberRemove",
-      GuildMembersChunk: "guildMembersChunk",
-      GuildMemberUpdate: "guildMemberUpdate",
-      GuildRoleCreate: "roleCreate",
-      GuildRoleDelete: "roleDelete",
-      GuildRoleUpdate: "roleUpdate",
-      GuildScheduledEventCreate: "guildScheduledEventCreate",
-      GuildScheduledEventDelete: "guildScheduledEventDelete",
-      GuildScheduledEventUpdate: "guildScheduledEventUpdate",
-      GuildScheduledEventUserAdd: "guildScheduledEventUserAdd",
-      GuildScheduledEventUserRemove: "guildScheduledEventUserRemove",
-      GuildSoundboardSoundCreate: "guildSoundboardSoundCreate",
-      GuildSoundboardSoundDelete: "guildSoundboardSoundDelete",
-      GuildSoundboardSoundsUpdate: "guildSoundboardSoundsUpdate",
-      GuildSoundboardSoundUpdate: "guildSoundboardSoundUpdate",
-      GuildStickerCreate: "stickerCreate",
-      GuildStickerDelete: "stickerDelete",
-      GuildStickerUpdate: "stickerUpdate",
-      GuildUnavailable: "guildUnavailable",
-      GuildUpdate: "guildUpdate",
-      InteractionCreate: "interactionCreate",
-      Invalidated: "invalidated",
-      InviteCreate: "inviteCreate",
-      InviteDelete: "inviteDelete",
-      MessageBulkDelete: "messageDeleteBulk",
-      MessageCreate: "messageCreate",
-      MessageDelete: "messageDelete",
-      MessagePollVoteAdd: "messagePollVoteAdd",
-      MessagePollVoteRemove: "messagePollVoteRemove",
-      MessageReactionAdd: "messageReactionAdd",
-      MessageReactionRemove: "messageReactionRemove",
-      MessageReactionRemoveAll: "messageReactionRemoveAll",
-      MessageReactionRemoveEmoji: "messageReactionRemoveEmoji",
-      MessageUpdate: "messageUpdate",
-      PresenceUpdate: "presenceUpdate",
-      SoundboardSounds: "soundboardSounds",
-      Raw: "raw",
-      ShardDisconnect: "shardDisconnect",
-      ShardError: "shardError",
-      ShardReady: "shardReady",
-      ShardReconnecting: "shardReconnecting",
-      ShardResume: "shardResume",
-      StageInstanceCreate: "stageInstanceCreate",
-      StageInstanceDelete: "stageInstanceDelete",
-      StageInstanceUpdate: "stageInstanceUpdate",
-      SubscriptionCreate: "subscriptionCreate",
-      SubscriptionUpdate: "subscriptionUpdate",
-      SubscriptionDelete: "subscriptionDelete",
-      ThreadCreate: "threadCreate",
-      ThreadDelete: "threadDelete",
-      ThreadListSync: "threadListSync",
-      ThreadMembersUpdate: "threadMembersUpdate",
-      ThreadMemberUpdate: "threadMemberUpdate",
-      ThreadUpdate: "threadUpdate",
-      TypingStart: "typingStart",
-      UserUpdate: "userUpdate",
-      VoiceChannelEffectSend: "voiceChannelEffectSend",
-      VoiceServerUpdate: "voiceServerUpdate",
-      VoiceStateUpdate: "voiceStateUpdate",
-      Warn: "warn",
-      WebhooksUpdate: "webhookUpdate"
-    };
-  }
-});
-
-// node_modules/discord.js/src/client/actions/ApplicationCommandPermissionsUpdate.js
-var require_ApplicationCommandPermissionsUpdate = __commonJS({
-  "node_modules/discord.js/src/client/actions/ApplicationCommandPermissionsUpdate.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var Events2 = require_Events();
-    var ApplicationCommandPermissionsUpdateAction = class extends Action {
-      handle(data) {
-        const client2 = this.client;
-        client2.emit(Events2.ApplicationCommandPermissionsUpdate, {
-          permissions: data.permissions,
-          id: data.id,
-          guildId: data.guild_id,
-          applicationId: data.application_id
+      toJSON() {
+        const json = super.toJSON({
+          guild: "guildId",
+          createdTimestamp: true,
+          identifier: true
         });
+        json.imageURL = this.imageURL();
+        return json;
       }
     };
-    module2.exports = ApplicationCommandPermissionsUpdateAction;
-  }
-});
-
-// node_modules/discord.js/src/structures/AutoModerationActionExecution.js
-var require_AutoModerationActionExecution = __commonJS({
-  "node_modules/discord.js/src/structures/AutoModerationActionExecution.js"(exports2, module2) {
-    "use strict";
-    var { _transformAPIAutoModerationAction } = require_Transformers();
-    var AutoModerationActionExecution = class {
-      constructor(data, guild2) {
-        this.guild = guild2;
-        this.action = _transformAPIAutoModerationAction(data.action);
-        this.ruleId = data.rule_id;
-        this.ruleTriggerType = data.rule_trigger_type;
-        this.userId = data.user_id;
-        this.channelId = data.channel_id ?? null;
-        this.messageId = data.message_id ?? null;
-        this.alertSystemMessageId = data.alert_system_message_id ?? null;
-        this.content = data.content;
-        this.matchedKeyword = data.matched_keyword ?? null;
-        this.matchedContent = data.matched_content ?? null;
-      }
-      /**
-       * The auto moderation rule this action belongs to.
-       * @type {?AutoModerationRule}
-       * @readonly
-       */
-      get autoModerationRule() {
-        return this.guild.autoModerationRules.cache.get(this.ruleId) ?? null;
-      }
-      /**
-       * The channel where this action was triggered from.
-       * @type {?(GuildTextBasedChannel|ForumChannel|MediaChannel)}
-       * @readonly
-       */
-      get channel() {
-        return this.guild.channels.cache.get(this.channelId) ?? null;
-      }
-      /**
-       * The user that triggered this action.
-       * @type {?User}
-       * @readonly
-       */
-      get user() {
-        return this.guild.client.users.cache.get(this.userId) ?? null;
-      }
-      /**
-       * The guild member that triggered this action.
-       * @type {?GuildMember}
-       * @readonly
-       */
-      get member() {
-        return this.guild.members.cache.get(this.userId) ?? null;
-      }
-    };
-    module2.exports = AutoModerationActionExecution;
-  }
-});
-
-// node_modules/discord.js/src/client/actions/AutoModerationActionExecution.js
-var require_AutoModerationActionExecution2 = __commonJS({
-  "node_modules/discord.js/src/client/actions/AutoModerationActionExecution.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var AutoModerationActionExecution = require_AutoModerationActionExecution();
-    var Events2 = require_Events();
-    var AutoModerationActionExecutionAction = class extends Action {
-      handle(data) {
-        const { client: client2 } = this;
-        const guild2 = client2.guilds.cache.get(data.guild_id);
-        if (guild2) {
-          client2.emit(Events2.AutoModerationActionExecution, new AutoModerationActionExecution(data, guild2));
-        }
-        return {};
-      }
-    };
-    module2.exports = AutoModerationActionExecutionAction;
-  }
-});
-
-// node_modules/discord.js/src/client/actions/AutoModerationRuleCreate.js
-var require_AutoModerationRuleCreate = __commonJS({
-  "node_modules/discord.js/src/client/actions/AutoModerationRuleCreate.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var Events2 = require_Events();
-    var AutoModerationRuleCreateAction = class extends Action {
-      handle(data) {
-        const { client: client2 } = this;
-        const guild2 = client2.guilds.cache.get(data.guild_id);
-        if (guild2) {
-          const autoModerationRule = guild2.autoModerationRules._add(data);
-          client2.emit(Events2.AutoModerationRuleCreate, autoModerationRule);
-        }
-        return {};
-      }
-    };
-    module2.exports = AutoModerationRuleCreateAction;
-  }
-});
-
-// node_modules/discord.js/src/client/actions/AutoModerationRuleDelete.js
-var require_AutoModerationRuleDelete = __commonJS({
-  "node_modules/discord.js/src/client/actions/AutoModerationRuleDelete.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var Events2 = require_Events();
-    var AutoModerationRuleDeleteAction = class extends Action {
-      handle(data) {
-        const { client: client2 } = this;
-        const guild2 = client2.guilds.cache.get(data.guild_id);
-        if (guild2) {
-          const autoModerationRule = guild2.autoModerationRules.cache.get(data.id);
-          if (autoModerationRule) {
-            guild2.autoModerationRules.cache.delete(autoModerationRule.id);
-            client2.emit(Events2.AutoModerationRuleDelete, autoModerationRule);
-          }
-        }
-        return {};
-      }
-    };
-    module2.exports = AutoModerationRuleDeleteAction;
-  }
-});
-
-// node_modules/discord.js/src/client/actions/AutoModerationRuleUpdate.js
-var require_AutoModerationRuleUpdate = __commonJS({
-  "node_modules/discord.js/src/client/actions/AutoModerationRuleUpdate.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var Events2 = require_Events();
-    var AutoModerationRuleUpdateAction = class extends Action {
-      handle(data) {
-        const { client: client2 } = this;
-        const guild2 = client2.guilds.cache.get(data.guild_id);
-        if (guild2) {
-          const oldAutoModerationRule = guild2.autoModerationRules.cache.get(data.id)?._clone() ?? null;
-          const newAutoModerationRule = guild2.autoModerationRules._add(data);
-          client2.emit(Events2.AutoModerationRuleUpdate, oldAutoModerationRule, newAutoModerationRule);
-        }
-        return {};
-      }
-    };
-    module2.exports = AutoModerationRuleUpdateAction;
-  }
-});
-
-// node_modules/discord.js/src/client/actions/ChannelCreate.js
-var require_ChannelCreate = __commonJS({
-  "node_modules/discord.js/src/client/actions/ChannelCreate.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var Events2 = require_Events();
-    var ChannelCreateAction = class extends Action {
-      handle(data) {
-        const client2 = this.client;
-        const existing = client2.channels.cache.has(data.id);
-        const channel = client2.channels._add(data);
-        if (!existing && channel) {
-          client2.emit(Events2.ChannelCreate, channel);
-        }
-        return { channel };
-      }
-    };
-    module2.exports = ChannelCreateAction;
-  }
-});
-
-// node_modules/discord.js/src/client/actions/ChannelDelete.js
-var require_ChannelDelete = __commonJS({
-  "node_modules/discord.js/src/client/actions/ChannelDelete.js"(exports2, module2) {
-    "use strict";
-    var Action = require_Action();
-    var Events2 = require_Events();
-    var ChannelDeleteAction = class extends Action {
-      handle(data) {
-        const client2 = this.client;
-        const channel = client2.channels.cache.get(data.id);
-        if (channel) {
-          client2.channels._remove(channel.id);
-          client2.emit(Events2.ChannelDelete, channel);
-        }
-      }
-    };
-    module2.exports = ChannelDeleteAction;
-  }
-});
-
-// node_modules/discord.js/src/managers/CategoryChannelChildManager.js
-var require_CategoryChannelChildManager = __commonJS({
-  "node_modules/discord.js/src/managers/CategoryChannelChildManager.js"(exports2, module2) {
-    "use strict";
-    var DataManager = require_DataManager();
-    var GuildChannel = require_GuildChannel();
-    var CategoryChannelChildManager = class extends DataManager {
-      constructor(channel) {
-        super(channel.client, GuildChannel);
-        this.channel = channel;
-      }
-      /**
-       * The channels that are a part of this category
-       * @type {Collection<Snowflake, GuildChannel>}
-       * @readonly
-       */
-      get cache() {
-        return this.guild.channels.cache.filter((channel) => channel.parentId === this.channel.id);
-      }
-      /**
-       * The guild this manager belongs to
-       * @type {Guild}
-       * @readonly
-       */
-      get guild() {
-        return this.channel.guild;
-      }
-      /**
-       * Options for creating a channel using {@link CategoryChannelChildManager#create}.
-       * @typedef {Object} CategoryCreateChannelOptions
-       * @property {string} name The name for the new channel
-       * @property {ChannelType} [type=ChannelType.GuildText] The type of the new channel.
-       * @property {string} [topic] The topic for the new channel
-       * @property {boolean} [nsfw] Whether the new channel is NSFW
-       * @property {number} [bitrate] Bitrate of the new channel in bits (only voice)
-       * @property {number} [userLimit] Maximum amount of users allowed in the new channel (only voice)
-       * @property {OverwriteResolvable[]|Collection<Snowflake, OverwriteResolvable>} [permissionOverwrites]
-       * Permission overwrites of the new channel
-       * @property {number} [position] Position of the new channel
-       * @property {number} [rateLimitPerUser] The rate limit per user (slowmode) for the new channel in seconds
-       * @property {string} [rtcRegion] The specific region of the new channel.
-       * @property {VideoQualityMode} [videoQualityMode] The camera video quality mode of the voice channel
-       * @property {number} [defaultThreadRateLimitPerUser] The initial rate limit per user (slowmode)
-       * to set on newly created threads in a channel.
-       * @property {GuildForumTagData[]} [availableTags] The tags that can be used in this channel (forum only).
-       * @property {DefaultReactionEmoji} [defaultReactionEmoji]
-       * The emoji to show in the add reaction button on a thread in a guild forum channel.
-       * @property {ThreadAutoArchiveDuration} [defaultAutoArchiveDuration]
-       * The default auto archive duration for all new threads in this channel
-       * @property {SortOrderType} [defaultSortOrder] The default sort order mode used to order posts (forum only).
-       * @property {ForumLayoutType} [defaultForumLayout] The default layout used to display posts (forum only).
-       * @property {string} [reason] Reason for creating the new channel
-       */
-      /**
-       * Creates a new channel within this category.
-       * <info>You cannot create a channel of type {@link ChannelType.GuildCategory} inside a CategoryChannel.</info>
-       * @param {CategoryCreateChannelOptions} options Options for creating the new channel
-       * @returns {Promise<GuildChannel>}
-       */
-      create(options) {
-        return this.guild.channels.create({
-          ...options,
-          parent: this.channel.id
-        });
-      }
-    };
-    module2.exports = CategoryChannelChildManager;
-  }
-});
-
-// node_modules/discord.js/src/structures/CategoryChannel.js
-var require_CategoryChannel = __commonJS({
-  "node_modules/discord.js/src/structures/CategoryChannel.js"(exports2, module2) {
-    "use strict";
-    var GuildChannel = require_GuildChannel();
-    var CategoryChannelChildManager = require_CategoryChannelChildManager();
-    var CategoryChannel = class extends GuildChannel {
-      /**
-       * The id of the parent of this channel.
-       * @name CategoryChannel#parentId
-       * @type {null}
-       */
-      /**
-       * The parent of this channel.
-       * @name CategoryChannel#parent
-       * @type {null}
-       * @readonly
-       */
-      /**
-       * Sets the category parent of this channel.
-       * <warn>It is not possible to set the parent of a CategoryChannel.</warn>
-       * @method setParent
-       * @memberof CategoryChannel
-       * @instance
-       * @param {?CategoryChannelResolvable} channel The channel to set as parent
-       * @param {SetParentOptions} [options={}] The options for setting the parent
-       * @returns {Promise<GuildChannel>}
-       */
-      /**
-       * A manager of the channels belonging to this category
-       * @type {CategoryChannelChildManager}
-       * @readonly
-       */
-      get children() {
-        return new CategoryChannelChildManager(this);
-      }
-    };
-    module2.exports = CategoryChannel;
+    exports2.Emoji = Emoji;
   }
 });
 
@@ -32415,7 +32110,7 @@ var require_Collector = __commonJS({
       }
       /**
        * Allows collectors to be consumed with for-await-of loops
-       * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of}
+       * @see {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/for-await...of}
        */
       async *[Symbol.asyncIterator]() {
         const queue = [];
@@ -32476,6 +32171,104 @@ var require_Collector = __commonJS({
       /* eslint-enable no-empty-function */
     };
     module2.exports = Collector;
+  }
+});
+
+// node_modules/discord.js/src/util/Events.js
+var require_Events = __commonJS({
+  "node_modules/discord.js/src/util/Events.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      ApplicationCommandPermissionsUpdate: "applicationCommandPermissionsUpdate",
+      AutoModerationActionExecution: "autoModerationActionExecution",
+      AutoModerationRuleCreate: "autoModerationRuleCreate",
+      AutoModerationRuleDelete: "autoModerationRuleDelete",
+      AutoModerationRuleUpdate: "autoModerationRuleUpdate",
+      CacheSweep: "cacheSweep",
+      ChannelCreate: "channelCreate",
+      ChannelDelete: "channelDelete",
+      ChannelPinsUpdate: "channelPinsUpdate",
+      ChannelUpdate: "channelUpdate",
+      ClientReady: "clientReady",
+      Debug: "debug",
+      EntitlementCreate: "entitlementCreate",
+      EntitlementUpdate: "entitlementUpdate",
+      EntitlementDelete: "entitlementDelete",
+      Error: "error",
+      GuildAuditLogEntryCreate: "guildAuditLogEntryCreate",
+      GuildAvailable: "guildAvailable",
+      GuildBanAdd: "guildBanAdd",
+      GuildBanRemove: "guildBanRemove",
+      GuildCreate: "guildCreate",
+      GuildDelete: "guildDelete",
+      GuildEmojiCreate: "emojiCreate",
+      GuildEmojiDelete: "emojiDelete",
+      GuildEmojiUpdate: "emojiUpdate",
+      GuildIntegrationsUpdate: "guildIntegrationsUpdate",
+      GuildMemberAdd: "guildMemberAdd",
+      GuildMemberAvailable: "guildMemberAvailable",
+      GuildMemberRemove: "guildMemberRemove",
+      GuildMembersChunk: "guildMembersChunk",
+      GuildMemberUpdate: "guildMemberUpdate",
+      GuildRoleCreate: "roleCreate",
+      GuildRoleDelete: "roleDelete",
+      GuildRoleUpdate: "roleUpdate",
+      GuildScheduledEventCreate: "guildScheduledEventCreate",
+      GuildScheduledEventDelete: "guildScheduledEventDelete",
+      GuildScheduledEventUpdate: "guildScheduledEventUpdate",
+      GuildScheduledEventUserAdd: "guildScheduledEventUserAdd",
+      GuildScheduledEventUserRemove: "guildScheduledEventUserRemove",
+      GuildSoundboardSoundCreate: "guildSoundboardSoundCreate",
+      GuildSoundboardSoundDelete: "guildSoundboardSoundDelete",
+      GuildSoundboardSoundsUpdate: "guildSoundboardSoundsUpdate",
+      GuildSoundboardSoundUpdate: "guildSoundboardSoundUpdate",
+      GuildStickerCreate: "stickerCreate",
+      GuildStickerDelete: "stickerDelete",
+      GuildStickerUpdate: "stickerUpdate",
+      GuildUnavailable: "guildUnavailable",
+      GuildUpdate: "guildUpdate",
+      InteractionCreate: "interactionCreate",
+      Invalidated: "invalidated",
+      InviteCreate: "inviteCreate",
+      InviteDelete: "inviteDelete",
+      MessageBulkDelete: "messageDeleteBulk",
+      MessageCreate: "messageCreate",
+      MessageDelete: "messageDelete",
+      MessagePollVoteAdd: "messagePollVoteAdd",
+      MessagePollVoteRemove: "messagePollVoteRemove",
+      MessageReactionAdd: "messageReactionAdd",
+      MessageReactionRemove: "messageReactionRemove",
+      MessageReactionRemoveAll: "messageReactionRemoveAll",
+      MessageReactionRemoveEmoji: "messageReactionRemoveEmoji",
+      MessageUpdate: "messageUpdate",
+      PresenceUpdate: "presenceUpdate",
+      SoundboardSounds: "soundboardSounds",
+      Raw: "raw",
+      ShardDisconnect: "shardDisconnect",
+      ShardError: "shardError",
+      ShardReady: "shardReady",
+      ShardReconnecting: "shardReconnecting",
+      ShardResume: "shardResume",
+      StageInstanceCreate: "stageInstanceCreate",
+      StageInstanceDelete: "stageInstanceDelete",
+      StageInstanceUpdate: "stageInstanceUpdate",
+      SubscriptionCreate: "subscriptionCreate",
+      SubscriptionUpdate: "subscriptionUpdate",
+      SubscriptionDelete: "subscriptionDelete",
+      ThreadCreate: "threadCreate",
+      ThreadDelete: "threadDelete",
+      ThreadListSync: "threadListSync",
+      ThreadMembersUpdate: "threadMembersUpdate",
+      ThreadMemberUpdate: "threadMemberUpdate",
+      ThreadUpdate: "threadUpdate",
+      TypingStart: "typingStart",
+      UserUpdate: "userUpdate",
+      VoiceChannelEffectSend: "voiceChannelEffectSend",
+      VoiceServerUpdate: "voiceServerUpdate",
+      VoiceStateUpdate: "voiceStateUpdate",
+      Warn: "warn",
+      WebhooksUpdate: "webhooksUpdate"
+    };
   }
 });
 
@@ -33334,6 +33127,25 @@ var require_InviteStageInstance = __commonJS({
   }
 });
 
+// node_modules/discord.js/src/util/InviteFlagsBitField.js
+var require_InviteFlagsBitField = __commonJS({
+  "node_modules/discord.js/src/util/InviteFlagsBitField.js"(exports2) {
+    "use strict";
+    var { InviteFlags } = require_v106();
+    var BitField = require_BitField();
+    var InviteFlagsBitField = class extends BitField {
+      /**
+       * Numeric invite flags.
+       *
+       * @type {InviteFlags}
+       * @memberof InviteFlagsBitField
+       */
+      static Flags = InviteFlags;
+    };
+    exports2.InviteFlagsBitField = InviteFlagsBitField;
+  }
+});
+
 // node_modules/discord.js/src/structures/BaseGuild.js
 var require_BaseGuild = __commonJS({
   "node_modules/discord.js/src/structures/BaseGuild.js"(exports2, module2) {
@@ -33477,97 +33289,6 @@ var require_AnonymousGuild = __commonJS({
   }
 });
 
-// node_modules/discord.js/src/structures/Emoji.js
-var require_Emoji = __commonJS({
-  "node_modules/discord.js/src/structures/Emoji.js"(exports2) {
-    "use strict";
-    var process2 = require("node:process");
-    var { formatEmoji } = require_dist7();
-    var { DiscordSnowflake } = require_cjs();
-    var Base = require_Base();
-    var deprecationEmittedForURL = false;
-    var Emoji = class extends Base {
-      constructor(client2, emoji) {
-        super(client2);
-        this.animated = emoji.animated ?? null;
-        this.name = emoji.name ?? null;
-        this.id = emoji.id ?? null;
-      }
-      /**
-       * The identifier of this emoji, used for message reactions
-       * @type {string}
-       * @readonly
-       */
-      get identifier() {
-        if (this.id) return `${this.animated ? "a:" : ""}${this.name}:${this.id}`;
-        return encodeURIComponent(this.name);
-      }
-      /**
-       * Returns a URL for the emoji or `null` if this is not a custom emoji.
-       * @param {BaseImageURLOptions} [options] Options for the image URL
-       * @returns {?string}
-       */
-      imageURL(options) {
-        return this.id && this.client.rest.cdn.emoji(this.id, options);
-      }
-      /**
-       * Returns a URL for the emoji or `null` if this is not a custom emoji.
-       * @type {?string}
-       * @readonly
-       * @deprecated Use {@link Emoji#imageURL} instead.
-       */
-      get url() {
-        if (!deprecationEmittedForURL) {
-          process2.emitWarning("The Emoji#url getter is deprecated. Use Emoji#imageURL() instead.", "DeprecationWarning");
-          deprecationEmittedForURL = true;
-        }
-        return this.imageURL({ extension: this.animated ? "gif" : "png" });
-      }
-      /**
-       * The timestamp the emoji was created at, or null if unicode
-       * @type {?number}
-       * @readonly
-       */
-      get createdTimestamp() {
-        return this.id && DiscordSnowflake.timestampFrom(this.id);
-      }
-      /**
-       * The time the emoji was created at, or null if unicode
-       * @type {?Date}
-       * @readonly
-       */
-      get createdAt() {
-        return this.id && new Date(this.createdTimestamp);
-      }
-      /**
-       * When concatenated with a string, this automatically returns the text required to form a graphical emoji on Discord
-       * instead of the Emoji object.
-       * @returns {string}
-       * @example
-       * // Send a custom emoji from a guild:
-       * const emoji = guild.emojis.cache.first();
-       * msg.channel.send(`Hello! ${emoji}`);
-       * @example
-       * // Send the emoji used in a reaction to the channel the reaction is part of
-       * reaction.message.channel.send(`The emoji used was: ${reaction.emoji}`);
-       */
-      toString() {
-        return this.id ? formatEmoji({ animated: this.animated, id: this.id, name: this.name }) : this.name;
-      }
-      toJSON() {
-        const json = super.toJSON({
-          guild: "guildId",
-          createdTimestamp: true,
-          identifier: true
-        });
-        json.imageURL = this.imageURL();
-        return json;
-      }
-    };
-    exports2.Emoji = Emoji;
-  }
-});
-
 // node_modules/discord.js/src/structures/WelcomeChannel.js
 var require_WelcomeChannel = __commonJS({
   "node_modules/discord.js/src/structures/WelcomeChannel.js"(exports2, module2) {
@@ -33661,6 +33382,7 @@ var require_Invite = __commonJS({
     var IntegrationApplication = require_IntegrationApplication();
     var InviteStageInstance = require_InviteStageInstance();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
+    var { InviteFlagsBitField } = require_InviteFlagsBitField();
     var Invite2 = class extends Base {
       /**
        * A regular expression that matches Discord invite links.
@@ -33763,6 +33485,11 @@ var require_Invite = __commonJS({
           this.guildScheduledEvent = new GuildScheduledEvent(this.client, data.guild_scheduled_event);
         } else {
           this.guildScheduledEvent ??= null;
+        }
+        if ("flags" in data) {
+          this.flags = new InviteFlagsBitField(data.flags).freeze();
+        } else {
+          this.flags ??= new InviteFlagsBitField().freeze();
         }
       }
       /**
@@ -33918,6 +33645,7 @@ var require_GuildTemplate = __commonJS({
        * @param {string} name The name of the guild
        * @param {BufferResolvable|Base64Resolvable} [icon] The icon for the guild
        * @returns {Promise<Guild>}
+       * @deprecated API related to guild ownership may no longer be used.
        */
       async createGuild(name, icon) {
         const { client: client2 } = this;
@@ -34989,11 +34717,11 @@ var require_ApplicationCommand = __commonJS({
        * @typedef {Object} ApplicationCommandData
        * @property {string} name The name of the command, must be in all lowercase if type is
        * {@link ApplicationCommandType.ChatInput}
-       * @property {Object<Locale, string>} [nameLocalizations] The localizations for the command name
+       * @property {LocalizationMap} [nameLocalizations] The localizations for the command name
        * @property {string} description The description of the command,
        * if type is {@link ApplicationCommandType.ChatInput} or {@link ApplicationCommandType.PrimaryEntryPoint}
        * @property {boolean} [nsfw] Whether the command is age-restricted
-       * @property {Object<Locale, string>} [descriptionLocalizations] The localizations for the command description,
+       * @property {LocalizationMap} [descriptionLocalizations] The localizations for the command description,
        * if type is {@link ApplicationCommandType.ChatInput} or {@link ApplicationCommandType.PrimaryEntryPoint}
        * @property {ApplicationCommandType} [type=ApplicationCommandType.ChatInput] The type of the command
        * @property {ApplicationCommandOptionData[]} [options] Options for the command
@@ -35014,9 +34742,9 @@ var require_ApplicationCommand = __commonJS({
        * @typedef {Object} ApplicationCommandOptionData
        * @property {ApplicationCommandOptionType} type The type of the option
        * @property {string} name The name of the option
-       * @property {Object<Locale, string>} [nameLocalizations] The name localizations for the option
+       * @property {LocalizationMap} [nameLocalizations] The name localizations for the option
        * @property {string} description The description of the option
-       * @property {Object<Locale, string>} [descriptionLocalizations] The description localizations for the option
+       * @property {LocalizationMap} [descriptionLocalizations] The description localizations for the option
        * @property {boolean} [autocomplete] Whether the autocomplete interaction is enabled for a
        * {@link ApplicationCommandOptionType.String}, {@link ApplicationCommandOptionType.Integer} or
        * {@link ApplicationCommandOptionType.Number} option
@@ -35037,7 +34765,7 @@ var require_ApplicationCommand = __commonJS({
       /**
        * @typedef {Object} ApplicationCommandOptionChoiceData
        * @property {string} name The name of the choice
-       * @property {Object<Locale, string>} [nameLocalizations] The localized names for this choice
+       * @property {LocalizationMap} [nameLocalizations] The localized names for this choice
        * @property {string|number} value The value of the choice
        */
       /**
@@ -35065,11 +34793,11 @@ var require_ApplicationCommand = __commonJS({
       }
       /**
        * Edits the localized names of this ApplicationCommand
-       * @param {Object<Locale, string>} nameLocalizations The new localized names for the command
+       * @param {LocalizationMap} nameLocalizations The new localized names for the command
        * @returns {Promise<ApplicationCommand>}
        * @example
        * // Edit the name localizations of this command
-       * command.setLocalizedNames({
+       * command.setNameLocalizations({
        *   'en-GB': 'test',
        *   'pt-BR': 'teste',
        * })
@@ -35089,7 +34817,7 @@ var require_ApplicationCommand = __commonJS({
       }
       /**
        * Edits the localized descriptions of this ApplicationCommand
-       * @param {Object<Locale, string>} descriptionLocalizations The new localized descriptions for the command
+       * @param {LocalizationMap} descriptionLocalizations The new localized descriptions for the command
        * @returns {Promise<ApplicationCommand>}
        * @example
        * // Edit the description localizations of this command
@@ -35244,10 +34972,10 @@ var require_ApplicationCommand = __commonJS({
        * @typedef {Object} ApplicationCommandOption
        * @property {ApplicationCommandOptionType} type The type of the option
        * @property {string} name The name of the option
-       * @property {Object<Locale, string>} [nameLocalizations] The localizations for the option name
+       * @property {LocalizationMap} [nameLocalizations] The localizations for the option name
        * @property {string} [nameLocalized] The localized name for this option
        * @property {string} description The description of the option
-       * @property {Object<Locale, string>} [descriptionLocalizations] The localizations for the option description
+       * @property {LocalizationMap} [descriptionLocalizations] The localizations for the option description
        * @property {string} [descriptionLocalized] The localized description for this option
        * @property {boolean} [required] Whether the option is required
        * @property {boolean} [autocomplete] Whether the autocomplete interaction is enabled for a
@@ -35563,19 +35291,21 @@ var require_ApplicationEmoji = __commonJS({
       constructor(client2, data, application) {
         super(client2, data);
         this.application = application;
-        this.author = null;
-        this.managed = null;
-        this.requiresColons = null;
         this._patch(data);
       }
       _patch(data) {
         if ("name" in data) this.name = data.name;
-        if (data.user) this.author = this.client.users._add(data.user);
+        if (data.user) {
+          this.author = this.client.users._add(data.user);
+        }
         if ("managed" in data) {
           this.managed = data.managed;
         }
         if ("require_colons" in data) {
           this.requiresColons = data.require_colons;
+        }
+        if ("available" in data) {
+          this.available = data.available;
         }
       }
       /**
@@ -35626,7 +35356,7 @@ var require_ApplicationEmoji = __commonJS({
        */
       equals(other) {
         if (other instanceof _ApplicationEmoji) {
-          return other.animated === this.animated && other.id === this.id && other.name === this.name && other.managed === this.managed && other.requiresColons === this.requiresColons;
+          return other.animated === this.animated && other.id === this.id && other.name === this.name && other.managed === this.managed && other.requiresColons === this.requiresColons && other.available === this.available;
         }
         return other.id === this.id && other.name === this.name;
       }
@@ -36247,6 +35977,11 @@ var require_ClientApplication = __commonJS({
         } else {
           this.approximateUserInstallCount ??= null;
         }
+        if ("approximate_user_authorization_count" in data) {
+          this.approximateUserAuthorizationCount = data.approximate_user_authorization_count;
+        } else {
+          this.approximateUserAuthorizationCount ??= null;
+        }
         if ("guild_id" in data) {
           this.guildId = data.guild_id;
         } else {
@@ -36387,9 +36122,9 @@ var require_ClientApplication = __commonJS({
        * Data for creating or editing an application role connection metadata.
        * @typedef {Object} ApplicationRoleConnectionMetadataEditOptions
        * @property {string} name The name of the metadata field
-       * @property {?Object<Locale, string>} [nameLocalizations] The name localizations for the metadata field
+       * @property {?LocalizationMap} [nameLocalizations] The name localizations for the metadata field
        * @property {string} description The description of the metadata field
-       * @property {?Object<Locale, string>} [descriptionLocalizations] The description localizations for the metadata field
+       * @property {?LocalizationMap} [descriptionLocalizations] The description localizations for the metadata field
        * @property {string} key The dictionary key of the metadata field
        * @property {ApplicationRoleConnectionMetadataType} type The type of the metadata field
        */
@@ -36607,10 +36342,10 @@ var require_coreJsData = __commonJS({
 var require_isMasked = __commonJS({
   "node_modules/lodash/_isMasked.js"(exports2, module2) {
     var coreJsData = require_coreJsData();
-    var maskSrcKey = function() {
+    var maskSrcKey = (function() {
       var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
       return uid ? "Symbol(src)_1." + uid : "";
-    }();
+    })();
     function isMasked(func) {
       return !!maskSrcKey && maskSrcKey in func;
     }
@@ -37575,7 +37310,7 @@ var require_cjs3 = __commonJS({
       }
     }
     __name(c, "c");
-    !function() {
+    !(function() {
       try {
         t = "function" == typeof setTimeout ? setTimeout : i;
       } catch (e3) {
@@ -37586,7 +37321,7 @@ var require_cjs3 = __commonJS({
       } catch (e3) {
         n = u;
       }
-    }();
+    })();
     var l;
     var s = [];
     var f = false;
@@ -37604,7 +37339,7 @@ var require_cjs3 = __commonJS({
             l && l[a].run();
           a = -1, t3 = s.length;
         }
-        l = null, f = false, function(e4) {
+        l = null, f = false, (function(e4) {
           if (n === clearTimeout)
             return clearTimeout(e4);
           if ((n === u || !n) && clearTimeout)
@@ -37618,7 +37353,7 @@ var require_cjs3 = __commonJS({
               return n.call(this || r, e4);
             }
           }
-        }(e3);
+        })(e3);
       }
     }
     __name(d, "d");
@@ -37678,9 +37413,9 @@ var require_cjs3 = __commonJS({
     var n2 = __name(function(t3) {
       return !!o2(t3) || null !== t3 && "object" == typeof t3 && "number" == typeof t3.length && t3.length >= 0 && "[object Array]" !== e2.call(t3) && "[object Function]" === e2.call(t3.callee);
     }, "n");
-    var r2 = function() {
+    var r2 = (function() {
       return o2(arguments);
-    }();
+    })();
     o2.isLegacyArguments = n2;
     var l2 = r2 ? o2 : n2;
     var t$1 = Object.prototype.toString;
@@ -37688,14 +37423,14 @@ var require_cjs3 = __commonJS({
     var n$1 = /^\s*(?:function)?\*/;
     var e$1 = "function" == typeof Symbol && "symbol" == typeof Symbol.toStringTag;
     var r$1 = Object.getPrototypeOf;
-    var c2 = function() {
+    var c2 = (function() {
       if (!e$1)
         return false;
       try {
         return Function("return function*() {}")();
       } catch (t3) {
       }
-    }();
+    })();
     var u2 = c2 ? r$1(c2) : {};
     var i2 = __name(function(c3) {
       return "function" == typeof c3 && (!!n$1.test(o$1.call(c3)) || (e$1 ? r$1(c3) === u2 : "[object GeneratorFunction]" === t$1.call(c3)));
@@ -37966,7 +37701,7 @@ var require_cjs3 = __commonJS({
         var n3 = t3.inspect(r3, e3);
         return ge(n3) || (n3 = ae(e3, n3, r3)), n3;
       }
-      var i3 = function(e4, t4) {
+      var i3 = (function(e4, t4) {
         if (be(t4))
           return e4.stylize("undefined", "undefined");
         if (ge(t4)) {
@@ -37979,15 +37714,15 @@ var require_cjs3 = __commonJS({
           return e4.stylize("" + t4, "boolean");
         if (le(t4))
           return e4.stylize("null", "null");
-      }(e3, t3);
+      })(e3, t3);
       if (i3)
         return i3;
-      var o3 = Object.keys(t3), u3 = function(e4) {
+      var o3 = Object.keys(t3), u3 = (function(e4) {
         var t4 = {};
         return e4.forEach(function(e5, r4) {
           t4[e5] = true;
         }), t4;
-      }(o3);
+      })(o3);
       if (e3.showHidden && (o3 = Object.getOwnPropertyNames(t3)), Ae(t3) && (o3.indexOf("message") >= 0 || o3.indexOf("description") >= 0))
         return ce(t3);
       if (0 === o3.length) {
@@ -38004,22 +37739,22 @@ var require_cjs3 = __commonJS({
       }
       var a3, c3 = "", s4 = false, p3 = ["{", "}"];
       (pe(t3) && (s4 = true, p3 = ["[", "]"]), we(t3)) && (c3 = " [Function" + (t3.name ? ": " + t3.name : "") + "]");
-      return me(t3) && (c3 = " " + RegExp.prototype.toString.call(t3)), je(t3) && (c3 = " " + Date.prototype.toUTCString.call(t3)), Ae(t3) && (c3 = " " + ce(t3)), 0 !== o3.length || s4 && 0 != t3.length ? r3 < 0 ? me(t3) ? e3.stylize(RegExp.prototype.toString.call(t3), "regexp") : e3.stylize("[Object]", "special") : (e3.seen.push(t3), a3 = s4 ? function(e4, t4, r4, n4, i4) {
+      return me(t3) && (c3 = " " + RegExp.prototype.toString.call(t3)), je(t3) && (c3 = " " + Date.prototype.toUTCString.call(t3)), Ae(t3) && (c3 = " " + ce(t3)), 0 !== o3.length || s4 && 0 != t3.length ? r3 < 0 ? me(t3) ? e3.stylize(RegExp.prototype.toString.call(t3), "regexp") : e3.stylize("[Object]", "special") : (e3.seen.push(t3), a3 = s4 ? (function(e4, t4, r4, n4, i4) {
         for (var o4 = [], u4 = 0, f4 = t4.length; u4 < f4; ++u4)
           ke(t4, String(u4)) ? o4.push(se(e4, t4, r4, n4, String(u4), true)) : o4.push("");
         return i4.forEach(function(i5) {
           i5.match(/^\d+$/) || o4.push(se(e4, t4, r4, n4, i5, true));
         }), o4;
-      }(e3, t3, r3, u3, o3) : o3.map(function(n4) {
+      })(e3, t3, r3, u3, o3) : o3.map(function(n4) {
         return se(e3, t3, r3, u3, n4, s4);
-      }), e3.seen.pop(), function(e4, t4, r4) {
+      }), e3.seen.pop(), (function(e4, t4, r4) {
         var n4 = 0;
         if (e4.reduce(function(e5, t5) {
           return n4++, t5.indexOf("\n") >= 0 && n4++, e5 + t5.replace(/\u001b\[\d\d?m/g, "").length + 1;
         }, 0) > 60)
           return r4[0] + ("" === t4 ? "" : t4 + "\n ") + " " + e4.join(",\n  ") + " " + r4[1];
         return r4[0] + t4 + " " + e4.join(", ") + " " + r4[1];
-      }(a3, c3, p3)) : p3[0] + c3 + p3[1];
+      })(a3, c3, p3)) : p3[0] + c3 + p3[1];
     }
     __name(ae, "ae");
     function ce(e3) {
@@ -40882,7 +40617,7 @@ var require_decorator = __commonJS({
       return decoratorsForClass;
     };
     exports2.getDecoratorsForClass = getDecoratorsForClass;
-    var decorateClass = (decorator) => (clazz) => {
+    var decorateClass = (decorator) => ((clazz) => {
       const decoratorsForClass = (0, exports2.getDecoratorsForClass)(clazz);
       let classDecorators = decoratorsForClass.class;
       if (!classDecorators) {
@@ -40891,8 +40626,8 @@ var require_decorator = __commonJS({
       }
       classDecorators.push(decorator);
       return decorator(clazz);
-    };
-    var decorateMember = (decorator) => (object, key, ...otherArgs) => {
+    });
+    var decorateMember = (decorator) => ((object, key, ...otherArgs) => {
       var _a, _b, _c;
       const decoratorTargetType = typeof object === "function" ? "static" : "instance";
       const decoratorType = typeof object[key] === "function" ? "method" : "property";
@@ -40906,12 +40641,12 @@ var require_decorator = __commonJS({
       decoratorsForType[key] = decoratorsForKey;
       decoratorsForKey.push(decorator);
       return decorator(object, key, ...otherArgs);
-    };
-    var decorate = (decorator) => (...args) => {
+    });
+    var decorate = (decorator) => ((...args) => {
       if (args.length === 1)
         return decorateClass(decorator)(args[0]);
       return decorateMember(decorator)(...args);
-    };
+    });
     exports2.decorate = decorate;
   }
 });
@@ -41070,17 +40805,21 @@ var require_dist8 = __commonJS({
       ChannelSelectMenuBuilder: () => ChannelSelectMenuBuilder,
       ComponentAssertions: () => Assertions_exports2,
       ComponentBuilder: () => ComponentBuilder,
-      ComponentsV2Assertions: () => Assertions_exports4,
+      ComponentsV2Assertions: () => Assertions_exports6,
       ContainerBuilder: () => ContainerBuilder,
-      ContextMenuCommandAssertions: () => Assertions_exports7,
+      ContextMenuCommandAssertions: () => Assertions_exports9,
       ContextMenuCommandBuilder: () => ContextMenuCommandBuilder,
       EmbedAssertions: () => Assertions_exports,
       EmbedBuilder: () => EmbedBuilder2,
       FileBuilder: () => FileBuilder,
+      FileUploadAssertions: () => Assertions_exports3,
+      FileUploadBuilder: () => FileUploadBuilder,
+      LabelAssertions: () => Assertions_exports5,
+      LabelBuilder: () => LabelBuilder,
       MediaGalleryBuilder: () => MediaGalleryBuilder,
       MediaGalleryItemBuilder: () => MediaGalleryItemBuilder,
       MentionableSelectMenuBuilder: () => MentionableSelectMenuBuilder,
-      ModalAssertions: () => Assertions_exports5,
+      ModalAssertions: () => Assertions_exports7,
       ModalBuilder: () => ModalBuilder2,
       RoleSelectMenuBuilder: () => RoleSelectMenuBuilder,
       SectionBuilder: () => SectionBuilder,
@@ -41091,7 +40830,7 @@ var require_dist8 = __commonJS({
       SharedSlashCommand: () => SharedSlashCommand,
       SharedSlashCommandOptions: () => SharedSlashCommandOptions,
       SharedSlashCommandSubcommands: () => SharedSlashCommandSubcommands,
-      SlashCommandAssertions: () => Assertions_exports6,
+      SlashCommandAssertions: () => Assertions_exports8,
       SlashCommandAttachmentOption: () => SlashCommandAttachmentOption,
       SlashCommandBooleanOption: () => SlashCommandBooleanOption,
       SlashCommandBuilder: () => SlashCommandBuilder2,
@@ -41107,7 +40846,7 @@ var require_dist8 = __commonJS({
       StringSelectMenuBuilder: () => StringSelectMenuBuilder2,
       StringSelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder,
       TextDisplayBuilder: () => TextDisplayBuilder,
-      TextInputAssertions: () => Assertions_exports3,
+      TextInputAssertions: () => Assertions_exports4,
       TextInputBuilder: () => TextInputBuilder2,
       ThumbnailBuilder: () => ThumbnailBuilder,
       UserSelectMenuBuilder: () => UserSelectMenuBuilder,
@@ -41585,7 +41324,7 @@ var require_dist8 = __commonJS({
       }
     }
     __name(validateRequiredButtonParameters, "validateRequiredButtonParameters");
-    var import_v1019 = require_v106();
+    var import_v1024 = require_v106();
     var ComponentBuilder = class {
       static {
         __name(this, "ComponentBuilder");
@@ -41619,7 +41358,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v1018 = require_v106();
+    var import_v1023 = require_v106();
     var import_v102 = require_v106();
     var ButtonBuilder2 = class extends ComponentBuilder {
       static {
@@ -41742,7 +41481,148 @@ var require_dist8 = __commonJS({
         };
       }
     };
+    var import_v104 = require_v106();
+    var Assertions_exports3 = {};
+    __export2(Assertions_exports3, {
+      fileUploadPredicate: () => fileUploadPredicate
+    });
+    var import_shapeshift3 = require_cjs3();
     var import_v103 = require_v106();
+    var fileUploadPredicate = import_shapeshift3.s.object({
+      type: import_shapeshift3.s.literal(import_v103.ComponentType.FileUpload),
+      id: idValidator.optional(),
+      custom_id: customIdValidator,
+      min_values: import_shapeshift3.s.number().greaterThanOrEqual(0).lessThanOrEqual(10).optional(),
+      max_values: import_shapeshift3.s.number().greaterThanOrEqual(1).lessThanOrEqual(10).optional(),
+      required: import_shapeshift3.s.boolean().optional()
+    });
+    var FileUploadBuilder = class extends ComponentBuilder {
+      static {
+        __name(this, "FileUploadBuilder");
+      }
+      /**
+       * Creates a new file upload.
+       *
+       * @param data - The API data to create this file upload with
+       * @example
+       * Creating a file upload from an API data object:
+       * ```ts
+       * const fileUpload = new FileUploadBuilder({
+       * 	custom_id: "file_upload",
+       *  min_values: 2,
+       *  max_values: 5,
+       * });
+       * ```
+       * @example
+       * Creating a file upload using setters and API data:
+       * ```ts
+       * const fileUpload = new FileUploadBuilder({
+       * 	custom_id: "file_upload",
+       *  min_values: 2,
+       *  max_values: 5,
+       * }).setRequired();
+       * ```
+       */
+      constructor(data = {}) {
+        super({ type: import_v104.ComponentType.FileUpload, ...data });
+      }
+      /**
+       * Sets the custom id for this file upload.
+       *
+       * @param customId - The custom id to use
+       */
+      setCustomId(customId) {
+        this.data.custom_id = customId;
+        return this;
+      }
+      /**
+       * Sets the minimum number of file uploads required.
+       *
+       * @param minValues - The minimum values that must be uploaded
+       */
+      setMinValues(minValues) {
+        this.data.min_values = minValues;
+        return this;
+      }
+      /**
+       * Clears the minimum values.
+       */
+      clearMinValues() {
+        this.data.min_values = void 0;
+        return this;
+      }
+      /**
+       * Sets the maximum number of file uploads required.
+       *
+       * @param maxValues - The maximum values that must be uploaded
+       */
+      setMaxValues(maxValues) {
+        this.data.max_values = maxValues;
+        return this;
+      }
+      /**
+       * Clears the maximum values.
+       */
+      clearMaxValues() {
+        this.data.max_values = void 0;
+        return this;
+      }
+      /**
+       * Sets whether this file upload is required.
+       *
+       * @param required - Whether this file upload is required
+       */
+      setRequired(required = true) {
+        this.data.required = required;
+        return this;
+      }
+      /**
+       * {@inheritDoc ComponentBuilder.toJSON}
+       */
+      toJSON() {
+        fileUploadPredicate.parse(this.data);
+        return this.data;
+      }
+    };
+    var import_v1014 = require_v106();
+    var import_v106 = require_v106();
+    var Assertions_exports4 = {};
+    __export2(Assertions_exports4, {
+      labelValidator: () => labelValidator,
+      maxLengthValidator: () => maxLengthValidator,
+      minLengthValidator: () => minLengthValidator,
+      placeholderValidator: () => placeholderValidator2,
+      requiredValidator: () => requiredValidator,
+      textInputPredicate: () => textInputPredicate,
+      textInputStyleValidator: () => textInputStyleValidator,
+      validateRequiredParameters: () => validateRequiredParameters,
+      valueValidator: () => valueValidator
+    });
+    var import_shapeshift4 = require_cjs3();
+    var import_v105 = require_v106();
+    var textInputStyleValidator = import_shapeshift4.s.nativeEnum(import_v105.TextInputStyle).setValidationEnabled(isValidationEnabled);
+    var minLengthValidator = import_shapeshift4.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
+    var maxLengthValidator = import_shapeshift4.s.number().int().greaterThanOrEqual(1).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
+    var requiredValidator = import_shapeshift4.s.boolean().setValidationEnabled(isValidationEnabled);
+    var valueValidator = import_shapeshift4.s.string().lengthLessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
+    var placeholderValidator2 = import_shapeshift4.s.string().lengthLessThanOrEqual(100).setValidationEnabled(isValidationEnabled);
+    var labelValidator = import_shapeshift4.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
+    var textInputPredicate = import_shapeshift4.s.object({
+      type: import_shapeshift4.s.literal(import_v105.ComponentType.TextInput),
+      custom_id: customIdValidator,
+      style: textInputStyleValidator,
+      id: idValidator.optional(),
+      min_length: minLengthValidator.optional(),
+      max_length: maxLengthValidator.optional(),
+      placeholder: placeholderValidator2.optional(),
+      value: valueValidator.optional(),
+      required: requiredValidator.optional()
+    }).setValidationEnabled(isValidationEnabled);
+    function validateRequiredParameters(customId, style) {
+      customIdValidator.parse(customId);
+      textInputStyleValidator.parse(style);
+    }
+    __name(validateRequiredParameters, "validateRequiredParameters");
     var BaseSelectMenuBuilder = class extends ComponentBuilder {
       static {
         __name(this, "BaseSelectMenuBuilder");
@@ -41793,6 +41673,16 @@ var require_dist8 = __commonJS({
         return this;
       }
       /**
+       * Sets whether this select menu is required.
+       *
+       * @remarks Only for use in modals.
+       * @param required - Whether this select menu is required
+       */
+      setRequired(required = true) {
+        this.data.required = requiredValidator.parse(required);
+        return this;
+      }
+      /**
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
@@ -41830,7 +41720,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor(data) {
-        super({ ...data, type: import_v103.ComponentType.ChannelSelect });
+        super({ ...data, type: import_v106.ComponentType.ChannelSelect });
       }
       /**
        * Adds channel types to this select menu.
@@ -41866,7 +41756,7 @@ var require_dist8 = __commonJS({
         this.data.default_values.push(
           ...normalizedValues.map((id) => ({
             id,
-            type: import_v103.SelectMenuDefaultValueType.Channel
+            type: import_v106.SelectMenuDefaultValueType.Channel
           }))
         );
         return this;
@@ -41881,7 +41771,7 @@ var require_dist8 = __commonJS({
         optionsLengthValidator.parse(normalizedValues.length);
         this.data.default_values = normalizedValues.map((id) => ({
           id,
-          type: import_v103.SelectMenuDefaultValueType.Channel
+          type: import_v106.SelectMenuDefaultValueType.Channel
         }));
         return this;
       }
@@ -41895,7 +41785,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v104 = require_v106();
+    var import_v107 = require_v106();
     var MentionableSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "MentionableSelectMenuBuilder");
@@ -41923,7 +41813,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor(data) {
-        super({ ...data, type: import_v104.ComponentType.MentionableSelect });
+        super({ ...data, type: import_v107.ComponentType.MentionableSelect });
       }
       /**
        * Adds default roles to this auto populated select menu.
@@ -41937,7 +41827,7 @@ var require_dist8 = __commonJS({
         this.data.default_values.push(
           ...normalizedValues.map((id) => ({
             id,
-            type: import_v104.SelectMenuDefaultValueType.Role
+            type: import_v107.SelectMenuDefaultValueType.Role
           }))
         );
         return this;
@@ -41954,7 +41844,7 @@ var require_dist8 = __commonJS({
         this.data.default_values.push(
           ...normalizedValues.map((id) => ({
             id,
-            type: import_v104.SelectMenuDefaultValueType.User
+            type: import_v107.SelectMenuDefaultValueType.User
           }))
         );
         return this;
@@ -41983,7 +41873,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v105 = require_v106();
+    var import_v108 = require_v106();
     var RoleSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "RoleSelectMenuBuilder");
@@ -42011,7 +41901,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor(data) {
-        super({ ...data, type: import_v105.ComponentType.RoleSelect });
+        super({ ...data, type: import_v108.ComponentType.RoleSelect });
       }
       /**
        * Adds default roles to this auto populated select menu.
@@ -42025,7 +41915,7 @@ var require_dist8 = __commonJS({
         this.data.default_values.push(
           ...normalizedValues.map((id) => ({
             id,
-            type: import_v105.SelectMenuDefaultValueType.Role
+            type: import_v108.SelectMenuDefaultValueType.Role
           }))
         );
         return this;
@@ -42040,12 +41930,12 @@ var require_dist8 = __commonJS({
         optionsLengthValidator.parse(normalizedValues.length);
         this.data.default_values = normalizedValues.map((id) => ({
           id,
-          type: import_v105.SelectMenuDefaultValueType.Role
+          type: import_v108.SelectMenuDefaultValueType.Role
         }));
         return this;
       }
     };
-    var import_v106 = require_v106();
+    var import_v109 = require_v106();
     var StringSelectMenuBuilder2 = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "StringSelectMenuBuilder");
@@ -42087,7 +41977,7 @@ var require_dist8 = __commonJS({
        */
       constructor(data) {
         const { options, ...initData } = data ?? {};
-        super({ ...initData, type: import_v106.ComponentType.StringSelect });
+        super({ ...initData, type: import_v109.ComponentType.StringSelect });
         this.options = options?.map((option) => new StringSelectMenuOptionBuilder(option)) ?? [];
       }
       /**
@@ -42165,7 +42055,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v107 = require_v106();
+    var import_v1010 = require_v106();
     var UserSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "UserSelectMenuBuilder");
@@ -42193,7 +42083,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor(data) {
-        super({ ...data, type: import_v107.ComponentType.UserSelect });
+        super({ ...data, type: import_v1010.ComponentType.UserSelect });
       }
       /**
        * Adds default users to this auto populated select menu.
@@ -42207,7 +42097,7 @@ var require_dist8 = __commonJS({
         this.data.default_values.push(
           ...normalizedValues.map((id) => ({
             id,
-            type: import_v107.SelectMenuDefaultValueType.User
+            type: import_v1010.SelectMenuDefaultValueType.User
           }))
         );
         return this;
@@ -42222,40 +42112,14 @@ var require_dist8 = __commonJS({
         optionsLengthValidator.parse(normalizedValues.length);
         this.data.default_values = normalizedValues.map((id) => ({
           id,
-          type: import_v107.SelectMenuDefaultValueType.User
+          type: import_v1010.SelectMenuDefaultValueType.User
         }));
         return this;
       }
     };
     var import_util = require_dist();
-    var import_v109 = require_v106();
+    var import_v1011 = require_v106();
     var import_fast_deep_equal = __toESM2(require_fast_deep_equal());
-    var Assertions_exports3 = {};
-    __export2(Assertions_exports3, {
-      labelValidator: () => labelValidator,
-      maxLengthValidator: () => maxLengthValidator,
-      minLengthValidator: () => minLengthValidator,
-      placeholderValidator: () => placeholderValidator2,
-      requiredValidator: () => requiredValidator,
-      textInputStyleValidator: () => textInputStyleValidator,
-      validateRequiredParameters: () => validateRequiredParameters,
-      valueValidator: () => valueValidator
-    });
-    var import_shapeshift3 = require_cjs3();
-    var import_v108 = require_v106();
-    var textInputStyleValidator = import_shapeshift3.s.nativeEnum(import_v108.TextInputStyle);
-    var minLengthValidator = import_shapeshift3.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
-    var maxLengthValidator = import_shapeshift3.s.number().int().greaterThanOrEqual(1).lessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
-    var requiredValidator = import_shapeshift3.s.boolean();
-    var valueValidator = import_shapeshift3.s.string().lengthLessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
-    var placeholderValidator2 = import_shapeshift3.s.string().lengthLessThanOrEqual(100).setValidationEnabled(isValidationEnabled);
-    var labelValidator = import_shapeshift3.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
-    function validateRequiredParameters(customId, style, label) {
-      customIdValidator.parse(customId);
-      textInputStyleValidator.parse(style);
-      labelValidator.parse(label);
-    }
-    __name(validateRequiredParameters, "validateRequiredParameters");
     var TextInputBuilder2 = class extends ComponentBuilder {
       static {
         __name(this, "TextInputBuilder");
@@ -42269,7 +42133,7 @@ var require_dist8 = __commonJS({
        * ```ts
        * const textInput = new TextInputBuilder({
        * 	custom_id: 'a cool text input',
-       * 	label: 'Type something',
+       * 	placeholder: 'Type something',
        * 	style: TextInputStyle.Short,
        * });
        * ```
@@ -42277,14 +42141,14 @@ var require_dist8 = __commonJS({
        * Creating a text input using setters and API data:
        * ```ts
        * const textInput = new TextInputBuilder({
-       * 	label: 'Type something else',
+       * 	placeholder: 'Type something else',
        * })
        * 	.setCustomId('woah')
        * 	.setStyle(TextInputStyle.Paragraph);
        * ```
        */
       constructor(data) {
-        super({ type: import_v109.ComponentType.TextInput, ...data });
+        super({ type: import_v1011.ComponentType.TextInput, ...data });
       }
       /**
        * Sets the custom id for this text input.
@@ -42299,6 +42163,7 @@ var require_dist8 = __commonJS({
        * Sets the label for this text input.
        *
        * @param label - The label to use
+       * @deprecated Use a label builder to create a label (and optionally a description) instead.
        */
       setLabel(label) {
         this.data.label = labelValidator.parse(label);
@@ -42362,7 +42227,7 @@ var require_dist8 = __commonJS({
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
-        validateRequiredParameters(this.data.custom_id, this.data.style, this.data.label);
+        validateRequiredParameters(this.data.custom_id, this.data.style);
         return {
           ...this.data
         };
@@ -42377,9 +42242,221 @@ var require_dist8 = __commonJS({
         return (0, import_fast_deep_equal.default)(other, this.data);
       }
     };
-    var import_v1015 = require_v106();
-    var Assertions_exports4 = {};
-    __export2(Assertions_exports4, {
+    var Assertions_exports5 = {};
+    __export2(Assertions_exports5, {
+      labelPredicate: () => labelPredicate
+    });
+    var import_shapeshift6 = require_cjs3();
+    var import_v1013 = require_v106();
+    var import_shapeshift5 = require_cjs3();
+    var import_v1012 = require_v106();
+    var selectMenuBasePredicate = import_shapeshift5.s.object({
+      id: idValidator.optional(),
+      placeholder: import_shapeshift5.s.string().lengthLessThanOrEqual(150).optional(),
+      min_values: import_shapeshift5.s.number().greaterThanOrEqual(0).lessThanOrEqual(25).optional(),
+      max_values: import_shapeshift5.s.number().greaterThanOrEqual(0).lessThanOrEqual(25).optional(),
+      custom_id: customIdValidator,
+      disabled: import_shapeshift5.s.boolean().optional()
+    });
+    var selectMenuChannelPredicate = selectMenuBasePredicate.extend({
+      type: import_shapeshift5.s.literal(import_v1012.ComponentType.ChannelSelect),
+      channel_types: import_shapeshift5.s.nativeEnum(import_v1012.ChannelType).array().optional(),
+      default_values: import_shapeshift5.s.object({ id: import_shapeshift5.s.string(), type: import_shapeshift5.s.literal(import_v1012.SelectMenuDefaultValueType.Channel) }).array().lengthLessThanOrEqual(25).optional()
+    }).setValidationEnabled(isValidationEnabled);
+    var selectMenuMentionablePredicate = selectMenuBasePredicate.extend({
+      type: import_shapeshift5.s.literal(import_v1012.ComponentType.MentionableSelect),
+      default_values: import_shapeshift5.s.object({
+        id: import_shapeshift5.s.string(),
+        type: import_shapeshift5.s.union([import_shapeshift5.s.literal(import_v1012.SelectMenuDefaultValueType.Role), import_shapeshift5.s.literal(import_v1012.SelectMenuDefaultValueType.User)])
+      }).array().lengthLessThanOrEqual(25).optional()
+    }).setValidationEnabled(isValidationEnabled);
+    var selectMenuRolePredicate = selectMenuBasePredicate.extend({
+      type: import_shapeshift5.s.literal(import_v1012.ComponentType.RoleSelect),
+      default_values: import_shapeshift5.s.object({ id: import_shapeshift5.s.string(), type: import_shapeshift5.s.literal(import_v1012.SelectMenuDefaultValueType.Role) }).array().lengthLessThanOrEqual(25).optional()
+    }).setValidationEnabled(isValidationEnabled);
+    var selectMenuUserPredicate = selectMenuBasePredicate.extend({
+      type: import_shapeshift5.s.literal(import_v1012.ComponentType.UserSelect),
+      default_values: import_shapeshift5.s.object({ id: import_shapeshift5.s.string(), type: import_shapeshift5.s.literal(import_v1012.SelectMenuDefaultValueType.User) }).array().lengthLessThanOrEqual(25).optional()
+    }).setValidationEnabled(isValidationEnabled);
+    var selectMenuStringOptionPredicate = import_shapeshift5.s.object({
+      label: labelValidator,
+      value: import_shapeshift5.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100),
+      description: import_shapeshift5.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100).optional(),
+      emoji: emojiValidator.optional(),
+      default: import_shapeshift5.s.boolean().optional()
+    }).setValidationEnabled(isValidationEnabled);
+    var selectMenuStringPredicate = selectMenuBasePredicate.extend({
+      type: import_shapeshift5.s.literal(import_v1012.ComponentType.StringSelect),
+      options: selectMenuStringOptionPredicate.array().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(25)
+    }).reshape((value) => {
+      if (value.min_values !== void 0 && value.options.length < value.min_values) {
+        return import_shapeshift5.Result.err(new RangeError(`The number of options must be greater than or equal to min_values`));
+      }
+      if (value.min_values !== void 0 && value.max_values !== void 0 && value.min_values > value.max_values) {
+        return import_shapeshift5.Result.err(
+          new RangeError(`The maximum amount of options must be greater than or equal to the minimum amount of options`)
+        );
+      }
+      return import_shapeshift5.Result.ok(value);
+    }).setValidationEnabled(isValidationEnabled);
+    var labelPredicate = import_shapeshift6.s.object({
+      id: idValidator.optional(),
+      type: import_shapeshift6.s.literal(import_v1013.ComponentType.Label),
+      label: import_shapeshift6.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45),
+      description: import_shapeshift6.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100).optional(),
+      component: import_shapeshift6.s.union([
+        textInputPredicate,
+        selectMenuUserPredicate,
+        selectMenuRolePredicate,
+        selectMenuMentionablePredicate,
+        selectMenuChannelPredicate,
+        selectMenuStringPredicate,
+        fileUploadPredicate
+      ])
+    }).setValidationEnabled(isValidationEnabled);
+    var LabelBuilder = class extends ComponentBuilder {
+      static {
+        __name(this, "LabelBuilder");
+      }
+      /**
+       * @internal
+       */
+      data;
+      /**
+       * Creates a new label.
+       *
+       * @param data - The API data to create this label with
+       * @example
+       * Creating a label from an API data object:
+       * ```ts
+       * const label = new LabelBuilder({
+       * 	label: "label",
+       * 	component,
+       * });
+       * ```
+       * @example
+       * Creating a label using setters and API data:
+       * ```ts
+       * const label = new LabelBuilder({
+       * 	label: 'label',
+       * 	component,
+       * }).setLabel('new text');
+       * ```
+       */
+      constructor(data = {}) {
+        super({ type: import_v1014.ComponentType.Label });
+        const { component, ...rest } = data;
+        this.data = {
+          ...rest,
+          component: component ? createComponentBuilder(component) : void 0,
+          type: import_v1014.ComponentType.Label
+        };
+      }
+      /**
+       * Sets the label for this label.
+       *
+       * @param label - The label to use
+       */
+      setLabel(label) {
+        this.data.label = label;
+        return this;
+      }
+      /**
+       * Sets the description for this label.
+       *
+       * @param description - The description to use
+       */
+      setDescription(description) {
+        this.data.description = description;
+        return this;
+      }
+      /**
+       * Clears the description for this label.
+       */
+      clearDescription() {
+        this.data.description = void 0;
+        return this;
+      }
+      /**
+       * Sets a string select menu component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setStringSelectMenuComponent(input) {
+        this.data.component = resolveBuilder(input, StringSelectMenuBuilder2);
+        return this;
+      }
+      /**
+       * Sets a user select menu component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setUserSelectMenuComponent(input) {
+        this.data.component = resolveBuilder(input, UserSelectMenuBuilder);
+        return this;
+      }
+      /**
+       * Sets a role select menu component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setRoleSelectMenuComponent(input) {
+        this.data.component = resolveBuilder(input, RoleSelectMenuBuilder);
+        return this;
+      }
+      /**
+       * Sets a mentionable select menu component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setMentionableSelectMenuComponent(input) {
+        this.data.component = resolveBuilder(input, MentionableSelectMenuBuilder);
+        return this;
+      }
+      /**
+       * Sets a channel select menu component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setChannelSelectMenuComponent(input) {
+        this.data.component = resolveBuilder(input, ChannelSelectMenuBuilder);
+        return this;
+      }
+      /**
+       * Sets a text input component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setTextInputComponent(input) {
+        this.data.component = resolveBuilder(input, TextInputBuilder2);
+        return this;
+      }
+      /**
+       * Sets a file upload component to this label.
+       *
+       * @param input - A function that returns a component builder or an already built builder
+       */
+      setFileUploadComponent(input) {
+        this.data.component = resolveBuilder(input, FileUploadBuilder);
+        return this;
+      }
+      /**
+       * {@inheritDoc ComponentBuilder.toJSON}
+       */
+      toJSON() {
+        const { component, ...rest } = this.data;
+        const data = {
+          ...rest,
+          // The label predicate validates the component.
+          component: component?.toJSON()
+        };
+        labelPredicate.parse(data);
+        return data;
+      }
+    };
+    var import_v1020 = require_v106();
+    var Assertions_exports6 = {};
+    __export2(Assertions_exports6, {
       accessoryPredicate: () => accessoryPredicate,
       assertReturnOfBuilder: () => assertReturnOfBuilder,
       containerColorPredicate: () => containerColorPredicate,
@@ -42392,9 +42469,9 @@ var require_dist8 = __commonJS({
       unfurledMediaItemPredicate: () => unfurledMediaItemPredicate,
       validateComponentArray: () => validateComponentArray
     });
-    var import_shapeshift4 = require_cjs3();
-    var import_v1011 = require_v106();
-    var import_v1010 = require_v106();
+    var import_shapeshift7 = require_cjs3();
+    var import_v1016 = require_v106();
+    var import_v1015 = require_v106();
     var ThumbnailBuilder = class extends ComponentBuilder {
       static {
         __name(this, "ThumbnailBuilder");
@@ -42426,7 +42503,7 @@ var require_dist8 = __commonJS({
        */
       constructor(data = {}) {
         super({
-          type: import_v1010.ComponentType.Thumbnail,
+          type: import_v1015.ComponentType.Thumbnail,
           ...data,
           media: data.media ? { url: data.media.url } : void 0
         });
@@ -42473,31 +42550,31 @@ var require_dist8 = __commonJS({
         return { ...this.data };
       }
     };
-    var unfurledMediaItemPredicate = import_shapeshift4.s.object({
-      url: import_shapeshift4.s.string().url(
+    var unfurledMediaItemPredicate = import_shapeshift7.s.object({
+      url: import_shapeshift7.s.string().url(
         { allowedProtocols: ["http:", "https:", "attachment:"] },
         { message: "Invalid protocol for media URL. Must be http:, https:, or attachment:" }
       )
     }).setValidationEnabled(isValidationEnabled);
-    var descriptionPredicate2 = import_shapeshift4.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(1024).setValidationEnabled(isValidationEnabled);
-    var filePredicate = import_shapeshift4.s.object({
-      url: import_shapeshift4.s.string().url({ allowedProtocols: ["attachment:"] }, { message: "Invalid protocol for file URL. Must be attachment:" })
+    var descriptionPredicate2 = import_shapeshift7.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(1024).setValidationEnabled(isValidationEnabled);
+    var filePredicate = import_shapeshift7.s.object({
+      url: import_shapeshift7.s.string().url({ allowedProtocols: ["attachment:"] }, { message: "Invalid protocol for file URL. Must be attachment:" })
     }).setValidationEnabled(isValidationEnabled);
-    var spoilerPredicate = import_shapeshift4.s.boolean();
-    var dividerPredicate = import_shapeshift4.s.boolean();
-    var spacingPredicate = import_shapeshift4.s.nativeEnum(import_v1011.SeparatorSpacingSize);
-    var textDisplayContentPredicate = import_shapeshift4.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
-    var accessoryPredicate = import_shapeshift4.s.instance(ButtonBuilder2).or(import_shapeshift4.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
+    var spoilerPredicate = import_shapeshift7.s.boolean();
+    var dividerPredicate = import_shapeshift7.s.boolean();
+    var spacingPredicate = import_shapeshift7.s.nativeEnum(import_v1016.SeparatorSpacingSize);
+    var textDisplayContentPredicate = import_shapeshift7.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
+    var accessoryPredicate = import_shapeshift7.s.instance(ButtonBuilder2).or(import_shapeshift7.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
     var containerColorPredicate = colorPredicate.nullish();
     function assertReturnOfBuilder(input, ExpectedInstanceOf) {
-      import_shapeshift4.s.instance(ExpectedInstanceOf).setValidationEnabled(isValidationEnabled).parse(input);
+      import_shapeshift7.s.instance(ExpectedInstanceOf).setValidationEnabled(isValidationEnabled).parse(input);
     }
     __name(assertReturnOfBuilder, "assertReturnOfBuilder");
     function validateComponentArray(input, min, max, ExpectedInstanceOf) {
-      (ExpectedInstanceOf ? import_shapeshift4.s.instance(ExpectedInstanceOf) : import_shapeshift4.s.instance(ComponentBuilder)).array().lengthGreaterThanOrEqual(min).lengthLessThanOrEqual(max).setValidationEnabled(isValidationEnabled).parse(input);
+      (ExpectedInstanceOf ? import_shapeshift7.s.instance(ExpectedInstanceOf) : import_shapeshift7.s.instance(ComponentBuilder)).array().lengthGreaterThanOrEqual(min).lengthLessThanOrEqual(max).setValidationEnabled(isValidationEnabled).parse(input);
     }
     __name(validateComponentArray, "validateComponentArray");
-    var import_v1012 = require_v106();
+    var import_v1017 = require_v106();
     var FileBuilder = class extends ComponentBuilder {
       static {
         __name(this, "FileBuilder");
@@ -42528,7 +42605,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor(data = {}) {
-        super({ type: import_v1012.ComponentType.File, ...data, file: data.file ? { url: data.file.url } : void 0 });
+        super({ type: import_v1017.ComponentType.File, ...data, file: data.file ? { url: data.file.url } : void 0 });
       }
       /**
        * Sets the spoiler status of this file.
@@ -42556,7 +42633,7 @@ var require_dist8 = __commonJS({
         return { ...this.data, file: { ...this.data.file } };
       }
     };
-    var import_v1013 = require_v106();
+    var import_v1018 = require_v106();
     var SeparatorBuilder = class extends ComponentBuilder {
       static {
         __name(this, "SeparatorBuilder");
@@ -42584,7 +42661,7 @@ var require_dist8 = __commonJS({
        */
       constructor(data = {}) {
         super({
-          type: import_v1013.ComponentType.Separator,
+          type: import_v1018.ComponentType.Separator,
           ...data
         });
       }
@@ -42620,7 +42697,7 @@ var require_dist8 = __commonJS({
         return { ...this.data };
       }
     };
-    var import_v1014 = require_v106();
+    var import_v1019 = require_v106();
     var TextDisplayBuilder = class extends ComponentBuilder {
       static {
         __name(this, "TextDisplayBuilder");
@@ -42647,7 +42724,7 @@ var require_dist8 = __commonJS({
        */
       constructor(data = {}) {
         super({
-          type: import_v1014.ComponentType.TextDisplay,
+          type: import_v1019.ComponentType.TextDisplay,
           ...data
         });
       }
@@ -42707,7 +42784,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor({ components, ...data } = {}) {
-        super({ type: import_v1015.ComponentType.Container, ...data });
+        super({ type: import_v1020.ComponentType.Container, ...data });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -42828,7 +42905,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v1016 = require_v106();
+    var import_v1021 = require_v106();
     var MediaGalleryItemBuilder = class {
       static {
         __name(this, "MediaGalleryItemBuilder");
@@ -42954,7 +43031,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor({ items, ...data } = {}) {
-        super({ type: import_v1016.ComponentType.MediaGallery, ...data });
+        super({ type: import_v1021.ComponentType.MediaGallery, ...data });
         this.items = items?.map((item) => new MediaGalleryItemBuilder(item)) ?? [];
       }
       /**
@@ -43002,7 +43079,7 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var import_v1017 = require_v106();
+    var import_v1022 = require_v106();
     var SectionBuilder = class extends ComponentBuilder {
       static {
         __name(this, "SectionBuilder");
@@ -43051,7 +43128,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor({ components, accessory, ...data } = {}) {
-        super({ type: import_v1017.ComponentType.Section, ...data });
+        super({ type: import_v1022.ComponentType.Section, ...data });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
         this.accessory = accessory ? createComponentBuilder(accessory) : void 0;
       }
@@ -43124,36 +43201,40 @@ var require_dist8 = __commonJS({
         return data;
       }
       switch (data.type) {
-        case import_v1018.ComponentType.ActionRow:
+        case import_v1023.ComponentType.ActionRow:
           return new ActionRowBuilder2(data);
-        case import_v1018.ComponentType.Button:
+        case import_v1023.ComponentType.Button:
           return new ButtonBuilder2(data);
-        case import_v1018.ComponentType.StringSelect:
+        case import_v1023.ComponentType.StringSelect:
           return new StringSelectMenuBuilder2(data);
-        case import_v1018.ComponentType.TextInput:
+        case import_v1023.ComponentType.TextInput:
           return new TextInputBuilder2(data);
-        case import_v1018.ComponentType.UserSelect:
+        case import_v1023.ComponentType.UserSelect:
           return new UserSelectMenuBuilder(data);
-        case import_v1018.ComponentType.RoleSelect:
+        case import_v1023.ComponentType.RoleSelect:
           return new RoleSelectMenuBuilder(data);
-        case import_v1018.ComponentType.MentionableSelect:
+        case import_v1023.ComponentType.MentionableSelect:
           return new MentionableSelectMenuBuilder(data);
-        case import_v1018.ComponentType.ChannelSelect:
+        case import_v1023.ComponentType.ChannelSelect:
           return new ChannelSelectMenuBuilder(data);
-        case import_v1018.ComponentType.File:
+        case import_v1023.ComponentType.File:
           return new FileBuilder(data);
-        case import_v1018.ComponentType.Container:
+        case import_v1023.ComponentType.Container:
           return new ContainerBuilder(data);
-        case import_v1018.ComponentType.Section:
+        case import_v1023.ComponentType.Section:
           return new SectionBuilder(data);
-        case import_v1018.ComponentType.Separator:
+        case import_v1023.ComponentType.Separator:
           return new SeparatorBuilder(data);
-        case import_v1018.ComponentType.TextDisplay:
+        case import_v1023.ComponentType.TextDisplay:
           return new TextDisplayBuilder(data);
-        case import_v1018.ComponentType.Thumbnail:
+        case import_v1023.ComponentType.Thumbnail:
           return new ThumbnailBuilder(data);
-        case import_v1018.ComponentType.MediaGallery:
+        case import_v1023.ComponentType.MediaGallery:
           return new MediaGalleryBuilder(data);
+        case import_v1023.ComponentType.Label:
+          return new LabelBuilder(data);
+        case import_v1023.ComponentType.FileUpload:
+          return new FileUploadBuilder(data);
         default:
           throw new Error(`Cannot properly serialize component type: ${data.type}`);
       }
@@ -43216,7 +43297,7 @@ var require_dist8 = __commonJS({
        * ```
        */
       constructor({ components, ...data } = {}) {
-        super({ type: import_v1019.ComponentType.ActionRow, ...data });
+        super({ type: import_v1024.ComponentType.ActionRow, ...data });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -43247,15 +43328,16 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var Assertions_exports5 = {};
-    __export2(Assertions_exports5, {
+    var import_v1025 = require_v106();
+    var Assertions_exports7 = {};
+    __export2(Assertions_exports7, {
       componentsValidator: () => componentsValidator,
       titleValidator: () => titleValidator,
       validateRequiredParameters: () => validateRequiredParameters2
     });
-    var import_shapeshift5 = require_cjs3();
-    var titleValidator = import_shapeshift5.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
-    var componentsValidator = import_shapeshift5.s.instance(ActionRowBuilder2).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
+    var import_shapeshift8 = require_cjs3();
+    var titleValidator = import_shapeshift8.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
+    var componentsValidator = import_shapeshift8.s.union([import_shapeshift8.s.instance(ActionRowBuilder2), import_shapeshift8.s.instance(LabelBuilder), import_shapeshift8.s.instance(TextDisplayBuilder)]).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
     function validateRequiredParameters2(customId, title, components) {
       customIdValidator.parse(customId);
       titleValidator.parse(title);
@@ -43305,19 +43387,121 @@ var require_dist8 = __commonJS({
        * Adds components to this modal.
        *
        * @param components - The components to add
+       * @deprecated Use {@link ModalBuilder.addLabelComponents} or {@link ModalBuilder.addTextDisplayComponents} instead
        */
       addComponents(...components) {
         this.components.push(
-          ...normalizeArray(components).map(
-            (component) => component instanceof ActionRowBuilder2 ? component : new ActionRowBuilder2(component)
-          )
+          ...normalizeArray(components).map((component, idx) => {
+            if (component instanceof ActionRowBuilder2 || component instanceof LabelBuilder || component instanceof TextDisplayBuilder) {
+              return component;
+            }
+            if (component instanceof TextInputBuilder2) {
+              return new ActionRowBuilder2().addComponents(component);
+            }
+            if ("type" in component) {
+              if (component.type === import_v1025.ComponentType.ActionRow) {
+                return new ActionRowBuilder2(component);
+              }
+              if (component.type === import_v1025.ComponentType.Label) {
+                return new LabelBuilder(component);
+              }
+              if (component.type === import_v1025.ComponentType.TextDisplay) {
+                return new TextDisplayBuilder(component);
+              }
+              if (component.type === import_v1025.ComponentType.TextInput) {
+                return new ActionRowBuilder2().addComponents(
+                  new TextInputBuilder2(component)
+                );
+              }
+            }
+            throw new TypeError(`Invalid component passed in ModalBuilder.addComponents at index ${idx}!`);
+          })
         );
+        return this;
+      }
+      /**
+       * Adds label components to this modal.
+       *
+       * @param components - The components to add
+       */
+      addLabelComponents(...components) {
+        const normalized = normalizeArray(components);
+        const resolved = normalized.map((label) => resolveBuilder(label, LabelBuilder));
+        this.components.push(...resolved);
+        return this;
+      }
+      /**
+       * Adds text display components to this modal.
+       *
+       * @param components - The components to add
+       */
+      addTextDisplayComponents(...components) {
+        const normalized = normalizeArray(components);
+        const resolved = normalized.map((row) => resolveBuilder(row, TextDisplayBuilder));
+        this.components.push(...resolved);
+        return this;
+      }
+      /**
+       * Adds action rows to this modal.
+       *
+       * @param components - The components to add
+       * @deprecated Use {@link ModalBuilder.addLabelComponents} instead
+       */
+      addActionRowComponents(...components) {
+        const normalized = normalizeArray(components);
+        const resolved = normalized.map((row) => resolveBuilder(row, ActionRowBuilder2));
+        this.components.push(...resolved);
+        return this;
+      }
+      /**
+       * Sets the labels for this modal.
+       *
+       * @param components - The components to set
+       */
+      setLabelComponents(...components) {
+        const normalized = normalizeArray(components);
+        this.spliceLabelComponents(0, this.components.length, ...normalized);
+        return this;
+      }
+      /**
+       * Removes, replaces, or inserts labels for this modal.
+       *
+       * @remarks
+       * This method behaves similarly
+       * to {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/splice | Array.prototype.splice()}.
+       * The maximum amount of labels that can be added is 5.
+       *
+       * It's useful for modifying and adjusting order of the already-existing labels of a modal.
+       * @example
+       * Remove the first label:
+       * ```ts
+       * modal.spliceLabelComponents(0, 1);
+       * ```
+       * @example
+       * Remove the first n labels:
+       * ```ts
+       * const n = 4;
+       * modal.spliceLabelComponents(0, n);
+       * ```
+       * @example
+       * Remove the last label:
+       * ```ts
+       * modal.spliceLabelComponents(-1, 1);
+       * ```
+       * @param index - The index to start at
+       * @param deleteCount - The number of labels to remove
+       * @param labels - The replacing label objects
+       */
+      spliceLabelComponents(index, deleteCount, ...labels) {
+        const resolved = labels.map((label) => resolveBuilder(label, LabelBuilder));
+        this.components.splice(index, deleteCount, ...resolved);
         return this;
       }
       /**
        * Sets components for this modal.
        *
        * @param components - The components to set
+       * @deprecated Use {@link ModalBuilder.setLabelComponents} instead
        */
       setComponents(...components) {
         this.components.splice(0, this.components.length, ...normalizeArray(components));
@@ -43334,8 +43518,8 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    var Assertions_exports6 = {};
-    __export2(Assertions_exports6, {
+    var Assertions_exports8 = {};
+    __export2(Assertions_exports8, {
       assertReturnOfBuilder: () => assertReturnOfBuilder2,
       contextsPredicate: () => contextsPredicate,
       integrationTypesPredicate: () => integrationTypesPredicate,
@@ -43353,20 +43537,20 @@ var require_dist8 = __commonJS({
       validateRequired: () => validateRequired,
       validateRequiredParameters: () => validateRequiredParameters3
     });
-    var import_shapeshift6 = require_cjs3();
-    var import_v1020 = require_v106();
-    var namePredicate = import_shapeshift6.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^[\p{Ll}\p{Lm}\p{Lo}\p{N}\p{sc=Devanagari}\p{sc=Thai}_-]+$/u).setValidationEnabled(isValidationEnabled);
+    var import_shapeshift9 = require_cjs3();
+    var import_v1026 = require_v106();
+    var namePredicate = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^[\p{Ll}\p{Lm}\p{Lo}\p{N}\p{sc=Devanagari}\p{sc=Thai}_-]+$/u).setValidationEnabled(isValidationEnabled);
     function validateName(name) {
       namePredicate.parse(name);
     }
     __name(validateName, "validateName");
-    var descriptionPredicate3 = import_shapeshift6.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100).setValidationEnabled(isValidationEnabled);
-    var localePredicate = import_shapeshift6.s.nativeEnum(import_v1020.Locale);
+    var descriptionPredicate3 = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100).setValidationEnabled(isValidationEnabled);
+    var localePredicate = import_shapeshift9.s.nativeEnum(import_v1026.Locale);
     function validateDescription(description) {
       descriptionPredicate3.parse(description);
     }
     __name(validateDescription, "validateDescription");
-    var maxArrayLengthPredicate = import_shapeshift6.s.unknown().array().lengthLessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
+    var maxArrayLengthPredicate = import_shapeshift9.s.unknown().array().lengthLessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
     function validateLocale(locale) {
       return localePredicate.parse(locale);
     }
@@ -43381,7 +43565,7 @@ var require_dist8 = __commonJS({
       validateMaxOptionsLength(options);
     }
     __name(validateRequiredParameters3, "validateRequiredParameters");
-    var booleanPredicate = import_shapeshift6.s.boolean();
+    var booleanPredicate = import_shapeshift9.s.boolean();
     function validateDefaultPermission(value) {
       booleanPredicate.parse(value);
     }
@@ -43390,29 +43574,29 @@ var require_dist8 = __commonJS({
       booleanPredicate.parse(required);
     }
     __name(validateRequired, "validateRequired");
-    var choicesLengthPredicate = import_shapeshift6.s.number().lessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
+    var choicesLengthPredicate = import_shapeshift9.s.number().lessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
     function validateChoicesLength(amountAdding, choices) {
       choicesLengthPredicate.parse((choices?.length ?? 0) + amountAdding);
     }
     __name(validateChoicesLength, "validateChoicesLength");
     function assertReturnOfBuilder2(input, ExpectedInstanceOf) {
-      import_shapeshift6.s.instance(ExpectedInstanceOf).parse(input);
+      import_shapeshift9.s.instance(ExpectedInstanceOf).parse(input);
     }
     __name(assertReturnOfBuilder2, "assertReturnOfBuilder");
-    var localizationMapPredicate = import_shapeshift6.s.object(Object.fromEntries(Object.values(import_v1020.Locale).map((locale) => [locale, import_shapeshift6.s.string().nullish()]))).strict().nullish().setValidationEnabled(isValidationEnabled);
+    var localizationMapPredicate = import_shapeshift9.s.object(Object.fromEntries(Object.values(import_v1026.Locale).map((locale) => [locale, import_shapeshift9.s.string().nullish()]))).strict().nullish().setValidationEnabled(isValidationEnabled);
     function validateLocalizationMap(value) {
       localizationMapPredicate.parse(value);
     }
     __name(validateLocalizationMap, "validateLocalizationMap");
-    var dmPermissionPredicate = import_shapeshift6.s.boolean().nullish();
+    var dmPermissionPredicate = import_shapeshift9.s.boolean().nullish();
     function validateDMPermission(value) {
       dmPermissionPredicate.parse(value);
     }
     __name(validateDMPermission, "validateDMPermission");
-    var memberPermissionPredicate = import_shapeshift6.s.union([
-      import_shapeshift6.s.bigint().transform((value) => value.toString()),
-      import_shapeshift6.s.number().safeInt().transform((value) => value.toString()),
-      import_shapeshift6.s.string().regex(/^\d+$/)
+    var memberPermissionPredicate = import_shapeshift9.s.union([
+      import_shapeshift9.s.bigint().transform((value) => value.toString()),
+      import_shapeshift9.s.number().safeInt().transform((value) => value.toString()),
+      import_shapeshift9.s.string().regex(/^\d+$/)
     ]).nullish();
     function validateDefaultMemberPermissions(permissions) {
       return memberPermissionPredicate.parse(permissions);
@@ -43422,11 +43606,11 @@ var require_dist8 = __commonJS({
       booleanPredicate.parse(value);
     }
     __name(validateNSFW, "validateNSFW");
-    var contextsPredicate = import_shapeshift6.s.array(
-      import_shapeshift6.s.nativeEnum(import_v1020.InteractionContextType).setValidationEnabled(isValidationEnabled)
+    var contextsPredicate = import_shapeshift9.s.array(
+      import_shapeshift9.s.nativeEnum(import_v1026.InteractionContextType).setValidationEnabled(isValidationEnabled)
     );
-    var integrationTypesPredicate = import_shapeshift6.s.array(
-      import_shapeshift6.s.nativeEnum(import_v1020.ApplicationIntegrationType).setValidationEnabled(isValidationEnabled)
+    var integrationTypesPredicate = import_shapeshift9.s.array(
+      import_shapeshift9.s.nativeEnum(import_v1026.ApplicationIntegrationType).setValidationEnabled(isValidationEnabled)
     );
     var import_ts_mixer6 = require_cjs4();
     var SharedNameAndDescription = class {
@@ -43540,7 +43724,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v1021 = require_v106();
+    var import_v1027 = require_v106();
     var SharedSlashCommand = class {
       static {
         __name(this, "SharedSlashCommand");
@@ -43645,12 +43829,12 @@ var require_dist8 = __commonJS({
         validateLocalizationMap(this.description_localizations);
         return {
           ...this,
-          type: import_v1021.ApplicationCommandType.ChatInput,
+          type: import_v1027.ApplicationCommandType.ChatInput,
           options: this.options.map((option) => option.toJSON())
         };
       }
     };
-    var import_v1022 = require_v106();
+    var import_v1028 = require_v106();
     var ApplicationCommandOptionBase = class extends SharedNameAndDescription {
       static {
         __name(this, "ApplicationCommandOptionBase");
@@ -43688,7 +43872,7 @@ var require_dist8 = __commonJS({
       /**
        * The type of this option.
        */
-      type = import_v1022.ApplicationCommandOptionType.Attachment;
+      type = import_v1028.ApplicationCommandOptionType.Attachment;
       /**
        * {@inheritDoc ApplicationCommandOptionBase.toJSON}
        */
@@ -43697,7 +43881,7 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_v1023 = require_v106();
+    var import_v1029 = require_v106();
     var SlashCommandBooleanOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandBooleanOption");
@@ -43705,7 +43889,7 @@ var require_dist8 = __commonJS({
       /**
        * The type of this option.
        */
-      type = import_v1023.ApplicationCommandOptionType.Boolean;
+      type = import_v1029.ApplicationCommandOptionType.Boolean;
       /**
        * {@inheritDoc ApplicationCommandOptionBase.toJSON}
        */
@@ -43714,23 +43898,23 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_v1025 = require_v106();
+    var import_v1031 = require_v106();
     var import_ts_mixer = require_cjs4();
-    var import_shapeshift7 = require_cjs3();
-    var import_v1024 = require_v106();
+    var import_shapeshift10 = require_cjs3();
+    var import_v1030 = require_v106();
     var allowedChannelTypes = [
-      import_v1024.ChannelType.GuildText,
-      import_v1024.ChannelType.GuildVoice,
-      import_v1024.ChannelType.GuildCategory,
-      import_v1024.ChannelType.GuildAnnouncement,
-      import_v1024.ChannelType.AnnouncementThread,
-      import_v1024.ChannelType.PublicThread,
-      import_v1024.ChannelType.PrivateThread,
-      import_v1024.ChannelType.GuildStageVoice,
-      import_v1024.ChannelType.GuildForum,
-      import_v1024.ChannelType.GuildMedia
+      import_v1030.ChannelType.GuildText,
+      import_v1030.ChannelType.GuildVoice,
+      import_v1030.ChannelType.GuildCategory,
+      import_v1030.ChannelType.GuildAnnouncement,
+      import_v1030.ChannelType.AnnouncementThread,
+      import_v1030.ChannelType.PublicThread,
+      import_v1030.ChannelType.PrivateThread,
+      import_v1030.ChannelType.GuildStageVoice,
+      import_v1030.ChannelType.GuildForum,
+      import_v1030.ChannelType.GuildMedia
     ];
-    var channelTypesPredicate = import_shapeshift7.s.array(import_shapeshift7.s.union(allowedChannelTypes.map((type) => import_shapeshift7.s.literal(type))));
+    var channelTypesPredicate = import_shapeshift10.s.array(import_shapeshift10.s.union(allowedChannelTypes.map((type) => import_shapeshift10.s.literal(type))));
     var ApplicationCommandOptionChannelTypesMixin = class {
       static {
         __name(this, "ApplicationCommandOptionChannelTypesMixin");
@@ -43756,7 +43940,7 @@ var require_dist8 = __commonJS({
       /**
        * The type of this option.
        */
-      type = import_v1025.ApplicationCommandOptionType.Channel;
+      type = import_v1031.ApplicationCommandOptionType.Channel;
       /**
        * {@inheritDoc ApplicationCommandOptionBase.toJSON}
        */
@@ -43769,8 +43953,8 @@ var require_dist8 = __commonJS({
     SlashCommandChannelOption = __decorateClass([
       (0, import_ts_mixer.mix)(ApplicationCommandOptionChannelTypesMixin)
     ], SlashCommandChannelOption);
-    var import_shapeshift10 = require_cjs3();
-    var import_v1027 = require_v106();
+    var import_shapeshift13 = require_cjs3();
+    var import_v1033 = require_v106();
     var import_ts_mixer2 = require_cjs4();
     var ApplicationCommandNumericOptionMinMaxValueMixin = class {
       static {
@@ -43785,8 +43969,8 @@ var require_dist8 = __commonJS({
        */
       min_value;
     };
-    var import_shapeshift8 = require_cjs3();
-    var booleanPredicate2 = import_shapeshift8.s.boolean();
+    var import_shapeshift11 = require_cjs3();
+    var booleanPredicate2 = import_shapeshift11.s.boolean();
     var ApplicationCommandOptionWithAutocompleteMixin = class {
       static {
         __name(this, "ApplicationCommandOptionWithAutocompleteMixin");
@@ -43815,14 +43999,14 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_shapeshift9 = require_cjs3();
-    var import_v1026 = require_v106();
-    var stringPredicate = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100);
-    var numberPredicate = import_shapeshift9.s.number().greaterThan(Number.NEGATIVE_INFINITY).lessThan(Number.POSITIVE_INFINITY);
-    var choicesPredicate = import_shapeshift9.s.object({
+    var import_shapeshift12 = require_cjs3();
+    var import_v1032 = require_v106();
+    var stringPredicate = import_shapeshift12.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100);
+    var numberPredicate = import_shapeshift12.s.number().greaterThan(Number.NEGATIVE_INFINITY).lessThan(Number.POSITIVE_INFINITY);
+    var choicesPredicate = import_shapeshift12.s.object({
       name: stringPredicate,
       name_localizations: localizationMapPredicate,
-      value: import_shapeshift9.s.union([stringPredicate, numberPredicate])
+      value: import_shapeshift12.s.union([stringPredicate, numberPredicate])
     }).array();
     var ApplicationCommandOptionWithChoicesMixin = class {
       static {
@@ -43854,7 +44038,7 @@ var require_dist8 = __commonJS({
         }
         validateChoicesLength(normalizedChoices.length, this.choices);
         for (const { name, name_localizations, value } of normalizedChoices) {
-          if (this.type === import_v1026.ApplicationCommandOptionType.String) {
+          if (this.type === import_v1032.ApplicationCommandOptionType.String) {
             stringPredicate.parse(value);
           } else {
             numberPredicate.parse(value);
@@ -43879,12 +44063,12 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var numberValidator = import_shapeshift10.s.number().int();
+    var numberValidator = import_shapeshift13.s.number().int();
     var SlashCommandIntegerOption = class extends ApplicationCommandOptionBase {
       /**
        * The type of this option.
        */
-      type = import_v1027.ApplicationCommandOptionType.Integer;
+      type = import_v1033.ApplicationCommandOptionType.Integer;
       /**
        * {@inheritDoc ApplicationCommandNumericOptionMinMaxValueMixin.setMaxValue}
        */
@@ -43920,7 +44104,7 @@ var require_dist8 = __commonJS({
         ApplicationCommandOptionWithChoicesMixin
       )
     ], SlashCommandIntegerOption);
-    var import_v1028 = require_v106();
+    var import_v1034 = require_v106();
     var SlashCommandMentionableOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandMentionableOption");
@@ -43928,7 +44112,7 @@ var require_dist8 = __commonJS({
       /**
        * The type of this option.
        */
-      type = import_v1028.ApplicationCommandOptionType.Mentionable;
+      type = import_v1034.ApplicationCommandOptionType.Mentionable;
       /**
        * {@inheritDoc ApplicationCommandOptionBase.toJSON}
        */
@@ -43937,15 +44121,15 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_shapeshift11 = require_cjs3();
-    var import_v1029 = require_v106();
+    var import_shapeshift14 = require_cjs3();
+    var import_v1035 = require_v106();
     var import_ts_mixer3 = require_cjs4();
-    var numberValidator2 = import_shapeshift11.s.number();
+    var numberValidator2 = import_shapeshift14.s.number();
     var SlashCommandNumberOption = class extends ApplicationCommandOptionBase {
       /**
        * The type of this option.
        */
-      type = import_v1029.ApplicationCommandOptionType.Number;
+      type = import_v1035.ApplicationCommandOptionType.Number;
       /**
        * {@inheritDoc ApplicationCommandNumericOptionMinMaxValueMixin.setMaxValue}
        */
@@ -43981,7 +44165,7 @@ var require_dist8 = __commonJS({
         ApplicationCommandOptionWithChoicesMixin
       )
     ], SlashCommandNumberOption);
-    var import_v1030 = require_v106();
+    var import_v1036 = require_v106();
     var SlashCommandRoleOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandRoleOption");
@@ -43989,7 +44173,7 @@ var require_dist8 = __commonJS({
       /**
        * The type of this option.
        */
-      type = import_v1030.ApplicationCommandOptionType.Role;
+      type = import_v1036.ApplicationCommandOptionType.Role;
       /**
        * {@inheritDoc ApplicationCommandOptionBase.toJSON}
        */
@@ -43998,16 +44182,16 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    var import_shapeshift12 = require_cjs3();
-    var import_v1031 = require_v106();
+    var import_shapeshift15 = require_cjs3();
+    var import_v1037 = require_v106();
     var import_ts_mixer4 = require_cjs4();
-    var minLengthValidator2 = import_shapeshift12.s.number().greaterThanOrEqual(0).lessThanOrEqual(6e3);
-    var maxLengthValidator2 = import_shapeshift12.s.number().greaterThanOrEqual(1).lessThanOrEqual(6e3);
+    var minLengthValidator2 = import_shapeshift15.s.number().greaterThanOrEqual(0).lessThanOrEqual(6e3);
+    var maxLengthValidator2 = import_shapeshift15.s.number().greaterThanOrEqual(1).lessThanOrEqual(6e3);
     var SlashCommandStringOption = class extends ApplicationCommandOptionBase {
       /**
        * The type of this option.
        */
-      type = import_v1031.ApplicationCommandOptionType.String;
+      type = import_v1037.ApplicationCommandOptionType.String;
       /**
        * The maximum length of this option.
        */
@@ -44051,7 +44235,7 @@ var require_dist8 = __commonJS({
     SlashCommandStringOption = __decorateClass([
       (0, import_ts_mixer4.mix)(ApplicationCommandOptionWithAutocompleteMixin, ApplicationCommandOptionWithChoicesMixin)
     ], SlashCommandStringOption);
-    var import_v1032 = require_v106();
+    var import_v1038 = require_v106();
     var SlashCommandUserOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandUserOption");
@@ -44059,7 +44243,7 @@ var require_dist8 = __commonJS({
       /**
        * The type of this option.
        */
-      type = import_v1032.ApplicationCommandOptionType.User;
+      type = import_v1038.ApplicationCommandOptionType.User;
       /**
        * {@inheritDoc ApplicationCommandOptionBase.toJSON}
        */
@@ -44161,7 +44345,7 @@ var require_dist8 = __commonJS({
         return this;
       }
     };
-    var import_v1033 = require_v106();
+    var import_v1039 = require_v106();
     var import_ts_mixer5 = require_cjs4();
     var SlashCommandSubcommandGroupBuilder = class {
       /**
@@ -44199,7 +44383,7 @@ var require_dist8 = __commonJS({
       toJSON() {
         validateRequiredParameters3(this.name, this.description, this.options);
         return {
-          type: import_v1033.ApplicationCommandOptionType.SubcommandGroup,
+          type: import_v1039.ApplicationCommandOptionType.SubcommandGroup,
           name: this.name,
           name_localizations: this.name_localizations,
           description: this.description,
@@ -44235,7 +44419,7 @@ var require_dist8 = __commonJS({
       toJSON() {
         validateRequiredParameters3(this.name, this.description, this.options);
         return {
-          type: import_v1033.ApplicationCommandOptionType.Subcommand,
+          type: import_v1039.ApplicationCommandOptionType.Subcommand,
           name: this.name,
           name_localizations: this.name_localizations,
           description: this.description,
@@ -44337,8 +44521,8 @@ var require_dist8 = __commonJS({
     SlashCommandBuilder2 = __decorateClass([
       (0, import_ts_mixer6.mix)(SharedSlashCommandOptions, SharedNameAndDescription, SharedSlashCommandSubcommands, SharedSlashCommand)
     ], SlashCommandBuilder2);
-    var Assertions_exports7 = {};
-    __export2(Assertions_exports7, {
+    var Assertions_exports9 = {};
+    __export2(Assertions_exports9, {
       contextsPredicate: () => contextsPredicate2,
       integrationTypesPredicate: () => integrationTypesPredicate2,
       validateDMPermission: () => validateDMPermission2,
@@ -44348,11 +44532,11 @@ var require_dist8 = __commonJS({
       validateRequiredParameters: () => validateRequiredParameters4,
       validateType: () => validateType
     });
-    var import_shapeshift13 = require_cjs3();
-    var import_v1034 = require_v106();
-    var namePredicate2 = import_shapeshift13.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/^( *[\p{P}\p{L}\p{N}\p{sc=Devanagari}\p{sc=Thai}]+ *)+$/u).setValidationEnabled(isValidationEnabled);
-    var typePredicate = import_shapeshift13.s.union([import_shapeshift13.s.literal(import_v1034.ApplicationCommandType.User), import_shapeshift13.s.literal(import_v1034.ApplicationCommandType.Message)]).setValidationEnabled(isValidationEnabled);
-    var booleanPredicate3 = import_shapeshift13.s.boolean();
+    var import_shapeshift16 = require_cjs3();
+    var import_v1040 = require_v106();
+    var namePredicate2 = import_shapeshift16.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(32).regex(/\S/).setValidationEnabled(isValidationEnabled);
+    var typePredicate = import_shapeshift16.s.union([import_shapeshift16.s.literal(import_v1040.ApplicationCommandType.User), import_shapeshift16.s.literal(import_v1040.ApplicationCommandType.Message)]).setValidationEnabled(isValidationEnabled);
+    var booleanPredicate3 = import_shapeshift16.s.boolean();
     function validateDefaultPermission2(value) {
       booleanPredicate3.parse(value);
     }
@@ -44370,25 +44554,25 @@ var require_dist8 = __commonJS({
       validateType(type);
     }
     __name(validateRequiredParameters4, "validateRequiredParameters");
-    var dmPermissionPredicate2 = import_shapeshift13.s.boolean().nullish();
+    var dmPermissionPredicate2 = import_shapeshift16.s.boolean().nullish();
     function validateDMPermission2(value) {
       dmPermissionPredicate2.parse(value);
     }
     __name(validateDMPermission2, "validateDMPermission");
-    var memberPermissionPredicate2 = import_shapeshift13.s.union([
-      import_shapeshift13.s.bigint().transform((value) => value.toString()),
-      import_shapeshift13.s.number().safeInt().transform((value) => value.toString()),
-      import_shapeshift13.s.string().regex(/^\d+$/)
+    var memberPermissionPredicate2 = import_shapeshift16.s.union([
+      import_shapeshift16.s.bigint().transform((value) => value.toString()),
+      import_shapeshift16.s.number().safeInt().transform((value) => value.toString()),
+      import_shapeshift16.s.string().regex(/^\d+$/)
     ]).nullish();
     function validateDefaultMemberPermissions2(permissions) {
       return memberPermissionPredicate2.parse(permissions);
     }
     __name(validateDefaultMemberPermissions2, "validateDefaultMemberPermissions");
-    var contextsPredicate2 = import_shapeshift13.s.array(
-      import_shapeshift13.s.nativeEnum(import_v1034.InteractionContextType).setValidationEnabled(isValidationEnabled)
+    var contextsPredicate2 = import_shapeshift16.s.array(
+      import_shapeshift16.s.nativeEnum(import_v1040.InteractionContextType).setValidationEnabled(isValidationEnabled)
     );
-    var integrationTypesPredicate2 = import_shapeshift13.s.array(
-      import_shapeshift13.s.nativeEnum(import_v1034.ApplicationIntegrationType).setValidationEnabled(isValidationEnabled)
+    var integrationTypesPredicate2 = import_shapeshift16.s.array(
+      import_shapeshift16.s.nativeEnum(import_v1040.ApplicationIntegrationType).setValidationEnabled(isValidationEnabled)
     );
     var ContextMenuCommandBuilder = class {
       static {
@@ -44563,7 +44747,7 @@ var require_dist8 = __commonJS({
       return (data.title?.length ?? 0) + (data.description?.length ?? 0) + (data.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data.footer?.text.length ?? 0) + (data.author?.name.length ?? 0);
     }
     __name(embedLength, "embedLength");
-    var version = "1.11.2";
+    var version = "1.13.0";
   }
 });
 
@@ -44960,119 +45144,6 @@ var require_MessageMentions = __commonJS({
       }
     };
     module2.exports = MessageMentions;
-  }
-});
-
-// node_modules/discord.js/src/structures/PollAnswer.js
-var require_PollAnswer = __commonJS({
-  "node_modules/discord.js/src/structures/PollAnswer.js"(exports2) {
-    "use strict";
-    var Base = require_Base();
-    var { Emoji } = require_Emoji();
-    var PollAnswer = class extends Base {
-      constructor(client2, data, poll) {
-        super(client2);
-        Object.defineProperty(this, "poll", { value: poll });
-        this.id = data.answer_id;
-        this.text = data.poll_media.text ?? null;
-        Object.defineProperty(this, "_emoji", { value: data.poll_media.emoji ?? null });
-        this._patch(data);
-      }
-      _patch(data) {
-        if ("count" in data) {
-          this.voteCount = data.count;
-        } else {
-          this.voteCount ??= 0;
-        }
-      }
-      /**
-       * The emoji of this answer
-       * @type {?(GuildEmoji|Emoji)}
-       */
-      get emoji() {
-        if (!this._emoji || !this._emoji.id && !this._emoji.name) return null;
-        return this.client.emojis.cache.get(this._emoji.id) ?? new Emoji(this.client, this._emoji);
-      }
-      /**
-       * Options used for fetching voters of a poll answer.
-       * @typedef {Object} BaseFetchPollAnswerVotersOptions
-       * @property {number} [limit] The maximum number of voters to fetch
-       * @property {Snowflake} [after] The user id to fetch voters after
-       */
-      /**
-       * Fetches the users that voted for this answer.
-       * @param {BaseFetchPollAnswerVotersOptions} [options={}] The options for fetching voters
-       * @returns {Promise<Collection<Snowflake, User>>}
-       */
-      fetchVoters({ after, limit } = {}) {
-        return this.poll.message.channel.messages.fetchPollAnswerVoters({
-          messageId: this.poll.message.id,
-          answerId: this.id,
-          after,
-          limit
-        });
-      }
-    };
-    exports2.PollAnswer = PollAnswer;
-  }
-});
-
-// node_modules/discord.js/src/structures/Poll.js
-var require_Poll = __commonJS({
-  "node_modules/discord.js/src/structures/Poll.js"(exports2) {
-    "use strict";
-    var { Collection: Collection3 } = require_dist6();
-    var Base = require_Base();
-    var { PollAnswer } = require_PollAnswer();
-    var { DiscordjsError: DiscordjsError2 } = require_DJSError();
-    var { ErrorCodes: ErrorCodes2 } = require_errors2();
-    var Poll = class extends Base {
-      constructor(client2, data, message) {
-        super(client2);
-        Object.defineProperty(this, "message", { value: message });
-        this.question = {
-          text: data.question.text
-        };
-        this.answers = data.answers.reduce(
-          (acc, answer) => acc.set(answer.answer_id, new PollAnswer(this.client, answer, this)),
-          new Collection3()
-        );
-        this.expiresTimestamp = Date.parse(data.expiry);
-        this.allowMultiselect = data.allow_multiselect;
-        this.layoutType = data.layout_type;
-        this._patch(data);
-      }
-      _patch(data) {
-        if (data.results) {
-          this.resultsFinalized = data.results.is_finalized;
-          for (const answerResult of data.results.answer_counts) {
-            const answer = this.answers.get(answerResult.id);
-            answer?._patch(answerResult);
-          }
-        } else {
-          this.resultsFinalized ??= false;
-        }
-      }
-      /**
-       * The date when this poll expires
-       * @type {Date}
-       * @readonly
-       */
-      get expiresAt() {
-        return new Date(this.expiresTimestamp);
-      }
-      /**
-       * Ends this poll.
-       * @returns {Promise<Message>}
-       */
-      async end() {
-        if (Date.now() > this.expiresTimestamp) {
-          throw new DiscordjsError2(ErrorCodes2.PollAlreadyExpired);
-        }
-        return this.message.channel.messages.endPoll(this.message.id);
-      }
-    };
-    exports2.Poll = Poll;
   }
 });
 
@@ -45673,291 +45744,6 @@ var require_ReactionEmoji = __commonJS({
       }
     };
     module2.exports = ReactionEmoji;
-  }
-});
-
-// node_modules/discord.js/src/util/UserFlagsBitField.js
-var require_UserFlagsBitField = __commonJS({
-  "node_modules/discord.js/src/util/UserFlagsBitField.js"(exports2, module2) {
-    "use strict";
-    var { UserFlags } = require_v106();
-    var BitField = require_BitField();
-    var UserFlagsBitField = class extends BitField {
-      /**
-       * Numeric user flags.
-       * @type {UserFlags}
-       * @memberof UserFlagsBitField
-       */
-      static Flags = UserFlags;
-    };
-    module2.exports = UserFlagsBitField;
-  }
-});
-
-// node_modules/discord.js/src/structures/User.js
-var require_User = __commonJS({
-  "node_modules/discord.js/src/structures/User.js"(exports2, module2) {
-    "use strict";
-    var { userMention } = require_dist7();
-    var { calculateUserDefaultAvatarIndex } = require_dist5();
-    var { DiscordSnowflake } = require_cjs();
-    var Base = require_Base();
-    var TextBasedChannel = require_TextBasedChannel();
-    var UserFlagsBitField = require_UserFlagsBitField();
-    var { emitDeprecationWarningForUserFetchFlags } = require_Util();
-    var User = class extends Base {
-      constructor(client2, data) {
-        super(client2);
-        this.id = data.id;
-        this.bot = null;
-        this.system = null;
-        this.flags = null;
-        this._patch(data);
-      }
-      _patch(data) {
-        if ("username" in data) {
-          this.username = data.username;
-        } else {
-          this.username ??= null;
-        }
-        if ("global_name" in data) {
-          this.globalName = data.global_name;
-        } else {
-          this.globalName ??= null;
-        }
-        if ("bot" in data) {
-          this.bot = Boolean(data.bot);
-        } else if (!this.partial && typeof this.bot !== "boolean") {
-          this.bot = false;
-        }
-        if ("discriminator" in data) {
-          this.discriminator = data.discriminator;
-        } else {
-          this.discriminator ??= null;
-        }
-        if ("avatar" in data) {
-          this.avatar = data.avatar;
-        } else {
-          this.avatar ??= null;
-        }
-        if ("banner" in data) {
-          this.banner = data.banner;
-        } else if (this.banner !== null) {
-          this.banner ??= void 0;
-        }
-        if ("accent_color" in data) {
-          this.accentColor = data.accent_color;
-        } else if (this.accentColor !== null) {
-          this.accentColor ??= void 0;
-        }
-        if ("system" in data) {
-          this.system = Boolean(data.system);
-        } else if (!this.partial && typeof this.system !== "boolean") {
-          this.system = false;
-        }
-        if ("public_flags" in data) {
-          this.flags = new UserFlagsBitField(data.public_flags);
-        }
-        if ("avatar_decoration" in data) {
-          this.avatarDecoration = data.avatar_decoration;
-        } else {
-          this.avatarDecoration ??= null;
-        }
-        if (data.avatar_decoration_data) {
-          this.avatarDecorationData = {
-            asset: data.avatar_decoration_data.asset,
-            skuId: data.avatar_decoration_data.sku_id
-          };
-        } else {
-          this.avatarDecorationData = null;
-        }
-      }
-      /**
-       * Whether this User is a partial
-       * @type {boolean}
-       * @readonly
-       */
-      get partial() {
-        return typeof this.username !== "string";
-      }
-      /**
-       * The timestamp the user was created at
-       * @type {number}
-       * @readonly
-       */
-      get createdTimestamp() {
-        return DiscordSnowflake.timestampFrom(this.id);
-      }
-      /**
-       * The time the user was created at
-       * @type {Date}
-       * @readonly
-       */
-      get createdAt() {
-        return new Date(this.createdTimestamp);
-      }
-      /**
-       * A link to the user's avatar.
-       * @param {ImageURLOptions} [options={}] Options for the image URL
-       * @returns {?string}
-       */
-      avatarURL(options = {}) {
-        return this.avatar && this.client.rest.cdn.avatar(this.id, this.avatar, options);
-      }
-      /**
-       * A link to the user's avatar decoration.
-       * @param {BaseImageURLOptions} [options={}] Options for the image URL
-       * @returns {?string}
-       */
-      avatarDecorationURL(options = {}) {
-        if (this.avatarDecorationData) {
-          return this.client.rest.cdn.avatarDecoration(this.avatarDecorationData.asset);
-        }
-        return this.avatarDecoration && this.client.rest.cdn.avatarDecoration(this.id, this.avatarDecoration, options);
-      }
-      /**
-       * A link to the user's default avatar
-       * @type {string}
-       * @readonly
-       */
-      get defaultAvatarURL() {
-        const index = this.discriminator === "0" ? calculateUserDefaultAvatarIndex(this.id) : this.discriminator % 5;
-        return this.client.rest.cdn.defaultAvatar(index);
-      }
-      /**
-       * A link to the user's avatar if they have one.
-       * Otherwise a link to their default avatar will be returned.
-       * @param {ImageURLOptions} [options={}] Options for the image URL
-       * @returns {string}
-       */
-      displayAvatarURL(options) {
-        return this.avatarURL(options) ?? this.defaultAvatarURL;
-      }
-      /**
-       * The hexadecimal version of the user accent color, with a leading hash
-       * <info>The user must be force fetched for this property to be present</info>
-       * @type {?string}
-       * @readonly
-       */
-      get hexAccentColor() {
-        if (typeof this.accentColor !== "number") return this.accentColor;
-        return `#${this.accentColor.toString(16).padStart(6, "0")}`;
-      }
-      /**
-       * A link to the user's banner. See {@link User#banner} for more info
-       * @param {ImageURLOptions} [options={}] Options for the image URL
-       * @returns {?string}
-       */
-      bannerURL(options = {}) {
-        return this.banner && this.client.rest.cdn.banner(this.id, this.banner, options);
-      }
-      /**
-       * The tag of this user
-       * <info>This user's username, or their legacy tag (e.g. `hydrabolt#0001`)
-       * if they're using the legacy username system</info>
-       * @type {?string}
-       * @readonly
-       */
-      get tag() {
-        return typeof this.username === "string" ? this.discriminator === "0" ? this.username : `${this.username}#${this.discriminator}` : null;
-      }
-      /**
-       * The global name of this user, or their username if they don't have one
-       * @type {?string}
-       * @readonly
-       */
-      get displayName() {
-        return this.globalName ?? this.username;
-      }
-      /**
-       * The DM between the client's user and this user
-       * @type {?DMChannel}
-       * @readonly
-       */
-      get dmChannel() {
-        return this.client.users.dmChannel(this.id);
-      }
-      /**
-       * Creates a DM channel between the client and the user.
-       * @param {boolean} [force=false] Whether to skip the cache check and request the API
-       * @returns {Promise<DMChannel>}
-       */
-      createDM(force = false) {
-        return this.client.users.createDM(this.id, { force });
-      }
-      /**
-       * Deletes a DM channel (if one exists) between the client and the user. Resolves with the channel if successful.
-       * @returns {Promise<DMChannel>}
-       */
-      deleteDM() {
-        return this.client.users.deleteDM(this.id);
-      }
-      /**
-       * Checks if the user is equal to another.
-       * It compares id, username, discriminator, avatar, banner, accent color, and bot flags.
-       * It is recommended to compare equality by using `user.id === user2.id` unless you want to compare all properties.
-       * @param {User} user User to compare with
-       * @returns {boolean}
-       */
-      equals(user) {
-        return user && this.id === user.id && this.username === user.username && this.discriminator === user.discriminator && this.globalName === user.globalName && this.avatar === user.avatar && this.flags?.bitfield === user.flags?.bitfield && this.banner === user.banner && this.accentColor === user.accentColor && this.avatarDecoration === user.avatarDecoration && this.avatarDecorationData?.asset === user.avatarDecorationData?.asset && this.avatarDecorationData?.skuId === user.avatarDecorationData?.skuId;
-      }
-      /**
-       * Compares the user with an API user object
-       * @param {APIUser} user The API user object to compare
-       * @returns {boolean}
-       * @private
-       */
-      _equals(user) {
-        return user && this.id === user.id && this.username === user.username && this.discriminator === user.discriminator && this.globalName === user.global_name && this.avatar === user.avatar && this.flags?.bitfield === user.public_flags && ("banner" in user ? this.banner === user.banner : true) && ("accent_color" in user ? this.accentColor === user.accent_color : true) && ("avatar_decoration" in user ? this.avatarDecoration === user.avatar_decoration : true) && ("avatar_decoration_data" in user ? this.avatarDecorationData?.asset === user.avatar_decoration_data?.asset && this.avatarDecorationData?.skuId === user.avatar_decoration_data?.sku_id : true);
-      }
-      /**
-       * Fetches this user's flags.
-       * @param {boolean} [force=false] Whether to skip the cache check and request the API
-       * @returns {Promise<UserFlagsBitField>}
-       * @deprecated <warn>This method is deprecated and will be removed in the next major version.
-       * Flags may still be retrieved via {@link User#fetch}.</warn>
-       */
-      fetchFlags(force = false) {
-        emitDeprecationWarningForUserFetchFlags(this.constructor.name);
-        return this.client.users.fetchFlags(this.id, { force });
-      }
-      /**
-       * Fetches this user.
-       * @param {boolean} [force=true] Whether to skip the cache check and request the API
-       * @returns {Promise<User>}
-       */
-      fetch(force = true) {
-        return this.client.users.fetch(this.id, { force });
-      }
-      /**
-       * When concatenated with a string, this automatically returns the user's mention instead of the User object.
-       * @returns {string}
-       * @example
-       * // Logs: Hello from <@123456789012345678>!
-       * console.log(`Hello from ${user}!`);
-       */
-      toString() {
-        return userMention(this.id);
-      }
-      toJSON(...props) {
-        const json = super.toJSON(
-          {
-            createdTimestamp: true,
-            defaultAvatarURL: true,
-            hexAccentColor: true,
-            tag: true
-          },
-          ...props
-        );
-        json.avatarURL = this.avatarURL();
-        json.displayAvatarURL = this.displayAvatarURL();
-        json.bannerURL = this.banner ? this.bannerURL() : this.banner;
-        return json;
-      }
-    };
-    TextBasedChannel.applyToClass(User);
-    module2.exports = User;
   }
 });
 
@@ -46629,6 +46415,48 @@ var require_FileComponent = __commonJS({
   }
 });
 
+// node_modules/discord.js/src/structures/LabelComponent.js
+var require_LabelComponent = __commonJS({
+  "node_modules/discord.js/src/structures/LabelComponent.js"(exports2, module2) {
+    "use strict";
+    var Component = require_Component();
+    var { createComponent } = require_Components();
+    var LabelComponent = class extends Component {
+      constructor({ component, ...data }) {
+        super(data);
+        this.component = createComponent(component);
+      }
+      /**
+       * The label of the component
+       *
+       * @type {string}
+       * @readonly
+       */
+      get label() {
+        return this.data.label;
+      }
+      /**
+       * The description of this component
+       *
+       * @type {?string}
+       * @readonly
+       */
+      get description() {
+        return this.data.description ?? null;
+      }
+      /**
+       * Returns the API-compatible JSON for this component
+       *
+       * @returns {APILabelComponent}
+       */
+      toJSON() {
+        return { ...this.data, component: this.component.toJSON() };
+      }
+    };
+    module2.exports = LabelComponent;
+  }
+});
+
 // node_modules/discord.js/src/structures/MediaGalleryItem.js
 var require_MediaGalleryItem = __commonJS({
   "node_modules/discord.js/src/structures/MediaGalleryItem.js"(exports2, module2) {
@@ -47085,6 +46913,7 @@ var require_Components = __commonJS({
     var Component = require_Component();
     var ContainerComponent = require_ContainerComponent();
     var FileComponent = require_FileComponent();
+    var LabelComponent = require_LabelComponent();
     var MediaGalleryComponent = require_MediaGalleryComponent();
     var MentionableSelectMenuBuilder = require_MentionableSelectMenuBuilder();
     var MentionableSelectMenuComponent = require_MentionableSelectMenuComponent();
@@ -47115,7 +46944,8 @@ var require_Components = __commonJS({
       [ComponentType.MediaGallery]: MediaGalleryComponent,
       [ComponentType.Section]: SectionComponent,
       [ComponentType.Separator]: SeparatorComponent,
-      [ComponentType.Thumbnail]: ThumbnailComponent
+      [ComponentType.Thumbnail]: ThumbnailComponent,
+      [ComponentType.Label]: LabelComponent
     };
     var ComponentTypeToBuilder = {
       [ComponentType.ActionRow]: ActionRowBuilder2,
@@ -47354,7 +47184,11 @@ var require_Message = __commonJS({
           this.interaction ??= null;
         }
         if (data.poll) {
-          this.poll = new Poll(this.client, data.poll, this);
+          if (this.poll) {
+            this.poll._patch(data.poll);
+          } else {
+            this.poll = new Poll(this.client, data.poll, this, this.channel);
+          }
         } else {
           this.poll ??= null;
         }
@@ -47494,7 +47328,7 @@ var require_Message = __commonJS({
        * Similar to createReactionCollector but in promise form.
        * Resolves with a collection of reactions that pass the specified filter.
        * @param {AwaitReactionsOptions} [options={}] Optional options to pass to the internal collector
-       * @returns {Promise<Collection<string | Snowflake, MessageReaction>>}
+       * @returns {Promise<Collection<string|Snowflake, MessageReaction>>}
        * @example
        * // Create a reaction collector
        * const filter = (reaction, user) => reaction.emoji.name === '👌' && user.id === 'someId'
@@ -47623,9 +47457,12 @@ var require_Message = __commonJS({
        */
       get pinnable() {
         const { channel } = this;
-        return Boolean(
-          !this.system && (!this.guild || channel?.viewable && channel?.permissionsFor(this.client.user)?.has(PermissionFlagsBits.ManageMessages, false))
-        );
+        if (this.system) return false;
+        if (!this.guild) return true;
+        if (!channel || channel.isVoiceBased() || !channel.viewable) return false;
+        const permissions = channel?.permissionsFor(this.client.user);
+        if (!permissions) return false;
+        return permissions.has(PermissionFlagsBits.ReadMessageHistory | PermissionFlagsBits.PinMessages) || permissions.has(PermissionFlagsBits.ReadMessageHistory | PermissionFlagsBits.ManageMessages);
       }
       /**
        * Fetches the Message this crosspost/reply/pin-add references, if available to the client
@@ -47649,7 +47486,7 @@ var require_Message = __commonJS({
         const bitfield = PermissionFlagsBits.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField2.DefaultBit : PermissionFlagsBits.ManageMessages);
         const { channel } = this;
         return Boolean(
-          channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags.Crossposted) && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
+          channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
         );
       }
       /**
@@ -48679,7 +48516,7 @@ var require_GuildMemberRoleManager = __commonJS({
        * @readonly
        */
       get color() {
-        const coloredRoles = this.cache.filter((role) => role.color);
+        const coloredRoles = this.cache.filter((role) => role.colors.primaryColor);
         if (!coloredRoles.size) return null;
         return coloredRoles.reduce((prev, role) => role.comparePositionTo(prev) > 0 ? role : prev);
       }
@@ -48817,7 +48654,8 @@ var require_GuildMemberFlagsBitField = __commonJS({
     var BitField = require_BitField();
     var GuildMemberFlagsBitField = class extends BitField {
       /**
-       * Numeric guild guild member flags.
+       * Numeric guild member flags.
+       *
        * @type {GuildMemberFlags}
        * @memberof GuildMemberFlagsBitField
        */
@@ -48843,7 +48681,6 @@ var require_GuildMember = __commonJS({
       constructor(client2, data, guild2) {
         super(client2);
         this.guild = guild2;
-        this.joinedTimestamp = null;
         this.premiumSinceTimestamp = null;
         this.nickname = null;
         this.pending = null;
@@ -48866,7 +48703,11 @@ var require_GuildMember = __commonJS({
         } else {
           this.banner ??= null;
         }
-        if ("joined_at" in data) this.joinedTimestamp = Date.parse(data.joined_at);
+        if ("joined_at" in data) {
+          this.joinedTimestamp = data.joined_at && Date.parse(data.joined_at);
+        } else {
+          this.joinedTimestamp ??= null;
+        }
         if ("premium_since" in data) {
           this.premiumSinceTimestamp = data.premium_since ? Date.parse(data.premium_since) : null;
         }
@@ -48883,6 +48724,14 @@ var require_GuildMember = __commonJS({
           this.flags = new GuildMemberFlagsBitField(data.flags).freeze();
         } else {
           this.flags ??= new GuildMemberFlagsBitField().freeze();
+        }
+        if (data.avatar_decoration_data) {
+          this.avatarDecorationData = {
+            asset: data.avatar_decoration_data.asset,
+            skuId: data.avatar_decoration_data.sku_id
+          };
+        } else {
+          this.avatarDecorationData = null;
         }
       }
       _clone() {
@@ -48923,6 +48772,14 @@ var require_GuildMember = __commonJS({
         return this.avatar && this.client.rest.cdn.guildMemberAvatar(this.guild.id, this.id, this.avatar, options);
       }
       /**
+       * A link to the member's avatar decoration.
+       *
+       * @returns {?string}
+       */
+      avatarDecorationURL() {
+        return this.avatarDecorationData ? this.client.rest.cdn.avatarDecoration(this.avatarDecorationData.asset) : null;
+      }
+      /**
        * A link to the member's banner.
        * @param {ImageURLOptions} [options={}] Options for the banner URL
        * @returns {?string}
@@ -48947,6 +48804,15 @@ var require_GuildMember = __commonJS({
        */
       displayBannerURL(options) {
         return this.bannerURL(options) ?? this.user.bannerURL(options);
+      }
+      /**
+       * A link to the member's guild avatar decoration if they have one.
+       * Otherwise, a link to their {@link User#avatarDecorationURL} will be returned.
+       *
+       * @returns {?string}
+       */
+      displayAvatarDecorationURL() {
+        return this.avatarDecorationURL() ?? this.user.avatarDecorationURL();
       }
       /**
        * The time this member joined the guild
@@ -48986,7 +48852,7 @@ var require_GuildMember = __commonJS({
        * @readonly
        */
       get displayColor() {
-        return this.roles.color?.color ?? 0;
+        return this.roles.color?.colors.primaryColor ?? 0;
       }
       /**
        * The displayed role color of this member in hexadecimal
@@ -49120,7 +48986,7 @@ var require_GuildMember = __commonJS({
        *   .catch(console.error);
        */
       setNickname(nick, reason) {
-        return this.edit({ nick, reason });
+        return this.user.id === this.client.user.id ? this.guild.members.editMe({ nick, reason }) : this.edit({ nick, reason });
       }
       /**
        * Creates a DM channel between the client and this member.
@@ -49209,7 +49075,7 @@ var require_GuildMember = __commonJS({
        * @returns {boolean}
        */
       equals(member) {
-        return member instanceof this.constructor && this.id === member.id && this.partial === member.partial && this.guild.id === member.guild.id && this.joinedTimestamp === member.joinedTimestamp && this.nickname === member.nickname && this.avatar === member.avatar && this.banner === member.banner && this.pending === member.pending && this.communicationDisabledUntilTimestamp === member.communicationDisabledUntilTimestamp && this.flags.bitfield === member.flags.bitfield && (this._roles === member._roles || this._roles.length === member._roles.length && this._roles.every((role, i) => role === member._roles[i]));
+        return member instanceof this.constructor && this.id === member.id && this.partial === member.partial && this.guild.id === member.guild.id && this.joinedTimestamp === member.joinedTimestamp && this.nickname === member.nickname && this.avatar === member.avatar && this.banner === member.banner && this.pending === member.pending && this.communicationDisabledUntilTimestamp === member.communicationDisabledUntilTimestamp && this.flags.bitfield === member.flags.bitfield && (this._roles === member._roles || this._roles.length === member._roles.length && this._roles.every((role, index) => role === member._roles[index])) && this.avatarDecorationData?.asset === member.avatarDecorationData?.asset && this.avatarDecorationData?.skuId === member.avatarDecorationData?.skuId;
       }
       /**
        * When concatenated with a string, this automatically returns the user's mention instead of the GuildMember object.
@@ -49232,6 +49098,7 @@ var require_GuildMember = __commonJS({
         json.bannerURL = this.bannerURL();
         json.displayAvatarURL = this.displayAvatarURL();
         json.displayBannerURL = this.displayBannerURL();
+        json.avatarDecorationURL = this.avatarDecorationURL();
         return json;
       }
     };
@@ -49244,6 +49111,7 @@ var require_GuildMember = __commonJS({
 var require_MessageManager = __commonJS({
   "node_modules/discord.js/src/managers/MessageManager.js"(exports2, module2) {
     "use strict";
+    var process2 = require("node:process");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { Routes: Routes2 } = require_v106();
@@ -49253,6 +49121,7 @@ var require_MessageManager = __commonJS({
     var MessagePayload = require_MessagePayload();
     var { MakeCacheOverrideSymbol } = require_Symbols();
     var { resolvePartialEmoji } = require_Util();
+    var deprecationEmittedForFetchPinned = false;
     var MessageManager = class _MessageManager extends CachedManager {
       static [MakeCacheOverrideSymbol] = _MessageManager;
       constructor(channel, iterable) {
@@ -49338,18 +49207,75 @@ var require_MessageManager = __commonJS({
         return data.reduce((_data, message) => _data.set(message.id, this._add(message, options.cache)), new Collection3());
       }
       /**
+       * Options used to fetch pinned messages.
+       *
+       * @typedef {Object} FetchPinnedMessagesOptions
+       * @property {DateResolvable} [before] Consider only pinned messages before this time
+       * @property {number} [limit] The maximum number of pinned messages to return
+       * @property {boolean} [cache] Whether to cache the pinned messages
+       */
+      /**
+       * Data returned from fetching pinned messages.
+       *
+       * @typedef {Object} FetchPinnedMessagesResponse
+       * @property {MessagePin[]} items The pinned messages
+       * @property {boolean} hasMore Whether there are additional pinned messages that require a subsequent call
+       */
+      /**
+       * Pinned message data returned from fetching pinned messages.
+       *
+       * @typedef {Object} MessagePin
+       * @property {Date} pinnedAt The time the message was pinned at
+       * @property {number} pinnedTimestamp The timestamp the message was pinned at
+       * @property {Message} message The pinned message
+       */
+      /**
+       * Fetches the pinned messages of this channel and returns a collection of them.
+       * <info>The returned Collection does not contain any reaction data of the messages.
+       * Those need to be fetched separately.</info>
+       *
+       * @param {FetchPinnedMessagesOptions} [options={}] Options for fetching pinned messages
+       * @returns {Promise<FetchPinnedMessagesResponse>}
+       * @example
+       * // Get pinned messages
+       * channel.messages.fetchPins()
+       *   .then(messages => console.log(`Received ${messages.items.length} messages`))
+       *   .catch(console.error);
+       */
+      async fetchPins(options = {}) {
+        const data = await this.client.rest.get(Routes2.channelMessagesPins(this.channel.id), {
+          query: makeURLSearchParams2({
+            ...options,
+            before: options.before && new Date(options.before).toISOString()
+          })
+        });
+        return {
+          items: data.items.map((item) => ({
+            pinnedTimestamp: Date.parse(item.pinned_at),
+            get pinnedAt() {
+              return new Date(this.pinnedTimestamp);
+            },
+            message: this._add(item.message, options.cache)
+          })),
+          hasMore: data.has_more
+        };
+      }
+      /**
        * Fetches the pinned messages of this channel and returns a collection of them.
        * <info>The returned Collection does not contain any reaction data of the messages.
        * Those need to be fetched separately.</info>
        * @param {boolean} [cache=true] Whether to cache the message(s)
+       * @deprecated Use {@link MessageManager#fetchPins} instead.
        * @returns {Promise<Collection<Snowflake, Message>>}
-       * @example
-       * // Get pinned messages
-       * channel.messages.fetchPinned()
-       *   .then(messages => console.log(`Received ${messages.size} messages`))
-       *   .catch(console.error);
        */
       async fetchPinned(cache = true) {
+        if (!deprecationEmittedForFetchPinned) {
+          process2.emitWarning(
+            "The MessageManager#fetchPinned() method is deprecated. Use MessageManager#fetchPins() instead.",
+            "DeprecationWarning"
+          );
+          deprecationEmittedForFetchPinned = true;
+        }
         const data = await this.client.rest.get(Routes2.channelPins(this.channel.id));
         const messages = new Collection3();
         for (const message of data) messages.set(message.id, this._add(message, cache));
@@ -49423,7 +49349,7 @@ var require_MessageManager = __commonJS({
       async pin(message, reason) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        await this.client.rest.put(Routes2.channelPin(this.channel.id, message), { reason });
+        await this.client.rest.put(Routes2.channelMessagesPin(this.channel.id, message), { reason });
       }
       /**
        * Unpins a message from the channel's pinned messages, even if it's not cached.
@@ -49434,7 +49360,7 @@ var require_MessageManager = __commonJS({
       async unpin(message, reason) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        await this.client.rest.delete(Routes2.channelPin(this.channel.id, message), { reason });
+        await this.client.rest.delete(Routes2.channelMessagesPin(this.channel.id, message), { reason });
       }
       /**
        * Adds a reaction to a message, even if it's not cached.
@@ -50219,6 +50145,1000 @@ var require_TextBasedChannel = __commonJS({
   }
 });
 
+// node_modules/discord.js/src/util/UserFlagsBitField.js
+var require_UserFlagsBitField = __commonJS({
+  "node_modules/discord.js/src/util/UserFlagsBitField.js"(exports2, module2) {
+    "use strict";
+    var { UserFlags } = require_v106();
+    var BitField = require_BitField();
+    var UserFlagsBitField = class extends BitField {
+      /**
+       * Numeric user flags.
+       * @type {UserFlags}
+       * @memberof UserFlagsBitField
+       */
+      static Flags = UserFlags;
+    };
+    module2.exports = UserFlagsBitField;
+  }
+});
+
+// node_modules/discord.js/src/structures/User.js
+var require_User = __commonJS({
+  "node_modules/discord.js/src/structures/User.js"(exports2, module2) {
+    "use strict";
+    var { userMention } = require_dist7();
+    var { calculateUserDefaultAvatarIndex } = require_dist5();
+    var { DiscordSnowflake } = require_cjs();
+    var Base = require_Base();
+    var TextBasedChannel = require_TextBasedChannel();
+    var { _transformCollectibles } = require_Transformers();
+    var UserFlagsBitField = require_UserFlagsBitField();
+    var { emitDeprecationWarningForUserFetchFlags } = require_Util();
+    var User = class extends Base {
+      constructor(client2, data) {
+        super(client2);
+        this.id = data.id;
+        this.bot = null;
+        this.system = null;
+        this.flags = null;
+        this._patch(data);
+      }
+      _patch(data) {
+        if ("username" in data) {
+          this.username = data.username;
+        } else {
+          this.username ??= null;
+        }
+        if ("global_name" in data) {
+          this.globalName = data.global_name;
+        } else {
+          this.globalName ??= null;
+        }
+        if ("bot" in data) {
+          this.bot = Boolean(data.bot);
+        } else if (!this.partial && typeof this.bot !== "boolean") {
+          this.bot = false;
+        }
+        if ("discriminator" in data) {
+          this.discriminator = data.discriminator;
+        } else {
+          this.discriminator ??= null;
+        }
+        if ("avatar" in data) {
+          this.avatar = data.avatar;
+        } else {
+          this.avatar ??= null;
+        }
+        if ("banner" in data) {
+          this.banner = data.banner;
+        } else if (this.banner !== null) {
+          this.banner ??= void 0;
+        }
+        if ("accent_color" in data) {
+          this.accentColor = data.accent_color;
+        } else if (this.accentColor !== null) {
+          this.accentColor ??= void 0;
+        }
+        if ("system" in data) {
+          this.system = Boolean(data.system);
+        } else if (!this.partial && typeof this.system !== "boolean") {
+          this.system = false;
+        }
+        if ("public_flags" in data) {
+          this.flags = new UserFlagsBitField(data.public_flags);
+        }
+        if ("avatar_decoration" in data) {
+          this.avatarDecoration = data.avatar_decoration;
+        } else {
+          this.avatarDecoration ??= null;
+        }
+        if ("avatar_decoration_data" in data) {
+          if (data.avatar_decoration_data) {
+            this.avatarDecorationData = {
+              asset: data.avatar_decoration_data.asset,
+              skuId: data.avatar_decoration_data.sku_id
+            };
+          } else {
+            this.avatarDecorationData = null;
+          }
+        } else {
+          this.avatarDecorationData ??= null;
+        }
+        if (data.collectibles) {
+          this.collectibles = _transformCollectibles(data.collectibles);
+        } else {
+          this.collectibles = null;
+        }
+        if ("primary_guild" in data) {
+          if (data.primary_guild) {
+            this.primaryGuild = {
+              identityGuildId: data.primary_guild.identity_guild_id,
+              identityEnabled: data.primary_guild.identity_enabled,
+              tag: data.primary_guild.tag,
+              badge: data.primary_guild.badge
+            };
+          } else {
+            this.primaryGuild = null;
+          }
+        } else {
+          this.primaryGuild ??= null;
+        }
+      }
+      /**
+       * Whether this User is a partial
+       * @type {boolean}
+       * @readonly
+       */
+      get partial() {
+        return typeof this.username !== "string";
+      }
+      /**
+       * The timestamp the user was created at
+       * @type {number}
+       * @readonly
+       */
+      get createdTimestamp() {
+        return DiscordSnowflake.timestampFrom(this.id);
+      }
+      /**
+       * The time the user was created at
+       * @type {Date}
+       * @readonly
+       */
+      get createdAt() {
+        return new Date(this.createdTimestamp);
+      }
+      /**
+       * A link to the user's avatar.
+       * @param {ImageURLOptions} [options={}] Options for the image URL
+       * @returns {?string}
+       */
+      avatarURL(options = {}) {
+        return this.avatar && this.client.rest.cdn.avatar(this.id, this.avatar, options);
+      }
+      /**
+       * A link to the user's avatar decoration.
+       * @param {BaseImageURLOptions} [options={}] Options for the image URL
+       * @returns {?string}
+       */
+      avatarDecorationURL(options = {}) {
+        if (this.avatarDecorationData) {
+          return this.client.rest.cdn.avatarDecoration(this.avatarDecorationData.asset);
+        }
+        return this.avatarDecoration && this.client.rest.cdn.avatarDecoration(this.id, this.avatarDecoration, options);
+      }
+      /**
+       * A link to the user's default avatar
+       * @type {string}
+       * @readonly
+       */
+      get defaultAvatarURL() {
+        const index = this.discriminator === "0" || this.discriminator === "0000" ? calculateUserDefaultAvatarIndex(this.id) : this.discriminator % 5;
+        return this.client.rest.cdn.defaultAvatar(index);
+      }
+      /**
+       * A link to the user's avatar if they have one.
+       * Otherwise a link to their default avatar will be returned.
+       * @param {ImageURLOptions} [options={}] Options for the image URL
+       * @returns {string}
+       */
+      displayAvatarURL(options) {
+        return this.avatarURL(options) ?? this.defaultAvatarURL;
+      }
+      /**
+       * The hexadecimal version of the user accent color, with a leading hash
+       * <info>The user must be force fetched for this property to be present</info>
+       * @type {?string}
+       * @readonly
+       */
+      get hexAccentColor() {
+        if (typeof this.accentColor !== "number") return this.accentColor;
+        return `#${this.accentColor.toString(16).padStart(6, "0")}`;
+      }
+      /**
+       * A link to the user's banner. See {@link User#banner} for more info
+       * @param {ImageURLOptions} [options={}] Options for the image URL
+       * @returns {?string}
+       */
+      bannerURL(options = {}) {
+        return this.banner && this.client.rest.cdn.banner(this.id, this.banner, options);
+      }
+      /**
+       * A link to the user's guild tag badge.
+       *
+       * @param {ImageURLOptions} [options={}] Options for the image URL
+       * @returns {?string}
+       */
+      guildTagBadgeURL(options = {}) {
+        return this.primaryGuild?.badge ? this.client.rest.cdn.guildTagBadge(this.primaryGuild.identityGuildId, this.primaryGuild.badge, options) : null;
+      }
+      /**
+       * The tag of this user
+       * <info>This user's username, or their legacy tag (e.g. `hydrabolt#0001`)
+       * if they're using the legacy username system</info>
+       * @type {?string}
+       * @readonly
+       */
+      get tag() {
+        return typeof this.username === "string" ? this.discriminator === "0" || this.discriminator === "0000" ? this.username : `${this.username}#${this.discriminator}` : null;
+      }
+      /**
+       * The global name of this user, or their username if they don't have one
+       * @type {?string}
+       * @readonly
+       */
+      get displayName() {
+        return this.globalName ?? this.username;
+      }
+      /**
+       * The DM between the client's user and this user
+       * @type {?DMChannel}
+       * @readonly
+       */
+      get dmChannel() {
+        return this.client.users.dmChannel(this.id);
+      }
+      /**
+       * Creates a DM channel between the client and the user.
+       * @param {boolean} [force=false] Whether to skip the cache check and request the API
+       * @returns {Promise<DMChannel>}
+       */
+      createDM(force = false) {
+        return this.client.users.createDM(this.id, { force });
+      }
+      /**
+       * Deletes a DM channel (if one exists) between the client and the user. Resolves with the channel if successful.
+       * @returns {Promise<DMChannel>}
+       */
+      deleteDM() {
+        return this.client.users.deleteDM(this.id);
+      }
+      /**
+       * Checks if the user is equal to another.
+       * It compares id, username, discriminator, avatar, banner, accent color, and bot flags.
+       * It is recommended to compare equality by using `user.id === user2.id` unless you want to compare all properties.
+       * @param {User} user User to compare with
+       * @returns {boolean}
+       */
+      equals(user) {
+        return user && this.id === user.id && this.username === user.username && this.discriminator === user.discriminator && this.globalName === user.globalName && this.avatar === user.avatar && this.flags?.bitfield === user.flags?.bitfield && this.banner === user.banner && this.accentColor === user.accentColor && this.avatarDecoration === user.avatarDecoration && this.avatarDecorationData?.asset === user.avatarDecorationData?.asset && this.avatarDecorationData?.skuId === user.avatarDecorationData?.skuId && this.collectibles?.nameplate?.skuId === user.collectibles?.nameplate?.skuId && this.collectibles?.nameplate?.asset === user.collectibles?.nameplate?.asset && this.collectibles?.nameplate?.label === user.collectibles?.nameplate?.label && this.collectibles?.nameplate?.palette === user.collectibles?.nameplate?.palette && this.primaryGuild?.identityGuildId === user.primaryGuild?.identityGuildId && this.primaryGuild?.identityEnabled === user.primaryGuild?.identityEnabled && this.primaryGuild?.tag === user.primaryGuild?.tag && this.primaryGuild?.badge === user.primaryGuild?.badge;
+      }
+      /**
+       * Compares the user with an API user object
+       * @param {APIUser} user The API user object to compare
+       * @returns {boolean}
+       * @private
+       */
+      _equals(user) {
+        return user && this.id === user.id && this.username === user.username && this.discriminator === user.discriminator && this.globalName === user.global_name && this.avatar === user.avatar && this.flags?.bitfield === user.public_flags && ("banner" in user ? this.banner === user.banner : true) && ("accent_color" in user ? this.accentColor === user.accent_color : true) && ("avatar_decoration" in user ? this.avatarDecoration === user.avatar_decoration : true) && ("avatar_decoration_data" in user ? this.avatarDecorationData?.asset === user.avatar_decoration_data?.asset && this.avatarDecorationData?.skuId === user.avatar_decoration_data?.sku_id : true) && ("collectibles" in user ? this.collectibles?.nameplate?.skuId === user.collectibles?.nameplate?.sku_id && this.collectibles?.nameplate?.asset === user.collectibles?.nameplate?.asset && this.collectibles?.nameplate?.label === user.collectibles?.nameplate?.label && this.collectibles?.nameplate?.palette === user.collectibles?.nameplate?.palette : true) && ("primary_guild" in user ? this.primaryGuild?.identityGuildId === user.primary_guild?.identity_guild_id && this.primaryGuild?.identityEnabled === user.primary_guild?.identity_enabled && this.primaryGuild?.tag === user.primary_guild?.tag && this.primaryGuild?.badge === user.primary_guild?.badge : true);
+      }
+      /**
+       * Fetches this user's flags.
+       * @param {boolean} [force=false] Whether to skip the cache check and request the API
+       * @returns {Promise<UserFlagsBitField>}
+       * @deprecated <warn>This method is deprecated and will be removed in the next major version.
+       * Flags may still be retrieved via {@link User#fetch}.</warn>
+       */
+      fetchFlags(force = false) {
+        emitDeprecationWarningForUserFetchFlags(this.constructor.name);
+        return this.client.users.fetchFlags(this.id, { force });
+      }
+      /**
+       * Fetches this user.
+       * @param {boolean} [force=true] Whether to skip the cache check and request the API
+       * @returns {Promise<User>}
+       */
+      fetch(force = true) {
+        return this.client.users.fetch(this.id, { force });
+      }
+      /**
+       * When concatenated with a string, this automatically returns the user's mention instead of the User object.
+       * @returns {string}
+       * @example
+       * // Logs: Hello from <@123456789012345678>!
+       * console.log(`Hello from ${user}!`);
+       */
+      toString() {
+        return userMention(this.id);
+      }
+      toJSON(...props) {
+        const json = super.toJSON(
+          {
+            createdTimestamp: true,
+            defaultAvatarURL: true,
+            hexAccentColor: true,
+            tag: true
+          },
+          ...props
+        );
+        json.avatarURL = this.avatarURL();
+        json.displayAvatarURL = this.displayAvatarURL();
+        json.bannerURL = this.banner ? this.bannerURL() : this.banner;
+        json.guildTagBadgeURL = this.guildTagBadgeURL();
+        return json;
+      }
+    };
+    TextBasedChannel.applyToClass(User);
+    module2.exports = User;
+  }
+});
+
+// node_modules/discord.js/src/managers/PollAnswerVoterManager.js
+var require_PollAnswerVoterManager = __commonJS({
+  "node_modules/discord.js/src/managers/PollAnswerVoterManager.js"(exports2) {
+    "use strict";
+    var { Collection: Collection3 } = require_dist6();
+    var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
+    var { Routes: Routes2 } = require_v106();
+    var CachedManager = require_CachedManager();
+    var User = require_User();
+    var PollAnswerVoterManager = class extends CachedManager {
+      constructor(answer) {
+        super(answer.client, User);
+        this.answer = answer;
+      }
+      /**
+       * The cache of this manager
+       * @type {Collection<Snowflake, User>}
+       * @name PollAnswerVoterManager#cache
+       */
+      /**
+       * Fetches the users that voted on this poll answer. Resolves with a collection of users, mapped by their ids.
+       * @param {BaseFetchPollAnswerVotersOptions} [options={}] Options for fetching the users
+       * @returns {Promise<Collection<Snowflake, User>>}
+       */
+      async fetch({ after, limit } = {}) {
+        const poll = this.answer.poll;
+        const query = makeURLSearchParams2({ limit, after });
+        const data = await this.client.rest.get(Routes2.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
+          query
+        });
+        return data.users.reduce((coll, rawUser) => {
+          const user = this.client.users._add(rawUser);
+          this.cache.set(user.id, user);
+          return coll.set(user.id, user);
+        }, new Collection3());
+      }
+    };
+    exports2.PollAnswerVoterManager = PollAnswerVoterManager;
+  }
+});
+
+// node_modules/discord.js/src/structures/PollAnswer.js
+var require_PollAnswer = __commonJS({
+  "node_modules/discord.js/src/structures/PollAnswer.js"(exports2) {
+    "use strict";
+    var process2 = require("node:process");
+    var Base = require_Base();
+    var { Emoji } = require_Emoji();
+    var { PollAnswerVoterManager } = require_PollAnswerVoterManager();
+    var deprecationEmittedForFetchVoters = false;
+    var PollAnswer = class extends Base {
+      constructor(client2, data, poll) {
+        super(client2);
+        Object.defineProperty(this, "poll", { value: poll });
+        this.id = data.answer_id;
+        this.voters = new PollAnswerVoterManager(this);
+        Object.defineProperty(this, "_emoji", { value: null, writable: true });
+        this._patch(data);
+      }
+      _patch(data) {
+        if ("count" in data) {
+          this.voteCount = data.count;
+        } else {
+          this.voteCount ??= this.voters.cache.size;
+        }
+        this.text ??= data.poll_media?.text ?? null;
+        if (data.poll_media?.emoji) {
+          this._emoji = data.poll_media.emoji;
+        }
+      }
+      /**
+       * The emoji of this answer
+       * @type {?(GuildEmoji|Emoji)}
+       */
+      get emoji() {
+        if (!this._emoji || !this._emoji.id && !this._emoji.name) return null;
+        return this.client.emojis.cache.get(this._emoji.id) ?? new Emoji(this.client, this._emoji);
+      }
+      /**
+       * Whether this poll answer is a partial.
+       * @type {boolean}
+       * @readonly
+       */
+      get partial() {
+        return this.poll.partial || this.text === null && this.emoji === null;
+      }
+      /**
+       * Options used for fetching voters of a poll answer.
+       * @typedef {Object} BaseFetchPollAnswerVotersOptions
+       * @property {number} [limit] The maximum number of voters to fetch
+       * @property {Snowflake} [after] The user id to fetch voters after
+       */
+      /**
+       * Fetches the users that voted for this answer.
+       * @param {BaseFetchPollAnswerVotersOptions} [options={}] The options for fetching voters
+       * @returns {Promise<Collection<Snowflake, User>>}
+       * @deprecated Use {@link PollAnswerVoterManager#fetch} instead
+       */
+      fetchVoters({ after, limit } = {}) {
+        if (!deprecationEmittedForFetchVoters) {
+          process2.emitWarning("PollAnswer#fetchVoters is deprecated. Use PollAnswer#voters#fetch instead.");
+          deprecationEmittedForFetchVoters = true;
+        }
+        return this.voters.fetch({ after, limit });
+      }
+    };
+    exports2.PollAnswer = PollAnswer;
+  }
+});
+
+// node_modules/discord.js/src/structures/Poll.js
+var require_Poll = __commonJS({
+  "node_modules/discord.js/src/structures/Poll.js"(exports2) {
+    "use strict";
+    var { Collection: Collection3 } = require_dist6();
+    var Base = require_Base();
+    var { PollAnswer } = require_PollAnswer();
+    var { DiscordjsError: DiscordjsError2 } = require_DJSError();
+    var { ErrorCodes: ErrorCodes2 } = require_errors2();
+    var Poll = class extends Base {
+      constructor(client2, data, message, channel) {
+        super(client2);
+        this.channelId = data.channel_id ?? channel.id;
+        Object.defineProperty(this, "channel", { value: channel });
+        this.messageId = data.message_id ?? message.id;
+        Object.defineProperty(this, "message", { value: message });
+        this.answers = new Collection3();
+        this._patch(data);
+      }
+      _patch(data) {
+        if (data.answers) {
+          for (const answer of data.answers) {
+            const existing = this.answers.get(answer.answer_id);
+            if (existing) {
+              existing._patch(answer);
+            } else {
+              this.answers.set(answer.answer_id, new PollAnswer(this.client, answer, this));
+            }
+          }
+        }
+        if (data.results) {
+          this.resultsFinalized = data.results.is_finalized;
+          for (const answerResult of data.results.answer_counts) {
+            const answer = this.answers.get(answerResult.id);
+            answer?._patch(answerResult);
+          }
+        } else {
+          this.resultsFinalized ??= false;
+        }
+        if ("allow_multiselect" in data) {
+          this.allowMultiselect = data.allow_multiselect;
+        } else {
+          this.allowMultiselect ??= null;
+        }
+        if ("layout_type" in data) {
+          this.layoutType = data.layout_type;
+        } else {
+          this.layoutType ??= null;
+        }
+        if ("expiry" in data) {
+          this.expiresTimestamp = data.expiry && Date.parse(data.expiry);
+        } else {
+          this.expiresTimestamp ??= null;
+        }
+        if (data.question) {
+          this.question = {
+            text: data.question.text
+          };
+        } else {
+          this.question ??= {
+            text: null
+          };
+        }
+      }
+      /**
+       * The date when this poll expires
+       * @type {?Date}
+       * @readonly
+       */
+      get expiresAt() {
+        return this.expiresTimestamp && new Date(this.expiresTimestamp);
+      }
+      /**
+       * Whether this poll is a partial
+       * @type {boolean}
+       * @readonly
+       */
+      get partial() {
+        return this.allowMultiselect === null;
+      }
+      /**
+       * Fetches the message that started this poll, then updates the poll from the fetched message.
+       * @returns {Promise<Poll>}
+       */
+      async fetch() {
+        await this.channel.messages.fetch(this.messageId);
+        return this;
+      }
+      /**
+       * Ends this poll.
+       * @returns {Promise<Message>}
+       */
+      async end() {
+        if (this.expiresTimestamp !== null && Date.now() > this.expiresTimestamp) {
+          throw new DiscordjsError2(ErrorCodes2.PollAlreadyExpired);
+        }
+        return this.channel.messages.endPoll(this.messageId);
+      }
+    };
+    exports2.Poll = Poll;
+  }
+});
+
+// node_modules/discord.js/src/util/Enums.js
+var require_Enums = __commonJS({
+  "node_modules/discord.js/src/util/Enums.js"(exports2, module2) {
+    "use strict";
+    function createEnum(keys) {
+      const obj = {};
+      for (const [index, key] of keys.entries()) {
+        if (key === null) continue;
+        obj[key] = index;
+        obj[index] = key;
+      }
+      return obj;
+    }
+    module2.exports = { createEnum };
+  }
+});
+
+// node_modules/discord.js/src/util/Partials.js
+var require_Partials = __commonJS({
+  "node_modules/discord.js/src/util/Partials.js"(exports2, module2) {
+    "use strict";
+    var { createEnum } = require_Enums();
+    module2.exports = createEnum([
+      "User",
+      "Channel",
+      "GuildMember",
+      "Message",
+      "Reaction",
+      "GuildScheduledEvent",
+      "ThreadMember",
+      "SoundboardSound",
+      "Poll",
+      "PollAnswer"
+    ]);
+  }
+});
+
+// node_modules/discord.js/src/client/actions/Action.js
+var require_Action = __commonJS({
+  "node_modules/discord.js/src/client/actions/Action.js"(exports2, module2) {
+    "use strict";
+    var { Poll } = require_Poll();
+    var { PollAnswer } = require_PollAnswer();
+    var Partials2 = require_Partials();
+    var GenericAction = class {
+      constructor(client2) {
+        this.client = client2;
+      }
+      handle(data) {
+        return data;
+      }
+      getPayload(data, manager, id, partialType, cache) {
+        return this.client.options.partials.includes(partialType) ? manager._add(data, cache) : manager.cache.get(id);
+      }
+      getChannel(data) {
+        const payloadData = {};
+        const id = data.channel_id ?? data.id;
+        if (!("recipients" in data)) {
+          const recipient = data.author ?? data.user ?? { id: data.user_id };
+          if (recipient.id !== this.client.user.id) payloadData.recipients = [recipient];
+        }
+        if (id !== void 0) payloadData.id = id;
+        return data[this.client.actions.injectedChannel] ?? this.getPayload({ ...data, ...payloadData }, this.client.channels, id, Partials2.Channel);
+      }
+      getMessage(data, channel, cache) {
+        const id = data.message_id ?? data.id;
+        return data[this.client.actions.injectedMessage] ?? this.getPayload(
+          {
+            id,
+            channel_id: channel.id,
+            guild_id: data.guild_id ?? channel.guild?.id
+          },
+          channel.messages,
+          id,
+          Partials2.Message,
+          cache
+        );
+      }
+      getPoll(data, message, channel) {
+        const includePollPartial = this.client.options.partials.includes(Partials2.Poll);
+        const includePollAnswerPartial = this.client.options.partials.includes(Partials2.PollAnswer);
+        if (message.partial && (!includePollPartial || !includePollAnswerPartial)) return null;
+        if (!message.poll && includePollPartial) {
+          message.poll = new Poll(this.client, data, message, channel);
+        }
+        if (message.poll && !message.poll.answers.has(data.answer_id) && includePollAnswerPartial) {
+          const pollAnswer = new PollAnswer(this.client, data, message.poll);
+          message.poll.answers.set(data.answer_id, pollAnswer);
+        }
+        return message.poll;
+      }
+      getReaction(data, message, user) {
+        const id = data.emoji.id ?? decodeURIComponent(data.emoji.name);
+        return this.getPayload(
+          {
+            emoji: data.emoji,
+            count: message.partial ? null : 0,
+            me: user?.id === this.client.user.id
+          },
+          message.reactions,
+          id,
+          Partials2.Reaction
+        );
+      }
+      getMember(data, guild2) {
+        return this.getPayload(data, guild2.members, data.user.id, Partials2.GuildMember);
+      }
+      getUser(data) {
+        const id = data.user_id;
+        return data[this.client.actions.injectedUser] ?? this.getPayload({ id }, this.client.users, id, Partials2.User);
+      }
+      getUserFromMember(data) {
+        if (data.guild_id && data.member?.user) {
+          const guild2 = this.client.guilds.cache.get(data.guild_id);
+          if (guild2) {
+            return guild2.members._add(data.member).user;
+          } else {
+            return this.client.users._add(data.member.user);
+          }
+        }
+        return this.getUser(data);
+      }
+      getScheduledEvent(data, guild2) {
+        const id = data.guild_scheduled_event_id ?? data.id;
+        return this.getPayload(
+          { id, guild_id: data.guild_id ?? guild2.id },
+          guild2.scheduledEvents,
+          id,
+          Partials2.GuildScheduledEvent
+        );
+      }
+      getThreadMember(id, manager) {
+        return this.getPayload({ user_id: id }, manager, id, Partials2.ThreadMember, false);
+      }
+      getSoundboardSound(data, guild2) {
+        return this.getPayload(data, guild2.soundboardSounds, data.sound_id, Partials2.SoundboardSound);
+      }
+      spreadInjectedData(data) {
+        return Object.fromEntries(Object.getOwnPropertySymbols(data).map((symbol) => [symbol, data[symbol]]));
+      }
+    };
+    module2.exports = GenericAction;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/ApplicationCommandPermissionsUpdate.js
+var require_ApplicationCommandPermissionsUpdate = __commonJS({
+  "node_modules/discord.js/src/client/actions/ApplicationCommandPermissionsUpdate.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var Events2 = require_Events();
+    var ApplicationCommandPermissionsUpdateAction = class extends Action {
+      handle(data) {
+        const client2 = this.client;
+        client2.emit(Events2.ApplicationCommandPermissionsUpdate, {
+          permissions: data.permissions,
+          id: data.id,
+          guildId: data.guild_id,
+          applicationId: data.application_id
+        });
+      }
+    };
+    module2.exports = ApplicationCommandPermissionsUpdateAction;
+  }
+});
+
+// node_modules/discord.js/src/structures/AutoModerationActionExecution.js
+var require_AutoModerationActionExecution = __commonJS({
+  "node_modules/discord.js/src/structures/AutoModerationActionExecution.js"(exports2, module2) {
+    "use strict";
+    var { _transformAPIAutoModerationAction } = require_Transformers();
+    var AutoModerationActionExecution = class {
+      constructor(data, guild2) {
+        this.guild = guild2;
+        this.action = _transformAPIAutoModerationAction(data.action);
+        this.ruleId = data.rule_id;
+        this.ruleTriggerType = data.rule_trigger_type;
+        this.userId = data.user_id;
+        this.channelId = data.channel_id ?? null;
+        this.messageId = data.message_id ?? null;
+        this.alertSystemMessageId = data.alert_system_message_id ?? null;
+        this.content = data.content;
+        this.matchedKeyword = data.matched_keyword ?? null;
+        this.matchedContent = data.matched_content ?? null;
+      }
+      /**
+       * The auto moderation rule this action belongs to.
+       * @type {?AutoModerationRule}
+       * @readonly
+       */
+      get autoModerationRule() {
+        return this.guild.autoModerationRules.cache.get(this.ruleId) ?? null;
+      }
+      /**
+       * The channel where this action was triggered from.
+       * @type {?(GuildTextBasedChannel|ForumChannel|MediaChannel)}
+       * @readonly
+       */
+      get channel() {
+        return this.guild.channels.cache.get(this.channelId) ?? null;
+      }
+      /**
+       * The user that triggered this action.
+       * @type {?User}
+       * @readonly
+       */
+      get user() {
+        return this.guild.client.users.cache.get(this.userId) ?? null;
+      }
+      /**
+       * The guild member that triggered this action.
+       * @type {?GuildMember}
+       * @readonly
+       */
+      get member() {
+        return this.guild.members.cache.get(this.userId) ?? null;
+      }
+    };
+    module2.exports = AutoModerationActionExecution;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/AutoModerationActionExecution.js
+var require_AutoModerationActionExecution2 = __commonJS({
+  "node_modules/discord.js/src/client/actions/AutoModerationActionExecution.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var AutoModerationActionExecution = require_AutoModerationActionExecution();
+    var Events2 = require_Events();
+    var AutoModerationActionExecutionAction = class extends Action {
+      handle(data) {
+        const { client: client2 } = this;
+        const guild2 = client2.guilds.cache.get(data.guild_id);
+        if (guild2) {
+          client2.emit(Events2.AutoModerationActionExecution, new AutoModerationActionExecution(data, guild2));
+        }
+        return {};
+      }
+    };
+    module2.exports = AutoModerationActionExecutionAction;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/AutoModerationRuleCreate.js
+var require_AutoModerationRuleCreate = __commonJS({
+  "node_modules/discord.js/src/client/actions/AutoModerationRuleCreate.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var Events2 = require_Events();
+    var AutoModerationRuleCreateAction = class extends Action {
+      handle(data) {
+        const { client: client2 } = this;
+        const guild2 = client2.guilds.cache.get(data.guild_id);
+        if (guild2) {
+          const autoModerationRule = guild2.autoModerationRules._add(data);
+          client2.emit(Events2.AutoModerationRuleCreate, autoModerationRule);
+        }
+        return {};
+      }
+    };
+    module2.exports = AutoModerationRuleCreateAction;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/AutoModerationRuleDelete.js
+var require_AutoModerationRuleDelete = __commonJS({
+  "node_modules/discord.js/src/client/actions/AutoModerationRuleDelete.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var Events2 = require_Events();
+    var AutoModerationRuleDeleteAction = class extends Action {
+      handle(data) {
+        const { client: client2 } = this;
+        const guild2 = client2.guilds.cache.get(data.guild_id);
+        if (guild2) {
+          const autoModerationRule = guild2.autoModerationRules.cache.get(data.id);
+          if (autoModerationRule) {
+            guild2.autoModerationRules.cache.delete(autoModerationRule.id);
+            client2.emit(Events2.AutoModerationRuleDelete, autoModerationRule);
+          }
+        }
+        return {};
+      }
+    };
+    module2.exports = AutoModerationRuleDeleteAction;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/AutoModerationRuleUpdate.js
+var require_AutoModerationRuleUpdate = __commonJS({
+  "node_modules/discord.js/src/client/actions/AutoModerationRuleUpdate.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var Events2 = require_Events();
+    var AutoModerationRuleUpdateAction = class extends Action {
+      handle(data) {
+        const { client: client2 } = this;
+        const guild2 = client2.guilds.cache.get(data.guild_id);
+        if (guild2) {
+          const oldAutoModerationRule = guild2.autoModerationRules.cache.get(data.id)?._clone() ?? null;
+          const newAutoModerationRule = guild2.autoModerationRules._add(data);
+          client2.emit(Events2.AutoModerationRuleUpdate, oldAutoModerationRule, newAutoModerationRule);
+        }
+        return {};
+      }
+    };
+    module2.exports = AutoModerationRuleUpdateAction;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/ChannelCreate.js
+var require_ChannelCreate = __commonJS({
+  "node_modules/discord.js/src/client/actions/ChannelCreate.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var Events2 = require_Events();
+    var ChannelCreateAction = class extends Action {
+      handle(data) {
+        const client2 = this.client;
+        const existing = client2.channels.cache.has(data.id);
+        const channel = client2.channels._add(data);
+        if (!existing && channel) {
+          client2.emit(Events2.ChannelCreate, channel);
+        }
+        return { channel };
+      }
+    };
+    module2.exports = ChannelCreateAction;
+  }
+});
+
+// node_modules/discord.js/src/client/actions/ChannelDelete.js
+var require_ChannelDelete = __commonJS({
+  "node_modules/discord.js/src/client/actions/ChannelDelete.js"(exports2, module2) {
+    "use strict";
+    var Action = require_Action();
+    var Events2 = require_Events();
+    var ChannelDeleteAction = class extends Action {
+      handle(data) {
+        const client2 = this.client;
+        const channel = client2.channels.cache.get(data.id);
+        if (channel) {
+          client2.channels._remove(channel.id);
+          client2.emit(Events2.ChannelDelete, channel);
+        }
+      }
+    };
+    module2.exports = ChannelDeleteAction;
+  }
+});
+
+// node_modules/discord.js/src/managers/CategoryChannelChildManager.js
+var require_CategoryChannelChildManager = __commonJS({
+  "node_modules/discord.js/src/managers/CategoryChannelChildManager.js"(exports2, module2) {
+    "use strict";
+    var DataManager = require_DataManager();
+    var GuildChannel = require_GuildChannel();
+    var CategoryChannelChildManager = class extends DataManager {
+      constructor(channel) {
+        super(channel.client, GuildChannel);
+        this.channel = channel;
+      }
+      /**
+       * The channels that are a part of this category
+       * @type {Collection<Snowflake, GuildChannel>}
+       * @readonly
+       */
+      get cache() {
+        return this.guild.channels.cache.filter((channel) => channel.parentId === this.channel.id);
+      }
+      /**
+       * The guild this manager belongs to
+       * @type {Guild}
+       * @readonly
+       */
+      get guild() {
+        return this.channel.guild;
+      }
+      /**
+       * Options for creating a channel using {@link CategoryChannelChildManager#create}.
+       * @typedef {Object} CategoryCreateChannelOptions
+       * @property {string} name The name for the new channel
+       * @property {ChannelType} [type=ChannelType.GuildText] The type of the new channel.
+       * @property {string} [topic] The topic for the new channel
+       * @property {boolean} [nsfw] Whether the new channel is NSFW
+       * @property {number} [bitrate] Bitrate of the new channel in bits (only voice)
+       * @property {number} [userLimit] Maximum amount of users allowed in the new channel (only voice)
+       * @property {OverwriteResolvable[]|Collection<Snowflake, OverwriteResolvable>} [permissionOverwrites]
+       * Permission overwrites of the new channel
+       * @property {number} [position] Position of the new channel
+       * @property {number} [rateLimitPerUser] The rate limit per user (slowmode) for the new channel in seconds
+       * @property {string} [rtcRegion] The specific region of the new channel.
+       * @property {VideoQualityMode} [videoQualityMode] The camera video quality mode of the voice channel
+       * @property {number} [defaultThreadRateLimitPerUser] The initial rate limit per user (slowmode)
+       * to set on newly created threads in a channel.
+       * @property {GuildForumTagData[]} [availableTags] The tags that can be used in this channel (forum only).
+       * @property {DefaultReactionEmoji} [defaultReactionEmoji]
+       * The emoji to show in the add reaction button on a thread in a guild forum channel.
+       * @property {ThreadAutoArchiveDuration} [defaultAutoArchiveDuration]
+       * The default auto archive duration for all new threads in this channel
+       * @property {SortOrderType} [defaultSortOrder] The default sort order mode used to order posts (forum only).
+       * @property {ForumLayoutType} [defaultForumLayout] The default layout used to display posts (forum only).
+       * @property {string} [reason] Reason for creating the new channel
+       */
+      /**
+       * Creates a new channel within this category.
+       * <info>You cannot create a channel of type {@link ChannelType.GuildCategory} inside a CategoryChannel.</info>
+       * @param {CategoryCreateChannelOptions} options Options for creating the new channel
+       * @returns {Promise<GuildChannel>}
+       */
+      create(options) {
+        return this.guild.channels.create({
+          ...options,
+          parent: this.channel.id
+        });
+      }
+    };
+    module2.exports = CategoryChannelChildManager;
+  }
+});
+
+// node_modules/discord.js/src/structures/CategoryChannel.js
+var require_CategoryChannel = __commonJS({
+  "node_modules/discord.js/src/structures/CategoryChannel.js"(exports2, module2) {
+    "use strict";
+    var GuildChannel = require_GuildChannel();
+    var CategoryChannelChildManager = require_CategoryChannelChildManager();
+    var CategoryChannel = class extends GuildChannel {
+      /**
+       * The id of the parent of this channel.
+       * @name CategoryChannel#parentId
+       * @type {null}
+       */
+      /**
+       * The parent of this channel.
+       * @name CategoryChannel#parent
+       * @type {null}
+       * @readonly
+       */
+      /**
+       * Sets the category parent of this channel.
+       * <warn>It is not possible to set the parent of a CategoryChannel.</warn>
+       * @method setParent
+       * @memberof CategoryChannel
+       * @instance
+       * @param {?CategoryChannelResolvable} channel The channel to set as parent
+       * @param {SetParentOptions} [options={}] The options for setting the parent
+       * @returns {Promise<GuildChannel>}
+       */
+      /**
+       * A manager of the channels belonging to this category
+       * @type {CategoryChannelChildManager}
+       * @readonly
+       */
+      get children() {
+        return new CategoryChannelChildManager(this);
+      }
+    };
+    module2.exports = CategoryChannel;
+  }
+});
+
 // node_modules/discord.js/src/managers/DMMessageManager.js
 var require_DMMessageManager = __commonJS({
   "node_modules/discord.js/src/managers/DMMessageManager.js"(exports2, module2) {
@@ -50579,14 +51499,15 @@ var require_ThreadOnlyChannel = __commonJS({
 var require_ThreadMemberFlagsBitField = __commonJS({
   "node_modules/discord.js/src/util/ThreadMemberFlagsBitField.js"(exports2, module2) {
     "use strict";
+    var { ThreadMemberFlags } = require_v106();
     var BitField = require_BitField();
     var ThreadMemberFlagsBitField = class extends BitField {
       /**
        * Numeric thread member flags. There are currently no bitflags relevant to bots for this.
-       * @type {Object<string, number>}
+       * @type {ThreadMemberFlags}
        * @memberof ThreadMemberFlagsBitField
        */
-      static Flags = {};
+      static Flags = ThreadMemberFlags;
     };
     module2.exports = ThreadMemberFlagsBitField;
   }
@@ -51071,7 +51992,7 @@ var require_ThreadChannel = __commonJS({
       async edit(options) {
         const newData = await this.client.rest.patch(Routes2.channel(this.id), {
           body: {
-            name: (options.name ?? this.name).trim(),
+            name: options.name,
             archived: options.archived,
             auto_archive_duration: options.autoArchiveDuration,
             rate_limit_per_user: options.rateLimitPerUser,
@@ -54963,14 +55884,18 @@ var require_CommandInteraction = __commonJS({
         return this.guild?.commands.cache.get(id) ?? this.client.application.commands.cache.get(id) ?? null;
       }
       /**
-       * Represents the resolved data of a received command interaction.
-       * @typedef {Object} CommandInteractionResolvedData
+       * @typedef {Object} BaseInteractionResolvedData
        * @property {Collection<Snowflake, User>} [users] The resolved users
        * @property {Collection<Snowflake, GuildMember|APIGuildMember>} [members] The resolved guild members
        * @property {Collection<Snowflake, Role|APIRole>} [roles] The resolved roles
        * @property {Collection<Snowflake, BaseChannel|APIChannel>} [channels] The resolved channels
-       * @property {Collection<Snowflake, Message|APIMessage>} [messages] The resolved messages
        * @property {Collection<Snowflake, Attachment>} [attachments] The resolved attachments
+       */
+      /**
+       * Represents the resolved data of a received command interaction.
+       *
+       * @typedef {BaseInteractionResolvedData} CommandInteractionResolvedData
+       * @property {Collection<Snowflake, Message|APIMessage>} [messages] The resolved messages
        */
       /**
        * Represents an option of a received command interaction.
@@ -55200,10 +56125,16 @@ var require_ModalSubmitFields = __commonJS({
     var { ComponentType } = require_v106();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ModalSubmitFields = class {
-      constructor(components) {
+      constructor(components, resolved) {
         this.components = components;
+        Object.defineProperty(this, "resolved", { value: resolved ? Object.freeze(resolved) : null });
         this.fields = components.reduce((accumulator, next) => {
-          next.components.forEach((component) => accumulator.set(component.customId, component));
+          if ("components" in next) {
+            for (const component of next.components) accumulator.set(component.customId, component);
+          }
+          if ("component" in next) {
+            accumulator.set(next.component.customId, next.component);
+          }
           return accumulator;
         }, new Collection3());
       }
@@ -55222,12 +56153,152 @@ var require_ModalSubmitFields = __commonJS({
         return field;
       }
       /**
+       * Gets a component by custom id and property and checks its type.
+       *
+       * @param {string} customId The custom id of the component.
+       * @param {ComponentType[]} allowedTypes The allowed types of the component.
+       * @param {string[]} properties The properties to check for for `required`.
+       * @param {boolean} required Whether to throw an error if the component value(s) are not found.
+       * @returns {ModalData} The option, if found.
+       * @private
+       */
+      _getTypedComponent(customId, allowedTypes, properties, required) {
+        const component = this.getField(customId);
+        if (!allowedTypes.includes(component.type)) {
+          throw new DiscordjsTypeError2(
+            ErrorCodes2.ModalSubmitInteractionFieldNotFound,
+            customId,
+            component.type,
+            allowedTypes.join(", ")
+          );
+        } else if (required && properties.every((prop) => component[prop] === null || component[prop] === void 0)) {
+          throw new DiscordjsTypeError2(ErrorCodes2.ModalSubmitInteractionFieldEmpty, customId, component.type);
+        }
+        return component;
+      }
+      /**
        * Gets the value of a text input component given a custom id
        * @param {string} customId The custom id of the text input component
        * @returns {string}
        */
       getTextInputValue(customId) {
-        return this.getField(customId, ComponentType.TextInput).value;
+        return this._getTypedComponent(customId, [ComponentType.TextInput]).value;
+      }
+      /**
+       * Gets the values of a string select component given a custom id
+       *
+       * @param {string} customId The custom id of the string select component
+       * @returns {string[]}
+       */
+      getStringSelectValues(customId) {
+        return this._getTypedComponent(customId, [ComponentType.StringSelect]).values;
+      }
+      /**
+       * Gets users component
+       *
+       * @param {string} customId The custom id of the component
+       * @param {boolean} [required=false] Whether to throw an error if the component value is not found or empty
+       * @returns {?Collection<Snowflake, User>} The selected users, or null if none were selected and not required
+       */
+      getSelectedUsers(customId, required = false) {
+        const component = this._getTypedComponent(
+          customId,
+          [ComponentType.UserSelect, ComponentType.MentionableSelect],
+          ["users"],
+          required
+        );
+        return component.users ?? null;
+      }
+      /**
+       * Gets roles component
+       *
+       * @param {string} customId The custom id of the component
+       * @param {boolean} [required=false] Whether to throw an error if the component value is not found or empty
+       * @returns {?Collection<Snowflake, Role|APIRole>} The selected roles, or null if none were selected and not required
+       */
+      getSelectedRoles(customId, required = false) {
+        const component = this._getTypedComponent(
+          customId,
+          [ComponentType.RoleSelect, ComponentType.MentionableSelect],
+          ["roles"],
+          required
+        );
+        return component.roles ?? null;
+      }
+      /**
+       * Gets channels component
+       *
+       * @param {string} customId The custom id of the component
+       * @param {boolean} [required=false] Whether to throw an error if the component value is not found or empty
+       * @param {ChannelType[]} [channelTypes=[]] The allowed types of channels. If empty, all channel types are allowed.
+       * @returns {?Collection<Snowflake, GuildChannel|ThreadChannel|APIChannel>} The selected channels,
+       * or null if none were selected and not required
+       */
+      getSelectedChannels(customId, required = false, channelTypes = []) {
+        const component = this._getTypedComponent(customId, [ComponentType.ChannelSelect], ["channels"], required);
+        const channels = component.channels;
+        if (channels && channelTypes.length > 0) {
+          for (const channel of channels.values()) {
+            if (!channelTypes.includes(channel.type)) {
+              throw new DiscordjsTypeError2(
+                ErrorCodes2.ModalSubmitInteractionComponentInvalidChannelType,
+                customId,
+                channel.type,
+                channelTypes.join(", ")
+              );
+            }
+          }
+        }
+        return channels ?? null;
+      }
+      /**
+       * Gets members component
+       *
+       * @param {string} customId The custom id of the component
+       * @returns {?Collection<Snowflake, GuildMember|APIGuildMember>} The selected members,
+       * or null if none were selected or the users were not present in the guild
+       */
+      getSelectedMembers(customId) {
+        const component = this._getTypedComponent(
+          customId,
+          [ComponentType.UserSelect, ComponentType.MentionableSelect],
+          ["members"],
+          false
+        );
+        return component.members ?? null;
+      }
+      /**
+       * Gets mentionables component
+       *
+       * @param {string} customId The custom id of the component
+       * @param {boolean} [required=false] Whether to throw an error if the component value is not found or empty
+       * @returns {?ModalSelectedMentionables} The selected mentionables, or null if none were selected and not required
+       */
+      getSelectedMentionables(customId, required = false) {
+        const component = this._getTypedComponent(
+          customId,
+          [ComponentType.MentionableSelect],
+          ["users", "members", "roles"],
+          required
+        );
+        if (component.users || component.members || component.roles) {
+          return {
+            users: component.users ?? new Collection3(),
+            members: component.members ?? new Collection3(),
+            roles: component.roles ?? new Collection3()
+          };
+        }
+        return null;
+      }
+      /**
+       * Gets file upload component
+       *
+       * @param {string} customId The custom id of the component
+       * @param {boolean} [required=false] Whether to throw an error if the component value is not found or empty
+       * @returns {?Collection<Snowflake, Attachment>} The uploaded files, or null if none were uploaded and not required
+       */
+      getUploadedFiles(customId, required = false) {
+        return this._getTypedComponent(customId, [ComponentType.FileUpload], ["attachments"], required).attachments ?? null;
       }
     };
     module2.exports = ModalSubmitFields;
@@ -55238,12 +56309,15 @@ var require_ModalSubmitFields = __commonJS({
 var require_ModalSubmitInteraction = __commonJS({
   "node_modules/discord.js/src/structures/ModalSubmitInteraction.js"(exports2, module2) {
     "use strict";
+    var { Collection: Collection3 } = require_dist6();
     var { lazy } = require_dist();
     var BaseInteraction = require_BaseInteraction();
     var InteractionWebhook = require_InteractionWebhook();
     var ModalSubmitFields = require_ModalSubmitFields();
     var InteractionResponses = require_InteractionResponses();
+    var { transformResolved } = require_Util();
     var getMessage = lazy(() => require_Message().Message);
+    var getAttachment = lazy(() => require_Attachment());
     var ModalSubmitInteraction = class _ModalSubmitInteraction extends BaseInteraction {
       constructor(client2, data) {
         super(client2, data);
@@ -55253,8 +56327,16 @@ var require_ModalSubmitInteraction = __commonJS({
         } else {
           this.message = null;
         }
-        this.components = data.data.components?.map((component) => _ModalSubmitInteraction.transformComponent(component));
-        this.fields = new ModalSubmitFields(this.components);
+        this.components = data.data.components?.map(
+          (component) => _ModalSubmitInteraction.transformComponent(component, data.data.resolved, {
+            client: this.client,
+            guild: this.guild
+          })
+        );
+        this.fields = new ModalSubmitFields(
+          this.components,
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data.data.resolved)
+        );
         this.deferred = false;
         this.replied = false;
         this.ephemeral = null;
@@ -55263,17 +56345,82 @@ var require_ModalSubmitInteraction = __commonJS({
       /**
        * Transforms component data to discord.js-compatible data
        * @param {*} rawComponent The data to transform
+       * @param {APIInteractionDataResolved} [resolved] The resolved data for the interaction
+       * @param {*} [extra] Extra data required for the transformation
        * @returns {ModalData[]}
        */
-      static transformComponent(rawComponent) {
-        return rawComponent.components ? {
+      static transformComponent(rawComponent, resolved, { client: client2, guild: guild2 } = {}) {
+        if ("components" in rawComponent) {
+          return {
+            type: rawComponent.type,
+            id: rawComponent.id,
+            components: rawComponent.components.map(
+              (component) => this.transformComponent(component, resolved, { client: client2, guild: guild2 })
+            )
+          };
+        }
+        if ("component" in rawComponent) {
+          return {
+            type: rawComponent.type,
+            id: rawComponent.id,
+            component: this.transformComponent(rawComponent.component, resolved, { client: client2, guild: guild2 })
+          };
+        }
+        const data = {
           type: rawComponent.type,
-          components: rawComponent.components.map((component) => this.transformComponent(component))
-        } : {
-          value: rawComponent.value,
-          type: rawComponent.type,
-          customId: rawComponent.custom_id
+          id: rawComponent.id
         };
+        if ("custom_id" in rawComponent) data.customId = rawComponent.custom_id;
+        if ("value" in rawComponent) data.value = rawComponent.value;
+        if (rawComponent.values) {
+          data.values = rawComponent.values;
+          if (resolved) {
+            const { members, users, channels, roles, attachments } = resolved;
+            const valueSet = new Set(rawComponent.values);
+            if (users) {
+              data.users = new Collection3();
+              for (const [id, user] of Object.entries(users)) {
+                if (valueSet.has(id)) {
+                  data.users.set(id, client2.users._add(user));
+                }
+              }
+            }
+            if (channels) {
+              data.channels = new Collection3();
+              for (const [id, apiChannel] of Object.entries(channels)) {
+                if (valueSet.has(id)) {
+                  data.channels.set(id, client2.channels._add(apiChannel, guild2) ?? apiChannel);
+                }
+              }
+            }
+            if (members) {
+              data.members = new Collection3();
+              for (const [id, member] of Object.entries(members)) {
+                if (valueSet.has(id)) {
+                  const user = users?.[id];
+                  data.members.set(id, guild2?.members._add({ user, ...member }) ?? member);
+                }
+              }
+            }
+            if (roles) {
+              data.roles = new Collection3();
+              for (const [id, role] of Object.entries(roles)) {
+                if (valueSet.has(id)) {
+                  data.roles.set(id, guild2?.roles._add(role) ?? role);
+                }
+              }
+            }
+            if (attachments) {
+              data.attachments = new Collection3();
+              for (const [id, attachment] of Object.entries(attachments)) {
+                if (valueSet.has(id)) {
+                  data.attachments.set(id, new (getAttachment())(attachment));
+                }
+              }
+            }
+          }
+        }
+        return data;
       }
       /**
        * Whether this is from a {@link MessageComponentInteraction}.
@@ -55669,9 +56816,14 @@ var require_MessagePollVoteAdd = __commonJS({
         if (!channel?.isTextBased()) return false;
         const message = this.getMessage(data, channel);
         if (!message) return false;
-        const { poll } = message;
-        const answer = poll?.answers.get(data.answer_id);
+        const poll = this.getPoll(data, message, channel);
+        if (!poll) return false;
+        const answer = poll.answers.get(data.answer_id);
         if (!answer) return false;
+        const user = this.getUser(data);
+        if (user) {
+          answer.voters._add(user);
+        }
         answer.voteCount++;
         this.client.emit(Events2.MessagePollVoteAdd, answer, data.user_id);
         return { poll };
@@ -55693,10 +56845,14 @@ var require_MessagePollVoteRemove = __commonJS({
         if (!channel?.isTextBased()) return false;
         const message = this.getMessage(data, channel);
         if (!message) return false;
-        const { poll } = message;
-        const answer = poll?.answers.get(data.answer_id);
+        const poll = this.getPoll(data, message, channel);
+        if (!poll) return false;
+        const answer = poll.answers.get(data.answer_id);
         if (!answer) return false;
-        answer.voteCount--;
+        answer.voters.cache.delete(data.user_id);
+        if (answer.voteCount > 0) {
+          answer.voteCount--;
+        }
         this.client.emit(Events2.MessagePollVoteRemove, answer, data.user_id);
         return { poll };
       }
@@ -56284,73 +57440,73 @@ var require_ActionsManager = __commonJS({
       injectedMessage = Symbol("djs.actions.injectedMessage");
       constructor(client2) {
         this.client = client2;
-        this.register(require_ApplicationCommandPermissionsUpdate());
-        this.register(require_AutoModerationActionExecution2());
-        this.register(require_AutoModerationRuleCreate());
-        this.register(require_AutoModerationRuleDelete());
-        this.register(require_AutoModerationRuleUpdate());
-        this.register(require_ChannelCreate());
-        this.register(require_ChannelDelete());
-        this.register(require_ChannelUpdate());
-        this.register(require_EntitlementCreate());
-        this.register(require_EntitlementDelete());
-        this.register(require_EntitlementUpdate());
-        this.register(require_GuildAuditLogEntryCreate());
-        this.register(require_GuildBanAdd());
-        this.register(require_GuildBanRemove());
-        this.register(require_GuildChannelsPositionUpdate());
-        this.register(require_GuildDelete());
-        this.register(require_GuildEmojiCreate());
-        this.register(require_GuildEmojiDelete());
-        this.register(require_GuildEmojiUpdate());
-        this.register(require_GuildEmojisUpdate());
-        this.register(require_GuildIntegrationsUpdate());
-        this.register(require_GuildMemberRemove());
-        this.register(require_GuildMemberUpdate());
-        this.register(require_GuildRoleCreate());
-        this.register(require_GuildRoleDelete());
-        this.register(require_GuildRoleUpdate());
-        this.register(require_GuildRolesPositionUpdate());
-        this.register(require_GuildScheduledEventCreate());
-        this.register(require_GuildScheduledEventDelete());
-        this.register(require_GuildScheduledEventUpdate());
-        this.register(require_GuildScheduledEventUserAdd());
-        this.register(require_GuildScheduledEventUserRemove());
-        this.register(require_GuildSoundboardSoundDelete());
-        this.register(require_GuildStickerCreate());
-        this.register(require_GuildStickerDelete());
-        this.register(require_GuildStickerUpdate());
-        this.register(require_GuildStickersUpdate());
-        this.register(require_GuildUpdate());
-        this.register(require_InteractionCreate());
-        this.register(require_InviteCreate());
-        this.register(require_InviteDelete());
-        this.register(require_MessageCreate());
-        this.register(require_MessageDelete());
-        this.register(require_MessageDeleteBulk());
-        this.register(require_MessagePollVoteAdd());
-        this.register(require_MessagePollVoteRemove());
-        this.register(require_MessageReactionAdd());
-        this.register(require_MessageReactionRemove());
-        this.register(require_MessageReactionRemoveAll());
-        this.register(require_MessageReactionRemoveEmoji());
-        this.register(require_MessageUpdate());
-        this.register(require_PresenceUpdate());
-        this.register(require_StageInstanceCreate());
-        this.register(require_StageInstanceDelete());
-        this.register(require_StageInstanceUpdate());
-        this.register(require_ThreadCreate());
-        this.register(require_ThreadDelete());
-        this.register(require_ThreadListSync());
-        this.register(require_ThreadMemberUpdate());
-        this.register(require_ThreadMembersUpdate());
-        this.register(require_TypingStart());
-        this.register(require_UserUpdate());
-        this.register(require_VoiceStateUpdate());
-        this.register(require_WebhooksUpdate());
+        this.ApplicationCommandPermissionsUpdate = this.load(require_ApplicationCommandPermissionsUpdate());
+        this.AutoModerationActionExecution = this.load(require_AutoModerationActionExecution2());
+        this.AutoModerationRuleCreate = this.load(require_AutoModerationRuleCreate());
+        this.AutoModerationRuleDelete = this.load(require_AutoModerationRuleDelete());
+        this.AutoModerationRuleUpdate = this.load(require_AutoModerationRuleUpdate());
+        this.ChannelCreate = this.load(require_ChannelCreate());
+        this.ChannelDelete = this.load(require_ChannelDelete());
+        this.ChannelUpdate = this.load(require_ChannelUpdate());
+        this.EntitlementCreate = this.load(require_EntitlementCreate());
+        this.EntitlementDelete = this.load(require_EntitlementDelete());
+        this.EntitlementUpdate = this.load(require_EntitlementUpdate());
+        this.GuildAuditLogEntryCreate = this.load(require_GuildAuditLogEntryCreate());
+        this.GuildBanAdd = this.load(require_GuildBanAdd());
+        this.GuildBanRemove = this.load(require_GuildBanRemove());
+        this.GuildChannelsPositionUpdate = this.load(require_GuildChannelsPositionUpdate());
+        this.GuildDelete = this.load(require_GuildDelete());
+        this.GuildEmojiCreate = this.load(require_GuildEmojiCreate());
+        this.GuildEmojiDelete = this.load(require_GuildEmojiDelete());
+        this.GuildEmojiUpdate = this.load(require_GuildEmojiUpdate());
+        this.GuildEmojisUpdate = this.load(require_GuildEmojisUpdate());
+        this.GuildIntegrationsUpdate = this.load(require_GuildIntegrationsUpdate());
+        this.GuildMemberRemove = this.load(require_GuildMemberRemove());
+        this.GuildMemberUpdate = this.load(require_GuildMemberUpdate());
+        this.GuildRoleCreate = this.load(require_GuildRoleCreate());
+        this.GuildRoleDelete = this.load(require_GuildRoleDelete());
+        this.GuildRoleUpdate = this.load(require_GuildRoleUpdate());
+        this.GuildRolesPositionUpdate = this.load(require_GuildRolesPositionUpdate());
+        this.GuildScheduledEventCreate = this.load(require_GuildScheduledEventCreate());
+        this.GuildScheduledEventDelete = this.load(require_GuildScheduledEventDelete());
+        this.GuildScheduledEventUpdate = this.load(require_GuildScheduledEventUpdate());
+        this.GuildScheduledEventUserAdd = this.load(require_GuildScheduledEventUserAdd());
+        this.GuildScheduledEventUserRemove = this.load(require_GuildScheduledEventUserRemove());
+        this.GuildSoundboardSoundDelete = this.load(require_GuildSoundboardSoundDelete());
+        this.GuildStickerCreate = this.load(require_GuildStickerCreate());
+        this.GuildStickerDelete = this.load(require_GuildStickerDelete());
+        this.GuildStickerUpdate = this.load(require_GuildStickerUpdate());
+        this.GuildStickersUpdate = this.load(require_GuildStickersUpdate());
+        this.GuildUpdate = this.load(require_GuildUpdate());
+        this.InteractionCreate = this.load(require_InteractionCreate());
+        this.InviteCreate = this.load(require_InviteCreate());
+        this.InviteDelete = this.load(require_InviteDelete());
+        this.MessageCreate = this.load(require_MessageCreate());
+        this.MessageDelete = this.load(require_MessageDelete());
+        this.MessageDeleteBulk = this.load(require_MessageDeleteBulk());
+        this.MessagePollVoteAdd = this.load(require_MessagePollVoteAdd());
+        this.MessagePollVoteRemove = this.load(require_MessagePollVoteRemove());
+        this.MessageReactionAdd = this.load(require_MessageReactionAdd());
+        this.MessageReactionRemove = this.load(require_MessageReactionRemove());
+        this.MessageReactionRemoveAll = this.load(require_MessageReactionRemoveAll());
+        this.MessageReactionRemoveEmoji = this.load(require_MessageReactionRemoveEmoji());
+        this.MessageUpdate = this.load(require_MessageUpdate());
+        this.PresenceUpdate = this.load(require_PresenceUpdate());
+        this.StageInstanceCreate = this.load(require_StageInstanceCreate());
+        this.StageInstanceDelete = this.load(require_StageInstanceDelete());
+        this.StageInstanceUpdate = this.load(require_StageInstanceUpdate());
+        this.ThreadCreate = this.load(require_ThreadCreate());
+        this.ThreadDelete = this.load(require_ThreadDelete());
+        this.ThreadListSync = this.load(require_ThreadListSync());
+        this.ThreadMemberUpdate = this.load(require_ThreadMemberUpdate());
+        this.ThreadMembersUpdate = this.load(require_ThreadMembersUpdate());
+        this.TypingStart = this.load(require_TypingStart());
+        this.UserUpdate = this.load(require_UserUpdate());
+        this.VoiceStateUpdate = this.load(require_VoiceStateUpdate());
+        this.WebhooksUpdate = this.load(require_WebhooksUpdate());
       }
-      register(Action) {
-        this[Action.name.replace(/Action$/, "")] = new Action(this.client);
+      load(Action) {
+        return new Action(this.client);
       }
     };
     module2.exports = ActionsManager2;
@@ -63110,8 +64266,6 @@ var require_ClientUser = __commonJS({
             banner: banner && await resolveImage(banner)
           }
         });
-        this.client.token = data.token;
-        this.client.rest.setToken(data.token);
         const { updated } = this.client.actions.UserUpdate.handle(data);
         return updated ?? this;
       }
@@ -63636,6 +64790,7 @@ var require_WebSocketManager = __commonJS({
     var Status2 = require_Status();
     var WebSocketShardEvents = require_WebSocketShardEvents();
     var zlib;
+    var deprecationEmitted = false;
     try {
       zlib = require("zlib-sync");
     } catch {
@@ -63883,6 +65038,14 @@ var require_WebSocketManager = __commonJS({
       triggerClientReady() {
         this.status = Status2.Ready;
         this.client.readyTimestamp = Date.now();
+        if (this.client.emit("ready", this.client) && !deprecationEmitted) {
+          deprecationEmitted = true;
+          process2.emitWarning(
+            // eslint-disable-next-line max-len
+            "The ready event has been renamed to clientReady to distinguish it from the gateway READY event and will only emit under that name in v15. Please use clientReady instead.",
+            "DeprecationWarning"
+          );
+        }
         this.client.emit(Events2.ClientReady, this.client);
         this.handlePacket();
       }
@@ -65272,13 +66435,11 @@ var require_GuildChannelManager = __commonJS({
       async createWebhook({ channel, name, avatar, reason }) {
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
-        if (typeof avatar === "string" && !avatar.startsWith("data:")) {
-          avatar = await resolveImage(avatar);
-        }
+        const resolvedImage = await resolveImage(avatar);
         const data = await this.client.rest.post(Routes2.channelWebhooks(id), {
           body: {
             name,
-            avatar
+            avatar: resolvedImage
           },
           reason
         });
@@ -65885,6 +67046,7 @@ var require_GuildInviteManager = __commonJS({
 var require_GuildMemberManager = __commonJS({
   "node_modules/discord.js/src/managers/GuildMemberManager.js"(exports2, module2) {
     "use strict";
+    var { process: process2 } = require("node:process");
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
@@ -65895,9 +67057,11 @@ var require_GuildMemberManager = __commonJS({
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var { GuildMember } = require_GuildMember();
     var { Role } = require_Role();
+    var { resolveImage } = require_DataResolver();
     var Events2 = require_Events();
     var { GuildMemberFlagsBitField } = require_GuildMemberFlagsBitField();
     var Partials2 = require_Partials();
+    var deprecatedEmittedForEditSoleNickname = false;
     var GuildMemberManager = class extends CachedManager {
       constructor(guild2, iterable) {
         super(guild2.client, GuildMember, iterable);
@@ -66178,8 +67342,8 @@ var require_GuildMemberManager = __commonJS({
        * @property {string} [reason] Reason for editing this user
        */
       /**
-       * Edits a member of the guild.
-       * <info>The user must be a member of the guild</info>
+       * Edits a member of a guild.
+       *
        * @param {UserResolvable} user The member to edit
        * @param {GuildMemberEditOptions} options The options to provide
        * @returns {Promise<GuildMember>}
@@ -66209,15 +67373,52 @@ var require_GuildMemberManager = __commonJS({
         let endpoint;
         if (id === this.client.user.id) {
           const keys = Object.keys(options);
-          if (keys.length === 1 && keys[0] === "nick") endpoint = Routes2.guildMember(this.guild.id);
-          else endpoint = Routes2.guildMember(this.guild.id, id);
-        } else {
-          endpoint = Routes2.guildMember(this.guild.id, id);
+          if (keys.length === 1 && keys[0] === "nick") {
+            endpoint = Routes2.guildMember(this.guild.id, "@me");
+            if (!deprecatedEmittedForEditSoleNickname) {
+              process2.emitWarning(
+                // eslint-disable-next-line max-len
+                "You should use GuildMemberManager#editMe() when changing your nickname. Due to Discord's API changes, GuildMemberManager#edit() will end up requiring MANAGE_NICKNAMES in v15.",
+                "DeprecationWarning"
+              );
+              deprecatedEmittedForEditSoleNickname = true;
+            }
+          }
         }
+        endpoint ??= Routes2.guildMember(this.guild.id, id);
         const d = await this.client.rest.patch(endpoint, { body: options, reason });
         const clone = this.cache.get(id)?._clone();
         clone?._patch(d);
         return clone ?? this._add(d, false);
+      }
+      /**
+       * The data for editing the current application's guild member.
+       *
+       * @typedef {Object} GuildMemberEditMeOptions
+       * @property {?string} [nick] The nickname to set
+       * @property {?(BufferResolvable|Base64Resolvable)} [banner] The banner to set
+       * @property {?(BufferResolvable|Base64Resolvable)} [avatar] The avatar to set
+       * @property {?string} [bio] The bio to set
+       * @property {string} [reason] The reason to use
+       */
+      /**
+       * Edits the current application's guild member in a guild.
+       *
+       * @param {GuildMemberEditMeOptions} options The options to provide
+       * @returns {Promise<GuildMember>}
+       */
+      async editMe({ reason, ...options }) {
+        const data = await this.client.rest.patch(Routes2.guildMember(this.guild.id, "@me"), {
+          body: {
+            ...options,
+            banner: options.banner && await resolveImage(options.banner),
+            avatar: options.avatar && await resolveImage(options.avatar)
+          },
+          reason
+        });
+        const clone = this.me?._clone();
+        clone?._patch(data);
+        return clone ?? this._add(data, false);
       }
       /**
        * Options used for pruning guild members.
@@ -67375,6 +68576,8 @@ var require_RoleManager = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var { setPosition, resolveColor } = require_Util();
     var cacheWarningEmitted = false;
+    var deprecationEmittedForCreate = false;
+    var deprecationEmittedForEdit = false;
     var RoleManager = class extends CachedManager {
       constructor(guild2, iterable) {
         super(guild2.client, Role, iterable);
@@ -67408,7 +68611,7 @@ var require_RoleManager = __commonJS({
        * @example
        * // Fetch a single role
        * message.guild.roles.fetch('222078108977594368')
-       *   .then(role => console.log(`The role color is: ${role.color}`))
+       *   .then(role => console.log(`The role color is: ${role.colors.primaryColor}`))
        *   .catch(console.error);
        */
       async fetch(id, { cache = true, force = false } = {}) {
@@ -67455,10 +68658,22 @@ var require_RoleManager = __commonJS({
        * @returns {?Snowflake}
        */
       /**
+       * @typedef {Object} RoleColorsResolvable
+       * @property {ColorResolvable} primaryColor The primary color of the role
+       * @property {ColorResolvable} [secondaryColor] The secondary color of the role.
+       * This will make the role a gradient between the other provided colors
+       * @property {ColorResolvable} [tertiaryColor] The tertiary color of the role.
+       * When sending `tertiaryColor` the API enforces the role color to be a holographic style
+       * with values of `primaryColor = 11127295`, `secondaryColor = 16759788`, and `tertiaryColor = 16761760`.
+       * These values are available as a constant: `Constants.HolographicStyle`
+       */
+      /**
        * Options used to create a new role.
        * @typedef {Object} RoleCreateOptions
        * @property {string} [name] The name of the new role
        * @property {ColorResolvable} [color] The data to create the role with
+       * <warn>This property is deprecated. Use `colors` instead.</warn>
+       * @property {RoleColorsResolvable} [colors] The colors to create the role with
        * @property {boolean} [hoist] Whether or not the new role should be hoisted
        * @property {PermissionResolvable} [permissions] The permissions for the new role
        * @property {number} [position] The position of the new role
@@ -67483,25 +68698,56 @@ var require_RoleManager = __commonJS({
        * // Create a new role with data and a reason
        * guild.roles.create({
        *   name: 'Super Cool Blue People',
-       *   color: Colors.Blue,
        *   reason: 'we needed a role for Super Cool People',
+       *   colors: {
+       *     primaryColor: Colors.Blue,
+       *   },
+       * })
+       *   .then(console.log)
+       *   .catch(console.error);
+       * @example
+       * // Create a role with holographic colors
+       * guild.roles.create({
+       *   name: 'Holographic Role',
+       *   reason: 'Creating a role with holographic effect',
+       *   colors: {
+       *     primaryColor: Constants.HolographicStyle.Primary,
+       *     secondaryColor: Constants.HolographicStyle.Secondary,
+       *     tertiaryColor: Constants.HolographicStyle.Tertiary,
+       *   },
        * })
        *   .then(console.log)
        *   .catch(console.error);
        */
       async create(options = {}) {
-        let { name, color, hoist, permissions, position, mentionable, reason, icon, unicodeEmoji } = options;
-        color &&= resolveColor(color);
+        let { permissions, icon } = options;
+        const { name, color, hoist, position, mentionable, reason, unicodeEmoji } = options;
         if (permissions !== void 0) permissions = new PermissionsBitField2(permissions);
         if (icon) {
           const guildEmojiURL = this.guild.emojis.resolve(icon)?.imageURL();
           icon = guildEmojiURL ? await resolveImage(guildEmojiURL) : await resolveImage(icon);
           if (typeof icon !== "string") icon = void 0;
         }
+        let colors = options.colors && {
+          primary_color: resolveColor(options.colors.primaryColor),
+          secondary_color: options.colors.secondaryColor && resolveColor(options.colors.secondaryColor),
+          tertiary_color: options.colors.tertiaryColor && resolveColor(options.colors.tertiaryColor)
+        };
+        if (color !== void 0) {
+          if (!deprecationEmittedForCreate) {
+            process2.emitWarning(`Passing "color" to RoleManager#create() is deprecated. Use "colors" instead.`);
+          }
+          deprecationEmittedForCreate = true;
+          colors = {
+            primary_color: resolveColor(color),
+            secondary_color: null,
+            tertiary_color: null
+          };
+        }
         const data = await this.client.rest.post(Routes2.guildRoles(this.guild.id), {
           body: {
             name,
-            color,
+            colors,
             hoist,
             permissions,
             mentionable,
@@ -67545,9 +68791,25 @@ var require_RoleManager = __commonJS({
           icon = guildEmojiURL ? await resolveImage(guildEmojiURL) : await resolveImage(icon);
           if (typeof icon !== "string") icon = void 0;
         }
+        let colors = options.colors && {
+          primary_color: resolveColor(options.colors.primaryColor),
+          secondary_color: options.colors.secondaryColor && resolveColor(options.colors.secondaryColor),
+          tertiary_color: options.colors.tertiaryColor && resolveColor(options.colors.tertiaryColor)
+        };
+        if (options.color !== void 0) {
+          if (!deprecationEmittedForEdit) {
+            process2.emitWarning(`Passing "color" to RoleManager#edit() is deprecated. Use "colors" instead.`);
+          }
+          deprecationEmittedForEdit = true;
+          colors = {
+            primary_color: resolveColor(options.color),
+            secondary_color: null,
+            tertiary_color: null
+          };
+        }
         const body = {
           name: options.name,
-          color: options.color === void 0 ? void 0 : resolveColor(options.color),
+          colors,
           hoist: options.hoist,
           permissions: options.permissions === void 0 ? void 0 : new PermissionsBitField2(options.permissions),
           mentionable: options.mentionable,
@@ -68437,6 +69699,7 @@ var require_Guild = __commonJS({
        * @property {number} [afkTimeout] The AFK timeout of the guild
        * @property {?(BufferResolvable|Base64Resolvable)} [icon] The icon of the guild
        * @property {GuildMemberResolvable} [owner] The owner of the guild
+       * <warn>This property is **deprecated** as API related to guild ownership may no longer be used.</warn>
        * @property {?(BufferResolvable|Base64Resolvable)} [splash] The invite splash image of the guild
        * @property {?(BufferResolvable|Base64Resolvable)} [discoverySplash] The discovery splash image of the guild
        * @property {?(BufferResolvable|Base64Resolvable)} [banner] The banner of the guild
@@ -68775,12 +70038,7 @@ var require_Guild = __commonJS({
        * @param {GuildMemberResolvable} owner The new owner of the guild
        * @param {string} [reason] Reason for setting the new owner
        * @returns {Promise<Guild>}
-       * @example
-       * // Edit the guild owner
-       * guild.setOwner(guild.members.cache.first())
-       *  .then(guild => guild.fetchOwner())
-       *  .then(owner => console.log(`Updated the guild owner to ${owner.displayName}`))
-       *  .catch(console.error);
+       * @deprecated API related to guild ownership may no longer be used.
        */
       setOwner(owner, reason) {
         return this.edit({ owner, reason });
@@ -68913,11 +70171,7 @@ var require_Guild = __commonJS({
        * @param {GuildMFALevel} level The MFA level
        * @param {string} [reason] Reason for changing the guild's MFA level
        * @returns {Promise<Guild>}
-       * @example
-       * // Set the MFA level of the guild to Elevated
-       * guild.setMFALevel(GuildMFALevel.Elevated)
-       *   .then(guild => console.log("Set guild's MFA level to Elevated"))
-       *   .catch(console.error);
+       * @deprecated API related to guild ownership may no longer be used.
        */
       async setMFALevel(level, reason) {
         await this.client.rest.post(Routes2.guildMFA(this.id), {
@@ -68945,6 +70199,7 @@ var require_Guild = __commonJS({
       /**
        * Deletes the guild.
        * @returns {Promise<Guild>}
+       * @deprecated API related to guild ownership may no longer be used.
        * @example
        * // Delete a guild
        * guild.delete()
@@ -69203,6 +70458,7 @@ var require_GuildManager = __commonJS({
        * Creates a guild.
        * <warn>This is only available to bots in fewer than 10 guilds.</warn>
        * @param {GuildCreateOptions} options Options for creating the guild
+       * @deprecated API related to guild ownership may no longer be used.
        * @returns {Promise<Guild>} The guild that was created
        */
       async create({
@@ -70614,7 +71870,7 @@ var require_Client = __commonJS({
         return this.token.split(".").map((val, i) => i > 1 ? val.replace(/./g, "*") : val).join(".");
       }
       /**
-       * Calls {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval} on a script
+       * Calls {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/eval} on a script
        * with the client as `this`.
        * @param {string} script Script to eval
        * @returns {*}
@@ -71816,6 +73072,7 @@ var require_src = __commonJS({
     exports2.Formatters = require_Formatters();
     exports2.GuildMemberFlagsBitField = require_GuildMemberFlagsBitField().GuildMemberFlagsBitField;
     exports2.IntentsBitField = require_IntentsBitField();
+    exports2.InviteFlagsBitField = require_InviteFlagsBitField().InviteFlagsBitField;
     exports2.LimitedCollection = require_LimitedCollection();
     exports2.MessageFlagsBitField = require_MessageFlagsBitField();
     exports2.Options = require_Options();
@@ -71861,6 +73118,7 @@ var require_src = __commonJS({
     exports2.GuildTextThreadManager = require_GuildTextThreadManager();
     exports2.MessageManager = require_MessageManager();
     exports2.PermissionOverwriteManager = require_PermissionOverwriteManager();
+    exports2.PollAnswerVoterManager = require_PollAnswerVoterManager().PollAnswerVoterManager;
     exports2.PresenceManager = require_PresenceManager();
     exports2.ReactionManager = require_ReactionManager();
     exports2.ReactionUserManager = require_ReactionUserManager();
@@ -71904,6 +73162,7 @@ var require_src = __commonJS({
     exports2.Component = require_Component();
     exports2.ContainerComponent = require_ContainerComponent();
     exports2.ContextMenuCommandInteraction = require_ContextMenuCommandInteraction();
+    exports2.DirectoryChannel = require_DirectoryChannel();
     exports2.DMChannel = require_DMChannel();
     exports2.Embed = require_Embed();
     exports2.EmbedBuilder = require_EmbedBuilder();
@@ -71937,6 +73196,7 @@ var require_src = __commonJS({
     exports2.Invite = require_Invite();
     exports2.InviteStageInstance = require_InviteStageInstance();
     exports2.InviteGuild = require_InviteGuild();
+    exports2.LabelComponent = require_LabelComponent();
     exports2.Message = require_Message().Message;
     exports2.Attachment = require_Attachment();
     exports2.AttachmentBuilder = require_AttachmentBuilder();
