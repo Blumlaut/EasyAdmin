@@ -20375,7 +20375,13 @@ var require_common = __commonJS({
        *
        * Applies to channel types: Text
        */
-      PinMessages: 1n << 51n
+      PinMessages: 1n << 51n,
+      /**
+       * @unstable Allows for bypassing slowmode restrictions. Not (yet) documented.
+       *
+       * Applies to text-based and thread-based channel types.
+       */
+      BypassSlowmode: 1n << 52n
     };
     Object.freeze(exports2.PermissionFlagsBits);
   }
