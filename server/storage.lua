@@ -10,12 +10,12 @@
 ------------------------------------
 ------------------------------------
 
-local currentVersion = 1
 banlist = {}
 actions = {}
 
 local function LoadList(fileName)
     local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
+    local currentVersion = GetConvar("$ea_storageAPIVersion", 1)
     local defaultData = {
         version = currentVersion,
         data = {}
@@ -208,6 +208,7 @@ Storage = {
 }
 
 Citizen.CreateThread(function()
+    local currentVersion = GetConvar("$ea_storageAPIVersion", 1)
     local banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
     if banContent then
         local data = json.decode(banContent)
