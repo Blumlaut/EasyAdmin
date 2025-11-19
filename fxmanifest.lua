@@ -89,6 +89,7 @@ convar_category 'EasyAdmin' {
         { "Enable Allowlist", "$ea_enableAllowlist", "CV_BOOL", "false" },
         { "Routing Bucket Options", "$ea_routingBucketOptions", "CV_BOOL", "false" },
         { "Enable Action History", "$ea_enableActionHistory", "CV_BOOL", "true" },
-        { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "30" }, -- Recommended time is 30 days
+        { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "30" }, -- Recommended time is 30 days,
+        { "Storage API Version", "$ea_storageAPIVersion", "CV_INT", "1"} -- Not recommended to edit unless you know what you are doing
     }
 }
