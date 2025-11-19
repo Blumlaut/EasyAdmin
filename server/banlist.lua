@@ -477,14 +477,5 @@ end
 ---@return boolean @True if the identifier is banned, false otherwise
 function IsIdentifierBanned(theIdentifier)
     return Storage.getBanIdentifier(theIdentifier)
-    -- local identifierfound = false
-    -- for index,value in ipairs(blacklist) do
-    --     for i,identifier in ipairs(value.identifiers) do
-    --         if theIdentifier == identifier then
-    --             identifierfound = true
-    --         end
-    --     end
-    -- end
-    -- return identifierfound
 end
 exports('IsIdentifierBanned', IsIdentifierBanned)
