@@ -848,7 +848,7 @@ function GenerateMenu() -- this is a big ass function
 								if action.action == "BAN" and permissions["player.ban.remove"] then
 									local actionUnban = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
 									actionUnban.Activated = function(ParentMenu, SelectedItem)
-										TriggerServerEvent("EasyAdmin:UnbanPlayer", action.id)
+										TriggerServerEvent("EasyAdmin:UnbanPlayer", action.banid)
 										TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("unbanplayer"))
 										TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.discord)
 										ParentMenu:Visible(false)
