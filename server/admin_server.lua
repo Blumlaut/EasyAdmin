@@ -883,7 +883,7 @@ Citizen.CreateThread(function()
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(id, true, true), reason), "kick", 16711680)
 					DropPlayer(id, GetLocalisedText("warnkicked"))
 					WarnedPlayers[id] = nil
-					TriggerEvent("EasyAdmin:LogAction", {action = "KICK", discord = CachedPlayers[id].discord, reason = "Reached maximum warnings", moderator = "Server", moderatorId = 0})
+					TriggerEvent("EasyAdmin:LogAction", {action = "KICK", discordId = CachedPlayers[id].discord, reason = "Reached maximum warnings", moderator = "Server", moderatorId = 0})
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
 					local bannedIdentifiers = getCachedPlayerIdentifiers(id) or getAllPlayerIdentifiers(id)
 					local bannedUsername = getCachedPlayerName(id) or getName(id, true)
@@ -892,7 +892,7 @@ Citizen.CreateThread(function()
 					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(id), getName(src, true) )
 					local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = getName(src, true), reason = reason, expire = expires }
 					updateBlacklist( ban )
-					TriggerEvent("EasyAdmin:LogAction", {action = "BAN", discord = CachedPlayers[id].discord, reason = "Reached maximum warnings", moderator = "Server", moderatorId = 0})
+					TriggerEvent("EasyAdmin:LogAction", {action = "BAN", discordId = CachedPlayers[id].discord, reason = "Reached maximum warnings", moderator = "Server", moderatorId = 0})
 					
 					PrintDebugMessage("Player "..getName(src,true).." warnbanned player "..getCachedPlayerName(id).." for "..reason, 3)
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), bannedUsername, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
