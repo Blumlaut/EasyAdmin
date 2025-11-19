@@ -126,9 +126,9 @@
     "deleteaction": "Aktion löschen",
     "deleteactionguide": "Diese Aktion aus dem Verlauf löschen.",
     "actiondeleted": "Aktion gelöscht.",
-    "getplayerdiscord": "Kopiere den Discord-Server des Spielers",
+    "getplayerdiscord": "Kopiere die Discord-ID des Spielers.",
     "getplayerdiscordguide": "Kopiere die Discord-ID des Spielers.",
-    "getmoderatordiscord": "Kopiere den Discord-Server des Moderators",
+    "getmoderatordiscord": "Kopiere den Discord-ID des Moderators",
     "getmoderatordiscordguide": "Kopiere die Discord-ID des Moderators.",
 
     "copydiscord": "Discord-ID kopieren",
