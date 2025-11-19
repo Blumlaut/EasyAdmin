@@ -46,7 +46,19 @@ local function LoadList(fileName)
 end
 
 local function updateList(fileName)
-
+    local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
+    if content then
+        local data = json.decode(content)
+        if not data then
+            data = {
+                version = currentVersion,
+                data = {}
+            }
+        end
+        -- Migration logic can be added here for future versions
+        data.version = currentVersion
+        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(data, { indent=true }), -1)
+    end
 end
 
 banlist = LoadList("banlist").data
