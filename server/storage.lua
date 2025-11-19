@@ -128,10 +128,8 @@ Storage = {
                     return false
                 end
                 return true
-            else
-                return false
-            end
         end
+        return false
     end,
     removeBanIdentifier = function(identifiers)
         for i, ban in ipairs(banlist) do
