@@ -30,7 +30,7 @@ RegisterNetEvent("EasyAdmin:LogAction", function(action)
         if not action then
             PrintDebugMessage("Action not defined.", 2)
         end
-        Storage.addAction(action.type, action.discordId, action.reason, action.moderator, action.moderatorId, action.expire, action.expireString)
+        Storage.addAction(action.action, action.discordId, action.reason, action.moderator, action.moderatorId, action.expire, action.expireString)
         PrintDebugMessage("Action logged successfully.", 2)
     end
 end)
