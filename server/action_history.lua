@@ -55,13 +55,6 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
     end
 end)
 
-PrintDebugMessage("Clearing expired actions from action history", 4)
-for i, action in ipairs(actions) do
-if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
-    table.remove(actions, i)
-    PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
-end
-
 local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
 if not content then
     PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
@@ -72,3 +65,14 @@ if not content then
     content = json.encode({})
 end
 actions = json.decode(content)
+
+Citizen.CreateThread(function()
+    Citizen.Wait(500) -- Allow the actions list to populate before trying to edit it
+    PrintDebugMessage("Clearing expired actions from action history", 4)
+    for i, action in ipairs(actions) do
+        if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
+            table.remove(actions, i)
+            PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
+        end
+    end
+end)
