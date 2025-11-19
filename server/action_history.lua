@@ -54,11 +54,12 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
         PrintDebugMessage("Player does not have permission to delete actions.", 2)
     end
 end)
+
+PrintDebugMessage("Clearing expired actions from action history", 4)
 for i, action in ipairs(actions) do
-    if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
-        table.remove(actions, i)
-        PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
-    end
+if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
+    table.remove(actions, i)
+    PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
 end
 
 local change = (forceChange or false)
