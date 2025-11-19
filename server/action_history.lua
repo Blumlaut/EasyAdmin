@@ -62,7 +62,6 @@ if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.t
     PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
 end
 
-local change = (forceChange or false)
 local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
 if not content then
     PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
