@@ -223,5 +223,21 @@ Citizen.CreateThread(function()
         if data.version ~= currentVersion then
             updateList('actions')
         end
+    else
+        PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
+        local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode({}), -1)
+        if not saved then
+            PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+        end
+        content = json.encode({})
+    end
+    actions = json.decode(content)
+
+    PrintDebugMessage("Clearing expired actions from action history", 4)
+    for i, action in ipairs(actions) do
+        if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
+            table.remove(actions, i)
+            PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
+        end
     end
 end)

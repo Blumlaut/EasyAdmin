@@ -10,8 +10,6 @@
 ------------------------------------
 ------------------------------------
 
-local actions = {}
-
 RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     if DoesPlayerHavePermission(source, "player.actionhistory.view") then
         if not discordId then
@@ -52,27 +50,5 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
         SendWebhookMessage(preferredWebhook, string.format(GetLocalisedText("actionhistorydeleted"), getName(source, false, true), actionId), "", 16777214)
     else
         PrintDebugMessage("Player does not have permission to delete actions.", 2)
-    end
-end)
-
-local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
-if not content then
-    PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
-    local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode({}), -1)
-    if not saved then
-        PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-    end
-    content = json.encode({})
-end
-actions = json.decode(content)
-
-Citizen.CreateThread(function()
-    Citizen.Wait(500) -- Allow the actions list to populate before trying to edit it
-    PrintDebugMessage("Clearing expired actions from action history", 4)
-    for i, action in ipairs(actions) do
-        if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
-            table.remove(actions, i)
-            PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
-        end
     end
 end)
