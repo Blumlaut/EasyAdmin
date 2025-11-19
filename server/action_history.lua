@@ -12,11 +12,6 @@
 
 local actions = {}
 
-moderationNotification = GetConvar("ea_moderationNotification", "false")
-reportNotification = GetConvar("ea_reportNotification", "false")
-detailNotification = GetConvar("ea_detailNotification", "false")
-minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
-
 RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
     if DoesPlayerHavePermission(source, "player.actionhistory.view") then
         if not discordId then
@@ -50,6 +45,9 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
         end
         Storage.removeAction(actionId)
         PrintDebugMessage("Action deleted successfully.", 2)
+
+        detailNotification = GetConvar("ea_detailNotification", "false")
+        moderationNotification = GetConvar("ea_moderationNotification", "false")
         local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
         SendWebhookMessage(preferredWebhook, string.format(GetLocalisedText("actionhistorydeleted"), getName(source, false, true), actionId), "", 16777214)
     else
