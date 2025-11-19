@@ -177,7 +177,6 @@ Storage = {
         return userActions
     end,
     addAction = function(type, identifier, reason, moderator_name, moderator_identifier)
-        -- Find the current maximum ID in actions
         local max_id = 0
         for _, act in ipairs(actions) do
             if act.id and act.id > max_id then
