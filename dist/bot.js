@@ -23367,6 +23367,7 @@ var require_v105 = __commonJS({
     exports2.isMessageComponentGuildInteraction = isMessageComponentGuildInteraction;
     exports2.isLinkButton = isLinkButton;
     exports2.isInteractionButton = isInteractionButton;
+    exports2.isModalSubmitInteraction = isModalSubmitInteraction;
     exports2.isMessageComponentInteraction = isMessageComponentInteraction;
     exports2.isMessageComponentButtonInteraction = isMessageComponentButtonInteraction;
     exports2.isMessageComponentSelectMenuInteraction = isMessageComponentSelectMenuInteraction;
@@ -23396,6 +23397,9 @@ var require_v105 = __commonJS({
     }
     function isInteractionButton(component) {
       return ![index_1.ButtonStyle.Link, index_1.ButtonStyle.Premium].includes(component.style);
+    }
+    function isModalSubmitInteraction(interaction) {
+      return interaction.type === index_1.InteractionType.ModalSubmit;
     }
     function isMessageComponentInteraction(interaction) {
       return interaction.type === index_1.InteractionType.MessageComponent;
