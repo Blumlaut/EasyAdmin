@@ -129,7 +129,6 @@ end
 exports('addBan', addBanExport)
 AddEventHandler("EasyAdmin:addBan", addBanExport)
 
--- Is this required anymore with storage updates?
 RegisterServerEvent("EasyAdmin:updateBanlist", function(playerId)
     local src = source
     if DoesPlayerHavePermission(source, "player.ban.view") then
