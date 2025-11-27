@@ -1,5 +1,5 @@
 [{
-    "translator": "TheIndra, Jaccosf",
+    "translator": "TheIndra, Jaccosf, Leroy",
     "language": "nl",
 
     "on": "Ingeschakeld",
@@ -47,7 +47,7 @@
     "teleportplayer": "Teleporteer",
     "teleporttoplayer": "naar Speler",
     "teleportplayertome": "Speler naar mij",
-    "slapplayer": "Speler klap geven",
+    "slapplayer": "Speler Klap Geven",
     "setplayerfrozen": "Speler vastzetten",
     "allplayers": "Alle spelers",
     "teleporttome": "Teleporteer naar mij",
@@ -245,9 +245,9 @@
 
     "spectatevehicleseatoccupied":"Het voertuig waar je net in zat is nu bezet.",
     "spectatenovehiclefound":"Het voertuig waar je net in zat kan niet worden gevonden.",
-    "screenreader":"Screen Reader (TTS)",
+    "screenreader":"Scherm Lezer (TTS)",
     "screenreaderguide":"Schakelt Text to Speech in voor de GUI",
-    "screenreaderspeed":"Screen Reader Speed",
-    "screenreaderspeedguide":"Adjusts the speed of the text-to-speech feature."
+    "screenreaderspeed":"Scherm lezer Snelheid",
+    "screenreaderspeedguide":"Pas de snelheid van de TTS aan."
 
 }]
