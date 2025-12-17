@@ -9,7 +9,7 @@ on:
 
 jobs:
   create:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Push Tag

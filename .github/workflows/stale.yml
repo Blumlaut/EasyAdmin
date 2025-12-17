@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
 jobs:
   stale:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v9
+      - uses: actions/stale@v10
         with:
           exempt-pr-labels: dependencies,review-required
           exempt-issue-labels: enhancement,help-wanted
