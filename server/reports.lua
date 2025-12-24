@@ -276,4 +276,29 @@ Citizen.CreateThread(function()
             removeSimilarReports(report)
         end
     end)
+
+    RegisterServerEvent("EasyAdmin:ClaimReport", function(reportId)
+        if DoesPlayerHavePermission(source, "player.reports.claim") then
+            local report = reports[reportId]
+            if report then
+                if not report.claimed then
+                    report.claimed = true
+                    report.claimedBy = source
+                    report.claimedName = getName(source, true)
+                    
+                    SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("adminclaimedreport"), getName(source, false, true), report.id), "reports", 16776960)
+                    
+                    for i,_ in pairs(OnlineAdmins) do 
+                        TriggerLatentClientEvent("EasyAdmin:ClaimedReport", i, 10000, report)
+                    end
+                    
+                    TriggerEvent("EasyAdmin:reportClaimed", report)
+                else
+                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
+                end
+            else
+                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
+            end
+        end
+    end)
 end)
