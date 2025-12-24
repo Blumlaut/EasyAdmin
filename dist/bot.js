@@ -1152,8 +1152,9 @@ var require_dist = __commonJS({
       return to;
     };
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
-    var src_exports = {};
-    __export2(src_exports, {
+    var index_exports = {};
+    __export2(index_exports, {
+      GatewayRateLimitError: () => GatewayRateLimitError,
       calculateShardId: () => calculateShardId,
       getUserAgentAppendix: () => getUserAgentAppendix,
       isEquatable: () => isEquatable,
@@ -1164,7 +1165,7 @@ var require_dist = __commonJS({
       shouldUseGlobalFetchAndWebSocket: () => shouldUseGlobalFetchAndWebSocket,
       version: () => version
     });
-    module2.exports = __toCommonJS2(src_exports);
+    module2.exports = __toCommonJS2(index_exports);
     function lazy(cb) {
       let defaultValue;
       return () => defaultValue ??= cb();
@@ -1231,8 +1232,8 @@ var require_dist = __commonJS({
     }
     __name(getUserAgentAppendix, "getUserAgentAppendix");
     function polyfillDispose() {
-      Symbol.dispose ??= Symbol("Symbol.dispose");
-      Symbol.asyncDispose ??= Symbol("Symbol.asyncDispose");
+      Symbol.dispose ??= /* @__PURE__ */ Symbol("Symbol.dispose");
+      Symbol.asyncDispose ??= /* @__PURE__ */ Symbol("Symbol.asyncDispose");
     }
     __name(polyfillDispose, "polyfillDispose");
     function isJSONEncodable(maybeEncodable) {
@@ -1243,7 +1244,18 @@ var require_dist = __commonJS({
       return maybeEquatable !== null && typeof maybeEquatable === "object" && "equals" in maybeEquatable;
     }
     __name(isEquatable, "isEquatable");
-    var version = "1.1.1";
+    var GatewayRateLimitError = class _GatewayRateLimitError extends Error {
+      constructor(data, payload) {
+        super(`Request with opcode ${data.opcode} was rate limited. Retry after ${data.retry_after} seconds.`);
+        this.data = data;
+        this.payload = payload;
+      }
+      static {
+        __name(this, "GatewayRateLimitError");
+      }
+      name = _GatewayRateLimitError.name;
+    };
+    var version = "1.2.0";
   }
 });
 
@@ -1776,71 +1788,71 @@ var init_tslib_es6 = __esm({
 var require_symbols = __commonJS({
   "node_modules/undici/lib/core/symbols.js"(exports2, module2) {
     module2.exports = {
-      kClose: Symbol("close"),
-      kDestroy: Symbol("destroy"),
-      kDispatch: Symbol("dispatch"),
-      kUrl: Symbol("url"),
-      kWriting: Symbol("writing"),
-      kResuming: Symbol("resuming"),
-      kQueue: Symbol("queue"),
-      kConnect: Symbol("connect"),
-      kConnecting: Symbol("connecting"),
-      kKeepAliveDefaultTimeout: Symbol("default keep alive timeout"),
-      kKeepAliveMaxTimeout: Symbol("max keep alive timeout"),
-      kKeepAliveTimeoutThreshold: Symbol("keep alive timeout threshold"),
-      kKeepAliveTimeoutValue: Symbol("keep alive timeout"),
-      kKeepAlive: Symbol("keep alive"),
-      kHeadersTimeout: Symbol("headers timeout"),
-      kBodyTimeout: Symbol("body timeout"),
-      kServerName: Symbol("server name"),
-      kLocalAddress: Symbol("local address"),
-      kHost: Symbol("host"),
-      kNoRef: Symbol("no ref"),
-      kBodyUsed: Symbol("used"),
-      kBody: Symbol("abstracted request body"),
-      kRunning: Symbol("running"),
-      kBlocking: Symbol("blocking"),
-      kPending: Symbol("pending"),
-      kSize: Symbol("size"),
-      kBusy: Symbol("busy"),
-      kQueued: Symbol("queued"),
-      kFree: Symbol("free"),
-      kConnected: Symbol("connected"),
-      kClosed: Symbol("closed"),
-      kNeedDrain: Symbol("need drain"),
-      kReset: Symbol("reset"),
-      kDestroyed: Symbol.for("nodejs.stream.destroyed"),
-      kResume: Symbol("resume"),
-      kOnError: Symbol("on error"),
-      kMaxHeadersSize: Symbol("max headers size"),
-      kRunningIdx: Symbol("running index"),
-      kPendingIdx: Symbol("pending index"),
-      kError: Symbol("error"),
-      kClients: Symbol("clients"),
-      kClient: Symbol("client"),
-      kParser: Symbol("parser"),
-      kOnDestroyed: Symbol("destroy callbacks"),
-      kPipelining: Symbol("pipelining"),
-      kSocket: Symbol("socket"),
-      kHostHeader: Symbol("host header"),
-      kConnector: Symbol("connector"),
-      kStrictContentLength: Symbol("strict content length"),
-      kMaxRedirections: Symbol("maxRedirections"),
-      kMaxRequests: Symbol("maxRequestsPerClient"),
-      kProxy: Symbol("proxy agent options"),
-      kCounter: Symbol("socket request counter"),
-      kInterceptors: Symbol("dispatch interceptors"),
-      kMaxResponseSize: Symbol("max response size"),
-      kHTTP2Session: Symbol("http2Session"),
-      kHTTP2SessionState: Symbol("http2Session state"),
-      kRetryHandlerDefaultRetry: Symbol("retry agent default retry"),
-      kConstruct: Symbol("constructable"),
-      kListeners: Symbol("listeners"),
-      kHTTPContext: Symbol("http context"),
-      kMaxConcurrentStreams: Symbol("max concurrent streams"),
-      kNoProxyAgent: Symbol("no proxy agent"),
-      kHttpProxyAgent: Symbol("http proxy agent"),
-      kHttpsProxyAgent: Symbol("https proxy agent")
+      kClose: /* @__PURE__ */ Symbol("close"),
+      kDestroy: /* @__PURE__ */ Symbol("destroy"),
+      kDispatch: /* @__PURE__ */ Symbol("dispatch"),
+      kUrl: /* @__PURE__ */ Symbol("url"),
+      kWriting: /* @__PURE__ */ Symbol("writing"),
+      kResuming: /* @__PURE__ */ Symbol("resuming"),
+      kQueue: /* @__PURE__ */ Symbol("queue"),
+      kConnect: /* @__PURE__ */ Symbol("connect"),
+      kConnecting: /* @__PURE__ */ Symbol("connecting"),
+      kKeepAliveDefaultTimeout: /* @__PURE__ */ Symbol("default keep alive timeout"),
+      kKeepAliveMaxTimeout: /* @__PURE__ */ Symbol("max keep alive timeout"),
+      kKeepAliveTimeoutThreshold: /* @__PURE__ */ Symbol("keep alive timeout threshold"),
+      kKeepAliveTimeoutValue: /* @__PURE__ */ Symbol("keep alive timeout"),
+      kKeepAlive: /* @__PURE__ */ Symbol("keep alive"),
+      kHeadersTimeout: /* @__PURE__ */ Symbol("headers timeout"),
+      kBodyTimeout: /* @__PURE__ */ Symbol("body timeout"),
+      kServerName: /* @__PURE__ */ Symbol("server name"),
+      kLocalAddress: /* @__PURE__ */ Symbol("local address"),
+      kHost: /* @__PURE__ */ Symbol("host"),
+      kNoRef: /* @__PURE__ */ Symbol("no ref"),
+      kBodyUsed: /* @__PURE__ */ Symbol("used"),
+      kBody: /* @__PURE__ */ Symbol("abstracted request body"),
+      kRunning: /* @__PURE__ */ Symbol("running"),
+      kBlocking: /* @__PURE__ */ Symbol("blocking"),
+      kPending: /* @__PURE__ */ Symbol("pending"),
+      kSize: /* @__PURE__ */ Symbol("size"),
+      kBusy: /* @__PURE__ */ Symbol("busy"),
+      kQueued: /* @__PURE__ */ Symbol("queued"),
+      kFree: /* @__PURE__ */ Symbol("free"),
+      kConnected: /* @__PURE__ */ Symbol("connected"),
+      kClosed: /* @__PURE__ */ Symbol("closed"),
+      kNeedDrain: /* @__PURE__ */ Symbol("need drain"),
+      kReset: /* @__PURE__ */ Symbol("reset"),
+      kDestroyed: /* @__PURE__ */ Symbol.for("nodejs.stream.destroyed"),
+      kResume: /* @__PURE__ */ Symbol("resume"),
+      kOnError: /* @__PURE__ */ Symbol("on error"),
+      kMaxHeadersSize: /* @__PURE__ */ Symbol("max headers size"),
+      kRunningIdx: /* @__PURE__ */ Symbol("running index"),
+      kPendingIdx: /* @__PURE__ */ Symbol("pending index"),
+      kError: /* @__PURE__ */ Symbol("error"),
+      kClients: /* @__PURE__ */ Symbol("clients"),
+      kClient: /* @__PURE__ */ Symbol("client"),
+      kParser: /* @__PURE__ */ Symbol("parser"),
+      kOnDestroyed: /* @__PURE__ */ Symbol("destroy callbacks"),
+      kPipelining: /* @__PURE__ */ Symbol("pipelining"),
+      kSocket: /* @__PURE__ */ Symbol("socket"),
+      kHostHeader: /* @__PURE__ */ Symbol("host header"),
+      kConnector: /* @__PURE__ */ Symbol("connector"),
+      kStrictContentLength: /* @__PURE__ */ Symbol("strict content length"),
+      kMaxRedirections: /* @__PURE__ */ Symbol("maxRedirections"),
+      kMaxRequests: /* @__PURE__ */ Symbol("maxRequestsPerClient"),
+      kProxy: /* @__PURE__ */ Symbol("proxy agent options"),
+      kCounter: /* @__PURE__ */ Symbol("socket request counter"),
+      kInterceptors: /* @__PURE__ */ Symbol("dispatch interceptors"),
+      kMaxResponseSize: /* @__PURE__ */ Symbol("max response size"),
+      kHTTP2Session: /* @__PURE__ */ Symbol("http2Session"),
+      kHTTP2SessionState: /* @__PURE__ */ Symbol("http2Session state"),
+      kRetryHandlerDefaultRetry: /* @__PURE__ */ Symbol("retry agent default retry"),
+      kConstruct: /* @__PURE__ */ Symbol("constructable"),
+      kListeners: /* @__PURE__ */ Symbol("listeners"),
+      kHTTPContext: /* @__PURE__ */ Symbol("http context"),
+      kMaxConcurrentStreams: /* @__PURE__ */ Symbol("max concurrent streams"),
+      kNoProxyAgent: /* @__PURE__ */ Symbol("no proxy agent"),
+      kHttpProxyAgent: /* @__PURE__ */ Symbol("http proxy agent"),
+      kHttpsProxyAgent: /* @__PURE__ */ Symbol("https proxy agent")
     };
   }
 });
@@ -3043,7 +3055,7 @@ var require_request = __commonJS({
     var { channels } = require_diagnostics();
     var { headerNameLowerCasedRecord } = require_constants();
     var invalidPathRegex = /[^\u0021-\u00ff]/;
-    var kHandler = Symbol("handler");
+    var kHandler = /* @__PURE__ */ Symbol("handler");
     var Request = class {
       constructor(origin, {
         path,
@@ -3407,9 +3419,9 @@ var require_dispatcher_base = __commonJS({
       InvalidArgumentError
     } = require_errors();
     var { kDestroy, kClose, kClosed, kDestroyed, kDispatch, kInterceptors } = require_symbols();
-    var kOnDestroyed = Symbol("onDestroyed");
-    var kOnClosed = Symbol("onClosed");
-    var kInterceptedDispatch = Symbol("Intercepted Dispatch");
+    var kOnDestroyed = /* @__PURE__ */ Symbol("onDestroyed");
+    var kOnClosed = /* @__PURE__ */ Symbol("onClosed");
+    var kInterceptedDispatch = /* @__PURE__ */ Symbol("Intercepted Dispatch");
     var DispatcherBase = class extends Dispatcher {
       constructor() {
         super();
@@ -3565,7 +3577,7 @@ var require_timers = __commonJS({
     var RESOLUTION_MS = 1e3;
     var TICK_MS = (RESOLUTION_MS >> 1) - 1;
     var fastNowTimeout;
-    var kFastTimer = Symbol("kFastTimer");
+    var kFastTimer = /* @__PURE__ */ Symbol("kFastTimer");
     var fastTimers = [];
     var NOT_IN_LIST = -2;
     var TO_BE_CLEARED = -1;
@@ -4549,7 +4561,7 @@ var require_constants3 = __commonJS({
 var require_global = __commonJS({
   "node_modules/undici/lib/web/fetch/global.js"(exports2, module2) {
     "use strict";
-    var globalOrigin = Symbol.for("undici.globalOrigin.1");
+    var globalOrigin = /* @__PURE__ */ Symbol.for("undici.globalOrigin.1");
     function getGlobalOrigin() {
       return globalThis[globalOrigin];
     }
@@ -6227,11 +6239,11 @@ var require_symbols2 = __commonJS({
   "node_modules/undici/lib/web/fetch/symbols.js"(exports2, module2) {
     "use strict";
     module2.exports = {
-      kUrl: Symbol("url"),
-      kHeaders: Symbol("headers"),
-      kSignal: Symbol("signal"),
-      kState: Symbol("state"),
-      kDispatcher: Symbol("dispatcher")
+      kUrl: /* @__PURE__ */ Symbol("url"),
+      kHeaders: /* @__PURE__ */ Symbol("headers"),
+      kSignal: /* @__PURE__ */ Symbol("signal"),
+      kState: /* @__PURE__ */ Symbol("state"),
+      kDispatcher: /* @__PURE__ */ Symbol("dispatcher")
     };
   }
 });
@@ -8066,7 +8078,7 @@ var require_client_h2 = __commonJS({
       kSize,
       kHTTPContext
     } = require_symbols();
-    var kOpenStreams = Symbol("open streams");
+    var kOpenStreams = /* @__PURE__ */ Symbol("open streams");
     var extractBody;
     var h2ExperimentalWarned = false;
     var http2;
@@ -8585,7 +8597,7 @@ var require_redirect_handler = __commonJS({
     var { InvalidArgumentError } = require_errors();
     var EE = require("node:events");
     var redirectableStatusCodes = [300, 301, 302, 303, 307, 308];
-    var kBody = Symbol("body");
+    var kBody = /* @__PURE__ */ Symbol("body");
     var BodyAsyncIterable = class {
       constructor(body) {
         this[kBody] = body;
@@ -8818,7 +8830,7 @@ var require_client = __commonJS({
     var connectH1 = require_client_h1();
     var connectH2 = require_client_h2();
     var deprecatedInterceptorWarned = false;
-    var kClosedResolve = Symbol("kClosedResolve");
+    var kClosedResolve = /* @__PURE__ */ Symbol("kClosedResolve");
     var noop = () => {
     };
     function getPipelining(client2) {
@@ -9317,7 +9329,7 @@ var require_fixed_queue = __commonJS({
 var require_pool_stats = __commonJS({
   "node_modules/undici/lib/dispatcher/pool-stats.js"(exports2, module2) {
     var { kFree, kConnected, kPending, kQueued, kRunning, kSize } = require_symbols();
-    var kPool = Symbol("pool");
+    var kPool = /* @__PURE__ */ Symbol("pool");
     var PoolStats = class {
       constructor(pool) {
         this[kPool] = pool;
@@ -9353,18 +9365,18 @@ var require_pool_base = __commonJS({
     var FixedQueue = require_fixed_queue();
     var { kConnected, kSize, kRunning, kPending, kQueued, kBusy, kFree, kUrl, kClose, kDestroy, kDispatch } = require_symbols();
     var PoolStats = require_pool_stats();
-    var kClients = Symbol("clients");
-    var kNeedDrain = Symbol("needDrain");
-    var kQueue = Symbol("queue");
-    var kClosedResolve = Symbol("closed resolve");
-    var kOnDrain = Symbol("onDrain");
-    var kOnConnect = Symbol("onConnect");
-    var kOnDisconnect = Symbol("onDisconnect");
-    var kOnConnectionError = Symbol("onConnectionError");
-    var kGetDispatcher = Symbol("get dispatcher");
-    var kAddClient = Symbol("add client");
-    var kRemoveClient = Symbol("remove client");
-    var kStats = Symbol("stats");
+    var kClients = /* @__PURE__ */ Symbol("clients");
+    var kNeedDrain = /* @__PURE__ */ Symbol("needDrain");
+    var kQueue = /* @__PURE__ */ Symbol("queue");
+    var kClosedResolve = /* @__PURE__ */ Symbol("closed resolve");
+    var kOnDrain = /* @__PURE__ */ Symbol("onDrain");
+    var kOnConnect = /* @__PURE__ */ Symbol("onConnect");
+    var kOnDisconnect = /* @__PURE__ */ Symbol("onDisconnect");
+    var kOnConnectionError = /* @__PURE__ */ Symbol("onConnectionError");
+    var kGetDispatcher = /* @__PURE__ */ Symbol("get dispatcher");
+    var kAddClient = /* @__PURE__ */ Symbol("add client");
+    var kRemoveClient = /* @__PURE__ */ Symbol("remove client");
+    var kStats = /* @__PURE__ */ Symbol("stats");
     var PoolBase = class extends DispatcherBase {
       constructor() {
         super();
@@ -9518,9 +9530,9 @@ var require_pool = __commonJS({
     var util = require_util();
     var { kUrl, kInterceptors } = require_symbols();
     var buildConnector = require_connect();
-    var kOptions = Symbol("options");
-    var kConnections = Symbol("connections");
-    var kFactory = Symbol("factory");
+    var kOptions = /* @__PURE__ */ Symbol("options");
+    var kConnections = /* @__PURE__ */ Symbol("connections");
+    var kFactory = /* @__PURE__ */ Symbol("factory");
     function defaultFactory(origin, opts) {
       return new Client3(origin, opts);
     }
@@ -9610,14 +9622,14 @@ var require_balanced_pool = __commonJS({
     var Pool = require_pool();
     var { kUrl, kInterceptors } = require_symbols();
     var { parseOrigin } = require_util();
-    var kFactory = Symbol("factory");
-    var kOptions = Symbol("options");
-    var kGreatestCommonDivisor = Symbol("kGreatestCommonDivisor");
-    var kCurrentWeight = Symbol("kCurrentWeight");
-    var kIndex = Symbol("kIndex");
-    var kWeight = Symbol("kWeight");
-    var kMaxWeightPerServer = Symbol("kMaxWeightPerServer");
-    var kErrorPenalty = Symbol("kErrorPenalty");
+    var kFactory = /* @__PURE__ */ Symbol("factory");
+    var kOptions = /* @__PURE__ */ Symbol("options");
+    var kGreatestCommonDivisor = /* @__PURE__ */ Symbol("kGreatestCommonDivisor");
+    var kCurrentWeight = /* @__PURE__ */ Symbol("kCurrentWeight");
+    var kIndex = /* @__PURE__ */ Symbol("kIndex");
+    var kWeight = /* @__PURE__ */ Symbol("kWeight");
+    var kMaxWeightPerServer = /* @__PURE__ */ Symbol("kMaxWeightPerServer");
+    var kErrorPenalty = /* @__PURE__ */ Symbol("kErrorPenalty");
     function getGreatestCommonDivisor(a, b) {
       if (a === 0) return b;
       while (b !== 0) {
@@ -9746,13 +9758,13 @@ var require_agent = __commonJS({
     var Client3 = require_client();
     var util = require_util();
     var createRedirectInterceptor = require_redirect_interceptor();
-    var kOnConnect = Symbol("onConnect");
-    var kOnDisconnect = Symbol("onDisconnect");
-    var kOnConnectionError = Symbol("onConnectionError");
-    var kMaxRedirections = Symbol("maxRedirections");
-    var kOnDrain = Symbol("onDrain");
-    var kFactory = Symbol("factory");
-    var kOptions = Symbol("options");
+    var kOnConnect = /* @__PURE__ */ Symbol("onConnect");
+    var kOnDisconnect = /* @__PURE__ */ Symbol("onDisconnect");
+    var kOnConnectionError = /* @__PURE__ */ Symbol("onConnectionError");
+    var kMaxRedirections = /* @__PURE__ */ Symbol("maxRedirections");
+    var kOnDrain = /* @__PURE__ */ Symbol("onDrain");
+    var kFactory = /* @__PURE__ */ Symbol("factory");
+    var kOptions = /* @__PURE__ */ Symbol("options");
     function defaultFactory(origin, opts) {
       return opts && opts.connections === 1 ? new Client3(origin, opts) : new Pool(origin, opts);
     }
@@ -9843,12 +9855,12 @@ var require_proxy_agent = __commonJS({
     var DispatcherBase = require_dispatcher_base();
     var { InvalidArgumentError, RequestAbortedError, SecureProxyConnectionError } = require_errors();
     var buildConnector = require_connect();
-    var kAgent = Symbol("proxy agent");
-    var kClient = Symbol("proxy client");
-    var kProxyHeaders = Symbol("proxy headers");
-    var kRequestTls = Symbol("request tls settings");
-    var kProxyTls = Symbol("proxy tls settings");
-    var kConnectEndpoint = Symbol("connect endpoint function");
+    var kAgent = /* @__PURE__ */ Symbol("proxy agent");
+    var kClient = /* @__PURE__ */ Symbol("proxy client");
+    var kProxyHeaders = /* @__PURE__ */ Symbol("proxy headers");
+    var kRequestTls = /* @__PURE__ */ Symbol("request tls settings");
+    var kProxyTls = /* @__PURE__ */ Symbol("proxy tls settings");
+    var kConnectEndpoint = /* @__PURE__ */ Symbol("connect endpoint function");
     function defaultProtocolPort(protocol) {
       return protocol === "https:" ? 443 : 80;
     }
@@ -10465,12 +10477,12 @@ var require_readable = __commonJS({
     var { RequestAbortedError, NotSupportedError, InvalidArgumentError, AbortError } = require_errors();
     var util = require_util();
     var { ReadableStreamFrom } = require_util();
-    var kConsume = Symbol("kConsume");
-    var kReading = Symbol("kReading");
-    var kBody = Symbol("kBody");
-    var kAbort = Symbol("kAbort");
-    var kContentType = Symbol("kContentType");
-    var kContentLength = Symbol("kContentLength");
+    var kConsume = /* @__PURE__ */ Symbol("kConsume");
+    var kReading = /* @__PURE__ */ Symbol("kReading");
+    var kBody = /* @__PURE__ */ Symbol("kBody");
+    var kAbort = /* @__PURE__ */ Symbol("kAbort");
+    var kContentType = /* @__PURE__ */ Symbol("kContentType");
+    var kContentLength = /* @__PURE__ */ Symbol("kContentLength");
     var noop = () => {
     };
     var BodyReadable = class extends Readable {
@@ -11001,8 +11013,8 @@ var require_abort_signal = __commonJS({
   "node_modules/undici/lib/api/abort-signal.js"(exports2, module2) {
     var { addAbortListener } = require_util();
     var { RequestAbortedError } = require_errors();
-    var kListener = Symbol("kListener");
-    var kSignal = Symbol("kSignal");
+    var kListener = /* @__PURE__ */ Symbol("kListener");
+    var kSignal = /* @__PURE__ */ Symbol("kSignal");
     function abort(self2) {
       if (self2.abort) {
         self2.abort(self2[kSignal]?.reason);
@@ -11238,7 +11250,7 @@ var require_api_pipeline = __commonJS({
     var { AsyncResource } = require("node:async_hooks");
     var { addSignal, removeSignal } = require_abort_signal();
     var assert = require("node:assert");
-    var kResume = Symbol("resume");
+    var kResume = /* @__PURE__ */ Symbol("resume");
     var PipelineRequest = class extends Readable {
       constructor() {
         super({ autoDestroy: true });
@@ -11639,25 +11651,25 @@ var require_mock_symbols = __commonJS({
   "node_modules/undici/lib/mock/mock-symbols.js"(exports2, module2) {
     "use strict";
     module2.exports = {
-      kAgent: Symbol("agent"),
-      kOptions: Symbol("options"),
-      kFactory: Symbol("factory"),
-      kDispatches: Symbol("dispatches"),
-      kDispatchKey: Symbol("dispatch key"),
-      kDefaultHeaders: Symbol("default headers"),
-      kDefaultTrailers: Symbol("default trailers"),
-      kContentLength: Symbol("content length"),
-      kMockAgent: Symbol("mock agent"),
-      kMockAgentSet: Symbol("mock agent set"),
-      kMockAgentGet: Symbol("mock agent get"),
-      kMockDispatch: Symbol("mock dispatch"),
-      kClose: Symbol("close"),
-      kOriginalClose: Symbol("original agent close"),
-      kOrigin: Symbol("origin"),
-      kIsMockActive: Symbol("is mock active"),
-      kNetConnect: Symbol("net connect"),
-      kGetNetConnect: Symbol("get net connect"),
-      kConnected: Symbol("connected")
+      kAgent: /* @__PURE__ */ Symbol("agent"),
+      kOptions: /* @__PURE__ */ Symbol("options"),
+      kFactory: /* @__PURE__ */ Symbol("factory"),
+      kDispatches: /* @__PURE__ */ Symbol("dispatches"),
+      kDispatchKey: /* @__PURE__ */ Symbol("dispatch key"),
+      kDefaultHeaders: /* @__PURE__ */ Symbol("default headers"),
+      kDefaultTrailers: /* @__PURE__ */ Symbol("default trailers"),
+      kContentLength: /* @__PURE__ */ Symbol("content length"),
+      kMockAgent: /* @__PURE__ */ Symbol("mock agent"),
+      kMockAgentSet: /* @__PURE__ */ Symbol("mock agent set"),
+      kMockAgentGet: /* @__PURE__ */ Symbol("mock agent get"),
+      kMockDispatch: /* @__PURE__ */ Symbol("mock dispatch"),
+      kClose: /* @__PURE__ */ Symbol("close"),
+      kOriginalClose: /* @__PURE__ */ Symbol("original agent close"),
+      kOrigin: /* @__PURE__ */ Symbol("origin"),
+      kIsMockActive: /* @__PURE__ */ Symbol("is mock active"),
+      kNetConnect: /* @__PURE__ */ Symbol("net connect"),
+      kGetNetConnect: /* @__PURE__ */ Symbol("get net connect"),
+      kConnected: /* @__PURE__ */ Symbol("connected")
     };
   }
 });
@@ -12432,7 +12444,7 @@ ${pendingInterceptorsFormatter.format(pending)}
 var require_global2 = __commonJS({
   "node_modules/undici/lib/global.js"(exports2, module2) {
     "use strict";
-    var globalDispatcher = Symbol.for("undici.globalDispatcher.1");
+    var globalDispatcher = /* @__PURE__ */ Symbol.for("undici.globalDispatcher.1");
     var { InvalidArgumentError } = require_errors();
     var Agent = require_agent();
     if (getGlobalDispatcher() === void 0) {
@@ -12950,8 +12962,8 @@ var require_headers = __commonJS({
     var { webidl } = require_webidl();
     var assert = require("node:assert");
     var util = require("node:util");
-    var kHeadersMap = Symbol("headers map");
-    var kHeadersSortedMap = Symbol("headers map sorted");
+    var kHeadersMap = /* @__PURE__ */ Symbol("headers map");
+    var kHeadersSortedMap = /* @__PURE__ */ Symbol("headers map sorted");
     function isHTTPWhiteSpaceCharCode(code) {
       return code === 10 || code === 13 || code === 9 || code === 32;
     }
@@ -13849,7 +13861,7 @@ var require_request2 = __commonJS({
     var { kConstruct } = require_symbols();
     var assert = require("node:assert");
     var { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = require("node:events");
-    var kAbortController = Symbol("abortController");
+    var kAbortController = /* @__PURE__ */ Symbol("abortController");
     var requestFinalizer = new FinalizationRegistry2(({ signal, abort }) => {
       signal.removeEventListener("abort", abort);
     });
@@ -15583,12 +15595,12 @@ var require_symbols3 = __commonJS({
   "node_modules/undici/lib/web/fileapi/symbols.js"(exports2, module2) {
     "use strict";
     module2.exports = {
-      kState: Symbol("FileReader state"),
-      kResult: Symbol("FileReader result"),
-      kError: Symbol("FileReader error"),
-      kLastProgressEventFired: Symbol("FileReader last progress event fired timestamp"),
-      kEvents: Symbol("FileReader events"),
-      kAborted: Symbol("FileReader aborted")
+      kState: /* @__PURE__ */ Symbol("FileReader state"),
+      kResult: /* @__PURE__ */ Symbol("FileReader result"),
+      kError: /* @__PURE__ */ Symbol("FileReader error"),
+      kLastProgressEventFired: /* @__PURE__ */ Symbol("FileReader last progress event fired timestamp"),
+      kEvents: /* @__PURE__ */ Symbol("FileReader events"),
+      kAborted: /* @__PURE__ */ Symbol("FileReader aborted")
     };
   }
 });
@@ -15598,7 +15610,7 @@ var require_progressevent = __commonJS({
   "node_modules/undici/lib/web/fileapi/progressevent.js"(exports2, module2) {
     "use strict";
     var { webidl } = require_webidl();
-    var kState = Symbol("ProgressEvent state");
+    var kState = /* @__PURE__ */ Symbol("ProgressEvent state");
     var ProgressEvent = class _ProgressEvent extends Event {
       constructor(type, eventInitDict = {}) {
         type = webidl.converters.DOMString(type, "ProgressEvent constructor", "type");
@@ -17866,14 +17878,14 @@ var require_symbols5 = __commonJS({
   "node_modules/undici/lib/web/websocket/symbols.js"(exports2, module2) {
     "use strict";
     module2.exports = {
-      kWebSocketURL: Symbol("url"),
-      kReadyState: Symbol("ready state"),
-      kController: Symbol("controller"),
-      kResponse: Symbol("response"),
-      kBinaryType: Symbol("binary type"),
-      kSentClose: Symbol("sent close"),
-      kReceivedClose: Symbol("received close"),
-      kByteParser: Symbol("byte parser")
+      kWebSocketURL: /* @__PURE__ */ Symbol("url"),
+      kReadyState: /* @__PURE__ */ Symbol("ready state"),
+      kController: /* @__PURE__ */ Symbol("controller"),
+      kResponse: /* @__PURE__ */ Symbol("response"),
+      kBinaryType: /* @__PURE__ */ Symbol("binary type"),
+      kSentClose: /* @__PURE__ */ Symbol("sent close"),
+      kReceivedClose: /* @__PURE__ */ Symbol("received close"),
+      kByteParser: /* @__PURE__ */ Symbol("byte parser")
     };
   }
 });
@@ -18316,8 +18328,8 @@ var require_permessage_deflate = __commonJS({
     var { createInflateRaw, Z_DEFAULT_WINDOWBITS } = require("node:zlib");
     var { isValidClientWindowBits } = require_util7();
     var tail = Buffer.from([0, 0, 255, 255]);
-    var kBuffer = Symbol("kBuffer");
-    var kLength = Symbol("kLength");
+    var kBuffer = /* @__PURE__ */ Symbol("kBuffer");
+    var kLength = /* @__PURE__ */ Symbol("kLength");
     var PerMessageDeflate = class {
       /** @type {import('node:zlib').InflateRaw} */
       #inflate;
@@ -19989,6 +20001,8 @@ var require_globals = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.FormattingPatterns = void 0;
+    var timestampStyles = "DFRSTdfst";
+    var timestampLength = 13;
     exports2.FormattingPatterns = {
       /**
        * Regular expression for matching a user mention, strictly without a nickname
@@ -20053,20 +20067,19 @@ var require_globals = __commonJS({
        *
        * The `timestamp` and `style` group properties are present on the `exec` result of this expression
        */
-      // eslint-disable-next-line prefer-named-capture-group, unicorn/better-regex
-      Timestamp: /<t:(?<timestamp>-?\d{1,13})(:(?<style>[DFRSTdfst]))?>/,
+      Timestamp: new RegExp(`<t:(?<timestamp>-?\\d{1,${timestampLength}})(:(?<style>[${timestampStyles}]))?>`),
       /**
        * Regular expression for matching strictly default styled timestamps
        *
        * The `timestamp` group property is present on the `exec` result of this expression
        */
-      DefaultStyledTimestamp: /<t:(?<timestamp>-?\d{1,13})>/,
+      DefaultStyledTimestamp: new RegExp(`<t:(?<timestamp>-?\\d{1,${timestampLength}})>`),
       /**
        * Regular expression for matching strictly custom styled timestamps
        *
        * The `timestamp` and `style` group properties are present on the `exec` result of this expression
        */
-      StyledTimestamp: /<t:(?<timestamp>-?\d{1,13}):(?<style>[DFRTdft])>/,
+      StyledTimestamp: new RegExp(`<t:(?<timestamp>-?\\d{1,${timestampLength}}):(?<style>[${timestampStyles}])>`),
       /**
        * Regular expression for matching a guild navigation mention
        *
@@ -20377,9 +20390,9 @@ var require_common = __commonJS({
        */
       PinMessages: 1n << 51n,
       /**
-       * @unstable Allows for bypassing slowmode restrictions. Not (yet) documented.
+       * Allows bypassing slowmode restrictions
        *
-       * Applies to text-based and thread-based channel types.
+       * Applies to channel types: Text, Voice, Stage
        */
       BypassSlowmode: 1n << 52n
     };
@@ -24029,10 +24042,10 @@ var require_cjs = __commonJS({
       __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
       return value;
     };
-    var IncrementSymbol = Symbol("@sapphire/snowflake.increment");
-    var EpochSymbol = Symbol("@sapphire/snowflake.epoch");
-    var ProcessIdSymbol = Symbol("@sapphire/snowflake.processId");
-    var WorkerIdSymbol = Symbol("@sapphire/snowflake.workerId");
+    var IncrementSymbol = /* @__PURE__ */ Symbol("@sapphire/snowflake.increment");
+    var EpochSymbol = /* @__PURE__ */ Symbol("@sapphire/snowflake.epoch");
+    var ProcessIdSymbol = /* @__PURE__ */ Symbol("@sapphire/snowflake.processId");
+    var WorkerIdSymbol = /* @__PURE__ */ Symbol("@sapphire/snowflake.workerId");
     var MaximumWorkerId = 0b11111n;
     var MaximumProcessId = 0b11111n;
     var MaximumIncrement = 0b111111111111n;
@@ -24293,7 +24306,6 @@ Emitted 'error' event${ctorInfo} at:
       return err.stack + sep + ownStack.join("\n");
     }
     __name(enhanceStackTrace, "enhanceStackTrace");
-    var brandSymbol = Symbol.for("async-event-emitter.ts-brand");
     var _AsyncEventEmitter = class _AsyncEventEmitter2 {
       constructor() {
         this._events = {
@@ -27909,7 +27921,10 @@ var require_Messages = __commonJS({
       [DjsErrorCodes.MessageReferenceMissing]: "The message does not reference another message",
       [DjsErrorCodes.EmojiType]: "Emoji must be a string or GuildEmoji/ReactionEmoji",
       [DjsErrorCodes.EmojiManaged]: "Emoji is managed and has no Author.",
-      [DjsErrorCodes.MissingManageGuildExpressionsPermission]: (guild2) => `Client must have Manage Guild Expressions permission in guild ${guild2} to see emoji authors.`,
+      [DjsErrorCodes.MissingManageGuildExpressionsPermission]: (guild2) => (
+        // eslint-disable-next-line max-len
+        `Client must have Create Guild Expressions or Manage Guild Expressions permission in guild ${guild2} to see emoji authors.`
+      ),
       [DjsErrorCodes.MissingManageEmojisAndStickersPermission]: (guild2) => `Client must have Manage Emojis and Stickers permission in guild ${guild2} to see emoji authors.`,
       [DjsErrorCodes.NotGuildSoundboardSound]: (action) => `Soundboard sound is a default (non-guild) soundboard sound and can't be ${action}.`,
       [DjsErrorCodes.NotGuildSticker]: "Sticker is a standard (non-guild) sticker and has no author.",
@@ -29172,8 +29187,8 @@ var require_dist7 = __commonJS({
       return to;
     };
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
-    var src_exports = {};
-    __export2(src_exports, {
+    var index_exports = {};
+    __export2(index_exports, {
       Faces: () => Faces,
       GuildNavigationMentions: () => GuildNavigationMentions,
       HeadingLevel: () => HeadingLevel,
@@ -29185,6 +29200,7 @@ var require_dist7 = __commonJS({
       channelMention: () => channelMention,
       chatInputApplicationCommandMention: () => chatInputApplicationCommandMention,
       codeBlock: () => codeBlock,
+      email: () => email,
       escapeBold: () => escapeBold,
       escapeBulletedList: () => escapeBulletedList,
       escapeCodeBlock: () => escapeCodeBlock,
@@ -29204,8 +29220,10 @@ var require_dist7 = __commonJS({
       hyperlink: () => hyperlink,
       inlineCode: () => inlineCode,
       italic: () => italic,
+      linkedRoleMention: () => linkedRoleMention,
       messageLink: () => messageLink,
       orderedList: () => orderedList,
+      phoneNumber: () => phoneNumber,
       quote: () => quote,
       roleMention: () => roleMention,
       spoiler: () => spoiler,
@@ -29218,7 +29236,7 @@ var require_dist7 = __commonJS({
       userMention: () => userMention,
       version: () => version
     });
-    module2.exports = __toCommonJS2(src_exports);
+    module2.exports = __toCommonJS2(index_exports);
     function escapeMarkdown(text, options = {}) {
       const {
         codeBlock: codeBlock2 = true,
@@ -29299,15 +29317,21 @@ var require_dist7 = __commonJS({
     __name(escapeInlineCode, "escapeInlineCode");
     function escapeItalic(text) {
       let idx = 0;
-      const newText = text.replaceAll(/(?<=^|[^*])\*([^*]|\*\*|$)/g, (_, match) => {
-        if (match === "**") return ++idx % 2 ? `\\*${match}` : `${match}\\*`;
-        return `\\*${match}`;
-      });
+      const newText = text.replaceAll(
+        /(?<=^|[^*])(?<!(?<!<)https?:\/\/\S*|<[^\s:]+:\/[^\s>]*)\*([^*]|\*\*|$)/g,
+        (_, match) => {
+          if (match === "**") return ++idx % 2 ? `\\*${match}` : `${match}\\*`;
+          return `\\*${match}`;
+        }
+      );
       idx = 0;
-      return newText.replaceAll(/(?<=^|[^_])(?<!<a?:.+|https?:\/\/\S+)_(?!:\d+>)([^_]|__|$)/g, (_, match) => {
-        if (match === "__") return ++idx % 2 ? `\\_${match}` : `${match}\\_`;
-        return `\\_${match}`;
-      });
+      return newText.replaceAll(
+        /(?<=^|[^_])(?<!<a?:.+|(?<!<)https?:\/\/\S*|<[^\s:]:\/[^\s>]*)_(?!:\d+>)([^_]|__|$)/g,
+        (_, match) => {
+          if (match === "__") return ++idx % 2 ? `\\_${match}` : `${match}\\_`;
+          return `\\_${match}`;
+        }
+      );
     }
     __name(escapeItalic, "escapeItalic");
     function escapeBold(text) {
@@ -29418,6 +29442,10 @@ ${content}
       return `<@&${roleId}>`;
     }
     __name(roleMention, "roleMention");
+    function linkedRoleMention(roleId) {
+      return `<id:linked-roles:${roleId}>`;
+    }
+    __name(linkedRoleMention, "linkedRoleMention");
     function chatInputApplicationCommandMention(commandName, subcommandGroupName, subcommandName, commandId) {
       if (commandId !== void 0) {
         return `</${commandName} ${subcommandGroupName} ${subcommandName}:${commandId}>`;
@@ -29434,7 +29462,7 @@ ${content}
         animated: animated ?? false
       } : emojiIdOrOptions;
       const { id, animated: isAnimated, name: emojiName } = options;
-      return `<${isAnimated ? "a" : ""}:${emojiName ?? "_"}:${id}>`;
+      return `<${isAnimated ? "a" : ""}:${emojiName ?? "emoji"}:${id}>`;
     }
     __name(formatEmoji, "formatEmoji");
     function channelLink(channelId, guildId) {
@@ -29493,6 +29521,23 @@ ${content}
       return skuId ? `${url}/${skuId}` : url;
     }
     __name(applicationDirectory, "applicationDirectory");
+    function email(email2, headers) {
+      if (headers) {
+        const searchParams = new URLSearchParams(
+          Object.fromEntries(Object.entries(headers).map(([key, value]) => [key.toLowerCase(), value]))
+        );
+        return `<${email2}?${searchParams.toString()}>`;
+      }
+      return `<${email2}>`;
+    }
+    __name(email, "email");
+    function phoneNumber(phoneNumber2) {
+      if (!phoneNumber2.startsWith("+")) {
+        throw new Error('Phone number must start with a "+" sign.');
+      }
+      return `<${phoneNumber2}>`;
+    }
+    __name(phoneNumber, "phoneNumber");
     var TimestampStyles = {
       /**
        * Short time format, consisting of hours and minutes.
@@ -29501,9 +29546,16 @@ ${content}
        */
       ShortTime: "t",
       /**
+       * Medium time format, consisting of hours, minutes, and seconds.
+       *
+       * @example `16:20:30`
+       */
+      MediumTime: "T",
+      /**
        * Long time format, consisting of hours, minutes, and seconds.
        *
        * @example `16:20:30`
+       * @deprecated Use {@link TimestampStyles.MediumTime} instead.
        */
       LongTime: "T",
       /**
@@ -29515,21 +29567,47 @@ ${content}
       /**
        * Long date format, consisting of day, month, and year.
        *
-       * @example `20 April 2021`
+       * @example `April 20, 2021`
        */
       LongDate: "D",
+      /**
+       * Long date-short time format, consisting of long date and short time.
+       *
+       * @example `April 20, 2021 at 16:20`
+       */
+      LongDateShortTime: "f",
       /**
        * Short date-time format, consisting of short date and short time formats.
        *
        * @example `20 April 2021 16:20`
+       * @deprecated Use {@link TimestampStyles.LongDateShortTime} instead.
        */
       ShortDateTime: "f",
+      /**
+       * Full date-short time format, consisting of full date and short time.
+       *
+       * @example `Tuesday, April 20, 2021 at 16:20`
+       */
+      FullDateShortTime: "F",
       /**
        * Long date-time format, consisting of long date and short time formats.
        *
        * @example `Tuesday, 20 April 2021 16:20`
+       * @deprecated Use {@link TimestampStyles.FullDateShortTime} instead.
        */
       LongDateTime: "F",
+      /**
+       * Short date, short time format, consisting of short date and short time.
+       *
+       * @example `20/04/2021, 16:20`
+       */
+      ShortDateShortTime: "s",
+      /**
+       * Short date, medium time format, consisting of short date and medium time.
+       *
+       * @example `20/04/2021, 16:20:30`
+       */
+      ShortDateMediumTime: "S",
       /**
        * Relative time format, consisting of a relative duration format.
        *
@@ -29547,9 +29625,10 @@ ${content}
       GuildNavigationMentions2["Browse"] = "<id:browse>";
       GuildNavigationMentions2["Customize"] = "<id:customize>";
       GuildNavigationMentions2["Guide"] = "<id:guide>";
+      GuildNavigationMentions2["LinkedRoles"] = "<id:linked-roles>";
       return GuildNavigationMentions2;
     })(GuildNavigationMentions || {});
-    var version = "0.6.1";
+    var version = "0.6.2";
   }
 });
 
@@ -29899,7 +29978,7 @@ var require_DataManager = __commonJS({
 var require_Symbols = __commonJS({
   "node_modules/discord.js/src/util/Symbols.js"(exports2) {
     "use strict";
-    exports2.MakeCacheOverrideSymbol = Symbol("djs.managers.makeCacheOverride");
+    exports2.MakeCacheOverrideSymbol = /* @__PURE__ */ Symbol("djs.managers.makeCacheOverride");
   }
 });
 
@@ -30078,7 +30157,7 @@ var require_Role = __commonJS({
         this.guild = guild2;
         this.icon = null;
         this.unicodeEmoji = null;
-        if (data) this._patch(data);
+        this._patch(data);
       }
       _patch(data) {
         this.id = data.id;
@@ -30456,7 +30535,7 @@ var require_PermissionOverwrites = __commonJS({
       constructor(client2, data, channel) {
         super(client2);
         Object.defineProperty(this, "channel", { value: channel });
-        if (data) this._patch(data);
+        this._patch(data);
       }
       _patch(data) {
         this.id = data.id;
@@ -31512,7 +31591,7 @@ var require_package = __commonJS({
     module2.exports = {
       $schema: "https://json.schemastore.org/package.json",
       name: "discord.js",
-      version: "14.24.2",
+      version: "14.25.1",
       description: "A powerful library for interacting with the Discord API",
       main: "./src/index.js",
       types: "./typings/index.d.ts",
@@ -31564,19 +31643,19 @@ var require_package = __commonJS({
       homepage: "https://discord.js.org",
       funding: "https://github.com/discordjs/discord.js?sponsor",
       dependencies: {
-        "@discordjs/builders": "^1.13.0",
         "@discordjs/collection": "1.5.3",
-        "@discordjs/formatters": "^0.6.1",
         "@discordjs/ws": "^1.2.3",
         "@sapphire/snowflake": "3.5.3",
-        "discord-api-types": "^0.38.31",
+        "discord-api-types": "^0.38.33",
         "fast-deep-equal": "3.1.3",
         "lodash.snakecase": "4.1.1",
         "magic-bytes.js": "^1.10.0",
         tslib: "^2.6.3",
         undici: "6.21.3",
-        "@discordjs/rest": "^2.6.0",
-        "@discordjs/util": "^1.1.1"
+        "@discordjs/builders": "^1.13.0",
+        "@discordjs/formatters": "^0.6.2",
+        "@discordjs/util": "^1.2.0",
+        "@discordjs/rest": "^2.6.0"
       },
       devDependencies: {
         "@favware/cliff-jumper": "^4.1.0",
@@ -31594,8 +31673,8 @@ var require_package = __commonJS({
         turbo: "^2.0.14",
         typescript: "~5.5.4",
         "@discordjs/api-extractor": "^7.38.1",
-        "@discordjs/scripts": "^0.1.0",
-        "@discordjs/docgen": "^0.12.1"
+        "@discordjs/docgen": "^0.12.1",
+        "@discordjs/scripts": "^0.1.0"
       },
       engines: {
         node: ">=18"
@@ -37472,15 +37551,19 @@ var require_cjs3 = __commonJS({
     var l$1 = "undefined" != typeof Uint8Array;
     var d2 = "undefined" != typeof ArrayBuffer;
     if (l$1 && y)
-      var g = Object.getPrototypeOf(Uint8Array.prototype), b = c$1(Object.getOwnPropertyDescriptor(g, Symbol.toStringTag).get);
+      g = Object.getPrototypeOf(Uint8Array.prototype), b = c$1(Object.getOwnPropertyDescriptor(g, Symbol.toStringTag).get);
+    var g;
+    var b;
     var m2 = c$1(Object.prototype.toString);
     var h2 = c$1(Number.prototype.valueOf);
     var j = c$1(String.prototype.valueOf);
     var A = c$1(Boolean.prototype.valueOf);
     if (s2)
-      var w = c$1(BigInt.prototype.valueOf);
+      w = c$1(BigInt.prototype.valueOf);
+    var w;
     if (p2)
-      var v = c$1(Symbol.prototype.valueOf);
+      v = c$1(Symbol.prototype.valueOf);
+    var v;
     function O(e3, t3) {
       if ("object" != typeof e3)
         return false;
@@ -37875,7 +37958,7 @@ var require_cjs3 = __commonJS({
         e3[r3[n3]] = t3[r3[n3]];
       return e3;
     };
-    var Ee = "undefined" != typeof Symbol ? Symbol("util.promisify.custom") : void 0;
+    var Ee = "undefined" != typeof Symbol ? /* @__PURE__ */ Symbol("util.promisify.custom") : void 0;
     function De(e3, t3) {
       if (!e3) {
         var r3 = new Error("Promise was rejected with a falsy value");
@@ -38007,8 +38090,8 @@ var require_cjs3 = __commonJS({
     X.types;
     X.TextEncoder = globalThis.TextEncoder;
     X.TextDecoder = globalThis.TextDecoder;
-    var customInspectSymbol = Symbol.for("nodejs.util.inspect.custom");
-    var customInspectSymbolStackLess = Symbol.for("nodejs.util.inspect.custom.stack-less");
+    var customInspectSymbol = /* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom");
+    var customInspectSymbolStackLess = /* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom.stack-less");
     var _BaseError = class _BaseError extends Error {
       toJSON() {
         return {
@@ -45549,7 +45632,14 @@ var require_GuildEmojiRoleManager = __commonJS({
        * @readonly
        */
       get cache() {
-        return this.guild.roles.cache.filter((role) => this.emoji._roles.includes(role.id));
+        const cache = new Collection3();
+        for (const roleId of this.emoji._roles) {
+          const role = this.guild.roles.cache.get(roleId);
+          if (role !== void 0) {
+            cache.set(roleId, role);
+          }
+        }
+        return cache;
       }
       /**
        * Adds a role (or multiple roles) to the list of roles that can use this emoji.
@@ -47784,7 +47874,7 @@ var require_Webhook = __commonJS({
     var Webhook2 = class _Webhook {
       constructor(client2, data) {
         Object.defineProperty(this, "client", { value: client2 });
-        if (data) this._patch(data);
+        this._patch(data);
       }
       _patch(data) {
         if ("name" in data) {
@@ -48497,8 +48587,15 @@ var require_GuildMemberRoleManager = __commonJS({
        * @readonly
        */
       get cache() {
-        const everyone = this.guild.roles.everyone;
-        return this.guild.roles.cache.filter((role) => this.member._roles.includes(role.id)).set(everyone.id, everyone);
+        const cache = new Collection3();
+        cache.set(this.guild.id, this.guild.roles.everyone);
+        for (const roleId of this.member._roles) {
+          const role = this.guild.roles.cache.get(roleId);
+          if (role !== void 0) {
+            cache.set(roleId, role);
+          }
+        }
+        return cache;
       }
       /**
        * The role of the member used to hoist them in a separate category in the users list
@@ -48696,7 +48793,7 @@ var require_GuildMember = __commonJS({
         this.pending = null;
         this.communicationDisabledUntilTimestamp = null;
         Object.defineProperty(this, "_roles", { value: [], writable: true });
-        if (data) this._patch(data);
+        this._patch(data);
       }
       _patch(data) {
         if ("user" in data) {
@@ -49210,11 +49307,11 @@ var require_MessageManager = __commonJS({
         const data = await this.client.rest.get(Routes2.channelMessage(this.channel.id, message));
         return this._add(data, cache);
       }
-      async _fetchMany(options = {}) {
+      async _fetchMany({ cache, ...apiOptions } = {}) {
         const data = await this.client.rest.get(Routes2.channelMessages(this.channel.id), {
-          query: makeURLSearchParams2(options)
+          query: makeURLSearchParams2(apiOptions)
         });
-        return data.reduce((_data, message) => _data.set(message.id, this._add(message, options.cache)), new Collection3());
+        return data.reduce((_data, message) => _data.set(message.id, this._add(message, cache)), new Collection3());
       }
       /**
        * Options used to fetch pinned messages.
@@ -49240,8 +49337,8 @@ var require_MessageManager = __commonJS({
        * @property {Message} message The pinned message
        */
       /**
-       * Fetches the pinned messages of this channel and returns a collection of them.
-       * <info>The returned Collection does not contain any reaction data of the messages.
+       * Fetches the pinned messages of this channel, returning a paginated result.
+       * <info>The returned messages do not contain any reaction data.
        * Those need to be fetched separately.</info>
        *
        * @param {FetchPinnedMessagesOptions} [options={}] Options for fetching pinned messages
@@ -49252,11 +49349,11 @@ var require_MessageManager = __commonJS({
        *   .then(messages => console.log(`Received ${messages.items.length} messages`))
        *   .catch(console.error);
        */
-      async fetchPins(options = {}) {
+      async fetchPins({ cache, ...apiOptions } = {}) {
         const data = await this.client.rest.get(Routes2.channelMessagesPins(this.channel.id), {
           query: makeURLSearchParams2({
-            ...options,
-            before: options.before && new Date(options.before).toISOString()
+            ...apiOptions,
+            before: apiOptions.before && new Date(apiOptions.before).toISOString()
           })
         });
         return {
@@ -49265,7 +49362,7 @@ var require_MessageManager = __commonJS({
             get pinnedAt() {
               return new Date(this.pinnedTimestamp);
             },
-            message: this._add(item.message, options.cache)
+            message: this._add(item.message, cache)
           })),
           hasMore: data.has_more
         };
@@ -51802,7 +51899,7 @@ var require_ThreadChannel = __commonJS({
         this.ownerId = data.owner_id;
         this.messages = new GuildMessageManager(this);
         this.members = new ThreadMemberManager(this);
-        if (data) this._patch(data);
+        this._patch(data);
       }
       _patch(data) {
         super._patch(data);
@@ -57445,9 +57542,9 @@ var require_ActionsManager = __commonJS({
       // These symbols represent fully built data that we inject at times when calling actions manually.
       // Action#getUser, for example, will return the injected data (which is assumed to be a built structure)
       // instead of trying to make it from provided data
-      injectedUser = Symbol("djs.actions.injectedUser");
-      injectedChannel = Symbol("djs.actions.injectedChannel");
-      injectedMessage = Symbol("djs.actions.injectedMessage");
+      injectedUser = /* @__PURE__ */ Symbol("djs.actions.injectedUser");
+      injectedChannel = /* @__PURE__ */ Symbol("djs.actions.injectedChannel");
+      injectedMessage = /* @__PURE__ */ Symbol("djs.actions.injectedMessage");
       constructor(client2) {
         this.client = client2;
         this.ApplicationCommandPermissionsUpdate = this.load(require_ApplicationCommandPermissionsUpdate());
@@ -58126,10 +58223,10 @@ var require_constants6 = __commonJS({
       EMPTY_BUFFER: Buffer.alloc(0),
       GUID: "258EAFA5-E914-47DA-95CA-C5AB0DC85B11",
       hasBlob,
-      kForOnEventAttribute: Symbol("kIsForOnEventAttribute"),
-      kListener: Symbol("kListener"),
-      kStatusCode: Symbol("status-code"),
-      kWebSocket: Symbol("websocket"),
+      kForOnEventAttribute: /* @__PURE__ */ Symbol("kIsForOnEventAttribute"),
+      kListener: /* @__PURE__ */ Symbol("kListener"),
+      kStatusCode: /* @__PURE__ */ Symbol("status-code"),
+      kWebSocket: /* @__PURE__ */ Symbol("websocket"),
       NOOP: () => {
       }
     };
@@ -58427,8 +58524,8 @@ var require_buffer_util = __commonJS({
 var require_limiter = __commonJS({
   "node_modules/ws/lib/limiter.js"(exports2, module2) {
     "use strict";
-    var kDone = Symbol("kDone");
-    var kRun = Symbol("kRun");
+    var kDone = /* @__PURE__ */ Symbol("kDone");
+    var kRun = /* @__PURE__ */ Symbol("kRun");
     var Limiter = class {
       /**
        * Creates a new `Limiter`.
@@ -58483,11 +58580,11 @@ var require_permessage_deflate2 = __commonJS({
     var { kStatusCode } = require_constants6();
     var FastBuffer = Buffer[Symbol.species];
     var TRAILER = Buffer.from([0, 0, 255, 255]);
-    var kPerMessageDeflate = Symbol("permessage-deflate");
-    var kTotalLength = Symbol("total-length");
-    var kCallback = Symbol("callback");
-    var kBuffers = Symbol("buffers");
-    var kError = Symbol("error");
+    var kPerMessageDeflate = /* @__PURE__ */ Symbol("permessage-deflate");
+    var kTotalLength = /* @__PURE__ */ Symbol("total-length");
+    var kCallback = /* @__PURE__ */ Symbol("callback");
+    var kBuffers = /* @__PURE__ */ Symbol("buffers");
+    var kError = /* @__PURE__ */ Symbol("error");
     var zlibLimiter;
     var PerMessageDeflate = class {
       /**
@@ -59708,7 +59805,7 @@ var require_sender2 = __commonJS({
     var { EMPTY_BUFFER, kWebSocket, NOOP } = require_constants6();
     var { isBlob, isValidStatusCode } = require_validation();
     var { mask: applyMask, toBuffer } = require_buffer_util();
-    var kByteLength = Symbol("kByteLength");
+    var kByteLength = /* @__PURE__ */ Symbol("kByteLength");
     var maskBuffer = Buffer.alloc(4);
     var RANDOM_POOL_SIZE = 8 * 1024;
     var randomPool;
@@ -60191,14 +60288,14 @@ var require_event_target = __commonJS({
   "node_modules/ws/lib/event-target.js"(exports2, module2) {
     "use strict";
     var { kForOnEventAttribute, kListener } = require_constants6();
-    var kCode = Symbol("kCode");
-    var kData = Symbol("kData");
-    var kError = Symbol("kError");
-    var kMessage = Symbol("kMessage");
-    var kReason = Symbol("kReason");
-    var kTarget = Symbol("kTarget");
-    var kType = Symbol("kType");
-    var kWasClean = Symbol("kWasClean");
+    var kCode = /* @__PURE__ */ Symbol("kCode");
+    var kData = /* @__PURE__ */ Symbol("kData");
+    var kError = /* @__PURE__ */ Symbol("kError");
+    var kMessage = /* @__PURE__ */ Symbol("kMessage");
+    var kReason = /* @__PURE__ */ Symbol("kReason");
+    var kTarget = /* @__PURE__ */ Symbol("kTarget");
+    var kType = /* @__PURE__ */ Symbol("kType");
+    var kWasClean = /* @__PURE__ */ Symbol("kWasClean");
     var Event2 = class {
       /**
        * Create a new `Event`.
@@ -60600,7 +60697,7 @@ var require_websocket2 = __commonJS({
     var { format, parse } = require_extension();
     var { toBuffer } = require_buffer_util();
     var closeTimeout = 30 * 1e3;
-    var kAborted = Symbol("kAborted");
+    var kAborted = /* @__PURE__ */ Symbol("kAborted");
     var protocolVersions = [8, 13];
     var readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"];
     var subprotocolRegex = /^[!#$%&'*+\-.0-9A-Z^_`|a-z~]+$/;
@@ -64228,6 +64325,32 @@ var require_PRESENCE_UPDATE = __commonJS({
   }
 });
 
+// node_modules/discord.js/src/client/websocket/handlers/RATE_LIMITED.js
+var require_RATE_LIMITED = __commonJS({
+  "node_modules/discord.js/src/client/websocket/handlers/RATE_LIMITED.js"(exports2, module2) {
+    "use strict";
+    var process2 = require("node:process");
+    var { GatewayOpcodes } = require_v106();
+    var emittedFor = /* @__PURE__ */ new Set();
+    module2.exports = (_, { d: data }) => {
+      switch (data.opcode) {
+        case GatewayOpcodes.RequestGuildMembers: {
+          break;
+        }
+        default: {
+          if (!emittedFor.has(data.opcode)) {
+            process2.emitWarning(
+              // eslint-disable-next-line max-len
+              `Hit a gateway rate limit on opcode ${data.opcode} (${GatewayOpcodes[data.opcode]}). If the discord.js version you're using is up-to-date, please open an issue on GitHub.`
+            );
+            emittedFor.add(data.opcode);
+          }
+        }
+      }
+    };
+  }
+});
+
 // node_modules/discord.js/src/structures/ClientUser.js
 var require_ClientUser = __commonJS({
   "node_modules/discord.js/src/structures/ClientUser.js"(exports2, module2) {
@@ -64752,6 +64875,7 @@ var require_handlers = __commonJS({
       ["MESSAGE_REACTION_REMOVE_EMOJI", require_MESSAGE_REACTION_REMOVE_EMOJI()],
       ["MESSAGE_UPDATE", require_MESSAGE_UPDATE()],
       ["PRESENCE_UPDATE", require_PRESENCE_UPDATE()],
+      ["RATE_LIMITED", require_RATE_LIMITED()],
       ["READY", require_READY()],
       ["RESUMED", require_RESUMED()],
       ["SOUNDBOARD_SOUNDS", require_SOUNDBOARD_SOUNDS()],
@@ -66123,11 +66247,11 @@ var require_GuildBanManager = __commonJS({
         const data = await this.client.rest.get(Routes2.guildBan(this.guild.id, user));
         return this._add(data, cache);
       }
-      async _fetchMany(options = {}) {
+      async _fetchMany({ cache, ...apiOptions } = {}) {
         const data = await this.client.rest.get(Routes2.guildBans(this.guild.id), {
-          query: makeURLSearchParams2(options)
+          query: makeURLSearchParams2(apiOptions)
         });
-        return data.reduce((col, ban) => col.set(ban.user.id, this._add(ban, options.cache)), new Collection3());
+        return data.reduce((col, ban) => col.set(ban.user.id, this._add(ban, cache)), new Collection3());
       }
       /**
        * Options used to ban a user from a guild.
@@ -66852,7 +66976,7 @@ var require_GuildEmojiManager = __commonJS({
         }
         const { me } = this.guild.members;
         if (!me) throw new DiscordjsError2(ErrorCodes2.GuildUncachedMe);
-        if (!me.permissions.has(PermissionFlagsBits.ManageGuildExpressions)) {
+        if (!me.permissions.any(PermissionFlagsBits.CreateGuildExpressions | PermissionFlagsBits.ManageGuildExpressions)) {
           throw new DiscordjsError2(ErrorCodes2.MissingManageGuildExpressionsPermission, this.guild);
         }
         const data = await this.client.rest.get(Routes2.guildEmoji(this.guild.id, emoji.id));
@@ -67060,8 +67184,9 @@ var require_GuildMemberManager = __commonJS({
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
     var { Collection: Collection3 } = require_dist6();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
+    var { GatewayRateLimitError } = require_dist();
     var { DiscordSnowflake } = require_cjs();
-    var { Routes: Routes2, GatewayOpcodes } = require_v106();
+    var { Routes: Routes2, GatewayOpcodes, GatewayDispatchEvents } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
@@ -67258,19 +67383,19 @@ var require_GuildMemberManager = __commonJS({
         if (nonce.length > 32) throw new DiscordjsRangeError2(ErrorCodes2.MemberFetchNonceLength);
         return new Promise((resolve, reject) => {
           if (!query && !users) query = "";
-          this.guild.shard.send({
-            op: GatewayOpcodes.RequestGuildMembers,
-            d: {
-              guild_id: this.guild.id,
-              presences,
-              user_ids: users,
-              query,
-              nonce,
-              limit
-            }
-          });
           const fetchedMembers = new Collection3();
           let i = 0;
+          const cleanup = () => {
+            clearTimeout2(timeout);
+            this.client.removeListener(Events2.Raw, rateLimitHandler);
+            this.client.decrementMaxListeners();
+            this.client.removeListener(Events2.GuildMembersChunk, handler);
+            this.client.decrementMaxListeners();
+          };
+          const timeout = setTimeout2(() => {
+            cleanup();
+            reject(new DiscordjsError2(ErrorCodes2.GuildMembersTimeout));
+          }, time).unref();
           const handler = (members, _, chunk) => {
             if (chunk.nonce !== nonce) return;
             timeout.refresh();
@@ -67279,19 +67404,32 @@ var require_GuildMemberManager = __commonJS({
               fetchedMembers.set(member.id, member);
             }
             if (members.size < 1e3 || limit && fetchedMembers.size >= limit || i === chunk.count) {
-              clearTimeout2(timeout);
-              this.client.removeListener(Events2.GuildMembersChunk, handler);
-              this.client.decrementMaxListeners();
+              cleanup();
               resolve(users && !Array.isArray(users) && fetchedMembers.size ? fetchedMembers.first() : fetchedMembers);
             }
           };
-          const timeout = setTimeout2(() => {
-            this.client.removeListener(Events2.GuildMembersChunk, handler);
-            this.client.decrementMaxListeners();
-            reject(new DiscordjsError2(ErrorCodes2.GuildMembersTimeout));
-          }, time).unref();
+          const requestData = {
+            guild_id: this.guild.id,
+            presences,
+            user_ids: users,
+            query,
+            nonce,
+            limit
+          };
+          const rateLimitHandler = (payload) => {
+            if (payload.t === GatewayDispatchEvents.RateLimited && payload.d.meta.nonce === nonce) {
+              cleanup();
+              reject(new GatewayRateLimitError(payload.d, requestData));
+            }
+          };
+          this.client.incrementMaxListeners();
+          this.client.on(Events2.Raw, rateLimitHandler);
           this.client.incrementMaxListeners();
           this.client.on(Events2.GuildMembersChunk, handler);
+          this.guild.shard.send({
+            op: GatewayOpcodes.RequestGuildMembers,
+            d: requestData
+          });
         });
       }
       /**
