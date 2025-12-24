@@ -18,6 +18,12 @@ blacklist = {}
 ---@param expires number @The timestamp when the ban should expire
 ---@return nil
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
+    -- Validate playerId before proceeding
+    if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+        return
+    end
+    
     if playerId ~= nil and CheckAdminCooldown(source, "ban") then
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
             SetAdminCooldown(source, "ban")

@@ -320,6 +320,12 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer", function(playerId,reason)
+		-- Validate playerId before proceeding
+		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		if DoesPlayerHavePermission(source, "player.kick") and CheckAdminCooldown(source, "kick") and not CachedPlayers[playerId].immune then
 			SetAdminCooldown(source, "kick")
 			reason = formatShortcuts(reason)
@@ -332,6 +338,12 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate", function(playerId)
+		-- Validate playerId before proceeding
+		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		if DoesPlayerHavePermission(source, "player.spectate") and CheckAdminCooldown(source, "spectate") then
 			SetAdminCooldown(source, "spectate")
 			PrintDebugMessage("Player "..getName(source,true).." Requested Spectate to "..getName(playerId,true), 3)
@@ -508,6 +520,12 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords", function(playerId,tgtCoords)
+		-- Validate playerId before proceeding
+		if playerId ~= -1 and (not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped) then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		local source=source
 		if DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
 			SetAdminCooldown(source, "teleport")
@@ -572,6 +590,12 @@ Citizen.CreateThread(function()
 	exports('slapPlayer', slapPlayer)
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
+		-- Validate playerId before proceeding
+		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		if DoesPlayerHavePermission(source, "player.slap") and CheckAdminCooldown(source, "slap") and slapPlayer(playerId, slapAmount) then
 			SetAdminCooldown(source, "slap")
 			PrintDebugMessage("Player "..getName(source,true).." slapped "..getName(playerId,true).." for "..slapAmount.." HP", 3)
@@ -603,6 +627,12 @@ Citizen.CreateThread(function()
 	exports('freezePlayer', freezePlayer)
 
 	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
+		-- Validate playerId before proceeding
+		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "freeze") then
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			freezePlayer(playerId, toggle)
@@ -629,6 +659,12 @@ Citizen.CreateThread(function()
 	exports('isScreenshotInProgress', isScreenshotInProgress)
 
 	RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
+		-- Validate playerId before proceeding
+		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		if scrinprogress then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("screenshotinprogress"))
 			return
@@ -673,6 +709,12 @@ Citizen.CreateThread(function()
 	end)
 	
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
+		-- Validate playerId before proceeding
+		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		local src = source
 		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "mute") then
 			SetAdminCooldown(source, "mute")
@@ -787,6 +829,12 @@ Citizen.CreateThread(function()
 	exports('getName', getName)
 
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
+		-- Validate id before proceeding
+		if not id or not CachedPlayers[id] or CachedPlayers[id].dropped then
+			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+			return
+		end
+		
 		local src = source
 		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune and CheckAdminCooldown(source, "warn") then
 			SetAdminCooldown(source, "warn")
@@ -837,6 +885,11 @@ Citizen.CreateThread(function()
 	---@param reason string
 	---@return boolean
 	function warnPlayerExport(src, id, reason)
+		-- Validate id before proceeding
+		if not id or not CachedPlayers[id] or CachedPlayers[id].dropped then
+			return false
+		end
+		
 		if not CachedPlayers[id].immune then
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
