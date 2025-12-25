@@ -16,6 +16,7 @@ node_version '22'
 shared_script 'shared/util_shared.lua'
 
 server_scripts {
+    "server/storage.lua",
     "server/*.lua",
     "dist/*.js",
     "plugins/**/*_shared.lua",
@@ -87,5 +88,8 @@ convar_category 'EasyAdmin' {
         { "Channel for Discord bot to enable live status", "$ea_botStatusChannel", "CV_STRING", "true" },
         { "Enable Allowlist", "$ea_enableAllowlist", "CV_BOOL", "false" },
         { "Routing Bucket Options", "$ea_routingBucketOptions", "CV_BOOL", "false" },
+        { "Enable Action History", "$ea_enableActionHistory", "CV_BOOL", "true" },
+        { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "30" }, -- Recommended time is 30 days,
+        { "Storage API Version", "$ea_storageAPIVersion", "CV_INT", "1"} -- Not recommended to edit unless you know what you are doing
     }
 }
