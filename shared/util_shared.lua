@@ -267,14 +267,7 @@ function setMenuItemTitle(item,text)
 	end
 end
 
-function getCachedPlayer(playerId)
-	if CachedPlayers[playerId] then
-		return CachedPlayers[playerId]
-	else
-		return false
-	end
-end
-exports('getCachedPlayer', getCachedPlayer)
+
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then
