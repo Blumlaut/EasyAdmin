@@ -65,15 +65,15 @@ function getCachedPlayer(id)
 end
 exports('getCachedPlayer', getCachedPlayer)
 
----Checks if a player is cached and not dropped.
+---Checks if a player is cached and online (not dropped).
 ---@param playerId number|string @The player ID to check.
----@return boolean @True if player is cached and not dropped, false otherwise.
-function isPlayerCached(playerId)
+---@return boolean @True if player is cached and online, false otherwise.
+function isPlayerOnline(playerId)
 	local id = tonumber(playerId)
 	local player = getCachedPlayer(id)
 	return player and not player.dropped
 end
-exports('isPlayerCached', isPlayerCached)
+exports('isPlayerOnline', isPlayerOnline)
 
 ---Checks if a player is immune.
 ---@param playerId number|string @The player ID to check.

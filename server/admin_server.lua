@@ -321,7 +321,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer", function(playerId,reason)
 		-- Validate playerId before proceeding
-		if not playerId or not isPlayerCached(playerId) then
+		if not playerId or not isPlayerOnline(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -339,7 +339,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate", function(playerId)
 		-- Validate playerId before proceeding
-		if not playerId or not isPlayerCached(playerId) then
+		if not playerId or not isPlayerOnline(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -521,7 +521,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords", function(playerId,tgtCoords)
 		-- Validate playerId before proceeding
-		if playerId ~= -1 and (not playerId or not isPlayerCached(playerId)) then
+		if playerId ~= -1 and (not playerId or not isPlayerOnline(playerId)) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -591,7 +591,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
 		-- Validate playerId before proceeding
-		if not playerId or not isPlayerCached(playerId) then
+		if not playerId or not isPlayerOnline(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -628,7 +628,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
 		-- Validate playerId before proceeding
-		if not playerId or not isPlayerCached(playerId) then
+		if not playerId or not isPlayerOnline(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -660,7 +660,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
 		-- Validate playerId before proceeding
-		if not playerId or not isPlayerCached(playerId) then
+		if not playerId or not isPlayerOnline(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -710,7 +710,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
 		-- Validate playerId before proceeding
-		if not playerId or not isPlayerCached(playerId) then
+		if not playerId or not isPlayerOnline(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -844,7 +844,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		-- Validate id before proceeding
-		if not id or not isPlayerCached(id) then
+		if not id or not isPlayerOnline(id) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -900,7 +900,7 @@ Citizen.CreateThread(function()
 	---@return boolean
 	function warnPlayerExport(src, id, reason)
 		-- Validate id before proceeding
-		if not id or not isPlayerCached(id) then
+		if not id or not isPlayerOnline(id) then
 			return false
 		end
 		

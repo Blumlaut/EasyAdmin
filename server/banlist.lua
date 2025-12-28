@@ -19,7 +19,7 @@ blacklist = {}
 ---@return nil
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     -- Validate playerId before proceeding
-    if not playerId or not isPlayerCached(playerId) then
+    if not playerId or not isPlayerOnline(playerId) then
         TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
         return
     end
@@ -97,7 +97,7 @@ function addBanExport(playerId,reason,expires,banner)
     if type(playerId) == "table" then -- if playerId is a table of identifiers
         offline = true
         bannedIdentifiers = playerId
-    elseif isPlayerCached(playerId) then
+    elseif isPlayerOnline(playerId) then
         if hasPlayerDropped(playerId) then
             offline = true
         end
