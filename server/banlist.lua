@@ -19,16 +19,16 @@ blacklist = {}
 ---@return nil
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     -- Validate playerId before proceeding
-    if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+    if not playerId or not isPlayerCached(playerId) then
         TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
         return
     end
     
     if playerId ~= nil and CheckAdminCooldown(source, "ban") then
-        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
+        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
             SetAdminCooldown(source, "ban")
-            local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
-            local username = CachedPlayers[playerId].name or getName(playerId, true)
+            local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
+            local username = getCachedPlayerName(playerId) or getName(playerId, true)
             if expires and expires < os.time() then
                 expires = os.time()+expires 
             elseif not expires then 
@@ -38,13 +38,13 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source, true), reason = reason, expire = expires, expireString = formatDateString(expires) }
             updateBlacklist( ban )
-            PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
+            PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
-        elseif CachedPlayers[playerId].immune then
+        elseif isPlayerImmune(playerId) then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
         end
     end
@@ -56,11 +56,11 @@ end)
 ---@param expires number @The timestamp when the ban should expire
 ---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
-    if playerId ~= nil and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "ban") then
-        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not CachedPlayers[playerId].immune then
+    if playerId ~= nil and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "ban") then
+        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
             SetAdminCooldown(source, "ban")
-            local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
-            local username = CachedPlayers[playerId].name or getName(playerId, true)
+            local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
+            local username = getCachedPlayerName(playerId) or getName(playerId, true)
             if expires and expires < os.time() then
                 expires = os.time()+expires 
             elseif not expires then 
@@ -70,13 +70,13 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
             local ban = {banid = GetFreshBanId(), name = username,identifiers = bannedIdentifiers, banner = getName(source), reason = reason, expire = expires }
             updateBlacklist( ban )
-            PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
+            PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
         end
-    elseif CachedPlayers[playerId].immune then
+    elseif isPlayerImmune(playerId) then
         TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
     end
 end)
@@ -97,15 +97,15 @@ function addBanExport(playerId,reason,expires,banner)
     if type(playerId) == "table" then -- if playerId is a table of identifiers
         offline = true
         bannedIdentifiers = playerId
-    elseif CachedPlayers[playerId] then
-        if CachedPlayers[playerId].dropped then
+    elseif isPlayerCached(playerId) then
+        if hasPlayerDropped(playerId) then
             offline = true
         end
-        if CachedPlayers[playerId].immune then
+        if isPlayerImmune(playerId) then
             return false
         end
-        bannedIdentifiers = CachedPlayers[playerId].identifiers
-        bannedUsername = CachedPlayers[playerId].name or getName(playerId, true)
+        bannedIdentifiers = getCachedPlayerIdentifiers(playerId)
+        bannedUsername = getCachedPlayerName(playerId) or getName(playerId, true)
     else
         PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
         return false

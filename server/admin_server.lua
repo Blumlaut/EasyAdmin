@@ -243,12 +243,12 @@ Citizen.CreateThread(function()
 		
 		cachePlayer(source) -- this will do nothing if player is already cached.
 		
-		if CachedPlayers[source].lastPermRequest and CachedPlayers[source].lastPermRequest+10 > os.time() then
-			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..CachedPlayers[source].lastPermRequest+10-os.time().." seconds left.", 3)
+		if getPlayerLastPermRequest(source) and getPlayerLastPermRequest(source)+10 > os.time() then
+			PrintDebugMessage(getName(source).." hit Permission Check Ratelimit! "..getPlayerLastPermRequest(source)+10-os.time().." seconds left.", 3)
 			return
 		end
 
-		CachedPlayers[source].lastPermRequest = os.time()
+		setPlayerLastPermRequest(source, os.time())
 		
 		local identifiers = getAllPlayerIdentifiers(source)
 		local perms = {}
@@ -321,25 +321,25 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:kickPlayer", function(playerId,reason)
 		-- Validate playerId before proceeding
-		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+		if not playerId or not isPlayerCached(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
 		
-		if DoesPlayerHavePermission(source, "player.kick") and CheckAdminCooldown(source, "kick") and not CachedPlayers[playerId].immune then
+		if DoesPlayerHavePermission(source, "player.kick") and CheckAdminCooldown(source, "kick") and not isPlayerImmune(playerId) then
 			SetAdminCooldown(source, "kick")
 			reason = formatShortcuts(reason)
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(source, false, true), getName(playerId, true, true), reason), "kick", 16711680)
 			PrintDebugMessage("Kicking Player "..getName(source, true).." for "..reason, 3)
 			DropPlayer(playerId, string.format(GetLocalisedText("kicked"), getName(source), reason) )
-		elseif CachedPlayers[playerId].immune then
+		elseif isPlayerImmune(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
 	
 	RegisterServerEvent("EasyAdmin:requestSpectate", function(playerId)
 		-- Validate playerId before proceeding
-		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+		if not playerId or not isPlayerCached(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -521,7 +521,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords", function(playerId,tgtCoords)
 		-- Validate playerId before proceeding
-		if playerId ~= -1 and (not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped) then
+		if playerId ~= -1 and (not playerId or not isPlayerCached(playerId)) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -542,7 +542,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer", function(id)
 		local source=source
-		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
+		if not hasPlayerDropped(id) and DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then
 			SetAdminCooldown(source, "teleport")
 			local tgtPed = GetPlayerPed(id)
 			if tgtPed == 0 then
@@ -570,7 +570,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:TeleportPlayerBack", function(id)
 		local source=source
-		if not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") then
+		if not hasPlayerDropped(id) and DoesPlayerHavePermission(source, "player.teleport.single") then
 			TriggerClientEvent('EasyAdmin:TeleportPlayerBack', id)
 		end
 	end)
@@ -580,7 +580,7 @@ Citizen.CreateThread(function()
 	---@param slapAmount number
 	---@return boolean
 	function slapPlayer(playerId,slapAmount)
-		if not CachedPlayers[playerId].immune then
+		if not isPlayerImmune(playerId) then
 			TriggerClientEvent("EasyAdmin:SlapPlayer", playerId, slapAmount)
 			return true
 		else
@@ -591,7 +591,7 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:SlapPlayer", function(playerId,slapAmount)
 		-- Validate playerId before proceeding
-		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+		if not playerId or not isPlayerCached(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -601,7 +601,7 @@ Citizen.CreateThread(function()
 			PrintDebugMessage("Player "..getName(source,true).." slapped "..getName(playerId,true).." for "..slapAmount.." HP", 3)
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminslappedplayer"), getName(source, false, true), getName(playerId, true, true), slapAmount), "slap", 16777214)
-		elseif CachedPlayers[playerId].immune then
+		elseif isPlayerImmune(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
@@ -613,7 +613,7 @@ Citizen.CreateThread(function()
 	---@return boolean
 	function freezePlayer(playerId, toggle)
 		if not toggle then toggle = not FrozenPlayers[playerId] end
-		if not CachedPlayers[playerId].immune then
+		if not isPlayerImmune(playerId) then
 			FrozenPlayers[playerId] = (toggle == true or nil)
 			TriggerClientEvent("EasyAdmin:FreezePlayer", playerId, toggle)
 			for i,_ in pairs(OnlineAdmins) do 
@@ -628,12 +628,12 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:FreezePlayer", function(playerId,toggle)
 		-- Validate playerId before proceeding
-		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+		if not playerId or not isPlayerCached(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
 		
-		if DoesPlayerHavePermission(source, "player.freeze") and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "freeze") then
+		if DoesPlayerHavePermission(source, "player.freeze") and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "freeze") then
 			local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
 			freezePlayer(playerId, toggle)
 			if toggle then
@@ -644,7 +644,7 @@ Citizen.CreateThread(function()
 				SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminunfrozeplayer"), getName(source, false, true), getName(playerId, true, true)), "freeze", 16777214)
 				PrintDebugMessage("Player "..getName(source,true).." unfroze "..getName(playerId,true), 3)
 			end
-		elseif CachedPlayers[playerId].immune then
+		elseif isPlayerImmune(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
@@ -660,7 +660,7 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
 		-- Validate playerId before proceeding
-		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+		if not playerId or not isPlayerCached(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
@@ -710,13 +710,13 @@ Citizen.CreateThread(function()
 	
 	RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)
 		-- Validate playerId before proceeding
-		if not playerId or not CachedPlayers[playerId] or CachedPlayers[playerId].dropped then
+		if not playerId or not isPlayerCached(playerId) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
 		
 		local src = source
-		if DoesPlayerHavePermission(src,"player.mute") and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "mute") then
+		if DoesPlayerHavePermission(src,"player.mute") and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "mute") then
 			SetAdminCooldown(source, "mute")
 			local muted = mutePlayer(playerId, not MutedPlayers[playerId])
 
@@ -739,7 +739,7 @@ Citizen.CreateThread(function()
 	---@param toggle boolean
 	---@return boolean
 	function mutePlayer(playerId, toggle)
-		if not CachedPlayers[playerId].immune then 
+		if not isPlayerImmune(playerId) then 
 			if toggle and not MutedPlayers[playerId] then
 				MutedPlayers[playerId] = true
 				if MumbleSetPlayerMuted then -- workaround for outdated servers
@@ -804,7 +804,7 @@ Citizen.CreateThread(function()
 		if (playerId == 0 or playerId == "") then
 			return "Console"
 		else
-			local cachedPlayer = CachedPlayers[playerId]
+			local cachedPlayer = getCachedPlayer(playerId)
 			local playerName
 			
 			if AnonymousAdmins[playerId] and not anonymousdisabled then
@@ -844,13 +844,13 @@ Citizen.CreateThread(function()
 
 	RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 		-- Validate id before proceeding
-		if not id or not CachedPlayers[id] or CachedPlayers[id].dropped then
+		if not id or not isPlayerCached(id) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
 			return
 		end
 		
 		local src = source
-		if DoesPlayerHavePermission(src,"player.warn") and not CachedPlayers[id].immune and CheckAdminCooldown(source, "warn") then
+		if DoesPlayerHavePermission(src,"player.warn") and not isPlayerImmune(id) and CheckAdminCooldown(source, "warn") then
 			SetAdminCooldown(source, "warn")
 			reason = formatShortcuts(reason)
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
@@ -870,24 +870,24 @@ Citizen.CreateThread(function()
 					DropPlayer(id, GetLocalisedText("warnkicked"))
 					WarnedPlayers[id] = nil
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
-					local bannedIdentifiers = CachedPlayers[id].identifiers or getAllPlayerIdentifiers(id)
-					local bannedUsername = CachedPlayers[id].name or getName(id, true)
+					local bannedIdentifiers = getCachedPlayerIdentifiers(id) or getAllPlayerIdentifiers(id)
+					local bannedUsername = getCachedPlayerName(id) or getName(id, true)
 					local expires = os.time()+GetConvarInt("ea_warningBanTime", 604800)
 					
-					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), CachedPlayers[id].name, getName(source, true) )
+					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(id), getName(source, true) )
 					local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = getName(source, true), reason = reason, expire = expires }
 					updateBlacklist( ban )
 					
 					
 					
-					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..CachedPlayers[id].name.." for "..reason, 3)
+					PrintDebugMessage("Player "..getName(source,true).." warnbanned player "..getCachedPlayerName(id).." for "..reason, 3)
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), bannedUsername, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
 					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 					WarnedPlayers[id] = nil
 					
 				end
 			end
-		elseif CachedPlayers[id].immune then
+		elseif isPlayerImmune(id) then
 			TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
 		end
 	end)
@@ -900,11 +900,11 @@ Citizen.CreateThread(function()
 	---@return boolean
 	function warnPlayerExport(src, id, reason)
 		-- Validate id before proceeding
-		if not id or not CachedPlayers[id] or CachedPlayers[id].dropped then
+		if not id or not isPlayerCached(id) then
 			return false
 		end
 		
-		if not CachedPlayers[id].immune then
+		if not isPlayerImmune(id) then
 			local maxWarnings = GetConvarInt("ea_maxWarnings", 3)
 			if not WarnedPlayers[id] then
 				WarnedPlayers[id] = {name = getName(id, true), identifiers = getAllPlayerIdentifiers(id), warns = 0}

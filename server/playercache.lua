@@ -65,6 +65,81 @@ function getCachedPlayer(id)
 end
 exports('getCachedPlayer', getCachedPlayer)
 
+---Checks if a player is cached and not dropped.
+---@param playerId number|string @The player ID to check.
+---@return boolean @True if player is cached and not dropped, false otherwise.
+function isPlayerCached(playerId)
+	local id = tonumber(playerId)
+	local player = getCachedPlayer(id)
+	return player and not player.dropped
+end
+exports('isPlayerCached', isPlayerCached)
+
+---Checks if a player is immune.
+---@param playerId number|string @The player ID to check.
+---@return boolean @True if player is immune, false otherwise.
+function isPlayerImmune(playerId)
+	local player = getCachedPlayer(playerId)
+	return player and player.immune
+end
+exports('isPlayerImmune', isPlayerImmune)
+
+---Gets a player's name from cache.
+---@param playerId number|string @The player ID.
+---@return string? @The player's name, or nil if not found.
+function getCachedPlayerName(playerId)
+	local player = getCachedPlayer(playerId)
+	return player and player.name
+end
+exports('getCachedPlayerName', getCachedPlayerName)
+
+---Gets a player's identifiers from cache.
+---@param playerId number|string @The player ID.
+---@return table? @The player's identifiers, or nil if not found.
+function getCachedPlayerIdentifiers(playerId)
+	local player = getCachedPlayer(playerId)
+	return player and player.identifiers
+end
+exports('getCachedPlayerIdentifiers', getCachedPlayerIdentifiers)
+
+---Gets a player's Discord ID from cache.
+---@param playerId number|string @The player ID.
+---@return string? @The player's Discord ID, or nil if not found.
+function getCachedPlayerDiscord(playerId)
+	local player = getCachedPlayer(playerId)
+	return player and player.discord
+end
+exports('getCachedPlayerDiscord', getCachedPlayerDiscord)
+
+---Checks if a player has dropped.
+---@param playerId number|string @The player ID to check.
+---@return boolean @True if player has dropped, false otherwise.
+function hasPlayerDropped(playerId)
+	local player = getCachedPlayer(playerId)
+	return player and player.dropped
+end
+exports('hasPlayerDropped', hasPlayerDropped)
+
+---Sets a player's last permission request time.
+---@param playerId number|string @The player ID.
+---@param timestamp number @The timestamp to set.
+function setPlayerLastPermRequest(playerId, timestamp)
+	local id = tonumber(playerId)
+	cachePlayer(id)
+	CachedPlayers[id].lastPermRequest = timestamp
+end
+exports('setPlayerLastPermRequest', setPlayerLastPermRequest)
+
+---Gets a player's last permission request time.
+---@param playerId number|string @The player ID.
+---@return number? @The timestamp, or nil if not found.
+function getPlayerLastPermRequest(playerId)
+	local id = tonumber(playerId)
+	cachePlayer(id)
+	return CachedPlayers[id].lastPermRequest
+end
+exports('getPlayerLastPermRequest', getPlayerLastPermRequest)
+
 AddEventHandler('playerDropped', function (reason)
 	if CachedPlayers[source] then
 		CachedPlayers[source].droppedTime = os.time()

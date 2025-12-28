@@ -37,7 +37,8 @@ end, false)
 RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
 	if source == 0 and args[1] then -- only let Console run this command
 		local id = tonumber(args[1])
-		print(json.encode(CachedPlayers[id].identifiers)) -- puke all identifiers into console
+		local identifiers = getCachedPlayerIdentifiers(id) or {}
+		print(json.encode(identifiers)) -- puke all identifiers into console
 	end
 end,false)
 
