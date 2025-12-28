@@ -788,33 +788,47 @@ Citizen.CreateThread(function()
 	---@param identifierenabled boolean
 	---@return string
 	function getName(src,anonymousdisabled,identifierenabled)
+		-- Guard against nil or invalid player IDs
+		if src == nil then
+			return "Unknown - nil"
+		end
+		
+		local playerId = tonumber(src)
+		if not playerId then
+			return "Unknown - invalid id: " .. tostring(src)
+		end
+		
 		local identifierPref = GetConvar("ea_logIdentifier", "steam,discord,license")
 		if identifierPref == "false" then identifierenabled = false end;
 		local identifiers, identifier = {}, "~No Identifier~"
-		if (src == 0 or src == "") then
+		if (playerId == 0 or playerId == "") then
 			return "Console"
 		else
-			if AnonymousAdmins[src] and not anonymousdisabled then
+			local cachedPlayer = CachedPlayers[playerId]
+			local playerName
+			
+			if AnonymousAdmins[playerId] and not anonymousdisabled then
 				return GetLocalisedText("anonymous")
-			elseif CachedPlayers[src] and CachedPlayers[src].name then
+			elseif cachedPlayer and cachedPlayer.name then
+				playerName = cachedPlayer.name
 				
-				if not identifierenabled then
-					return CachedPlayers[src].name
-				end
-
-				if not CachedPlayers[src].discord then
-					return CachedPlayers[src].name
-				end
-
-				return (string.format("%s [ %s ]", CachedPlayers[src].name, CachedPlayers[src].discord))
-
-			elseif (GetPlayerName(src)) then
-				local playerName = GetPlayerName(src)
 				if not identifierenabled then
 					return playerName
 				end
 
-				local playerDiscord = GetPlayerIdentifierByType(src, "discord") and GetPlayerIdentifierByType(src, "discord"):gsub("discord:", "") or false
+				if not cachedPlayer.discord then
+					return playerName
+				end
+
+				return (string.format("%s [ %s ]", playerName, cachedPlayer.discord))
+
+			elseif (GetPlayerName(playerId)) then
+				playerName = GetPlayerName(playerId)
+				if not identifierenabled then
+					return playerName
+				end
+
+				local playerDiscord = GetPlayerIdentifierByType(playerId, "discord") and GetPlayerIdentifierByType(playerId, "discord"):gsub("discord:", "") or false
 				if not playerDiscord then
 					return playerName
 				end
@@ -822,7 +836,7 @@ Citizen.CreateThread(function()
 				return (string.format("%s [ %s ]", playerName, playerDiscord))
 
 			else
-				return "Unknown - " .. src
+				return "Unknown - " .. tostring(src)
 			end
 		end
 	end
