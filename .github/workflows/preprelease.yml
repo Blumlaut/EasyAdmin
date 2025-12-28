@@ -12,6 +12,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - name: Get previous tag
+      id: previous_tag
+      run: |
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        echo "previous_tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
+    - name: Generate changelog
+      id: generate_changelog
+      run: |
+        if [ -n "${{ steps.previous_tag.outputs.previous_tag }}" ]; then
+          CHANGELOG=$(git log --pretty=format:"- %s" ${{ steps.previous_tag.outputs.previous_tag }}..HEAD)
+        else
+          CHANGELOG=$(git log --pretty=format:"- %s")
+        fi
+        echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
+        echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
+        echo "EOF" >> "$GITHUB_OUTPUT"
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        name: EasyAdmin ${{ github.event.inputs.version }}
+        body: |
+          # EasyAdmin ${{ github.event.inputs.version }}
+
+          ## What's Changed
+          ${{ steps.generate_changelog.outputs.changelog }}
+
+          Supported by:
+          <a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
+          <p align="center">10% Discount Code: <b>EasyAdmin</b></p>
+
+          **Full Changelog**: https://github.com/Blumlaut/EasyAdmin/compare/${{ steps.previous_tag.outputs.previous_tag }}...${{ github.event.inputs.version }}
+        draft: false
+        prerelease: false
     - name: Push Tag
       run: | 
             echo "version is ${{ github.event.inputs.version }}"
