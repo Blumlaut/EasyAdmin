@@ -6,6 +6,7 @@ author 'Blumlaut <blue@furfag.de>'
 description 'EasyAdmin - Admin Menu for FiveM & RedM'
 repository 'https://github.com/Blumlaut/EasyAdmin'
 version '7.51'
+api_version '2'
 is_master 'yes'
 
 
@@ -90,6 +91,5 @@ convar_category 'EasyAdmin' {
         { "Routing Bucket Options", "$ea_routingBucketOptions", "CV_BOOL", "false" },
         { "Enable Action History", "$ea_enableActionHistory", "CV_BOOL", "true" },
         { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "30" }, -- Recommended time is 30 days,
-        { "Storage API Version", "$ea_storageAPIVersion", "CV_INT", "1"} -- Not recommended to edit unless you know what you are doing
     }
 }
