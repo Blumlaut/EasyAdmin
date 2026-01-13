@@ -14,8 +14,9 @@ banlist = {}
 actions = {}
 
 local function LoadList(fileName)
-    local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
-    local currentVersion = GetConvar("$ea_storageAPIVersion", 1)
+    local resourceName = GetCurrentResourceName()
+    local content = LoadResourceFile(resourceName, fileName .. ".json")
+    local currentVersion = tonumber(GetResourceMetadata(resourceName, 'api_version', 1))
     local defaultData = {
         version = currentVersion,
         data = {}
@@ -140,6 +141,7 @@ Storage = {
                     return false
                 end
                 return true
+            end
         end
         return false
     end,
