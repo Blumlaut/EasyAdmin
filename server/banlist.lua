@@ -80,7 +80,6 @@ AddEventHandler('banCheater', function(playerId,reason)
     Citizen.Trace("^1EasyAdmin^7: the banCheater event is ^1deprecated^7 and has been removed! Please adjust your ^3"..GetInvokingResource().."^7 Resource to use EasyAdmin:addBan instead.")
 end)
 
-
 ---Adds a ban to the banlist, either for an online or offline player
 ---@param playerId number|string|table @The ID of the player or a table of identifiers if the player is offline
 ---@param reason string @The reason for the ban
@@ -114,7 +113,7 @@ function addBanExport(playerId,reason,expires,banner)
     end
     reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
     Storage.addBan(GetFreshBanId(), bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
-    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", source, expires, formatDateString(expires))
+    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", source)
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
     end
