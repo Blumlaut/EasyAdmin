@@ -441,11 +441,11 @@ function GenerateMenu() -- this is a big ass function
 					_menuPool:MouseControlsEnabled(false)
 
 					for i,thePlayer in ipairs(temp) do
-						local title = "["..thePlayer.id.."] "..thePlayer.name, ""
+						local title, description = "[".. thePlayer.id .."] "..thePlayer.name, ""
 						if thePlayer.cached then
 							title = thePlayer.name
 						end
-						local thisItem = NativeUI.CreateItem(title)
+						local thisItem = NativeUI.CreateItem(title, description)
 						resultMenu:AddItem(thisItem)
 						thisItem.Activated = function(ParentMenu, SelectedItem)
 							_menuPool:CloseAllMenus()
