@@ -18,10 +18,10 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
             return
         end
         local history = Storage.getAction(discordId)
-        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", source, history)
+        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", source, history, discordId)
     else
         PrintDebugMessage("Player does not have permission to view action history.", 2)
-        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", source, {})
+        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", source, {}, discordId)
     end
 end)
 

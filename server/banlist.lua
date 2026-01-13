@@ -472,7 +472,7 @@ function performBanlistUpgrades()
             banlist[i].banid = freshId
             upgraded = true
         end
-        takenIds[b.banid] = true 
+        takenIds[b.banid] = true
     end
     takenIds=nil
 
