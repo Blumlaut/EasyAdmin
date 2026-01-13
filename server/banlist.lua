@@ -133,7 +133,7 @@ function addBanExport(playerId,reason,expires,banner)
     end
     reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
     Storage.addBan(GetFreshBanId(), bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
-    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", source, expires, formatDateString(expires))
+    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", source)
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
     end
