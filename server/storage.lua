@@ -10,8 +10,9 @@
 ------------------------------------
 ------------------------------------
 
-banlist = {}
-actions = {}
+local listsReady = false
+local banlist = {}
+local actions = {}
 
 local function LoadList(fileName)
     local resourceName = GetCurrentResourceName()
@@ -62,11 +63,11 @@ local function updateList(fileName)
     end
 end
 
-banlist = LoadList("banlist").data
-actions = LoadList("actions").data
-
 Storage = {
     getBan = function(banId)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 return ban
@@ -75,6 +76,9 @@ Storage = {
         return false
     end,
     getBanIdentifier = function(identifiers)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         local found = false
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
@@ -87,6 +91,9 @@ Storage = {
         return found
     end,
     addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         table.insert(banlist, {
             time = os.time(),
             banid = banId,
@@ -127,6 +134,9 @@ Storage = {
         end
     end,
     removeBan = function(banId)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 table.remove(banlist, i)
@@ -146,6 +156,9 @@ Storage = {
         return false
     end,
     removeBanIdentifier = function(identifiers)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
                 if ban.identifiers[identifier] then
@@ -167,9 +180,15 @@ Storage = {
         return
     end,
     getBanList = function()
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         return banlist
     end,
     getAction = function(discordId)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         local userActions = {}
         for _, act in ipairs(actions) do
             if act.discord == discordId then
@@ -179,6 +198,9 @@ Storage = {
         return userActions
     end,
     addAction = function(type, identifier, reason, moderator_name, moderator_identifier)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         local max_id = 0
         for _, act in ipairs(actions) do
             if act.id and act.id > max_id then
@@ -206,6 +228,9 @@ Storage = {
         return
     end,
     removeAction = function(actionId)
+        while not listsReady do
+            Citizen.Wait(0)
+        end
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
@@ -221,25 +246,28 @@ Storage = {
             end
         end
         return
-    end,
-    apiVersion = 1,
+    end
 }
 
 Citizen.CreateThread(function()
-    local currentVersion = GetConvar("$ea_storageAPIVersion", 1)
+    local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'api_version', 1)
     local banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
     if banContent then
         local data = json.decode(banContent)
         if data.version ~= currentVersion then
             updateList('banlist')
+            banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
         end
     end
+
+    banlist = json.decode(banContent) or {}
 
     local actionContent = LoadResourceFile(GetCurrentResourceName(), "actions.json")
     if actionContent then
         local data = json.decode(actionContent)
         if data.version ~= currentVersion then
             updateList('actions')
+            actionContent = LoadResourceFile(GetCurrentResourceName(), "actions.json")
         end
     else
         PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
@@ -249,7 +277,7 @@ Citizen.CreateThread(function()
         end
         content = json.encode({})
     end
-    actions = json.decode(content)
+    actions = json.decode(actionContent) or {}
 
     PrintDebugMessage("Clearing expired actions from action history", 4)
     for i, action in ipairs(actions) do
@@ -258,4 +286,6 @@ Citizen.CreateThread(function()
             PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
         end
     end
+
+    listsReady = true
 end)
