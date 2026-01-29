@@ -18,9 +18,10 @@ blacklist = {}
 ---@param expires number @The timestamp when the ban should expire
 ---@return nil
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
-    if playerId ~= nil and CheckAdminCooldown(source, "ban") then
-        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
-            SetAdminCooldown(source, "ban")
+    local src = source
+    if playerId ~= nil and CheckAdminCooldown(src, "ban") then
+        if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and CachedPlayers[playerId] and not CachedPlayers[playerId].immune then
+            SetAdminCooldown(src, "ban")
             local bannedIdentifiers = CachedPlayers[playerId].identifiers or getAllPlayerIdentifiers(playerId)
             local username = CachedPlayers[playerId].name or getName(playerId, true)
             if expires and expires < os.time() then
@@ -28,19 +29,19 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             elseif not expires then 
                 expires = 10444633200
             end
-            if expires >= 10444633200 and not DoesPlayerHavePermission(source, "player.ban.permanent") then
+            if expires >= 10444633200 and not DoesPlayerHavePermission(src, "player.ban.permanent") then
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
+            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(src) )
             local banId = GetFreshBanId()
-            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
-            Storage.addAction("BAN", CachedPlayers[playerId].discord, reason, getName(source), CachedPlayers[source].discord)
-            PrintDebugMessage("Player "..getName(source,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
+            Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time())
+            Storage.addAction("BAN", CachedPlayers[playerId].discord, reason, getName(src), CachedPlayers[src].discord)
+            PrintDebugMessage("Player "..getName(src,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif CachedPlayers[playerId].immune then
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
+            TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("adminimmune"))
         end
     end
 end)
@@ -188,13 +189,14 @@ end
 exports('fetchBan', fetchBan)
 
 RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
-    if DoesPlayerHavePermission(source, "player.ban.remove") and CheckAdminCooldown(source, "unban") then
-        SetAdminCooldown(source, "unban")
+    local src = source
+    if DoesPlayerHavePermission(src, "player.ban.remove") and CheckAdminCooldown(src, "unban") then
+        SetAdminCooldown(src, "unban")
         local thisBan = fetchBan(banId)
         local ret = unbanPlayer(banId)
         if ret then
-            PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), banId, thisBan.reason), "ban", 16711680)
+            PrintDebugMessage("Player "..getName(src,true).." unbanned "..banId, 3)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(src, false, true), banId, thisBan.reason), "ban", 16711680)
         end
     end
 end)
@@ -349,7 +351,7 @@ end
 ---@param identifier string @The identifier of the player to unban
 ---@return nil
 function UnbanIdentifier(identifier)
-    Storage.removeBanIdentifier(identifier)
+    Storage.unbanIdentifier(identifier)
 end
 
 ---Unbans a player using their ban ID
