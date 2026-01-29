@@ -155,29 +155,30 @@ Storage = {
         end
         return false
     end,
-    removeBanIdentifier = function(identifiers)
+    unbanIdentifier = function(identifier)
         repeat
             Citizen.Wait(0)
         until listsReady
-        for i, ban in ipairs(banlist) do
-            for j, identifier in ipairs(identifiers) do
-                if ban.identifiers[identifier] then
-                    table.remove(banlist, i)
-                    local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-                    if not content then
-                        PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-                        content = json.encode({})
-                    end
-                    local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
-                    if not saved then
-                        PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+        if identifier then
+            for i,ban in ipairs(banlist) do
+                for index,id in pairs(ban.identifiers) do
+                    if identifier == id then
+                        table.remove(banlist,i)
+                        local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
+                        if not content then
+                            PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
+                            content = json.encode({})
+                        end
+                        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
+                        if not saved then
+                            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
+                        end
+                        PrintDebugMessage("removed ban as per unbanidentifier func", 4)
                         return
                     end
-                    return
                 end
             end
         end
-        return
     end,
     getBanList = function()
         repeat

@@ -32,15 +32,14 @@ end
 ---@param expires number @The timestamp when the ban should expire
 ---@return nil
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
-    -- Validate playerId before proceeding
+    local src = source
     if not playerId or not isPlayerOnline(playerId) then
-        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("invalidplayer"))
         return
     end
-    
-    if playerId ~= nil and CheckAdminCooldown(source, "ban") then
-        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
-            SetAdminCooldown(source, "ban")
+    if playerId ~= nil and CheckAdminCooldown(src, "ban") then
+        if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and not isPlayerImmune(playerId) then
+            SetAdminCooldown(src, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
             local username = getCachedPlayerName(playerId) or getName(playerId, true)
             if expires and expires < os.time() then
@@ -48,19 +47,19 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             elseif not expires then 
                 expires = 10444633200
             end
-            if expires >= 10444633200 and not DoesPlayerHavePermission(source, "player.ban.permanent") then
+            if expires >= 10444633200 and not DoesPlayerHavePermission(src, "player.ban.permanent") then
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
+            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(src) )
             local banId = GetFreshBanId()
-            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "BAN", os.time())
-            Storage.addAction("BAN", CachedPlayers[playerId].discord, reason, getName(source), CachedPlayers[source].discord)
-            PrintDebugMessage("Player "..getName(source,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
+            Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time())
+            Storage.addAction("BAN", CachedPlayers[playerId].discord, reason, getName(src), CachedPlayers[src].discord)
+            PrintDebugMessage("Player "..getName(src,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
         elseif isPlayerImmune(playerId) then
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
+            TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("adminimmune"))
         end
     end
 end)
@@ -207,13 +206,14 @@ end
 exports('fetchBan', fetchBan)
 
 RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
-    if DoesPlayerHavePermission(source, "player.ban.remove") and CheckAdminCooldown(source, "unban") then
-        SetAdminCooldown(source, "unban")
+    local src = source
+    if DoesPlayerHavePermission(src, "player.ban.remove") and CheckAdminCooldown(src, "unban") then
+        SetAdminCooldown(src, "unban")
         local thisBan = fetchBan(banId)
         local ret = unbanPlayer(banId)
         if ret then
-            PrintDebugMessage("Player "..getName(source,true).." unbanned "..banId, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), banId, thisBan.reason), "ban", 16711680)
+            PrintDebugMessage("Player "..getName(src,true).." unbanned "..banId, 3)
+            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(src, false, true), banId, thisBan.reason), "ban", 16711680)
         end
     end
 end)
@@ -373,32 +373,7 @@ end
 ---@param identifier string @The identifier of the player to unban
 ---@return nil
 function UnbanIdentifier(identifier)
-    Storage.removeBanIdentifier(identifier)
-<<<<<<< HEAD
-    -- if identifier then
-    --     for i,ban in pairs(blacklist) do
-    --         for index,id in pairs(ban.identifiers) do
-    --             if identifier == id then
-    --                 table.remove(blacklist,i)
-    --                 local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-    --                 if not saved then
-    --                     PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-    --                 end
-                    
-                    if GetConvar("ea_custombanlist", "false") == "true" then 
-                        TriggerEvent("ea_data:removeBan", ban)
-                    end
-                    PrintDebugMessage("removed ban as per unbanidentifier func", 4)
-                    
-                    -- Rebuild ban index after removing a ban
-                    rebuildBanIndex()
-                    return
-                end 
-            end
-        end
-    end
-=======
->>>>>>> beb2bbf ((fix): Removing dead code)
+    Storage.unbanIdentifier(identifier)
 end
 
 ---Unbans a player using their ban ID
@@ -406,23 +381,7 @@ end
 ---@return nil
 function UnbanId(id)
     Storage.removeBan(id)
-<<<<<<< HEAD
-    -- for i,ban in pairs(blacklist) do
-    --     if ban.banid == id then
-    --         table.remove(blacklist,i)
-    --         local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-    --         if not saved then
-    --             PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-    --         end
-            
-    --         if GetConvar("ea_custombanlist", "false") == "true" then
-    --             TriggerEvent("ea_data:removeBan", ban)
-    --         end
-    --         TriggerEvent("EasyAdmin:LogAction", {action = "UNBAN", banId = id })
-    --     end
-    -- end
-=======
->>>>>>> beb2bbf ((fix): Removing dead code)
+
 end
 function performBanlistUpgrades()
     local upgraded = false
