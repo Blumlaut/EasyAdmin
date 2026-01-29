@@ -81,7 +81,7 @@ Storage = {
         until listsReady
         local found = false
         for i, ban in ipairs(banlist) do
-            for j, identifier in ipairs(identifiers) do
+            for j, identifier in ipairs(ban.identifiers) do
                 if ban.identifiers[identifier] then
                     found = true
                     break
