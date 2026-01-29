@@ -17,7 +17,7 @@ local actions = {}
 local function LoadList(fileName)
     local resourceName = GetCurrentResourceName()
     local content = LoadResourceFile(resourceName, fileName .. ".json")
-    local currentVersion = tonumber(GetResourceMetadata(resourceName, 'api_version', 1))
+    local currentVersion = tonumber(GetResourceMetadata(resourceName, 'storage_api_version', 1))
     local defaultData = {
         version = currentVersion,
         data = {}
@@ -250,7 +250,7 @@ Storage = {
 }
 
 Citizen.CreateThread(function()
-    local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'api_version', 1)
+    local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
     local banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
     if banContent then
         local data = json.decode(banContent)
