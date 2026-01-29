@@ -65,9 +65,9 @@ end
 
 Storage = {
     getBan = function(banId)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 return ban
@@ -76,9 +76,9 @@ Storage = {
         return false
     end,
     getBanIdentifier = function(identifiers)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         local found = false
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
@@ -91,9 +91,9 @@ Storage = {
         return found
     end,
     addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         table.insert(banlist, {
             time = os.time(),
             banid = banId,
@@ -134,9 +134,9 @@ Storage = {
         end
     end,
     removeBan = function(banId)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 table.remove(banlist, i)
@@ -156,9 +156,9 @@ Storage = {
         return false
     end,
     removeBanIdentifier = function(identifiers)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         for i, ban in ipairs(banlist) do
             for j, identifier in ipairs(identifiers) do
                 if ban.identifiers[identifier] then
@@ -180,15 +180,15 @@ Storage = {
         return
     end,
     getBanList = function()
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         return banlist
     end,
     getAction = function(discordId)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         local userActions = {}
         for _, act in ipairs(actions) do
             if act.discord == discordId then
@@ -198,9 +198,9 @@ Storage = {
         return userActions
     end,
     addAction = function(type, identifier, reason, moderator_name, moderator_identifier)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         local max_id = 0
         for _, act in ipairs(actions) do
             if act.id and act.id > max_id then
@@ -228,9 +228,9 @@ Storage = {
         return
     end,
     removeAction = function(actionId)
-        while not listsReady do
+        repeat
             Citizen.Wait(0)
-        end
+        until listsReady
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
