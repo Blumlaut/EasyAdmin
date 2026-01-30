@@ -14,52 +14,30 @@ local listsReady = false
 local banlist = {}
 local actions = {}
 
-local function LoadList(fileName)
-    local resourceName = GetCurrentResourceName()
-    local content = LoadResourceFile(resourceName, fileName .. ".json")
-    local currentVersion = tonumber(GetResourceMetadata(resourceName, 'storage_api_version', 1))
-    local defaultData = {
-        version = currentVersion,
-        data = {}
-    }
-    if content then
-        local decoded = json.decode(content)
-
-        if not decoded then
-            decoded = defaultData
-
-        elseif not decoded.version then
-            if decoded[1] or next(decoded) ~= nil then
-                decoded = {
-                    version = currentVersion,
-                    data = decoded
-                }
-            else
-                decoded = defaultData
-            end            
-        end
-
-        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(decoded, { indent=true }), -1)
-        return decoded
-    else
-        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(defaultData, { indent=true }), -1)
-        return defaultData
-    end
+local function updateList(filename)
+    return
 end
 
-local function updateList(fileName)
-    local content = LoadResourceFile(GetCurrentResourceName(), fileName .. ".json")
+local function loadJsonFile(filename, currentVersion)
+    local content = LoadResourceFile(GetCurrentResourceName(), filename)
     if content then
         local data = json.decode(content)
-        if not data then
-            data = {
-                version = currentVersion,
-                data = {}
-            }
+        if data.version ~= currentVersion then
+            updateList(filename)
+            content = LoadResourceFile(GetCurrentResourceName(), filename)
         end
-        -- Migration logic can be added here for future versions
-        data.version = currentVersion
-        SaveResourceFile(GetCurrentResourceName(), fileName .. ".json", json.encode(data, { indent=true }), -1)
+    else
+        PrintDebugMessage(filename .. " file was missing, we created a new one.", 2)
+        content = json.encode({})
+    end
+
+    return content
+end
+
+local function saveJsonFile(filename, data)
+    local saved = SaveResourceFile(GetCurrentResourceName(), filename, json.encode(data, {indent = true, version = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 0)}), -1)
+    if not saved then
+        PrintDebugMessage("^1Saving " .. filename .. " failed! Please check if EasyAdmin has Permission to write in its owner folder!^7", 1)
     end
 end
 
@@ -106,32 +84,21 @@ Storage = {
             type = type,
             timeLeft = time,
         })
-        local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-        if not content then
-            PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-            content = json.encode({
-                version = 1,
-                bans = {}
-            })
-        end
-        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-        end
+        saveJsonFile("banlist.json", banlist)
     end,
-    -- Not too sure what this one does
-    -- updateBan = function(banId, .....)
-    -- end,
+    updateBan = function(id, newData)
+        if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
+            for i, ban in pairs(banlist) do
+                if ban.banid == newData.banid then
+                    banlist[i] = newData
+                    saveJsonFile("banlist.json", banlist)
+                    break
+                end
+            end
+        end 
+    end,
     updateBanlist = function(banlist)
-        local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-        if not content then
-            PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-            content = json.encode({})
-        end
-        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-        end
+        saveJsonFile("banlist.json", banlist)
     end,
     removeBan = function(banId)
         repeat
@@ -140,16 +107,7 @@ Storage = {
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 table.remove(banlist, i)
-                local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-                if not content then
-                    PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-                    content = json.encode({})
-                end
-                local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
-                if not saved then
-                    PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-                    return false
-                end
+                saveJsonFile("banlist.json", banlist)
                 return true
             end
         end
@@ -164,15 +122,7 @@ Storage = {
                 for index,id in pairs(ban.identifiers) do
                     if identifier == id then
                         table.remove(banlist,i)
-                        local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-                        if not content then
-                            PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-                            content = json.encode({})
-                        end
-                        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(banlist, {indent = true}), -1)
-                        if not saved then
-                            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-                        end
+                        saveJsonFile("banlist.json", banlist)
                         PrintDebugMessage("removed ban as per unbanidentifier func", 4)
                         return
                     end
@@ -217,16 +167,7 @@ Storage = {
             moderator = moderator_name,
             moderatorId = moderator_identifier,
         })
-        local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
-        if not content then
-            PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
-            content = json.encode({})
-        end
-        local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode(actions, {indent = true}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-        end
-        return
+        saveJsonFile("actions.json", actions)
     end,
     removeAction = function(actionId)
         repeat
@@ -235,15 +176,7 @@ Storage = {
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
-                local content = LoadResourceFile(GetCurrentResourceName(), "actions.json")
-                if not content then
-                    PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
-                    content = json.encode({})
-                end
-                local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode(actions, {indent = true}), -1)
-                if not saved then
-                    PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-                end
+                saveJsonFile("actions.json", actions)
             end
         end
         return
@@ -252,32 +185,12 @@ Storage = {
 
 Citizen.CreateThread(function()
     local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
+    local banContent = loadJsonFile("banlist.json", currentVersion)
     local banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-    if banContent then
-        local data = json.decode(banContent)
-        if data.version ~= currentVersion then
-            updateList('banlist')
-            banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-        end
-    end
 
     banlist = json.decode(banContent) or {}
 
-    local actionContent = LoadResourceFile(GetCurrentResourceName(), "actions.json")
-    if actionContent then
-        local data = json.decode(actionContent)
-        if data.version ~= currentVersion then
-            updateList('actions')
-            actionContent = LoadResourceFile(GetCurrentResourceName(), "actions.json")
-        end
-    else
-        PrintDebugMessage("actions.json file was missing, we created a new one.", 2)
-        local saved = SaveResourceFile(GetCurrentResourceName(), "actions.json", json.encode({}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving actions.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-        end
-        content = json.encode({})
-    end
+    local actionContent = loadJsonFile("actions.json", currentVersion)
     actions = json.decode(actionContent) or {}
 
     PrintDebugMessage("Clearing expired actions from action history", 4)
