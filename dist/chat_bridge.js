@@ -46,7 +46,7 @@ try {
     var embed = await prepareGenericEmbed(void 0, void 0, 55555, void 0, void 0, userInfo, outMessage.args[1], false);
     client.channels.cache.get(GetConvar("ea_botChatBridge", "")).send({ embeds: [embed] });
   });
-} catch (error) {
+} catch {
   if (GetConvar("ea_botChatBridge", "") != "") {
     console.error("Registering Chat Bridge failed, you will need to update your chat resource from https://github.com/citizenfx/cfx-server-data to use it.");
   }
