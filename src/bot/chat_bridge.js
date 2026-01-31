@@ -38,7 +38,6 @@ try {
 					}
 				} catch {
 					knownAvatars[source] = false // something broke while trying to get discourse avatar, dont try again.
-                    
 				}
 			} else {
 				knownAvatars[source] = false // no fivem identifier
@@ -55,8 +54,8 @@ try {
 	})
     
     
-} catch(error) {
-	if (GetConvar('ea_botChatBridge', '') != '') { 
+} catch {
+	if (GetConvar('ea_botChatBridge', '') != '') {
 		console.error('Registering Chat Bridge failed, you will need to update your chat resource from https://github.com/citizenfx/cfx-server-data to use it.')
 	}
 }

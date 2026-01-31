@@ -14,7 +14,7 @@ global.syncDiscordRoles = async function (player) {
 		if (!user) {
 			return false
 		}
-	} catch (error) {
+	} catch {
 		return
 	}
 	
