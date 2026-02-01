@@ -1001,17 +1001,123 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while true do
-		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", checkVersion, "GET")
-		Wait(3600000)
+	function getLatestVersion()
+		local latestVersion,latestURL
+		
+		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", function(err,response,headers)
+			if err == 200 then
+				local data = json.decode(response)
+				latestVersion = data.tag_name
+				latestURL = data.html_url
+			else
+				latestVersion = GetVersion()
+				latestURL = "https://github.com/Blumlaut/EasyAdmin"
+			end		
+			PrintDebugMessage("Version check returned "..err..", Local Version: "..GetVersion()..", Remote Version: "..latestVersion, 4)
+		end, "GET")
+		
+		repeat
+			Wait(50)
+		until (latestVersion and latestURL)
+		return latestVersion, latestURL
 	end
-end)
+	exports('getLatestVersion', getLatestVersion)
 
-Citizen.CreateThread(function()
-	-- Makes an HTTP request and returns the result
-	---@param url string
-	---@param ... any
-	---@return string
+	function checkVersion()
+		local remoteVersion,remoteURL = getLatestVersion()
+
+		if GetResourceKvpString('currentVersion') ~= curVersion then
+			local legacyFiles = {
+				'__resource.lua',
+				'version.json',
+				'admin_server.lua',
+				'admin_client.lua',
+				'gui_c.lua',
+				'util_shared.lua',
+				'yarn.lock',
+				'.yarn.installed',
+				'server/bot/notifications.js',
+				'package.json',
+				'server/bot/bot.js',
+				'server/bot/chat_bridge.js',
+				'server/bot/functions.js',
+				'server/bot/logging.js',
+				'server/bot/player_events.js',
+				'server/bot/reports.js',
+				'server/bot/roles.js',
+				'server/bot/server_status.js',
+				'server/bot/commands/add_ace.js',
+				'server/bot/commands/add_group.js',
+				'server/bot/commands/announce.js',
+				'server/bot/commands/ban.js',
+				'server/bot/commands/baninfo.js',
+				'server/bot/commands/cleanup.js',
+				'server/bot/commands/configure.js',
+				'server/bot/commands/freeze.js',
+				'server/bot/commands/kick.js',
+				'server/bot/commands/mute.js',
+				'server/bot/commands/playerinfo.js',
+				'server/bot/commands/playerlist.js',
+				'server/bot/commands/refreshperms.js',
+				'server/bot/commands/remove_ace.js',
+				'server/bot/commands/remove_group.js',
+				'server/bot/commands/screenshot.js',
+				'server/bot/commands/slap.js',
+				'server/bot/commands/unban.js',
+				'server/bot/commands/unfreeze.js',
+				'server/bot/commands/unmute.js',
+				'server/bot/commands/warn.js',
+				'dist/commands/configure.js'
+			}
+		
+			for i,file in pairs(legacyFiles) do
+				local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
+				if fileExists then
+					os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
+					PrintDebugMessage("Found legacy file "..file.." in EasyAdmin Folder and attempted deletion.", 2)
+				end
+			end
+
+			PrintDebugMessage('EasyAdmin has been updated, or just been installed for the first time, please restart EasyAdmin to ensure smooth operation.', 1)
+			
+			SetResourceKvpNoSync('currentVersion', curVersion)
+		end
+
+		if isMaster then
+			PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
+		end
+
+		if not tonumber(curVersion) then
+			PrintDebugMessage("EasyAdmin's Version Number is invalid, this usually means you are using a pre-release version")
+		elseif curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+			print("\n--------------------------------------------------------------------------")
+			print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..remoteURL)
+			print("\n--------------------------------------------------------------------------")
+			updateAvailable = remoteVersion
+		elseif tonumber(curVersion) > tonumber(remoteVersion) then
+			PrintDebugMessage("Your version of "..resourceName.." seems to be higher than the current stable version.", 2)
+		end
+		
+		if GetResourceState("screenshot-basic") == "missing" then 
+			PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
+		else
+			StartResource("screenshot-basic")
+			screenshots = true
+		end
+		
+		local onesync = GetConvar("onesync", "off")
+		if (onesync ~= "off" and onesync ~= "legacy") then 
+			PrintDebugMessage("Onesync is Infinity", 3)
+			infinity = true
+		end
+		
+		if GetConvar("ea_defaultKey", "none") == "none" and RedM then
+			PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
+		end
+	end
+
+	exports('checkVersion', checkVersion)
+
 	function HTTPRequest(url, ...)
 		local err,response,headers
 		
@@ -1025,6 +1131,11 @@ Citizen.CreateThread(function()
 		return response
 	end
 	exports('HTTPRequest', HTTPRequest)
+
+	while true do
+		checkVersion()
+		Wait(3600000)
+	end
 end)
 
 Citizen.CreateThread(function()
@@ -1151,124 +1262,6 @@ end)
 
 curVersion, isMaster = GetVersion()
 local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
-function checkVersion()
-	local remoteVersion,remoteURL = getLatestVersion()
-
-	if GetResourceKvpString('currentVersion') ~= curVersion then
-		local legacyFiles = {
-			'__resource.lua',
-			'version.json',
-			'admin_server.lua',
-			'admin_client.lua',
-			'gui_c.lua',
-			'util_shared.lua',
-			'yarn.lock',
-			'.yarn.installed',
-			'server/bot/notifications.js',
-			'package.json',
-			'server/bot/bot.js',
-			'server/bot/chat_bridge.js',
-			'server/bot/functions.js',
-			'server/bot/logging.js',
-			'server/bot/player_events.js',
-			'server/bot/reports.js',
-			'server/bot/roles.js',
-			'server/bot/server_status.js',
-			'server/bot/commands/add_ace.js',
-			'server/bot/commands/add_group.js',
-			'server/bot/commands/announce.js',
-			'server/bot/commands/ban.js',
-			'server/bot/commands/baninfo.js',
-			'server/bot/commands/cleanup.js',
-			'server/bot/commands/configure.js',
-			'server/bot/commands/freeze.js',
-			'server/bot/commands/kick.js',
-			'server/bot/commands/mute.js',
-			'server/bot/commands/playerinfo.js',
-			'server/bot/commands/playerlist.js',
-			'server/bot/commands/refreshperms.js',
-			'server/bot/commands/remove_ace.js',
-			'server/bot/commands/remove_group.js',
-			'server/bot/commands/screenshot.js',
-			'server/bot/commands/slap.js',
-			'server/bot/commands/unban.js',
-			'server/bot/commands/unfreeze.js',
-			'server/bot/commands/unmute.js',
-			'server/bot/commands/warn.js',
-			'dist/commands/configure.js'
-		}
-	
-		for i,file in pairs(legacyFiles) do
-			local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
-			if fileExists then
-				os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
-				PrintDebugMessage("Found legacy file "..file.." in EasyAdmin Folder and attempted deletion.", 2)
-			end
-		end
-
-		PrintDebugMessage('EasyAdmin has been updated, or just been installed for the first time, please restart EasyAdmin to ensure smooth operation.', 1)
-		
-		SetResourceKvpNoSync('currentVersion', curVersion)
-	end
-
-	if isMaster then
-		PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
-	end
-
-	if not tonumber(curVersion) then
-		PrintDebugMessage("EasyAdmin's Version Number is invalid, this usually means you are using a pre-release version")
-	elseif curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
-		print("\n--------------------------------------------------------------------------")
-		print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..remoteURL)
-		print("\n--------------------------------------------------------------------------")
-		updateAvailable = remoteVersion
-	elseif tonumber(curVersion) > tonumber(remoteVersion) then
-		PrintDebugMessage("Your version of "..resourceName.." seems to be higher than the current stable version.", 2)
-	end
-	
-	if GetResourceState("screenshot-basic") == "missing" then 
-		PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
-	else
-		StartResource("screenshot-basic")
-		screenshots = true
-	end
-	
-	local onesync = GetConvar("onesync", "off")
-	if (onesync ~= "off" and onesync ~= "legacy") then 
-		PrintDebugMessage("Onesync is Infinity", 3)
-		infinity = true
-	end
-	
-	if GetConvar("ea_defaultKey", "none") == "none" and RedM then
-		PrintDebugMessage("ea_defaultKey is not defined, EasyAdmin can only be opened using the /easyadmin command, to define a key:\nhttps://easyadmin.readthedocs.io/en/latest", 1)
-	end
-end
-
-
-Citizen.CreateThread(function()
-	function getLatestVersion()
-		local latestVersion,latestURL
-		
-		PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", function(err,response,headers)
-			if err == 200 then
-				local data = json.decode(response)
-				latestVersion = data.tag_name
-				latestURL = data.html_url
-			else
-				latestVersion = GetVersion()
-				latestURL = "https://github.com/Blumlaut/EasyAdmin"
-			end		
-			PrintDebugMessage("Version check returned "..err..", Local Version: "..GetVersion()..", Remote Version: "..latestVersion, 4)
-		end, "GET")
-		
-		repeat
-			Wait(50)
-		until (latestVersion and latestURL)
-		return latestVersion, latestURL
-	end
-	exports('getLatestVersion', getLatestVersion)
-
-end)
 
 Citizen.CreateThread(function()
 	repeat
