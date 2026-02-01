@@ -34,7 +34,7 @@ jobs:
       - name: Run linters
         uses: rkuykendall/lint-action@master
         with:
-          auto_fix: true
+          auto_fix: false
           commit_message: "style: Fix code style issues with ${linter}"
           eslint: true
           eslint_dir: "src/"
