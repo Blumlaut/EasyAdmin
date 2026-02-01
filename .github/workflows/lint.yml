@@ -24,7 +24,7 @@ jobs:
           node-version: 22
 
       - name: Install Node.js dependencies
-        run: cd src && npm i
+        run: cd src && npm ci
 
       - name: Configure Git user
         run: |
