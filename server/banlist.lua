@@ -12,6 +12,19 @@
 
 blacklist = {}
 
+-- Ban index for O(1) lookups
+banIndex = {}
+
+-- Rebuild the ban index after blacklist is loaded or updated
+local function rebuildBanIndex()
+    banIndex = {}
+    for _, ban in ipairs(blacklist) do
+        for _, id in ipairs(ban.identifiers) do
+            banIndex[id] = ban
+        end
+    end
+end
+
 ---Handles the banning of a player
 ---@param playerId number @The ID of the player to ban
 ---@param reason string @The reason for the ban
@@ -287,6 +300,9 @@ function updateBan(id,newData)
                 if GetConvar("ea_custombanlist", "false") == "true" then 
                     TriggerEvent("ea_data:updateBan", newData)
                 end
+                
+                -- Rebuild ban index after updating a ban
+                rebuildBanIndex()
                 break
             end
         end
@@ -357,6 +373,9 @@ function updateBlacklist(data,remove, forceChange)
     upgraded = performBanlistUpgrades(blacklist)
     if upgraded then change = true end
     
+    -- Rebuild ban index after loading or upgrading blacklist
+    rebuildBanIndex()
+    
     if data and not remove then
         addBan(data)
         PrintDebugMessage("Added the following data to banlist:\n"..table_to_string(data), 4)
@@ -409,6 +428,9 @@ function updateBlacklist(data,remove, forceChange)
         end
     end
     PrintDebugMessage("Completed Banlist Update.", 4)
+    
+    -- Rebuild the ban index after updates
+    rebuildBanIndex()
 end
 
 ---Bans a player using their identifier
@@ -445,6 +467,9 @@ function UnbanIdentifier(identifier)
                         TriggerEvent("ea_data:removeBan", ban)
                     end
                     PrintDebugMessage("removed ban as per unbanidentifier func", 4)
+                    
+                    -- Rebuild ban index after removing a ban
+                    rebuildBanIndex()
                     return
                 end 
             end
@@ -467,6 +492,9 @@ function UnbanId(id)
             if GetConvar("ea_custombanlist", "false") == "true" then 
                 TriggerEvent("ea_data:removeBan", ban)
             end
+            
+            -- Rebuild ban index after removing a ban
+            rebuildBanIndex()
         end
     end
 end
@@ -548,14 +576,6 @@ end
 ---@param theIdentifier string @The identifier to check
 ---@return boolean @True if the identifier is banned, false otherwise
 function IsIdentifierBanned(theIdentifier)
-    local identifierfound = false
-    for index,value in ipairs(blacklist) do
-        for i,identifier in ipairs(value.identifiers) do
-            if theIdentifier == identifier then
-                identifierfound = true
-            end
-        end
-    end
-    return identifierfound
+    return banIndex[theIdentifier] ~= nil
 end
 exports('IsIdentifierBanned', IsIdentifierBanned)

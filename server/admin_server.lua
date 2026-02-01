@@ -1032,9 +1032,11 @@ Citizen.CreateThread(function()
 	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
 		local player = source
 		local numIds = getAllPlayerIdentifiers(player)
-		local matchingIdentifierCount = 0
-		local matchingIdentifiers = {}
 		local showProgress = GetConvar("ea_presentDeferral", "true")
+		
+		-- Localize frequently used globals for micro-optimization
+		local loglevel = GetConvarInt("ea_logLevel", 1)
+		local minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
 		
 		deferrals.defer()
 		Wait(0)
@@ -1044,7 +1046,12 @@ Citizen.CreateThread(function()
 		end
 		
 		deferrals.update(deferralText)
-		PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
+		
+		-- Guard debug logging with log level check
+		if loglevel >= 3 then
+			PrintDebugMessage(getName(player).."'s Identifiers:\n "..table_to_string(numIds), 3)
+		end
+		
 		if not blacklist then
 			print("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
 			print("EasyAdmin: ^1Failed^7 to load Banlist!\n")
@@ -1055,58 +1062,66 @@ Citizen.CreateThread(function()
 		end
 		Wait(0)
 		
-		local lastPercentage = 0
-		for bi,blacklisted in ipairs(blacklist) do
-			if showProgress == "true" then
-				local percentage = math.round(bi/#blacklist*100)
-				if bi % 12 == 0 and percentage >= lastPercentage+4 then -- only update on every 12th ban
-					Wait(0)
-					deferrals.update(string.format(GetLocalisedText("deferral"), percentage))
-					lastPercentage = percentage
-				end
-			end
-			for i,theId in ipairs(numIds) do
-				for ci,identifier in ipairs(blacklisted.identifiers) do
-					if identifier == theId and matchingIdentifiers[theId] ~= true then
-						matchingIdentifierCount = matchingIdentifierCount+1 
-						matchingIdentifiers[theId] = true -- make sure we remember the identifier for later
-						PrintDebugMessage("IDENTIFIER MATCH! "..identifier.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount, 3)
-						local notBannedIds = checkForChangedIdentifiers(numIds, blacklisted.identifiers)
-						if matchingIdentifierCount >= minimumMatchingIdentifierCount then
-							if #notBannedIds > 0 then
-								local newBanData = blacklisted
-								newBanData.identifiers = mergeTables(blacklisted.identifiers, notBannedIds) -- add newly found identifiers to the existing ban
-								updateBan(blacklisted.banid,newBanData) -- send it off!
-							end
-							PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..blacklist[bi].reason..", Ban ID: "..blacklist[bi].banid.."\n", 3)
-							
-							local banMessageTitleColour = GetConvar("ea_banMessageTitleColour", "#354557")
-							local banMessageServerName = GetConvar("ea_banMessageServerName", GetConvar("sv_projectName", "EasyAdmin"))							
-							local banMessageShowStaff = GetConvar("ea_banMessageShowStaff", "true")
-							local banMessageStaffName = blacklist[bi].banner
-							local banMessageFooter = GetConvar("ea_banMessageFooter", "You can appeal this by ban by visiting our discord.")
-							local banMessageSubHeader = GetConvar("ea_banMessageSubHeader", "You have been banned from this server.")
-							local banMessageWatermark = GetConvar("ea_banMessageWatermark", DefaultWatermark)
-							local banMessageReason = blacklist[bi].reason:gsub(string.format(", .*: %s", banMessageStaffName), "")
-							-- gives us a raw ban reason with their nickname as we don't want the staff member displayed due to our new convar // "banned by:" field
-							
-							if banMessageShowStaff == "false" then 
-								banMessageStaffName = 'Server Staff'
-							end
-
-							deferrals.done(
-                        	'<div style="background-color: rgba(30, 30, 30, 0.5); padding: 20px; border: solid 2px var(--color-modal-border); border-radius: var(--border-radius-normal); margin-top: 25px; position: relative;"><h1 style="color:' .. banMessageTitleColour .. ';">' .. banMessageServerName .. '</h1><br><h2>'.. banMessageSubHeader ..'</h2><br><p style="font-size: 1.25rem; padding: 0px"><strong>Expires:</strong> ' ..
-                            formatDateString(blacklist[bi].expire) .. '<br><strong>Banned By:</strong> ' .. banMessageStaffName ..
-                            ' <br>            <strong>Ban Reason:</strong> ' .. banMessageReason ..
-                            ' <br>            <strong>Ban ID:</strong> <code style="letter-spacing: 2px; background-color: #ff7f5059; padding: 2px 4px; border-radius: 6px;">' ..
-                            blacklist[bi].banid ..
-                            '</code><br><br>' .. banMessageFooter .. ' <span style="font-style: italic;"></span></p><img src="' .. banMessageWatermark ..  '" style="position: absolute;right: 15px;bottom: 15px;opacity: 65%;"></div>')
-							return
-
-						end
+		-- Optimized ban check using O(1) lookup with banIndex
+		local matchedBan = nil
+		local matchedIdentifiers = {}
+		local matchingIdentifierCount = 0
+		
+		for _, pid in ipairs(numIds) do
+			local ban = banIndex[pid]
+			if ban then
+				if not matchedIdentifiers[ban.banid] then
+					matchedIdentifiers[ban.banid] = true
+					matchingIdentifierCount = matchingIdentifierCount + 1
+					matchedBan = ban
+					
+					-- Guard debug logging with log level check
+					if loglevel >= 3 then
+						PrintDebugMessage("IDENTIFIER MATCH! "..pid.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount, 3)
+					end
+					
+					if matchingIdentifierCount >= minimumMatchingIdentifierCount then
+						break
 					end
 				end
 			end
+		end
+		
+		if matchedBan then
+			-- Update ban with any new identifiers
+			local notBannedIds = checkForChangedIdentifiers(numIds, matchedBan.identifiers)
+			if #notBannedIds > 0 then
+				local newBanData = matchedBan
+				newBanData.identifiers = mergeTables(matchedBan.identifiers, notBannedIds)
+				updateBan(matchedBan.banid, newBanData)
+			end
+			
+			-- Guard debug logging with log level check
+			if loglevel >= 3 then
+				PrintDebugMessage("Connection of "..getName(player).." Declined, Banned for "..matchedBan.reason..", Ban ID: "..matchedBan.banid.."\n", 3)
+			end
+			
+			local banMessageTitleColour = GetConvar("ea_banMessageTitleColour", "#354557")
+			local banMessageServerName = GetConvar("ea_banMessageServerName", GetConvar("sv_projectName", "EasyAdmin"))
+			local banMessageShowStaff = GetConvar("ea_banMessageShowStaff", "true")
+			local banMessageStaffName = matchedBan.banner
+			local banMessageFooter = GetConvar("ea_banMessageFooter", "You can appeal this by ban by visiting our discord.")
+			local banMessageSubHeader = GetConvar("ea_banMessageSubHeader", "You have been banned from this server.")
+			local banMessageWatermark = GetConvar("ea_banMessageWatermark", DefaultWatermark)
+			local banMessageReason = matchedBan.reason:gsub(string.format(", .*: %s", banMessageStaffName), "")
+			
+			if banMessageShowStaff == "false" then 
+				banMessageStaffName = 'Server Staff'
+			end
+			
+			deferrals.done(
+				'<div style="background-color: rgba(30, 30, 30, 0.5); padding: 20px; border: solid 2px var(--color-modal-border); border-radius: var(--border-radius-normal); margin-top: 25px; position: relative;"><h1 style="color:' .. banMessageTitleColour .. ';">' .. banMessageServerName .. '</h1><br><h2>'.. banMessageSubHeader ..'</h2><br><p style="font-size: 1.25rem; padding: 0px"><strong>Expires:</strong> ' ..
+						formatDateString(matchedBan.expire) .. '<br><strong>Banned By:</strong> ' .. banMessageStaffName ..
+						' <br>            <strong>Ban Reason:</strong> ' .. banMessageReason ..
+						' <br>            <strong>Ban ID:</strong> <code style="letter-spacing: 2px; background-color: #ff7f5059; padding: 2px 4px; border-radius: 6px;">' ..
+						matchedBan.banid ..
+						'</code><br><br>' .. banMessageFooter .. ' <span style="font-style: italic;"></span></p><img src="' .. banMessageWatermark ..  '" style="position: absolute;right: 15px;bottom: 15px;opacity: 65%;"></div>')
+			return
 		end
 		
 		if GetConvar("ea_enableAllowlist", "false") == "true" then
