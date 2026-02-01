@@ -12,6 +12,8 @@
 
 Citizen.CreateThread(function()
 	backupInfos = LoadResourceFile(GetCurrentResourceName(), "backups/_backups.json")
+	backupData = nil
+	lastBackupTime = 0
 	
 	while true do 
 		repeat
@@ -20,8 +22,10 @@ Citizen.CreateThread(function()
 		if backupInfos == nil then 
 			lastBackupTime = 0
 		else
-			backupData = json.decode(backupInfos)
-			lastBackupTime = backupData.lastBackup
+			if not backupData then
+				backupData = json.decode(backupInfos)
+				lastBackupTime = backupData.lastBackup
+			end
 		end
 		if (GetConvarInt("ea_backupFrequency", 72) ~= 0) and (lastBackupTime+(GetConvarInt("ea_backupFrequency", 72)*3600) < os.time()) then
 			createBackup()
@@ -83,7 +87,9 @@ function createBackup()
 	
 	backupInfos = LoadResourceFile(resourceName, "backups/_backups.json")
 	if backupInfos then
-		backupData = json.decode(backupInfos)
+		if not backupData then
+			backupData = json.decode(backupInfos)
+		end
 		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
 		
 		
@@ -94,7 +100,7 @@ function createBackup()
 		SaveResourceFile(resourceName, "backups/_backups.json", json.encode(backupData, {indent = true}))
 		
 	else
-		local backupData = {lastBackup = backupTime, backups = {}}
+		backupData = {lastBackup = backupTime, backups = {}}
 		table.insert(backupData.backups, {id = getNewBackupid(backupData), backupFile = backupName, backupTimestamp = backupTime, backupDate = backupDate})
 		SaveResourceFile(resourceName, "backups/_backups.json", json.encode(backupData, {indent = true}))
 	end
@@ -114,6 +120,7 @@ function deleteBackup(backupData,id)
 	os.remove(fullResourcePath.."/backups/"..backupFileName)
 	PrintDebugMessage("Removed Backup "..backupFileName, 3)
 	
+	SaveResourceFile(GetCurrentResourceName(), "backups/_backups.json", json.encode(backupData, {indent = true}))
 end
 
 ---@param backupData table @Table containing backup information
