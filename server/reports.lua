@@ -11,10 +11,14 @@
 ------------------------------------
 
 AddEventHandler('playerDropped', function (reason)
-    for i, report in pairs(reports) do
+    local reportIds = {}
+    for id, report in pairs(reports) do
         if report.reporter == source or (report.reported and report.reported == source) then
-            removeReport(report.id)
+            reportIds[id] = true
         end
+    end
+    for id, _ in pairs(reportIds) do
+        removeReportById(id)
     end
     if cooldowns[source] then
         cooldowns[source] = nil
@@ -198,6 +202,17 @@ Citizen.CreateThread(function()
             end
         end
     end)
+
+    function removeReportById(id)
+        if reports[id] then
+            local report = reports[id]
+            for admin,_ in pairs(OnlineAdmins) do 
+                TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
+            end
+            TriggerEvent("EasyAdmin:reportRemoved", report)
+            reports[id] = nil
+        end
+    end
 
     function removeReport(index,reporter,reported,reason)
         for i, report in pairs(reports) do
