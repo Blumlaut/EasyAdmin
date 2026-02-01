@@ -239,6 +239,9 @@ Citizen.CreateThread(function()
 	detailNotification = GetConvar("ea_detailNotification", "false")
 	minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
 	
+	initEnvironmentChecks()
+	
+
 	
 	RegisterServerEvent('EasyAdmin:amiadmin', function()
 		local source = source 
@@ -1096,7 +1099,11 @@ function checkVersion()
 	elseif tonumber(curVersion) > tonumber(remoteVersion) then
 		PrintDebugMessage("Your version of "..resourceName.." seems to be higher than the current stable version.", 2)
 	end
-	
+end
+
+exports('checkVersion', checkVersion)
+
+function initEnvironmentChecks()
 	if GetResourceState("screenshot-basic") == "missing" then 
 		PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
 	else
@@ -1115,7 +1122,6 @@ function checkVersion()
 	end
 end
 
-exports('checkVersion', checkVersion)
 
 function HTTPRequest(url, ...)
 	local err,response,headers
