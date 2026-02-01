@@ -15,12 +15,13 @@ blacklist = {}
 -- Ban index for O(1) lookups
 banIndex = {}
 
--- Rebuild the ban index after blacklist is loaded or updated
 local function rebuildBanIndex()
     banIndex = {}
     for _, ban in ipairs(blacklist) do
-        for _, id in ipairs(ban.identifiers) do
-            banIndex[id] = ban
+        if ban.identifiers then
+            for _, id in ipairs(ban.identifiers) do
+                banIndex[id] = ban
+            end
         end
     end
 end
@@ -428,9 +429,6 @@ function updateBlacklist(data,remove, forceChange)
         end
     end
     PrintDebugMessage("Completed Banlist Update.", 4)
-    
-    -- Rebuild the ban index after updates
-    rebuildBanIndex()
 end
 
 ---Bans a player using their identifier
