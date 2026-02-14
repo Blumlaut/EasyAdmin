@@ -35,7 +35,7 @@ module.exports = {
 			return
 		}
 
-		if (!await checkBanPermission(interaction.member, banTime)) {
+		if (!await checkBanPermission(interaction.member, banTime, interaction)) {
 			return
 		}
 
@@ -61,7 +61,7 @@ async function parseBanTime(timeframe) {
 	}
 }
 
-async function checkBanPermission(member, banTime) {
+async function checkBanPermission(member, banTime, interaction) {
 	var maxTime = banTime < 10444633200 ? 'player.ban.temporary' : 'player.ban.permanent'
 
 	if (!await DoesGuildMemberHavePermission(member, maxTime)) {

@@ -13,7 +13,7 @@ try {
 		var userInfo = {name: outMessage.args[0]}
 
 		if (knownAvatars[source] == undefined) {
-			userInfo.iconURL = await fetchAndCacheAvatar(source, user.identifiers)
+			userInfo.iconURL = await fetchDiscourseAvatar(source, fivemAccount)
 		} else {
 			userInfo.iconURL = knownAvatars[source]
 		}
@@ -53,21 +53,21 @@ function findFivemAccount(identifiers) {
 	return false
 }
 
-async function fetchDiscourseAvatar(fivemAccount) {
+async function fetchDiscourseAvatar(source, fivemAccount) {
 	var response = await exports[EasyAdmin].HTTPRequest(`https://policy-live.fivem.net/api/getUserInfo/${fivemAccount}`)
 
 	try {
 		response = JSON.parse(response)
 		if (response.avatar_template) {
 			var avatarURL = formatAvatarURL(response.avatar_template)
-			knownAvatars[global.source] = avatarURL
+			knownAvatars[source] = avatarURL
 			return avatarURL
 		}
 
-		knownAvatars[global.source] = false
+		knownAvatars[source] = false
 		return false
 	} catch {
-		knownAvatars[global.source] = false
+		knownAvatars[source] = false
 		return false
 	}
 }
@@ -95,8 +95,8 @@ client.on('messageCreate', async msg => {
     
 })
 
-on('playerDropped', () => {
+on('playerDropped', (source) => {
 	if (GetConvar('ea_botChatBridge', '') == '') { return }
-	knownAvatars[global.source] = undefined
+	knownAvatars[source] = undefined
 })
 
