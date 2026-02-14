@@ -78,7 +78,7 @@ function getReportStats(reports) {
 	var activeReports = 0
 	var claimedReports = 0
 
-	for (let report of Object.values(reports).entries()) {
+	for (const report of Object.values(reports)) {
 		activeReports+=1
 		if (report.claimed) {
 			claimedReports+=1
