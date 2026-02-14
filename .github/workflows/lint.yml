@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 permissions:
   checks: write
@@ -38,3 +39,16 @@ jobs:
           commit_message: "style: Fix code style issues with ${linter}"
           eslint: true
           eslint_dir: "src/"
+
+  lua-lint:
+    name: Lint Lua scripts (FiveM)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Lint Lua with FiveM natives
+        uses: GoatG33k/fivem-lua-lint-action@v1
+        with:
+          args: "-t"
+          paths: "."
