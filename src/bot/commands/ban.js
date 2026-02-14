@@ -50,7 +50,7 @@ async function parseBanTime(timeframe) {
 		}
 
 		var banTime = await juration.parse(timeframe)
-		if (banTime > 10444633200) {
+		if (banTime >= 10444633200) {
 			return 10444633200
 		}
 
@@ -62,7 +62,7 @@ async function parseBanTime(timeframe) {
 }
 
 async function checkBanPermission(member, banTime, interaction) {
-	var maxTime = banTime < 10444633200 ? 'player.ban.temporary' : 'player.ban.permanent'
+	var maxTime = banTime === 10444633200 ? 'player.ban.permanent' : 'player.ban.temporary'
 
 	if (!await DoesGuildMemberHavePermission(member, maxTime)) {
 		var permissionName = banTime < 10444633200 ? 'easyadmin.player.ban.temporary' : 'easyadmin.player.ban.permanent'
