@@ -23,7 +23,7 @@ global.getServerStatus = async function (why) {
 	embed.addFields([{ name: 'Uptime', value: `\`\`\`${prettyMilliseconds(new Date()-startTimestamp, {verbose: true, secondsDecimalDigits: 0})}\`\`\``, inline: false}])
 
 	if (isValidJoinURL(joinURL)) {
-		embed.setURL(`https://${joinURL}`);
+		embed.setURL(`https://${joinURL}`)
 	}
 	if (why) {
 		embed.addFields([{name: 'Last Update', value: why}])
