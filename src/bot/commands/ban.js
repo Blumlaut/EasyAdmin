@@ -28,39 +28,59 @@ module.exports = {
 			return
 		}
 
-		var banTime
+		var banTime = parseBanTime(timeframe)
 
-		try {
-			if (timeframe.toLowerCase() == 'permanent') {
-				banTime = 10444633200
-			} else {
-				banTime = await juration.parse(timeframe)
-				if (banTime > 10444633200) {
-					banTime = 10444633200
-				}
-			}
-		} catch (error) {
-			console.error(error)
+		if (banTime === null) {
 			interaction.reply({ content: 'Sorry, i couldn\'t understand the timeframe you provided.', ephemeral: true })
 			return
 		}
 
-
-		if (banTime < 10444633200 && !await DoesGuildMemberHavePermission(interaction.member, 'player.ban.temporary')) {
-			interaction.reply({ content: 'Insufficient Permissions, you need `easyadmin.player.ban.temporary`.', ephemeral: true })
-			return
-		} else if (banTime > 10444633200 && !await DoesGuildMemberHavePermission(interaction.member, 'player.ban.permanent')) {
-			interaction.reply({ content: 'Insufficient Permissions, you need `easyadmin.player.ban.permanent`.', ephemeral: true })
+		if (!await checkBanPermission(interaction.member, banTime)) {
 			return
 		}
 
-		var ban = exports[EasyAdmin].addBan(user.id, reason, banTime, interaction.user.tag)
-		if (ban) {
-			let embed = await prepareGenericEmbed(`Successfully banned **${user.name}** for **${reason}** until ${ban.expireString} [#${ban.banid}.`)
-			await interaction.reply({ embeds: [embed]})
-		} else {
-			let embed = await prepareGenericEmbed(`Failed banning **${user.name}**.`)
-			await interaction.reply({ embeds: [embed]})
-		}
+		await executeBan(interaction, user, reason, banTime)
 	},
+}
+
+async function parseBanTime(timeframe) {
+	try {
+		if (timeframe.toLowerCase() == 'permanent') {
+			return 10444633200
+		}
+
+		var banTime = await juration.parse(timeframe)
+		if (banTime > 10444633200) {
+			return 10444633200
+		}
+
+		return banTime
+	} catch (error) {
+		console.error(error)
+		return null
+	}
+}
+
+async function checkBanPermission(member, banTime) {
+	var maxTime = banTime < 10444633200 ? 'player.ban.temporary' : 'player.ban.permanent'
+
+	if (!await DoesGuildMemberHavePermission(member, maxTime)) {
+		var permissionName = banTime < 10444633200 ? 'easyadmin.player.ban.temporary' : 'easyadmin.player.ban.permanent'
+		interaction.reply({ content: `Insufficient Permissions, you need \`${permissionName}\`.`, ephemeral: true })
+		return false
+	}
+
+	return true
+}
+
+async function executeBan(interaction, user, reason, banTime) {
+	var ban = exports[EasyAdmin].addBan(user.id, reason, banTime, interaction.user.tag)
+
+	if (ban) {
+		let embed = await prepareGenericEmbed(`Successfully banned **${user.name}** for **${reason}** until ${ban.expireString} [#${ban.banid}.`)
+		await interaction.reply({ embeds: [embed]})
+	} else {
+		let embed = await prepareGenericEmbed(`Failed banning **${user.name}**.`)
+		await interaction.reply({ embeds: [embed]})
+	}
 }
