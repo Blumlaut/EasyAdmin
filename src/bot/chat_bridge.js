@@ -13,7 +13,7 @@ try {
 		var userInfo = {name: outMessage.args[0]}
 
 		if (knownAvatars[source] == undefined) {
-			userInfo.iconURL = await fetchDiscourseAvatar(source, fivemAccount)
+			userInfo.iconURL = await fetchAndCacheAvatar(source, user.identifiers)
 		} else {
 			userInfo.iconURL = knownAvatars[source]
 		}
@@ -37,7 +37,7 @@ async function fetchAndCacheAvatar(source, identifiers) {
 	var fivemAccount = findFivemAccount(identifiers)
 
 	if (fivemAccount) {
-		return await fetchDiscourseAvatar(fivemAccount)
+		return await fetchDiscourseAvatar(source, fivemAccount)
 	}
 
 	knownAvatars[source] = false

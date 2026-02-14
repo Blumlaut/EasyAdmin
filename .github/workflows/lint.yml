@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+  pull_request_target:
+      - master
 
 permissions:
   checks: write
