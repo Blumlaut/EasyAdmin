@@ -21212,6 +21212,9 @@ var require_message = __commonJS({
       ComponentType2[ComponentType2["Container"] = 17] = "Container";
       ComponentType2[ComponentType2["Label"] = 18] = "Label";
       ComponentType2[ComponentType2["FileUpload"] = 19] = "FileUpload";
+      ComponentType2[ComponentType2["RadioGroup"] = 21] = "RadioGroup";
+      ComponentType2[ComponentType2["CheckboxGroup"] = 22] = "CheckboxGroup";
+      ComponentType2[ComponentType2["Checkbox"] = 23] = "Checkbox";
       ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
     })(ComponentType || (exports2.ComponentType = ComponentType = {}));
     var ButtonStyle2;
