@@ -20,7 +20,6 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(playerId)
             return
         end
         local history = Storage.getAction(identifiers)
-        print(json.encode(history))
         TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, history, playerId)
     else
         PrintDebugMessage("Player does not have permission to view action history.", 2)
