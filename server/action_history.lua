@@ -10,29 +10,35 @@
 ------------------------------------
 ------------------------------------
 
-RegisterNetEvent("EasyAdmin:GetActionHistory", function(discordId)
+RegisterNetEvent("EasyAdmin:GetActionHistory", function(playerId)
     local src = source
+    local identifiers = getAllPlayerIdentifiers(playerId)
     if DoesPlayerHavePermission(src, "player.actionhistory.view") then
-        if not discordId then
-            PrintDebugMessage("No Discord ID provided, returning empty action history.", 2)
+        if not identifiers then
+            PrintDebugMessage("User has no identifiers somehow, returning empty action history.", 2)
             TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {})
             return
         end
-        local history = Storage.getAction(discordId)
-        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, history, discordId)
+        local history = Storage.getAction(identifiers)
+        print(json.encode(history))
+        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, history, playerId)
     else
         PrintDebugMessage("Player does not have permission to view action history.", 2)
-        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {}, discordId)
+        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {}, playerId)
     end
 end)
 
-RegisterNetEvent("EasyAdmin:LogAction", function(action)
+RegisterNetEvent("EasyAdmin:LogAction", function(action, playerId)
     local src = source
     if DoesPlayerHavePermission(src, "player.actionhistory.add") then
         if not action then
             PrintDebugMessage("Action not defined.", 2)
         end
-        Storage.addAction(action.action, action.discordId, action.reason, action.moderator, action.moderatorId, action.expire, action.expireString)
+
+        local identifiers = getAllPlayerIdentifiers(playerId)
+        local moderatorIdentifiers = getAllPlayerIdentifiers(src)
+
+        Storage.addAction(action.action, identifiers, action.reason, GetPlayerName(src), moderatorIdentifiers, action.expire, action.expireString)
         PrintDebugMessage("Action logged successfully.", 2)
     end
 end)

@@ -36,7 +36,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(src) )
             local banId = GetFreshBanId()
             Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time())
-            Storage.addAction("BAN", CachedPlayers[playerId].discord, reason, getName(src), CachedPlayers[src].discord)
+            Storage.addAction("BAN", getAllPlayerIdentifiers(playerId), reason, getName(src), getAllPlayerIdentifiers(src))
             PrintDebugMessage("Player "..getName(src,true).." banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
@@ -52,6 +52,7 @@ end)
 ---@param expires number @The timestamp when the ban should expire
 ---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
+    local src = source
     if playerId ~= nil and not CachedPlayers[playerId].immune and CheckAdminCooldown(source, "ban") then
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not CachedPlayers[playerId].immune then
             SetAdminCooldown(source, "ban")
@@ -68,7 +69,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), CachedPlayers[playerId].name, getName(source) )
             Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time()) 
-            Storage.addAction("OFFLINE BAN", CachedPlayers[playerId].discord, reason, getName(source), CachedPlayers[source].discord)
+            Storage.addAction("OFFLINE BAN", getAllPlayerIdentifiers(playerId), reason, getName(source), getAllPlayerIdentifiers(src))
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..CachedPlayers[playerId].name.." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), CachedPlayers[playerId].name, reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -114,7 +115,7 @@ function addBanExport(playerId,reason,expires,banner)
     end
     reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
     Storage.addBan(GetFreshBanId(), bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
-    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", source)
+    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", getAllPlayerIdentifiers(source))
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
     end
