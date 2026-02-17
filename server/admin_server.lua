@@ -877,13 +877,13 @@ Citizen.CreateThread(function()
 			TriggerClientEvent("txcl:showWarning", id, getName(src), string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings), GetLocalisedText("warnedtitle"), GetLocalisedText("warnedby"),GetLocalisedText("warndismiss"))
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src, false, true), getName(id, true, true), reason, WarnedPlayers[id].warns, maxWarnings), "warn", 16711680)
 			local test_name = getName(source, true, false)
-			Storage.addAction("WARN", CachedPlayers[id].discord, reason, test_name, CachedPlayers[source].discord)
+			Storage.addAction("WARN", getAllPlayerIdentifiers(id), reason, test_name, getAllPlayerIdentifiers(src))
 			if WarnedPlayers[id].warns >= maxWarnings then
 				if GetConvar("ea_warnAction", "kick") == "kick" then
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(id, true, true), reason), "kick", 16711680)
 					DropPlayer(id, GetLocalisedText("warnkicked"))
 					WarnedPlayers[id] = nil
-					TriggerEvent("EasyAdmin:LogAction", {action = "KICK", discordId = CachedPlayers[id].discord, reason = "Reached maximum warnings", moderator = "Server", moderatorId = 0})
+					TriggerEvent("EasyAdmin:LogAction", {action = "KICK", reason = "Reached maximum warnings"}, id)
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
 					local bannedIdentifiers = getCachedPlayerIdentifiers(id) or getAllPlayerIdentifiers(id)
 					local bannedUsername = getCachedPlayerName(id) or getName(id, true)
@@ -892,7 +892,7 @@ Citizen.CreateThread(function()
 					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(id), getName(src, true) )
 					local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = getName(src, true), reason = reason, expire = expires }
 					updateBlacklist( ban )
-					TriggerEvent("EasyAdmin:LogAction", {action = "BAN", discordId = CachedPlayers[id].discord, reason = "Reached maximum warnings", moderator = "Server", moderatorId = 0})
+					TriggerEvent("EasyAdmin:LogAction", {action = "BAN", reason = "Reached maximum warnings"}, id)
 					
 					PrintDebugMessage("Player "..getName(src,true).." warnbanned player "..getCachedPlayerName(id).." for "..reason, 3)
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), bannedUsername, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
@@ -960,6 +960,22 @@ Citizen.CreateThread(function()
 		end
 	end
 	exports('getPlayerWarnings', getPlayerWarnings)
+
+	RegisterNetEvent("EasyAdmin:GetAdminNotes", function(identifiers)
+		local src = source
+		if DoesPlayerHavePermission(src, "player.adminnotes.view") then
+			if not identifiers then
+				PrintDebugMessage("User has no identifiers somehow, returning no notes.", 2)
+				TriggerClientEvent("EasyAdmin:ReceiveAdminNotes", src, {})
+				return
+			end
+			local history = Storage.getNotes(identifiers)
+			TriggerClientEvent("EasyAdmin:ReceiveAdminNotes", src, history, identifiers)
+		else
+			PrintDebugMessage("Player does not have permission to view admin notes.", 2)
+			TriggerClientEvent("EasyAdmin:ReceiveAdminNotes", src, {}, identifiers)
+		end
+	end)
 	
 	AddEventHandler("EasyAdmin:GetVersion", function(cb)
 		cb(GetVersion())
