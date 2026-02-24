@@ -38,13 +38,6 @@ function handleOrientation(orientation)
 	end
 end
 
-function truncate(str, limit)
-    if #str > limit then
-        return string.sub(str, 1, limit) .. "..."
-    end
-    return str
-end
-
 playlist = nil
 
 
@@ -1815,17 +1808,8 @@ AddEventHandler("EasyAdmin:ReceiveActionHistory", function(actionHistory, player
 		end
 		local punishedDiscord = NativeUI.CreateItem(GetLocalisedText("getplayerdiscord"), GetLocalisedText("getplayerdiscordguide"))
 		punishedDiscord.Activated = function(ParentMenu, SelectedItem)
-			local identifiers = action.idents
-			if identifiers then
-				local discordId = nil
-
-				for _, id in ipairs(identifiers) do
-					if string.match(id, "discord:") then
-						discordId = string.gsub(id, "discord:", "")
-						break
-					end
-				end
-				
+			local discordId = getDiscordFromIdentifiers(action.idents)
+			if discordId then
 				copyToClipboard(discordId)
 			else
 				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
@@ -1834,17 +1818,8 @@ AddEventHandler("EasyAdmin:ReceiveActionHistory", function(actionHistory, player
 		actionSubmenu:AddItem(punishedDiscord)
 		local moderatorDiscord = NativeUI.CreateItem(GetLocalisedText("getmoderatordiscord"), GetLocalisedText("getmoderatordiscordguide"))
 		moderatorDiscord.Activated = function(ParentMenu, SelectedItem)
-			local identifiers = action.moderatorIdents
-			if identifiers then
-				local discordId = nil
-
-				for _, id in ipairs(identifiers) do
-					if string.match(id, "discord:") then
-						discordId = string.gsub(id, "discord:", "")
-						break
-					end
-				end
-
+			local discordId = getDiscordFromIdentifiers(action.moderatorIdents)
+			if discordId then
 				copyToClipboard(discordId)
 			else
 				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
@@ -1898,17 +1873,8 @@ AddEventHandler("EasyAdmin:ReceiveAdminNotes", function(notes, playerId)
 
 		local noteDiscord = NativeUI.CreateItem(GetLocalisedText("getplayerdiscord"), GetLocalisedText("getplayerdiscordguide"))
 		noteDiscord.Activated = function(ParentMenu, SelectedItem)
-			local identifiers = note.idents
-			if identifiers then
-				local discordId = nil
-
-				for _, id in ipairs(identifiers) do
-					if string.match(id, "discord:") then
-						discordId = string.gsub(id, "discord:", "")
-						break
-					end
-				end
-				
+			local discordId = getDiscordFromIdentifiers(note.idents)
+			if discordId then
 				copyToClipboard(discordId)
 			else
 				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
@@ -1918,17 +1884,8 @@ AddEventHandler("EasyAdmin:ReceiveAdminNotes", function(notes, playerId)
 
 		local moderatorDiscord = NativeUI.CreateItem(GetLocalisedText("getmoderatordiscord"), GetLocalisedText("getmoderatordiscordguide"))
 		moderatorDiscord.Activated = function(ParentMenu, SelectedItem)
-			local identifiers = note.moderatorIdents
-			if identifiers then
-				local discordId = nil
-
-				for _, id in ipairs(identifiers) do
-					if string.match(id, "discord:") then
-						discordId = string.gsub(id, "discord:", "")
-						break
-					end
-				end
-				
+			local discordId = getDiscordFromIdentifiers(note.moderatorIdents)
+			if discordId then
 				copyToClipboard(discordId)
 			else
 				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
