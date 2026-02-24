@@ -15,16 +15,19 @@ local banlist = {}
 local actions = {}
 local notes = {}
 
--- local function updateList(filename)
---     return
--- end
+-- updateList is a placeholder for future schema migration logic.
+-- When the storage_api_version changes, this function should handle
+-- upgrading the data format from older versions to the current one.
+local function updateList(filename)
+    return
+end
 
 local function loadJsonFile(filename, currentVersion)
     local content = LoadResourceFile(GetCurrentResourceName(), filename)
     if content then
         local data = json.decode(content)
         if data.version ~= currentVersion then
-            -- updateList(filename)
+            updateList(filename)
             content = LoadResourceFile(GetCurrentResourceName(), filename)
         end
     else
@@ -137,14 +140,14 @@ Storage = {
         until listsReady
         return banlist
     end,
-    getAction = function(idents)
+    getAction = function(identifiers)
         repeat
             Citizen.Wait(0)
         until listsReady
         local userActions = {}
         local playerHasIdent = {}
 
-        for _, id in ipairs(idents) do playerHasIdent[id] = true end
+        for _, id in ipairs(identifiers) do playerHasIdent[id] = true end
 
         for _, act in ipairs(actions) do
             for _, ident in ipairs(act.idents) do
