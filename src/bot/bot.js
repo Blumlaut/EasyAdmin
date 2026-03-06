@@ -89,7 +89,7 @@ async function RegisterClientCommands(clientId) {
 
 if (GetConvar('ea_botToken', '') != '') {
     
-	client.on('ready', async () => {
+	client.once('clientReady', async () => {
 		console.log(`Logged in as ${client.user.tag}!`)
 		client.user.setPresence({ activities: [{ name: `${GetConvar('sv_projectName', GetConvar('sv_hostname', 'default FXServer'))}`, type: 'WATCHING' }], status: 'online' })
 		userID = client.user.id
