@@ -22240,8 +22240,6 @@ var require_v103 = __commonJS({
       /**
        * Route for:
        * - GET `/guilds/{guild.id}/roles/member-counts`
-       *
-       * @unstable
        */
       guildRoleMemberCounts(guildId) {
         return `/guilds/${guildId}/roles/member-counts`;
