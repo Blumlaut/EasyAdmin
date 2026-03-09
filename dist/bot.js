@@ -22240,8 +22240,6 @@ var require_v103 = __commonJS({
       /**
        * Route for:
        * - GET `/guilds/{guild.id}/roles/member-counts`
-       *
-       * @unstable
        */
       guildRoleMemberCounts(guildId) {
         return `/guilds/${guildId}/roles/member-counts`;
@@ -73513,7 +73511,7 @@ ${error.stack}\`\`\``, ephemeral: true };
   });
 }
 if (GetConvar("ea_botToken", "") != "") {
-  client.on("ready", async () => {
+  client.once("clientReady", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setPresence({ activities: [{ name: `${GetConvar("sv_projectName", GetConvar("sv_hostname", "default FXServer"))}`, type: "WATCHING" }], status: "online" });
     userID = client.user.id;
