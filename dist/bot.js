@@ -20133,7 +20133,7 @@ var require_common = __commonJS({
        */
       ManageGuild: 1n << 5n,
       /**
-       * Allows for the addition of reactions to messages
+       * Allows for the addition of reactions to messages. This permission does not apply to reacting with an existing reaction on a message
        *
        * Applies to channel types: Text, Voice, Stage
        */
@@ -20329,9 +20329,9 @@ var require_common = __commonJS({
        */
       SendMessagesInThreads: 1n << 38n,
       /**
-       * Allows for using Activities (applications with the {@link ApplicationFlags.Embedded} flag) in a voice channel
+       * Allows for using Activities (applications with the {@link ApplicationFlags.Embedded} flag)
        *
-       * Applies to channel types: Voice
+       * Applies to channel types: Text, Voice
        */
       UseEmbeddedActivities: 1n << 39n,
       /**
@@ -20405,7 +20405,7 @@ var require_application = __commonJS({
   "node_modules/discord-api-types/payloads/v10/application.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ApplicationWebhookEventStatus = exports2.ApplicationRoleConnectionMetadataType = exports2.ApplicationFlags = void 0;
+    exports2.ApplicationWebhookEventStatus = exports2.ActivityLocationKind = exports2.ApplicationRoleConnectionMetadataType = exports2.ApplicationFlags = void 0;
     var ApplicationFlags;
     (function(ApplicationFlags2) {
       ApplicationFlags2[ApplicationFlags2["EmbeddedReleased"] = 2] = "EmbeddedReleased";
@@ -20436,6 +20436,11 @@ var require_application = __commonJS({
       ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["BooleanEqual"] = 7] = "BooleanEqual";
       ApplicationRoleConnectionMetadataType2[ApplicationRoleConnectionMetadataType2["BooleanNotEqual"] = 8] = "BooleanNotEqual";
     })(ApplicationRoleConnectionMetadataType || (exports2.ApplicationRoleConnectionMetadataType = ApplicationRoleConnectionMetadataType = {}));
+    var ActivityLocationKind;
+    (function(ActivityLocationKind2) {
+      ActivityLocationKind2["GuildChannel"] = "gc";
+      ActivityLocationKind2["PrivateChannel"] = "pc";
+    })(ActivityLocationKind || (exports2.ActivityLocationKind = ActivityLocationKind = {}));
     var ApplicationWebhookEventStatus;
     (function(ApplicationWebhookEventStatus2) {
       ApplicationWebhookEventStatus2[ApplicationWebhookEventStatus2["Disabled"] = 1] = "Disabled";
@@ -21100,7 +21105,7 @@ var require_message = __commonJS({
   "node_modules/discord-api-types/payloads/v10/message.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = void 0;
+    exports2.MessageSearchSortMode = exports2.MessageSearchEmbedType = exports2.MessageSearchHasType = exports2.MessageSearchAuthorType = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.BaseThemeType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = void 0;
     var MessageType;
     (function(MessageType2) {
       MessageType2[MessageType2["Default"] = 0] = "Default";
@@ -21171,6 +21176,14 @@ var require_message = __commonJS({
       MessageFlags2[MessageFlags2["HasSnapshot"] = 16384] = "HasSnapshot";
       MessageFlags2[MessageFlags2["IsComponentsV2"] = 32768] = "IsComponentsV2";
     })(MessageFlags || (exports2.MessageFlags = MessageFlags = {}));
+    var BaseThemeType;
+    (function(BaseThemeType2) {
+      BaseThemeType2[BaseThemeType2["Unset"] = 0] = "Unset";
+      BaseThemeType2[BaseThemeType2["Dark"] = 1] = "Dark";
+      BaseThemeType2[BaseThemeType2["Light"] = 2] = "Light";
+      BaseThemeType2[BaseThemeType2["Darker"] = 3] = "Darker";
+      BaseThemeType2[BaseThemeType2["Midnight"] = 4] = "Midnight";
+    })(BaseThemeType || (exports2.BaseThemeType = BaseThemeType = {}));
     var EmbedType;
     (function(EmbedType2) {
       EmbedType2["Rich"] = "rich";
@@ -21249,6 +21262,49 @@ var require_message = __commonJS({
       SeparatorSpacingSize2[SeparatorSpacingSize2["Small"] = 1] = "Small";
       SeparatorSpacingSize2[SeparatorSpacingSize2["Large"] = 2] = "Large";
     })(SeparatorSpacingSize || (exports2.SeparatorSpacingSize = SeparatorSpacingSize = {}));
+    var MessageSearchAuthorType;
+    (function(MessageSearchAuthorType2) {
+      MessageSearchAuthorType2["User"] = "user";
+      MessageSearchAuthorType2["Bot"] = "bot";
+      MessageSearchAuthorType2["Webhook"] = "webhook";
+      MessageSearchAuthorType2["NotUser"] = "-user";
+      MessageSearchAuthorType2["NotBot"] = "-bot";
+      MessageSearchAuthorType2["NotWebhook"] = "-webhook";
+    })(MessageSearchAuthorType || (exports2.MessageSearchAuthorType = MessageSearchAuthorType = {}));
+    var MessageSearchHasType;
+    (function(MessageSearchHasType2) {
+      MessageSearchHasType2["Image"] = "image";
+      MessageSearchHasType2["Sound"] = "sound";
+      MessageSearchHasType2["Video"] = "video";
+      MessageSearchHasType2["File"] = "file";
+      MessageSearchHasType2["Sticker"] = "sticker";
+      MessageSearchHasType2["Embed"] = "embed";
+      MessageSearchHasType2["Link"] = "link";
+      MessageSearchHasType2["Poll"] = "poll";
+      MessageSearchHasType2["Snapshot"] = "snapshot";
+      MessageSearchHasType2["NotImage"] = "-image";
+      MessageSearchHasType2["NotSound"] = "-sound";
+      MessageSearchHasType2["NotVideo"] = "-video";
+      MessageSearchHasType2["NotFile"] = "-file";
+      MessageSearchHasType2["NotSticker"] = "-sticker";
+      MessageSearchHasType2["NotEmbed"] = "-embed";
+      MessageSearchHasType2["NotLink"] = "-link";
+      MessageSearchHasType2["NotPoll"] = "-poll";
+      MessageSearchHasType2["NotSnapshot"] = "-snapshot";
+    })(MessageSearchHasType || (exports2.MessageSearchHasType = MessageSearchHasType = {}));
+    var MessageSearchEmbedType;
+    (function(MessageSearchEmbedType2) {
+      MessageSearchEmbedType2["Image"] = "image";
+      MessageSearchEmbedType2["Video"] = "video";
+      MessageSearchEmbedType2["Gif"] = "gif";
+      MessageSearchEmbedType2["Sound"] = "sound";
+      MessageSearchEmbedType2["Article"] = "article";
+    })(MessageSearchEmbedType || (exports2.MessageSearchEmbedType = MessageSearchEmbedType = {}));
+    var MessageSearchSortMode;
+    (function(MessageSearchSortMode2) {
+      MessageSearchSortMode2["Timestamp"] = "timestamp";
+      MessageSearchSortMode2["Relevance"] = "relevance";
+    })(MessageSearchSortMode || (exports2.MessageSearchSortMode = MessageSearchSortMode = {}));
   }
 });
 
@@ -21598,7 +21654,7 @@ var require_common2 = __commonJS({
   "node_modules/discord-api-types/rest/common.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.Locale = exports2.RESTJSONErrorCodes = void 0;
+    exports2.Locale = exports2.CannotSendMessagesToThisUserErrorCodes = exports2.RESTJSONErrorCodes = void 0;
     var RESTJSONErrorCodes;
     (function(RESTJSONErrorCodes2) {
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["GeneralError"] = 0] = "GeneralError";
@@ -21774,6 +21830,7 @@ var require_common2 = __commonJS({
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileDurationExceedsMaximumLength"] = 50124] = "ProvidedFileDurationExceedsMaximumLength";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["OwnerCannotBePendingMember"] = 50131] = "OwnerCannotBePendingMember";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["OwnershipCannotBeMovedToABotUser"] = 50132] = "OwnershipCannotBeMovedToABotUser";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToResizeAssetBelowTheMaximumSize"] = 50138] = "FailedToResizeAssetBelowTheMaximumSize";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToResizeAssetBelowTheMinimumSize"] = 50138] = "FailedToResizeAssetBelowTheMinimumSize";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotMixSubscriptionAndNonSubscriptionRolesForAnEmoji"] = 50144] = "CannotMixSubscriptionAndNonSubscriptionRolesForAnEmoji";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotConvertBetweenPremiumEmojiAndNormalEmoji"] = 50145] = "CannotConvertBetweenPremiumEmojiAndNormalEmoji";
@@ -21787,11 +21844,13 @@ var require_common2 = __commonJS({
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouCannotSendVoiceMessagesInThisChannel"] = 50173] = "YouCannotSendVoiceMessagesInThisChannel";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheUserAccountMustFirstBeVerified"] = 50178] = "TheUserAccountMustFirstBeVerified";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvidedFileDoesNotHaveAValidDuration"] = 50192] = "ProvidedFileDoesNotHaveAValidDuration";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotSendMessagesToThisUserDueToHavingNoMutualGuilds"] = 50278] = "CannotSendMessagesToThisUserDueToHavingNoMutualGuilds";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["YouDoNotHavePermissionToSendThisSticker"] = 50600] = "YouDoNotHavePermissionToSendThisSticker";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["TwoFactorAuthenticationIsRequired"] = 60003] = "TwoFactorAuthenticationIsRequired";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["NoUsersWithDiscordTagExist"] = 80004] = "NoUsersWithDiscordTagExist";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ReactionWasBlocked"] = 90001] = "ReactionWasBlocked";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["UserCannotUseBurstReactions"] = 90002] = "UserCannotUseBurstReactions";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["IndexNotYetAvailable"] = 11e4] = "IndexNotYetAvailable";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ApplicationNotYetAvailable"] = 110001] = "ApplicationNotYetAvailable";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["APIResourceOverloaded"] = 13e4] = "APIResourceOverloaded";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["TheStageIsAlreadyOpen"] = 150006] = "TheStageIsAlreadyOpen";
@@ -21826,7 +21885,18 @@ var require_common2 = __commonJS({
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotEditAPollMessage"] = 520003] = "CannotEditAPollMessage";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotUseAnEmojiIncludedWithThePoll"] = 520004] = "CannotUseAnEmojiIncludedWithThePoll";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotExpireANonPollMessage"] = 520006] = "CannotExpireANonPollMessage";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ProvisionalAccountsPermissionNotGranted"] = 53e4] = "ProvisionalAccountsPermissionNotGranted";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["IdTokenJWTExpired"] = 530001] = "IdTokenJWTExpired";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["IdTokenJWTIssuerMismatch"] = 530002] = "IdTokenJWTIssuerMismatch";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["IdTokenJWTAudienceMismatch"] = 530003] = "IdTokenJWTAudienceMismatch";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["IdTokenJWTIssuedTooLongAgo"] = 530004] = "IdTokenJWTIssuedTooLongAgo";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["FailedToGenerateUniqueUsername"] = 530006] = "FailedToGenerateUniqueUsername";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidClientSecret"] = 530007] = "InvalidClientSecret";
     })(RESTJSONErrorCodes || (exports2.RESTJSONErrorCodes = RESTJSONErrorCodes = {}));
+    exports2.CannotSendMessagesToThisUserErrorCodes = [
+      RESTJSONErrorCodes.CannotSendMessagesToThisUser,
+      RESTJSONErrorCodes.CannotSendMessagesToThisUserDueToHavingNoMutualGuilds
+    ];
     var Locale;
     (function(Locale2) {
       Locale2["Indonesian"] = "id";
@@ -22176,6 +22246,13 @@ var require_v103 = __commonJS({
        */
       guildMembersSearch(guildId) {
         return `/guilds/${guildId}/members/search`;
+      },
+      /**
+       * Route for:
+       * - GET `/guilds/{guild.id}/messages/search`
+       */
+      guildMessagesSearch(guildId) {
+        return `/guilds/${guildId}/messages/search`;
       },
       /**
        * Route for:
@@ -22771,6 +22848,13 @@ var require_v103 = __commonJS({
       },
       /**
        * Route for:
+       * - GET `/applications/{application.id}/activity-instances/{instance_id}`
+       */
+      applicationActivityInstance(applicationId, instanceId) {
+        return `/applications/${applicationId}/activity-instances/${instanceId}`;
+      },
+      /**
+       * Route for:
        * - GET `/applications/{application.id}/entitlements`
        * - POST `/applications/{application.id}/entitlements`
        */
@@ -22870,7 +22954,7 @@ var require_v103 = __commonJS({
       }
     };
     for (const [key, fn] of Object.entries(exports2.Routes)) {
-      exports2.Routes[key] = (...args) => {
+      exports2.Routes[key] = ((...args) => {
         const escaped = args.map((arg) => {
           if (arg) {
             if (internals_1.urlSafeCharacters.test(String(arg))) {
@@ -22881,7 +22965,7 @@ var require_v103 = __commonJS({
           return arg;
         });
         return fn.call(null, ...escaped);
-      };
+      });
     }
     Object.freeze(exports2.Routes);
     exports2.StickerPackApplicationId = "710982414301790216";
@@ -23128,7 +23212,7 @@ var require_v103 = __commonJS({
       }
     };
     for (const [key, fn] of Object.entries(exports2.CDNRoutes)) {
-      exports2.CDNRoutes[key] = (...args) => {
+      exports2.CDNRoutes[key] = ((...args) => {
         const escaped = args.map((arg) => {
           if (arg) {
             if (internals_1.urlSafeCharacters.test(String(arg))) {
@@ -23139,7 +23223,7 @@ var require_v103 = __commonJS({
           return arg;
         });
         return fn.call(null, ...escaped);
-      };
+      });
     }
     Object.freeze(exports2.CDNRoutes);
     exports2.RouteBases = {
@@ -23456,9 +23540,33 @@ var require_v106 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    }) : function(o, v) {
+      o["default"] = v;
+    });
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+      var ownKeys2 = function(o) {
+        ownKeys2 = Object.getOwnPropertyNames || function(o2) {
+          var ar = [];
+          for (var k in o2) if (Object.prototype.hasOwnProperty.call(o2, k)) ar[ar.length] = k;
+          return ar;
+        };
+        return ownKeys2(o);
+      };
+      return function(mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) {
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
+        }
+        __setModuleDefault2(result, mod);
+        return result;
+      };
+    })();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.Utils = void 0;
     __exportStar2(require_v10(), exports2);
@@ -23467,7 +23575,7 @@ var require_v106 = __commonJS({
     __exportStar2(require_v103(), exports2);
     __exportStar2(require_v104(), exports2);
     __exportStar2(require_internals(), exports2);
-    exports2.Utils = require_v105();
+    exports2.Utils = __importStar2(require_v105());
   }
 });
 
