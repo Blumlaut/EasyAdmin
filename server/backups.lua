@@ -70,7 +70,7 @@ function loadBackupName(name)
 end
 
 
----@return number @Backup ID
+---@return number @Backup filename
 ---@return number @Backup timestamp
 function createBackup()
 	local backupTime = os.time()
@@ -105,7 +105,7 @@ function createBackup()
 		SaveResourceFile(resourceName, "backups/_backups.json", json.encode(backupData, {indent = true}))
 	end
 	
-	return id,timestamp
+	return backupName, backupTime
 end
 
 ---@param backupData table @Table containing backup information

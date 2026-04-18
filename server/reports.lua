@@ -18,7 +18,7 @@ AddEventHandler('playerDropped', function (reason)
         end
     end
     for id, _ in pairs(reportIds) do
-        removeReportById(id)
+        removeReport(id)
     end
     if cooldowns[source] then
         cooldowns[source] = nil
@@ -80,18 +80,19 @@ Citizen.CreateThread(function()
                     end
                 end
 
-                if id and not GetPlayerIdentifier(id, 1) then
-                    for i, player in pairs(GetPlayers()) do
-                        if string.find(string.lower(getName(player, true)), string.lower(id)) then
-                            id = player
-                            valid = true
-                            break
+                if id then
+                    if GetPlayerIdentifier(id, 1) then
+                        valid = true
+                    else
+                        for i, player in pairs(GetPlayers()) do
+                            if string.find(string.lower(getName(player, true)), string.lower(id)) then
+                                id = player
+                                valid = true
+                                break
+                            end
                         end
                     end
-                    if not valid then
-                        valid = true
-                    end
-                end                 
+                end
 
                 if id and valid then
                     local reason = string.gsub(rawCommand, GetConvar("ea_reportCommandName", "report").." " ..args[1].." ", "")
@@ -203,70 +204,31 @@ Citizen.CreateThread(function()
         end
     end)
 
-    function removeReportById(id)
-        if reports[id] then
-            local report = reports[id]
-            for admin,_ in pairs(OnlineAdmins) do 
-                TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
-            end
-            TriggerEvent("EasyAdmin:reportRemoved", report)
-            reports[id] = nil
+    local function broadcastReportRemoval(i, report)
+        for admin,_ in pairs(OnlineAdmins) do
+            TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
         end
+        TriggerEvent("EasyAdmin:reportRemoved", report)
+        reports[i] = nil
     end
 
     function removeReport(index,reporter,reported,reason)
         for i, report in pairs(reports) do
-            if (index and i == index) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", report)
-                reports[i] = nil
-            elseif (reporter and reporter == report.reporter) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", report)
-                reports[i] = nil
-            elseif (reported and reported == report.reported) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, report)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", report)
-                reports[i] = nil
+            if (index and i == index)
+            or (reporter and reporter == report.reporter)
+            or (reported and reported == report.reported) then
+                broadcastReportRemoval(i, report)
             end
         end
     end
 
     function removeSimilarReports(report)
         for i, r in pairs(reports) do
-            if (report.reporter and report.reported) and (report.reporter == r.reporter and report.reported == r.reported) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
-                reports[i] = nil
-            end
-            if (report.reason and report.reporter) and (report.reason == r.reason and report.reporter == r.reporter) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
-                reports[i] = nil
-            end
-            if (report.reported) and (report.reported == r.reported) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
-                reports[i] = nil
-            end
-            if (report.reporter) and (report.reporter == r.reporter) then
-                for admin,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:RemoveReport", admin, 10000, r)
-                end
-                TriggerEvent("EasyAdmin:reportRemoved", r)
-                reports[i] = nil
+            if ((report.reporter and report.reported) and (report.reporter == r.reporter and report.reported == r.reported))
+            or ((report.reason and report.reporter) and (report.reason == r.reason and report.reporter == r.reporter))
+            or (report.reported and report.reported == r.reported)
+            or (report.reporter and report.reporter == r.reporter) then
+                broadcastReportRemoval(i, r)
             end
         end
     end

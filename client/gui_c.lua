@@ -19,6 +19,8 @@ settings = {
 	forceShowGUIButtons = false,
 }
 
+local actionHistoryMenu = nil
+local adminNotesMenu = nil
 
 -- generate "slap" table once
 local SlapAmount = {}
@@ -34,6 +36,13 @@ function handleOrientation(orientation)
 	elseif orientation == "left" then
 		return 0
 	end
+end
+
+function truncate(str, limit)
+    if #str > limit then
+        return string.sub(str, 1, limit) .. "..."
+    end
+    return str
 end
 
 playlist = nil
@@ -439,17 +448,16 @@ function GenerateMenu() -- this is a big ass function
 					_menuPool:MouseControlsEnabled(false)
 
 					for i,thePlayer in ipairs(temp) do
-						local title = "["..thePlayer.id.."] "..thePlayer.name, ""
-						if thePlayer.cached then
-							title = thePlayer.name
-						end
-						local thisItem = NativeUI.CreateItem(title)
+						local title, description = "[".. thePlayer.id .."] "..thePlayer.name, ""
+						local thisItem = NativeUI.CreateItem(title, description)
 						resultMenu:AddItem(thisItem)
 						thisItem.Activated = function(ParentMenu, SelectedItem)
 							_menuPool:CloseAllMenus()
 							Citizen.Wait(300)
 							local thisMenu = thePlayer.menu
-							playerMenus[tostring(thePlayer.id)].generate(thisMenu)
+							if not thePlayer.cached then
+								playerMenus[tostring(thePlayer.id)].generate(thisMenu)
+							end
 							thisMenu:Visible(true)
 						end
 					end
@@ -463,7 +471,9 @@ function GenerateMenu() -- this is a big ass function
 					_menuPool:CloseAllMenus()
 					Citizen.Wait(300)
 					ttsSpeechText("Found User.")
-					playerMenus[tostring(temp[1].id)].generate(thisMenu)
+					if not temp[1].cached then
+						playerMenus[tostring(temp[1].id)].generate(thisMenu)
+					end
 					thisMenu:Visible(true)
 					return
 				end
@@ -824,8 +834,24 @@ function GenerateMenu() -- this is a big ass function
 							TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
 						end
 					end
+
+					if GetConvar("ea_enableActionHistory", "true") == "true" and permissions["player.actionhistory.view"] then
+						actionHistoryMenu = _menuPool:AddSubMenu(thisPlayer, GetLocalisedText("actionhistory"), GetLocalisedText("actionhistoryguide"), true)
+						actionHistoryMenu:SetMenuWidthOffset(menuWidth)
+						local loadingItem = NativeUI.CreateItem(GetLocalisedText("actionsloading"), GetLocalisedText("actionsloadingguide"))
+						actionHistoryMenu:AddItem(loadingItem)
+						TriggerServerEvent("EasyAdmin:GetActionHistory", thePlayer.id)
+					end
+
+					if GetConvar("ea_enableAdminNotes", "true") == "true" and permissions["player.adminnotes.view"] then
+						adminNotesMenu = _menuPool:AddSubMenu(thisPlayer, GetLocalisedText("adminnotes"), GetLocalisedText("adminnotesguide"), true)
+						adminNotesMenu:SetMenuWidthOffset(menuWidth)
+						local loadingItem = NativeUI.CreateItem(GetLocalisedText("notesloading"), GetLocalisedText("notesloadingguide"))
+						adminNotesMenu:AddItem(loadingItem)
+						TriggerServerEvent("EasyAdmin:GetAdminNotes", thePlayer.id)
+					end
 		
-					ExecutePluginsFunction("playerMenu", p.id)
+					ExecutePluginsFunction("playerMenu", thePlayer.id)
 
 					
 					if GetResourceState("es_extended") == "started" and not ESX then
@@ -1015,6 +1041,54 @@ function GenerateMenu() -- this is a big ass function
 		CachedList = _menuPool:AddSubMenu(playermanagement,GetLocalisedText("cachedplayers"),"",true)
 		CachedList:SetMenuWidthOffset(menuWidth)
 
+		if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
+			local cachedSearch = NativeUI.CreateItem(GetLocalisedText("searchuser"), GetLocalisedText("searchuserguide"))
+			CachedList:AddItem(cachedSearch)
+			cachedSearch.Activated = function(ParentMenu, SelectedItem)
+				local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 60)
+				if result and result ~= "" then
+					local temp = {}
+					local seen = {}
+					if cachedMenus[result] then
+						seen[result] = true
+						table.insert(temp, cachedMenus[result])
+					end
+					for k, v in pairs(cachedMenus) do
+						if not seen[k] and string.find(string.lower(v.name), string.lower(result)) then
+							seen[k] = true
+							table.insert(temp, v)
+						end
+					end
+					if #temp == 0 then
+						TriggerEvent("EasyAdmin:showNotification", "~r~No results found!")
+					elseif #temp == 1 then
+						local thisMenu = temp[1].menu
+						_menuPool:CloseAllMenus()
+						Citizen.Wait(300)
+						thisMenu:Visible(true)
+					else
+						local searchsubtitle = "Found "..tostring(#temp).." results!"
+						local resultMenu = NativeUI.CreateMenu("Search Results", searchsubtitle, menuOrientation, 0, "easyadmin", "banner-gradient", "logo")
+						_menuPool:Add(resultMenu)
+						_menuPool:ControlDisablingEnabled(false)
+						_menuPool:MouseControlsEnabled(false)
+						for i, thePlayer in ipairs(temp) do
+							local thisItem = NativeUI.CreateItem("["..thePlayer.id.."] "..thePlayer.name, "")
+							resultMenu:AddItem(thisItem)
+							thisItem.Activated = function(ParentMenu, SelectedItem)
+								_menuPool:CloseAllMenus()
+								Citizen.Wait(300)
+								thePlayer.menu:Visible(true)
+							end
+						end
+						_menuPool:CloseAllMenus()
+						Citizen.Wait(300)
+						resultMenu:Visible(true)
+					end
+				end
+			end
+		end
+
 		CachedList.ParentItem.Activated = function(ParentMenu, SelectedItem)
 			if not cachedListGenerated then
 				if permissions["player.ban.temporary"] or permissions["player.ban.permanent"] then
@@ -1080,6 +1154,7 @@ function GenerateMenu() -- this is a big ass function
 					end
 				end
 				cachedListGenerated=true
+				_menuPool:MouseControlsEnabled(false)
 				CachedList:RefreshIndexRecursively()
 			end
 		end
@@ -1753,3 +1828,185 @@ function DrawPlayerInfoLoop()
 	end)
 
 end
+
+RegisterNetEvent("EasyAdmin:ReceiveActionHistory")
+AddEventHandler("EasyAdmin:ReceiveActionHistory", function(actionHistory, playerId)
+	actionHistoryMenu:Clear()
+
+	if #actionHistory == 0 then
+		local noActionsItem = NativeUI.CreateItem(GetLocalisedText("noactions"), GetLocalisedText("noactionsguide"))
+		actionHistoryMenu:AddItem(noActionsItem)
+	end
+
+	for i, action in ipairs(actionHistory) do
+		local moderatorName = action.moderator or ""
+ 		local actionReason = action.reason or ""
+ 		local actionTitle = "[#"..action.id.."] " .. action.action .. " by " .. moderatorName
+ 		local actionDescription = GetLocalisedText("reason") .. ": " .. actionReason
+ 		local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, actionTitle, actionDescription, true)
+		actionSubmenu:SetMenuWidthOffset(menuWidth)
+		if action.action == "BAN" and permissions["player.ban.remove"] then
+			local actionUnban = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
+			actionUnban.Activated = function(ParentMenu, SelectedItem)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", action.banid)
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("unbanplayer"))
+				TriggerServerEvent("EasyAdmin:GetActionHistory", playerId)
+				ParentMenu:Visible(false)
+				ParentMenu.ParentMenu:Visible(true)
+			end
+			actionSubmenu:AddItem(actionUnban)
+		end
+		if permissions["player.actionhistory.delete"] then
+			local actionDelete = NativeUI.CreateItem(GetLocalisedText("deleteaction"), GetLocalisedText("deleteactionguide"))
+			actionDelete.Activated = function(ParentMenu, SelectedItem)
+				TriggerServerEvent("EasyAdmin:DeleteAction", action.id)
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("actiondeleted"))
+				TriggerServerEvent("EasyAdmin:GetActionHistory", playerId)
+				ParentMenu:Visible(false)
+				ParentMenu.ParentMenu:Visible(true)
+			end
+			actionSubmenu:AddItem(actionDelete)
+		end
+		local punishedDiscord = NativeUI.CreateItem(GetLocalisedText("getplayerdiscord"), GetLocalisedText("getplayerdiscordguide"))
+		punishedDiscord.Activated = function(ParentMenu, SelectedItem)
+			local identifiers = action.idents
+			if identifiers then
+				local discordId = nil
+
+				for _, id in ipairs(identifiers) do
+					if string.match(id, "discord:") then
+						discordId = string.gsub(id, "discord:", "")
+						break
+					end
+				end
+
+				if discordId then
+					copyToClipboard(discordId)
+				else
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+				end
+			else
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+			end
+		end
+		actionSubmenu:AddItem(punishedDiscord)
+		local moderatorDiscord = NativeUI.CreateItem(GetLocalisedText("getmoderatordiscord"), GetLocalisedText("getmoderatordiscordguide"))
+		moderatorDiscord.Activated = function(ParentMenu, SelectedItem)
+			local identifiers = action.moderatorIdents
+			if identifiers then
+				local discordId = nil
+
+				for _, id in ipairs(identifiers) do
+					if string.match(id, "discord:") then
+						discordId = string.gsub(id, "discord:", "")
+						break
+					end
+				end
+
+				if discordId then
+					copyToClipboard(discordId)
+				else
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+				end
+			else
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+			end
+		end
+		actionSubmenu:AddItem(moderatorDiscord)
+		actionSubmenu:RefreshIndex()
+	end
+end)
+
+RegisterNetEvent("EasyAdmin:ReceiveAdminNotes")
+AddEventHandler("EasyAdmin:ReceiveAdminNotes", function(notes, playerId)
+	adminNotesMenu:Clear()
+
+	if permissions["player.adminnotes.add"] then
+		local addNoteItem = NativeUI.CreateItem(GetLocalisedText("addnote"), GetLocalisedText("addnoteguide"))
+		adminNotesMenu:AddItem(addNoteItem)
+
+		addNoteItem.Activated = function(ParentMenu, SelectedItem)
+			local result = displayKeyboardInput("FMMC_KEY_TIP8", "", 60)
+
+			if result and result ~= "" then
+				TriggerServerEvent("EasyAdmin:AddAdminNote", result, playerId)
+				Citizen.Wait(500)
+				TriggerServerEvent("EasyAdmin:GetAdminNotes", playerId)
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("noteadded"))
+			end
+		end
+	end
+
+	if #notes == 0 then
+		local noNotesItem = NativeUI.CreateItem(GetLocalisedText("nonotes"), GetLocalisedText("nonotesguide"))
+		adminNotesMenu:AddItem(noNotesItem)
+	end
+
+	for i, note in ipairs(notes) do
+		local notesSubmenu = _menuPool:AddSubMenu(adminNotesMenu, "[#" .. note.id  .. "] " .. truncate(note.content, 10) .. " by " .. note.moderator, GetLocalisedText("date") .. ": " .. note.time, true)
+		notesSubmenu:SetMenuWidthOffset(menuWidth)
+
+		if permissions["player.adminnotes.delete"] then
+			local noteDelete = NativeUI.CreateItem(GetLocalisedText("deletenote"), GetLocalisedText("deletenoteguide"))
+			noteDelete.Activated = function(ParentMenu, SelectedItem)
+				TriggerServerEvent("EasyAdmin:DeleteAdminNote", note.id)
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("notedeleted"))
+				TriggerServerEvent("EasyAdmin:GetAdminNotes", playerId)
+				ParentMenu:Visible(false)
+				ParentMenu.ParentMenu:Visible(true)
+			end
+			notesSubmenu:AddItem(noteDelete)
+		end
+
+		local noteDiscord = NativeUI.CreateItem(GetLocalisedText("getplayerdiscord"), GetLocalisedText("getplayerdiscordguide"))
+		noteDiscord.Activated = function(ParentMenu, SelectedItem)
+			local identifiers = note.idents
+			if identifiers then
+				local discordId = nil
+
+				for _, id in ipairs(identifiers) do
+					if string.match(id, "discord:") then
+						discordId = string.gsub(id, "discord:", "")
+						break
+					end
+				end
+
+				if discordId then
+					copyToClipboard(discordId)
+				else
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+				end
+			else
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+			end
+		end
+		notesSubmenu:AddItem(noteDiscord)
+
+		local moderatorDiscord = NativeUI.CreateItem(GetLocalisedText("getmoderatordiscord"), GetLocalisedText("getmoderatordiscordguide"))
+		moderatorDiscord.Activated = function(ParentMenu, SelectedItem)
+			local identifiers = note.moderatorIdents
+			if identifiers then
+				local discordId = nil
+
+				for _, id in ipairs(identifiers) do
+					if string.match(id, "discord:") then
+						discordId = string.gsub(id, "discord:", "")
+						break
+					end
+				end
+
+				if discordId then
+					copyToClipboard(discordId)
+				else
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+				end
+			else
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("nodiscordpresent"))
+			end
+		end
+		notesSubmenu:AddItem(moderatorDiscord)
+		notesSubmenu:RefreshIndex()
+	end
+
+	adminNotesMenu:RefreshIndex()
+end)
