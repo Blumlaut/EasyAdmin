@@ -18,7 +18,7 @@ AddEventHandler('playerDropped', function (reason)
         end
     end
     for id, _ in pairs(reportIds) do
-        removeReportById(id)
+        removeReport(id)
     end
     if cooldowns[source] then
         cooldowns[source] = nil
@@ -80,18 +80,19 @@ Citizen.CreateThread(function()
                     end
                 end
 
-                if id and not GetPlayerIdentifier(id, 1) then
-                    for i, player in pairs(GetPlayers()) do
-                        if string.find(string.lower(getName(player, true)), string.lower(id)) then
-                            id = player
-                            valid = true
-                            break
+                if id then
+                    if GetPlayerIdentifier(id, 1) then
+                        valid = true
+                    else
+                        for i, player in pairs(GetPlayers()) do
+                            if string.find(string.lower(getName(player, true)), string.lower(id)) then
+                                id = player
+                                valid = true
+                                break
+                            end
                         end
                     end
-                    if not valid then
-                        valid = true
-                    end
-                end                 
+                end
 
                 if id and valid then
                     local reason = string.gsub(rawCommand, GetConvar("ea_reportCommandName", "report").." " ..args[1].." ", "")
