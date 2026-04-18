@@ -93,8 +93,9 @@ Storage = {
     end,
     addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
         awaitReady()
+        local banTime = time or os.time()
         table.insert(banlist, {
-            time = os.time(),
+            time = banTime,
             banid = banId,
             username = username,
             identifiers = bannedIdentifiers,
