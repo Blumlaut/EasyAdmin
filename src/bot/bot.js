@@ -115,12 +115,6 @@ if (GetConvar('ea_botToken', '') != '') {
 			console.log(`${info}`)
 		}
 	})
-	on('debug', function(info){
-		if (GetConvarInt('ea_logLevel', 1) >= 4 ) {
-			console.log(`${info}`)
-		}
-	})
-    
 	client.login(GetConvar('ea_botToken', ''))
 }
 

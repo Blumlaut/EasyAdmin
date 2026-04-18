@@ -24,6 +24,9 @@ permissions = {
 	["player.reports.view"] = false,
 	["player.reports.claim"] = false,
 	["player.reports.process"] = false,
+
+	["bot.history"] = false,
+	["bot.notes"] = false,
 	
 	["server.cleanup.cars"] = false,
 	["server.cleanup.props"] = false,
@@ -287,7 +290,7 @@ function string.split(inputstr, sep)
 	if sep == nil then
 		sep = "%s"
 	end
-	local t={} ; i=1
+	local t={} ; local i=1
 	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
 		t[i] = str
 		i = i + 1
@@ -318,23 +321,6 @@ end
 -- Convert a lua table into a lua syntactically correct string
 function table_to_string(tbl)
 	return json.encode(tbl)
-end
-
-function truncate(str, limit)
-	if #str > limit then
-		return string.sub(str, 1, limit) .. "..."
-	end
-	return str
-end
-
-function getDiscordFromIdentifiers(identifiers)
-	if not identifiers then return nil end
-	for _, id in ipairs(identifiers) do
-		if string.find(id, "discord:", 1, true) then
-			return string.gsub(id, "discord:", "", 1)
-		end
-	end
-	return nil
 end
 
 function mergeTables(t1, t2)

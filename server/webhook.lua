@@ -33,6 +33,12 @@ function isWebhookFeatureExcluded(feature)
 end
 exports('isWebhookFeatureExcluded', isWebhookFeatureExcluded)
 
+-- Returns detailNotification if configured, otherwise falls back to moderationNotification.
+-- Use this wherever the preferred webhook for an action is needed.
+function getPreferredWebhook()
+    return detailNotification ~= "false" and detailNotification or moderationNotification
+end
+
 function SendWebhookMessage(webhook,message,feature,colour,title,image)
     moderationNotification = GetConvar("ea_moderationNotification", "false")
     reportNotification = GetConvar("ea_reportNotification", "false")

@@ -15,11 +15,14 @@ local banlist = {}
 local actions = {}
 local notes = {}
 
--- updateList is a placeholder for future schema migration logic.
--- When the storage_api_version changes, this function should handle
--- upgrading the data format from older versions to the current one.
-local function updateList(filename)
-    return
+-- local function updateList(filename)
+--     return
+-- end
+
+local function awaitReady()
+    if not listsReady then
+        repeat Citizen.Wait(0) until listsReady
+    end
 end
 
 local function loadJsonFile(filename, currentVersion)
@@ -27,7 +30,7 @@ local function loadJsonFile(filename, currentVersion)
     if content then
         local data = json.decode(content)
         if data.version ~= currentVersion then
-            updateList(filename)
+            -- updateList(filename)
             content = LoadResourceFile(GetCurrentResourceName(), filename)
         end
     else
@@ -45,11 +48,37 @@ local function saveJsonFile(filename, data)
     end
 end
 
+-- Returns the next available sequential ID for a list of records that have an .id field
+local function nextId(list)
+    local max_id = 0
+    for _, entry in ipairs(list) do
+        if entry.id and entry.id > max_id then
+            max_id = entry.id
+        end
+    end
+    return max_id + 1
+end
+
+-- Returns all entries from `list` whose .idents table shares at least one value with `idents`
+local function findByIdentifiers(list, idents)
+    local playerHasIdent = {}
+    for _, id in ipairs(idents) do playerHasIdent[id] = true end
+
+    local results = {}
+    for _, entry in ipairs(list) do
+        for _, ident in ipairs(entry.idents) do
+            if playerHasIdent[ident] then
+                results[#results + 1] = entry
+                break
+            end
+        end
+    end
+    return results
+end
+
 Storage = {
     getBan = function(banId)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
+        awaitReady()
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 return ban
@@ -57,25 +86,19 @@ Storage = {
         end
         return false
     end,
-    getBanIdentifier = function(identifiers)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
-        local found = false
+    getBanIdentifier = function(identifier)
+        awaitReady()
         for i, ban in ipairs(banlist) do
-            for j, identifier in ipairs(ban.identifiers) do
-                if ban.identifiers[identifier] then
-                    found = true
-                    break
+            for j, banId in ipairs(ban.identifiers) do
+                if banId == identifier then
+                    return ban
                 end
             end
         end
-        return found
+        return false
     end,
     addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
+        awaitReady()
         table.insert(banlist, {
             time = os.time(),
             banid = banId,
@@ -99,15 +122,13 @@ Storage = {
                     break
                 end
             end
-        end 
+        end
     end,
     updateBanlist = function(banlist)
         saveJsonFile("banlist.json", banlist)
     end,
     removeBan = function(banId)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
+        awaitReady()
         for i, ban in ipairs(banlist) do
             if ban.banid == banId then
                 table.remove(banlist, i)
@@ -118,14 +139,12 @@ Storage = {
         return false
     end,
     unbanIdentifier = function(identifier)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
+        awaitReady()
         if identifier then
-            for i,ban in ipairs(banlist) do
-                for index,id in pairs(ban.identifiers) do
+            for i, ban in ipairs(banlist) do
+                for index, id in pairs(ban.identifiers) do
                     if identifier == id then
-                        table.remove(banlist,i)
+                        table.remove(banlist, i)
                         saveJsonFile("banlist.json", banlist)
                         PrintDebugMessage("removed ban as per unbanidentifier func", 4)
                         return
@@ -135,43 +154,18 @@ Storage = {
         end
     end,
     getBanList = function()
-        repeat
-            Citizen.Wait(0)
-        until listsReady
+        awaitReady()
         return banlist
     end,
-    getAction = function(identifiers)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
-        local userActions = {}
-        local playerHasIdent = {}
-
-        for _, id in ipairs(identifiers) do playerHasIdent[id] = true end
-
-        for _, act in ipairs(actions) do
-            for _, ident in ipairs(act.idents) do
-                if playerHasIdent[ident] then
-                    table.insert(userActions, act)
-                    break
-                end
-            end
-        end
-        return userActions
+    getAction = function(idents)
+        awaitReady()
+        return findByIdentifiers(actions, idents)
     end,
     addAction = function(type, identifiers, reason, moderatorName, moderatorIdentifiers)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
-        local max_id = 0
-        for _, act in ipairs(actions) do
-            if act.id and act.id > max_id then
-                max_id = act.id
-            end
-        end
+        awaitReady()
         table.insert(actions, {
             time = os.time(),
-            id = max_id + 1,
+            id = nextId(actions),
             action = type,
             idents = identifiers,
             reason = reason,
@@ -181,32 +175,19 @@ Storage = {
         saveJsonFile("actions.json", actions)
     end,
     removeAction = function(actionId)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
+        awaitReady()
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
             end
         end
         saveJsonFile("actions.json", actions)
-        return
     end,
     addNote = function(noteContent, identifiers, moderatorName, moderatorIdentifiers)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
-
-        local max_id = 0
-        for _, note in ipairs(notes) do
-            if note.id and note.id > max_id then
-                max_id = note.id
-            end
-        end
-        
+        awaitReady()
         table.insert(notes, {
             time = os.date("%d/%m/%Y %H:%M", os.time()),
-            id = max_id + 1,
+            id = nextId(notes),
             content = noteContent,
             idents = identifiers,
             moderator = moderatorName,
@@ -215,46 +196,29 @@ Storage = {
         saveJsonFile("notes.json", notes)
     end,
     removeNote = function(noteId)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
-
+        awaitReady()
         for i, note in ipairs(notes) do
             if note.id == noteId then
                 table.remove(notes, i)
             end
         end
         saveJsonFile("notes.json", notes)
-        return
     end,
     getNotes = function(id)
-        repeat
-            Citizen.Wait(0)
-        until listsReady
-
-        local userNotes = {}
-        local playerHasIdent = {}
-
+        awaitReady()
+        if not CachedPlayers[id] then return {} end
         local idents = CachedPlayers[id].identifiers
-
-        for _, id in ipairs(idents) do playerHasIdent[id] = true end
-
-        for _, note in ipairs(notes) do
-            for _, ident in ipairs(note.idents) do
-                if playerHasIdent[ident] then
-                    table.insert(userNotes, note)
-                    break
-                end
-            end
-        end
-        return userNotes
+        return findByIdentifiers(notes, idents)
+    end,
+    getNotesByIdents = function(idents)
+        awaitReady()
+        return findByIdentifiers(notes, idents)
     end,
 }
 
 Citizen.CreateThread(function()
     local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
     local banContent = loadJsonFile("banlist.json", currentVersion)
-    local banContent = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
 
     banlist = json.decode(banContent) or {}
 

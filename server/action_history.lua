@@ -37,9 +37,13 @@ RegisterNetEvent("EasyAdmin:LogAction", function(action, playerId)
         local identifiers = getAllPlayerIdentifiers(playerId)
         local moderatorIdentifiers = getAllPlayerIdentifiers(src)
 
-        Storage.addAction(action.action, identifiers, action.reason, GetPlayerName(src), moderatorIdentifiers, action.expire, action.expireString)
+        Storage.addAction(action.action, identifiers, action.reason, GetPlayerName(src), moderatorIdentifiers)
         PrintDebugMessage("Action logged successfully.", 2)
     end
+end)
+
+exports('getActionHistory', function(identifiers)
+    return Storage.getAction(identifiers)
 end)
 
 RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
@@ -52,9 +56,7 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
         Storage.removeAction(actionId)
         PrintDebugMessage("Action deleted successfully.", 2)
 
-        detailNotification = GetConvar("ea_detailNotification", "false")
-        moderationNotification = GetConvar("ea_moderationNotification", "false")
-        local preferredWebhook = detailNotification ~= "false" and detailNotification or moderationNotification
+        local preferredWebhook = getPreferredWebhook()
         SendWebhookMessage(preferredWebhook, string.format(GetLocalisedText("actionhistorydeleted"), getName(src, false, true), actionId), "", 16777214)
     else
         PrintDebugMessage("Player does not have permission to delete actions.", 2)

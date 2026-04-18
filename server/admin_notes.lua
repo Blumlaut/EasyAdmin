@@ -1,3 +1,7 @@
+exports('getAdminNotes', function(identifiers)
+    return Storage.getNotesByIdents(identifiers)
+end)
+
 RegisterNetEvent("EasyAdmin:GetAdminNotes", function(playerId)
     local src = source
     if DoesPlayerHavePermission(src, "player.adminnotes.view") then
@@ -37,6 +41,6 @@ RegisterNetEvent("EasyAdmin:DeleteAdminNote", function(noteId)
         end
 
         Storage.removeNote(noteId)
-        PrintDebugMessage("Admin note deleted successfully.", 2)
+        PrintDebugMessage("Note deleted successfully.", 2)
     end
 end)

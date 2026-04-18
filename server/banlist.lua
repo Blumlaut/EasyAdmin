@@ -109,6 +109,7 @@ end)
 function addBanExport(playerId,reason,expires,banner)
     local bannedIdentifiers = {}
     local bannedUsername = "Unknown"
+    local offline = false
     if type(playerId) == "table" then -- if playerId is a table of identifiers
         offline = true
         bannedIdentifiers = playerId
@@ -125,21 +126,22 @@ function addBanExport(playerId,reason,expires,banner)
         PrintDebugMessage("Couldn't find any Infos about Player "..playerId..", no ban issued.", 1)
         return false
     end
-    
+
     if expires and expires < os.time() then
-        expires = os.time()+expires 
-    elseif not expires then 
+        expires = os.time()+expires
+    elseif not expires then
         expires = 10444633200
     end
     reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
-    Storage.addBan(GetFreshBanId(), bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
-    Storage.addAction("BAN", bannedIdentifiers[1], reason, banner or "Unknown", getAllPlayerIdentifiers(source))
+    local banId = GetFreshBanId()
+    Storage.addBan(banId, bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
+    Storage.addAction("BAN", bannedIdentifiers, reason, banner or "Unknown", getAllPlayerIdentifiers(source))
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
     end
-    
-    
-    SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), banner or "Unknown", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
+
+    local ban = Storage.getBan(banId)
+    SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), banner or "Unknown", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
     if not offline then
         DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
     end
@@ -223,11 +225,13 @@ end)
 ---@return number @The next available ban ID
 function GetFreshBanId()
     local blacklist = Storage.getBanList()
-    if blacklist[#blacklist] then 
-        return blacklist[#blacklist].banid+1
-    else
-        return 1
+    local maxId = 0
+    for _, ban in ipairs(blacklist) do
+        if ban.banid and ban.banid > maxId then
+            maxId = ban.banid
+        end
     end
+    return maxId + 1
 end
 exports('GetFreshBanId', GetFreshBanId)
 
