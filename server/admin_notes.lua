@@ -41,6 +41,6 @@ RegisterNetEvent("EasyAdmin:DeleteAdminNote", function(noteId)
         end
 
         Storage.removeNote(noteId)
-        PrintDebugMessage("Note deleted successfully.", 2)
+        PrintDebugMessage("Admin note deleted successfully.", 2)
     end
 end)
