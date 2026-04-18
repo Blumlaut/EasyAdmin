@@ -12,15 +12,21 @@
 
 RegisterNetEvent("EasyAdmin:GetActionHistory", function(playerId)
     local src = source
-    local identifiers = getAllPlayerIdentifiers(playerId)
     if DoesPlayerHavePermission(src, "player.actionhistory.view") then
+        local targetPlayerId = tonumber(playerId)
+        if not targetPlayerId or not GetPlayerName(targetPlayerId) then
+            PrintDebugMessage("Invalid or offline player ID provided for action history, returning empty action history.", 2)
+            TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {}, playerId)
+            return
+        end
+        local identifiers = getAllPlayerIdentifiers(targetPlayerId)
         if not identifiers then
             PrintDebugMessage("User has no identifiers somehow, returning empty action history.", 2)
             TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {})
             return
         end
         local history = Storage.getAction(identifiers)
-        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, history, playerId)
+        TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, history, targetPlayerId)
     else
         PrintDebugMessage("Player does not have permission to view action history.", 2)
         TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {}, playerId)
@@ -30,14 +36,16 @@ end)
 RegisterNetEvent("EasyAdmin:LogAction", function(action, playerId)
     local src = source
     if DoesPlayerHavePermission(src, "player.actionhistory.add") then
-        if not action then
-            PrintDebugMessage("Action not defined.", 2)
+        if not action or not action.action then
+            PrintDebugMessage("Invalid action data provided.", 2)
+            return
         end
 
         local identifiers = getAllPlayerIdentifiers(playerId)
         local moderatorIdentifiers = getAllPlayerIdentifiers(src)
+        local reason = action.reason or ""
 
-        Storage.addAction(action.action, identifiers, action.reason, GetPlayerName(src), moderatorIdentifiers)
+        Storage.addAction(action.action, identifiers, reason, GetPlayerName(src), moderatorIdentifiers)
         PrintDebugMessage("Action logged successfully.", 2)
     end
 end)

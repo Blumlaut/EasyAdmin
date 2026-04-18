@@ -1839,12 +1839,16 @@ AddEventHandler("EasyAdmin:ReceiveActionHistory", function(actionHistory, player
 	end
 
 	for i, action in ipairs(actionHistory) do
-		local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, "[#"..action.id.."] " .. action.action .. " by " .. action.moderator, GetLocalisedText("reason") .. ": " ..  action.reason or "", true)
+		local moderatorName = action.moderator or ""
+ 		local actionReason = action.reason or ""
+ 		local actionTitle = "[#"..action.id.."] " .. action.action .. " by " .. moderatorName
+ 		local actionDescription = GetLocalisedText("reason") .. ": " .. actionReason
+ 		local actionSubmenu = _menuPool:AddSubMenu(actionHistoryMenu, actionTitle, actionDescription, true)
 		actionSubmenu:SetMenuWidthOffset(menuWidth)
 		if action.action == "BAN" and permissions["player.ban.remove"] then
 			local actionUnban = NativeUI.CreateItem(GetLocalisedText("unbanplayer"), GetLocalisedText("unbanplayerguide"))
 			actionUnban.Activated = function(ParentMenu, SelectedItem)
-				TriggerServerEvent("EasyAdmin:UnbanPlayer", action.banid)
+				TriggerServerEvent("EasyAdmin:unbanPlayer", action.banid)
 				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("unbanplayer"))
 				TriggerServerEvent("EasyAdmin:GetActionHistory", playerId)
 				ParentMenu:Visible(false)

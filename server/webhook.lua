@@ -11,6 +11,14 @@
 ------------------------------------
 
 ExcludedWebhookFeatures = {}
+
+ local function refreshWebhookConvars()
+    moderationNotification = GetConvar("ea_moderationNotification", "false")
+    reportNotification = GetConvar("ea_reportNotification", "false")
+    detailNotification = GetConvar("ea_detailNotification", "false")
+ end
+ refreshWebhookConvars()
+
 RegisterCommand("ea_testWebhook", function(source, args, rawCommand)
 	if DoesPlayerHavePermission(source, "server") then
 		SendWebhookMessage(moderationNotification, "**Testing Webhook for moderationNotification**", false, 65280)
@@ -36,13 +44,12 @@ exports('isWebhookFeatureExcluded', isWebhookFeatureExcluded)
 -- Returns detailNotification if configured, otherwise falls back to moderationNotification.
 -- Use this wherever the preferred webhook for an action is needed.
 function getPreferredWebhook()
+    refreshWebhookConvars()
     return detailNotification ~= "false" and detailNotification or moderationNotification
 end
 
 function SendWebhookMessage(webhook,message,feature,colour,title,image)
-    moderationNotification = GetConvar("ea_moderationNotification", "false")
-    reportNotification = GetConvar("ea_reportNotification", "false")
-    detailNotification = GetConvar("ea_detailNotification", "false")
+    refreshWebhookConvars()
     
     local embed = {
         {

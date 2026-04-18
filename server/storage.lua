@@ -28,12 +28,6 @@ end
 local function loadJsonFile(filename, currentVersion)
     local content = LoadResourceFile(GetCurrentResourceName(), filename)
     if content then
-        local data = json.decode(content)
-        if data.version ~= currentVersion then
-            -- updateList(filename)
-            content = LoadResourceFile(GetCurrentResourceName(), filename)
-        end
-    else
         PrintDebugMessage(filename .. " file was missing, we created a new one.", 2)
         content = json.encode({})
     end
@@ -42,7 +36,7 @@ local function loadJsonFile(filename, currentVersion)
 end
 
 local function saveJsonFile(filename, data)
-    local saved = SaveResourceFile(GetCurrentResourceName(), filename, json.encode(data, {indent = true, version = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 0)}), -1)
+    local saved = SaveResourceFile(GetCurrentResourceName(), filename, json.encode(data, {indent = true}), -1)
     if not saved then
         PrintDebugMessage("^1Saving " .. filename .. " failed! Please check if EasyAdmin has Permission to write in its owner folder!^7", 1)
     end
@@ -228,13 +222,19 @@ Citizen.CreateThread(function()
     local notesContent = loadJsonFile("notes.json", currentVersion)
     notes = json.decode(notesContent) or {}
 
+    local actionsPruned = false
     PrintDebugMessage("Clearing expired actions from action history", 4)
     for i, action in ipairs(actions) do
         if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
             table.remove(actions, i)
+            actionsPruned = true
             PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
         end
     end
+
+    if actionsPruned then
+         saveJsonFile("actions.json", actions)
+     end
 
     listsReady = true
 end)

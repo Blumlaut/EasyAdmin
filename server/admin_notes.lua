@@ -21,8 +21,9 @@ end)
 RegisterNetEvent("EasyAdmin:AddAdminNote", function(note, playerId)
     local src = source
     if DoesPlayerHavePermission(src, "player.adminnotes.add") then
-        if not note then
+        if not note or note == "" then
             PrintDebugMessage("Note not defined.", 2)
+            return
         end
 
         local identifiers = getAllPlayerIdentifiers(playerId)
@@ -38,6 +39,7 @@ RegisterNetEvent("EasyAdmin:DeleteAdminNote", function(noteId)
     if DoesPlayerHavePermission(src, "player.adminnotes.delete") then
         if not noteId then
             PrintDebugMessage("Invalid parameters for admin note deletion.", 2)
+            return
         end
 
         Storage.removeNote(noteId)

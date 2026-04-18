@@ -70,7 +70,7 @@ function loadBackupName(name)
 end
 
 
----@return number @Backup ID
+---@return number @Backup filename
 ---@return number @Backup timestamp
 function createBackup()
 	local backupTime = os.time()
