@@ -26,6 +26,11 @@ local function rebuildBanIndex()
     end
 end
 
+function IsSelfBan(banner, target)
+    if banner == nil or target == nil then return false end
+    return tonumber(banner) == tonumber(target)
+end
+
 ---Handles the banning of a player
 ---@param playerId number @The ID of the player to ban
 ---@param reason string @The reason for the ban
@@ -35,6 +40,10 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     -- Validate playerId before proceeding
     if not playerId or not isPlayerOnline(playerId) then
         TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
+        return
+    end
+    if IsSelfBan(source, playerId) and GetConvar("ea_allowSelfBan", "false") ~= "true" then
+        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
         return
     end
     
@@ -71,6 +80,10 @@ end)
 ---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
     if playerId ~= nil and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "ban") then
+        if IsSelfBan(source, playerId) and GetConvar("ea_allowSelfBan", "false") ~= "true" then
+            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
+            return
+        end
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
             SetAdminCooldown(source, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
