@@ -235,6 +235,7 @@
     "savebanchanges":"Save Changes",
     "savebanguide":"~r~~h~NOTE:~h~~w~ Pressing Confirm will update this Ban on the Server.",
     "adminimmune":"You do not have permission to perform this action, target player is immune.",
+    "cantbanself":"You cannot ban yourself.",
     "teleportmeback":"Teleport me back",
     "teleportplayerback":"Teleport Player back",
     "teleportintoclosestvehicle":"into closest vehicle",
