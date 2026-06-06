@@ -42,7 +42,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
         TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidplayer"))
         return
     end
-    if IsSelfBan(source, playerId) and GetConvar("ea_allowSelfBan", "false") ~= "true" then
+    if IsSelfBan(source, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
         TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
         return
     end
@@ -80,7 +80,7 @@ end)
 ---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
     if playerId ~= nil and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "ban") then
-        if IsSelfBan(source, playerId) and GetConvar("ea_allowSelfBan", "false") ~= "true" then
+        if IsSelfBan(source, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
             TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
             return
         end
