@@ -212,7 +212,12 @@ Citizen.CreateThread(function()
         reports[i] = nil
     end
 
-    function removeReport(index,reporter,reported,reason)
+    ---Removes any report(s) matching ANY of the provided criteria (OR-matched).
+    ---Pass only the criteria you want to match on; the others may be nil.
+    ---@param index number|nil @id/index of a specific report to remove
+    ---@param reporter any|nil @remove reports filed by this reporter
+    ---@param reported any|nil @remove reports against this reported player
+    function removeReport(index,reporter,reported)
         for i, report in pairs(reports) do
             if (index and i == index)
             or (reporter and reporter == report.reporter)

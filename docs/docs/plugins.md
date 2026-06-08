@@ -179,6 +179,9 @@ Example:
 | `string.reverse` | string | Reverses a string |
 | `UIMenu:RefreshIndexRecursively()` | N/A | Forces menu index refresh, needed when items are added/removed while menu is open |
 
+!!! note "Changed: `DoesPlayerHavePermission`"
+    `DoesPlayerHavePermission` is defined in the shared script (`shared/util_shared.lua`) and is therefore available on **both the client and the server** (it is also exposed as an export). The redundant client-only copy that previously lived in `client/admin_client.lua` has been removed. Behaviour of the shared function is unchanged; plugins that relied on the old client-local global should call this shared `DoesPlayerHavePermission` instead.
+
 ---
 
 ### Events You Can Receive (but shouldn't trigger)

@@ -863,7 +863,7 @@ Citizen.CreateThread(function()
 			})
 			TriggerClientEvent("txcl:showWarning", id, getName(src), string.format(GetLocalisedText("warned"), reason, WarnedPlayers[id].warns, maxWarnings), GetLocalisedText("warnedtitle"), GetLocalisedText("warnedby"),GetLocalisedText("warndismiss"))
 			SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminwarnedplayer"), getName(src, false, true), getName(id, true, true), reason, WarnedPlayers[id].warns, maxWarnings), "warn", 16711680)
-			if GetConvarInt("ea_enableActionHistory", 1) == 1 then
+			if GetConvar("ea_enableActionHistory", "true") == "true" then
  				Storage.addAction("WARN", getAllPlayerIdentifiers(id), reason, getName(src, true, false), getAllPlayerIdentifiers(src))
  			end
 			if WarnedPlayers[id].warns >= maxWarnings then

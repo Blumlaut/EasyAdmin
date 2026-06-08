@@ -20,8 +20,17 @@ local notes = {}
 -- end
 
 local function awaitReady()
-    if not listsReady then
-        repeat Citizen.Wait(0) until listsReady
+    if listsReady then return end
+    -- Bounded wait: the loader thread always sets listsReady (even on failure, see below),
+    -- so this is a safety cap against a never-scheduled loader rather than the normal path.
+    local waited = 0
+    while not listsReady do
+        Citizen.Wait(50)
+        waited = waited + 50
+        if waited >= 10000 then
+            PrintDebugMessage("^1Storage.awaitReady timed out after 10s; proceeding with current (possibly empty) lists.^7", 1)
+            return
+        end
     end
 end
 
@@ -104,7 +113,6 @@ Storage = {
             expire = expires,
             expiryString = expiryString,
             type = type,
-            timeLeft = time,
         })
         saveJsonFile("banlist.json", banlist)
     end,
@@ -175,9 +183,11 @@ Storage = {
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
+                saveJsonFile("actions.json", actions)
+                return true
             end
         end
-        saveJsonFile("actions.json", actions)
+        return false
     end,
     addNote = function(noteContent, identifiers, moderatorName, moderatorIdentifiers)
         awaitReady()
@@ -212,32 +222,50 @@ Storage = {
     end,
 }
 
-Citizen.CreateThread(function()
-    local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
-    local banContent = loadJsonFile("banlist.json", currentVersion)
-
-    banlist = json.decode(banContent) or {}
-
-    local actionContent = loadJsonFile("actions.json", currentVersion)
-    actions = json.decode(actionContent) or {}
-
-    local notesContent = loadJsonFile("notes.json", currentVersion)
-    notes = json.decode(notesContent) or {}
-
-    local actionsPruned = false
-    PrintDebugMessage("Clearing expired actions from action history", 4)
+-- Removes actions older than ea_actionHistoryExpiry days. Safe to call repeatedly.
+local function pruneExpiredActions()
+    local expirySeconds = GetConvarInt("ea_actionHistoryExpiry", 30) * 24 * 60 * 60
+    local pruned = false
     for i = #actions, 1, -1 do
         local action = actions[i]
-        if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
+        if action.time and action.time + expirySeconds < os.time() then
             table.remove(actions, i)
-            actionsPruned = true
+            pruned = true
             PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
         end
     end
+    if pruned then
+        saveJsonFile("actions.json", actions)
+    end
+end
 
-    if actionsPruned then
-         saveJsonFile("actions.json", actions)
-     end
+Citizen.CreateThread(function()
+    -- Load all lists inside pcall: a decode/IO failure must never leave listsReady false,
+    -- otherwise awaitReady() (and thus every Storage call) would block indefinitely.
+    local ok, err = pcall(function()
+        local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
+        banlist = json.decode(loadJsonFile("banlist.json", currentVersion)) or {}
+        actions = json.decode(loadJsonFile("actions.json", currentVersion)) or {}
+        notes = json.decode(loadJsonFile("notes.json", currentVersion)) or {}
+        PrintDebugMessage("Clearing expired actions from action history", 4)
+        pruneExpiredActions()
+    end)
+    if not ok then
+        PrintDebugMessage("^1Storage failed to load lists: " .. tostring(err) .. " - starting with empty lists.^7", 1)
+        banlist = banlist or {}
+        actions = actions or {}
+        notes = notes or {}
+    end
 
     listsReady = true
+end)
+
+-- Recurring cleanup so expired actions are pruned during runtime, not only at startup.
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(60 * 60 * 1000) -- hourly
+        if listsReady then
+            pruneExpiredActions()
+        end
+    end
 end)

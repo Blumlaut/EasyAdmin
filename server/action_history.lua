@@ -33,21 +33,21 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(playerId)
     end
 end)
 
-RegisterNetEvent("EasyAdmin:LogAction", function(action, playerId)
+-- Server-internal event (deliberately NOT a net event): only EasyAdmin server code fires
+-- this, so there is no remotely-supplied source to permission-check.
+AddEventHandler("EasyAdmin:LogAction", function(action, playerId)
     local src = source
-    if DoesPlayerHavePermission(src, "player.actionhistory.add") then
-        if not action or not action.action then
-            PrintDebugMessage("Invalid action data provided.", 2)
-            return
-        end
-
-        local identifiers = getAllPlayerIdentifiers(playerId)
-        local moderatorIdentifiers = getAllPlayerIdentifiers(src)
-        local reason = action.reason or ""
-
-        Storage.addAction(action.action, identifiers, reason, GetPlayerName(src), moderatorIdentifiers)
-        PrintDebugMessage("Action logged successfully.", 2)
+    if not action or not action.action then
+        PrintDebugMessage("Invalid action data provided.", 2)
+        return
     end
+
+    local identifiers = getAllPlayerIdentifiers(playerId)
+    local moderatorIdentifiers = getAllPlayerIdentifiers(src)
+    local reason = action.reason or ""
+
+    Storage.addAction(action.action, identifiers, reason, GetPlayerName(src), moderatorIdentifiers)
+    PrintDebugMessage("Action logged successfully.", 2)
 end)
 
 exports('getActionHistory', function(identifiers)
