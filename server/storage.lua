@@ -27,7 +27,7 @@ end
 
 local function loadJsonFile(filename, currentVersion)
     local content = LoadResourceFile(GetCurrentResourceName(), filename)
-    if content then
+    if not content then
         PrintDebugMessage(filename .. " file was missing, we created a new one.", 2)
         content = json.encode({})
     end
@@ -156,7 +156,7 @@ Storage = {
         awaitReady()
         return findByIdentifiers(actions, idents)
     end,
-    addAction = function(type, identifiers, reason, moderatorName, moderatorIdentifiers)
+    addAction = function(type, identifiers, reason, moderatorName, moderatorIdentifiers, banId)
         awaitReady()
         table.insert(actions, {
             time = os.time(),
@@ -166,6 +166,7 @@ Storage = {
             reason = reason,
             moderator = moderatorName,
             moderatorIdents = moderatorIdentifiers,
+            banid = banId,
         })
         saveJsonFile("actions.json", actions)
     end,
@@ -225,7 +226,8 @@ Citizen.CreateThread(function()
 
     local actionsPruned = false
     PrintDebugMessage("Clearing expired actions from action history", 4)
-    for i, action in ipairs(actions) do
+    for i = #actions, 1, -1 do
+        local action = actions[i]
         if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
             table.remove(actions, i)
             actionsPruned = true

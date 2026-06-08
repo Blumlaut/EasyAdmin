@@ -104,8 +104,9 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             end
             
             reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
-            Storage.addBan(GetFreshBanId(), username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
-            Storage.addAction("OFFLINE BAN", bannedIdentifiers, reason, getName(source), getAllPlayerIdentifiers(src))
+            local banId = GetFreshBanId()
+            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
+            Storage.addAction("OFFLINE BAN", bannedIdentifiers, reason, getName(source), getAllPlayerIdentifiers(src), banId)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
         end
@@ -153,7 +154,7 @@ function addBanExport(playerId,reason,expires,banner)
     reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
     local banId = GetFreshBanId()
     Storage.addBan(banId, bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
-    Storage.addAction("BAN", bannedIdentifiers, reason, banner or "Unknown", getAllPlayerIdentifiers(source))
+    Storage.addAction("BAN", bannedIdentifiers, reason, banner or "Unknown", getAllPlayerIdentifiers(source), banId)
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
     end

@@ -878,12 +878,12 @@ Citizen.CreateThread(function()
 					local expires = os.time()+GetConvarInt("ea_warningBanTime", 604800)
 					
 					reason = GetLocalisedText("warnbanned").. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(id), getName(src, true) )
-					local ban = {banid = GetFreshBanId(), name = bannedUsername,identifiers = bannedIdentifiers,  banner = getName(src, true), reason = reason, expire = expires }
-					Storage.addBan( ban )
-					Storage.addAction("BAN", bannedIdentifiers, "Reached maximum warnings", test_name, getAllPlayerIdentifiers(src))
+					local banId = GetFreshBanId()
+					Storage.addBan(banId, bannedUsername, bannedIdentifiers, getName(src, true), reason, expires, formatDateString(expires), "BAN", os.time())
+					Storage.addAction("BAN", bannedIdentifiers, "Reached maximum warnings", getName(src, true), getAllPlayerIdentifiers(src), banId)
 					
 					PrintDebugMessage("Player "..getName(src,true).." warnbanned player "..getCachedPlayerName(id).." for "..reason, 3)
-					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), bannedUsername, reason, formatDateString( expires ), tostring(ban.banid) ), "ban", 16711680)
+					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), bannedUsername, reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
 					DropPlayer(id, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
 					WarnedPlayers[id] = nil
 					
