@@ -26,6 +26,11 @@ local function rebuildBanIndex()
     end
 end
 
+function IsSelfBan(banner, target)
+    if banner == nil or target == nil then return false end
+    return tonumber(banner) == tonumber(target)
+end
+
 ---Handles the banning of a player
 ---@param playerId number @The ID of the player to ban
 ---@param reason string @The reason for the ban
@@ -37,6 +42,11 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
         TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("invalidplayer"))
         return
     end
+    if IsSelfBan(src, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("cantbanself"))
+        return
+    end
+
     if playerId ~= nil and CheckAdminCooldown(src, "ban") then
         if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and not isPlayerImmune(playerId) then
             SetAdminCooldown(src, "ban")
@@ -76,6 +86,10 @@ end)
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
     local src = source
     if playerId ~= nil and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "ban") then
+        if IsSelfBan(source, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
+            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
+            return
+        end
         if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
             SetAdminCooldown(source, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)

@@ -120,4 +120,4 @@ EasyAdmin is configured using **convars**. You can set them in your server confi
 | `ea_logLevel` | `setr ea_logLevel 3` | Sets logging verbosity. Options: 1 (errors), 2 (warnings), 3 (info), 4 (debug). |
 | `ea_useTokenIdentifiers` | `set ea_useTokenIdentifiers "true"` | Use tokens for bans. Disable if multiple servers share the same banlist. |
 | `ea_enableSplash` | `set ea_enableSplash "false"` | Enables or disables the startup ASCII art. |
-
+| `ea_dangerousDevMode` | `set ea_dangerousDevMode "true"` | Master toggle for unsafe dev-only behaviours. Off by default. Currently this allows admins to ban themselves; future dev-only features will gate on the same convar. Never enable on a production server. |
