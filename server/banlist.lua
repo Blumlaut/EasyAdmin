@@ -26,6 +26,13 @@ local function rebuildBanIndex()
     end
 end
 
+---Rebuilds the derived enforcement view (the global `blacklist` + `banIndex`) from the authoritative
+---Storage banlist. Storage calls this after every ban mutation so enforcement reflects changes at once.
+function RebuildBanlistView()
+    blacklist = Storage.getBanList()
+    rebuildBanIndex()
+end
+
 function IsSelfBan(banner, target)
     if banner == nil or target == nil then return false end
     return tonumber(banner) == tonumber(target)
@@ -259,22 +266,10 @@ exports('GetFreshBanId', GetFreshBanId)
 ---@param newData table @The new data to apply to the ban
 ---@return nil
 function updateBan(id,newData)
-    if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then 
-        for i, ban in pairs(blacklist) do
-            if ban.banid == newData.banid then
-                blacklist[i] = newData
-                local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-                if not saved then
-                    PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-                end
-                if GetConvar("ea_custombanlist", "false") == "true" then 
-                    TriggerEvent("ea_data:updateBan", newData)
-                end
-                
-                -- Rebuild ban index after updating a ban
-                rebuildBanIndex()
-                break
-            end
+    if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
+        Storage.updateBan(newData.banid, newData) -- persists to banlist.json + refreshes the enforcement view
+        if GetConvar("ea_custombanlist", "false") == "true" then
+            TriggerEvent("ea_data:updateBan", newData)
         end
     end
 end
@@ -285,7 +280,8 @@ end
 ---@return nil
 function addBan(data)
     if data then
-        table.insert(blacklist, data)
+        -- Route through Storage (the single banlist owner) rather than the derived blacklist view.
+        Storage.addBan(data.banid, data.username or data.name, data.identifiers, data.banner, data.reason, data.expire, data.expiryString, data.type, data.time)
     end
 end
 
@@ -295,70 +291,49 @@ end
 ---@param remove boolean @Whether this is a remove operation
 ---@param forceChange boolean @Whether to force a save regardless of changes
 ---@return nil
-function updateBlacklist(data,remove, forceChange)
-    local change = (forceChange or false) --mark if file was changed to save up on disk writes.
-    
-    local content = LoadResourceFile(GetCurrentResourceName(), "banlist.json")
-    if not content then
-        PrintDebugMessage("banlist.json file was missing, we created a new one.", 2)
-        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode({}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-        end
-        content = json.encode({})
-    end
-    blacklist = json.decode(content)
-    
-    if not blacklist then
-        PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
-        PrintDebugMessage("^1Failed^7 to load Banlist!\n")
-        PrintDebugMessage("Please check your banlist file for errors, ^1Bans *will not* work!^7\n")
-        PrintDebugMessage("^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7\n")
+function updateBlacklist(data, remove, forceChange)
+    local change = (forceChange or false) --mark if the list changed, to save up on disk writes.
+
+    -- Storage is the single owner of banlist.json; operate on its authoritative in-memory list.
+    local banlist = Storage.getBanList()
+    if not banlist then
+        PrintDebugMessage("^1Failed^7 to load Banlist from Storage! ^1Bans *will not* work!^7\n")
         return
     end
-    
-    upgraded = performBanlistUpgrades(blacklist)
-    if upgraded then change = true end
-    
-    -- Rebuild ban index after loading or upgrading blacklist
-    rebuildBanIndex()
-    
+
+    -- legacy/version upgrades (operates on Storage's live table and persists via Storage)
+    if performBanlistUpgrades() then change = true end
+
     if data and not remove then
         addBan(data)
         PrintDebugMessage("Added the following data to banlist:\n"..table_to_string(data), 4)
-        change=true
+        change = true
     elseif not data then
-        for i,theBan in ipairs(blacklist) do
+        -- validation + expiry sweep; iterate backwards because we remove entries in place
+        for i = #banlist, 1, -1 do
+            local theBan = banlist[i]
             theBan.id = nil
             if not theBan.banid then
-                if i==1 then 
-                    theBan.banid = 1
-                else
-                    theBan.banid = blacklist[i].banid or i
-                end
-                PrintDebugMessage("Ban "..theBan.banid.." did not have an ID, assigned one.", 4)
-                change=true
+                theBan.banid = GetFreshBanId()
+                PrintDebugMessage("Ban did not have an ID, assigned "..theBan.banid..".", 4)
+                change = true
             end
-            if not theBan.expire then 
-                PrintDebugMessage("Ban "..theBan.banid.." did not have an expiry time, removing..", 4)
-                table.remove(blacklist,i)
-                change=true
-            elseif not theBan.identifiers then -- make sure 1 identifier is given, otherwise its a broken ban
-                PrintDebugMessage("Ban "..theBan.banid.." did not have any identifiers, removing..", 4)
-                table.remove(blacklist,i)
-                change=true
-            elseif not theBan.identifiers[1] then 
-                PrintDebugMessage("Ban "..theBan.banid.." did not have one identifier, removing..", 4)
-                table.remove(blacklist,i)
-                change=true
+            if not theBan.expire then
+                PrintDebugMessage("Ban "..tostring(theBan.banid).." did not have an expiry time, removing..", 4)
+                table.remove(banlist, i)
+                change = true
+            elseif not theBan.identifiers or not theBan.identifiers[1] then
+                PrintDebugMessage("Ban "..tostring(theBan.banid).." did not have any identifiers, removing..", 4)
+                table.remove(banlist, i)
+                change = true
             elseif theBan.expire < os.time() then
-                PrintDebugMessage("Ban "..theBan.banid.." expired, removing..", 4)
-                table.remove(blacklist,i)
-                change=true
+                PrintDebugMessage("Ban "..tostring(theBan.banid).." expired, removing..", 4)
+                table.remove(banlist, i)
+                change = true
             elseif theBan.expire == 1924300800 then
-                PrintDebugMessage("Ban "..theBan.banid.." had legacy expiry time, we fixed it", 4)
-                blacklist[i].expire = 10444633200
-                change=true
+                PrintDebugMessage("Ban "..tostring(theBan.banid).." had legacy expiry time, we fixed it", 4)
+                theBan.expire = 10444633200
+                change = true
             end
         end
     end
@@ -367,12 +342,12 @@ function updateBlacklist(data,remove, forceChange)
         UnbanId(data.banid)
         change = true
     end
+
     if change then
         PrintDebugMessage("Banlist changed, saving..", 4)
-        local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-        if not saved then
-            PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-        end
+        Storage.updateBanlist(banlist) -- single writer of banlist.json; also rebuilds the enforcement view
+    else
+        RebuildBanlistView() -- nothing changed, but ensure blacklist/banIndex reflect Storage
     end
     PrintDebugMessage("Completed Banlist Update.", 4)
 end
@@ -486,3 +461,8 @@ function IsIdentifierBanned(theIdentifier)
     return Storage.getBanIdentifier(theIdentifier) ~= false
 end
 exports('IsIdentifierBanned', IsIdentifierBanned)
+
+-- Build the derived enforcement view (blacklist + banIndex) once Storage has loaded the banlist.
+Citizen.CreateThread(function()
+    RebuildBanlistView()
+end)

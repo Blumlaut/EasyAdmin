@@ -14,15 +14,17 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(playerId)
     local src = source
     if DoesPlayerHavePermission(src, "player.actionhistory.view") then
         local targetPlayerId = tonumber(playerId)
-        if not targetPlayerId or not GetPlayerName(targetPlayerId) then
-            PrintDebugMessage("Invalid or offline player ID provided for action history, returning empty action history.", 2)
+        if not targetPlayerId then
+            PrintDebugMessage("Invalid player ID provided for action history, returning empty action history.", 2)
             TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {}, playerId)
             return
         end
-        local identifiers = getAllPlayerIdentifiers(targetPlayerId)
-        if not identifiers then
-            PrintDebugMessage("User has no identifiers somehow, returning empty action history.", 2)
-            TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {})
+        -- Resolve identifiers cache-first so action history works for cached/recently-dropped
+        -- players too, with a live fallback for players cached this session.
+        local identifiers = getCachedPlayerIdentifiers(targetPlayerId) or getAllPlayerIdentifiers(targetPlayerId)
+        if not identifiers or #identifiers == 0 then
+            PrintDebugMessage("User has no resolvable identifiers (offline and uncached), returning empty action history.", 2)
+            TriggerClientEvent("EasyAdmin:ReceiveActionHistory", src, {}, targetPlayerId)
             return
         end
         local history = Storage.getAction(identifiers)
@@ -33,20 +35,22 @@ RegisterNetEvent("EasyAdmin:GetActionHistory", function(playerId)
     end
 end)
 
--- Server-internal event (deliberately NOT a net event): only EasyAdmin server code fires
--- this, so there is no remotely-supplied source to permission-check.
+-- Server-internal event (deliberately NOT a net event): only EasyAdmin / plugin server code fires
+-- this via TriggerEvent, where `source` is nil. The moderator must therefore be supplied in the
+-- action payload (with best-effort fallbacks); the target's identifiers are resolved cache-first.
 AddEventHandler("EasyAdmin:LogAction", function(action, playerId)
-    local src = source
     if not action or not action.action then
         PrintDebugMessage("Invalid action data provided.", 2)
         return
     end
+    if GetConvar("ea_enableActionHistory", "true") ~= "true" then return end
 
-    local identifiers = getAllPlayerIdentifiers(playerId)
-    local moderatorIdentifiers = getAllPlayerIdentifiers(src)
+    local identifiers = action.identifiers or getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
+    local moderatorName = action.moderator or "Console"
+    local moderatorIdentifiers = action.moderatorIdents or {}
     local reason = action.reason or ""
 
-    Storage.addAction(action.action, identifiers, reason, GetPlayerName(src), moderatorIdentifiers)
+    Storage.addAction(action.action, identifiers, reason, moderatorName, moderatorIdentifiers, action.banid)
     PrintDebugMessage("Action logged successfully.", 2)
 end)
 

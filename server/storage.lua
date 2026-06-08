@@ -79,6 +79,12 @@ local function findByIdentifiers(list, idents)
     return results
 end
 
+-- Notify banlist.lua to rebuild its derived enforcement view (blacklist + banIndex) after any
+-- banlist mutation, so Storage remains the single source of truth and bans take effect immediately.
+local function syncBanlistView()
+    if RebuildBanlistView then RebuildBanlistView() end
+end
+
 Storage = {
     getBan = function(banId)
         awaitReady()
@@ -115,6 +121,7 @@ Storage = {
             type = type,
         })
         saveJsonFile("banlist.json", banlist)
+        syncBanlistView()
     end,
     updateBan = function(id, newData)
         if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
@@ -122,13 +129,16 @@ Storage = {
                 if ban.banid == newData.banid then
                     banlist[i] = newData
                     saveJsonFile("banlist.json", banlist)
+                    syncBanlistView()
                     break
                 end
             end
         end
     end,
-    updateBanlist = function(banlist)
+    updateBanlist = function(newList)
+        banlist = newList
         saveJsonFile("banlist.json", banlist)
+        syncBanlistView()
     end,
     removeBan = function(banId)
         awaitReady()
@@ -136,6 +146,7 @@ Storage = {
             if ban.banid == banId then
                 table.remove(banlist, i)
                 saveJsonFile("banlist.json", banlist)
+                syncBanlistView()
                 return true
             end
         end
@@ -149,6 +160,7 @@ Storage = {
                     if identifier == id then
                         table.remove(banlist, i)
                         saveJsonFile("banlist.json", banlist)
+                        syncBanlistView()
                         PrintDebugMessage("removed ban as per unbanidentifier func", 4)
                         return
                     end
@@ -206,14 +218,18 @@ Storage = {
         for i, note in ipairs(notes) do
             if note.id == noteId then
                 table.remove(notes, i)
+                saveJsonFile("notes.json", notes)
+                return true
             end
         end
-        saveJsonFile("notes.json", notes)
+        return false
     end,
     getNotes = function(id)
         awaitReady()
-        if not CachedPlayers[id] then return {} end
-        local idents = CachedPlayers[id].identifiers
+        -- Resolve identifiers via the player cache (works for online AND recently-dropped players);
+        -- callers that already hold identifiers should use getNotesByIdents directly.
+        local idents = getCachedPlayerIdentifiers(tonumber(id))
+        if not idents then return {} end
         return findByIdentifiers(notes, idents)
     end,
     getNotesByIdents = function(idents)
@@ -258,6 +274,8 @@ Citizen.CreateThread(function()
     end
 
     listsReady = true
+    -- Build the enforcement view now that Storage is ready (guarded: banlist.lua may load after us).
+    syncBanlistView()
 end)
 
 -- Recurring cleanup so expired actions are pruned during runtime, not only at startup.

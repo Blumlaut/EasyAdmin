@@ -871,7 +871,7 @@ Citizen.CreateThread(function()
 					SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminkickedplayer"), getName(src, false, true), getName(id, true, true), reason), "kick", 16711680)
 					DropPlayer(id, GetLocalisedText("warnkicked"))
 					WarnedPlayers[id] = nil
-					TriggerEvent("EasyAdmin:LogAction", {action = "KICK", reason = "Reached maximum warnings"}, id)
+					if GetConvar("ea_enableActionHistory", "true") == "true" then Storage.addAction("KICK", getCachedPlayerIdentifiers(id) or getAllPlayerIdentifiers(id), "Reached maximum warnings", getName(src, true, false), getAllPlayerIdentifiers(src)) end
 				elseif GetConvar("ea_warnAction", "kick") == "ban" then
 					local bannedIdentifiers = getCachedPlayerIdentifiers(id) or getAllPlayerIdentifiers(id)
 					local bannedUsername = getCachedPlayerName(id) or getName(id, true)

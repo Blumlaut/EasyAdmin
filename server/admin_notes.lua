@@ -5,12 +5,15 @@ end)
 RegisterNetEvent("EasyAdmin:GetAdminNotes", function(playerId)
     local src = source
     if DoesPlayerHavePermission(src, "player.adminnotes.view") then
-        if not playerId then
-            PrintDebugMessage("Player ID not parsed.", 2)
-            TriggerClientEvent("EasyAdmin:ReceiveAdminNotes", src, {})
+        local targetPlayerId = tonumber(playerId)
+        -- Resolve identifiers cache-first so notes work for cached/recently-dropped players too.
+        local identifiers = targetPlayerId and (getCachedPlayerIdentifiers(targetPlayerId) or getAllPlayerIdentifiers(targetPlayerId))
+        if not identifiers or #identifiers == 0 then
+            PrintDebugMessage("No identifiers resolvable for admin notes lookup, returning empty.", 2)
+            TriggerClientEvent("EasyAdmin:ReceiveAdminNotes", src, {}, playerId)
             return
         end
-        local history = Storage.getNotes(playerId)
+        local history = Storage.getNotesByIdents(identifiers)
         TriggerClientEvent("EasyAdmin:ReceiveAdminNotes", src, history, playerId)
     else
         PrintDebugMessage("Player does not have permission to view admin notes.", 2)
