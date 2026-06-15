@@ -33,11 +33,12 @@ client_scripts {
     "plugins/**/*_client.lua"
 }
 
-ui_page "dependencies/nui/index.html"
+ui_page "nui/dist/index.html"
 
 files {
     "dependencies/images/*.png",
-    "dependencies/nui/**/*"
+    "dependencies/nui/**/*",
+    "nui/dist/**/*",
 }
 
 dependencies {
