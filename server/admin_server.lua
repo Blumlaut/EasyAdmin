@@ -140,22 +140,23 @@ end
 
 
 AddEventHandler('playerDropped', function (reason)
-	if OnlineAdmins[source] then
-		OnlineAdmins[source] = nil
+	local src = source
+	if OnlineAdmins[src] then
+		OnlineAdmins[src] = nil
 	end
-	if FrozenPlayers[source] then
-		FrozenPlayers[source] = nil
+	if FrozenPlayers[src] then
+		FrozenPlayers[src] = nil
 		for i,_ in pairs(OnlineAdmins) do 
-			TriggerLatentClientEvent("EasyAdmin:SetPlayerFrozen", i, 1000, source, nil)
+			TriggerLatentClientEvent("EasyAdmin:SetPlayerFrozen", i, 1000, src, nil)
 		end
 	end
-	if MutedPlayers[source] then
-		MutedPlayers[source] = nil
+	if MutedPlayers[src] then
+		MutedPlayers[src] = nil
 		for i,_ in pairs(OnlineAdmins) do 
-			TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, source, nil)
+			TriggerLatentClientEvent("EasyAdmin:SetPlayerMuted", i, 1000, src, nil)
 		end
 	end
-	PrintDebugMessage(source.." disconnected.", 4)
+	PrintDebugMessage(src.." disconnected.", 4)
 end)
 
 local Contributors = {
@@ -169,8 +170,9 @@ local Contributors = {
 }
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
-	PrintDebugMessage(getName(source, true).." requested Playerlist.", 4)
-	if IsPlayerAdmin(source) then
+	local src = source
+	PrintDebugMessage(getName(src, true).." requested Playerlist.", 4)
+	if IsPlayerAdmin(src) then
 		local l = {}
 		local players = GetPlayers()
 		
@@ -183,7 +185,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 		end
 		
 		-- each player is more or less 2000bytes big.
-		TriggerLatentClientEvent("EasyAdmin:GetInfinityPlayerList", source, 200000, l) 
+		TriggerLatentClientEvent("EasyAdmin:GetInfinityPlayerList", src, 200000, l) 
 	end
 end)
 

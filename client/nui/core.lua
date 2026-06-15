@@ -55,10 +55,13 @@ function NuiToggle()
 end
 
 function NuiSendPlayerData()
-  if not nuiVisible then return end
+  if not nuiVisible then
+    return
+  end
   local perms = permissions or {}
   local players = {}
-  if perms.player then
+  local hasPlayerPerm = DoesPlayerHavePermissionForCategory(-1, 'player')
+  if hasPlayerPerm then
     players = NuiBuildPlayerList()
   end
   SendNUIMessage({
