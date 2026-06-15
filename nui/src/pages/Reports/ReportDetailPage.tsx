@@ -7,6 +7,7 @@ import { Icon } from '../../components/icons'
 
 interface ReportDetailPageProps {
   reportId: number
+  reports: Report[]
   permissions: Permissions
   players: Player[]
   onOpenPlayer: (playerId: number) => void
@@ -21,6 +22,7 @@ type DetailState =
 
 export function ReportDetailPage({
   reportId,
+  reports,
   permissions,
   players,
   onOpenPlayer,
@@ -35,32 +37,40 @@ export function ReportDetailPage({
   const [confirmSimilar, setConfirmSimilar] = useState(false)
   const [busy, setBusy] = useState(false)
 
+  // Derive report from parent's reports array; fall back to fetch if not found
   useEffect(() => {
-    let cancelled = false
-    callLua<{ report?: Report }>('getReportById', { id: reportId })
-      .then((res) => {
-        if (cancelled) return
-        if (res.report) {
-          setState({ status: 'success', report: res.report })
-        } else {
+    const existing = reports.find((r) => r.id === reportId)
+    if (existing) {
+      setState({ status: 'success', report: existing })
+    } else {
+      // Report not yet in the list (e.g. navigated before list loaded)
+      let cancelled = false
+      callLua<{ report?: Report }>('getReportById', { id: reportId })
+        .then((res) => {
+          if (cancelled) return
+          if (res.report) {
+            setState({ status: 'success', report: res.report })
+          } else {
+            setState({ status: 'error' })
+          }
+        })
+        .catch(() => {
+          if (cancelled) return
           setState({ status: 'error' })
-        }
-      })
-      .catch(() => {
-        if (cancelled) return
-        setState({ status: 'error' })
-      })
-    return () => {
-      cancelled = true
+        })
+      return () => {
+        cancelled = true
+      }
     }
-  }, [reportId])
+    // Re-run when reportId changes or reports array is updated (e.g. after claim)
+  }, [reportId, reports])
 
   async function claim() {
     if (state.status !== 'success') return
     setBusy(true)
     try {
       await callLua('claimReport', { id: state.report.id })
-      onToast('Report claimed', 'success')
+      // UI updates automatically via the reports prop when updateReports fires
     } catch {
       onToast('Failed to claim report', 'error')
     } finally {

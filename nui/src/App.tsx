@@ -457,6 +457,7 @@ function App() {
               {view === 'report-detail' && selectedReportId && (
                 <ReportDetailPage
                   reportId={selectedReportId}
+                  reports={reports}
                   permissions={permissions}
                   players={players}
                   onOpenPlayer={(id) => {
