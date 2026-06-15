@@ -3,6 +3,11 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Use relative base so asset paths in the built HTML resolve correctly
+  // from the ui_page location (nui/dist/) in FiveM's NUI system.
+  // Without this, Vite emits absolute paths like /assets/... which FiveM
+  // resolves to the resource root instead of nui/dist/assets/.
+  base: './',
   plugins: [react()],
   build: {
     outDir: 'dist',
