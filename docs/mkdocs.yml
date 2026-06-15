@@ -72,4 +72,5 @@ nav:
     - 'Developer Reference':
         - 'plugins.md'
         - 'translating.md'
+        - 'NUI Design System': 'nui-design-system.md'
   
