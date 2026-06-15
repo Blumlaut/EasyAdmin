@@ -44,3 +44,67 @@ export interface Notification {
   text: string
   type?: 'info' | 'success' | 'error'
 }
+
+// Ban list entry from server
+export interface BanEntry {
+  banid: string
+  reason: string
+  name?: string
+  banner?: string
+  expire?: number
+  expireString?: string
+  identifiers: string[]
+}
+
+// Cached (offline) player entry
+export interface CachedPlayer {
+  id: number
+  name: string
+  identifier?: string
+  droppedTime?: number
+  immune?: boolean
+}
+
+// Report entry from server
+export interface Report {
+  id: number
+  type: 0 | 1
+  reporter: number
+  reporterName: string
+  reported?: number
+  reportedName?: string
+  reason: string
+  reportTimeFormatted: string
+  claimed?: boolean
+  claimedName?: string
+}
+
+// Cleanup options
+export type CleanupType = 'cars' | 'peds' | 'props'
+export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
+
+// App settings (mirrors ea_* kvp entries)
+export interface AppSettings {
+  orientation: 'left' | 'middle' | 'right'
+  menuWidth: number
+  tts: boolean
+  ttsSpeed: number
+  anonymous: boolean
+  showLicenses: boolean
+}
+
+// Navigation views
+export type View =
+  | 'main'
+  | 'players'
+  | 'player-detail'
+  | 'bans'
+  | 'ban-detail'
+  | 'reports'
+  | 'report-detail'
+  | 'cached-players'
+  | 'server'
+  | 'settings'
+
+// Ban duration preset indices
+export type BanDurationPreset = 'permanent' | 'custom' | number

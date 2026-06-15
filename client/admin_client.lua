@@ -68,6 +68,10 @@ RegisterNetEvent("EasyAdmin:NewReport", function(reportData)
 	reports[reportData.id] = reportData
 end)
 
+RegisterNetEvent("EasyAdmin:fillReports", function(theReports)
+	reports = theReports
+end)
+
 RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
 	reports[reportData.id] = reportData
 	if _menuPool and _menuPool:IsAnyMenuOpen() then

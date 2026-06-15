@@ -1,14 +1,38 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
-import type { Player, Permissions, Notification } from './types'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type {
+  AppSettings,
+  BanEntry,
+  CachedPlayer,
+  Notification,
+  Permissions,
+  Player,
+  Report,
+  View,
+} from './types'
 import { on, callLua } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation, type NavItem } from './components/Navigation'
-import { PlayerList } from './components/PlayerList'
-import { PlayerActions } from './components/PlayerActions'
 import { ConfirmDialog } from './components/ConfirmDialog'
 import { Toast } from './components/Toast'
+import { Dashboard } from './pages/Dashboard/Dashboard'
+import { PlayerListPage } from './pages/Players/PlayerListPage'
+import { PlayerDetailPage } from './pages/Players/PlayerDetailPage'
+import { CachedPlayersPage } from './pages/Players/CachedPlayersPage'
+import { BanListPage } from './pages/Bans/BanListPage'
+import { BanDetailPage } from './pages/Bans/BanDetailPage'
+import { ReportListPage } from './pages/Reports/ReportListPage'
+import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
+import { ServerPage } from './pages/Server/ServerPage'
+import { SettingsPage } from './pages/Settings/SettingsPage'
 
-type View = 'main' | 'players' | 'player-detail'
+const NAV_ITEMS: NavItem[] = [
+  { id: 'main', label: 'Dashboard', icon: 'home' },
+  { id: 'players', label: 'Players', icon: 'users' },
+  { id: 'bans', label: 'Ban List', icon: 'ban' },
+  { id: 'reports', label: 'Reports', icon: 'flag' },
+  { id: 'server', label: 'Server', icon: 'server' },
+  { id: 'settings', label: 'Settings', icon: 'settings' },
+]
 
 interface ConfirmRequest {
   title: string
@@ -18,123 +42,209 @@ interface ConfirmRequest {
   onConfirm: () => void
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { id: 'main', label: 'Dashboard', icon: 'home' },
-  { id: 'players', label: 'Players', icon: 'users' },
-  { id: 'bans', label: 'Ban List', icon: 'ban', disabled: true },
-  { id: 'reports', label: 'Reports', icon: 'alert-triangle', disabled: true },
-  { id: 'server', label: 'Server', icon: 'server', disabled: true },
-  { id: 'settings', label: 'Settings', icon: 'settings', disabled: true },
-]
+const DEFAULT_SETTINGS: AppSettings = {
+  orientation: 'middle',
+  menuWidth: 0,
+  tts: false,
+  ttsSpeed: 4,
+  anonymous: false,
+  showLicenses: false,
+}
+
+const TOAST_DURATION_MS = 3000
 
 function App() {
+  // Visibility & routing
   const [visible, setVisible] = useState(false)
   const [view, setView] = useState<View>('main')
+  const viewHistoryRef = useRef<View[]>([])
+
+  // Data
   const [players, setPlayers] = useState<Player[]>([])
   const [permissions, setPermissions] = useState<Permissions>({})
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [playersFetched, setPlayersFetched] = useState(false)
-  const loading = view === 'players' && !playersFetched
+  const [selectedBanId, setSelectedBanId] = useState<string | null>(null)
+  const [selectedReportId, setSelectedReportId] = useState<number | null>(null)
+  const [isRedm, setIsRedm] = useState(false)
+  const [ipPrivacy, setIpPrivacy] = useState(true)
+
+  // UI
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null)
   const [toast, setToast] = useState<Notification | null>(null)
-  const viewHistoryRef = useRef<View[]>([])
+  const toastTimerRef = useRef<number | null>(null)
 
-  // Listen for menu open/close
+  // Settings
+  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
+  const [easterEggs, setEasterEggs] = useState<string[]>([])
+  const [currentEasterEgg, setCurrentEasterEgg] = useState<string | null>(null)
+
+  // Bump to refetch player list. The other pages lazy-load on mount
+  // so we don't need refresh counters for them.
+  const [playersRefresh, setPlayersRefresh] = useState(0)
+
+  // === Toast ===
+
+  const showToast = useCallback((text: string, type: Notification['type'] = 'info') => {
+    if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current)
+    setToast({ text, type })
+    toastTimerRef.current = window.setTimeout(() => setToast(null), TOAST_DURATION_MS)
+  }, [])
+
+  useEffect(() => () => {
+    if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current)
+  }, [])
+
+  // === Listeners from Lua ===
+
   useEffect(() => {
-    on<{ visible: boolean }>('menuToggle', (data) => {
+    return on<{ visible: boolean }>('menuToggle', (data) => {
       setVisible(data.visible)
       if (data.visible) {
         setView('main')
         setSelectedPlayer(null)
-        setSearchQuery('')
+        setSelectedBanId(null)
+        setSelectedReportId(null)
         viewHistoryRef.current = []
       }
     })
   }, [])
 
-  // Listen for player list updates
   useEffect(() => {
-    on<{ players: Player[]; permissions: Permissions }>('updatePlayers', (data) => {
-      setPlayers(data.players)
-      setPermissions(data.permissions)
-      setPlayersFetched(true)
+    return on<{ players: Player[]; permissions: Permissions; redm?: boolean; ipprivacy?: boolean }>(
+      'updatePlayers',
+      (data) => {
+        setPlayers(data.players)
+        setPermissions(data.permissions)
+        if (typeof data.redm === 'boolean') setIsRedm(data.redm)
+        if (typeof data.ipprivacy === 'boolean') setIpPrivacy(data.ipprivacy)
+      },
+    )
+  }, [])
+
+  // updateBanList / updateReports / updateCachedPlayers are received by the
+  // individual pages (which lazy-load their own data). Keep these listeners
+  // as a no-op placeholder in case Lua needs to broadcast updates later.
+  useEffect(() => {
+    return on<{ bans: BanEntry[] }>('updateBanList', () => {})
+  }, [])
+  useEffect(() => {
+    return on<{ players: CachedPlayer[] }>('updateCachedPlayers', () => {})
+  }, [])
+  useEffect(() => {
+    return on<{ reports: Report[] }>('updateReports', () => {})
+  }, [])
+
+  useEffect(() => {
+    return on<Notification>('notification', (data) => {
+      showToast(data.text, data.type)
+    })
+  }, [showToast])
+
+  useEffect(() => {
+    return on<Player>('playerUpdated', (data) => {
+      setPlayers((prev) => prev.map((p) => (p.id === data.id ? { ...p, ...data } : p)))
+      setSelectedPlayer((prev) => (prev && prev.id === data.id ? { ...prev, ...data } : prev))
     })
   }, [])
 
-  // Listen for notifications from Lua
   useEffect(() => {
-    on<Notification>('notification', (data) => {
-      setToast(data)
-      setTimeout(() => setToast(null), 3000)
+    return on<{ easterEggs: string[]; currentEgg: string | null }>('initEasterEggs', (data) => {
+      setEasterEggs(data.easterEggs)
+      setCurrentEasterEgg(data.currentEgg)
     })
   }, [])
 
-  // Listen for single player updates (frozen/muted state changed)
   useEffect(() => {
-    on<Player>('playerUpdated', (data) => {
-      setPlayers((prev) =>
-        prev.map((p) => (p.id === data.id ? { ...p, ...data } : p))
-      )
-      if (selectedPlayer?.id === data.id) {
-        setSelectedPlayer((prev) => (prev ? { ...prev, ...data } : null))
-      }
+    return on<AppSettings>('initSettings', (data) => {
+      setSettings((prev) => ({ ...prev, ...data }))
     })
-  }, [selectedPlayer?.id])
-
-  const showToast = useCallback((text: string, type: Notification['type'] = 'info') => {
-    setToast({ text, type })
-    setTimeout(() => setToast(null), 3000)
   }, [])
 
-  // Internal: change view and manage side effects (no history push)
-  const setViewInternal = useCallback((newView: View) => {
-    setView(newView)
-    if (newView !== 'players') {
-      setPlayersFetched(false)
-    } else if (players.length > 0) {
-      setPlayersFetched(true)
-    }
-  }, [players.length])
+  // === Navigation ===
 
   const navigateTo = useCallback((newView: View) => {
-    if (view !== 'main') {
-      viewHistoryRef.current.push(view)
-    }
-    setViewInternal(newView)
-  }, [view, setViewInternal])
+    setView((current) => {
+      if (current !== newView) {
+        viewHistoryRef.current.push(current)
+      }
+      return newView
+    })
+  }, [])
 
   const goBack = useCallback(() => {
     const previous = viewHistoryRef.current.pop()
     if (previous) {
-      setViewInternal(previous)
+      setView(previous)
     } else {
+      setView('main')
       setSelectedPlayer(null)
-      setViewInternal('main')
+      setSelectedBanId(null)
+      setSelectedReportId(null)
     }
-  }, [setViewInternal])
+  }, [])
+
+  // === Derived state ===
+
+  const activeNavId: string = (() => {
+    if (view === 'player-detail' || view === 'cached-players') return 'players'
+    if (view === 'ban-detail') return 'bans'
+    if (view === 'report-detail') return 'reports'
+    return view
+  })()
+
+  // Permission gating for nav items
+  const visibleNavItems = NAV_ITEMS.map((item) => {
+    let disabled = false
+    if (item.id === 'bans' && !permissions['player.ban.view']) disabled = true
+    if (item.id === 'reports' && !permissions['player.reports.view']) disabled = true
+    if (
+      item.id === 'server' &&
+      !permissions['server.announce'] &&
+      !permissions['server.convars'] &&
+      !permissions['player.ban.view']
+    ) {
+      disabled = true
+    }
+    return { ...item, disabled }
+  })
+
+  const availableViews: View[] = ['main', 'players']
+  if (permissions['player.ban.view']) availableViews.push('bans')
+  if (permissions['player.reports.view']) availableViews.push('reports')
+  if (
+    permissions['server.announce'] ||
+    permissions['server.convars'] ||
+    permissions['player.ban.view']
+  ) {
+    availableViews.push('server')
+  }
+  availableViews.push('settings', 'cached-players')
+
+  // === Handlers ===
 
   const selectPlayer = useCallback((player: Player) => {
     setSelectedPlayer(player)
     navigateTo('player-detail')
   }, [navigateTo])
 
-  const openConfirm = useCallback((title: string, message: string, onConfirmFn: () => void) => {
-    setConfirm({ title, message, onConfirm: onConfirmFn })
+  const selectBan = useCallback((banId: string) => {
+    setSelectedBanId(banId)
+    navigateTo('ban-detail')
+  }, [navigateTo])
+
+  const selectReport = useCallback((reportId: number) => {
+    setSelectedReportId(reportId)
+    navigateTo('report-detail')
+  }, [navigateTo])
+
+  const refreshPlayers = useCallback(() => {
+    setPlayersRefresh((k) => k + 1)
+    callLua('requestPlayers').catch(() => {})
   }, [])
 
-  const closeConfirm = useCallback(() => {
-    setConfirm(null)
-  }, [])
+  const closeConfirm = useCallback(() => setConfirm(null), [])
 
-  // Request player list when navigating to players view
-  useEffect(() => {
-    if (view === 'players' && players.length === 0) {
-      callLua('requestPlayers').finally(() => setPlayersFetched(true))
-    }
-  }, [view, players.length])
-
-  // Handle ESC key to close menu
+  // ESC closes the menu
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && visible) {
@@ -145,60 +255,46 @@ function App() {
     return () => window.removeEventListener('keydown', handleKey)
   }, [visible])
 
-  // Derive active nav ID from current view
-  const activeNavId = view === 'player-detail' ? 'players' : view
-
   if (!visible) return null
 
   return (
     <div className="flex w-full h-full absolute top-0 left-0">
-      {/* Sidebar */}
       <aside className="glass sidebar">
-        {/* Logo header */}
         <div className="sidebar-header">
           <img src="/logo.png" alt="EasyAdmin" className="sidebar-logo" />
           <div>
-            <h1 className="text-lg font-bold sidebar-title">
-              EasyAdmin
-            </h1>
+            <h1 className="text-lg font-bold sidebar-title">EasyAdmin</h1>
             <p className="text-xs text-muted">Admin Panel</p>
           </div>
         </div>
-
-        {/* Navigation */}
         <div className="sidebar-nav">
           <Navigation
-            items={[
-              ...NAV_ITEMS.map((item) => ({
-                ...item,
-                badge: item.id === 'players' ? players.length : item.badge,
-              })),
-            ]}
+            items={visibleNavItems.map((item) => ({
+              ...item,
+              badge: item.id === 'players' ? players.length : item.badge,
+            }))}
             activeId={activeNavId}
             onSelect={(id) => {
-              if (id === 'players') {
-                navigateTo('players')
-              } else if (id === 'main') {
-                navigateTo('main')
-              }
+              if (id === 'main') navigateTo('main')
+              else if (id === 'players') navigateTo('players')
+              else if (id === 'bans') navigateTo('bans')
+              else if (id === 'reports') navigateTo('reports')
+              else if (id === 'server') navigateTo('server')
+              else if (id === 'settings') navigateTo('settings')
             }}
           />
         </div>
-
-        {/* Sidebar footer */}
         <div className="sidebar-footer">
           <div className="flex items-center gap-2 text-xs text-muted">
             <Icon name="shield" size="xs" />
             <span>
-              {Object.entries(permissions).filter(([, v]) => v).length} permissions active
+              {Object.values(permissions).filter(Boolean).length} permissions active
             </span>
           </div>
         </div>
       </aside>
 
-      {/* Main content area */}
       <div className="flex flex-col flex-1 h-full overflow-hidden">
-        {/* Top bar */}
         <header className="glass topbar">
           {view !== 'main' && (
             <button
@@ -211,39 +307,111 @@ function App() {
             </button>
           )}
           <h2 className="text-lg font-semibold">
-            {getPageTitle(view, selectedPlayer)}
+            {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
           </h2>
         </header>
 
-        {/* Content */}
         <main className="glass main-content">
           {view === 'main' && (
-            <DashboardView
+            <Dashboard
               onNavigate={navigateTo}
               playerCount={players.length}
+              availableViews={availableViews}
             />
           )}
+
           {view === 'players' && (
-            <PlayerList
+            <PlayerListPage
               players={players}
-              loading={loading}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
+              loading={playersRefresh === 0 && players.length === 0}
+              permissions={permissions}
               onSelectPlayer={selectPlayer}
+              onOpenCached={() => navigateTo('cached-players')}
+              onToast={showToast}
+              onRefresh={refreshPlayers}
+              refreshKey={playersRefresh}
             />
           )}
+
           {view === 'player-detail' && selectedPlayer && (
-            <PlayerActions
+            <PlayerDetailPage
               player={selectedPlayer}
               permissions={permissions}
-              onConfirm={openConfirm}
+              ipPrivacy={ipPrivacy}
+              onToast={showToast}
+            />
+          )}
+
+          {view === 'cached-players' && (
+            <CachedPlayersPage onToast={showToast} refreshKey={playersRefresh} />
+          )}
+
+          {view === 'bans' && (
+            <BanListPage
+              showLicenses={settings.showLicenses}
+              ipPrivacy={ipPrivacy}
+              onSelectBan={selectBan}
+              onToast={showToast}
+              refreshKey={playersRefresh}
+            />
+          )}
+
+          {view === 'ban-detail' && selectedBanId && (
+            <BanDetailPage
+              banId={selectedBanId}
+              ipPrivacy={ipPrivacy}
+              permissions={permissions}
+              onBack={goBack}
+              onToast={showToast}
+              onUnbanned={() => navigateTo('bans')}
+            />
+          )}
+
+          {view === 'reports' && (
+            <ReportListPage
+              onSelectReport={selectReport}
+              onToast={showToast}
+              refreshKey={playersRefresh}
+            />
+          )}
+
+          {view === 'report-detail' && selectedReportId && (
+            <ReportDetailPage
+              reportId={selectedReportId}
+              permissions={permissions}
+              players={players}
+              onOpenPlayer={(id) => {
+                const p = players.find((pl) => pl.id === id)
+                if (p) selectPlayer(p)
+                else showToast('Player not online', 'error')
+              }}
+              onRemoved={() => navigateTo('reports')}
+              onToast={showToast}
+            />
+          )}
+
+          {view === 'server' && (
+            <ServerPage
+              permissions={permissions}
+              isRedm={isRedm}
+              onToast={showToast}
+            />
+          )}
+
+          {view === 'settings' && (
+            <SettingsPage
+              permissions={permissions}
+              settings={settings}
+              easterEggs={easterEggs}
+              currentEasterEgg={currentEasterEgg}
+              isRedm={isRedm}
+              onChange={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
               onToast={showToast}
             />
           )}
         </main>
       </div>
 
-      {/* Confirmation dialog */}
       {confirm && (
         <ConfirmDialog
           title={confirm.title}
@@ -258,85 +426,28 @@ function App() {
         />
       )}
 
-      {/* Toast notification */}
       {toast && <Toast message={toast.text} type={toast.type} />}
     </div>
   )
 }
 
-function getPageTitle(view: View, player: Player | null): string {
+function getPageTitle(
+  view: View,
+  player: Player | null,
+  banId: string | null,
+  reportId: number | null,
+): string {
   if (view === 'main') return 'Dashboard'
   if (view === 'players') return 'Player Management'
   if (view === 'player-detail' && player) return player.name
-  return 'Dashboard'
+  if (view === 'cached-players') return 'Cached Players'
+  if (view === 'bans') return 'Ban List'
+  if (view === 'ban-detail' && banId) return `Ban ${banId}`
+  if (view === 'reports') return 'Reports'
+  if (view === 'report-detail' && reportId !== null) return `Report #${reportId}`
+  if (view === 'server') return 'Server Management'
+  if (view === 'settings') return 'Settings'
+  return 'EasyAdmin'
 }
-
-// Dashboard view (main screen)
-function DashboardView({
-  onNavigate,
-  playerCount,
-}: {
-  onNavigate: (view: 'main' | 'players' | 'player-detail') => void
-  playerCount: number
-}) {
-  return (
-    <div className="page-container max-w-lg">
-      {/* Welcome card */}
-      <div className="card">
-        <div className="flex items-center gap-3">
-          <Icon name="shield" size="lg" className="text-accent-blue" />
-          <div>
-            <h3 className="text-xl font-semibold">Welcome to EasyAdmin</h3>
-            <p className="text-sm text-secondary mt-1">
-              Select an option from the sidebar to get started.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick actions */}
-      <div className="card">
-        <h3 className="text-lg font-semibold mb-3">
-          Quick Actions
-        </h3>
-        <div className="flex flex-col gap-2">
-          <button
-            className="btn btn-primary btn-lg btn-full"
-            onClick={() => onNavigate('players')}
-          >
-            <Icon name="users" size="sm" />
-            Player Management
-            {playerCount > 0 && (
-              <span className="badge badge-online">{playerCount} online</span>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Coming soon sections */}
-      <div className="flex flex-col gap-2">
-        <ComingSoonCard icon="server" title="Server Management" />
-        <ComingSoonCard icon="ban" title="Ban List" />
-        <ComingSoonCard icon="settings" title="Settings" />
-      </div>
-    </div>
-  )
-}
-
-function ComingSoonCard({ icon, title }: { icon: IconName; title: string }) {
-  return (
-    <div className="card coming-soon">
-      <div className="flex items-center gap-3">
-        <Icon name={icon} size="sm" className="text-muted" />
-        <span className="text-sm text-muted">{title}</span>
-        <span className="badge badge-default ml-auto">
-          Coming Soon
-        </span>
-      </div>
-    </div>
-  )
-}
-
-import type { IconName } from './components/icons'
 
 export default App

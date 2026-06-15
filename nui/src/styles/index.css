@@ -929,3 +929,217 @@ body {
 .text-accent-blue {
   color: var(--brand-blue-light);
 }
+
+/* ============================================================
+   KeyValueTable
+   ============================================================ */
+
+.kv-row-divider {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.kv-key {
+  width: var(--space-32);
+  min-width: var(--space-32);
+}
+
+.text-green {
+  color: var(--accent-green);
+}
+
+.text-red {
+  color: var(--accent-red);
+}
+
+.text-orange {
+  color: var(--accent-orange);
+}
+
+.text-yellow {
+  color: #facc15;
+}
+
+/* ============================================================
+   Report color coding
+   ============================================================ */
+
+.report-normal {
+  border-left: 3px solid #facc15;
+}
+
+.report-emergency {
+  border-left: 3px solid var(--accent-red);
+}
+
+.report-claimed {
+  border-left: 3px solid var(--accent-green);
+}
+
+/* ============================================================
+   Spinner row (used by lists while loading)
+   ============================================================ */
+
+.spinner-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  gap: var(--space-2);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Banner / card title with action button
+   ============================================================ */
+
+.card-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+/* ============================================================
+   Two field prompt (e.g. set convar)
+   ============================================================ */
+
+.two-field-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ============================================================
+   Cleanup modal extra
+   ============================================================ */
+
+.cleanup-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* ============================================================
+   Empty state
+   ============================================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ============================================================
+   Slider
+   ============================================================ */
+
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg-tertiary);
+  height: 4px;
+  border-radius: var(--radius-full);
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--brand-blue-light);
+  cursor: pointer;
+  border: 2px solid var(--brand-blue);
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--brand-blue-light);
+  cursor: pointer;
+  border: 2px solid var(--brand-blue);
+}
+
+/* ============================================================
+   Toggle (settings)
+   ============================================================ */
+
+.toggle {
+  --toggle-width: 36px;
+  --toggle-height: 20px;
+  position: relative;
+  display: inline-block;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--text-secondary);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition), background var(--transition);
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue-light);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(16px) translateY(-50%);
+  background: #fff;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+/* ============================================================
+   Spinner row
+   ============================================================ */
+
+.spinner-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+

@@ -271,13 +271,13 @@ Citizen.CreateThread(function()
                     report.claimed = true
                     report.claimedBy = source
                     report.claimedName = getName(source, true)
-                    
+
                     SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("adminclaimedreport"), getName(source, false, true), report.id), "reports", 16776960)
-                    
-                    for i,_ in pairs(OnlineAdmins) do 
+
+                    for i,_ in pairs(OnlineAdmins) do
                         TriggerLatentClientEvent("EasyAdmin:ClaimedReport", i, 10000, report)
                     end
-                    
+
                     TriggerEvent("EasyAdmin:reportClaimed", report)
                 else
                     TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
@@ -285,6 +285,24 @@ Citizen.CreateThread(function()
             else
                 TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
             end
+        end
+    end)
+
+    -- New NUI request event: pushes the full report list to the requesting admin.
+    RegisterServerEvent("EasyAdmin:requestReports", function()
+        if DoesPlayerHavePermission(source, "player.reports.view") then
+            -- Refresh timestamps before sending
+            for _, r in pairs(reports) do
+                local minutes = math.floor((os.time() - r.reportTime) / 60)
+                if minutes < 1 then
+                    r.reportTimeFormatted = "1m ago"
+                elseif minutes < 120 then
+                    r.reportTimeFormatted = string.format("%dm ago", minutes)
+                else
+                    r.reportTimeFormatted = string.format("%dh ago", math.floor(minutes / 60))
+                end
+            end
+            TriggerLatentClientEvent("EasyAdmin:fillReports", source, 10000, reports)
         end
     end)
 end)
