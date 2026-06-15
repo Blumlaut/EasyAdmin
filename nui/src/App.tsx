@@ -3,6 +3,7 @@ import type {
   AppSettings,
   BanEntry,
   CachedPlayer,
+  CleanupType,
   Notification,
   Permissions,
   Player,
@@ -12,8 +13,8 @@ import type {
 import { on, callLua } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation, type NavItem } from './components/Navigation'
-import { ConfirmDialog } from './components/ConfirmDialog'
 import { Toast } from './components/Toast'
+import { ModalProvider } from './ModalContext'
 import { Dashboard } from './pages/Dashboard/Dashboard'
 import { PlayerListPage } from './pages/Players/PlayerListPage'
 import { PlayerDetailPage } from './pages/Players/PlayerDetailPage'
@@ -34,14 +35,6 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ]
 
-interface ConfirmRequest {
-  title: string
-  message: string
-  confirmLabel?: string
-  variant?: 'default' | 'danger'
-  onConfirm: () => void
-}
-
 const DEFAULT_SETTINGS: AppSettings = {
   orientation: 'middle',
   menuWidth: 0,
@@ -52,6 +45,7 @@ const DEFAULT_SETTINGS: AppSettings = {
 }
 
 const TOAST_DURATION_MS = 3000
+const CLEANUP_TYPES: CleanupType[] = ['cars', 'peds', 'props']
 
 function App() {
   // Visibility & routing
@@ -77,8 +71,7 @@ function App() {
   const [loadingReports, setLoadingReports] = useState(false)
   const [loadingCached, setLoadingCached] = useState(false)
 
-  // UI
-  const [confirm, setConfirm] = useState<ConfirmRequest | null>(null)
+  // Toast
   const [toast, setToast] = useState<Notification | null>(null)
   const toastTimerRef = useRef<number | null>(null)
 
@@ -298,8 +291,6 @@ function App() {
     navigateTo('report-detail')
   }, [navigateTo])
 
-  const closeConfirm = useCallback(() => setConfirm(null), [])
-
   // ESC closes the menu
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -316,205 +307,191 @@ function App() {
   const closeMenu = () => callLua('closeMenu').catch(() => {})
 
   return (
-    <div className="ea-window">
-      <aside className="glass sidebar">
-        <div className="sidebar-header">
-          <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
-          <div>
-            <h1 className="text-lg font-bold sidebar-title">EasyAdmin</h1>
-            <p className="text-xs text-muted">Admin Panel</p>
+    <>
+      <ModalProvider
+        cleanupTypes={CLEANUP_TYPES}
+        onToast={showToast}
+        onPlayersUpdated={fetchPlayers}
+      >
+        <div className="ea-window">
+          <aside className="glass sidebar">
+            <div className="sidebar-header">
+              <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
+              <div>
+                <h1 className="text-lg font-bold sidebar-title">EasyAdmin</h1>
+                <p className="text-xs text-muted">Admin Panel</p>
+              </div>
+            </div>
+            <div className="sidebar-nav">
+              <Navigation
+                items={visibleNavItems.map((item) => ({
+                  ...item,
+                  badge: item.id === 'players' ? players.length : item.badge,
+                }))}
+                activeId={activeNavId}
+                onSelect={(id) => {
+                  if (id === 'main') navigateTo('main')
+                  else if (id === 'players') navigateTo('players')
+                  else if (id === 'bans') navigateTo('bans')
+                  else if (id === 'reports') navigateTo('reports')
+                  else if (id === 'server') navigateTo('server')
+                  else if (id === 'settings') navigateTo('settings')
+                }}
+              />
+            </div>
+            <div className="sidebar-footer">
+              <div className="flex items-center gap-2 text-xs text-muted">
+                <Icon name="shield" size="xs" />
+                <span>
+                  {Object.values(permissions).filter(Boolean).length} permissions active
+                </span>
+              </div>
+            </div>
+          </aside>
+
+          <div className="flex flex-col flex-1 h-full overflow-hidden">
+            <header className="glass topbar">
+              {view !== 'main' && (
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={goBack}
+                  aria-label="Go back"
+                >
+                  <Icon name="chevron-left" size="xs" />
+                  Back
+                </button>
+              )}
+              <h2 className="text-lg font-semibold">
+                {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
+              </h2>
+              <button
+                className="btn btn-ghost btn-icon btn-close ml-auto"
+                onClick={closeMenu}
+                aria-label="Close"
+              >
+                <Icon name="x" size="xs" />
+              </button>
+            </header>
+
+            <main className="glass main-content">
+              {view === 'main' && (
+                <Dashboard
+                  onNavigate={navigateTo}
+                  playerCount={players.length}
+                  availableViews={availableViews}
+                />
+              )}
+
+              {view === 'players' && (
+                <PlayerListPage
+                  players={players}
+                  loading={loadingPlayers}
+                  permissions={permissions}
+                  onSelectPlayer={selectPlayer}
+                  onOpenCached={() => navigateTo('cached-players')}
+                  onToast={showToast}
+                  onRefresh={fetchPlayers}
+                />
+              )}
+
+              {view === 'player-detail' && selectedPlayer && (
+                <PlayerDetailPage
+                  player={selectedPlayer}
+                  permissions={permissions}
+                  ipPrivacy={ipPrivacy}
+                  onToast={showToast}
+                />
+              )}
+
+              {view === 'cached-players' && (
+                <CachedPlayersPage
+                  cachedPlayers={cachedPlayers}
+                  loading={loadingCached}
+                  onToast={showToast}
+                  onRefresh={fetchCachedPlayers}
+                />
+              )}
+
+              {view === 'bans' && (
+                <BanListPage
+                  bans={bans}
+                  loading={loadingBans}
+                  showLicenses={settings.showLicenses}
+                  ipPrivacy={ipPrivacy}
+                  onSelectBan={selectBan}
+                  onToast={showToast}
+                  onRefresh={fetchBans}
+                />
+              )}
+
+              {view === 'ban-detail' && selectedBanId && (
+                <BanDetailPage
+                  banId={selectedBanId}
+                  ipPrivacy={ipPrivacy}
+                  permissions={permissions}
+                  onBack={goBack}
+                  onToast={showToast}
+                  onUnbanned={() => {
+                    setBans((prev) => prev.filter((b) => b.banid !== selectedBanId))
+                    navigateTo('bans')
+                  }}
+                />
+              )}
+
+              {view === 'reports' && (
+                <ReportListPage
+                  reports={reports}
+                  loading={loadingReports}
+                  onSelectReport={selectReport}
+                  onToast={showToast}
+                  onRefresh={fetchReports}
+                />
+              )}
+
+              {view === 'report-detail' && selectedReportId && (
+                <ReportDetailPage
+                  reportId={selectedReportId}
+                  permissions={permissions}
+                  players={players}
+                  onOpenPlayer={(id) => {
+                    const p = players.find((pl) => pl.id === id)
+                    if (p) selectPlayer(p)
+                    else showToast('Player not online', 'error')
+                  }}
+                  onRemoved={() => {
+                    setReports((prev) => prev.filter((r) => r.id !== selectedReportId))
+                    navigateTo('reports')
+                  }}
+                  onToast={showToast}
+                />
+              )}
+
+              {view === 'server' && (
+                <ServerPage
+                  permissions={permissions}
+                  isRedm={isRedm}
+                  onToast={showToast}
+                />
+              )}
+
+              {view === 'settings' && (
+                <SettingsPage
+                  permissions={permissions}
+                  settings={settings}
+                  easterEggs={easterEggs}
+                  currentEasterEgg={currentEasterEgg}
+                  isRedm={isRedm}
+                  onChange={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
+                  onToast={showToast}
+                />
+              )}
+            </main>
           </div>
         </div>
-        <div className="sidebar-nav">
-          <Navigation
-            items={visibleNavItems.map((item) => ({
-              ...item,
-              badge: item.id === 'players' ? players.length : item.badge,
-            }))}
-            activeId={activeNavId}
-            onSelect={(id) => {
-              if (id === 'main') navigateTo('main')
-              else if (id === 'players') navigateTo('players')
-              else if (id === 'bans') navigateTo('bans')
-              else if (id === 'reports') navigateTo('reports')
-              else if (id === 'server') navigateTo('server')
-              else if (id === 'settings') navigateTo('settings')
-            }}
-          />
-        </div>
-        <div className="sidebar-footer">
-          <div className="flex items-center gap-2 text-xs text-muted">
-            <Icon name="shield" size="xs" />
-            <span>
-              {Object.values(permissions).filter(Boolean).length} permissions active
-            </span>
-          </div>
-        </div>
-      </aside>
-
-      <div className="flex flex-col flex-1 h-full overflow-hidden">
-        <header className="glass topbar">
-          {view !== 'main' && (
-            <button
-              className="btn btn-ghost btn-sm"
-              onClick={goBack}
-              aria-label="Go back"
-            >
-              <Icon name="chevron-left" size="xs" />
-              Back
-            </button>
-          )}
-          <h2 className="text-lg font-semibold">
-            {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
-          </h2>
-          <button
-            className="btn btn-ghost btn-icon btn-close ml-auto"
-            onClick={closeMenu}
-            aria-label="Close"
-          >
-            <Icon name="x" size="xs" />
-          </button>
-        </header>
-
-        <main className="glass main-content">
-          {view === 'main' && (
-            <Dashboard
-              onNavigate={navigateTo}
-              playerCount={players.length}
-              availableViews={availableViews}
-            />
-          )}
-
-          {view === 'players' && (
-            <PlayerListPage
-              players={players}
-              loading={loadingPlayers}
-              permissions={permissions}
-              onSelectPlayer={selectPlayer}
-              onOpenCached={() => navigateTo('cached-players')}
-              onToast={showToast}
-              onRefresh={fetchPlayers}
-            />
-          )}
-
-          {view === 'player-detail' && selectedPlayer && (
-            <PlayerDetailPage
-              player={selectedPlayer}
-              permissions={permissions}
-              ipPrivacy={ipPrivacy}
-              onToast={showToast}
-            />
-          )}
-
-          {view === 'cached-players' && (
-            <CachedPlayersPage
-              cachedPlayers={cachedPlayers}
-              loading={loadingCached}
-              onBanPlayer={(id, name, reason, duration) => {
-                callLua('offlineBanPlayer', { id, name, reason, duration })
-                  .then(() => showToast(`Banned ${name}`, 'success'))
-                  .catch(() => showToast('Ban failed', 'error'))
-                // Also kick the player out of cached list
-                setCachedPlayers((prev) => prev.filter((p) => p.id !== id))
-              }}
-              onToast={showToast}
-              onRefresh={fetchCachedPlayers}
-            />
-          )}
-
-          {view === 'bans' && (
-            <BanListPage
-              bans={bans}
-              loading={loadingBans}
-              showLicenses={settings.showLicenses}
-              ipPrivacy={ipPrivacy}
-              onSelectBan={selectBan}
-              onToast={showToast}
-              onRefresh={fetchBans}
-            />
-          )}
-
-          {view === 'ban-detail' && selectedBanId && (
-            <BanDetailPage
-              banId={selectedBanId}
-              ipPrivacy={ipPrivacy}
-              permissions={permissions}
-              onBack={goBack}
-              onToast={showToast}
-              onUnbanned={() => {
-                // Remove the unbanned entry from local state
-                setBans((prev) => prev.filter((b) => b.banid !== selectedBanId))
-                navigateTo('bans')
-              }}
-            />
-          )}
-
-          {view === 'reports' && (
-            <ReportListPage
-              reports={reports}
-              loading={loadingReports}
-              onSelectReport={selectReport}
-              onToast={showToast}
-              onRefresh={fetchReports}
-            />
-          )}
-
-          {view === 'report-detail' && selectedReportId && (
-            <ReportDetailPage
-              reportId={selectedReportId}
-              permissions={permissions}
-              players={players}
-              onOpenPlayer={(id) => {
-                const p = players.find((pl) => pl.id === id)
-                if (p) selectPlayer(p)
-                else showToast('Player not online', 'error')
-              }}
-              onRemoved={() => {
-                setReports((prev) => prev.filter((r) => r.id !== selectedReportId))
-                navigateTo('reports')
-              }}
-              onToast={showToast}
-            />
-          )}
-
-          {view === 'server' && (
-            <ServerPage
-              permissions={permissions}
-              isRedm={isRedm}
-              onToast={showToast}
-            />
-          )}
-
-          {view === 'settings' && (
-            <SettingsPage
-              permissions={permissions}
-              settings={settings}
-              easterEggs={easterEggs}
-              currentEasterEgg={currentEasterEgg}
-              isRedm={isRedm}
-              onChange={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
-              onToast={showToast}
-            />
-          )}
-        </main>
-      </div>
-
-      {confirm && (
-        <ConfirmDialog
-          title={confirm.title}
-          message={confirm.message}
-          confirmLabel={confirm.confirmLabel}
-          variant={confirm.variant}
-          onConfirm={() => {
-            confirm.onConfirm()
-            closeConfirm()
-          }}
-          onCancel={closeConfirm}
-        />
-      )}
+      </ModalProvider>
 
       {toast && <Toast message={toast.text} type={toast.type} />}
-    </div>
+    </>
   )
 }
 

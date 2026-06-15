@@ -14,8 +14,8 @@ export function ServerPage({ permissions, isRedm, onToast }: ServerPageProps) {
   return (
     <div className="page-container">
       {permissions['server.announce'] && <ServerAnnouncements onToast={onToast} />}
-      {permissions['server.convars'] && <ServerInfo onToast={onToast} />}
-      {permissions['server.convars'] && <ServerConvars onToast={onToast} />}
+      {permissions['server.convars'] && <ServerInfo />}
+      {permissions['server.convars'] && <ServerConvars />}
       {!isRedm && <ServerCleanup permissions={permissions} onToast={onToast} />}
     </div>
   )

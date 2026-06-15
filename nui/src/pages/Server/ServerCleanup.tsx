@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import { callLua } from '../../fivem'
-import type { CleanupRadius, CleanupType, Notification, Permissions } from '../../types'
-import { CleanupModal } from '../../components/CleanupModal'
+import type { CleanupType, Notification, Permissions } from '../../types'
+import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 
 interface ServerCleanupProps {
@@ -9,9 +7,8 @@ interface ServerCleanupProps {
   onToast: (text: string, type?: Notification['type']) => void
 }
 
-export function ServerCleanup({ permissions, onToast }: ServerCleanupProps) {
-  const [open, setOpen] = useState(false)
-  const [busy, setBusy] = useState(false)
+export function ServerCleanup({ permissions, onToast: _onToast }: ServerCleanupProps) {
+  const modal = useModalContext()
 
   const availableTypes: CleanupType[] = []
   if (permissions['server.cleanup.cars']) availableTypes.push('cars')
@@ -19,19 +16,6 @@ export function ServerCleanup({ permissions, onToast }: ServerCleanupProps) {
   if (permissions['server.cleanup.props']) availableTypes.push('props')
 
   if (availableTypes.length === 0) return null
-
-  async function run(type: CleanupType, radius: CleanupRadius, deep: boolean) {
-    setBusy(true)
-    try {
-      await callLua('requestCleanup', { type, radius, deep })
-      onToast('Cleanup requested', 'success')
-      setOpen(false)
-    } catch {
-      onToast('Cleanup failed', 'error')
-    } finally {
-      setBusy(false)
-    }
-  }
 
   return (
     <div className="card">
@@ -41,19 +25,11 @@ export function ServerCleanup({ permissions, onToast }: ServerCleanupProps) {
       </p>
       <button
         className="btn btn-warning"
-        onClick={() => setOpen(true)}
-        disabled={busy}
+        onClick={() => modal.openCleanup(availableTypes)}
       >
         <Icon name="trash" size="xs" />
         Clean area
       </button>
-      {open && (
-        <CleanupModal
-          availableTypes={availableTypes}
-          onConfirm={run}
-          onCancel={() => setOpen(false)}
-        />
-      )}
     </div>
   )
 }

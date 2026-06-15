@@ -1,29 +1,8 @@
-import { useState } from 'react'
-import { callLua } from '../../fivem'
-import type { Notification } from '../../types'
-import { TwoFieldPrompt } from '../../components/TwoFieldPrompt'
+import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 
-interface ServerConvarsProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function ServerConvars({ onToast }: ServerConvarsProps) {
-  const [open, setOpen] = useState(false)
-  const [busy, setBusy] = useState(false)
-
-  async function commit(name: string, value: string) {
-    setBusy(true)
-    try {
-      await callLua('setConvar', { name, value })
-      onToast(`Set ${name} = ${value}`, 'success')
-      setOpen(false)
-    } catch {
-      onToast('Failed to set convar', 'error')
-    } finally {
-      setBusy(false)
-    }
-  }
+export function ServerConvars() {
+  const modal = useModalContext()
 
   return (
     <div className="card">
@@ -33,23 +12,11 @@ export function ServerConvars({ onToast }: ServerConvarsProps) {
       </p>
       <button
         className="btn btn-secondary"
-        onClick={() => setOpen(true)}
-        disabled={busy}
+        onClick={() => modal.openConvar()}
       >
         <Icon name="settings" size="xs" />
         Set convar
       </button>
-      {open && (
-        <TwoFieldPrompt
-          title="Set ConVar"
-          firstLabel="Convar name"
-          firstPlaceholder="ea_useNUI"
-          secondLabel="Convar value"
-          secondPlaceholder="true"
-          onCancel={() => setOpen(false)}
-          onConfirm={commit}
-        />
-      )}
     </div>
   )
 }

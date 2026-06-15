@@ -2,14 +2,12 @@ import { useState } from 'react'
 import type { CachedPlayer, Notification } from '../../types'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
-import { InputPrompt } from '../../components/InputPrompt'
-import { BanDurationPicker } from '../../components/BanDurationPicker'
 import { Icon } from '../../components/icons'
+import { useModalContext } from '../../ModalContext'
 
 interface CachedPlayersPageProps {
   cachedPlayers: CachedPlayer[]
   loading: boolean
-  onBanPlayer: (id: number, name: string, reason: string, duration: number) => void
   onToast: (_text: string, _type?: Notification['type']) => void
   onRefresh: () => void
 }
@@ -17,12 +15,11 @@ interface CachedPlayersPageProps {
 export function CachedPlayersPage({
   cachedPlayers,
   loading,
-  onBanPlayer,
   onToast: _onToast,
   onRefresh,
 }: CachedPlayersPageProps) {
+  const modal = useModalContext()
   const [query, setQuery] = useState('')
-  const [banTarget, setBanTarget] = useState<CachedPlayer | null>(null)
 
   return (
     <div className="page-container">
@@ -66,18 +63,10 @@ export function CachedPlayersPage({
             <CachedRow
               key={player.id}
               player={player}
-              onBan={() => setBanTarget(player)}
+              onBan={() => modal.openOfflineBan(player.id, player.name)}
             />
           ))}
         </div>
-      )}
-
-      {banTarget && (
-        <CachedBanFlow
-          player={banTarget}
-          onClose={() => setBanTarget(null)}
-          onBanPlayer={onBanPlayer}
-        />
       )}
     </div>
   )
@@ -110,60 +99,6 @@ function CachedRow({
           <Icon name="ban" size="xs" />
           Ban
         </button>
-      </div>
-    </div>
-  )
-}
-
-function CachedBanFlow({
-  player,
-  onClose,
-  onBanPlayer,
-}: {
-  player: CachedPlayer
-  onClose: () => void
-  onBanPlayer: (id: number, name: string, reason: string, duration: number) => void
-}) {
-  const [reason, setReason] = useState<string | null>(null)
-  const [duration, setDuration] = useState<number | null>(null)
-
-  if (reason === null) {
-    return (
-      <InputPrompt
-        title={`Ban ${player.name}`}
-        label="Ban reason"
-        placeholder="No reason"
-        onCancel={onClose}
-        onConfirm={(v) => setReason(v || 'No reason')}
-      />
-    )
-  }
-
-  return (
-    <div
-      className="dialog-overlay"
-      role="presentation"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="cached-ban-title">
-        <h2 id="cached-ban-title" className="dialog-title">Ban duration</h2>
-        <p className="dialog-description">Choose how long the ban should last.</p>
-        <BanDurationPicker value={duration} onChange={setDuration} />
-        <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={() => setReason(null)}>Back</button>
-          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button
-            className="btn btn-danger"
-            disabled={duration === null || duration === -1 || reason === null}
-            onClick={() => {
-              if (duration === null || duration === -1 || reason === null) return
-              onBanPlayer(player.id, player.name, reason, duration)
-              onClose()
-            }}
-          >
-            Confirm ban
-          </button>
-        </div>
       </div>
     </div>
   )

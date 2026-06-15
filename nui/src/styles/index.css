@@ -74,7 +74,8 @@
   /* -- Z-index -- */
   --z-topbar: 5;
   --z-sidebar: 10;
-  --z-overlay: 100;
+  --z-window: 100;
+  --z-overlay: 150;
   --z-toast: 200;
 
   /* -- Transitions -- */
@@ -643,27 +644,22 @@ body {
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--z-overlay);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  animation: dialogFadeIn var(--transition) ease-out;
 }
 
 .dialog {
   width: 100%;
   max-width: 420px;
-  background: var(--bg-secondary);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  box-shadow: var(--shadow);
-  animation: dialogSlideIn var(--transition-slow) ease-out;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .dialog-title {
@@ -676,8 +672,12 @@ body {
 .dialog-description {
   font-size: var(--text-base);
   color: var(--text-secondary);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-3);
   line-height: 1.6;
+}
+
+.dialog .input {
+  margin-bottom: var(--space-4);
 }
 
 .dialog-actions {
@@ -883,14 +883,14 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1050px;
-  height: 650px;
+  width: min(92vw, 1210px);
+  height: min(85vh, 750px);
   display: flex;
   flex-direction: row;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
-  z-index: var(--z-overlay);
+  z-index: var(--z-window);
 }
 
 /* ============================================================
