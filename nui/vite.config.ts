@@ -9,7 +9,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     minify: 'esbuild',
-    target: 'es2018',
+    target: 'es2022',
     rollupOptions: {
       output: {
         manualChunks: {

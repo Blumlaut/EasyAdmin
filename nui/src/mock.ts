@@ -9,14 +9,14 @@
 import type { Player, Permissions, Notification } from './types'
 
 const DEMO_PLAYERS: Player[] = [
-  { id: '1', name: 'Alice Johnson', license: 'license:abc123', ip: '127.0.0.1', ping: 24, score: 150, gang: '', job: 'police', frozen: false, muted: false },
-  { id: '2', name: 'Bob Smith', license: 'license:def456', ip: '192.168.1.50', ping: 45, score: 80, gang: 'lostmc', job: '', frozen: false, muted: false },
-  { id: '3', name: 'Charlie Brown', license: 'license:ghi789', ip: '10.0.0.12', ping: 120, score: 30, gang: '', job: 'mechanic', frozen: true, muted: false },
-  { id: '4', name: 'Diana Prince', license: 'license:jkl012', ip: '172.16.0.5', ping: 15, score: 500, gang: '', job: 'doctor', frozen: false, muted: true },
-  { id: '5', name: 'Eve Adams', license: 'license:mno345', ip: '192.168.2.100', ping: 67, score: 200, gang: 'ballas', job: '', frozen: false, muted: false },
-  { id: '6', name: 'Frank Castle', license: 'license:pqr678', ip: '10.10.10.10', ping: 200, score: 5, gang: '', job: '', frozen: false, muted: false },
-  { id: '7', name: 'Grace Hopper', license: 'license:stu901', ip: '172.20.0.3', ping: 33, score: 350, gang: '', job: 'police', frozen: false, muted: false },
-  { id: '8', name: 'Hank Pym', license: 'license:vwx234', ip: '192.168.3.200', ping: 89, score: 120, gang: 'vagos', job: '', frozen: false, muted: false },
+  { id: 1, name: 'Alice Johnson', license: 'license:abc123', ip: '127.0.0.1' },
+  { id: 2, name: 'Bob Smith', license: 'license:def456', ip: '192.168.1.50' },
+  { id: 3, name: 'Charlie Brown', license: 'license:ghi789', ip: '10.0.0.12', frozen: true },
+  { id: 4, name: 'Diana Prince', license: 'license:jkl012', ip: '172.16.0.5', muted: true },
+  { id: 5, name: 'Eve Adams', license: 'license:mno345', ip: '192.168.2.100' },
+  { id: 6, name: 'Frank Castle', license: 'license:pqr678', ip: '10.10.10.10' },
+  { id: 7, name: 'Grace Hopper', license: 'license:stu901', ip: '172.20.0.3' },
+  { id: 8, name: 'Hank Pym', license: 'license:vwx234', ip: '192.168.3.200' },
 ]
 
 const DEMO_PERMISSIONS: Permissions = {
@@ -51,22 +51,24 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
       case 'requestPlayers':
         return jsonResponse({ players: mockPlayers, permissions: DEMO_PERMISSIONS })
 
-      case 'kickPlayer':
-        const kickId = String(body.id || '')
+      case 'kickPlayer': {
+        const kickId = Number(body.id || 0)
         mockPlayers = mockPlayers.filter((p) => p.id !== kickId)
         mockToasts.push({ text: `Kicked ${body.name || 'player'}`, type: 'success' })
         broadcastNotification(mockToasts[mockToasts.length - 1])
         return jsonResponse({ success: true })
+      }
 
-      case 'banPlayer':
-        const banId = String(body.id || '')
+      case 'banPlayer': {
+        const banId = Number(body.id || 0)
         mockPlayers = mockPlayers.filter((p) => p.id !== banId)
         mockToasts.push({ text: `Banned ${body.name || 'player'}`, type: 'success' })
         broadcastNotification(mockToasts[mockToasts.length - 1])
         return jsonResponse({ success: true })
+      }
 
       case 'warnPlayer':
-        mockToasts.push({ text: `Warned ${body.name || 'player'}`, type: 'warning' })
+        mockToasts.push({ text: `Warned ${body.name || 'player'}`, type: 'info' })
         broadcastNotification(mockToasts[mockToasts.length - 1])
         return jsonResponse({ success: true })
 
@@ -85,8 +87,8 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         broadcastNotification(mockToasts[mockToasts.length - 1])
         return jsonResponse({ success: true })
 
-      case 'toggleFreeze':
-        const freezeId = String(body.id || '')
+      case 'toggleFreeze': {
+        const freezeId = Number(body.id || 0)
         mockPlayers = mockPlayers.map((p) =>
           p.id === freezeId ? { ...p, frozen: !p.frozen } : p
         )
@@ -98,9 +100,10 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         mockToasts.push({ text: `${updated?.frozen ? 'Frozen' : 'Unfrozen'} ${body.name || 'player'}`, type: 'info' })
         broadcastNotification(mockToasts[mockToasts.length - 1])
         return jsonResponse({ success: true })
+      }
 
-      case 'toggleMute':
-        const muteId = String(body.id || '')
+      case 'toggleMute': {
+        const muteId = Number(body.id || 0)
         mockPlayers = mockPlayers.map((p) =>
           p.id === muteId ? { ...p, muted: !p.muted } : p
         )
@@ -111,6 +114,7 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         mockToasts.push({ text: `${updatedMuted?.muted ? 'Muted' : 'Unmuted'} ${body.name || 'player'}`, type: 'info' })
         broadcastNotification(mockToasts[mockToasts.length - 1])
         return jsonResponse({ success: true })
+      }
 
       case 'screenshotPlayer':
         mockToasts.push({ text: `Screenshot of ${body.name || 'player'} saved`, type: 'success' })
@@ -133,7 +137,8 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
 }
 
 // Provide the FiveM global
-window.parentResourceName = 'EasyAdmin'
+// @ts-expect-error FiveM global not in lib.dom
+(window as Record<string, unknown>).parentResourceName = 'EasyAdmin'
 
 // Auto-open the menu after a short delay
 setTimeout(() => {
@@ -149,7 +154,6 @@ function bodyToString(body: unknown): string {
   if (typeof body === 'string') return body
   if (body instanceof FormData) {
     const parts: string[] = []
-    // @ts-expect-error FormData iteration
     for (const [k, v] of body.entries()) {
       parts.push(`${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
     }
@@ -169,6 +173,7 @@ function broadcastNotification(notification: Notification) {
   window.postMessage({ action: 'notification', data: notification }, '*')
 }
 
+// eslint-disable-next-line no-console -- dev-only banner
 console.log(
   '%c[EasyAdmin NUI Dev Mode] Mock active. Use the UI freely.',
   'color: #4ade80; font-weight: bold; font-size: 14px;',
