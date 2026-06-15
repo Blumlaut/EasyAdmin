@@ -87,28 +87,32 @@ function App() {
     setTimeout(() => setToast(null), 3000)
   }, [])
 
-  const navigateTo = useCallback((newView: View) => {
-    if (view !== 'main') {
-      viewHistoryRef.current.push(view)
-    }
+  // Internal: change view and manage side effects (no history push)
+  const setViewInternal = useCallback((newView: View) => {
     setView(newView)
     if (newView !== 'players') {
       setPlayersFetched(false)
     } else if (players.length > 0) {
-      // Already have data from a previous visit
       setPlayersFetched(true)
     }
-  }, [view, players.length])
+  }, [players.length])
+
+  const navigateTo = useCallback((newView: View) => {
+    if (view !== 'main') {
+      viewHistoryRef.current.push(view)
+    }
+    setViewInternal(newView)
+  }, [view, setViewInternal])
 
   const goBack = useCallback(() => {
     const previous = viewHistoryRef.current.pop()
     if (previous) {
-      setView(previous)
+      setViewInternal(previous)
     } else {
-      setView('main')
       setSelectedPlayer(null)
+      setViewInternal('main')
     }
-  }, [])
+  }, [setViewInternal])
 
   const selectPlayer = useCallback((player: Player) => {
     setSelectedPlayer(player)
