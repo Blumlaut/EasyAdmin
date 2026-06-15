@@ -17,21 +17,21 @@
   --brand-blue-light: #3b82f6;
   --brand-blue-glow: rgba(59, 130, 246, 0.25);
 
-  /* -- Glass panel backgrounds -- */
-  --bg-primary: rgba(10, 14, 26, 0.75);
-  --bg-secondary: rgba(15, 20, 35, 0.65);
-  --bg-tertiary: rgba(30, 38, 56, 0.5);
-  --bg-hover: rgba(50, 60, 80, 0.5);
-  --bg-active: rgba(59, 130, 246, 0.15);
+  /* -- Panel backgrounds (opaque for readability, slight transparency for game context) -- */
+  --bg-primary: rgba(10, 14, 26, 0.92);
+  --bg-secondary: rgba(13, 17, 28, 0.95);
+  --bg-tertiary: rgba(22, 28, 44, 0.9);
+  --bg-hover: rgba(50, 60, 80, 0.6);
+  --bg-active: rgba(59, 130, 246, 0.2);
 
   /* -- Borders -- */
-  --border-color: rgba(60, 70, 90, 0.4);
-  --border-glow: rgba(59, 130, 246, 0.3);
+  --border-color: rgba(80, 90, 110, 0.5);
+  --border-glow: rgba(59, 130, 246, 0.4);
 
-  /* -- Text -- */
+  /* -- Text (high contrast) -- */
   --text-primary: #f0f6fc;
-  --text-secondary: #9aa5b4;
-  --text-muted: #6b7a8d;
+  --text-secondary: #c9d1d9;
+  --text-muted: #8b949e;
 
   /* -- Semantic accents -- */
   --accent-blue: var(--brand-blue-light);
@@ -330,38 +330,38 @@ body {
 }
 
 .badge-online {
-  background: rgba(63, 185, 80, 0.15);
-  color: var(--accent-green);
+  background: rgba(63, 185, 80, 0.2);
+  color: #56d364;
 }
 
 .badge-offline {
-  background: rgba(107, 122, 141, 0.15);
+  background: rgba(107, 122, 141, 0.2);
   color: var(--text-muted);
 }
 
 .badge-frozen {
-  background: rgba(59, 130, 246, 0.15);
-  color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
 }
 
 .badge-muted {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--accent-orange);
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
 }
 
 .badge-dev {
-  background: rgba(167, 139, 250, 0.15);
-  color: var(--accent-purple);
+  background: rgba(167, 139, 250, 0.2);
+  color: #c4b5fd;
 }
 
 .badge-contributor {
-  background: rgba(167, 139, 250, 0.15);
-  color: var(--accent-purple);
+  background: rgba(167, 139, 250, 0.2);
+  color: #c4b5fd;
 }
 
 .badge-danger {
-  background: rgba(239, 68, 68, 0.15);
-  color: var(--accent-red);
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
 }
 
 /* ============================================================
@@ -709,6 +709,19 @@ body {
   border-color: var(--border-glow);
 }
 
+.nav-item:disabled,
+.nav-item[disabled] {
+  color: var(--text-muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.nav-item:disabled:hover,
+.nav-item[disabled]:hover {
+  background: transparent;
+  color: var(--text-muted);
+}
+
 .nav-item-label {
   flex: 1;
 }
@@ -872,10 +885,9 @@ body {
 }
 
 .sidebar-logo {
-  background: var(--brand-blue);
-  color: #fff;
-  font-weight: 800;
-  font-size: var(--text-lg);
+  height: 36px;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .sidebar-title {
@@ -911,7 +923,7 @@ body {
 }
 
 .coming-soon {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .text-accent-blue {

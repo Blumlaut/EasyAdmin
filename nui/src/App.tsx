@@ -149,9 +149,7 @@ function App() {
       <aside className="glass sidebar">
         {/* Logo header */}
         <div className="sidebar-header">
-          <div className="avatar avatar-md sidebar-logo">
-            EA
-          </div>
+          <img src="/logo.png" alt="EasyAdmin" className="sidebar-logo" />
           <div>
             <h1 className="text-lg font-bold sidebar-title">
               EasyAdmin
