@@ -160,7 +160,11 @@ Citizen.CreateThread(function()
     function addNewReport(type, reporter, reported, reason, reportTime)
         local t = {}
         local timestamp = os.time()
-        
+        -- Normalize reported to a number (command args are strings)
+        if reported then
+            reported = tonumber(reported)
+        end
+
         if type == 1 then
             t = {type = type, reporter = reporter, reporterName = getName(reporter, true), reported = reported, reportedName = getName(reported, true), reason = reason, reportTime = timestamp}
         else
