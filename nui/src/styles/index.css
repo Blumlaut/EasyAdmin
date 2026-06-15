@@ -17,10 +17,10 @@
   --brand-blue-light: #3b82f6;
   --brand-blue-glow: rgba(59, 130, 246, 0.25);
 
-  /* -- Panel backgrounds (opaque for readability, slight transparency for game context) -- */
-  --bg-primary: rgba(10, 14, 26, 0.92);
-  --bg-secondary: rgba(13, 17, 28, 0.95);
-  --bg-tertiary: rgba(22, 28, 44, 0.9);
+  /* -- Panel backgrounds (translucent so game is visible behind the window) -- */
+  --bg-primary: rgba(10, 14, 26, 0.78);
+  --bg-secondary: rgba(13, 17, 28, 0.82);
+  --bg-tertiary: rgba(22, 28, 44, 0.70);
   --bg-hover: rgba(50, 60, 80, 0.6);
   --bg-active: rgba(59, 130, 246, 0.2);
 
@@ -275,6 +275,17 @@ body {
   padding: var(--space-2);
   width: calc(var(--space-2) * 2 + 20px);
   height: calc(var(--space-2) * 2 + 20px);
+}
+
+.btn-close {
+  margin-left: auto;
+  color: var(--text-muted);
+}
+
+.btn-close:hover {
+  color: var(--accent-red);
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--accent-red);
 }
 
 .btn-full {
@@ -864,16 +875,36 @@ body {
 }
 
 /* ============================================================
+   App window (non-fullscreen, translucent, centered)
+   ============================================================ */
+
+.ea-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1050px;
+  height: 650px;
+  display: flex;
+  flex-direction: row;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  z-index: var(--z-overlay);
+}
+
+/* ============================================================
    App layout
    ============================================================ */
 
 .sidebar {
   width: 260px;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   z-index: var(--z-sidebar);
   box-shadow: var(--shadow);
+  flex-shrink: 0;
 }
 
 .sidebar-header {
@@ -882,6 +913,13 @@ body {
   gap: var(--space-3);
   padding: var(--space-4);
   border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.sidebar-header > .btn-close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
 }
 
 .sidebar-logo {

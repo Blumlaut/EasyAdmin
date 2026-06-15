@@ -257,15 +257,24 @@ function App() {
 
   if (!visible) return null
 
+  const closeMenu = () => callLua('closeMenu').catch(() => {})
+
   return (
-    <div className="flex w-full h-full absolute top-0 left-0">
+    <div className="ea-window">
       <aside className="glass sidebar">
         <div className="sidebar-header">
-          <img src="/logo.png" alt="EasyAdmin" className="sidebar-logo" />
+          <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
           <div>
             <h1 className="text-lg font-bold sidebar-title">EasyAdmin</h1>
             <p className="text-xs text-muted">Admin Panel</p>
           </div>
+          <button
+            className="btn btn-ghost btn-icon btn-close"
+            onClick={closeMenu}
+            aria-label="Close"
+          >
+            <Icon name="x" size="xs" />
+          </button>
         </div>
         <div className="sidebar-nav">
           <Navigation
