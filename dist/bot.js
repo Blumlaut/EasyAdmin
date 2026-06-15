@@ -9,11 +9,20 @@ var __glob = (map) => (path) => {
   if (fn) return fn();
   throw new Error("Module not found in bundle: " + path);
 };
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+var __esm = (fn, res, err) => function __init() {
+  if (err) throw err[0];
+  try {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  } catch (e) {
+    throw err = [e], e;
+  }
 };
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
 };
 var __export = (target, all) => {
   for (var name in all)
@@ -21367,7 +21376,7 @@ var require_message = __commonJS({
   "node_modules/discord-api-types/payloads/v10/message.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.MessageSearchSortMode = exports2.MessageSearchEmbedType = exports2.MessageSearchHasType = exports2.MessageSearchAuthorType = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedType = exports2.BaseThemeType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = void 0;
+    exports2.MessageSearchSortMode = exports2.MessageSearchEmbedType = exports2.MessageSearchHasType = exports2.MessageSearchAuthorType = exports2.SeparatorSpacingSize = exports2.UnfurledMediaItemFlags = exports2.UnfurledMediaItemLoadingState = exports2.SelectMenuDefaultValueType = exports2.TextInputStyle = exports2.ButtonStyle = exports2.ComponentType = exports2.AllowedMentionsTypes = exports2.AttachmentFlags = exports2.EmbedMediaFlags = exports2.EmbedFlags = exports2.EmbedType = exports2.BaseThemeType = exports2.MessageFlags = exports2.MessageReferenceType = exports2.MessageActivityType = exports2.MessageType = void 0;
     var MessageType;
     (function(MessageType2) {
       MessageType2[MessageType2["Default"] = 0] = "Default";
@@ -21457,9 +21466,21 @@ var require_message = __commonJS({
       EmbedType2["AutoModerationMessage"] = "auto_moderation_message";
       EmbedType2["PollResult"] = "poll_result";
     })(EmbedType || (exports2.EmbedType = EmbedType = {}));
+    var EmbedFlags;
+    (function(EmbedFlags2) {
+      EmbedFlags2[EmbedFlags2["IsContentInventoryEntry"] = 32] = "IsContentInventoryEntry";
+    })(EmbedFlags || (exports2.EmbedFlags = EmbedFlags = {}));
+    var EmbedMediaFlags;
+    (function(EmbedMediaFlags2) {
+      EmbedMediaFlags2[EmbedMediaFlags2["IsAnimated"] = 32] = "IsAnimated";
+    })(EmbedMediaFlags || (exports2.EmbedMediaFlags = EmbedMediaFlags = {}));
     var AttachmentFlags;
     (function(AttachmentFlags2) {
+      AttachmentFlags2[AttachmentFlags2["IsClip"] = 1] = "IsClip";
+      AttachmentFlags2[AttachmentFlags2["IsThumbnail"] = 2] = "IsThumbnail";
       AttachmentFlags2[AttachmentFlags2["IsRemix"] = 4] = "IsRemix";
+      AttachmentFlags2[AttachmentFlags2["IsSpoiler"] = 8] = "IsSpoiler";
+      AttachmentFlags2[AttachmentFlags2["IsAnimated"] = 32] = "IsAnimated";
     })(AttachmentFlags || (exports2.AttachmentFlags = AttachmentFlags = {}));
     var AllowedMentionsTypes;
     (function(AllowedMentionsTypes2) {
@@ -21519,6 +21540,10 @@ var require_message = __commonJS({
       UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedSuccess"] = 2] = "LoadedSuccess";
       UnfurledMediaItemLoadingState2[UnfurledMediaItemLoadingState2["LoadedNotFound"] = 3] = "LoadedNotFound";
     })(UnfurledMediaItemLoadingState || (exports2.UnfurledMediaItemLoadingState = UnfurledMediaItemLoadingState = {}));
+    var UnfurledMediaItemFlags;
+    (function(UnfurledMediaItemFlags2) {
+      UnfurledMediaItemFlags2[UnfurledMediaItemFlags2["IsAnimated"] = 1] = "IsAnimated";
+    })(UnfurledMediaItemFlags || (exports2.UnfurledMediaItemFlags = UnfurledMediaItemFlags = {}));
     var SeparatorSpacingSize;
     (function(SeparatorSpacingSize2) {
       SeparatorSpacingSize2[SeparatorSpacingSize2["Small"] = 1] = "Small";
@@ -21622,6 +21647,7 @@ var require_oauth2 = __commonJS({
       OAuth2Scopes3["DMChannelsRead"] = "dm_channels.read";
       OAuth2Scopes3["Email"] = "email";
       OAuth2Scopes3["Identify"] = "identify";
+      OAuth2Scopes3["IdentifyPremium"] = "identify.premium";
       OAuth2Scopes3["Guilds"] = "guilds";
       OAuth2Scopes3["GuildsJoin"] = "guilds.join";
       OAuth2Scopes3["GuildsMembersRead"] = "guilds.members.read";
@@ -21974,7 +22000,9 @@ var require_common2 = __commonJS({
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["OnlyTheOwnerOfThisAccountCanPerformThisAction"] = 20018] = "OnlyTheOwnerOfThisAccountCanPerformThisAction";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["AnnouncementEditLimitExceeded"] = 20022] = "AnnouncementEditLimitExceeded";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["UnderMinimumAge"] = 20024] = "UnderMinimumAge";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ChannelWriteRateLimit"] = 20028] = "ChannelWriteRateLimit";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ChannelSendRateLimit"] = 20028] = "ChannelSendRateLimit";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerWriteRateLimit"] = 20029] = "ServerWriteRateLimit";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ServerSendRateLimit"] = 20029] = "ServerSendRateLimit";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["StageTopicServerNameServerDescriptionOrChannelNamesContainDisallowedWords"] = 20031] = "StageTopicServerNameServerDescriptionOrChannelNamesContainDisallowedWords";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["GuildPremiumSubscriptionLevelTooLow"] = 20035] = "GuildPremiumSubscriptionLevelTooLow";
@@ -22121,6 +22149,7 @@ var require_common2 = __commonJS({
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["ThreadLocked"] = 160005] = "ThreadLocked";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumActiveThreads"] = 160006] = "MaximumActiveThreads";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["MaximumActiveAnnouncementThreads"] = 160007] = "MaximumActiveAnnouncementThreads";
+      RESTJSONErrorCodes2[RESTJSONErrorCodes2["CannotForwardMessageWithUnreadableContent"] = 160014] = "CannotForwardMessageWithUnreadableContent";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["InvalidJSONForUploadedLottieFile"] = 170001] = "InvalidJSONForUploadedLottieFile";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["UploadedLottiesCannotContainRasterizedImages"] = 170002] = "UploadedLottiesCannotContainRasterizedImages";
       RESTJSONErrorCodes2[RESTJSONErrorCodes2["StickerMaximumFramerateExceeded"] = 170003] = "StickerMaximumFramerateExceeded";
@@ -22206,6 +22235,7 @@ var require_channel2 = __commonJS({
     var ReactionType;
     (function(ReactionType2) {
       ReactionType2[ReactionType2["Normal"] = 0] = "Normal";
+      ReactionType2[ReactionType2["Burst"] = 1] = "Burst";
       ReactionType2[ReactionType2["Super"] = 1] = "Super";
     })(ReactionType || (exports2.ReactionType = ReactionType = {}));
   }
@@ -22757,8 +22787,9 @@ var require_v103 = __commonJS({
       },
       /**
        * Route for:
-       * - GET `/users/@me/applications/{application.id}/role-connection`
-       * - PUT `/users/@me/applications/{application.id}/role-connection`
+       * - GET    `/users/@me/applications/{application.id}/role-connection`
+       * - PUT    `/users/@me/applications/{application.id}/role-connection`
+       * - DELETE `/users/@me/applications/{application.id}/role-connection`
        */
       userApplicationRoleConnection(applicationId) {
         return `/users/@me/applications/${applicationId}/role-connection`;
@@ -32157,7 +32188,7 @@ var require_package = __commonJS({
     module2.exports = {
       $schema: "https://json.schemastore.org/package.json",
       name: "discord.js",
-      version: "14.26.2",
+      version: "14.26.4",
       description: "A powerful library for interacting with the Discord API",
       main: "./src/index.js",
       types: "./typings/index.d.ts",
@@ -32218,9 +32249,9 @@ var require_package = __commonJS({
         "magic-bytes.js": "^1.13.0",
         tslib: "^2.6.3",
         undici: "6.24.1",
-        "@discordjs/builders": "^1.14.1",
         "@discordjs/formatters": "^0.6.2",
         "@discordjs/rest": "^2.6.1",
+        "@discordjs/builders": "^1.14.1",
         "@discordjs/util": "^1.2.0"
       },
       devDependencies: {
@@ -32238,9 +32269,9 @@ var require_package = __commonJS({
         tslint: "6.1.3",
         turbo: "^2.8.10",
         typescript: "~5.8.3",
-        "@discordjs/api-extractor": "^7.38.1",
+        "@discordjs/docgen": "^0.12.1",
         "@discordjs/scripts": "^0.1.0",
-        "@discordjs/docgen": "^0.12.1"
+        "@discordjs/api-extractor": "^7.38.1"
       },
       engines: {
         node: ">=18"
@@ -34737,6 +34768,8 @@ var require_TeamMember = __commonJS({
       _patch(data) {
         if ("permissions" in data) {
           this.permissions = data.permissions;
+        } else {
+          this.permissions ??= [];
         }
         if ("membership_state" in data) {
           this.membershipState = data.membership_state;
@@ -58027,7 +58060,8 @@ var require_MessageCreate = __commonJS({
         const channel = this.getChannel({
           id: data.channel_id,
           author: data.author,
-          ..."guild_id" in data && { guild_id: data.guild_id }
+          ..."guild_id" in data && { guild_id: data.guild_id },
+          ..."channel_type" in data && { type: data.channel_type }
         });
         if (channel) {
           if (!channel.isTextBased()) return {};
@@ -59425,6 +59459,7 @@ var require_constants6 = __commonJS({
     if (hasBlob) BINARY_TYPES.push("blob");
     module2.exports = {
       BINARY_TYPES,
+      CLOSE_TIMEOUT: 3e4,
       EMPTY_BUFFER: Buffer.alloc(0),
       GUID: "258EAFA5-E914-47DA-95CA-C5AB0DC85B11",
       hasBlob,
@@ -59802,6 +59837,9 @@ var require_permessage_deflate2 = __commonJS({
        *     acknowledge disabling of client context takeover
        * @param {Number} [options.concurrencyLimit=10] The number of concurrent
        *     calls to zlib
+       * @param {Boolean} [options.isServer=false] Create the instance in either
+       *     server or client mode
+       * @param {Number} [options.maxPayload=0] The maximum allowed message length
        * @param {(Boolean|Number)} [options.serverMaxWindowBits] Request/confirm the
        *     use of a custom server window size
        * @param {Boolean} [options.serverNoContextTakeover=false] Request/accept
@@ -59812,15 +59850,12 @@ var require_permessage_deflate2 = __commonJS({
        *     deflate
        * @param {Object} [options.zlibInflateOptions] Options to pass to zlib on
        *     inflate
-       * @param {Boolean} [isServer=false] Create the instance in either server or
-       *     client mode
-       * @param {Number} [maxPayload=0] The maximum allowed message length
        */
-      constructor(options, isServer, maxPayload) {
-        this._maxPayload = maxPayload | 0;
+      constructor(options) {
         this._options = options || {};
         this._threshold = this._options.threshold !== void 0 ? this._options.threshold : 1024;
-        this._isServer = !!isServer;
+        this._maxPayload = this._options.maxPayload | 0;
+        this._isServer = !!this._options.isServer;
         this._deflate = null;
         this._inflate = null;
         this.params = null;
@@ -60443,6 +60478,10 @@ var require_receiver2 = __commonJS({
        *     extensions
        * @param {Boolean} [options.isServer=false] Specifies whether to operate in
        *     client or server mode
+       * @param {Number} [options.maxBufferedChunks=0] The maximum number of
+       *     buffered data chunks
+       * @param {Number} [options.maxFragments=0] The maximum number of message
+       *     fragments
        * @param {Number} [options.maxPayload=0] The maximum allowed message length
        * @param {Boolean} [options.skipUTF8Validation=false] Specifies whether or
        *     not to skip UTF-8 validation for text and close messages
@@ -60453,6 +60492,8 @@ var require_receiver2 = __commonJS({
         this._binaryType = options.binaryType || BINARY_TYPES[0];
         this._extensions = options.extensions || {};
         this._isServer = !!options.isServer;
+        this._maxBufferedChunks = options.maxBufferedChunks | 0;
+        this._maxFragments = options.maxFragments | 0;
         this._maxPayload = options.maxPayload | 0;
         this._skipUTF8Validation = !!options.skipUTF8Validation;
         this[kWebSocket] = void 0;
@@ -60482,6 +60523,18 @@ var require_receiver2 = __commonJS({
        */
       _write(chunk, encoding, cb) {
         if (this._opcode === 8 && this._state == GET_INFO) return cb();
+        if (this._maxBufferedChunks > 0 && this._buffers.length >= this._maxBufferedChunks) {
+          cb(
+            this.createError(
+              RangeError,
+              "Too many buffered chunks",
+              false,
+              1008,
+              "WS_ERR_TOO_MANY_BUFFERED_PARTS"
+            )
+          );
+          return;
+        }
         this._bufferedBytes += chunk.length;
         this._buffers.push(chunk);
         this.startLoop(cb);
@@ -60811,6 +60864,17 @@ var require_receiver2 = __commonJS({
           return;
         }
         if (data.length) {
+          if (this._maxFragments > 0 && this._fragments.length >= this._maxFragments) {
+            const error = this.createError(
+              RangeError,
+              "Too many message fragments",
+              false,
+              1008,
+              "WS_ERR_TOO_MANY_BUFFERED_PARTS"
+            );
+            cb(error);
+            return;
+          }
           this._messageLength = this._totalPayloadLength;
           this._fragments.push(data);
         }
@@ -60836,6 +60900,17 @@ var require_receiver2 = __commonJS({
                 false,
                 1009,
                 "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH"
+              );
+              cb(error);
+              return;
+            }
+            if (this._maxFragments > 0 && this._fragments.length >= this._maxFragments) {
+              const error = this.createError(
+                RangeError,
+                "Too many message fragments",
+                false,
+                1008,
+                "WS_ERR_TOO_MANY_BUFFERED_PARTS"
               );
               cb(error);
               return;
@@ -61006,6 +61081,9 @@ var require_sender2 = __commonJS({
     "use strict";
     var { Duplex } = require("stream");
     var { randomFillSync } = require("crypto");
+    var {
+      types: { isUint8Array }
+    } = require("util");
     var PerMessageDeflate = require_permessage_deflate2();
     var { EMPTY_BUFFER, kWebSocket, NOOP } = require_constants6();
     var { isBlob, isValidStatusCode } = require_validation();
@@ -61159,8 +61237,10 @@ var require_sender2 = __commonJS({
           buf.writeUInt16BE(code, 0);
           if (typeof data === "string") {
             buf.write(data, 2);
-          } else {
+          } else if (isUint8Array(data)) {
             buf.set(data, 2);
+          } else {
+            throw new TypeError("Second argument must be a string or a Uint8Array");
           }
         }
         const options = {
@@ -61888,6 +61968,7 @@ var require_websocket2 = __commonJS({
     var { isBlob } = require_validation();
     var {
       BINARY_TYPES,
+      CLOSE_TIMEOUT,
       EMPTY_BUFFER,
       GUID,
       kForOnEventAttribute,
@@ -61901,7 +61982,6 @@ var require_websocket2 = __commonJS({
     } = require_event_target();
     var { format, parse } = require_extension();
     var { toBuffer } = require_buffer_util();
-    var closeTimeout = 30 * 1e3;
     var kAborted = /* @__PURE__ */ Symbol("kAborted");
     var protocolVersions = [8, 13];
     var readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"];
@@ -61947,6 +62027,7 @@ var require_websocket2 = __commonJS({
           initAsClient(this, address, protocols, options);
         } else {
           this._autoPong = options.autoPong;
+          this._closeTimeout = options.closeTimeout;
           this._isServer = true;
         }
       }
@@ -62040,6 +62121,10 @@ var require_websocket2 = __commonJS({
        *     multiple times in the same tick
        * @param {Function} [options.generateMask] The function used to generate the
        *     masking key
+       * @param {Number} [options.maxBufferedChunks=0] The maximum number of
+       *     buffered data chunks
+       * @param {Number} [options.maxFragments=0] The maximum number of message
+       *     fragments
        * @param {Number} [options.maxPayload=0] The maximum allowed message size
        * @param {Boolean} [options.skipUTF8Validation=false] Specifies whether or
        *     not to skip UTF-8 validation for text and close messages
@@ -62051,6 +62136,8 @@ var require_websocket2 = __commonJS({
           binaryType: this.binaryType,
           extensions: this._extensions,
           isServer: this._isServer,
+          maxBufferedChunks: options.maxBufferedChunks,
+          maxFragments: options.maxFragments,
           maxPayload: options.maxPayload,
           skipUTF8Validation: options.skipUTF8Validation
         });
@@ -62348,7 +62435,10 @@ var require_websocket2 = __commonJS({
       const opts = {
         allowSynchronousEvents: true,
         autoPong: true,
+        closeTimeout: CLOSE_TIMEOUT,
         protocolVersion: protocolVersions[1],
+        maxBufferedChunks: 1024 * 1024,
+        maxFragments: 128 * 1024,
         maxPayload: 100 * 1024 * 1024,
         skipUTF8Validation: false,
         perMessageDeflate: true,
@@ -62365,6 +62455,7 @@ var require_websocket2 = __commonJS({
         port: void 0
       };
       websocket._autoPong = opts.autoPong;
+      websocket._closeTimeout = opts.closeTimeout;
       if (!protocolVersions.includes(opts.protocolVersion)) {
         throw new RangeError(
           `Unsupported protocol version: ${opts.protocolVersion} (supported versions: ${protocolVersions.join(", ")})`
@@ -62376,7 +62467,7 @@ var require_websocket2 = __commonJS({
       } else {
         try {
           parsedUrl = new URL2(address);
-        } catch (e) {
+        } catch {
           throw new SyntaxError(`Invalid URL: ${address}`);
         }
       }
@@ -62424,11 +62515,11 @@ var require_websocket2 = __commonJS({
       opts.path = parsedUrl.pathname + parsedUrl.search;
       opts.timeout = opts.handshakeTimeout;
       if (opts.perMessageDeflate) {
-        perMessageDeflate = new PerMessageDeflate(
-          opts.perMessageDeflate !== true ? opts.perMessageDeflate : {},
-          false,
-          opts.maxPayload
-        );
+        perMessageDeflate = new PerMessageDeflate({
+          ...opts.perMessageDeflate,
+          isServer: false,
+          maxPayload: opts.maxPayload
+        });
         opts.headers["Sec-WebSocket-Extensions"] = format({
           [PerMessageDeflate.extensionName]: perMessageDeflate.offer()
         });
@@ -62590,6 +62681,8 @@ var require_websocket2 = __commonJS({
         websocket.setSocket(socket, head, {
           allowSynchronousEvents: opts.allowSynchronousEvents,
           generateMask: opts.generateMask,
+          maxBufferedChunks: opts.maxBufferedChunks,
+          maxFragments: opts.maxFragments,
           maxPayload: opts.maxPayload,
           skipUTF8Validation: opts.skipUTF8Validation
         });
@@ -62707,7 +62800,7 @@ var require_websocket2 = __commonJS({
     function setCloseTimer(websocket) {
       websocket._closeTimer = setTimeout(
         websocket._socket.destroy.bind(websocket._socket),
-        closeTimeout
+        websocket._closeTimeout
       );
     }
     function socketOnClose() {
@@ -62716,8 +62809,8 @@ var require_websocket2 = __commonJS({
       this.removeListener("data", socketOnData);
       this.removeListener("end", socketOnEnd);
       websocket._readyState = WebSocket.CLOSING;
-      let chunk;
-      if (!this._readableState.endEmitted && !websocket._closeFrameReceived && !websocket._receiver._writableState.errorEmitted && (chunk = websocket._socket.read()) !== null) {
+      if (!this._readableState.endEmitted && !websocket._closeFrameReceived && !websocket._receiver._writableState.errorEmitted && this._readableState.length !== 0) {
+        const chunk = this.read(this._readableState.length);
         websocket._receiver.write(chunk);
       }
       websocket._receiver.end();
@@ -62908,7 +63001,7 @@ var require_websocket_server = __commonJS({
     var PerMessageDeflate = require_permessage_deflate2();
     var subprotocol = require_subprotocol();
     var WebSocket = require_websocket2();
-    var { GUID, kWebSocket } = require_constants6();
+    var { CLOSE_TIMEOUT, GUID, kWebSocket } = require_constants6();
     var keyRegex = /^[+/0-9A-Za-z]{22}==$/;
     var RUNNING = 0;
     var CLOSING = 1;
@@ -62927,8 +63020,15 @@ var require_websocket_server = __commonJS({
        *     pending connections
        * @param {Boolean} [options.clientTracking=true] Specifies whether or not to
        *     track clients
+       * @param {Number} [options.closeTimeout=30000] Duration in milliseconds to
+       *     wait for the closing handshake to finish after `websocket.close()` is
+       *     called
        * @param {Function} [options.handleProtocols] A hook to handle protocols
        * @param {String} [options.host] The hostname where to bind the server
+       * @param {Number} [options.maxBufferedChunks=1048576] The maximum number of
+       *     buffered data chunks
+       * @param {Number} [options.maxFragments=131072] The maximum number of message
+       *     fragments
        * @param {Number} [options.maxPayload=104857600] The maximum allowed message
        *     size
        * @param {Boolean} [options.noServer=false] Enable no server mode
@@ -62950,11 +63050,14 @@ var require_websocket_server = __commonJS({
         options = {
           allowSynchronousEvents: true,
           autoPong: true,
+          maxBufferedChunks: 1024 * 1024,
+          maxFragments: 128 * 1024,
           maxPayload: 100 * 1024 * 1024,
           skipUTF8Validation: false,
           perMessageDeflate: false,
           handleProtocols: null,
           clientTracking: true,
+          closeTimeout: CLOSE_TIMEOUT,
           verifyClient: null,
           noServer: false,
           backlog: null,
@@ -63110,9 +63213,11 @@ var require_websocket_server = __commonJS({
           abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
           return;
         }
-        if (version !== 8 && version !== 13) {
+        if (version !== 13 && version !== 8) {
           const message = "Missing or invalid Sec-WebSocket-Version header";
-          abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
+          abortHandshakeOrEmitwsClientError(this, req, socket, 400, message, {
+            "Sec-WebSocket-Version": "13, 8"
+          });
           return;
         }
         if (!this.shouldHandle(req)) {
@@ -63133,11 +63238,11 @@ var require_websocket_server = __commonJS({
         const secWebSocketExtensions = req.headers["sec-websocket-extensions"];
         const extensions = {};
         if (this.options.perMessageDeflate && secWebSocketExtensions !== void 0) {
-          const perMessageDeflate = new PerMessageDeflate(
-            this.options.perMessageDeflate,
-            true,
-            this.options.maxPayload
-          );
+          const perMessageDeflate = new PerMessageDeflate({
+            ...this.options.perMessageDeflate,
+            isServer: true,
+            maxPayload: this.options.maxPayload
+          });
           try {
             const offers = extension.parse(secWebSocketExtensions);
             if (offers[PerMessageDeflate.extensionName]) {
@@ -63226,6 +63331,8 @@ var require_websocket_server = __commonJS({
         socket.removeListener("error", socketOnError);
         ws.setSocket(socket, head, {
           allowSynchronousEvents: this.options.allowSynchronousEvents,
+          maxBufferedChunks: this.options.maxBufferedChunks,
+          maxFragments: this.options.maxFragments,
           maxPayload: this.options.maxPayload,
           skipUTF8Validation: this.options.skipUTF8Validation
         });
@@ -63271,13 +63378,13 @@ var require_websocket_server = __commonJS({
 ` + Object.keys(headers).map((h) => `${h}: ${headers[h]}`).join("\r\n") + "\r\n\r\n" + message
       );
     }
-    function abortHandshakeOrEmitwsClientError(server, req, socket, code, message) {
+    function abortHandshakeOrEmitwsClientError(server, req, socket, code, message, headers) {
       if (server.listenerCount("wsClientError")) {
         const err = new Error(message);
         Error.captureStackTrace(err, abortHandshakeOrEmitwsClientError);
         server.emit("wsClientError", err, socket, req);
       } else {
-        abortHandshake(socket, code, message);
+        abortHandshake(socket, code, message, headers);
       }
     }
   }
@@ -63287,13 +63394,23 @@ var require_websocket_server = __commonJS({
 var require_ws = __commonJS({
   "node_modules/ws/index.js"(exports2, module2) {
     "use strict";
+    var createWebSocketStream = require_stream();
+    var extension = require_extension();
+    var PerMessageDeflate = require_permessage_deflate2();
+    var Receiver = require_receiver2();
+    var Sender = require_sender2();
+    var subprotocol = require_subprotocol();
     var WebSocket = require_websocket2();
-    WebSocket.createWebSocketStream = require_stream();
-    WebSocket.Server = require_websocket_server();
-    WebSocket.Receiver = require_receiver2();
-    WebSocket.Sender = require_sender2();
+    var WebSocketServer = require_websocket_server();
+    WebSocket.createWebSocketStream = createWebSocketStream;
+    WebSocket.extension = extension;
+    WebSocket.PerMessageDeflate = PerMessageDeflate;
+    WebSocket.Receiver = Receiver;
+    WebSocket.Sender = Sender;
+    WebSocket.Server = WebSocketServer;
+    WebSocket.subprotocol = subprotocol;
     WebSocket.WebSocket = WebSocket;
-    WebSocket.WebSocketServer = WebSocket.Server;
+    WebSocket.WebSocketServer = WebSocketServer;
     module2.exports = WebSocket;
   }
 });
