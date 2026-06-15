@@ -94,8 +94,11 @@ function App() {
     setView(newView)
     if (newView !== 'players') {
       setPlayersFetched(false)
+    } else if (players.length > 0) {
+      // Already have data from a previous visit
+      setPlayersFetched(true)
     }
-  }, [view])
+  }, [view, players.length])
 
   const goBack = useCallback(() => {
     const previous = viewHistoryRef.current.pop()
