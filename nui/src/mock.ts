@@ -315,6 +315,38 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
       case 'requestCleanup':
         return toastAndReturn('Cleanup requested', 'info')
 
+      case 'requestServerStats':
+        return jsonResponse({
+          maxPlayers: 48,
+          resources: {
+            total: 85,
+            started: 78,
+            stopped: 7,
+          },
+          entities: {
+            vehicles: 142,
+            peds: 387,
+            objects: 1253,
+          },
+        })
+
+      case 'requestPlayerHistory': {
+        const range = body.range || '24h'
+        const now = Date.now()
+        let span: number
+        let interval: number
+        if (range === '1h') { span = 3600000; interval = 300000 }       // 1h, 5min points
+        else if (range === '6h') { span = 21600000; interval = 600000 }  // 6h, 10min points
+        else if (range === '7d') { span = 604800000; interval = 900000 } // 7d, 15min points
+        else { span = 86400000; interval = 600000 }                       // 24h, 10min points
+        const points = []
+        for (let t = now - span; t <= now; t += interval) {
+          const count = Math.floor(Math.random() * 30) + 5
+          points.push({ timestamp: t, count })
+        }
+        return jsonResponse(points)
+      }
+
       case 'setAnonymous':
       case 'setTtsEnabled':
       case 'setTtsSpeed':

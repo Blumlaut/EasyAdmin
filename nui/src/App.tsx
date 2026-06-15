@@ -379,11 +379,7 @@ function App() {
 
             <main className="glass main-content">
               {view === 'main' && (
-                <Dashboard
-                  onNavigate={navigateTo}
-                  playerCount={players.length}
-                  availableViews={availableViews}
-                />
+                <Dashboard playerCount={players.length} />
               )}
 
               {view === 'players' && (

@@ -50,6 +50,11 @@ export type IconName =
   | 'globe'
   | 'flag'
   | 'flag-triangle'
+  | 'activity'
+  | 'gauge'
+  | 'layers'
+  | 'box'
+  | 'user-minus'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -286,5 +291,39 @@ const ICONS: Record<IconName, JSX.Element> = {
   ),
   'flag-triangle': (
     <path d="M4 22V3l16 9-16 9z" />
+  ),
+  activity: (
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  ),
+  gauge: (
+    <>
+      <path d="M15 6v.01" />
+      <path d="M12 9v.01" />
+      <path d="M9 6v.01" />
+      <path d="M6 9v.01" />
+      <circle cx={12} cy={12} r={10} />
+      <path d="M12 8v4l3 3" />
+    </>
+  ),
+  layers: (
+    <>
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </>
+  ),
+  box: (
+    <>
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+      <line x1={12} y1={22.08} x2={12} y2={12} />
+    </>
+  ),
+  'user-minus': (
+    <>
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx={9} cy={7} r={4} />
+      <line x1={23} y1={8} x2={23} y2={16} />
+    </>
   ),
 }

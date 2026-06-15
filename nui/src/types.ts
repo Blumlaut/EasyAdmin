@@ -121,3 +121,27 @@ export type View =
 
 // Ban duration preset indices
 export type BanDurationPreset = 'permanent' | 'custom' | number
+
+// Server stats for dashboard
+export interface ServerStats {
+  maxPlayers: number
+  resources: {
+    total: number
+    started: number
+    stopped: number
+  }
+  entities: {
+    vehicles: number
+    peds: number
+    objects: number
+  }
+}
+
+// Single data point for sparkline charts
+export interface PlayerCountPoint {
+  timestamp: number
+  count: number
+}
+
+// Time range filter for player history
+export type HistoryRange = '1h' | '6h' | '24h' | '7d'

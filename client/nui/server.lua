@@ -132,3 +132,50 @@ RegisterNUICallback('requestCleanup', function(data, cb)
   toast('Cleanup requested')
   cb({ ok = true })
 end)
+
+-- Server stats for dashboard
+-- All stats come from the server; client just relays the response
+local pendingStatsCb = nil
+
+RegisterNUICallback('requestServerStats', function(_data, cb)
+  if pendingStatsCb then
+    -- Already a request in-flight, reuse the callback
+    pendingStatsCb = cb
+    return
+  end
+  pendingStatsCb = cb
+  TriggerServerEvent('EasyAdmin:requestServerStats')
+end)
+
+-- Server responds with full stats (maxPlayers, resources, entities)
+RegisterNetEvent('EasyAdmin:serverStatsResult', function(data)
+  if pendingStatsCb then
+    local cb = pendingStatsCb
+    pendingStatsCb = nil
+    cb(data or {
+      maxPlayers = 48,
+      resources = { total = 0, started = 0, stopped = 0 },
+      entities = { vehicles = 0, peds = 0, objects = 0 },
+    })
+  end
+end)
+
+-- Player history for dashboard sparkline
+local pendingHistoryCb = nil
+
+RegisterNUICallback('requestPlayerHistory', function(data, cb)
+  if pendingHistoryCb then
+    pendingHistoryCb = cb
+    return
+  end
+  pendingHistoryCb = cb
+  TriggerServerEvent('EasyAdmin:requestPlayerHistory', data and data.range or '24h')
+end)
+
+RegisterNetEvent('EasyAdmin:playerHistoryResult', function(data)
+  if pendingHistoryCb then
+    local cb = pendingHistoryCb
+    pendingHistoryCb = nil
+    cb(data or {})
+  end
+end)

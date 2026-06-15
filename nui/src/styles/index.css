@@ -165,6 +165,19 @@
   }
 }
 
+/* -- Dashboard charts grid -- */
+.dashboard-charts-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--space-3);
+}
+
+@media (max-width: 700px) {
+  .dashboard-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ============================================================
    Base
    ============================================================ */
@@ -946,6 +959,13 @@ select.input {
 .flex-1 { flex: 1; }
 .shrink-0 { flex-shrink: 0; }
 
+/* -- Grid -- */
+
+.grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
 /* ============================================================
    Dimension utilities
    ============================================================ */
@@ -956,6 +976,7 @@ select.input {
 .max-w-md { max-width: 440px; }
 .max-w-lg { max-width: 640px; }
 .min-h-sm { min-height: 200px; }
+.min-w-0 { min-width: 0; }
 
 /* ============================================================
    Position utilities
