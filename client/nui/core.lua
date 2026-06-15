@@ -12,7 +12,7 @@ function M.isVisible()
 end
 
 function M.isNuiEnabled()
-  return GetConvar('ea_useNUI', 'false') == 'true'
+  return GetConvar('ea_useNUI', 'true') == 'true'
 end
 
 function M.toggle()

@@ -49,6 +49,8 @@ playlist = nil
 
 
 RegisterCommand('easyadmin', function(source, args)
+	local useNui = GetConvar('ea_useNUI', 'true') == 'true'
+	if useNui then return end -- NUI is the primary; let gui_nui.lua handle it
 	CreateThread(function()
 		if not isAdmin == true then
 			TriggerServerEvent("EasyAdmin:amiadmin")

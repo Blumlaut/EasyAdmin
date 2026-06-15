@@ -24,22 +24,18 @@ RegisterCommand('ea_nui', function()
   core.toggle()
 end, false)
 
--- If NUI mode is enabled, also intercept the main easyadmin command.
-if core.isNuiEnabled() then
-  RegisterCommand('easyadmin', function(_source, _args)
-    CreateThread(function()
-      core.toggle()
-      if _menuPool and _menuPool:IsAnyMenuOpen() then
-        Wait(500)
-        if core.isVisible() then
-          _menuPool:Remove()
-          _menuPool = nil
-        end
+-- NUI is the primary interface; always register the main easyadmin command.
+-- When ea_useNUI is false, gui_c.lua handles it instead.
+RegisterCommand('easyadmin', function(_source, _args)
+  if not core.isNuiEnabled() then return end
+  CreateThread(function()
+    core.toggle()
+    if _menuPool and _menuPool:IsAnyMenuOpen() then
+      Wait(500)
+      if core.isVisible() then
+        _menuPool:Remove()
+        _menuPool = nil
       end
-    end)
-  end, false)
-end
-
--- Send initial settings/easter eggs to the NUI when the menu opens.
--- This is wired into the menuToggle event by core.toggle(); the bootstrap
--- stays focused on loading modules.
+    end
+  end)
+end, false)
