@@ -26,7 +26,7 @@ export function PlayerActions({ player, permissions, onConfirm, onToast }: Playe
       } else {
         onToast('Action completed', 'success')
       }
-    } catch (err) {
+    } catch {
       onToast('Failed to execute action', 'error')
     } finally {
       setBusy(false)

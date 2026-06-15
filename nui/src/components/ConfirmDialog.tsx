@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 interface ConfirmDialogProps {
   title: string
   message: string
@@ -6,8 +8,19 @@ interface ConfirmDialogProps {
 }
 
 export function ConfirmDialog({ title, message, onConfirm, onCancel }: ConfirmDialogProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onCancel])
+
   return (
     <div
+      role="presentation"
       style={{
         position: 'fixed',
         inset: 0,
@@ -18,9 +31,17 @@ export function ConfirmDialog({ title, message, onConfirm, onCancel }: ConfirmDi
         zIndex: 1000,
         backdropFilter: 'blur(4px)',
       }}
-      onClick={onCancel}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onCancel()
+        }
+      }}
+      tabIndex={-1}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
         style={{
           background: 'var(--bg-secondary)',
           border: '1px solid var(--border-color)',
@@ -29,8 +50,9 @@ export function ConfirmDialog({ title, message, onConfirm, onCancel }: ConfirmDi
           width: 400,
           maxWidth: '90vw',
           boxShadow: 'var(--shadow)',
+          position: 'relative',
+          zIndex: 1,
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         <h3 style={{
           fontSize: 16,

@@ -22,7 +22,8 @@ function App() {
   const [permissions, setPermissions] = useState<Permissions>({})
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [playersFetched, setPlayersFetched] = useState(false)
+  const loading = view === 'players' && !playersFetched
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null)
   const [toast, setToast] = useState<Notification | null>(null)
   const viewHistoryRef = useRef<View[]>([])
@@ -45,7 +46,7 @@ function App() {
     on<{ players: Player[]; permissions: Permissions }>('updatePlayers', (data) => {
       setPlayers(data.players)
       setPermissions(data.permissions)
-      setLoading(false)
+      setPlayersFetched(true)
     })
   }, [])
 
@@ -67,7 +68,7 @@ function App() {
         setSelectedPlayer((prev) => (prev ? { ...prev, ...data } : null))
       }
     })
-  }, [])
+  }, [selectedPlayer?.id])
 
   const showToast = useCallback((text: string, type: Notification['type'] = 'info') => {
     setToast({ text, type })
@@ -79,6 +80,10 @@ function App() {
       viewHistoryRef.current.push(view)
     }
     setView(newView)
+    // Reset fetched state when leaving players view
+    if (newView !== 'players') {
+      setPlayersFetched(false)
+    }
   }, [view])
 
   const goBack = useCallback(() => {
@@ -107,8 +112,7 @@ function App() {
   // Request player list when navigating to players view
   useEffect(() => {
     if (view === 'players' && players.length === 0) {
-      setLoading(true)
-      callLua('requestPlayers').catch(() => setLoading(false))
+      callLua('requestPlayers').finally(() => setPlayersFetched(true))
     }
   }, [view, players.length])
 

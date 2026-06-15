@@ -28,11 +28,11 @@ export function on<N = unknown>(action: string, handler: (data: N) => void): voi
 }
 
 // Set a value that Lua can read (for convvar-like behavior)
-export function setConvVar(key: string, value: string): void {
-  // @ts-expect-error - FiveM global
+export function setConvVar(_key: string, _value: string): void {
+  // @ts-expect-error FiveM global not available in browser dev environment
   if (typeof SetConvar === 'function') {
-    // @ts-expect-error
-    SetConvar(key, value)
+    // @ts-expect-error FiveM global not available in browser dev environment
+    SetConvar(_key, _value)
   }
 }
 
