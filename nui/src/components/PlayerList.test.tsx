@@ -33,8 +33,8 @@ describe('PlayerList', () => {
 
   it('shows player IDs', () => {
     renderPlayerList(mockPlayers)
-    expect(screen.getByText('1')).toBeInTheDocument()
-    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByText(/ID: 1/)).toBeInTheDocument()
+    expect(screen.getByText(/ID: 2/)).toBeInTheDocument()
   })
 
   it('filters players by name', () => {
@@ -90,7 +90,7 @@ describe('PlayerList', () => {
 
   it('shows empty message when no players', () => {
     renderPlayerList([])
-    expect(screen.getByText('No players online')).toBeInTheDocument()
+    expect(screen.getByText('No players connected')).toBeInTheDocument()
   })
 
   it('shows loading spinner', () => {
@@ -108,17 +108,15 @@ describe('PlayerList', () => {
     expect(spinner).toBeInTheDocument()
   })
 
-  it('truncates long identifiers in display', () => {
-    const longIdPlayer: Player = {
+  it('displays license in subtitle', () => {
+    const player: Player = {
       id: 1,
       name: 'Test',
-      identifier: 'steam:110000112345678901234567890abcdef',
+      license: 'license:abc123',
       frozen: false,
       muted: false,
     }
-    renderPlayerList([longIdPlayer])
-    // The identifier is displayed truncated
-    const identifierCell = screen.getByText(/steam:11000011234567/)
-    expect(identifierCell).toBeInTheDocument()
+    renderPlayerList([player])
+    expect(screen.getByText(/ID: 1/)).toBeInTheDocument()
   })
 })

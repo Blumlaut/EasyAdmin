@@ -2,45 +2,42 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Navigation } from './Navigation'
 
+const items = [
+  { id: 'main', label: 'Dashboard', icon: 'home' as const },
+  { id: 'players', label: 'Players', icon: 'users' as const, badge: 5 },
+  { id: 'bans', label: 'Bans', icon: 'ban' as const, disabled: true },
+]
+
 describe('Navigation', () => {
   it('renders all navigation items', () => {
-    render(<Navigation currentView="main" onNavigate={() => {}} playerCount={5} />)
+    render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
+    expect(screen.getByText('Dashboard')).toBeInTheDocument()
     expect(screen.getByText('Players')).toBeInTheDocument()
-    expect(screen.getByText('Server')).toBeInTheDocument()
-    expect(screen.getByText('Settings')).toBeInTheDocument()
+    expect(screen.getByText('Bans')).toBeInTheDocument()
   })
 
-  it('shows player count badge', () => {
-    render(<Navigation currentView="main" onNavigate={() => {}} playerCount={42} />)
-    expect(screen.getByText('42')).toBeInTheDocument()
+  it('shows badge when provided', () => {
+    render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
+    expect(screen.getByText('5')).toBeInTheDocument()
   })
 
-  it('highlights active view', () => {
-    render(<Navigation currentView="players" onNavigate={() => {}} playerCount={5} />)
-    const playersItem = screen.getByText('Players')
-    // Active item has blue text color
-    expect(playersItem.closest('button')).toHaveStyle('color: var(--accent-blue)')
+  it('highlights active item', () => {
+    render(<Navigation items={items} activeId="players" onSelect={() => {}} />)
+    const btn = screen.getByText('Players').closest('button')
+    expect(btn).toHaveClass('nav-item-active')
   })
 
-  it('calls onNavigate when players is clicked', async () => {
+  it('calls onSelect when clicked', async () => {
     const user = userEvent.setup()
-    const onNavigate = vi.fn()
-    render(<Navigation currentView="main" onNavigate={onNavigate} playerCount={5} />)
+    const onSelect = vi.fn()
+    render(<Navigation items={items} activeId="main" onSelect={onSelect} />)
     await user.click(screen.getByText('Players'))
-    expect(onNavigate).toHaveBeenCalledWith('players')
+    expect(onSelect).toHaveBeenCalledWith('players')
   })
 
-  it('does not navigate for disabled items', () => {
-    const onNavigate = vi.fn()
-    render(<Navigation currentView="main" onNavigate={onNavigate} playerCount={5} />)
-    // Server and Settings are disabled (no onClick handler)
-    const serverItem = screen.getByText('Server')
-    expect(serverItem.closest('button')).toHaveStyle('cursor: default')
-  })
-
-  it('highlights player-detail as players view', () => {
-    render(<Navigation currentView="player-detail" onNavigate={() => {}} playerCount={5} />)
-    const playersItem = screen.getByText('Players')
-    expect(playersItem.closest('button')).toHaveStyle('color: var(--accent-blue)')
+  it('marks disabled items as disabled', () => {
+    render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
+    const bansBtn = screen.getByText('Bans').closest('button')
+    expect(bansBtn).toBeDisabled()
   })
 })

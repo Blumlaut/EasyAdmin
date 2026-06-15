@@ -3,36 +3,30 @@ import { Toast } from './Toast'
 
 describe('Toast', () => {
   it('renders the message', () => {
-    render(<Toast message="Action completed" />)
-    expect(screen.getByText('Action completed')).toBeInTheDocument()
+    render(<Toast message="Player kicked" />)
+    expect(screen.getByText('Player kicked')).toBeInTheDocument()
   })
 
-  it('applies correct border color for info type', () => {
-    const { container } = render(<Toast message="Info" type="info" />)
-    // Check the raw style attribute for the CSS var reference
-    const innerDiv = container.querySelectorAll('div')[1]
-    expect(innerDiv?.getAttribute('style')).toContain('border-left')
-    expect(innerDiv?.getAttribute('style')).toContain('--accent-blue')
+  it('applies info class by default', () => {
+    render(<Toast message="Info message" />)
+    const toast = screen.getByText('Info message').closest('div.toast')
+    expect(toast).toHaveClass('toast-info')
   })
 
-  it('applies correct border color for success type', () => {
-    const { container } = render(<Toast message="Success" type="success" />)
-    const innerDiv = container.querySelectorAll('div')[1]
-    expect(innerDiv?.getAttribute('style')).toContain('border-left')
-    expect(innerDiv?.getAttribute('style')).toContain('--accent-green')
+  it('applies success class', () => {
+    render(<Toast message="Success" type="success" />)
+    const toast = screen.getByText('Success').closest('div.toast')
+    expect(toast).toHaveClass('toast-success')
   })
 
-  it('applies correct border color for error type', () => {
-    const { container } = render(<Toast message="Error" type="error" />)
-    const innerDiv = container.querySelectorAll('div')[1]
-    expect(innerDiv?.getAttribute('style')).toContain('border-left')
-    expect(innerDiv?.getAttribute('style')).toContain('--accent-red')
+  it('applies error class', () => {
+    render(<Toast message="Error" type="error" />)
+    const toast = screen.getByText('Error').closest('div.toast')
+    expect(toast).toHaveClass('toast-error')
   })
 
-  it('defaults to info type', () => {
-    const { container } = render(<Toast message="Default" />)
-    const innerDiv = container.querySelectorAll('div')[1]
-    expect(innerDiv?.getAttribute('style')).toContain('border-left')
-    expect(innerDiv?.getAttribute('style')).toContain('--accent-blue')
+  it('has alert role', () => {
+    render(<Toast message="Alert" />)
+    expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 })

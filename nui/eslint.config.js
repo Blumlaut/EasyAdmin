@@ -3,6 +3,7 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import tseslint from 'typescript-eslint'
+import nuiPlugin from './eslint-plugin-nui.mjs'
 
 export default tseslint.config(
   // Base configs
@@ -17,7 +18,7 @@ export default tseslint.config(
   // Global settings
   {
     languageOptions: {
-      ecmaVersion: 2018,
+      ecmaVersion: 2022,
       parserOptions: {
         ecmaFeatures: { jsx: true },
       },
@@ -52,6 +53,16 @@ export default tseslint.config(
       // Relax some rules that don't apply to fullscreen game UIs
       'jsx-a11y/no-static-element-interactions': 'off',
       'jsx-a11y/click-events-have-key-events': 'warn',
+    },
+  },
+
+  // Custom NUI rules
+  {
+    plugins: {
+      nui: nuiPlugin,
+    },
+    rules: {
+      'nui/no-inline-styles': 'error',
     },
   },
 

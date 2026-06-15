@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import type { Player, Permissions, Notification } from './types'
 import { on, callLua } from './fivem'
-import { Navigation } from './components/Navigation'
+import { Icon } from './components/icons'
+import { Navigation, type NavItem } from './components/Navigation'
 import { PlayerList } from './components/PlayerList'
 import { PlayerActions } from './components/PlayerActions'
 import { ConfirmDialog } from './components/ConfirmDialog'
@@ -12,8 +13,19 @@ type View = 'main' | 'players' | 'player-detail'
 interface ConfirmRequest {
   title: string
   message: string
+  confirmLabel?: string
+  variant?: 'default' | 'danger'
   onConfirm: () => void
 }
+
+const NAV_ITEMS: NavItem[] = [
+  { id: 'main', label: 'Dashboard', icon: 'home' },
+  { id: 'players', label: 'Players', icon: 'users' },
+  { id: 'bans', label: 'Ban List', icon: 'ban', disabled: true },
+  { id: 'reports', label: 'Reports', icon: 'alert-triangle', disabled: true },
+  { id: 'server', label: 'Server', icon: 'server', disabled: true },
+  { id: 'settings', label: 'Settings', icon: 'settings', disabled: true },
+]
 
 function App() {
   const [visible, setVisible] = useState(false)
@@ -80,7 +92,6 @@ function App() {
       viewHistoryRef.current.push(view)
     }
     setView(newView)
-    // Reset fetched state when leaving players view
     if (newView !== 'players') {
       setPlayersFetched(false)
     }
@@ -127,104 +138,86 @@ function App() {
     return () => window.removeEventListener('keydown', handleKey)
   }, [visible])
 
+  // Derive active nav ID from current view
+  const activeNavId = view === 'player-detail' ? 'players' : view
+
   if (!visible) return null
 
   return (
-    <div style={{
-      width: '100vw',
-      height: '100vh',
-      display: 'flex',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-    }}>
+    <div className="flex w-full h-full absolute top-0 left-0">
       {/* Sidebar */}
-      <div style={{
-        width: 260,
-        height: '100vh',
-        background: 'var(--bg-secondary)',
-        borderRight: '1px solid var(--border-color)',
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '4px 0 24px rgba(0,0,0,0.3)',
-        zIndex: 10,
-      }}>
-        {/* Header */}
-        <div style={{
-          padding: '16px',
-          borderBottom: '1px solid var(--border-color)',
-        }}>
-          <h1 style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            letterSpacing: '-0.02em',
-          }}>
-            EasyAdmin
-          </h1>
-          <p style={{
-            fontSize: 12,
-            color: 'var(--text-secondary)',
-            marginTop: 2,
-          }}>
-            Admin Panel
-          </p>
+      <aside className="glass sidebar">
+        {/* Logo header */}
+        <div className="sidebar-header">
+          <div className="avatar avatar-md sidebar-logo">
+            EA
+          </div>
+          <div>
+            <h1 className="text-lg font-bold sidebar-title">
+              EasyAdmin
+            </h1>
+            <p className="text-xs text-muted">Admin Panel</p>
+          </div>
         </div>
 
         {/* Navigation */}
-        <Navigation
-          currentView={view}
-          onNavigate={navigateTo}
-          playerCount={players.length}
-        />
-      </div>
-
-      {/* Main content */}
-      <div style={{
-        flex: 1,
-        height: '100vh',
-        background: 'var(--bg-primary)',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-        {/* Top bar */}
-        <div style={{
-          height: 48,
-          borderBottom: '1px solid var(--border-color)',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 16px',
-          gap: 12,
-          background: 'var(--bg-secondary)',
-        }}>
-          {view !== 'main' && (
-            <button
-              className="btn btn-sm"
-              onClick={goBack}
-              style={{ padding: '4px 10px' }}
-            >
-              ← Back
-            </button>
-          )}
-          <h2 style={{
-            fontSize: 15,
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-          }}>
-            {view === 'main' && 'Dashboard'}
-            {view === 'players' && 'Player Management'}
-            {view === 'player-detail' && selectedPlayer && `[${selectedPlayer.id}] ${selectedPlayer.name}`}
-          </h2>
+        <div className="sidebar-nav">
+          <Navigation
+            items={[
+              ...NAV_ITEMS.map((item) => ({
+                ...item,
+                badge: item.id === 'players' ? players.length : item.badge,
+              })),
+            ]}
+            activeId={activeNavId}
+            onSelect={(id) => {
+              if (id === 'players') {
+                navigateTo('players')
+              } else if (id === 'main') {
+                navigateTo('main')
+              }
+            }}
+          />
         </div>
 
-        {/* Content area */}
-        <div style={{
-          flex: 1,
-          overflow: 'auto',
-          padding: 20,
-        }}>
-          {view === 'main' && <DashboardView onSelectPlayers={() => navigateTo('players')} />}
+        {/* Sidebar footer */}
+        <div className="sidebar-footer">
+          <div className="flex items-center gap-2 text-xs text-muted">
+            <Icon name="shield" size="xs" />
+            <span>
+              {Object.entries(permissions).filter(([, v]) => v).length} permissions active
+            </span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main content area */}
+      <div className="flex flex-col flex-1 h-full overflow-hidden">
+        {/* Top bar */}
+        <header className="glass topbar">
+          {view !== 'main' && (
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={goBack}
+              aria-label="Go back"
+            >
+              <Icon name="chevron-left" size="xs" />
+              Back
+            </button>
+          )}
+          <h2 className="text-lg font-semibold">
+            {getPageTitle(view, selectedPlayer)}
+          </h2>
+        </header>
+
+        {/* Content */}
+        <main className="glass main-content">
+          {view === 'main' && (
+            <DashboardView
+              onNavigate={navigateTo}
+              playerCount={players.length}
+            />
+          )}
           {view === 'players' && (
             <PlayerList
               players={players}
@@ -242,7 +235,7 @@ function App() {
               onToast={showToast}
             />
           )}
-        </div>
+        </main>
       </div>
 
       {/* Confirmation dialog */}
@@ -250,6 +243,8 @@ function App() {
         <ConfirmDialog
           title={confirm.title}
           message={confirm.message}
+          confirmLabel={confirm.confirmLabel}
+          variant={confirm.variant}
           onConfirm={() => {
             confirm.onConfirm()
             closeConfirm()
@@ -264,72 +259,79 @@ function App() {
   )
 }
 
+function getPageTitle(view: View, player: Player | null): string {
+  if (view === 'main') return 'Dashboard'
+  if (view === 'players') return 'Player Management'
+  if (view === 'player-detail' && player) return player.name
+  return 'Dashboard'
+}
+
 // Dashboard view (main screen)
-function DashboardView({ onSelectPlayers }: { onSelectPlayers: () => void }) {
+function DashboardView({
+  onNavigate,
+  playerCount,
+}: {
+  onNavigate: (view: 'main' | 'players' | 'player-detail') => void
+  playerCount: number
+}) {
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 16,
-      maxWidth: 600,
-    }}>
-      <div style={{
-        padding: 20,
-        background: 'var(--bg-secondary)',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--border-color)',
-      }}>
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>
-          Welcome to EasyAdmin
-        </h3>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
-          Select an option from the sidebar to get started.
-        </p>
+    <div className="page-container max-w-lg">
+      {/* Welcome card */}
+      <div className="card">
+        <div className="flex items-center gap-3">
+          <Icon name="shield" size="lg" className="text-accent-blue" />
+          <div>
+            <h3 className="text-xl font-semibold">Welcome to EasyAdmin</h3>
+            <p className="text-sm text-secondary mt-1">
+              Select an option from the sidebar to get started.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <button
-        className="btn btn-primary"
-        onClick={onSelectPlayers}
-        style={{
-          padding: '12px 20px',
-          fontSize: 14,
-          width: '100%',
-        }}
-      >
-        👥 Player Management
-      </button>
-
-      <div style={{
-        padding: 16,
-        background: 'var(--bg-secondary)',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--border-color)',
-        opacity: 0.6,
-      }}>
-        <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-          Server Management
+      {/* Quick actions */}
+      <div className="card">
+        <h3 className="text-lg font-semibold mb-3">
+          Quick Actions
         </h3>
-        <p style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-          Coming in a future update
-        </p>
+        <div className="flex flex-col gap-2">
+          <button
+            className="btn btn-primary btn-lg btn-full"
+            onClick={() => onNavigate('players')}
+          >
+            <Icon name="users" size="sm" />
+            Player Management
+            {playerCount > 0 && (
+              <span className="badge badge-online">{playerCount} online</span>
+            )}
+          </button>
+        </div>
       </div>
 
-      <div style={{
-        padding: 16,
-        background: 'var(--bg-secondary)',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--border-color)',
-        opacity: 0.6,
-      }}>
-        <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-          Settings
-        </h3>
-        <p style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-          Coming in a future update
-        </p>
+      {/* Coming soon sections */}
+      <div className="flex flex-col gap-2">
+        <ComingSoonCard icon="server" title="Server Management" />
+        <ComingSoonCard icon="ban" title="Ban List" />
+        <ComingSoonCard icon="settings" title="Settings" />
       </div>
     </div>
   )
 }
+
+function ComingSoonCard({ icon, title }: { icon: IconName; title: string }) {
+  return (
+    <div className="card coming-soon">
+      <div className="flex items-center gap-3">
+        <Icon name={icon} size="sm" className="text-muted" />
+        <span className="text-sm text-muted">{title}</span>
+        <span className="badge badge-default ml-auto">
+          Coming Soon
+        </span>
+      </div>
+    </div>
+  )
+}
+
+import type { IconName } from './components/icons'
 
 export default App
