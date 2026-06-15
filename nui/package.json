@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:browser": "vite --open ?dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src/",
