@@ -268,13 +268,6 @@ function App() {
             <h1 className="text-lg font-bold sidebar-title">EasyAdmin</h1>
             <p className="text-xs text-muted">Admin Panel</p>
           </div>
-          <button
-            className="btn btn-ghost btn-icon btn-close"
-            onClick={closeMenu}
-            aria-label="Close"
-          >
-            <Icon name="x" size="xs" />
-          </button>
         </div>
         <div className="sidebar-nav">
           <Navigation
@@ -318,6 +311,13 @@ function App() {
           <h2 className="text-lg font-semibold">
             {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
           </h2>
+          <button
+            className="btn btn-ghost btn-icon btn-close ml-auto"
+            onClick={closeMenu}
+            aria-label="Close"
+          >
+            <Icon name="x" size="xs" />
+          </button>
         </header>
 
         <main className="glass main-content">
