@@ -1,21 +1,19 @@
 ------------------------------------
 -- EasyAdmin NUI: core
--- Visibility, focus, menu toggle
+-- Visibility, focus, menu toggle, shared helpers
 ------------------------------------
-
-local M = {}
 
 local nuiVisible = false
 
-function M.isVisible()
+function IsNuiVisible()
   return nuiVisible
 end
 
-function M.isNuiEnabled()
+function IsNuiEnabled()
   return GetConvar('ea_useNUI', 'true') == 'true'
 end
 
-function M.toggle()
+function NuiToggle()
   if not isAdmin then
     TriggerServerEvent('EasyAdmin:amiadmin')
     CreateThread(function()
@@ -25,7 +23,7 @@ function M.toggle()
         waitTime = waitTime + 1
       until isAdmin or waitTime > 100
       if not isAdmin then return end
-      M.toggle()
+      NuiToggle()
     end)
     return
   end
@@ -49,19 +47,19 @@ function M.toggle()
         Wait(10)
         waitTime = waitTime + 1
       until playerlist or waitTime > 50
-      M.sendPlayerData()
+      NuiSendPlayerData()
     end)
   else
     SetNuiFocus(false, false)
   end
 end
 
-function M.sendPlayerData()
+function NuiSendPlayerData()
   if not nuiVisible then return end
   local perms = permissions or {}
   local players = {}
   if perms.player then
-    players = M.buildPlayerList()
+    players = NuiBuildPlayerList()
   end
   SendNUIMessage({
     action = 'updatePlayers',
@@ -74,7 +72,7 @@ function M.sendPlayerData()
   })
 end
 
-function M.buildPlayerList()
+function NuiBuildPlayerList()
   local playerData = {}
 
   if (RedM and settings.infinity) or not RedM then
@@ -122,7 +120,7 @@ function M.buildPlayerList()
   return playerData
 end
 
-function M.closeMenu()
+function NuiCloseMenu()
   nuiVisible = false
   SetNuiFocus(false, false)
   SendNUIMessage({
@@ -131,38 +129,37 @@ function M.closeMenu()
   })
 end
 
-M.callbacks = {
-  closeMenu = function(_data, cb)
-    M.closeMenu()
-    cb({ ok = true })
-  end,
-  requestPlayers = function(_data, cb)
-    if DoesPlayerHavePermissionForCategory(-1, 'player') then
-      TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
-      CreateThread(function()
-        local waitTime = 0
-        repeat
-          Wait(10)
-          waitTime = waitTime + 1
-        until playerlist or waitTime > 100
-        M.sendPlayerData()
-      end)
-    end
-    cb({ ok = true })
-  end,
-  setResourceKvp = function(data, cb)
-    if data and data.key and data.value then
-      SetResourceKvp(data.key, tostring(data.value))
-    end
-    cb({ ok = true })
-  end,
-  copyToClipboard = function(data, cb)
-    if data and data.text then
-      -- Best-effort clipboard write (web API used by FiveM NUI)
-      SendNUIMessage({ action = 'clipboardCopy', data = { text = data.text } })
-    end
-    cb({ ok = true })
-  end,
-}
+-- Core callbacks
+RegisterNUICallback('closeMenu', function(_data, cb)
+  NuiCloseMenu()
+  cb({ ok = true })
+end)
 
-return M
+RegisterNUICallback('requestPlayers', function(_data, cb)
+  if DoesPlayerHavePermissionForCategory(-1, 'player') then
+    TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
+    CreateThread(function()
+      local waitTime = 0
+      repeat
+        Wait(10)
+        waitTime = waitTime + 1
+      until playerlist or waitTime > 100
+      NuiSendPlayerData()
+    end)
+  end
+  cb({ ok = true })
+end)
+
+RegisterNUICallback('setResourceKvp', function(data, cb)
+  if data and data.key and data.value then
+    SetResourceKvp(data.key, tostring(data.value))
+  end
+  cb({ ok = true })
+end)
+
+RegisterNUICallback('copyToClipboard', function(data, cb)
+  if data and data.text then
+    SendNUIMessage({ action = 'clipboardCopy', data = { text = data.text } })
+  end
+  cb({ ok = true })
+end)
