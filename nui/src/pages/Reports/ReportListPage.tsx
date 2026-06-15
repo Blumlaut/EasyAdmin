@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
-import { callLua } from '../../fivem'
+import { useMemo, useState } from 'react'
 import type { Notification, Report } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { SearchBar } from '../../components/SearchBar'
@@ -7,42 +6,21 @@ import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 
 interface ReportListPageProps {
+  reports: Report[]
+  loading: boolean
   onSelectReport: (reportId: number) => void
   onToast: (text: string, type?: Notification['type']) => void
-  refreshKey: number
+  onRefresh: () => void
 }
 
 export function ReportListPage({
+  reports,
+  loading,
   onSelectReport,
-  onToast,
-  refreshKey,
+  onRefresh,
 }: ReportListPageProps) {
-  const [state, setState] = useState<{
-    status: 'loading' | 'error' | 'success'
-    reports: Report[]
-  }>({ status: 'loading', reports: [] })
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
-
-  useEffect(() => {
-    let cancelled = false
-    callLua<{ reports?: Report[] }>('requestReports')
-      .then((res) => {
-        if (cancelled) return
-        setState({ status: 'success', reports: res.reports ?? [] })
-      })
-      .catch(() => {
-        if (cancelled) return
-        onToast('Failed to load reports', 'error')
-        setState({ status: 'error', reports: [] })
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [refreshKey, onToast])
-
-  const reports = state.reports
-  const loading = state.status === 'loading'
 
   const filtered = useMemo(() => {
     if (!debouncedQuery) return reports
@@ -58,13 +36,23 @@ export function ReportListPage({
 
   return (
     <div className="page-container">
-      <SearchBar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search by ID, name, or reason..."
-        resultCount={{ shown: filtered.length, total: reports.length }}
-        ariaLabel="Search reports"
-      />
+      <div className="flex items-center gap-2 mb-3">
+        <SearchBar
+          value={query}
+          onChange={setQuery}
+          placeholder="Search by ID, name, or reason..."
+          resultCount={{ shown: filtered.length, total: reports.length }}
+          ariaLabel="Search reports"
+        />
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={onRefresh}
+          disabled={loading}
+        >
+          <Icon name="refresh" size="xs" />
+          Refresh
+        </button>
+      </div>
 
       {loading ? (
         <ReportListSkeleton />
@@ -131,7 +119,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
       </div>
       <div className="list-item-meta">
         {report.claimed && report.claimedName && (
-          <span className="badge badge-online">{report.claimedName}</span>
+          <span className="badge badge-green">{report.claimedName}</span>
         )}
         <span className="badge badge-default">{report.reportTimeFormatted}</span>
       </div>

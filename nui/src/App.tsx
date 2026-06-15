@@ -59,14 +59,23 @@ function App() {
   const [view, setView] = useState<View>('main')
   const viewHistoryRef = useRef<View[]>([])
 
-  // Data
+  // Data — owned by App so it persists across page navigation
   const [players, setPlayers] = useState<Player[]>([])
+  const [bans, setBans] = useState<BanEntry[]>([])
+  const [reports, setReports] = useState<Report[]>([])
+  const [cachedPlayers, setCachedPlayers] = useState<CachedPlayer[]>([])
   const [permissions, setPermissions] = useState<Permissions>({})
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [selectedBanId, setSelectedBanId] = useState<string | null>(null)
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null)
   const [isRedm, setIsRedm] = useState(false)
   const [ipPrivacy, setIpPrivacy] = useState(true)
+
+  // Loading states per data set
+  const [loadingPlayers, setLoadingPlayers] = useState(true)
+  const [loadingBans, setLoadingBans] = useState(false)
+  const [loadingReports, setLoadingReports] = useState(false)
+  const [loadingCached, setLoadingCached] = useState(false)
 
   // UI
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null)
@@ -77,10 +86,6 @@ function App() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [easterEggs, setEasterEggs] = useState<string[]>([])
   const [currentEasterEgg, setCurrentEasterEgg] = useState<string | null>(null)
-
-  // Bump to refetch player list. The other pages lazy-load on mount
-  // so we don't need refresh counters for them.
-  const [playersRefresh, setPlayersRefresh] = useState(0)
 
   // === Toast ===
 
@@ -117,29 +122,43 @@ function App() {
         setPermissions(data.permissions)
         if (typeof data.redm === 'boolean') setIsRedm(data.redm)
         if (typeof data.ipprivacy === 'boolean') setIpPrivacy(data.ipprivacy)
+        setLoadingPlayers(false)
       },
     )
   }, [])
 
-  // updateBanList / updateReports / updateCachedPlayers are received by the
-  // individual pages (which lazy-load their own data). Keep these listeners
-  // as a no-op placeholder in case Lua needs to broadcast updates later.
+  // Ban list pushed from Lua events.lua fillBanlist handler
   useEffect(() => {
-    return on<{ bans: BanEntry[] }>('updateBanList', () => {})
-  }, [])
-  useEffect(() => {
-    return on<{ players: CachedPlayer[] }>('updateCachedPlayers', () => {})
-  }, [])
-  useEffect(() => {
-    return on<{ reports: Report[] }>('updateReports', () => {})
+    return on<{ bans: BanEntry[] }>('updateBanList', (data) => {
+      setBans(data.bans ?? [])
+      setLoadingBans(false)
+    })
   }, [])
 
+  // Cached players pushed from Lua events.lua fillCachedPlayers handler
+  useEffect(() => {
+    return on<{ players: CachedPlayer[] }>('updateCachedPlayers', (data) => {
+      setCachedPlayers(data.players ?? [])
+      setLoadingCached(false)
+    })
+  }, [])
+
+  // Reports pushed from Lua events.lua fillReports handler
+  useEffect(() => {
+    return on<{ reports: Report[] }>('updateReports', (data) => {
+      setReports(data.reports ?? [])
+      setLoadingReports(false)
+    })
+  }, [])
+
+  // Lua notifications
   useEffect(() => {
     return on<Notification>('notification', (data) => {
       showToast(data.text, data.type)
     })
   }, [showToast])
 
+  // Player updates (freeze/mute state pushed from Lua)
   useEffect(() => {
     return on<Player>('playerUpdated', (data) => {
       setPlayers((prev) => prev.map((p) => (p.id === data.id ? { ...p, ...data } : p)))
@@ -147,6 +166,7 @@ function App() {
     })
   }, [])
 
+  // Easter eggs init
   useEffect(() => {
     return on<{ easterEggs: string[]; currentEgg: string | null }>('initEasterEggs', (data) => {
       setEasterEggs(data.easterEggs)
@@ -154,11 +174,37 @@ function App() {
     })
   }, [])
 
+  // Settings init
   useEffect(() => {
     return on<AppSettings>('initSettings', (data) => {
       setSettings((prev) => ({ ...prev, ...data }))
     })
   }, [])
+
+  // === Data fetch functions ===
+
+  const fetchPlayers = useCallback(() => {
+    setLoadingPlayers(true)
+    callLua('requestPlayers').catch(() => setLoadingPlayers(false))
+  }, [])
+
+  const fetchBans = useCallback(() => {
+    setLoadingBans(true)
+    callLua('requestBanList').catch(() => setLoadingBans(false))
+  }, [])
+
+  const fetchReports = useCallback(() => {
+    setLoadingReports(true)
+    callLua('requestReports').catch(() => setLoadingReports(false))
+  }, [])
+
+  const fetchCachedPlayers = useCallback(() => {
+    setLoadingCached(true)
+    callLua('requestCachedPlayers').catch(() => setLoadingCached(false))
+  }, [])
+
+  // Track which data sets have already been fetched so we only lazy-load once
+  const fetchedRef = useRef({ bans: false, reports: false, cachedPlayers: false })
 
   // === Navigation ===
 
@@ -169,7 +215,22 @@ function App() {
       }
       return newView
     })
-  }, [])
+    // Lazy-load data the first time a section is opened
+    queueMicrotask(() => {
+      if (newView === 'bans' && !fetchedRef.current.bans) {
+        fetchedRef.current.bans = true
+        fetchBans()
+      }
+      if (newView === 'reports' && !fetchedRef.current.reports) {
+        fetchedRef.current.reports = true
+        fetchReports()
+      }
+      if (newView === 'cached-players' && !fetchedRef.current.cachedPlayers) {
+        fetchedRef.current.cachedPlayers = true
+        fetchCachedPlayers()
+      }
+    })
+  }, [fetchBans, fetchReports, fetchCachedPlayers])
 
   const goBack = useCallback(() => {
     const previous = viewHistoryRef.current.pop()
@@ -236,11 +297,6 @@ function App() {
     setSelectedReportId(reportId)
     navigateTo('report-detail')
   }, [navigateTo])
-
-  const refreshPlayers = useCallback(() => {
-    setPlayersRefresh((k) => k + 1)
-    callLua('requestPlayers').catch(() => {})
-  }, [])
 
   const closeConfirm = useCallback(() => setConfirm(null), [])
 
@@ -332,13 +388,12 @@ function App() {
           {view === 'players' && (
             <PlayerListPage
               players={players}
-              loading={playersRefresh === 0 && players.length === 0}
+              loading={loadingPlayers}
               permissions={permissions}
               onSelectPlayer={selectPlayer}
               onOpenCached={() => navigateTo('cached-players')}
               onToast={showToast}
-              onRefresh={refreshPlayers}
-              refreshKey={playersRefresh}
+              onRefresh={fetchPlayers}
             />
           )}
 
@@ -352,16 +407,30 @@ function App() {
           )}
 
           {view === 'cached-players' && (
-            <CachedPlayersPage onToast={showToast} refreshKey={playersRefresh} />
+            <CachedPlayersPage
+              cachedPlayers={cachedPlayers}
+              loading={loadingCached}
+              onBanPlayer={(id, name, reason, duration) => {
+                callLua('offlineBanPlayer', { id, name, reason, duration })
+                  .then(() => showToast(`Banned ${name}`, 'success'))
+                  .catch(() => showToast('Ban failed', 'error'))
+                // Also kick the player out of cached list
+                setCachedPlayers((prev) => prev.filter((p) => p.id !== id))
+              }}
+              onToast={showToast}
+              onRefresh={fetchCachedPlayers}
+            />
           )}
 
           {view === 'bans' && (
             <BanListPage
+              bans={bans}
+              loading={loadingBans}
               showLicenses={settings.showLicenses}
               ipPrivacy={ipPrivacy}
               onSelectBan={selectBan}
               onToast={showToast}
-              refreshKey={playersRefresh}
+              onRefresh={fetchBans}
             />
           )}
 
@@ -372,15 +441,21 @@ function App() {
               permissions={permissions}
               onBack={goBack}
               onToast={showToast}
-              onUnbanned={() => navigateTo('bans')}
+              onUnbanned={() => {
+                // Remove the unbanned entry from local state
+                setBans((prev) => prev.filter((b) => b.banid !== selectedBanId))
+                navigateTo('bans')
+              }}
             />
           )}
 
           {view === 'reports' && (
             <ReportListPage
+              reports={reports}
+              loading={loadingReports}
               onSelectReport={selectReport}
               onToast={showToast}
-              refreshKey={playersRefresh}
+              onRefresh={fetchReports}
             />
           )}
 
@@ -394,7 +469,10 @@ function App() {
                 if (p) selectPlayer(p)
                 else showToast('Player not online', 'error')
               }}
-              onRemoved={() => navigateTo('reports')}
+              onRemoved={() => {
+                setReports((prev) => prev.filter((r) => r.id !== selectedReportId))
+                navigateTo('reports')
+              }}
               onToast={showToast}
             />
           )}

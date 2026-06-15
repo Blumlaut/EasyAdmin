@@ -3,6 +3,18 @@
 -- Report viewer (claim, close, close similar)
 ------------------------------------
 
+local function sendReportsToNui()
+  -- Convert reports array to a table suitable for NUI
+  local reportList = {}
+  for _, r in pairs(reports or {}) do
+    table.insert(reportList, r)
+  end
+  SendNUIMessage({
+    action = 'updateReports',
+    data = { reports = reportList },
+  })
+end
+
 local function toast(text, kind)
   SendNUIMessage({
     action = 'notification',
@@ -16,7 +28,17 @@ end
 
 RegisterNUICallback('requestReports', function(_data, cb)
   if not permissions['player.reports.view'] then return deny(cb) end
+  reports = {} -- reset before request
   TriggerServerEvent('EasyAdmin:requestReports')
+  -- Wait for the latent event to fill reports, then send to NUI
+  CreateThread(function()
+    local waitTime = 0
+    repeat
+      Wait(50)
+      waitTime = waitTime + 1
+    until (reports and next(reports) ~= nil) or waitTime > 60
+    sendReportsToNui()
+  end)
   cb({ ok = true })
 end)
 

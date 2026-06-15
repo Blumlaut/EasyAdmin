@@ -15,112 +15,123 @@ local function deny(cb, msg)
 end
 
 RegisterNUICallback('kickPlayer', function(data, cb)
+  if not permissions['player.kick'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  local reason = (data and data.reason) or 'No reason'
-  if not id or not permissions['player.kick'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:kickPlayer', id, reason)
+  if not id then return deny(cb, 'Missing player id') end
+  TriggerServerEvent('EasyAdmin:kickPlayer', id, (data and data.reason) or 'No reason')
   toast('Kicked ' .. tostring(id))
   cb({ ok = true })
 end)
 
 RegisterNUICallback('banPlayer', function(data, cb)
-  local id = tonumber(data and data.id)
-  local reason = (data and data.reason) or 'No reason'
-  local duration = tonumber(data and data.duration) or 86400
-  if not id or not (permissions['player.ban.temporary'] or permissions['player.ban.permanent']) then
+  if not (permissions['player.ban.temporary'] or permissions['player.ban.permanent']) then
     return deny(cb)
   end
-  local name = 'Unknown'
-  if playerlist then
-    for _, p in pairs(playerlist) do
-      if p.id == id then name = p.name; break end
-    end
-  end
-  TriggerServerEvent('EasyAdmin:banPlayer', id, reason, duration, name)
+  local id = tonumber(data and data.id)
+  if not id then return deny(cb, 'Missing player id') end
+  local reason = (data and data.reason) or 'No reason'
+  local duration = tonumber(data and data.duration) or 86400
+  TriggerServerEvent('EasyAdmin:banPlayer', id, reason, duration)
   toast('Banned ' .. tostring(id))
   cb({ ok = true })
 end)
 
 RegisterNUICallback('warnPlayer', function(data, cb)
+  if not permissions['player.warn'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  local reason = (data and data.reason) or 'No reason'
-  if not id or not permissions['player.warn'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:warnPlayer', id, reason)
+  if not id then return deny(cb, 'Missing player id') end
+  TriggerServerEvent('EasyAdmin:warnPlayer', id, (data and data.reason) or 'No reason')
   toast('Warned ' .. tostring(id))
   cb({ ok = true })
 end)
 
 RegisterNUICallback('slapPlayer', function(data, cb)
+  if not permissions['player.slap'] then return deny(cb) end
   local id = tonumber(data and data.id)
+  if not id then return deny(cb, 'Missing player id') end
   local amount = tonumber(data and data.amount) or 200
-  if not id or not permissions['player.slap'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:SlapPlayer', id, amount)
   cb({ ok = true })
 end)
 
 RegisterNUICallback('spectatePlayer', function(data, cb)
+  if not permissions['player.spectate'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.spectate'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:requestSpectate', id)
   cb({ ok = true })
 end)
 
 RegisterNUICallback('toggleFreeze', function(data, cb)
+  if not permissions['player.freeze'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  local freeze = data and (data.freeze ~= nil and data.freeze or data.freeze == nil)
-  if not id or not permissions['player.freeze'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:FreezePlayer', id, freeze == true)
+  if not id then return deny(cb, 'Missing player id') end
+  local freeze = (data and data.freeze) == true
+  TriggerServerEvent('EasyAdmin:FreezePlayer', id, freeze)
   cb({ ok = true })
 end)
 
 RegisterNUICallback('toggleMute', function(data, cb)
+  if not permissions['player.mute'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  local mute = data and data.mute
-  if not id or not permissions['player.mute'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   TriggerServerEvent('EasyAdmin:mutePlayer', id)
   cb({ ok = true })
 end)
 
 RegisterNUICallback('screenshotPlayer', function(data, cb)
+  if not permissions['player.screenshot'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.screenshot'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   TriggerServerEvent('EasyAdmin:TakeScreenshot', id)
   cb({ ok = true })
 end)
 
 RegisterNUICallback('teleportToPlayer', function(data, cb)
+  if not permissions['player.teleport.single'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.teleport.single'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   if settings.infinity then
     TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', id)
   else
-    local playerPed = PlayerPedId()
     local targetPed = GetPlayerPed(GetPlayerFromServerId(id))
     if targetPed and targetPed ~= 0 then
-      local x, y, z = table.unpack(GetEntityCoords(targetPed, true))
-      local heading = GetEntityHeading(targetPed)
-      lastLocation = GetEntityCoords(playerPed)
-      SetEntityCoords(playerPed, x, y, z, 0, 0, heading, false)
+      local coords = GetEntityCoords(targetPed, true)
+      lastLocation = GetEntityCoords(PlayerPedId())
+      SetEntityCoords(PlayerPedId(), coords.x, coords.y, coords.z, 0, 0, GetEntityHeading(targetPed), false)
     end
   end
-  toast('Teleported to ' .. tostring(id))
   cb({ ok = true })
 end)
 
 RegisterNUICallback('teleportPlayerToMe', function(data, cb)
+  if not permissions['player.teleport.single'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.teleport.single'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   local coords = GetEntityCoords(PlayerPedId(), true)
   TriggerServerEvent('EasyAdmin:TeleportPlayerToCoords', id, coords)
-  toast('Teleported player ' .. tostring(id) .. ' to you')
   cb({ ok = true })
 end)
 
-RegisterNUICallback('teleportMeBack', function(_data, cb)
+RegisterNUICallback('teleportAllPlayersToMe', function(data, cb)
+  if not permissions['player.teleport.single'] then return deny(cb) end
+  -- Trigger server event with target = -1, meaning teleport everyone
+  for i = 0, 256 do
+    if NetworkIsPlayerActive(i) then
+      local serverId = GetPlayerServerId(i)
+      if serverId and serverId ~= PlayerId() then
+        local coords = GetEntityCoords(PlayerPedId(), true)
+        TriggerServerEvent('EasyAdmin:TeleportPlayerToCoords', serverId, coords)
+      end
+    end
+  end
+  toast('Teleported all players to you')
+  cb({ ok = true })
+end)
+
+RegisterNUICallback('teleportMeBack', function(data, cb)
   if not permissions['player.teleport.single'] then return deny(cb) end
   if lastLocation then
-    local playerPed = PlayerPedId()
-    SetEntityCoords(playerPed, lastLocation, 0, 0, 0, false)
+    SetEntityCoords(PlayerPedId(), lastLocation, 0, 0, 0, false)
     lastLocation = nil
     toast('Teleported back')
   else
@@ -133,13 +144,14 @@ RegisterNUICallback('teleportMeBack', function(_data, cb)
 end)
 
 RegisterNUICallback('teleportPlayerBack', function(data, cb)
+  if not permissions['player.teleport.single'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.teleport.single'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   TriggerServerEvent('EasyAdmin:TeleportPlayerBack', id)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('teleportIntoVehicle', function(_data, cb)
+RegisterNUICallback('teleportIntoVehicle', function(data, cb)
   if not permissions['player.teleport.single'] then return deny(cb) end
   local playerPed = PlayerPedId()
   local coords = GetEntityCoords(playerPed, true)
@@ -172,22 +184,24 @@ RegisterNUICallback('teleportIntoVehicle', function(_data, cb)
 end)
 
 RegisterNUICallback('joinPlayerBucket', function(data, cb)
+  if not permissions['player.bucket.join'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.bucket.join'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   TriggerServerEvent('EasyAdmin:JoinPlayerRoutingBucket', id)
-  toast('Joined bucket')
   cb({ ok = true })
 end)
 
 RegisterNUICallback('forcePlayerBucket', function(data, cb)
+  if not permissions['player.bucket.force'] then return deny(cb) end
   local id = tonumber(data and data.id)
-  if not id or not permissions['player.bucket.force'] then return deny(cb) end
+  if not id then return deny(cb, 'Missing player id') end
   TriggerServerEvent('EasyAdmin:ForcePlayerRoutingBucket', id)
-  toast('Forced into your bucket')
   cb({ ok = true })
 end)
 
 RegisterNUICallback('requestCachedPlayers', function(_data, cb)
   TriggerServerEvent('EasyAdmin:requestCachedPlayers')
+  -- Cached player data arrives via the 'updateCachedPlayers' NUI event
+  -- (see events.lua fillCachedPlayers handler)
   cb({ ok = true })
 end)

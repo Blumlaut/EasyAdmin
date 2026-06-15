@@ -1,7 +1,6 @@
 import type { Notification, Permissions } from '../../types'
 import { ServerAnnouncements } from './ServerAnnouncements'
 import { ServerInfo } from './ServerInfo'
-import { ServerResources } from './ServerResources'
 import { ServerConvars } from './ServerConvars'
 import { ServerCleanup } from './ServerCleanup'
 
@@ -17,7 +16,6 @@ export function ServerPage({ permissions, isRedm, onToast }: ServerPageProps) {
       {permissions['server.announce'] && <ServerAnnouncements onToast={onToast} />}
       {permissions['server.convars'] && <ServerInfo onToast={onToast} />}
       {permissions['server.convars'] && <ServerConvars onToast={onToast} />}
-      {permissions['server.resources.start'] && <ServerResources onToast={onToast} />}
       {!isRedm && <ServerCleanup permissions={permissions} onToast={onToast} />}
     </div>
   )

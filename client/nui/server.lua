@@ -37,18 +37,59 @@ RegisterNUICallback('setMapName', function(data, cb)
   cb({ ok = true })
 end)
 
+RegisterNUICallback('requestResources', function(_data, cb)
+  if not permissions['server.resources.start'] and not permissions['server.resources.stop'] then
+    return deny(cb)
+  end
+  local resources = GetNumResources() - 1
+  local resourceList = {}
+  for i = 0, resources - 1 do
+    local name = GetResourceByFindIndex(i)
+    if name then
+      local state = GetResourceState(name)
+      table.insert(resourceList, {
+        name = name,
+        state = state or 'stopped',
+        isProtected = (name == GetCurrentResourceName()),
+      })
+    end
+  end
+  cb({ resources = resourceList, protected = GetCurrentResourceName() })
+end)
+
 RegisterNUICallback('startResource', function(data, cb)
   if not permissions['server.resources.start'] then return deny(cb) end
   local name = data and data.name
-  if not name or name == '' then return deny(cb, 'Missing resource name') end
-  TriggerServerEvent('EasyAdmin:StartResource', name)
+  if not name or name == '' then
+    -- If the frontend sends a resource index instead of a name, look it up
+    local idx = tonumber(data and data.index)
+    if idx then
+      name = GetResourceByFindIndex(idx)
+      if not name then return deny(cb, 'Invalid resource index') end
+    else
+      return deny(cb, 'Missing resource name')
+    end
+  end
+  if GetResourceState(name) == 'started' then
+    SendNUIMessage({
+      action = 'notification',
+      data = { text = name .. ' is already started', type = 'info' },
+    })
+    return cb({ ok = true })
+  end
+  StartResource(name)
   toast('Started ' .. name)
   cb({ ok = true })
 end)
 
 RegisterNUICallback('stopResource', function(data, cb)
   if not permissions['server.resources.stop'] then return deny(cb) end
-  local name = data and data.name
+  local name
+  if data and data.name then
+    name = data.name
+  elseif data and data.index then
+    name = GetResourceByFindIndex(tonumber(data.index))
+  end
   if not name or name == '' then return deny(cb, 'Missing resource name') end
   if name == GetCurrentResourceName() then
     SendNUIMessage({
@@ -57,7 +98,14 @@ RegisterNUICallback('stopResource', function(data, cb)
     })
     return cb({ error = 'Self-stop blocked' })
   end
-  TriggerServerEvent('EasyAdmin:StopResource', name)
+  if GetResourceState(name) ~= 'started' then
+    SendNUIMessage({
+      action = 'notification',
+      data = { text = name .. ' is not running', type = 'info' },
+    })
+    return cb({ ok = true })
+  end
+  StopResource(name)
   toast('Stopped ' .. name)
   cb({ ok = true })
 end)

@@ -1,70 +1,47 @@
-import { useEffect, useMemo, useState } from 'react'
-import { callLua } from '../../fivem'
+import { useState } from 'react'
 import type { CachedPlayer, Notification } from '../../types'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { InputPrompt } from '../../components/InputPrompt'
 import { BanDurationPicker } from '../../components/BanDurationPicker'
-import { useDebounce } from '../../hooks/useDebounce'
 import { Icon } from '../../components/icons'
 
 interface CachedPlayersPageProps {
-  onToast: (text: string, type?: Notification['type']) => void
-  refreshKey: number
+  cachedPlayers: CachedPlayer[]
+  loading: boolean
+  onBanPlayer: (id: number, name: string, reason: string, duration: number) => void
+  onToast: (_text: string, _type?: Notification['type']) => void
+  onRefresh: () => void
 }
 
-export function CachedPlayersPage({ onToast, refreshKey }: CachedPlayersPageProps) {
-  const [state, setState] = useState<{
-    status: 'loading' | 'error' | 'success'
-    cached: CachedPlayer[]
-  }>({ status: 'loading', cached: [] })
+export function CachedPlayersPage({
+  cachedPlayers,
+  loading,
+  onBanPlayer,
+  onToast: _onToast,
+  onRefresh,
+}: CachedPlayersPageProps) {
   const [query, setQuery] = useState('')
-  const debouncedQuery = useDebounce(query, 200)
   const [banTarget, setBanTarget] = useState<CachedPlayer | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    callLua<{ players?: CachedPlayer[] }>('requestCachedPlayers')
-      .then((res) => {
-        if (cancelled) return
-        setState({ status: 'success', cached: res.players ?? [] })
-      })
-      .catch(() => {
-        if (cancelled) return
-        onToast('Failed to load cached players', 'error')
-        setState({ status: 'error', cached: [] })
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [refreshKey, onToast])
-
-  const cached = state.cached
-  const loading = state.status === 'loading'
-
-  const filtered = useMemo(() => {
-    if (!debouncedQuery) return cached
-    const q = debouncedQuery.toLowerCase()
-    return cached.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        String(p.id).includes(q) ||
-        (p.identifier ?? '').toLowerCase().includes(q),
-    )
-  }, [cached, debouncedQuery])
 
   return (
     <div className="page-container">
       <p className="text-sm text-muted">
         Recently disconnected players. You can ban them offline.
       </p>
-      <SearchBar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search by name, ID, or identifier..."
-        resultCount={{ shown: filtered.length, total: cached.length }}
-        ariaLabel="Search cached players"
-      />
+      <div className="flex items-center gap-2 mb-3">
+        <SearchBar
+          value={query}
+          onChange={setQuery}
+          placeholder="Search by name, ID, or identifier..."
+          resultCount={{ shown: cachedPlayers.length, total: cachedPlayers.length }}
+          ariaLabel="Search cached players"
+        />
+        <button className="btn btn-ghost btn-sm" onClick={onRefresh} disabled={loading}>
+          <Icon name="refresh" size="xs" />
+          Refresh
+        </button>
+      </div>
 
       {loading ? (
         <div className="list">
@@ -78,18 +55,14 @@ export function CachedPlayersPage({ onToast, refreshKey }: CachedPlayersPageProp
             </div>
           ))}
         </div>
-      ) : filtered.length === 0 ? (
+      ) : cachedPlayers.length === 0 ? (
         <div className="card empty-state">
           <Icon name="archive" size="lg" className="text-muted" />
-          <p>
-            {cached.length === 0
-              ? 'No cached players'
-              : 'No cached players match your search'}
-          </p>
+          <p>No cached players</p>
         </div>
       ) : (
         <div className="list">
-          {filtered.map((player) => (
+          {cachedPlayers.map((player) => (
             <CachedRow
               key={player.id}
               player={player}
@@ -103,7 +76,7 @@ export function CachedPlayersPage({ onToast, refreshKey }: CachedPlayersPageProp
         <CachedBanFlow
           player={banTarget}
           onClose={() => setBanTarget(null)}
-          onToast={onToast}
+          onBanPlayer={onBanPlayer}
         />
       )}
     </div>
@@ -127,7 +100,13 @@ function CachedRow({
         <div className="list-item-subtitle text-mono">ID: {player.id}</div>
       </div>
       <div className="list-item-meta">
-        <button className="btn btn-danger btn-sm" onClick={onBan}>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={(e) => {
+            e.stopPropagation()
+            onBan()
+          }}
+        >
           <Icon name="ban" size="xs" />
           Ban
         </button>
@@ -139,15 +118,14 @@ function CachedRow({
 function CachedBanFlow({
   player,
   onClose,
-  onToast,
+  onBanPlayer,
 }: {
   player: CachedPlayer
   onClose: () => void
-  onToast: (text: string, type?: Notification['type']) => void
+  onBanPlayer: (id: number, name: string, reason: string, duration: number) => void
 }) {
-  const [reason, setReason] = useState<null | string>(null)
+  const [reason, setReason] = useState<string | null>(null)
   const [duration, setDuration] = useState<number | null>(null)
-  const [busy, setBusy] = useState(false)
 
   if (reason === null) {
     return (
@@ -161,52 +139,32 @@ function CachedBanFlow({
     )
   }
 
-  if (duration === null) {
-    return (
-      <div
-        className="dialog-overlay"
-        role="presentation"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) onClose()
-        }}
-      >
-        <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="cached-ban-title">
-          <h2 id="cached-ban-title" className="dialog-title">Ban duration</h2>
-          <p className="dialog-description">Choose how long the ban should last.</p>
-          <BanDurationPicker value={duration} onChange={setDuration} />
-          <div className="dialog-actions">
-            <button className="btn btn-ghost" onClick={() => setReason(null)}>Back</button>
-            <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-            <button
-              className="btn btn-danger"
-              disabled={duration === null || duration === -1}
-              onClick={async () => {
-                if (duration === null || duration === -1) return
-                setBusy(true)
-                try {
-                  await callLua('offlineBanPlayer', {
-                    id: player.id,
-                    name: player.name,
-                    reason,
-                    duration,
-                  })
-                  onToast(`Banned ${player.name}`, 'success')
-                  onClose()
-                } catch {
-                  onToast('Ban failed', 'error')
-                  onClose()
-                } finally {
-                  setBusy(false)
-                }
-              }}
-            >
-              {busy ? 'Banning...' : 'Confirm ban'}
-            </button>
-          </div>
+  return (
+    <div
+      className="dialog-overlay"
+      role="presentation"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="cached-ban-title">
+        <h2 id="cached-ban-title" className="dialog-title">Ban duration</h2>
+        <p className="dialog-description">Choose how long the ban should last.</p>
+        <BanDurationPicker value={duration} onChange={setDuration} />
+        <div className="dialog-actions">
+          <button className="btn btn-ghost" onClick={() => setReason(null)}>Back</button>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button
+            className="btn btn-danger"
+            disabled={duration === null || duration === -1 || reason === null}
+            onClick={() => {
+              if (duration === null || duration === -1 || reason === null) return
+              onBanPlayer(player.id, player.name, reason, duration)
+              onClose()
+            }}
+          >
+            Confirm ban
+          </button>
         </div>
       </div>
-    )
-  }
-
-  return null
+    </div>
+  )
 }

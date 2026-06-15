@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
-import { callLua } from '../../fivem'
+import { useMemo, useState } from 'react'
 import type { BanEntry, Notification } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { usePagination } from '../../hooks/usePagination'
@@ -9,48 +8,27 @@ import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 
 interface BanListPageProps {
+  bans: BanEntry[]
+  loading: boolean
   showLicenses: boolean
   ipPrivacy: boolean
   onSelectBan: (banId: string) => void
   onToast: (text: string, type?: Notification['type']) => void
-  refreshKey: number
+  onRefresh: () => void
 }
 
 const PAGE_SIZE = 10
 
 export function BanListPage({
+  bans,
+  loading,
   showLicenses,
   ipPrivacy,
   onSelectBan,
-  onToast,
-  refreshKey,
+  onRefresh,
 }: BanListPageProps) {
-  const [state, setState] = useState<{
-    status: 'loading' | 'error' | 'success'
-    bans: BanEntry[]
-  }>({ status: 'loading', bans: [] })
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
-
-  useEffect(() => {
-    let cancelled = false
-    callLua<{ bans?: BanEntry[] }>('requestBanList')
-      .then((res) => {
-        if (cancelled) return
-        setState({ status: 'success', bans: res.bans ?? [] })
-      })
-      .catch(() => {
-        if (cancelled) return
-        onToast('Failed to load ban list', 'error')
-        setState({ status: 'error', bans: [] })
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [refreshKey, onToast])
-
-  const bans = state.bans
-  const loading = state.status === 'loading'
 
   const filtered = useMemo(() => {
     if (!debouncedQuery) return bans
@@ -68,16 +46,26 @@ export function BanListPage({
 
   return (
     <div className="page-container">
-      <SearchBar
-        value={query}
-        onChange={(v) => {
-          setQuery(v)
-          pagination.reset()
-        }}
-        placeholder="Search by ID, name, reason, or identifier..."
-        resultCount={{ shown: filtered.length, total: bans.length }}
-        ariaLabel="Search bans"
-      />
+      <div className="flex items-center gap-2 mb-3">
+        <SearchBar
+          value={query}
+          onChange={(v) => {
+            setQuery(v)
+            pagination.reset()
+          }}
+          placeholder="Search by ID, name, reason, or identifier..."
+          resultCount={{ shown: filtered.length, total: bans.length }}
+          ariaLabel="Search bans"
+        />
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={onRefresh}
+          disabled={loading}
+        >
+          <Icon name="refresh" size="xs" />
+          Refresh
+        </button>
+      </div>
 
       {loading ? (
         <BanListSkeleton />
@@ -123,7 +111,6 @@ function BanRow({
   ipPrivacy: boolean
   onClick: () => void
 }) {
-  // Choose the secondary text shown in the row: a license id or the reason.
   const secondary = (() => {
     if (showLicenses) {
       const visible = ban.identifiers?.find((id) => {

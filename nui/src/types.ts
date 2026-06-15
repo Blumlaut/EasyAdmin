@@ -28,9 +28,9 @@ export interface MenuState {
 }
 
 // NUI message from Lua to frontend
-export interface NUIPayload {
+export interface NUIPayload<T = unknown> {
   action: string
-  data: unknown
+  data: T
 }
 
 // Ban duration options

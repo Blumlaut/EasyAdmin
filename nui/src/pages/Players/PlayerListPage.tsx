@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Notification, Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { SearchBar } from '../../components/SearchBar'
@@ -14,7 +14,6 @@ interface PlayerListPageProps {
   onOpenCached: () => void
   onToast: (text: string, type?: Notification['type']) => void
   onRefresh: () => void
-  refreshKey: number
 }
 
 export function PlayerListPage({
@@ -25,15 +24,9 @@ export function PlayerListPage({
   onOpenCached,
   onToast,
   onRefresh,
-  refreshKey: _refreshKey,
 }: PlayerListPageProps) {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
-
-  // Force a fresh fetch on first render and when parent bumps refreshKey
-  useEffect(() => {
-    onRefresh()
-  }, [onRefresh])
 
   const filtered = useMemo(() => {
     if (!debouncedQuery) return players

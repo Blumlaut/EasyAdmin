@@ -18,25 +18,19 @@ function GetParentResourceName(): string {
 }
 
 // Listen for messages pushed from Lua via SendNUIMessage
-export function on<N = unknown>(action: string, handler: (data: N) => void): void {
-  window.addEventListener('message', (event: MessageEvent<NUIPayload>) => {
+// Returns an unsubscribe function
+export function on<N = unknown>(action: string, handler: (data: N) => void): () => void {
+  const listener = (event: MessageEvent<NUIPayload<N>>) => {
     const payload = event.data
     if (payload && payload.action === action) {
       handler(payload.data as N)
     }
-  })
-}
-
-// Set a value that Lua can read (for convvar-like behavior)
-export function setConvVar(_key: string, _value: string): void {
-  // @ts-expect-error FiveM global not available in browser dev environment
-  if (typeof SetConvar === 'function') {
-    // @ts-expect-error FiveM global not available in browser dev environment
-    SetConvar(_key, _value)
   }
+  window.addEventListener('message', listener)
+  return () => window.removeEventListener('message', listener)
 }
 
-// Set a resource-local convvar
-export function setResourceConvVar(key: string, value: string): void {
-  callLua('setResourceKvp', { key, value })
+// Set a resource KVP entry (persists setting to resource storage)
+export function setResourceKvp(key: string, value: string): void {
+  callLua('setResourceKvp', { key, value }).catch(() => {})
 }

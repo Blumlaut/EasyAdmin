@@ -13,6 +13,97 @@ RegisterNetEvent('EasyAdmin:GetInfinityPlayerList', function(_pl)
   end
 end)
 
+-- Push ban list to NUI when received from server.
+RegisterNetEvent('EasyAdmin:fillBanlist', function(thebanlist)
+  banlist = thebanlist
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'updateBanList',
+      data = { bans = banlist or {} },
+    })
+  end
+end)
+
+-- Push cached players to NUI when received from server.
+RegisterNetEvent('EasyAdmin:fillCachedPlayers', function(thecached)
+  cachedplayers = thecached
+  if IsNuiVisible() then
+    local playerList = {}
+    for id, player in pairs(cachedplayers or {}) do
+      if player.dropped then
+        table.insert(playerList, {
+          id = player.id,
+          name = player.name,
+          identifier = (player.identifiers and player.identifiers[1]) or nil,
+          droppedTime = player.droppedTime,
+          immune = player.immune and true or false,
+        })
+      end
+    end
+    SendNUIMessage({
+      action = 'updateCachedPlayers',
+      data = { players = playerList },
+    })
+  end
+end)
+
+-- Push reports to NUI when received from server.
+RegisterNetEvent('EasyAdmin:fillReports', function(theReports)
+  reports = theReports
+  if IsNuiVisible() then
+    local reportList = {}
+    for _, r in pairs(reports or {}) do
+      table.insert(reportList, r)
+    end
+    SendNUIMessage({
+      action = 'updateReports',
+      data = { reports = reportList },
+    })
+  end
+end)
+
+-- Push new report to NUI.
+RegisterNetEvent('EasyAdmin:NewReport', function(reportData)
+  reports[reportData.id] = reportData
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'updateReports',
+      data = { reports = _buildReportList() },
+    })
+  end
+end)
+
+-- Push claimed report update to NUI.
+RegisterNetEvent('EasyAdmin:ClaimedReport', function(reportData)
+  reports[reportData.id] = reportData
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'updateReports',
+      data = { reports = _buildReportList() },
+    })
+  end
+end)
+
+-- Push removed report to NUI.
+RegisterNetEvent('EasyAdmin:RemoveReport', function(reportData)
+  reports[reportData.id] = nil
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'updateReports',
+      data = { reports = _buildReportList() },
+    })
+  end
+end)
+
+-- Helper to build report list for NUI.
+function _buildReportList()
+  local rlist = {}
+  for _, r in pairs(reports or {}) do
+    table.insert(rlist, r)
+  end
+  return rlist
+end
+
 -- Push frozen/muted state to the NUI.
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(playerId, state)
   FrozenPlayers[playerId] = state

@@ -17,12 +17,16 @@ end
 RegisterNUICallback('requestBanList', function(_data, cb)
   if not permissions['player.ban.view'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:requestBanlist')
+  -- Response only acknowledges the request. Ban list data arrives
+  -- via the 'updateBanList' NUI event (see events.lua fillBanlist handler).
   cb({ ok = true })
 end)
 
 RegisterNUICallback('refreshBanList', function(_data, cb)
   if not permissions['player.ban.view'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:updateBanlist')
+  -- Response only acknowledges the request. Updated ban list data
+  -- arrives via the 'updateBanList' NUI event (see events.lua).
   cb({ ok = true })
 end)
 
@@ -51,11 +55,25 @@ RegisterNUICallback('editBan', function(data, cb)
   cb({ ok = true })
 end)
 
+RegisterNUICallback('offlineBanPlayer', function(data, cb)
+  -- Ban a cached (offline) player
+  local id = tonumber(data and data.id)
+  local reason = (data and data.reason) or 'No reason'
+  local duration = tonumber(data and data.duration) or 86400
+  if not id or not (permissions['player.ban.temporary'] or permissions['player.ban.permanent']) then
+    return deny(cb)
+  end
+  local name = (data and data.name) or 'Unknown'
+  TriggerServerEvent('EasyAdmin:offlinebanPlayer', id, reason, duration, name)
+  toast('Banned ' .. name)
+  cb({ ok = true })
+end)
+
 RegisterNUICallback('unbanPlayer', function(data, cb)
   if not permissions['player.ban.remove'] then return deny(cb) end
   local banid = data and data.banid
   if not banid then return deny(cb, 'Missing banid') end
-  TriggerServerEvent('EasyAdmin:unbanPlayer', banid)
+  TriggerServerEvent('EasyAdmin:unbanPlayer', tonumber(banid))
   toast('Player unbanned')
   cb({ ok = true })
 end)
