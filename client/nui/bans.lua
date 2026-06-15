@@ -30,21 +30,26 @@ RegisterNUICallback('refreshBanList', function(_data, cb)
   cb({ ok = true })
 end)
 
+---Server-side paginated ban list request.
+---NUI sends { page, pageSize, query }, result is pushed via 'banPage' NUI event.
+RegisterNUICallback('requestBanPage', function(data, cb)
+  if not permissions['player.ban.view'] then return deny(cb) end
+  local page = tonumber(data and data.page) or 1
+  local pageSize = tonumber(data and data.pageSize) or 10
+  local query = (data and data.query) and tostring(data.query) or nil
+  TriggerServerEvent('EasyAdmin:requestBanPage', { page = page, pageSize = pageSize, query = query })
+  -- Result arrives asynchronously via the 'banPage' NUI event (see events.lua).
+  cb({ ok = true })
+end)
+
+---Fetch full ban details by ID from the server.
+---Result is pushed via 'banDetail' NUI event.
 RegisterNUICallback('getBanById', function(data, cb)
   local banid = data and data.banid
   if not banid or not permissions['player.ban.view'] then return deny(cb) end
-  local entry = nil
-  for _, b in pairs(banlist or {}) do
-    if tostring(b.banid) == tostring(banid) then
-      entry = b
-      break
-    end
-  end
-  if entry then
-    cb({ ban = entry })
-  else
-    cb({ ban = nil })
-  end
+  TriggerServerEvent('EasyAdmin:getBanById', tostring(banid))
+  -- Result arrives asynchronously via the 'banDetail' NUI event (see events.lua).
+  cb({ ok = true })
 end)
 
 RegisterNUICallback('editBan', function(data, cb)

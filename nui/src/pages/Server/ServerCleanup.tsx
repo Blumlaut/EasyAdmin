@@ -18,13 +18,13 @@ export function ServerCleanup({ permissions, onToast: _onToast }: ServerCleanupP
   if (availableTypes.length === 0) return null
 
   return (
-    <div className="card">
-      <h3 className="text-lg font-semibold mb-2">Cleanup</h3>
-      <p className="text-sm text-muted mb-3">
+    <div className="card" style={{ borderTop: '2px solid', borderColor: 'rgba(210, 153, 34, 0.3)' }}>
+      <p className="section-label">Cleanup</p>
+      <p className="text-sm text-secondary mb-3">
         Remove cars, peds, or props from an area around you.
       </p>
       <button
-        className="btn btn-warning"
+        className="btn btn-warning btn-full"
         onClick={() => modal.openCleanup(availableTypes)}
       >
         <Icon name="trash" size="xs" />

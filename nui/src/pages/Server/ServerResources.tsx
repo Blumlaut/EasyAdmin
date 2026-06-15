@@ -6,17 +6,17 @@ export function ServerResources() {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Resources</h3>
+      <p className="section-label">Resources</p>
       <div className="flex flex-col gap-2">
         <button
-          className="btn btn-primary"
+          className="btn btn-primary btn-full"
           onClick={() => modal.openResourceStart()}
         >
           <Icon name="plus" size="xs" />
           Start resource
         </button>
         <button
-          className="btn btn-warning"
+          className="btn btn-warning btn-full"
           onClick={() => modal.openResourceStop()}
         >
           <Icon name="x" size="xs" />

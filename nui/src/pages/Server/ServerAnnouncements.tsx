@@ -11,12 +11,12 @@ export function ServerAnnouncements({ onToast: _onToast }: ServerAnnouncementsPr
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-2">Announcements</h3>
-      <p className="text-sm text-muted mb-3">
+      <p className="section-label">Announcements</p>
+      <p className="text-sm text-secondary mb-3">
         Send a message to all players on the server.
       </p>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary btn-full"
         onClick={() => modal.openAnnouncement()}
       >
         <Icon name="message-square" size="xs" />

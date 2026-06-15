@@ -38,7 +38,7 @@ export function SettingsDisplay({
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Display</h3>
+      <p className="section-label">Display</p>
 
       <div className="flex flex-col gap-2">
         <div className="toggle-row">

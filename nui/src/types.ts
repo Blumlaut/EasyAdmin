@@ -45,15 +45,28 @@ export interface Notification {
   type?: 'info' | 'success' | 'error'
 }
 
-// Ban list entry from server
-export interface BanEntry {
+// Lightweight ban entry for list view (no identifiers, fetched from server paginated)
+export interface BanListEntry {
   banid: string
   reason: string
   name?: string
-  banner?: string
   expire?: number
   expireString?: string
+}
+
+// Full ban entry with identifiers (fetched on-demand for detail/edit views)
+export interface BanEntry extends BanListEntry {
+  banner?: string
   identifiers: string[]
+}
+
+// Server-side paginated ban response
+export interface PaginatedBanResponse {
+  bans: BanListEntry[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
 }
 
 // Cached (offline) player entry

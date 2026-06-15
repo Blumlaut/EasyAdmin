@@ -21,10 +21,10 @@ export function SearchBar({
 }: SearchBarProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center flex-1">
-        <Icon name="search" size="sm" className="text-muted shrink-0" />
+      <div className="search-wrapper">
+        <Icon name="search" size="sm" className="text-muted shrink-0 search-icon" />
         <input
-          className="input"
+          className="input search-input"
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -32,7 +32,7 @@ export function SearchBar({
         />
       </div>
       {resultCount && (
-        <span className="text-sm text-muted shrink-0">
+        <span className="text-sm text-muted shrink-0" style={{ fontSize: '11px' }}>
           {resultCount.shown}/{resultCount.total}
         </span>
       )}

@@ -120,7 +120,7 @@ export function BanDurationPicker({
               <NumberField label="Months" value={months} onChange={setMonths} max={12} />
             </div>
             <div className="dialog-actions">
-              <button className="btn btn-ghost" onClick={handleCustomCancel}>
+              <button className="btn btn-secondary" onClick={handleCustomCancel}>
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={handleCustomConfirm}>

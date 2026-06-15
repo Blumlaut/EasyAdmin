@@ -28,11 +28,12 @@ export function KeyValueTable({ rows, ariaLabel }: KeyValueTableProps) {
         return (
           <div
             key={row.key}
-            className={`flex items-center gap-3 py-2 ${isLast ? '' : 'kv-row-divider'}`}
+            className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'kv-row-divider'}`}
             role="row"
           >
             <span
               className="text-sm text-muted shrink-0 kv-key"
+              style={{ fontWeight: 'var(--font-medium)' }}
             >
               {row.key}
             </span>
@@ -44,7 +45,11 @@ export function KeyValueTable({ rows, ariaLabel }: KeyValueTableProps) {
               >
                 <span className={row.mono ? 'text-mono' : ''}>{row.value}</span>
                 {row.actionLabel && (
-                  <span className="text-xs text-muted ml-auto">
+                  <span className="text-xs text-muted ml-auto" style={{
+                    background: 'var(--bg-hover)',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-full)',
+                  }}>
                     {row.actionLabel}
                   </span>
                 )}

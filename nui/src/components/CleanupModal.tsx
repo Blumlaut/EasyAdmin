@@ -90,7 +90,7 @@ export function CleanupModal({ availableTypes, onConfirm, onCancel }: CleanupMod
         </div>
 
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={onCancel}>
+          <button className="btn btn-secondary" onClick={onCancel}>
             Cancel
           </button>
           <button

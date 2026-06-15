@@ -38,7 +38,7 @@ export function SettingsAccessibility({
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Accessibility</h3>
+      <p className="section-label">Accessibility</p>
       <div className="toggle-row">
         <div className="flex flex-col">
           <span className="text-sm">Text-to-speech</span>

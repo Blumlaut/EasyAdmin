@@ -6,21 +6,23 @@ export function ServerInfo() {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Server Info</h3>
-      <div className="flex flex-col gap-2">
+      <p className="section-label">Server Info</p>
+      <div className="flex flex-col gap-1">
         <button
-          className="btn btn-secondary"
+          className="server-action-btn"
           onClick={() => modal.openGametype()}
         >
-          <Icon name="server" size="xs" />
-          Set gametype
+          <Icon name="server" size="xs" className="text-muted" />
+          <span className="flex-1 text-left">Set gametype</span>
+          <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
         </button>
         <button
-          className="btn btn-secondary"
+          className="server-action-btn"
           onClick={() => modal.openSessionName()}
         >
-          <Icon name="map-pin" size="xs" />
-          Set map name
+          <Icon name="map-pin" size="xs" className="text-muted" />
+          <span className="flex-1 text-left">Set map name</span>
+          <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
         </button>
       </div>
     </div>

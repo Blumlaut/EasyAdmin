@@ -6,12 +6,12 @@ export function ServerConvars() {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-2">ConVars</h3>
-      <p className="text-sm text-muted mb-3">
+      <p className="section-label">ConVars</p>
+      <p className="text-sm text-secondary mb-3">
         Set a convar by name and value.
       </p>
       <button
-        className="btn btn-secondary"
+        className="btn btn-secondary btn-full"
         onClick={() => modal.openConvar()}
       >
         <Icon name="settings" size="xs" />

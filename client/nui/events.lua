@@ -13,13 +13,33 @@ RegisterNetEvent('EasyAdmin:GetInfinityPlayerList', function(_pl)
   end
 end)
 
--- Push ban list to NUI when received from server.
+-- Push ban list to NUI when received from server (legacy, kept for backward compat).
 RegisterNetEvent('EasyAdmin:fillBanlist', function(thebanlist)
   banlist = thebanlist
   if IsNuiVisible() then
     SendNUIMessage({
       action = 'updateBanList',
       data = { bans = banlist or {} },
+    })
+  end
+end)
+
+-- Paginated ban page result — pushed to NUI for server-side pagination.
+RegisterNetEvent('EasyAdmin:banPageResult', function(result)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'banPage',
+      data = result or { bans = {}, total = 0, page = 1, pageSize = 10, totalPages = 1 },
+    })
+  end
+end)
+
+-- Full ban detail result — pushed to NUI for BanDetailPage.
+RegisterNetEvent('EasyAdmin:banDetailResult', function(ban)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'banDetail',
+      data = { ban = ban },
     })
   end
 end)

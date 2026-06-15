@@ -34,7 +34,7 @@ export function CachedPlayersPage({
           resultCount={{ shown: cachedPlayers.length, total: cachedPlayers.length }}
           ariaLabel="Search cached players"
         />
-        <button className="btn btn-ghost btn-sm" onClick={onRefresh} disabled={loading}>
+        <button className="btn btn-secondary btn-sm" onClick={onRefresh} disabled={loading}>
           <Icon name="refresh" size="xs" />
           Refresh
         </button>
@@ -54,8 +54,19 @@ export function CachedPlayersPage({
         </div>
       ) : cachedPlayers.length === 0 ? (
         <div className="card empty-state">
-          <Icon name="archive" size="lg" className="text-muted" />
-          <p>No cached players</p>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-hover)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 'var(--space-2)',
+          }}>
+            <Icon name="archive" size="lg" className="text-muted" />
+          </div>
+          <p className="text-secondary">No cached players</p>
         </div>
       ) : (
         <div className="list">
@@ -81,7 +92,9 @@ function CachedRow({
 }) {
   return (
     <div className="list-item">
-      <div className="avatar avatar-sm">
+      <div className="avatar avatar-sm" style={{
+        background: 'var(--bg-hover)',
+      }}>
         <Icon name="archive" size="xs" className="text-muted" />
       </div>
       <div className="list-item-content">

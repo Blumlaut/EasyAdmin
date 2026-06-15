@@ -433,8 +433,8 @@ function BanDurationFlow({
         <p className="dialog-description">Choose how long the ban should last.</p>
         <BanDurationPicker value={duration} onChange={setDuration} />
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={onBack}>Back</button>
-          <button className="btn btn-ghost" onClick={onCancel}>Cancel</button>
+          <button className="btn btn-secondary" onClick={onBack}>Back</button>
+          <button className="btn btn-secondary" onClick={onCancel}>Cancel</button>
           <button
             className="btn btn-danger"
             disabled={duration === null || duration === -1}
@@ -503,7 +503,7 @@ function OfflineBanDurationFlow({
         <p className="dialog-description">Choose how long the ban should last.</p>
         <BanDurationPicker value={duration} onChange={setDuration} />
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={onCancel}>Cancel</button>
+          <button className="btn btn-secondary" onClick={onCancel}>Cancel</button>
           <button
             className="btn btn-danger"
             disabled={duration === null || duration === -1}

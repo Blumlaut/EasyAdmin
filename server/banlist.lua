@@ -194,6 +194,84 @@ RegisterServerEvent("EasyAdmin:requestBanlist", function()
     end
 end)
 
+---Paginated ban list request (server-side pagination for large ban lists)
+---Returns lightweight entries without identifiers to minimise payload size.
+---Full ban details are fetched via EasyAdmin:getBanById when a row is clicked.
+RegisterServerEvent("EasyAdmin:requestBanPage", function(data)
+    local src = source
+    if not DoesPlayerHavePermission(src, "player.ban.view") then return end
+
+    local page = tonumber(data and data.page) or 1
+    local pageSize = tonumber(data and data.pageSize) or 10
+    local query = (data and data.query) and tostring(data.query):lower() or nil
+
+    if page < 1 then page = 1 end
+    if pageSize < 1 or pageSize > 100 then pageSize = 10 end
+
+    -- Build filtered list (server-side search)
+    local filtered = {}
+    for _, ban in ipairs(blacklist) do
+        if query then
+            local match = false
+            if tostring(ban.banid or ''):lower():find(query, 1, true) then match = true end
+            if not match and ban.name and tostring(ban.name):lower():find(query, 1, true) then match = true end
+            if not match and ban.reason and tostring(ban.reason):lower():find(query, 1, true) then match = true end
+            if not match and ban.identifiers then
+                for _, id in ipairs(ban.identifiers) do
+                    if tostring(id):lower():find(query, 1, true) then match = true; break end
+                end
+            end
+            if not match then goto continue end
+        end
+        table.insert(filtered, ban)
+        ::continue::
+    end
+
+    local total = #filtered
+    local totalPages = math.max(1, math.ceil(total / pageSize))
+    if page > totalPages then page = totalPages end
+
+    local startIdx = (page - 1) * pageSize + 1
+    local endIdx = math.min(startIdx + pageSize - 1, total)
+
+    -- Lightweight entries for list view (no identifiers)
+    local entries = {}
+    for i = startIdx, endIdx do
+        local ban = filtered[i]
+        table.insert(entries, {
+            banid = ban.banid,
+            name = ban.name,
+            reason = ban.reason,
+            expire = ban.expire,
+            expireString = ban.expireString,
+        })
+    end
+
+    TriggerClientEvent("EasyAdmin:banPageResult", src, {
+        bans = entries,
+        total = total,
+        page = page,
+        pageSize = pageSize,
+        totalPages = totalPages,
+    })
+end)
+
+---Fetch full ban details by ID (used by BanDetailPage)
+RegisterServerEvent("EasyAdmin:getBanById", function(banId)
+    local src = source
+    if not DoesPlayerHavePermission(src, "player.ban.view") then return end
+
+    local result = nil
+    for _, ban in ipairs(blacklist) do
+        if tostring(ban.banid) == tostring(banId) then
+            result = ban
+            break
+        end
+    end
+
+    TriggerClientEvent("EasyAdmin:banDetailResult", src, result)
+end)
+
 RegisterCommand("unban", function(source, args, rawCommand)
     if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") and CheckAdminCooldown(source, "unban") then
         SetAdminCooldown(source, "unban")

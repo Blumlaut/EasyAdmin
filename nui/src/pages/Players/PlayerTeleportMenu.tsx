@@ -46,17 +46,18 @@ export function PlayerTeleportMenu({ player, onToast }: PlayerTeleportMenuProps)
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Teleport</h3>
-      <div className="flex flex-col gap-2">
+      <p className="section-label">Teleport</p>
+      <div className="flex flex-col gap-1">
         {OPTIONS.map((opt) => (
           <button
             key={opt.id}
-            className="btn btn-secondary"
+            className="teleport-btn"
             onClick={() => run(opt)}
             disabled={busy === opt.id}
           >
-            <Icon name={opt.icon} size="xs" />
-            {opt.label}
+            <Icon name={opt.icon} size="xs" className="text-muted" />
+            <span className="flex-1 text-left">{opt.label}</span>
+            <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
           </button>
         ))}
       </div>

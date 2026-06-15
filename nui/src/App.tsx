@@ -55,7 +55,8 @@ function App() {
 
   // Data — owned by App so it persists across page navigation
   const [players, setPlayers] = useState<Player[]>([])
-  const [bans, setBans] = useState<BanEntry[]>([])
+  // Ban detail cache: populated when BanDetailPage fetches a ban by ID
+  const [banDetailCache, setBanDetailCache] = useState<Record<string, BanEntry>>({})
   const [reports, setReports] = useState<Report[]>([])
   const [cachedPlayers, setCachedPlayers] = useState<CachedPlayer[]>([])
   const [permissions, setPermissions] = useState<Permissions>({})
@@ -67,7 +68,6 @@ function App() {
 
   // Loading states per data set
   const [loadingPlayers, setLoadingPlayers] = useState(true)
-  const [loadingBans, setLoadingBans] = useState(false)
   const [loadingReports, setLoadingReports] = useState(false)
   const [loadingCached, setLoadingCached] = useState(false)
 
@@ -120,11 +120,19 @@ function App() {
     )
   }, [])
 
-  // Ban list pushed from Lua events.lua fillBanlist handler
+  // Ban detail pushed from Lua events.lua banDetailResult handler
   useEffect(() => {
-    return on<{ bans: BanEntry[] }>('updateBanList', (data) => {
-      setBans(data.bans ?? [])
-      setLoadingBans(false)
+    return on<{ ban: BanEntry | null }>('banDetail', (data) => {
+      if (data.ban && data.ban.banid) {
+        setBanDetailCache((prev) => ({ ...prev, [data.ban!.banid]: data.ban! }))
+      }
+    })
+  }, [])
+
+  // Legacy ban list push (backward compat — BanListPage now uses server-side pagination)
+  useEffect(() => {
+    return on<{ bans: BanEntry[] }>('updateBanList', () => {
+      // No-op: BanListPage manages its own paginated state
     })
   }, [])
 
@@ -181,23 +189,18 @@ function App() {
     callLua('requestPlayers').catch(() => setLoadingPlayers(false))
   }, [])
 
-  const fetchBans = useCallback(() => {
-    setLoadingBans(true)
-    callLua('requestBanList').catch(() => setLoadingBans(false))
-  }, [])
+
 
   const fetchReports = useCallback(() => {
-    setLoadingReports(true)
     callLua('requestReports').catch(() => setLoadingReports(false))
   }, [])
 
   const fetchCachedPlayers = useCallback(() => {
-    setLoadingCached(true)
     callLua('requestCachedPlayers').catch(() => setLoadingCached(false))
   }, [])
 
   // Track which data sets have already been fetched so we only lazy-load once
-  const fetchedRef = useRef({ bans: false, reports: false, cachedPlayers: false })
+  const fetchedRef = useRef({ reports: false, cachedPlayers: false })
 
   // === Navigation ===
 
@@ -208,22 +211,19 @@ function App() {
       }
       return newView
     })
-    // Lazy-load data the first time a section is opened
-    queueMicrotask(() => {
-      if (newView === 'bans' && !fetchedRef.current.bans) {
-        fetchedRef.current.bans = true
-        fetchBans()
-      }
-      if (newView === 'reports' && !fetchedRef.current.reports) {
-        fetchedRef.current.reports = true
-        fetchReports()
-      }
-      if (newView === 'cached-players' && !fetchedRef.current.cachedPlayers) {
-        fetchedRef.current.cachedPlayers = true
-        fetchCachedPlayers()
-      }
-    })
-  }, [fetchBans, fetchReports, fetchCachedPlayers])
+    // Set loading synchronously so skeletons render on first paint,
+    // then kick off the actual fetch in a microtask.
+    if (newView === 'reports' && !fetchedRef.current.reports) {
+      fetchedRef.current.reports = true
+      setLoadingReports(true)
+      queueMicrotask(() => fetchReports())
+    }
+    if (newView === 'cached-players' && !fetchedRef.current.cachedPlayers) {
+      fetchedRef.current.cachedPlayers = true
+      setLoadingCached(true)
+      queueMicrotask(() => fetchCachedPlayers())
+    }
+  }, [fetchReports, fetchCachedPlayers])
 
   const goBack = useCallback(() => {
     const previous = viewHistoryRef.current.pop()
@@ -283,8 +283,12 @@ function App() {
 
   const selectBan = useCallback((banId: string) => {
     setSelectedBanId(banId)
+    // Trigger server-side fetch for ban detail if not already cached
+    if (!banDetailCache[banId]) {
+      callLua('getBanById', { banid: banId }).catch(() => {})
+    }
     navigateTo('ban-detail')
-  }, [navigateTo])
+  }, [navigateTo, banDetailCache])
 
   const selectReport = useCallback((reportId: number) => {
     setSelectedReportId(reportId)
@@ -314,12 +318,12 @@ function App() {
         onPlayersUpdated={fetchPlayers}
       >
         <div className="ea-window">
-          <aside className="glass sidebar">
+          <aside className="sidebar">
             <div className="sidebar-header">
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
               <div>
-                <h1 className="text-lg font-bold sidebar-title">EasyAdmin</h1>
-                <p className="text-xs text-muted">Admin Panel</p>
+                <h1 className="text-xl font-bold sidebar-title text-gradient">EasyAdmin</h1>
+                <p className="text-xs text-muted" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: '10px' }}>Admin Panel</p>
               </div>
             </div>
             <div className="sidebar-nav">
@@ -350,7 +354,7 @@ function App() {
           </aside>
 
           <div className="flex flex-col flex-1 h-full overflow-hidden">
-            <header className="glass topbar">
+            <header className="topbar">
               {view !== 'main' && (
                 <button
                   className="btn btn-ghost btn-sm"
@@ -361,7 +365,7 @@ function App() {
                   Back
                 </button>
               )}
-              <h2 className="text-lg font-semibold">
+              <h2 className="text-xl font-semibold" style={{ letterSpacing: '-0.01em' }}>
                 {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
               </h2>
               <button
@@ -414,25 +418,27 @@ function App() {
 
               {view === 'bans' && (
                 <BanListPage
-                  bans={bans}
-                  loading={loadingBans}
                   showLicenses={settings.showLicenses}
                   ipPrivacy={ipPrivacy}
                   onSelectBan={selectBan}
                   onToast={showToast}
-                  onRefresh={fetchBans}
                 />
               )}
 
               {view === 'ban-detail' && selectedBanId && (
                 <BanDetailPage
                   banId={selectedBanId}
+                  ban={banDetailCache[selectedBanId] ?? null}
                   ipPrivacy={ipPrivacy}
                   permissions={permissions}
                   onBack={goBack}
                   onToast={showToast}
                   onUnbanned={() => {
-                    setBans((prev) => prev.filter((b) => b.banid !== selectedBanId))
+                    // BanListPage manages its own paginated state; navigate back (user can refresh if needed)
+                    setBanDetailCache((prev) => {
+                      const { [selectedBanId!]: _, ...rest } = prev
+                      return rest
+                    })
                     navigateTo('bans')
                   }}
                 />

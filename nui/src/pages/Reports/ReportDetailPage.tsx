@@ -117,8 +117,19 @@ export function ReportDetailPage({
     return (
       <div className="page-container">
         <div className="card empty-state">
-          <Icon name="flag" size="lg" className="text-muted" />
-          <p>Report not found or failed to load</p>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-orange)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 'var(--space-2)',
+          }}>
+            <Icon name="flag" size="lg" className="text-orange" />
+          </div>
+          <p className="text-secondary">Report not found or failed to load</p>
         </div>
       </div>
     )
@@ -157,25 +168,34 @@ export function ReportDetailPage({
     rows.push({ key: 'Claimed by', value: report.claimedName ?? '—' })
   }
 
+  const iconColor = report.claimed
+    ? 'text-green'
+    : report.type === 1
+      ? 'text-red'
+      : 'text-yellow'
+
+  const avatarBg = report.claimed
+    ? 'var(--bg-green)'
+    : report.type === 1
+      ? 'var(--bg-red)'
+      : 'var(--bg-orange)'
+
   return (
     <div className="page-container">
-      <div className="card">
+      <div className="card" style={{
+        borderTop: '2px solid',
+        borderColor: report.claimed ? 'var(--accent-green)' : report.type === 1 ? 'var(--accent-red)' : 'var(--accent-yellow)',
+      }}>
         <div className="flex items-center gap-3 mb-3">
-          <div className="avatar avatar-md">
+          <div className="avatar avatar-md" style={{ background: avatarBg }}>
             <Icon
               name="flag"
               size="sm"
-              className={
-                report.claimed
-                  ? 'text-green'
-                  : report.type === 1
-                    ? 'text-red'
-                    : 'text-yellow'
-              }
+              className={iconColor}
             />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-semibold">
+            <h3 className="text-xl font-bold" style={{ letterSpacing: '-0.01em' }}>
               Report #{report.id}
             </h3>
             <p className="text-sm text-muted">
@@ -186,37 +206,40 @@ export function ReportDetailPage({
         <KeyValueTable rows={rows} ariaLabel="Report details" />
       </div>
 
-      <div className="card flex flex-col gap-2">
-        {canClaim && !report.claimed && (
-          <button
-            className="btn btn-primary btn-full"
-            onClick={claim}
-            disabled={busy}
-          >
-            <Icon name="check" size="xs" />
-            Claim report
-          </button>
-        )}
-        {canProcess && (
-          <>
+      <div className="card">
+        <p className="section-label">Actions</p>
+        <div className="flex flex-col gap-2">
+          {canClaim && !report.claimed && (
             <button
-              className="btn btn-danger btn-full"
-              onClick={() => setConfirmClose(true)}
+              className="btn btn-primary btn-full"
+              onClick={claim}
               disabled={busy}
             >
-              <Icon name="x" size="xs" />
-              Close report
+              <Icon name="check" size="xs" />
+              Claim report
             </button>
-            <button
-              className="btn btn-warning btn-full"
-              onClick={() => setConfirmSimilar(true)}
-              disabled={busy}
-            >
-              <Icon name="trash-2" size="xs" />
-              Close similar reports
-            </button>
-          </>
-        )}
+          )}
+          {canProcess && (
+            <>
+              <button
+                className="btn btn-danger btn-full"
+                onClick={() => setConfirmClose(true)}
+                disabled={busy}
+              >
+                <Icon name="x" size="xs" />
+                Close report
+              </button>
+              <button
+                className="btn btn-warning btn-full"
+                onClick={() => setConfirmSimilar(true)}
+                disabled={busy}
+              >
+                <Icon name="trash-2" size="xs" />
+                Close similar reports
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {confirmClose && (

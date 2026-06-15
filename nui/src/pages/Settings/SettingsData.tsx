@@ -18,28 +18,28 @@ export function SettingsData({ onToast }: SettingsDataProps) {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Data</h3>
-      <div className="flex flex-col gap-2">
+      <p className="section-label">Data</p>
+      <div className="flex flex-col gap-1">
         <button
-          className="btn btn-secondary"
+          className="server-action-btn"
           onClick={() => refresh('refreshBanList', 'Ban list')}
         >
-          <Icon name="refresh" size="xs" />
-          Refresh ban list
+          <Icon name="refresh" size="xs" className="text-muted" />
+          <span className="flex-1 text-left">Refresh ban list</span>
         </button>
         <button
-          className="btn btn-secondary"
+          className="server-action-btn"
           onClick={() => refresh('refreshCachedPlayers', 'Cached players')}
         >
-          <Icon name="refresh" size="xs" />
-          Refresh cached players
+          <Icon name="refresh" size="xs" className="text-muted" />
+          <span className="flex-1 text-left">Refresh cached players</span>
         </button>
         <button
-          className="btn btn-secondary"
+          className="server-action-btn"
           onClick={() => refresh('refreshPermissions', 'Permissions')}
         >
-          <Icon name="refresh" size="xs" />
-          Refresh permissions
+          <Icon name="refresh" size="xs" className="text-muted" />
+          <span className="flex-1 text-left">Refresh permissions</span>
         </button>
       </div>
     </div>

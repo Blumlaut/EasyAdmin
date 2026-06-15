@@ -53,7 +53,7 @@ export function SliderInput({
           aria-label={label}
         />
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={onCancel}>
+          <button className="btn btn-secondary" onClick={onCancel}>
             Cancel
           </button>
           <button className="btn btn-primary" onClick={() => onConfirm(value)}>

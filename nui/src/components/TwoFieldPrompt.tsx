@@ -86,7 +86,7 @@ export function TwoFieldPrompt({
           </label>
         </div>
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={onCancel}>
+          <button className="btn btn-secondary" onClick={onCancel}>
             Cancel
           </button>
           <button

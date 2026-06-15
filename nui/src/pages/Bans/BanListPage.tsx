@@ -1,48 +1,88 @@
-import { useMemo, useState } from 'react'
-import type { BanEntry, Notification } from '../../types'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { BanListEntry, Notification, PaginatedBanResponse } from '../../types'
+import { on, callLua } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
-import { usePagination } from '../../hooks/usePagination'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 
 interface BanListPageProps {
-  bans: BanEntry[]
-  loading: boolean
   showLicenses: boolean
   ipPrivacy: boolean
   onSelectBan: (banId: string) => void
   onToast: (text: string, type?: Notification['type']) => void
-  onRefresh: () => void
 }
 
 const PAGE_SIZE = 10
 
 export function BanListPage({
-  bans,
-  loading,
   showLicenses,
   ipPrivacy,
   onSelectBan,
-  onRefresh,
+  onToast: _onToast,
 }: BanListPageProps) {
   const [query, setQuery] = useState('')
-  const debouncedQuery = useDebounce(query, 200)
+  const debouncedQuery = useDebounce(query, 300)
 
-  const filtered = useMemo(() => {
-    if (!debouncedQuery) return bans
-    const q = debouncedQuery.toLowerCase()
-    return bans.filter((ban) => {
-      if (ban.banid?.toLowerCase().includes(q)) return true
-      if (ban.name?.toLowerCase().includes(q)) return true
-      if (ban.reason?.toLowerCase().includes(q)) return true
-      if (ban.identifiers?.some((id) => id.toLowerCase().includes(q))) return true
-      return false
+  const [bans, setBans] = useState<BanListEntry[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+
+  // Stable ref so the NUI message handler doesn't stale-out
+  const bansRef = useRef(bans)
+  bansRef.current = bans
+  const totalRef = useRef(total)
+  totalRef.current = total
+  const pageRef = useRef(page)
+  pageRef.current = page
+
+  const fetchPage = useCallback((p: number, q: string) => {
+    setLoading(true)
+    callLua('requestBanPage', { page: p, pageSize: PAGE_SIZE, query: q })
+  }, [])
+
+  // Listen for paginated results pushed from Lua
+  useEffect(() => {
+    return on<PaginatedBanResponse>('banPage', (data) => {
+      setBans(data.bans)
+      setTotal(data.total)
+      setPage(data.page)
+      setTotalPages(data.totalPages)
+      setLoading(false)
     })
-  }, [bans, debouncedQuery])
+  }, [])
 
-  const pagination = usePagination(filtered, PAGE_SIZE)
+  // Fetch page 1 on mount
+  useEffect(() => {
+    fetchPage(1, '')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Refetch when debounced search changes
+  useEffect(() => {
+    setPage(1)
+    fetchPage(1, debouncedQuery)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery])
+
+  const handlePageChange = useCallback((p: number) => {
+    setPage(p)
+    fetchPage(p, debouncedQuery)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery])
+
+  const handleFirstPage = useCallback(() => handlePageChange(1), [handlePageChange])
+  const handleLastPage = useCallback(() => handlePageChange(totalPages), [handlePageChange, totalPages])
+  const handleNextPage = useCallback(() => handlePageChange(Math.min(page + 1, totalPages)), [handlePageChange, page, totalPages])
+  const handlePrevPage = useCallback(() => handlePageChange(Math.max(page - 1, 1)), [handlePageChange, page])
+
+  const handleRefresh = useCallback(() => {
+    fetchPage(page, debouncedQuery)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, debouncedQuery])
 
   return (
     <div className="page-container">
@@ -51,15 +91,14 @@ export function BanListPage({
           value={query}
           onChange={(v) => {
             setQuery(v)
-            pagination.reset()
           }}
           placeholder="Search by ID, name, reason, or identifier..."
-          resultCount={{ shown: filtered.length, total: bans.length }}
+          resultCount={{ shown: bans.length, total: total }}
           ariaLabel="Search bans"
         />
         <button
-          className="btn btn-ghost btn-sm"
-          onClick={onRefresh}
+          className="btn btn-secondary btn-sm"
+          onClick={handleRefresh}
           disabled={loading}
         >
           <Icon name="refresh" size="xs" />
@@ -67,16 +106,27 @@ export function BanListPage({
         </button>
       </div>
 
-      {loading ? (
+      {loading && bans.length === 0 ? (
         <BanListSkeleton />
-      ) : filtered.length === 0 ? (
+      ) : bans.length === 0 ? (
         <div className="card empty-state">
-          <Icon name="ban" size="lg" className="text-muted" />
-          <p>{bans.length === 0 ? 'No bans on record' : 'No bans match your search'}</p>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-red)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 'var(--space-2)',
+          }}>
+            <Icon name="ban" size="lg" className="text-red" />
+          </div>
+          <p className="text-secondary">{total === 0 ? 'No bans on record' : 'No bans match your search'}</p>
         </div>
       ) : (
         <div className="list">
-          {pagination.pageItems.map((ban, i) => (
+          {bans.map((ban, i) => (
             <BanRow
               key={`${ban.banid}-${i}`}
               ban={ban}
@@ -89,12 +139,12 @@ export function BanListPage({
       )}
 
       <Pagination
-        page={pagination.page}
-        totalPages={pagination.totalPages}
-        onFirst={pagination.firstPage}
-        onPrev={pagination.prevPage}
-        onNext={pagination.nextPage}
-        onLast={pagination.lastPage}
+        page={page}
+        totalPages={totalPages}
+        onFirst={handleFirstPage}
+        onPrev={handlePrevPage}
+        onNext={handleNextPage}
+        onLast={handleLastPage}
       />
     </div>
   )
@@ -102,25 +152,18 @@ export function BanListPage({
 
 function BanRow({
   ban,
-  showLicenses,
-  ipPrivacy,
+  showLicenses: _showLicenses,
+  ipPrivacy: _ipPrivacy,
   onClick,
 }: {
-  ban: BanEntry
+  ban: BanListEntry
   showLicenses: boolean
   ipPrivacy: boolean
   onClick: () => void
 }) {
-  const secondary = (() => {
-    if (showLicenses) {
-      const visible = ban.identifiers?.find((id) => {
-        if (ipPrivacy && id.split(':')[0] === 'ip') return false
-        return true
-      })
-      if (visible) return visible
-    }
-    return ban.reason || 'No reason'
-  })()
+  // List entries don't include identifiers (fetched on-demand for detail view).
+  // Show reason as secondary text.
+  const secondary = ban.reason || 'No reason'
 
   return (
     <div
@@ -135,7 +178,10 @@ function BanRow({
         }
       }}
     >
-      <div className="avatar avatar-sm">
+      <div className="avatar avatar-sm" style={{
+        background: 'var(--bg-red)',
+        borderColor: 'rgba(248, 81, 73, 0.3)',
+      }}>
         <Icon name="ban" size="xs" className="text-red" />
       </div>
       <div className="list-item-content">
@@ -148,6 +194,7 @@ function BanRow({
         )}
         {ban.expire === -1 && <span className="badge badge-danger">Permanent</span>}
       </div>
+      <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
     </div>
   )
 }

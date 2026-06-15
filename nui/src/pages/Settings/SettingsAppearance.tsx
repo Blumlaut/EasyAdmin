@@ -29,8 +29,8 @@ export function SettingsAppearance({
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Appearance</h3>
-      <p className="text-sm text-muted mb-3">
+      <p className="section-label">Appearance</p>
+      <p className="text-sm text-secondary mb-3">
         Force a fun alternative branding for the menu.
       </p>
       <select

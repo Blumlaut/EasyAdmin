@@ -20,7 +20,7 @@ export function SettingsPrivacy({ anonymous, onChange, onToast }: SettingsPrivac
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Privacy</h3>
+      <p className="section-label">Privacy</p>
       <div className="toggle-row">
         <div className="flex flex-col">
           <span className="text-sm">Anonymous mode</span>

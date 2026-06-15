@@ -28,11 +28,26 @@ export function Dashboard({ onNavigate, playerCount, availableViews }: Dashboard
 
   return (
     <div className="page-container max-w-lg">
-      <div className="card">
-        <div className="flex items-center gap-3">
-          <Icon name="shield" size="lg" className="text-accent-blue" />
+      {/* Welcome card with gradient accent */}
+      <div className="card" style={{
+        borderTop: '2px solid',
+        borderColor: 'var(--brand-blue)',
+      }}>
+        <div className="flex items-center gap-4">
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-md)',
+            background: 'var(--brand-gradient)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <Icon name="shield" size="lg" style={{ color: '#fff' }} />
+          </div>
           <div>
-            <h3 className="text-xl font-semibold">Welcome to EasyAdmin</h3>
+            <h3 className="text-2xl font-bold" style={{ letterSpacing: '-0.02em' }}>Welcome to EasyAdmin</h3>
             <p className="text-sm text-secondary mt-1">
               Select an option from the sidebar to get started.
             </p>
@@ -40,20 +55,33 @@ export function Dashboard({ onNavigate, playerCount, availableViews }: Dashboard
         </div>
       </div>
 
-      <div className="card">
-        <h3 className="text-lg font-semibold mb-3">Quick Actions</h3>
-        <div className="flex flex-col gap-2">
+      {/* Quick Actions section */}
+      <div>
+        <p className="section-label">Quick Actions</p>
+        <div className="flex flex-col gap-1">
           {visible.map((action) => (
             <button
               key={action.id}
-              className="btn btn-secondary justify-start"
+              className="dashboard-action-btn"
               onClick={() => onNavigate(action.id)}
             >
-              <Icon name={action.icon} size="sm" />
-              <span className="flex-1 text-left">{action.label}</span>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: 'var(--radius)',
+                background: 'var(--bg-hover)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                <Icon name={action.icon} size="sm" className="text-secondary" />
+              </div>
+              <span className="flex-1 text-left font-medium">{action.label}</span>
               {action.id === 'players' && playerCount > 0 && (
                 <span className="badge badge-online">{playerCount} online</span>
               )}
+              <Icon name="chevron-right" size="xs" className="text-muted" />
             </button>
           ))}
         </div>

@@ -17,6 +17,7 @@ export function ReportListPage({
   reports,
   loading,
   onSelectReport,
+  onToast: _onToast,
   onRefresh,
 }: ReportListPageProps) {
   const [query, setQuery] = useState('')
@@ -45,7 +46,7 @@ export function ReportListPage({
           ariaLabel="Search reports"
         />
         <button
-          className="btn btn-ghost btn-sm"
+          className="btn btn-secondary btn-sm"
           onClick={onRefresh}
           disabled={loading}
         >
@@ -58,8 +59,19 @@ export function ReportListPage({
         <ReportListSkeleton />
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
-          <Icon name="flag" size="lg" className="text-muted" />
-          <p>{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-orange)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 'var(--space-2)',
+          }}>
+            <Icon name="flag" size="lg" className="text-orange" />
+          </div>
+          <p className="text-secondary">{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
         </div>
       ) : (
         <div className="list">
@@ -85,6 +97,18 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
 
   const targetName = report.reportedName ?? report.reporterName
 
+  const iconColor = report.claimed
+    ? 'text-green'
+    : report.type === 1
+      ? 'text-red'
+      : 'text-yellow'
+
+  const avatarBg = report.claimed
+    ? 'var(--bg-green)'
+    : report.type === 1
+      ? 'var(--bg-red)'
+      : 'var(--bg-orange)'
+
   return (
     <div
       className={`list-item ${colorClass}`}
@@ -98,22 +122,17 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
         }
       }}
     >
-      <div className="avatar avatar-sm">
+      <div className="avatar avatar-sm" style={{ background: avatarBg }}>
         <Icon
           name="flag"
           size="xs"
-          className={
-            report.claimed
-              ? 'text-green'
-              : report.type === 1
-                ? 'text-red'
-                : 'text-yellow'
-          }
+          className={iconColor}
         />
       </div>
       <div className="list-item-content">
         <div className="list-item-title">
-          #{report.id} {targetName}
+          <span className="text-muted" style={{ marginRight: 'var(--space-1)' }}>#{report.id}</span>
+          {targetName}
         </div>
         <div className="list-item-subtitle truncate">{report.reason}</div>
       </div>
@@ -123,6 +142,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
         )}
         <span className="badge badge-default">{report.reportTimeFormatted}</span>
       </div>
+      <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
     </div>
   )
 }

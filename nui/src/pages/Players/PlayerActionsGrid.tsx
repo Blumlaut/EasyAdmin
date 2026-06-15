@@ -118,7 +118,7 @@ export function PlayerActionsGrid({ player, permissions, onToast }: PlayerAction
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">Actions</h3>
+      <p className="section-label">Actions</p>
       <div className="flex flex-wrap gap-2">
         {available.map((action) => (
           <button

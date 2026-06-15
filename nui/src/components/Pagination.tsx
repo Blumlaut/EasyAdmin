@@ -26,27 +26,27 @@ export function Pagination({
   return (
     <div className="flex items-center justify-center gap-2" role="navigation" aria-label="Pagination">
       {page > 1 && (
-        <button className="btn btn-sm btn-ghost" onClick={onFirst} aria-label="First page">
+        <button className="btn btn-sm btn-secondary" onClick={onFirst} aria-label="First page">
           <Icon name="chevron-double-left" size="xs" />
         </button>
       )}
       {page > 1 && (
-        <button className="btn btn-sm btn-ghost" onClick={onPrev} aria-label="Previous page">
+        <button className="btn btn-sm btn-secondary" onClick={onPrev} aria-label="Previous page">
           <Icon name="chevron-left" size="xs" />
           Prev
         </button>
       )}
-      <span className="text-sm text-muted">
-        Page {page} of {totalPages}
+      <span className="text-sm text-muted" style={{ fontFamily: 'var(--font-mono)' }}>
+        {page} / {totalPages}
       </span>
       {page < totalPages && (
-        <button className="btn btn-sm btn-ghost" onClick={onNext} aria-label="Next page">
+        <button className="btn btn-sm btn-secondary" onClick={onNext} aria-label="Next page">
           Next
           <Icon name="chevron-right" size="xs" />
         </button>
       )}
       {page < totalPages && (
-        <button className="btn btn-sm btn-ghost" onClick={onLast} aria-label="Last page">
+        <button className="btn btn-sm btn-secondary" onClick={onLast} aria-label="Last page">
           <Icon name="chevron-double-right" size="xs" />
         </button>
       )}

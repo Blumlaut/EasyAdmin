@@ -17,19 +17,20 @@ interface NavigationProps {
 export function Navigation({ items, activeId, onSelect }: NavigationProps) {
   return (
     <nav
-      className="flex flex-col gap-1"
+      className="flex flex-col gap-0.5"
       role="navigation"
       aria-label="Main navigation"
     >
       {items.map((item) => (
         <button
           key={item.id}
-          className={`nav-item${activeId === item.id ? ' nav-item-active' : ''}${item.disabled ? ' disabled' : ''}`}
+          className={`nav-item${activeId === item.id ? ' nav-item-active' : ''}`}
           onClick={() => !item.disabled && onSelect(item.id)}
           disabled={item.disabled}
           aria-current={activeId === item.id ? 'page' : undefined}
           aria-disabled={item.disabled}
           tabIndex={item.disabled ? -1 : undefined}
+          style={item.disabled ? { opacity: 0.5 } : undefined}
         >
           {/* @ts-expect-error Icon name is dynamic but validated at runtime */}
           <Icon name={item.icon} size="sm" />

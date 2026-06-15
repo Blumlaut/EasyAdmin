@@ -53,11 +53,11 @@ export function PlayerListPage({
       />
 
       <div className="flex gap-2 flex-wrap">
-        <button className="btn btn-ghost btn-sm" onClick={onOpenCached}>
+        <button className="btn btn-secondary btn-sm" onClick={onOpenCached}>
           <Icon name="archive" size="xs" />
           Cached players
         </button>
-        <button className="btn btn-ghost btn-sm" onClick={onRefresh} disabled={loading}>
+        <button className="btn btn-secondary btn-sm" onClick={onRefresh} disabled={loading}>
           <Icon name="refresh" size="xs" />
           Refresh
         </button>
@@ -77,8 +77,19 @@ export function PlayerListPage({
         </div>
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
-          <Icon name="users" size="lg" className="text-muted" />
-          <p>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-hover)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 'var(--space-2)',
+          }}>
+            <Icon name="users" size="lg" className="text-muted" />
+          </div>
+          <p className="text-secondary">
             {players.length === 0 ? 'No players connected' : 'No players match your search'}
           </p>
         </div>
@@ -129,6 +140,7 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
         {player.developer && <span className="badge badge-dev">Dev</span>}
         {player.contributor && <span className="badge badge-contributor">Contrib</span>}
       </div>
+      <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { callLua } from '../../fivem'
+import { callLua, on } from '../../fivem'
 import type { BanEntry, Notification, Permissions } from '../../types'
 import { InputPrompt } from '../../components/InputPrompt'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
@@ -9,6 +9,7 @@ import { Icon } from '../../components/icons'
 
 interface BanDetailPageProps {
   banId: string
+  ban: BanEntry | null
   ipPrivacy: boolean
   permissions: Permissions
   onBack: () => void
@@ -23,6 +24,7 @@ type DetailState =
 
 export function BanDetailPage({
   banId,
+  ban: initialBan,
   ipPrivacy,
   permissions,
   onBack: _onBack,
@@ -32,33 +34,33 @@ export function BanDetailPage({
   const canEdit = !!permissions['player.ban.edit']
   const canRemove = !!permissions['player.ban.remove']
 
-  const [state, setState] = useState<DetailState>({ status: 'loading' })
-  const [edited, setEdited] = useState<BanEntry | null>(null)
+  const [state, setState] = useState<DetailState>(
+    initialBan ? { status: 'success', ban: initialBan } : { status: 'loading' },
+  )
+  const [edited, setEdited] = useState<BanEntry | null>(initialBan ?? null)
   const [editing, setEditing] = useState<null | 'reason' | 'name' | 'banner' | 'expire'>(null)
   const [confirmUnban, setConfirmUnban] = useState(false)
   const [saving, setSaving] = useState(false)
 
-  // Lazy-load the ban detail by banId
+  // Fetch ban detail from server if not provided via props
   useEffect(() => {
+    if (initialBan) return // Already have the data
     let cancelled = false
-    callLua<{ ban?: BanEntry }>('getBanById', { banid: banId })
-      .then((res) => {
-        if (cancelled) return
-        if (res.ban) {
-          setState({ status: 'success', ban: res.ban })
-          setEdited(res.ban)
-        } else {
-          setState({ status: 'error' })
-        }
-      })
-      .catch(() => {
-        if (cancelled) return
+    callLua('getBanById', { banid: banId })
+    const unsub = on<{ ban: BanEntry | null }>('banDetail', (data) => {
+      if (cancelled) return
+      if (data.ban) {
+        setState({ status: 'success', ban: data.ban })
+        setEdited(data.ban)
+      } else {
         setState({ status: 'error' })
-      })
+      }
+    })
     return () => {
       cancelled = true
+      unsub()
     }
-  }, [banId])
+  }, [banId, initialBan])
 
   // All hooks must run on every render. Compute memoized values unconditionally.
   const visibleIdentifiers = useMemo(() => {
@@ -94,8 +96,19 @@ export function BanDetailPage({
     return (
       <div className="page-container">
         <div className="card empty-state">
-          <Icon name="ban" size="lg" className="text-muted" />
-          <p>Ban not found or failed to load</p>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-red)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 'var(--space-2)',
+          }}>
+            <Icon name="ban" size="lg" className="text-red" />
+          </div>
+          <p className="text-secondary">Ban not found or failed to load</p>
         </div>
       </div>
     )
@@ -182,13 +195,19 @@ export function BanDetailPage({
 
   return (
     <div className="page-container">
-      <div className="card">
+      <div className="card" style={{
+        borderTop: '2px solid',
+        borderColor: 'var(--accent-red)',
+      }}>
         <div className="flex items-center gap-3 mb-3">
-          <div className="avatar avatar-md">
+          <div className="avatar avatar-md" style={{
+            background: 'var(--bg-red)',
+            borderColor: 'rgba(248, 81, 73, 0.3)',
+          }}>
             <Icon name="ban" size="sm" className="text-red" />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-semibold">
+            <h3 className="text-xl font-bold" style={{ letterSpacing: '-0.01em' }}>
               {current.name ?? 'Banned player'}
             </h3>
             <p className="text-sm text-muted text-mono">ID: {current.banid}</p>
@@ -208,10 +227,10 @@ export function BanDetailPage({
       </div>
 
       <div className="card">
-        <h3 className="card-section-title">
+        <p className="section-label">
           Identifiers
-          <span className="text-sm text-muted">{visibleIdentifiers.length}</span>
-        </h3>
+          <span className="text-sm text-muted" style={{ textTransform: 'none', letterSpacing: '0' }}>{visibleIdentifiers.length}</span>
+        </p>
         {visibleIdentifiers.length === 0 ? (
           <p className="text-sm text-muted">No identifiers available</p>
         ) : (
@@ -222,6 +241,7 @@ export function BanDetailPage({
                 <li
                   key={id}
                   className="flex items-center gap-2 text-mono text-sm"
+                  style={{ padding: 'var(--space-2) var(--space-3)', borderRadius: 'var(--radius)', background: 'var(--bg-tertiary)' }}
                 >
                   <span className="badge badge-default">{kind}</span>
                   <span className="truncate flex-1">{value ?? id}</span>
@@ -240,8 +260,11 @@ export function BanDetailPage({
       </div>
 
       {canRemove && (
-        <div className="card">
-          <h3 className="card-section-title">Danger zone</h3>
+        <div className="card" style={{
+          borderTop: '2px solid',
+          borderColor: 'rgba(248, 81, 73, 0.3)',
+        }}>
+          <p className="section-label" style={{ color: 'var(--accent-red)' }}>Danger zone</p>
           <button
             className="btn btn-danger btn-full"
             onClick={() => setConfirmUnban(true)}

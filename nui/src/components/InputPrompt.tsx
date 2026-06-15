@@ -87,7 +87,7 @@ export function InputPrompt({
           aria-label={label ?? title}
         />
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={onCancel}>
+          <button className="btn btn-secondary" onClick={onCancel}>
             {cancelLabel}
           </button>
           <button

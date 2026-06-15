@@ -30,9 +30,9 @@ export function AllPlayersActions({ onToast }: AllPlayersActionsProps) {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-3">All Players</h3>
+      <p className="section-label">All Players</p>
       <button
-        className="btn btn-secondary"
+        className="btn btn-secondary btn-full"
         onClick={() => setConfirmTeleport(true)}
         disabled={busy}
       >
