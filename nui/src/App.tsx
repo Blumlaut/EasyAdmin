@@ -332,10 +332,12 @@ function App() {
 
   // Focus the page title on navigation (screen reader + keyboard users)
   const titleRef = useRef<HTMLHeadingElement>(null)
+  const initialViewRef = useRef(view)
 
   useEffect(() => {
-    if (visible && titleRef.current) {
+    if (visible && view !== initialViewRef.current && titleRef.current) {
       titleRef.current.focus()
+      initialViewRef.current = view
     }
   }, [view, visible])
 

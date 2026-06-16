@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useCallback, useRef } from 'react'
 import { Icon } from './icons'
 
@@ -69,7 +69,6 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
       className="flex flex-col gap-0.5"
       role="navigation"
       aria-label="Main navigation"
-      tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       {items.map((item) => (
