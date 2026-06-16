@@ -209,7 +209,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
-  transition: width var(--transition-slow), height var(--transition-slow), border-radius var(--transition-slow);
 }
 
 /* -- Menu size: large -- */
