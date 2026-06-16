@@ -14,25 +14,6 @@ const player: Player = {
 
 const shortcuts: ReasonShortcut[] = []
 
-function wrap(ui: React.ReactElement, permissions: Permissions = { 'player.kick': true, 'player.teleport.single': true }) {
-  return (
-    <ModalProvider
-      cleanupTypes={['cars']}
-      onToast={() => {}}
-    >
-      <PlayerDetailPage
-        player={player}
-        permissions={permissions}
-        ipPrivacy={false}
-        shortcuts={shortcuts}
-        onToast={() => {}}
-      >
-        {ui}
-      </PlayerDetailPage>
-    </ModalProvider>
-  )
-}
-
 function renderDefault(ipPrivacy = false) {
   return render(
     <ModalProvider

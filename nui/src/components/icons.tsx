@@ -89,7 +89,7 @@ export function Icon({ name, size = 'md', className, ...props }: IconProps) {
 }
 
 // Icon library -- each returns JSX elements for the SVG body
-const ICONS: Record<IconName, JSX.Element> = {
+const ICONS: Record<IconName, React.ReactNode> = {
   users: (
     <>
       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
