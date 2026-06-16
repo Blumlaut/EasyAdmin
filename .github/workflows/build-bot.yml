@@ -1,4 +1,4 @@
-name: Build DJS Bot
+name: Build Bot & NUI
 
 on:
   push:
@@ -17,14 +17,24 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install dependencies
+      - name: Install bot dependencies
         run: |
           cd src/
           npm ci
 
-      - name: Build project
+      - name: Build bot
         run: |
           cd src/
+          npm run build
+
+      - name: Install NUI dependencies
+        run: |
+          cd nui/
+          npm ci
+
+      - name: Build NUI
+        run: |
+          cd nui/
           npm run build
 
       - name: Commit changes
@@ -37,5 +47,5 @@ jobs:
           if [ -z "$(git status -s)" ]; then
             echo "No changes to commit"
           else
-            git commit -m "chore(bot): deploy latest build" && git push
+            git commit -m "chore: deploy latest bot + nui build" && git push
           fi
