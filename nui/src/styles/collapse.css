@@ -2,10 +2,20 @@
    Collapse / expand animation styles
    ============================================================ */
 
-/* Window styling when collapsed (shadow, border) — applied immediately */
+/* Fold button icon spins 180° during collapse/expand */
+.sidebar-collapse-icon {
+  display: inline-block;
+  transition: transform 180ms ease-out;
+}
+
+.ea-window--collapsed .sidebar-collapse-icon {
+  transform: rotate(180deg);
+}
+
+/* Window styling when collapsed — keep subtle shadow, remove border */
 .ea-window--collapsed {
-  box-shadow: none;
-  border-right: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  border: none !important;
 }
 
 /* Content wrapper flex collapse — applied AFTER animation finishes */

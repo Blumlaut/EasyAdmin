@@ -1,7 +1,7 @@
 import { useCallback, RefObject } from 'react'
 
 const COLLAPSE_DURATION = 180
-const COLLAPSED_WIDTH = 320
+const COLLAPSED_WIDTH = 260 // Match sidebar width exactly
 
 export function useCollapse(
   windowRef: RefObject<HTMLDivElement | null>,

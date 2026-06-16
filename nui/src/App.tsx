@@ -521,8 +521,9 @@ function App() {
                 disabled={nuiBackground}
               >
                 <Icon
-                  name={contentCollapsed ? 'chevron-double-right' : 'chevron-double-left'}
+                  name="chevron-double-left"
                   size="xs"
+                  className="sidebar-collapse-icon"
                 />
               </button>
             </div>
@@ -534,6 +535,8 @@ function App() {
                 }))}
                 activeId={activeNavId}
                 onSelect={(id) => {
+                  // Auto-unfold when clicking a sidebar item while collapsed
+                  if (contentCollapsed) toggleCollapsed()
                   if (id === 'main') navigateTo('main')
                   else if (id === 'players') navigateTo('players')
                   else if (id === 'bans') navigateTo('bans')
