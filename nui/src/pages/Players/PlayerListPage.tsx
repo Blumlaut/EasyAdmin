@@ -126,7 +126,7 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
       </div>
       <div className="list-item-content">
         <div className="list-item-title">
-          {player.name}
+          <span className="list-item-title-text">{player.name}</span>
           <RoleBadges player={player} />
         </div>
         <div className="list-item-subtitle text-mono">

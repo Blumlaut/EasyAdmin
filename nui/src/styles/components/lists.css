@@ -53,12 +53,19 @@
 }
 
 .list-item-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
   font-size: var(--text-base);
   font-weight: var(--font-medium);
   color: var(--text-primary);
-  white-space: nowrap;
+  min-width: 0;
+}
+
+.list-item-title-text {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .list-item-subtitle {
