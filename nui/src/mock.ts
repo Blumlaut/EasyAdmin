@@ -850,14 +850,16 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         })
 
       case 'requestPlayerHistory': {
+        // Match the real server: timestamps are unix epoch seconds (os.time())
+        // The frontend multiplies by 1000 to convert to milliseconds
         const range = body.range || '24h'
-        const now = Date.now()
+        const now = Math.floor(Date.now() / 1000)
         let span: number
         let interval: number
-        if (range === '1h') { span = 3600000; interval = 300000 }       // 1h, 5min points
-        else if (range === '6h') { span = 21600000; interval = 600000 }  // 6h, 10min points
-        else if (range === '7d') { span = 604800000; interval = 900000 } // 7d, 15min points
-        else { span = 86400000; interval = 600000 }                       // 24h, 10min points
+        if (range === '1h') { span = 3600; interval = 300 }      // 1h, 5min points
+        else if (range === '6h') { span = 21600; interval = 600 } // 6h, 10min points
+        else if (range === '7d') { span = 604800; interval = 900 } // 7d, 15min points
+        else { span = 86400; interval = 600 }                     // 24h, 10min points
         const points = []
         for (let t = now - span; t <= now; t += interval) {
           const count = Math.floor(Math.random() * 30) + 5
