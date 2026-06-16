@@ -163,6 +163,9 @@
   overflow: auto;
   padding: var(--space-6);
   background: var(--bg-primary);
+  /* Force clean compositing layer — Firefox renders text blurry inside
+     overflow:auto descendants of transform:translate() parents without this. */
+  transform: translateZ(0);
 }
 
 .coming-soon {
