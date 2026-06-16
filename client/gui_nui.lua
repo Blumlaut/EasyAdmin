@@ -4,13 +4,12 @@
 -- (client/nui/*.lua files load before this via fxmanifest)
 ------------------------------------
 
--- Dedicated NUI toggle command.
-RegisterCommand('ea_nui', function()
+-- NUI is the primary (and only) interface.
+RegisterCommand('easyadmin', function(_source, _args)
   NuiToggle()
 end, false)
 
--- NUI is the primary (and only) interface.
-RegisterCommand('easyadmin', function(_source, _args)
-  if not IsNuiEnabled() then return end
+-- Alias for easyadmin.
+RegisterCommand('ea', function(_source, _args)
   NuiToggle()
 end, false)

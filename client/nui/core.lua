@@ -9,10 +9,6 @@ function IsNuiVisible()
   return nuiVisible
 end
 
-function IsNuiEnabled()
-  return GetConvar('ea_useNUI', 'true') == 'true'
-end
-
 function NuiToggle()
   if not isAdmin then
     TriggerServerEvent('EasyAdmin:amiadmin')
