@@ -15,6 +15,7 @@ import { on, callLua } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation, type NavItem } from './components/Navigation'
 import { Toast } from './components/Toast'
+import { useWindowDrag, type WindowPosition } from './hooks/useWindowDrag'
 import { ModalProvider } from './ModalContext'
 import { Dashboard } from './pages/Dashboard/Dashboard'
 import { PlayerListPage } from './pages/Players/PlayerListPage'
@@ -81,6 +82,18 @@ function App() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [shortcuts, setShortcuts] = useState<ReasonShortcut[]>([])
 
+  // Window chrome: position offset, fold state, background mode.
+  // - windowPos: pixel offset from the centered default position.
+  //   Reset to {0,0} every time the menu opens.
+  // - contentCollapsed: when true, the main content area is hidden and
+  //   the window shrinks to just the sidebar width.
+  // - nuiBackground: when true, the NUI is visible but has no input
+  //   focus (the game has focus). The user can re-hook by holding ALT.
+  const [windowPos, setWindowPos] = useState<WindowPosition>({ x: 0, y: 0 })
+  const [contentCollapsed, setContentCollapsed] = useState(false)
+  const [nuiBackground, setNuiBackground] = useState(false)
+  const windowRef = useRef<HTMLDivElement>(null)
+
   // === Toast ===
 
   const showToast = useCallback((text: string, type: Notification['type'] = 'info') => {
@@ -104,7 +117,29 @@ function App() {
         setSelectedBanId(null)
         setSelectedReportId(null)
         viewHistoryRef.current = []
+        // Reset window chrome state every time the menu opens. The
+        // window is always centered, the main content is unfolded, and
+        // the NUI starts in focused mode.
+        setWindowPos({ x: 0, y: 0 })
+        setContentCollapsed(false)
+        setNuiBackground(false)
       }
+    })
+  }, [])
+
+  // Focus sync from Lua. The `+ea_setFocused` keybind handler in
+  // client/nui/core.lua sends `nuiRehook` when it regains focus and
+  // `nuiUnhook` when focus is lost. We mirror that state here so the
+  // NUI can dim itself and show the "Hold ALT to interact" hint.
+  useEffect(() => {
+    return on('nuiRehook', () => {
+      setNuiBackground(false)
+    })
+  }, [])
+
+  useEffect(() => {
+    return on('nuiUnhook', () => {
+      setNuiBackground(true)
     })
   }, [])
 
@@ -338,6 +373,50 @@ function App() {
     }
   }, [view, visible])
 
+  // === Window chrome: drag, fold, background-mode handlers ===
+
+  const handlePositionChange = useCallback((pos: WindowPosition) => {
+    setWindowPos(pos)
+  }, [])
+
+  // Window dragging is only enabled in non-fullscreen modes (the user
+  // spec: drag the top bar when not fullscreen). In fullscreen the
+  // window is already maximized so dragging is meaningless.
+  const dragEnabled = visible && settings.menuSize !== 'fullscreen' && !nuiBackground
+
+  useWindowDrag({
+    enabled: dragEnabled,
+    position: windowPos,
+    onPositionChange: handlePositionChange,
+  })
+
+  const toggleCollapsed = useCallback(() => {
+    setContentCollapsed((prev) => !prev)
+  }, [])
+
+  // The user clicked the area outside the window. Tell Lua to release
+  // NUI focus so the game can receive input again, and optimistically
+  // mark the NUI as in background mode so the dimmed state shows up
+  // immediately rather than waiting for the Lua round-trip.
+  const handleBackdropClick = useCallback(() => {
+    if (nuiBackground) return
+    setNuiBackground(true)
+    callLua('releaseFocus').catch(() => {
+      // If the callback failed for some reason, leave the state as-is
+      // (the game already has focus when the NUI doesn't).
+    })
+  }, [nuiBackground])
+
+  // Mirror the window position to CSS variables on the .ea-window
+  // element. We can't use the inline `style` prop because the CSS
+  // already sets `transform` to combine centering with our offset and
+  // inline styles would clobber the centering rule.
+  useEffect(() => {
+    if (!windowRef.current) return
+    windowRef.current.style.setProperty('--ea-drag-x', `${windowPos.x}px`)
+    windowRef.current.style.setProperty('--ea-drag-y', `${windowPos.y}px`)
+  }, [windowPos])
+
   if (!visible) return null
 
   const closeMenu = () => callLua('closeMenu').catch(() => {})
@@ -348,6 +427,13 @@ function App() {
   if (settings.fontSize !== 100) windowClasses.push(`font-size-${settings.fontSize}`)
   if (settings.menuSize === 'large') windowClasses.push('ea-window--large')
   if (settings.menuSize === 'fullscreen') windowClasses.push('ea-window--fullscreen')
+  if (contentCollapsed) windowClasses.push('ea-window--collapsed')
+  if (nuiBackground) windowClasses.push('ea-window--background')
+
+  // Backdrop is the "click to release focus" area behind the window.
+  // In fullscreen there is no visible background to click, so we hide
+  // it (the user can use the unhook button in the topbar instead).
+  const showBackdrop = settings.menuSize !== 'fullscreen'
 
   return (
     <>
@@ -356,7 +442,19 @@ function App() {
         onToast={showToast}
         onPlayersUpdated={fetchPlayers}
       >
-        <div className={windowClasses.join(' ')}>
+        {/* Backdrop sits behind the window. Clicking it releases NUI
+            focus (in non-fullscreen mode only). Rendered as a sibling
+            of the window so its onClick fires for clicks that miss
+            the window — siblings in a fragment are not nested. */}
+        {showBackdrop && (
+          <div
+            className="ea-backdrop"
+            onClick={handleBackdropClick}
+            aria-hidden="true"
+          />
+        )}
+
+        <div ref={windowRef} className={windowClasses.join(' ')}>
           {/* Skip link — first focusable element, visible on :focus */}
           <a
             className="skip-link"
@@ -402,7 +500,7 @@ function App() {
           </aside>
 
           <div className="flex flex-col flex-1 h-full overflow-hidden">
-            <header className="topbar">
+            <header className="topbar" data-window-drag-handle>
               {view !== 'main' && (
                 <button
                   className="btn btn-ghost btn-sm"
@@ -420,13 +518,36 @@ function App() {
               >
                 {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
               </h2>
-              <button
-                className="btn btn-ghost btn-icon btn-close ml-auto"
-                onClick={closeMenu}
-                aria-label="Close"
-              >
-                <Icon name="x" size="xs" />
-              </button>
+              <div className="topbar-actions">
+                <button
+                  className="btn btn-ghost btn-icon"
+                  onClick={toggleCollapsed}
+                  aria-label={contentCollapsed ? 'Expand main content' : 'Collapse main content'}
+                  title={contentCollapsed ? 'Expand main content' : 'Collapse main content'}
+                  disabled={nuiBackground}
+                >
+                  <Icon
+                    name={contentCollapsed ? 'chevron-double-left' : 'chevron-double-right'}
+                    size="xs"
+                  />
+                </button>
+                <button
+                  className="btn btn-ghost btn-icon"
+                  onClick={handleBackdropClick}
+                  aria-label="Release focus and play the game"
+                  title="Release focus (hold ALT to interact again)"
+                  disabled={nuiBackground}
+                >
+                  <Icon name="mouse-pointer-click" size="xs" />
+                </button>
+                <button
+                  className="btn btn-ghost btn-icon btn-close"
+                  onClick={closeMenu}
+                  aria-label="Close"
+                >
+                  <Icon name="x" size="xs" />
+                </button>
+              </div>
             </header>
 
             <main id="ea-main-content" className="glass main-content" role="main">
@@ -570,6 +691,20 @@ function App() {
       </ModalProvider>
 
       {toast && <Toast message={toast.text} type={toast.type} />}
+
+      {/*
+        Background-mode hint. Shown when the NUI is visible but the
+        game has focus. The user re-engages with EasyAdmin by holding
+        the +ea_setFocused keybind (default Left Alt, rebindable in
+        FiveM settings). The hint is `pointer-events: none` so it
+        never interferes with clicks.
+      */}
+      {nuiBackground && (
+        <div className="ea-background-hint" role="status" aria-live="polite">
+          <kbd>ALT</kbd>
+          <span>Hold to interact with EasyAdmin</span>
+        </div>
+      )}
     </>
   )
 }

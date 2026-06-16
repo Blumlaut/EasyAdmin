@@ -66,6 +66,8 @@ export type IconName =
   | 'layout-grid'
   | 'compass'
   | 'sliders'
+  | 'mouse-pointer-click'
+  | 'grip-vertical'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -399,6 +401,27 @@ const ICONS: Record<IconName, React.ReactNode> = {
       <line x1={1} y1={14} x2={7} y2={14} />
       <line x1={9} y1={8} x2={15} y2={8} />
       <line x1={17} y1={16} x2={23} y2={16} />
+    </>
+  ),
+  'mouse-pointer-click': (
+    <>
+      <path d="M9 9l3 9 1.5-3.5L17 13z" />
+      <path d="M6 4l1.5 1.5" />
+      <path d="M4 6l1.5 1.5" />
+      <path d="M2 9l2 0" />
+      <path d="M4 12l1.5-1.5" />
+      <path d="M6 14l1.5-1.5" />
+      <path d="M9 6l0 2" />
+    </>
+  ),
+  'grip-vertical': (
+    <>
+      <circle cx={9} cy={5} r={1.5} />
+      <circle cx={9} cy={12} r={1.5} />
+      <circle cx={9} cy={19} r={1.5} />
+      <circle cx={15} cy={5} r={1.5} />
+      <circle cx={15} cy={12} r={1.5} />
+      <circle cx={15} cy={19} r={1.5} />
     </>
   ),
 }

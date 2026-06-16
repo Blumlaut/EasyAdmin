@@ -199,7 +199,12 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  /* Combine centering (-50%) with the drag offset (--ea-drag-x/y).
+     The variables are set in JS; default to 0 (no offset). */
+  transform: translate(
+    calc(-50% + var(--ea-drag-x, 0px)),
+    calc(-50% + var(--ea-drag-y, 0px))
+  );
   width: min(92vw, 1210px);
   height: min(85vh, 750px);
   display: flex;
@@ -209,6 +214,9 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
+  /* Only animate width changes (e.g. when folding the main content).
+     Transform updates from dragging are NOT animated for snappier feel. */
+  transition: width var(--transition);
 }
 
 /* -- Menu size: large -- */
@@ -227,4 +235,94 @@
   border-radius: 0;
   border: none;
   box-shadow: none;
+  transition: none;
+}
+
+/* -- Menu: main content collapsed (sidebar only) -- */
+.ea-window--collapsed {
+  width: 320px;
+  min-width: 320px;
+}
+
+.ea-window--collapsed .main-content {
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  /* No transition on `animation`/CSS `animation` to stay CEF-safe. */
+  transition: opacity var(--transition-fast);
+}
+
+/* -- Menu: NUI in background mode (visible, but no focus) -- */
+.ea-window--background {
+  cursor: default;
+  opacity: 0.85;
+  filter: saturate(0.6);
+}
+
+.ea-window--background,
+.ea-window--background * {
+  /* Don't capture mouse events while the game has focus. The Lua
+     re-engages NUI focus on ALT hold. */
+  pointer-events: none;
+}
+
+/* The backdrop that sits behind the window and intercepts clicks to
+   release focus. Hidden in fullscreen mode (no "background" to click)
+   and when the menu is already in background mode (nothing useful to
+   click on). */
+.ea-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-window) - 1);
+  background: transparent;
+  cursor: pointer;
+  display: block;
+}
+
+.ea-backdrop[hidden],
+.ea-backdrop[aria-hidden='true'] {
+  display: none;
+}
+
+/* "Hold ALT to interact" hint, shown when the menu is in background
+   mode. Floats above everything and doesn't capture pointer events. */
+.ea-background-hint {
+  position: fixed;
+  bottom: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(10, 14, 20, 0.85);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  z-index: calc(var(--z-window) + 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.ea-background-hint kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 var(--space-2);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
 }

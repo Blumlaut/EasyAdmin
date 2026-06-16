@@ -156,6 +156,40 @@
   z-index: var(--z-topbar);
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg-secondary);
+  /* The topbar is the window drag handle. Cursors on buttons are
+     restored to `pointer` below so the drag affordance is only shown
+     on the empty/title areas. */
+  cursor: move;
+  user-select: none;
+}
+
+.topbar h2 {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: move;
+}
+
+.topbar button,
+.topbar a {
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.topbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+/* In fullscreen mode there's nothing to drag, so suppress the move
+   cursor on the topbar. */
+.ea-window--fullscreen .topbar,
+.ea-window--fullscreen .topbar h2 {
+  cursor: default;
 }
 
 .main-content {
