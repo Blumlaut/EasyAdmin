@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
 import type { Notification, Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult } from '../../types'
 import { callLua, on } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
@@ -60,18 +60,6 @@ export function ResourcesPage({
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
 
-  const fetchResources = useCallback(() => {
-    setLoading(true)
-    callLua<ResourceListResponse>('requestResources')
-      .then((res) => {
-        setResources(res.resources ?? [])
-        // After loading resources, fetch batch metadata
-        fetchBatchMetadata(res.resources ?? [])
-      })
-      .catch(() => onToast('Failed to fetch resources', 'error'))
-      .finally(() => setLoading(false))
-  }, [onToast])
-
   // Fetch metadata for all resources (batch) to populate version/description/repository
   const fetchBatchMetadata = useCallback(async (resList: ResourceEntry[]) => {
     const names = resList.map((r) => r.name)
@@ -99,37 +87,41 @@ export function ResourcesPage({
     }
   }, [])
 
+  const fetchResources = useCallback(() => {
+    setLoading(true)
+    callLua<ResourceListResponse>('requestResources')
+      .then((res) => {
+        setResources(res.resources ?? [])
+        // After loading resources, fetch batch metadata
+        fetchBatchMetadata(res.resources ?? [])
+      })
+      .catch(() => onToast('Failed to fetch resources', 'error'))
+      .finally(() => setLoading(false))
+  }, [onToast, fetchBatchMetadata])
+
+  // Initial fetch + event subscriptions (side effects, not render logic)
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     fetchResources()
-  }, [fetchResources])
 
-  // Listen for server push: resource list updated (after start/stop)
-  const resourcesRef = useRef(false)
-  resourcesRef.current = true
-  const unsubResources = on<ResourceListResponse>('updateResources', (payload) => {
-    if (!resourcesRef.current) return
-    setResources(payload.resources ?? [])
-    fetchBatchMetadata(payload.resources ?? [])
-  })
+    const unsubResources = on<ResourceListResponse>('updateResources', (payload) => {
+      setResources(payload.resources ?? [])
+      fetchBatchMetadata(payload.resources ?? [])
+    })
+    const unsubToast = on<Notification>('notification', (payload) => {
+      onToast(payload.text, payload.type)
+    })
 
-  // Listen for server push: action toasts
-  const toastRef = useRef(false)
-  toastRef.current = true
-  const unsubToast = on<Notification>('notification', (payload) => {
-    if (!toastRef.current) return
-    onToast(payload.text, payload.type)
-  })
-
-  useEffect(() => {
     return () => {
-      resourcesRef.current = false
-      toastRef.current = false
       unsubResources()
       unsubToast()
     }
-  }, [unsubResources, unsubToast])
+  }, [fetchResources, fetchBatchMetadata, onToast])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Fetch metadata when detailName changes
+  /* eslint-disable react-hooks/set-state-in-effect */
+  // legitimate data fetching effect
   useEffect(() => {
     if (!detailName) {
       setDetailMetadata(null)
@@ -141,13 +133,17 @@ export function ResourcesPage({
       .catch(() => setDetailMetadata(null))
       .finally(() => setDetailLoading(false))
   }, [detailName])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Sync with parent-selected resource (nav from outside)
+  /* eslint-disable react-hooks/set-state-in-effect */
+  // legitimate prop-to-state sync effect
   useEffect(() => {
     if (selectedResource && selectedResource !== detailName) {
       setDetailName(selectedResource)
     }
-  }, [selectedResource])
+  }, [selectedResource, detailName])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const filtered = useMemo(() => {
     if (!debouncedQuery) return resources
@@ -456,7 +452,7 @@ function ResourceDetailView({
 }) {
   // Get the parent resource name from the window (set by FiveM)
   const currentResourceName = typeof window !== 'undefined'
-    ? ((window as any).parentResourceName ?? 'EasyAdmin')
+    ? ((window as unknown as Record<string, unknown>).parentResourceName as string | undefined ?? 'EasyAdmin')
     : 'EasyAdmin'
   const isSelf = name === currentResourceName
 

@@ -30,8 +30,6 @@ export function RadioGroup<T = string>({
           <React.Fragment key={String(option.value)}>
             <label
               className={`radio-group-option ${value === option.value ? 'radio-group-option--checked' : ''}`}
-              role="radio"
-              aria-checked={value === option.value}
             >
               <input
                 type="radio"

@@ -174,10 +174,10 @@
   --border-subtle: rgba(80, 80, 100, 0.7);
   --border-hover: rgba(59, 130, 246, 0.6);
   --border-glow: rgba(59, 130, 246, 0.7);
-  --text-primary: #ffffff;
+  --text-primary: #fff;
   --text-secondary: #e8ecf0;
   --text-muted: #b0b8c0;
-  --text-heading: #ffffff;
+  --text-heading: #fff;
   --accent-blue: #79b8ff;
   --accent-green: #56d364;
   --accent-red: #ff6b6b;
@@ -194,7 +194,7 @@
   --bg-input: rgba(10, 10, 15, 0.95);
   --border-color: rgba(100, 100, 120, 0.9);
   --border-subtle: rgba(80, 80, 100, 0.7);
-  --text-primary: #ffffff;
+  --text-primary: #fff;
   --text-secondary: #e8ecf0;
   --text-muted: #b0b8c0;
 }
@@ -203,17 +203,24 @@
 
 /* 80% */
 .font-size-80 { --text-xs: 9px; --text-sm: 10px; --text-base: 10px; --text-lg: 11px; --text-xl: 13px; --text-2xl: 16px; --text-3xl: 19px; --text-heading: 22px; --text-section: 9px; }
+
 /* 90% */
 .font-size-90 { --text-xs: 10px; --text-sm: 11px; --text-base: 12px; --text-lg: 13px; --text-xl: 14px; --text-2xl: 18px; --text-3xl: 22px; --text-heading: 25px; --text-section: 10px; }
+
 /* 100% (default — no override needed) */
+
 /* 110% */
 .font-size-110 { --text-xs: 12px; --text-sm: 13px; --text-base: 14px; --text-lg: 15px; --text-xl: 18px; --text-2xl: 22px; --text-3xl: 26px; --text-heading: 31px; --text-section: 12px; }
+
 /* 120% */
 .font-size-120 { --text-xs: 13px; --text-sm: 14px; --text-base: 16px; --text-lg: 17px; --text-xl: 19px; --text-2xl: 24px; --text-3xl: 29px; --text-heading: 34px; --text-section: 13px; }
+
 /* 130% */
 .font-size-130 { --text-xs: 14px; --text-sm: 15px; --text-base: 17px; --text-lg: 18px; --text-xl: 21px; --text-2xl: 26px; --text-3xl: 31px; --text-heading: 36px; --text-section: 14px; }
+
 /* 140% */
 .font-size-140 { --text-xs: 15px; --text-sm: 16px; --text-base: 18px; --text-lg: 20px; --text-xl: 22px; --text-2xl: 28px; --text-3xl: 34px; --text-heading: 39px; --text-section: 15px; }
+
 /* 150% */
 .font-size-150 { --text-xs: 17px; --text-sm: 18px; --text-base: 20px; --text-lg: 21px; --text-xl: 24px; --text-2xl: 30px; --text-3xl: 36px; --text-heading: 42px; --text-section: 17px; }
 
