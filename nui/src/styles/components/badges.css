@@ -58,10 +58,9 @@
 /* Role badges: inline with name, slightly smaller, with icon */
 .badge-role {
   font-size: var(--text-xs);
-  padding: 1px var(--space-1.5);
+  padding: 1px var(--space-1);
   vertical-align: middle;
-  margin-left: var(--space-1.5);
-  margin-right: var(--space-1);
+  margin-left: var(--space-2);
 }
 
 .badge-danger {
