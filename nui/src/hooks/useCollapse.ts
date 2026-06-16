@@ -17,11 +17,24 @@ export function useCollapse(
     const toWidth = isCollapsing ? COLLAPSED_WIDTH : getExpandedWidth()
     const contentEl = el.querySelector(':scope > div:not(.sidebar)') as HTMLElement | null
 
+    // Remove content from flex layout so the window width can animate
+    // without layout shifts. Capture dimensions first, then go absolute.
+    // Applied for both collapse AND expand — restored after animation.
+    const sidebarWidth = 260
+    if (contentEl) {
+      const w = contentEl.offsetWidth || getExpandedWidth() - sidebarWidth
+      const h = contentEl.offsetHeight || el.offsetHeight
+      contentEl.style.position = 'absolute'
+      contentEl.style.left = `${sidebarWidth}px`
+      contentEl.style.top = '0'
+      contentEl.style.width = `${w}px`
+      contentEl.style.height = `${h}px`
+    }
+
     // Lock scrollbar so width change doesn't shift layout
     document.documentElement.style.overflowX = 'hidden'
 
-    // Animate width + clip-path together. clip-path hides content from
-    // the right edge without affecting the flex layout.
+    // Animate width + clip-path together
     const widthAnim = el.animate(
       [{ width: `${el.offsetWidth}px` }, { width: `${toWidth}px` }],
       { duration: COLLAPSE_DURATION, easing: 'ease-out', fill: 'forwards' },
@@ -46,12 +59,18 @@ export function useCollapse(
     widthAnim.onfinish = () => {
       document.documentElement.style.overflowX = ''
       el.style.width = isCollapsing ? `${toWidth}px` : ''
-      // On collapse, apply flex collapse after animation
-      // On expand, clear clip-path so content is fully visible
+      // Restore content to static + apply flex collapse
+      if (contentEl) {
+        contentEl.style.position = ''
+        contentEl.style.left = ''
+        contentEl.style.top = ''
+        contentEl.style.width = ''
+        contentEl.style.height = ''
+        contentEl.style.removeProperty('clip-path')
+      }
       if (isCollapsing && contentEl) {
         contentEl.classList.add('ea-content--collapsed')
       }
-      contentEl?.style.removeProperty('clip-path')
     }
     widthAnim.oncancel = () => { document.documentElement.style.overflowX = '' }
   }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth])

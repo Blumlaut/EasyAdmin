@@ -535,8 +535,22 @@ function App() {
                 }))}
                 activeId={activeNavId}
                 onSelect={(id) => {
-                  // Auto-unfold when clicking a sidebar item while collapsed
-                  if (contentCollapsed) toggleCollapsed()
+                  // Auto-unfold when clicking a sidebar item while collapsed,
+                  // but delay navigation so the animation isn't interrupted
+                  if (contentCollapsed) {
+                    toggleCollapsed()
+                    setTimeout(() => {
+                      if (id === 'main') navigateTo('main')
+                      else if (id === 'players') navigateTo('players')
+                      else if (id === 'bans') navigateTo('bans')
+                      else if (id === 'reports') navigateTo('reports')
+                      else if (id === 'statistics') navigateTo('statistics')
+                      else if (id === 'server') navigateTo('server')
+                      else if (id === 'resources') navigateTo('resources')
+                      else if (id === 'settings') navigateTo('settings')
+                    }, 50)
+                    return
+                  }
                   if (id === 'main') navigateTo('main')
                   else if (id === 'players') navigateTo('players')
                   else if (id === 'bans') navigateTo('bans')
