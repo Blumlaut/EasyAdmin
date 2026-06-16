@@ -52,7 +52,7 @@ export function SettingsAccessibility({
       </div>
 
       {/* Font Size */}
-      <label className="flex flex-col gap-1 mt-3">
+      <div className="flex flex-col gap-1 mt-3">
         <span className="text-sm text-secondary">
           Font size ({fontSize}%)
         </span>
@@ -73,7 +73,7 @@ export function SettingsAccessibility({
             </button>
           ))}
         </div>
-      </label>
+      </div>
     </div>
   )
 }
