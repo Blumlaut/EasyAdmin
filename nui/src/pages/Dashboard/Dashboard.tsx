@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ServerStats } from '../../types'
 import { callLua } from '../../fivem'
 import { Icon, type IconName } from '../../components/icons'
+import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
+import { DoughnutChart } from '../../components/DoughnutChart'
 
 // ============================================================
 // Types
@@ -13,252 +15,6 @@ interface StatCardConfig {
   icon: IconName
   color: string
   bgColor: string
-}
-
-// ============================================================
-// CircularProgressGauge
-// SVG donut showing a percentage (e.g. player capacity)
-// ============================================================
-
-interface CircularProgressGaugeProps {
-  value: number
-  max: number
-  size?: number
-  strokeWidth?: number
-  subLabel?: string
-}
-
-function CircularProgressGauge({
-  value,
-  max,
-  size = 160,
-  strokeWidth = 10,
-  subLabel,
-}: CircularProgressGaugeProps) {
-  const radius = (size - strokeWidth) / 2
-  const circumference = 2 * Math.PI * radius
-  const pct = max > 0 ? Math.min(value / max, 1) : 0
-  const offset = circumference * (1 - pct)
-  const pctText = max > 0 ? Math.round(pct * 100) : 0
-
-  // Color based on capacity
-  let strokeColor = 'var(--accent-green)'
-  if (pct >= 0.9) strokeColor = 'var(--accent-red)'
-  else if (pct >= 0.7) strokeColor = 'var(--accent-orange)'
-
-  return (
-    <div className="card flex flex-col items-center justify-center dashboard-card">
-      <p className="section-label mb-2">Player Capacity</p>
-      <div className="flex-1 flex items-center justify-center">
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
-        {/* Background track */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke="var(--bg-hover)"
-          strokeWidth={strokeWidth}
-        />
-        {/* Foreground arc */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke={strokeColor}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          className="dashboard-gauge-arc"
-        />
-        {/* Center text */}
-        <text
-          x={size / 2}
-          y={size / 2 - 8}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="var(--text-primary)"
-          className="dashboard-gauge-value"
-        >
-          {value}
-        </text>
-        <text
-          x={size / 2}
-          y={size / 2 + 14}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="var(--text-muted)"
-          className="dashboard-gauge-max"
-        >
-          / {max}
-        </text>
-      </svg>
-        </div>
-      {/* eslint-disable-next-line nui/no-inline-styles */}
-      <p className="text-sm font-semibold mt-3" style={{ color: strokeColor }}>
-        {pctText}% full
-      </p>
-      {subLabel && <p className="text-xs text-muted mt-1">{subLabel}</p>}
-    </div>
-  )
-}
-
-// ============================================================
-// SparklineChart
-// Simple SVG sparkline showing values over time
-// ============================================================
-
-interface SparklineChartProps {
-  data: { timestamp: number; count: number }[]
-  label: string
-  current?: number
-  height?: number
-  range?: string
-  onRangeChange?: (range: string) => void
-  ranges?: Array<{ value: string; label: string }>
-}
-
-function SparklineChart({ data, label, current, height = 120, range, onRangeChange, ranges }: SparklineChartProps) {
-  if (data.length < 2) {
-    return (
-      <div className="card dashboard-card">
-        <div className="flex items-center justify-between mb-3">
-          <p className="section-label">{label}</p>
-          <div className="flex items-center gap-2">
-            {current !== undefined && (
-              <span className="badge badge-online">{current} online</span>
-            )}
-            {ranges && onRangeChange && (
-              <div className="flex items-center gap-0.5">
-                {ranges.map((r) => (
-                  <button
-                    key={r.value}
-                    className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'} dashboard-range-btn`}
-                    onClick={() => onRangeChange(r.value)}
-                  >
-                    {r.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center justify-center dashboard-sparkline-container">
-          <p className="text-xs text-muted">Tracking player activity…</p>
-        </div>
-      </div>
-    )
-  }
-
-  const width = 400
-  const padding = { top: 8, bottom: 20, left: 4, right: 4 }
-  const chartW = width - padding.left - padding.right
-  const chartH = height - padding.top - padding.bottom
-
-  const maxVal = Math.max(...data.map((d) => d.count), 1)
-  const minVal = Math.min(...data.map((d) => d.count), 0)
-  const valueRange = maxVal - minVal || 1
-
-  // Build SVG path
-  const points = data.map((d, i) => {
-    const x = padding.left + (i / (data.length - 1)) * chartW
-    const y = padding.top + chartH - ((d.count - minVal) / valueRange) * chartH
-    return { x, y }
-  })
-
-  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')
-  const areaPath = `${linePath} L${points[points.length - 1].x},${padding.top + chartH} L${points[0].x},${padding.top + chartH} Z`
-
-  // Time labels
-  const timeLabels: { label: string; x: number }[] = []
-  // eslint-disable-next-line react-hooks/purity
-  const now = Date.now()
-  if (data.length >= 2) {
-    const firstTs = data[0].timestamp
-    const lastTs = data[data.length - 1].timestamp
-    const span = lastTs - firstTs
-
-    if (span > 0) {
-      // Show 3-4 time labels
-      const steps = Math.min(4, data.length - 1)
-      for (let i = 0; i <= steps; i++) {
-        const idx = Math.round((i / steps) * (data.length - 1))
-        const ago = Math.round((now - data[idx].timestamp) / 60000)
-        let label: string
-        if (ago < 1) label = 'now'
-        else if (ago < 60) label = `${ago}m ago`
-        else label = `${Math.floor(ago / 60)}h ago`
-        timeLabels.push({ label, x: points[idx].x })
-      }
-    }
-  }
-
-  return (
-    <div className="card dashboard-card">
-      <div className="flex items-center justify-between mb-3">
-        <p className="section-label">{label}</p>
-        <div className="flex items-center gap-2">
-          {current !== undefined && (
-            <span className="badge badge-online">{current} online</span>
-          )}
-          {ranges && onRangeChange && (
-            <div className="flex items-center gap-0.5">
-              {ranges.map((r) => (
-                <button
-                  key={r.value}
-                  className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'} dashboard-range-btn`}
-                  onClick={() => onRangeChange(r.value)}
-                >
-                  {r.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-      <svg width="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className="dashboard-sparkline-svg">
-        <defs>
-          <linearGradient id="sparklineGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--brand-blue-light)" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="var(--brand-blue-light)" stopOpacity="0.02" />
-          </linearGradient>
-        </defs>
-        {/* Area fill */}
-        <path d={areaPath} fill="url(#sparklineGrad)" />
-        {/* Line */}
-        <path
-          d={linePath}
-          fill="none"
-          stroke="var(--brand-blue-light)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* Dots on first and last point */}
-        {points.length > 1 && (
-          <>
-            <circle cx={points[0].x} cy={points[0].y} r="3" fill="var(--brand-blue-light)" />
-            <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r="3" fill="var(--brand-blue-light)" />
-          </>
-        )}
-        {/* Time labels */}
-        {timeLabels.map((tl, i) => (
-          <text
-            key={i}
-            x={tl.x}
-            y={height - 2}
-            textAnchor="middle"
-            fill="var(--text-muted)"
-            className="dashboard-gauge-label"
-          >
-            {tl.label}
-          </text>
-        ))}
-      </svg>
-    </div>
-  )
 }
 
 // ============================================================
@@ -534,10 +290,11 @@ export function Dashboard({ playerCount }: DashboardProps) {
 
       {/* Charts row */}
       <div className="dashboard-charts-grid">
-        <CircularProgressGauge
+        <DoughnutChart
           value={playerCount}
           max={stats?.maxPlayers ?? 48}
           subLabel={`${(stats?.maxPlayers ?? 48) - playerCount} slots available`}
+          className="dashboard-card"
         />
 
         <PlayerSparkline playerCount={playerCount} />
@@ -557,7 +314,9 @@ export function Dashboard({ playerCount }: DashboardProps) {
 
 // ============================================================
 // PlayerSparkline
-// Fetches player count history from the server with time range filters
+// Fetches player count history from the server with time range filters.
+// Uses Chart.js for proper time-axis rendering — shows full range
+// even when data is sparse or absent.
 // ============================================================
 
 const historyRanges: Array<{ value: '1h' | '6h' | '24h' | '7d'; label: string }> = [
@@ -566,6 +325,13 @@ const historyRanges: Array<{ value: '1h' | '6h' | '24h' | '7d'; label: string }>
   { value: '24h', label: '24h' },
   { value: '7d', label: '7d' },
 ]
+
+const rangeMs: Record<string, number> = {
+  '1h': 3600000,
+  '6h': 21600000,
+  '24h': 86400000,
+  '7d': 604800000,
+}
 
 interface PlayerSparklineProps {
   playerCount: number
@@ -595,14 +361,52 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
     return () => { cancelled = true }
   }, [range])
 
+  // Build time range for the chart axis
+  const chartRange = useMemo(() => {
+    const end = Date.now()
+    const start = end - (rangeMs[range] || 86400000)
+    return { start, end }
+  }, [range])
+
+  // Build Chart.js line data (map count → value)
+  const lines: TimeSeriesLine[] = useMemo(() => [
+    {
+      label: 'Players',
+      data: data.map((d) => ({ timestamp: d.timestamp, value: d.count })),
+      color: '#3b82f6',
+      fillColor: 'rgba(59, 130, 246, 0.18)',
+    },
+  ], [data])
+
   return (
-    <SparklineChart
-      data={data}
-      label="Players Over Time"
-      current={playerCount}
-      range={loading ? undefined : range}
-      onRangeChange={(r) => setRange(r as '1h' | '6h' | '24h' | '7d')}
-      ranges={historyRanges}
-    />
+    <div className="card dashboard-card flex flex-col">
+      <div className="flex items-center justify-between mb-3">
+        <p className="section-label">Players Over Time</p>
+        <div className="flex items-center gap-2">
+          {!loading && (
+            <span className="badge badge-online">{playerCount} online</span>
+          )}
+          <div className="flex items-center gap-0.5">
+            {historyRanges.map((r) => (
+              <button
+                key={r.value}
+                className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'} dashboard-range-btn`}
+                onClick={() => setRange(r.value)}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex-1 min-h-0">
+        <TimeSeriesChart
+          lines={lines}
+          range={chartRange}
+          unit="players"
+          emptyMessage="No data for this time range"
+        />
+      </div>
+    </div>
   )
 }

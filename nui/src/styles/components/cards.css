@@ -67,39 +67,9 @@
   padding: var(--space-4);
 }
 
-.dashboard-gauge-arc {
-  transform: rotate(-90deg);
-  transform-origin: center;
-  transition: stroke-dashoffset 300ms ease;
-}
-
-.dashboard-gauge-value {
-  font-size: 28px;
-  font-weight: 700;
-  font-family: var(--font-sans);
-}
-
-.dashboard-gauge-max {
-  font-size: 12px;
-  font-family: var(--font-sans);
-}
-
-.dashboard-gauge-label {
-  font-size: 9px;
-  font-family: var(--font-sans);
-}
-
 .dashboard-range-btn {
   font-size: 10px;
   padding: 2px 6px;
-}
-
-.dashboard-sparkline-container {
-  height: 120px;
-}
-
-.dashboard-sparkline-svg {
-  overflow: visible;
 }
 
 .dashboard-stat-icon {

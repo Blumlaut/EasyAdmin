@@ -68,6 +68,7 @@ export type IconName =
   | 'sliders'
   | 'mouse-pointer-click'
   | 'grip-vertical'
+  | 'chart-bar'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -422,6 +423,13 @@ const ICONS: Record<IconName, React.ReactNode> = {
       <circle cx={15} cy={5} r={1.5} />
       <circle cx={15} cy={12} r={1.5} />
       <circle cx={15} cy={19} r={1.5} />
+    </>
+  ),
+  'chart-bar': (
+    <>
+      <line x1={12} y1={20} x2={12} y2={10} />
+      <line x1={18} y1={20} x2={18} y2={4} />
+      <line x1={6} y1={20} x2={6} y2={16} />
     </>
   ),
 }

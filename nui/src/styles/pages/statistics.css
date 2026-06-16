@@ -1,0 +1,88 @@
+/* ============================================================
+   Statistics Page Styles
+   ============================================================ */
+
+/* Chart.js canvas — ensure it respects container sizing */
+canvas.chartjs-chart {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* Summary stat cards grid */
+.statistics-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Stat card */
+.statistics-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+}
+
+.statistics-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.statistics-value {
+  line-height: 1.2;
+}
+
+.statistics-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Chart card */
+.statistics-chart-card {
+  padding: 1rem;
+}
+
+/* Player registry table */
+.statistics-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.statistics-table th {
+  text-align: left;
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.statistics-table td {
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.statistics-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.statistics-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive: single column on small screens */
+@media (max-width: 640px) {
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+}

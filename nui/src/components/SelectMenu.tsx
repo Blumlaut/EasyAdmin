@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Icon } from './icons'
 import type { IconName } from './icons'
 
-interface SelectMenuItem {
+export interface SelectMenuItem {
   value: string
   label: string
   icon?: IconName
@@ -29,7 +29,9 @@ export function SelectMenu({
 }: SelectMenuProps) {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<SelectMenuItem | null>(null)
+  const [flip, setFlip] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   // Close on outside click / Escape
   useEffect(() => {
@@ -51,6 +53,28 @@ export function SelectMenu({
     }
   }, [open])
 
+  // Measure available space and flip dropdown direction if it would clip off-screen.
+  // The default CSS opens upward (bottom: calc(100% + 4px)).
+  // If there isn't enough space above, flip to open downward.
+  useEffect(() => {
+    if (!open || !triggerRef.current) return
+
+    // Use requestAnimationFrame to ensure the dropdown is painted before measuring
+    const rafId = requestAnimationFrame(() => {
+      const triggerRect = triggerRef.current!.getBoundingClientRect()
+      const spaceAbove = triggerRect.top
+      const spaceBelow = window.innerHeight - triggerRect.bottom
+      // Need at least 40px to be usable; prefer opening downward if there's more room below
+      if (spaceAbove < 40 || spaceBelow > spaceAbove) {
+        setFlip(true)
+      } else {
+        setFlip(false)
+      }
+    })
+
+    return () => cancelAnimationFrame(rafId)
+  }, [open])
+
   const handleSelect = (item: SelectMenuItem) => {
     setSelected(item)
     setOpen(false)
@@ -63,6 +87,7 @@ export function SelectMenu({
   return (
     <div ref={containerRef} className="select-menu-container">
       <button
+        ref={triggerRef}
         className="select-menu-trigger"
         onClick={() => setOpen(!open)}
         disabled={disabled}
@@ -77,7 +102,7 @@ export function SelectMenu({
 
       {open && (
         <div
-          className="select-menu-list"
+          className={`select-menu-list${flip ? ' select-menu-list-flip' : ''}`}
           role="listbox"
         >
           {items.map((item) => (

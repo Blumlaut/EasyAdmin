@@ -18,7 +18,11 @@
     "duplication": "jscpd src/"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^4.4.0",
     "react": "^19.2.7",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
@@ -27,6 +31,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/chart.js": "^4.0.1",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",

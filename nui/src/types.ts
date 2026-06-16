@@ -120,6 +120,7 @@ export type View =
   | 'server'
   | 'resources'
   | 'resource-detail'
+  | 'statistics'
   | 'settings'
 
 // Ban duration preset indices
@@ -147,7 +148,44 @@ export interface PlayerCountPoint {
 }
 
 // Time range filter for player history
-export type HistoryRange = '1h' | '6h' | '24h' | '7d'
+export type HistoryRange = '1h' | '6h' | '24h' | '7d' | '30d' | '90d' | '120d'
+
+// Statistics time range presets
+export type StatsRange = '7d' | '30d' | '90d' | '120d'
+
+// Player registry entry (from statistics module)
+export interface PlayerRegistryEntry {
+  name: string         // player username (latest known)
+  identifier: string   // primary (most stable) identifier
+  identifiers: string[] // all identifiers for this player
+  firstSeen: number    // unix ms
+  lastSeen: number     // unix ms
+  sessions: number
+  playtime: number     // seconds
+}
+
+// Daily aggregated player count stats
+export interface DailyPeak {
+  day: number          // unix epoch day (start of day, seconds)
+  max: number
+  avg: number
+  min: number
+  entries: number      // number of data points that day
+}
+
+// Summary statistics returned by server
+export interface StatsSummary {
+  totalUnique: number
+  newPlayers: number       // firstSeen within range
+  returningPlayers: number // sessions > 1 within range
+  retentionRate: number    // returning / total unique (0-100)
+  avgSessionLength: number // seconds (true mean of individual sessions)
+  medianSessionLength: number // seconds (true median of individual sessions)
+  shortestSession: number  // seconds
+  longestSession: number   // seconds
+  totalSessions: number
+  totalPlaytime: number    // seconds
+}
 
 // Reason shortcut (from ea_addShortcut)
 export interface ReasonShortcut {

@@ -1,0 +1,44 @@
+/**
+ * Chart.js registry — only registers the pieces we actually use.
+ * Import this once at app entry to keep the bundle lean.
+ */
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  TimeScale,
+  LineController,
+  LineElement,
+  PointElement,
+  BarController,
+  BarElement,
+  ArcElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+// eslint-disable-next-line import/no-unresolved
+import 'chartjs-adapter-date-fns'
+
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  TimeScale,
+  LineController,
+  LineElement,
+  PointElement,
+  BarController,
+  BarElement,
+  ArcElement,
+  Filler,
+  Tooltip,
+  Legend,
+)
+
+// Make TS happy with the extended registry
+declare module 'chart.js' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Register {}
+}
+
+export default Chart

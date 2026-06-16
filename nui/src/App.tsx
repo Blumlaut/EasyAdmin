@@ -25,6 +25,7 @@ import { BanListPage } from './pages/Bans/BanListPage'
 import { BanDetailPage } from './pages/Bans/BanDetailPage'
 import { ReportListPage } from './pages/Reports/ReportListPage'
 import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
+import { StatisticsPage } from './pages/Statistics/StatisticsPage'
 import { ServerPage } from './pages/Server/ServerPage'
 import { ResourcesPage } from './pages/Resources/ResourcesPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
@@ -34,6 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'players', label: 'Players', icon: 'users' },
   { id: 'bans', label: 'Ban List', icon: 'ban' },
   { id: 'reports', label: 'Reports', icon: 'flag' },
+  { id: 'statistics', label: 'Statistics', icon: 'chart-bar' },
   { id: 'server', label: 'Server', icon: 'server' },
   { id: 'resources', label: 'Resources', icon: 'layers' },
   { id: 'settings', label: 'Settings', icon: 'settings' },
@@ -286,6 +288,7 @@ function App() {
     if (view === 'ban-detail') return 'bans'
     if (view === 'report-detail') return 'reports'
     if (view === 'resource-detail') return 'resources'
+    if (view === 'statistics') return 'statistics'
     return view
   })()
 
@@ -294,6 +297,7 @@ function App() {
     let disabled = false
     if (item.id === 'bans' && !permissions['player.ban.view']) disabled = true
     if (item.id === 'reports' && !permissions['player.reports.view']) disabled = true
+    if (item.id === 'statistics' && !permissions['server.statistics.view']) disabled = true
     if (
       item.id === 'server' &&
       !permissions['server.announce'] &&
@@ -315,6 +319,7 @@ function App() {
   const availableViews: View[] = ['main', 'players']
   if (permissions['player.ban.view']) availableViews.push('bans')
   if (permissions['player.reports.view']) availableViews.push('reports')
+  if (permissions['server.statistics.view']) availableViews.push('statistics')
   if (
     permissions['server.announce'] ||
     permissions['server.convars'] ||
@@ -483,6 +488,7 @@ function App() {
                   else if (id === 'players') navigateTo('players')
                   else if (id === 'bans') navigateTo('bans')
                   else if (id === 'reports') navigateTo('reports')
+                  else if (id === 'statistics') navigateTo('statistics')
                   else if (id === 'server') navigateTo('server')
                   else if (id === 'resources') navigateTo('resources')
                   else if (id === 'settings') navigateTo('settings')
@@ -645,6 +651,12 @@ function App() {
                 />
               )}
 
+              {view === 'statistics' && (
+                <StatisticsPage
+                  onToast={showToast}
+                />
+              )}
+
               {view === 'server' && (
                 <ServerPage
                   permissions={permissions}
@@ -723,6 +735,7 @@ function getPageTitle(
   if (view === 'ban-detail' && banId) return `Ban ${banId}`
   if (view === 'reports') return 'Reports'
   if (view === 'report-detail' && reportId !== null) return `Report #${reportId}`
+  if (view === 'statistics') return 'Statistics'
   if (view === 'server') return 'Server Management'
   if (view === 'resources') return 'Resource Management'
   if (view === 'resource-detail') return 'Resource Details'

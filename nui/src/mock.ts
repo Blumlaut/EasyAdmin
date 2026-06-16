@@ -48,6 +48,7 @@ const DEMO_PERMISSIONS: Permissions = {
   'player.bucket.join': true,
   'player.bucket.force': true,
   'player.reports.view': true,
+  'server.statistics.view': true,
   'player.reports.claim': true,
   'player.reports.process': true,
   'server.announce': true,

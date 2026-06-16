@@ -167,3 +167,34 @@ AddEventHandler('onClientResourceStop', function(resource)
     SetNuiFocus(false, false)
   end
 end)
+
+-- ============================================================
+-- Statistics: forward server results to NUI
+-- ============================================================
+
+RegisterNetEvent('EasyAdmin:statsSummaryResult', function(data)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'statsSummary',
+      data = data or {},
+    })
+  end
+end)
+
+RegisterNetEvent('EasyAdmin:dailyPeaksResult', function(data)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'dailyPeaks',
+      data = data or {},
+    })
+  end
+end)
+
+RegisterNetEvent('EasyAdmin:playerRegistryResult', function(data)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'playerRegistry',
+      data = data or {},
+    })
+  end
+end)

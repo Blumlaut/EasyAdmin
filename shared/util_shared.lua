@@ -28,6 +28,8 @@ permissions = {
 	["bot.history"] = false,
 	["bot.notes"] = false,
 	
+	["server.statistics.view"] = false,
+	
 	["server.cleanup.cars"] = false,
 	["server.cleanup.props"] = false,
 	["server.cleanup.peds"] = false,
