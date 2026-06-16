@@ -3,6 +3,7 @@ support.json
 banlist.txt
 settings.json
 backups/*.json
+data/player_history.json
 plugins/dev/**/*.*
 *yarn*
 node_modules/

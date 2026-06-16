@@ -10,7 +10,7 @@
 -- In-memory cache of player count snapshots
 -- Each entry: { timestamp (unix epoch seconds), count (number) }
 local playerHistory = {}
-local historyFile = 'player_history.json'
+local historyFile = 'data/player_history.json'
 
 -- Retention: 7 days in seconds
 local HISTORY_RETENTION = 7 * 86400
