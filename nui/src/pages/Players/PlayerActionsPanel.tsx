@@ -3,7 +3,7 @@ import type { IconName } from '../../components/icons'
 import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
 import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
-import { DropdownMenu } from '../../components/DropdownMenu'
+import { SelectMenu } from '../../components/SelectMenu'
 import { callLua } from '../../fivem'
 
 interface PlayerActionsPanelProps {
@@ -24,7 +24,8 @@ const DEFAULT_PRESETS = [
   'Exploiting / cheating',
 ]
 
-// Quick actions: no modal needed (toggle or confirm-only)
+// ---- Quick action types ----
+
 type QuickActionId =
   | 'slap'
   | 'spectate'
@@ -41,16 +42,6 @@ interface QuickActionDef {
   permission: string
   colorClass?: string
 }
-
-const QUICK_ACTIONS: QuickActionDef[] = [
-  { id: 'slap', label: 'Slap', icon: 'zap', permission: 'player.slap', colorClass: 'text-accent-orange' },
-  { id: 'spectate', label: 'Spectate', icon: 'eye', permission: 'player.spectate' },
-  { id: 'screenshot', label: 'Screenshot', icon: 'camera', permission: 'player.screenshot' },
-  { id: 'bucket-join', label: 'Join bucket', icon: 'arrow-left', permission: 'player.bucket.join' },
-  { id: 'bucket-force', label: 'Force bucket', icon: 'map-pin', permission: 'player.bucket.force', colorClass: 'text-accent-orange' },
-  { id: 'freeze', label: 'Freeze', icon: 'snowflake', permission: 'player.freeze', colorClass: 'text-accent-blue' },
-  { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute', colorClass: 'text-accent-orange' },
-]
 
 // Teleport options
 type TeleportAction = 'toMe' | 'meToPlayer' | 'meBack' | 'playerBack' | 'intoVehicle'
@@ -70,11 +61,53 @@ const TELEPORT_OPTIONS: TeleportOption[] = [
   { id: 'intoVehicle', label: 'Into closest vehicle', icon: 'globe', action: 'teleportIntoVehicle' },
 ]
 
+// ---- Action groups ----
+
+interface ActionGroup {
+  label: string
+  icon: IconName
+  actions: QuickActionDef[]
+}
+
+const ACTION_GROUPS: ActionGroup[] = [
+  {
+    label: 'Movement',
+    icon: 'compass',
+    actions: [
+      { id: 'spectate', label: 'Spectate', icon: 'eye', permission: 'player.spectate' },
+      { id: 'bucket-join', label: 'Join bucket', icon: 'arrow-left', permission: 'player.bucket.join' },
+      { id: 'bucket-force', label: 'Force bucket', icon: 'map-pin', permission: 'player.bucket.force', colorClass: 'text-accent-orange' },
+    ],
+  },
+  {
+    label: 'Control',
+    icon: 'sliders',
+    actions: [
+      { id: 'slap', label: 'Slap', icon: 'zap', permission: 'player.slap', colorClass: 'text-accent-orange' },
+      { id: 'freeze', label: 'Freeze', icon: 'snowflake', permission: 'player.freeze' },
+      { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute', colorClass: 'text-accent-orange' },
+      { id: 'screenshot', label: 'Screenshot', icon: 'camera', permission: 'player.screenshot' },
+    ],
+  },
+]
+
 export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: PlayerActionsPanelProps) {
   const modal = useModalContext()
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
-  const [disciplineTab, setDisciplineTab] = useState<DisciplineTab>('kick')
+  const canKick = permissions['player.kick']
+  const canWarn = permissions['player.warn']
+  const canBan = permissions['player.ban.temporary']
+  const canTeleport = permissions['player.teleport.single']
+
+  // Default to first available discipline tab in escalation order
+  const defaultDisciplineTab = useMemo((): DisciplineTab => {
+    if (canWarn) return 'warn'
+    if (canKick) return 'kick'
+    return 'ban'
+  }, [canWarn, canKick])
+
+  const [disciplineTab, setDisciplineTab] = useState<DisciplineTab>(defaultDisciplineTab)
   const [reason, setReason] = useState('')
 
   // Use server shortcuts if available, otherwise fall back to defaults
@@ -85,11 +118,15 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
     return DEFAULT_PRESETS
   }, [shortcuts])
 
-  const availableQuickActions = QUICK_ACTIONS.filter((a) => permissions[a.permission])
-  const canKick = permissions['player.kick']
-  const canWarn = permissions['player.warn']
-  const canBan = permissions['player.ban.temporary']
-  const canTeleport = permissions['player.teleport.single']
+  // Build filtered groups based on permissions
+  const filteredGroups = useMemo(() => {
+    return ACTION_GROUPS.map((group) => ({
+      ...group,
+      actions: group.actions.filter((a) => permissions[a.permission]),
+    })).filter((group) => group.actions.length > 0)
+  }, [permissions])
+
+  const hasAnyQuickAction = filteredGroups.length > 0 || canTeleport
 
   // ---- Quick action handler ----
 
@@ -182,24 +219,22 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
     }
   }
 
-  // ---- Build teleport dropdown trigger ----
+  // ---- Teleport select ----
 
-  const teleportTrigger = (
-    <button className="btn btn-secondary btn-sm" disabled={teleportBusy !== null}>
-      <Icon name="map-pin" size="xs" />
-      Teleport
-    </button>
-  )
-
-  const teleportItems = TELEPORT_OPTIONS.map((opt) => ({
+  const teleportSelectItems = TELEPORT_OPTIONS.map((opt) => ({
+    value: opt.id,
     label: opt.label,
     icon: opt.icon,
-    onSelect: () => handleTeleport(opt),
   }))
+
+  function handleTeleportSelect(item: { value: string; label: string }) {
+    const opt = TELEPORT_OPTIONS.find((o) => o.id === item.value as TeleportAction)
+    if (opt) handleTeleport(opt)
+  }
 
   // ---- Render ----
 
-  const hasAnyPermission = availableQuickActions.length > 0 || canKick || canWarn || canBan || canTeleport
+  const hasAnyPermission = hasAnyQuickAction || canKick || canWarn || canBan
 
   return (
     <div className="card">
@@ -209,54 +244,11 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
         <p className="text-muted text-sm">No permissions for this player</p>
       )}
 
-      {/* Quick actions row */}
-      {(availableQuickActions.length > 0 || canTeleport) && (
-        <div className="player-actions-quick-row">
-          {availableQuickActions.map((action) => {
-            const isToggle = action.id === 'freeze' || action.id === 'mute'
-            const isActive = action.id === 'freeze' ? player.frozen : player.muted
-            const actionColor = action.colorClass ?? ''
-
-            return (
-              <button
-                key={action.id}
-                className={`player-actions-quick-btn${isToggle && isActive ? ' player-actions-quick-btn-active' : ''}`}
-                onClick={() => handleQuickAction(action.id)}
-                disabled={busyAction === action.id}
-                title={isToggle
-                  ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
-                  : `${action.label} ${player.name}`
-                }
-              >
-                <Icon name={action.icon} size="sm" className={actionColor} />
-                <span className="player-actions-quick-label">
-                  {isToggle && isActive ? `Un${action.label}` : action.label}
-                </span>
-              </button>
-            )
-          })}
-
-          {/* Teleport dropdown */}
-          {canTeleport && (
-            <DropdownMenu trigger={teleportTrigger} items={teleportItems} />
-          )}
-        </div>
-      )}
-
-      {/* Discipline panel (kick / warn / ban) */}
+      {/* Discipline panel (kick / warn / ban) — highest priority */}
       {(canKick || canWarn || canBan) && (
         <div className="player-discipline-panel">
-          {/* Tab bar */}
+          {/* Tab bar — escalation order: Warn → Kick → Ban */}
           <div className="player-discipline-tabs">
-            {canKick && (
-              <button
-                className={`player-discipline-tab${disciplineTab === 'kick' ? ' player-discipline-tab-active' : ''}`}
-                onClick={() => setDisciplineTab('kick')}
-              >
-                <Icon name="log-out" size="xs" />
-                Kick
-              </button>
-            )}
             {canWarn && (
               <button
                 className={`player-discipline-tab${disciplineTab === 'warn' ? ' player-discipline-tab-active' : ''}`}
@@ -264,6 +256,15 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
               >
                 <Icon name="alert-triangle" size="xs" />
                 Warn
+              </button>
+            )}
+            {canKick && (
+              <button
+                className={`player-discipline-tab${disciplineTab === 'kick' ? ' player-discipline-tab-active' : ''}`}
+                onClick={() => setDisciplineTab('kick')}
+              >
+                <Icon name="log-out" size="xs" />
+                Kick
               </button>
             )}
             {canBan && (
@@ -314,6 +315,70 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
               {disciplineTab === 'kick' ? 'Kick' : disciplineTab === 'warn' ? 'Warn' : 'Ban'}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Divider between discipline and quick actions */}
+      {(canKick || canWarn || canBan) && hasAnyQuickAction && (
+        <div className="section-divider" />
+      )}
+
+      {/* Grouped quick actions */}
+      {hasAnyQuickAction && (
+        <div className="player-actions-groups">
+          {/* Action groups */}
+          {filteredGroups.map((group) => (
+            <div key={group.label} className="player-action-group">
+              <p className="player-action-group-label">
+                <Icon name={group.icon} size="xs" />
+                {group.label}
+              </p>
+              <div className="player-action-group-grid">
+                {group.actions.map((action) => {
+                  const isToggle = action.id === 'freeze' || action.id === 'mute'
+                  const isActive = action.id === 'freeze' ? player.frozen : player.muted
+                  const actionColor = action.colorClass ?? ''
+
+                  return (
+                    <button
+                      key={action.id}
+                      className={`player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
+                      onClick={() => handleQuickAction(action.id)}
+                      disabled={busyAction === action.id}
+                      title={isToggle
+                        ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
+                        : `${action.label} ${player.name}`
+                      }
+                    >
+                      <Icon name={action.icon} size="sm" className={actionColor} />
+                      <span className="player-action-group-btn-label">
+                        {isToggle && isActive ? `Un${action.label}` : action.label}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+
+          {/* Teleport — always shown as standalone if permitted */}
+          {canTeleport && (
+            <div className="player-action-group">
+              <p className="player-action-group-label">
+                <Icon name="compass" size="xs" />
+                Teleport
+              </p>
+              <div className="player-action-group-grid">
+                <SelectMenu
+                  items={teleportSelectItems}
+                  placeholder="Select action..."
+                  onChange={handleTeleportSelect}
+                  disabled={teleportBusy !== null}
+                  ariaLabel="Teleport option"
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

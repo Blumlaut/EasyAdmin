@@ -48,9 +48,9 @@ describe('PlayerDetailPage', () => {
     expect(screen.getByText('Actions')).toBeInTheDocument()
   })
 
-  it('shows teleport dropdown button with permission', () => {
+  it('shows teleport section with permission', () => {
     renderDefault()
-    expect(screen.getByText('Teleport')).toBeInTheDocument()
+    expect(screen.getAllByText('Teleport').length).toBeGreaterThan(0)
   })
 
   it('hides teleport dropdown without permission', () => {

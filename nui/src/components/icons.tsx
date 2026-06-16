@@ -23,6 +23,8 @@ export type IconName =
   | 'search'
   | 'chevron-left'
   | 'chevron-right'
+  | 'chevron-down'
+  | 'chevron-up'
   | 'chevron-double-left'
   | 'chevron-double-right'
   | 'arrow-left'
@@ -61,6 +63,9 @@ export type IconName =
   | 'square'
   | 'code'
   | 'git-branch'
+  | 'layout-grid'
+  | 'compass'
+  | 'sliders'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -139,6 +144,12 @@ const ICONS: Record<IconName, React.ReactNode> = {
   ),
   'chevron-right': (
     <polyline points="9 18 15 12 9 6" />
+  ),
+  'chevron-down': (
+    <polyline points="6 9 12 15 18 9" />
+  ),
+  'chevron-up': (
+    <polyline points="18 15 12 9 6 15" />
   ),
   'chevron-double-left': (
     <>
@@ -361,6 +372,33 @@ const ICONS: Record<IconName, React.ReactNode> = {
       <circle cx={18} cy={6} r={3} />
       <circle cx={6} cy={18} r={3} />
       <path d="M18 9a9 9 0 0 1-9 9" />
+    </>
+  ),
+  'layout-grid': (
+    <>
+      <rect x={3} y={3} width={7} height={7} rx={1} />
+      <rect x={14} y={3} width={7} height={7} rx={1} />
+      <rect x={14} y={14} width={7} height={7} rx={1} />
+      <rect x={3} y={14} width={7} height={7} rx={1} />
+    </>
+  ),
+  compass: (
+    <>
+      <circle cx={12} cy={12} r={10} />
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </>
+  ),
+  sliders: (
+    <>
+      <line x1={4} y1={21} x2={4} y2={14} />
+      <line x1={4} y1={10} x2={4} y2={3} />
+      <line x1={12} y1={21} x2={12} y2={12} />
+      <line x1={12} y1={8} x2={12} y2={3} />
+      <line x1={20} y1={21} x2={20} y2={16} />
+      <line x1={20} y1={12} x2={20} y2={3} />
+      <line x1={1} y1={14} x2={7} y2={14} />
+      <line x1={9} y1={8} x2={15} y2={8} />
+      <line x1={17} y1={16} x2={23} y2={16} />
     </>
   ),
 }

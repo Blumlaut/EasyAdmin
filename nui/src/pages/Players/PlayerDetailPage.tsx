@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
 import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
 import { copyToClipboard } from '../../utils/clipboard'
+import { Icon } from '../../components/icons'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
 import { PlayerActionsPanel } from './PlayerActionsPanel'
 
@@ -21,6 +22,7 @@ export function PlayerDetailPage({
   onToast,
 }: PlayerDetailPageProps) {
   const [identifiers, setIdentifiers] = useState<string[] | null>(null)
+  const [identifiersExpanded, setIdentifiersExpanded] = useState(false)
 
   // Lazy-load full identifiers from server
   useEffect(() => {
@@ -49,14 +51,69 @@ export function PlayerDetailPage({
     }
   }
 
+  const handleToggleIdentifiers = useCallback(() => {
+    setIdentifiersExpanded((prev) => !prev)
+  }, [])
+
+  // Filter out IP identifiers when privacy is enabled
+  const visibleIdentifiers = useMemo(() => {
+    return (identifiers ?? []).filter((id) => {
+      if (ipPrivacy && id.split(':')[0] === 'ip') return false
+      return true
+    })
+  }, [identifiers, ipPrivacy])
+
   return (
     <div className="page-container">
       <PlayerInfoPanel
         player={player}
         ipPrivacy={ipPrivacy}
-        identifiers={identifiers}
         onCopyDiscord={copyDiscord}
       />
+
+      {/* Collapsible identifiers card */}
+      {visibleIdentifiers.length > 0 && (
+        <div className="card card-identifiers">
+          <button
+            className="card-identifiers-toggle"
+            onClick={handleToggleIdentifiers}
+            aria-expanded={identifiersExpanded}
+            aria-controls="identifiers-list"
+          >
+            <Icon
+              name={identifiersExpanded ? 'chevron-down' : 'chevron-right'}
+              size="sm"
+            />
+            <span>Identifiers</span>
+            <span className="text-sm text-muted identifier-count">{visibleIdentifiers.length}</span>
+          </button>
+
+          {identifiersExpanded && (
+            <ul className="card-identifiers-list" id="identifiers-list">
+              {visibleIdentifiers.map((id) => {
+                const [kind, value] = id.split(':')
+                return (
+                  <li
+                    key={id}
+                    className="flex items-center gap-2 text-mono text-sm identifier-row"
+                  >
+                    <span className="badge badge-default">{kind}</span>
+                    <span className="truncate flex-1">{value ?? id}</span>
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => copyToClipboard(id)}
+                      aria-label={`Copy ${kind}`}
+                    >
+                      Copy
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+      )}
+
       <PlayerActionsPanel
         player={player}
         permissions={permissions}

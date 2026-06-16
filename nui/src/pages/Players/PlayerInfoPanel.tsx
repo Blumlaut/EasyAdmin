@@ -1,4 +1,3 @@
-import { copyToClipboard } from '../../utils/clipboard'
 import type { Player } from '../../types'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
@@ -7,11 +6,10 @@ import { RoleBadges } from '../../components/RoleBadges'
 interface PlayerInfoPanelProps {
   player: Player
   ipPrivacy: boolean
-  identifiers: string[] | null
   onCopyDiscord: () => void
 }
 
-export function PlayerInfoPanel({ player, ipPrivacy, identifiers, onCopyDiscord }: PlayerInfoPanelProps) {
+export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfoPanelProps) {
   const rows: KeyValueRow[] = [
     { key: 'ID', value: player.id, mono: true },
     { key: 'Name', value: player.name },
@@ -49,12 +47,6 @@ export function PlayerInfoPanel({ player, ipPrivacy, identifiers, onCopyDiscord 
     rows.push({ key: 'Bucket', value: player.selfbucket, mono: true })
   }
 
-  // Filter out IP identifiers when privacy is enabled
-  const visibleIdentifiers = (identifiers ?? []).filter((id) => {
-    if (ipPrivacy && id.split(':')[0] === 'ip') return false
-    return true
-  })
-
   return (
     <div className="card">
       <div className="flex items-center gap-4 mb-3">
@@ -74,36 +66,6 @@ export function PlayerInfoPanel({ player, ipPrivacy, identifiers, onCopyDiscord 
         </div>
       </div>
       <KeyValueTable rows={rows} ariaLabel="Player info" />
-
-      {visibleIdentifiers.length > 0 && (
-        <div className="mt-3">
-          <p className="section-label">
-            Identifiers
-            <span className="text-sm text-muted identifier-count">{visibleIdentifiers.length}</span>
-          </p>
-          <ul className="flex flex-col gap-1">
-            {visibleIdentifiers.map((id) => {
-              const [kind, value] = id.split(':')
-              return (
-                <li
-                  key={id}
-                  className="flex items-center gap-2 text-mono text-sm identifier-row"
-                >
-                  <span className="badge badge-default">{kind}</span>
-                  <span className="truncate flex-1">{value ?? id}</span>
-                  <button
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => copyToClipboard(id)}
-                    aria-label={`Copy ${kind}`}
-                  >
-                    Copy
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      )}
 
       {player.ip && ipPrivacy && (
         <p className="text-xs text-muted flex items-center gap-1 mt-2">

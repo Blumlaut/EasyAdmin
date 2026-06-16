@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:browser": "vite --open ?dev",
     "build": "tsc && vite build",
+    "watch": "vite build --watch",
     "preview": "vite preview",
     "lint": "eslint src/",
     "lint:css": "stylelint \"src/**/*.css\"",
