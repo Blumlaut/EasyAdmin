@@ -205,3 +205,13 @@ RegisterNUICallback('requestCachedPlayers', function(_data, cb)
   -- (see events.lua fillCachedPlayers handler)
   cb({ ok = true })
 end)
+
+---Lazy-load identifiers for a player detail view.
+---Result is pushed via 'playerIdentifiers' NUI event.
+RegisterNUICallback('getPlayerIdentifiers', function(data, cb)
+  local id = tonumber(data and data.id)
+  if not id then return cb({ error = 'Missing player id' }) end
+  TriggerServerEvent('EasyAdmin:getPlayerIdentifiers', id)
+  -- Result arrives asynchronously via the 'playerIdentifiers' NUI event.
+  cb({ ok = true })
+end)

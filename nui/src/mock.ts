@@ -882,6 +882,27 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
       case 'setResourceKvp':
         return jsonResponse({ success: true })
 
+      case 'getPlayerIdentifiers': {
+        const playerId = (body as Record<string, unknown>).id ?? 1
+        setTimeout(() => {
+          window.postMessage({
+            action: 'playerIdentifiers',
+            data: {
+              id: playerId,
+              identifiers: [
+                'license:abc123def456',
+                'license2:r5:def456abc123',
+                'fivem:789xyz',
+                'discord:123456789012345678',
+                'ip:192.168.1.100:1234',
+                'steam:steam:1100001abcdef01',
+              ],
+            },
+          }, '*')
+        }, 100)
+        return jsonResponse({ success: true })
+      }
+
       case 'refreshBanList':
       case 'refreshCachedPlayers':
       case 'refreshPermissions':

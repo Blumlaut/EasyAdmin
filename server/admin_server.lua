@@ -189,6 +189,30 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 	end
 end)
 
+---Lazy-load identifiers for a single player (used by player detail page)
+RegisterServerEvent("EasyAdmin:getPlayerIdentifiers", function(playerId)
+	local src = source
+	if not IsPlayerAdmin(src) then return end
+	local pid = tonumber(playerId)
+	if not pid then return end
+
+	-- Try online player first
+	local onlineIdentifiers = GetPlayerIdentifiers(pid)
+	if #onlineIdentifiers > 0 then
+		TriggerClientEvent("EasyAdmin:playerIdentifiersResult", src, pid, onlineIdentifiers)
+		return
+	end
+
+	-- Fall back to cache
+	local cached = CachedPlayers[pid]
+	if cached and cached.identifiers then
+		TriggerClientEvent("EasyAdmin:playerIdentifiersResult", src, pid, cached.identifiers)
+		return
+	end
+
+	TriggerClientEvent("EasyAdmin:playerIdentifiersResult", src, pid, {})
+end)
+
 function GetOnlineAdmins()
 	return OnlineAdmins
 end

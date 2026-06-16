@@ -140,6 +140,16 @@ RegisterNetEvent('EasyAdmin:fillShortcuts', function(shortcuts)
   end
 end)
 
+-- Push player identifiers to NUI for the detail page.
+RegisterNetEvent('EasyAdmin:playerIdentifiersResult', function(playerId, identifiers)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'playerIdentifiers',
+      data = { id = playerId, identifiers = identifiers or {} },
+    })
+  end
+end)
+
 -- Push frozen/muted state to the NUI.
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(playerId, state)
   FrozenPlayers[playerId] = state

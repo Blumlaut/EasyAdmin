@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { callLua, on } from '../../fivem'
 import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
 import { copyToClipboard } from '../../utils/clipboard'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
@@ -18,6 +20,22 @@ export function PlayerDetailPage({
   shortcuts,
   onToast,
 }: PlayerDetailPageProps) {
+  const [identifiers, setIdentifiers] = useState<string[] | null>(null)
+
+  // Lazy-load full identifiers from server
+  useEffect(() => {
+    let cancelled = false
+    callLua('getPlayerIdentifiers', { id: player.id })
+    const unsub = on<{ id: number; identifiers: string[] }>('playerIdentifiers', (data) => {
+      if (cancelled || data.id !== player.id) return
+      setIdentifiers(data.identifiers)
+    })
+    return () => {
+      cancelled = true
+      unsub()
+    }
+  }, [player.id])
+
   function copyDiscord() {
     if (!player.discord) {
       onToast('No Discord to copy', 'error')
@@ -36,6 +54,7 @@ export function PlayerDetailPage({
       <PlayerInfoPanel
         player={player}
         ipPrivacy={ipPrivacy}
+        identifiers={identifiers}
         onCopyDiscord={copyDiscord}
       />
       <PlayerActionsPanel
