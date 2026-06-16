@@ -10,6 +10,7 @@ export interface Player {
   ipprivacy?: boolean
   frozen?: boolean
   muted?: boolean
+  admin?: boolean
   developer?: boolean
   contributor?: boolean
   coords?: { x: number; y: number; z: number }

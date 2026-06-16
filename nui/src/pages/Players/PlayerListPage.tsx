@@ -5,6 +5,7 @@ import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
+import { RoleBadges } from '../../components/RoleBadges'
 import { AllPlayersActions } from './AllPlayersActions'
 
 interface PlayerListPageProps {
@@ -124,7 +125,10 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
         {player.name.charAt(0).toUpperCase()}
       </div>
       <div className="list-item-content">
-        <div className="list-item-title">{player.name}</div>
+        <div className="list-item-title">
+          {player.name}
+          <RoleBadges player={player} />
+        </div>
         <div className="list-item-subtitle text-mono">
           ID: {player.id}
           {player.license ? ` -- ${player.license}` : ''}
@@ -133,8 +137,6 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
       <div className="list-item-meta">
         {player.frozen && <span className="badge badge-frozen">Frozen</span>}
         {player.muted && <span className="badge badge-muted">Muted</span>}
-        {player.developer && <span className="badge badge-dev">Dev</span>}
-        {player.contributor && <span className="badge badge-contributor">Contrib</span>}
       </div>
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
     </div>

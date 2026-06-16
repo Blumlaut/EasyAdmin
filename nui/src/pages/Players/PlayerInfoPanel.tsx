@@ -1,6 +1,7 @@
 import type { Player } from '../../types'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
+import { RoleBadges } from '../../components/RoleBadges'
 
 interface PlayerInfoPanelProps {
   player: Player
@@ -53,16 +54,15 @@ export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfo
           {player.name.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-bold truncate">{player.name}</h3>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="text-xl font-bold truncate">{player.name}</h3>
+            <RoleBadges player={player} />
+          </div>
           <p className="text-sm text-muted text-mono">ID: {player.id}</p>
         </div>
         <div className="flex gap-2 shrink-0">
           {player.frozen && <span className="badge badge-frozen">Frozen</span>}
           {player.muted && <span className="badge badge-muted">Muted</span>}
-          {player.developer && <span className="badge badge-dev">Dev</span>}
-          {player.contributor && (
-            <span className="badge badge-contributor">Contrib</span>
-          )}
         </div>
       </div>
       <KeyValueTable rows={rows} ariaLabel="Player info" />

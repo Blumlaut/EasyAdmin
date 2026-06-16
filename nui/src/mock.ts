@@ -24,7 +24,7 @@ const DEMO_PLAYERS: Player[] = [
   { id: 3, name: 'Charlie Brown', license: 'license:ghi789', ip: '10.0.0.12', frozen: true },
   { id: 4, name: 'Diana Prince', license: 'license:jkl012', ip: '172.16.0.5', muted: true },
   { id: 5, name: 'Eve Adams', license: 'license:mno345', ip: '192.168.2.100' },
-  { id: 6, name: 'Frank Castle', license: 'license:pqr678', ip: '10.10.10.10', developer: true },
+  { id: 6, name: 'Frank Castle', license: 'license:pqr678', ip: '10.10.10.10', admin: true, developer: true },
   { id: 7, name: 'Grace Hopper', license: 'license:stu901', ip: '172.20.0.3' },
   { id: 8, name: 'Hank Pym', license: 'license:vwx234', ip: '192.168.3.200', contributor: true },
 ]

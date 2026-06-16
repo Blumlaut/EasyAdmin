@@ -179,7 +179,7 @@ RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 		for i, player in pairs(players) do
 			local player = tonumber(player)
 			local cachedPlayer = cachePlayer(player)
-			local pData = { id = cachedPlayer.id, name = cachedPlayer.name, immune = cachedPlayer.immune, discord = cachedPlayer.discord, contributor = Contributors[cachedPlayer.discord], developer = cachedPlayer.discord == "178889658128793600" }
+			local pData = { id = cachedPlayer.id, name = cachedPlayer.name, immune = cachedPlayer.immune, discord = cachedPlayer.discord, contributor = Contributors[cachedPlayer.discord], developer = cachedPlayer.discord == "178889658128793600", admin = OnlineAdmins[player] }
 
 			l[#l + 1] = pData
 		end
