@@ -1,5 +1,5 @@
-import { callLua } from '../../fivem'
 import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
+import { copyToClipboard } from '../../utils/clipboard'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
 import { PlayerActionsPanel } from './PlayerActionsPanel'
 
@@ -24,7 +24,7 @@ export function PlayerDetailPage({
       return
     }
     try {
-      await callLua('copyToClipboard', { text: player.discord })
+      await copyToClipboard(player.discord)
       onToast('Discord copied to clipboard', 'success')
     } catch {
       onToast('Copy failed', 'error')

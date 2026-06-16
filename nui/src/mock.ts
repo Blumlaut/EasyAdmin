@@ -882,9 +882,6 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
       case 'setResourceKvp':
         return jsonResponse({ success: true })
 
-      case 'copyToClipboard':
-        return jsonResponse({ success: true })
-
       case 'refreshBanList':
       case 'refreshCachedPlayers':
       case 'refreshPermissions':

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
+import { copyToClipboard } from '../../utils/clipboard'
 import type { BanEntry, Notification, Permissions } from '../../types'
 import { InputPrompt } from '../../components/InputPrompt'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
@@ -139,7 +140,7 @@ export function BanDetailPage({
 
   function copy(text: string) {
     if (!text) return
-    callLua('copyToClipboard', { text }).catch(() => {})
+    copyToClipboard(text).catch(() => {})
   }
 
   const rows: KeyValueRow[] = [

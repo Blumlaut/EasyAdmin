@@ -186,9 +186,3 @@ RegisterNUICallback('setResourceKvp', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('copyToClipboard', function(data, cb)
-  if data and data.text then
-    SendNUIMessage({ action = 'clipboardCopy', data = { text = data.text } })
-  end
-  cb({ ok = true })
-end)
