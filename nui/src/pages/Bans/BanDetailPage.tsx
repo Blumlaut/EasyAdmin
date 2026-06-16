@@ -140,7 +140,7 @@ export function BanDetailPage({
 
   function copy(text: string) {
     if (!text) return
-    copyToClipboard(text).catch(() => {})
+    copyToClipboard(text)
   }
 
   const rows: KeyValueRow[] = [

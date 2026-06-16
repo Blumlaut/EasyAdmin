@@ -18,13 +18,13 @@ export function PlayerDetailPage({
   shortcuts,
   onToast,
 }: PlayerDetailPageProps) {
-  async function copyDiscord() {
+  function copyDiscord() {
     if (!player.discord) {
       onToast('No Discord to copy', 'error')
       return
     }
     try {
-      await copyToClipboard(player.discord)
+      copyToClipboard(player.discord)
       onToast('Discord copied to clipboard', 'success')
     } catch {
       onToast('Copy failed', 'error')
