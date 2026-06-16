@@ -1061,7 +1061,7 @@ select.input {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  margin: var(--space-1) var(--space-2);
+  margin: var(--space-1) var(--space-3);
   border-radius: var(--radius);
   color: var(--text-secondary);
   font-size: var(--text-base);
@@ -1071,7 +1071,7 @@ select.input {
   border: 1px solid transparent;
   background: transparent;
   font-family: inherit;
-  width: calc(100% - var(--space-1) * 2);
+  width: calc(100% - var(--space-3) * 2);
   text-align: left;
   letter-spacing: 0.01em;
 }
@@ -1606,10 +1606,11 @@ select.input {
   width: 100%;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--bg-tertiary);
+  background: var(--border-color);
   height: 6px;
   border-radius: var(--radius-full);
   outline: none;
+  margin: var(--space-4) 0;
 }
 
 .slider::-webkit-slider-thumb {
