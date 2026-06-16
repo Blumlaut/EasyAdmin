@@ -154,11 +154,16 @@ export interface ReasonShortcut {
   value: string
 }
 
-// Resource entry from GetResourceByFindIndex / GetResourceState
+// Resource entry from server (includes metadata summary)
 export interface ResourceEntry {
   name: string
   state: 'started' | 'stopped' | 'starting' | 'stopping' | 'missing' | 'unknown'
   isProtected?: boolean
+  version?: string
+  description?: string
+  repository?: string
+  latestVersion?: string | null
+  outdated?: boolean
 }
 
 // Resource metadata fetched via GET_RESOURCE_METADATA
@@ -166,4 +171,11 @@ export interface ResourceMetadata {
   name: string
   state: string
   entries: { key: string; value: string }[]
+}
+
+// Update check result for a single resource
+export interface ResourceUpdateResult {
+  name: string
+  latest: string | null
+  outdated: boolean
 }

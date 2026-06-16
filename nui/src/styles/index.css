@@ -563,6 +563,11 @@ select.input {
   color: var(--accent-red);
 }
 
+.badge-warning {
+  background: var(--bg-orange);
+  color: var(--accent-yellow);
+}
+
 /* ============================================================
    Card
    ============================================================ */

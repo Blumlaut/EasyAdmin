@@ -55,6 +55,10 @@ export type IconName =
   | 'layers'
   | 'box'
   | 'user-minus'
+  | 'external-link'
+  | 'arrow-up-circle'
+  | 'play'
+  | 'square'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -325,5 +329,25 @@ const ICONS: Record<IconName, JSX.Element> = {
       <circle cx={9} cy={7} r={4} />
       <line x1={23} y1={8} x2={23} y2={16} />
     </>
+  ),
+  'external-link': (
+    <>
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1={10} y1={14} x2={21} y2={3} />
+    </>
+  ),
+  'arrow-up-circle': (
+    <>
+      <circle cx={12} cy={12} r={10} />
+      <polyline points="12 16 16 12 12 8" />
+      <line x1={8} y1={12} x2={16} y2={12} />
+    </>
+  ),
+  play: (
+    <polygon points="5 3 19 12 5 21 5 3" />
+  ),
+  square: (
+    <rect x={3} y={3} width={18} height={18} rx={2} ry={2} />
   ),
 }

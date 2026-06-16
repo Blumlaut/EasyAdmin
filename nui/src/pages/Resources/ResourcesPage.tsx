@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect, useCallback } from 'react'
-import type { Notification, Permissions, ResourceEntry, ResourceMetadata } from '../../types'
-import { callLua } from '../../fivem'
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
+import type { Notification, Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult } from '../../types'
+import { callLua, on } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
@@ -24,6 +24,14 @@ interface ResourceMetadataResponse {
   metadata: ResourceMetadata | null
 }
 
+interface ResourceMetadataBatchResponse {
+  metadata: ResourceMetadata[]
+}
+
+interface ResourceUpdatesResponse {
+  updates: ResourceUpdateResult[]
+}
+
 const STATE_COLORS: Record<string, string> = {
   started: 'var(--accent-green)',
   stopped: 'var(--accent-red)',
@@ -31,6 +39,13 @@ const STATE_COLORS: Record<string, string> = {
   stopping: 'var(--accent-orange)',
   missing: 'var(--text-muted)',
   unknown: 'var(--text-muted)',
+}
+
+// Truncate description to max chars
+const MAX_DESC_LENGTH = 80
+
+function truncateDesc(text: string, max: number): string {
+  return text.length > max ? text.slice(0, max) + '…' : text
 }
 
 export function ResourcesPage({
@@ -50,6 +65,9 @@ export function ResourcesPage({
   const [detailMetadata, setDetailMetadata] = useState<ResourceMetadata | null>(null)
   const [detailLoading, setDetailLoading] = useState(false)
 
+  // Update check state
+  const [checkingUpdates, setCheckingUpdates] = useState(false)
+
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
 
@@ -58,14 +76,69 @@ export function ResourcesPage({
     callLua<ResourceListResponse>('requestResources')
       .then((res) => {
         setResources(res.resources ?? [])
+        // After loading resources, fetch batch metadata
+        fetchBatchMetadata(res.resources ?? [])
       })
       .catch(() => onToast('Failed to fetch resources', 'error'))
       .finally(() => setLoading(false))
   }, [onToast])
 
+  // Fetch metadata for all resources (batch) to populate version/description/repository
+  const fetchBatchMetadata = useCallback(async (resList: ResourceEntry[]) => {
+    const names = resList.map((r) => r.name)
+    try {
+      const res = await callLua<ResourceMetadataBatchResponse>('requestResourceMetadataBatch', { names })
+      const metadataList = res.metadata ?? []
+      // Merge metadata summaries into resources
+      setResources((prev) =>
+        prev.map((r) => {
+          const meta = metadataList.find((m) => m.name === r.name)
+          if (!meta) return r
+          const version = meta.entries.find((e) => e.key === 'version')?.value
+          const description = meta.entries.find((e) => e.key === 'description')?.value
+          const repository = meta.entries.find((e) => e.key === 'repository')?.value
+          return {
+            ...r,
+            version: version || r.version,
+            description: description || r.description,
+            repository: repository || r.repository,
+          }
+        }),
+      )
+    } catch {
+      // Silent fail - metadata is nice-to-have
+    }
+  }, [])
+
   useEffect(() => {
     fetchResources()
   }, [fetchResources])
+
+  // Listen for server push: resource list updated (after start/stop)
+  const resourcesRef = useRef(false)
+  resourcesRef.current = true
+  const unsubResources = on<ResourceListResponse>('updateResources', (payload) => {
+    if (!resourcesRef.current) return
+    setResources(payload.resources ?? [])
+    fetchBatchMetadata(payload.resources ?? [])
+  })
+
+  // Listen for server push: action toasts
+  const toastRef = useRef(false)
+  toastRef.current = true
+  const unsubToast = on<Notification>('notification', (payload) => {
+    if (!toastRef.current) return
+    onToast(payload.text, payload.type)
+  })
+
+  useEffect(() => {
+    return () => {
+      resourcesRef.current = false
+      toastRef.current = false
+      unsubResources()
+      unsubToast()
+    }
+  }, [unsubResources, unsubToast])
 
   // Fetch metadata when detailName changes
   useEffect(() => {
@@ -90,11 +163,16 @@ export function ResourcesPage({
   const filtered = useMemo(() => {
     if (!debouncedQuery) return resources
     const q = debouncedQuery.toLowerCase()
-    return resources.filter((r) => r.name.toLowerCase().includes(q))
+    return resources.filter(
+      (r) =>
+        r.name.toLowerCase().includes(q) ||
+        (r.description ?? '').toLowerCase().includes(q),
+    )
   }, [resources, debouncedQuery])
 
   const startedCount = resources.filter((r) => r.state === 'started').length
   const stoppedCount = resources.length - startedCount
+  const outdatedCount = resources.filter((r) => r.outdated).length
 
   const handleAction = async (name: string, action: 'start' | 'stop' | 'ensure') => {
     if (action === 'start' && !canStart) return
@@ -102,19 +180,14 @@ export function ResourcesPage({
 
     try {
       if (action === 'ensure') {
-        // Ensure = refresh + stop + start
         await callLua('stopResource', { name })
         await callLua('startResource', { name })
-        onToast(`Ensured ${name}`, 'success')
       } else if (action === 'start') {
         await callLua('startResource', { name })
-        onToast(`Started ${name}`, 'success')
       } else {
         await callLua('stopResource', { name })
-        onToast(`Stopped ${name}`, 'success')
       }
-      // Refresh list after action
-      fetchResources()
+      // List is refreshed via server push
       // Refresh metadata if viewing this resource
       if (detailName === name) {
         setDetailLoading(true)
@@ -124,6 +197,44 @@ export function ResourcesPage({
       }
     } catch {
       onToast(`Failed to ${action} ${name}`, 'error')
+    }
+  }
+
+  const handleCheckUpdates = async () => {
+    if (!canStart && !canStop) return
+    const withRepo = resources.filter((r) => r.repository && r.version)
+    if (withRepo.length === 0) {
+      onToast('No resources with a repository URL', 'info')
+      return
+    }
+    setCheckingUpdates(true)
+    try {
+      const res = await callLua<ResourceUpdatesResponse>('checkResourceUpdates', {
+        names: withRepo.map((r) => r.name),
+      })
+      const updates = res.updates ?? []
+      // Merge update results into resources
+      setResources((prev) =>
+        prev.map((r) => {
+          const update = updates.find((u) => u.name === r.name)
+          if (!update) return r
+          return {
+            ...r,
+            latestVersion: update.latest,
+            outdated: update.outdated,
+          }
+        }),
+      )
+      const outdatedNames = updates.filter((u) => u.outdated).map((u) => u.name)
+      if (outdatedNames.length > 0) {
+        onToast(`${outdatedNames.length} resource(s) have updates available`, 'info')
+      } else {
+        onToast('All resources are up to date', 'success')
+      }
+    } catch {
+      onToast('Failed to check for updates', 'error')
+    } finally {
+      setCheckingUpdates(false)
     }
   }
 
@@ -157,14 +268,31 @@ export function ResourcesPage({
           resultCount={{ shown: filtered.length, total: resources.length }}
           ariaLabel="Search resources"
         />
-        <button
-          className="btn btn-secondary btn-sm"
-          onClick={fetchResources}
-          disabled={loading}
-        >
-          <Icon name="refresh" size="xs" />
-          Refresh
-        </button>
+        <div className="flex gap-2">
+          {outdatedCount > 0 && (
+            <span className="badge badge-warning text-xs self-center" title={`${outdatedCount} resource(s) have updates`}>
+              <Icon name="arrow-up-circle" size="xs" />
+              {outdatedCount}
+            </span>
+          )}
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={handleCheckUpdates}
+            disabled={checkingUpdates || (!canStart && !canStop)}
+            title="Check GitHub for latest releases"
+          >
+            <Icon name="arrow-up-circle" size="xs" />
+            {checkingUpdates ? 'Checking...' : 'Updates'}
+          </button>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={fetchResources}
+            disabled={loading}
+          >
+            <Icon name="refresh" size="xs" />
+            Refresh
+          </button>
+        </div>
       </div>
 
       {/* Summary badges */}
@@ -205,6 +333,15 @@ export function ResourcesPage({
             <ResourceRow
               key={resource.name}
               resource={resource}
+              canStart={canStart}
+              canStop={canStop}
+              onToggle={() => {
+                if (resource.state === 'started') {
+                  handleAction(resource.name, 'stop')
+                } else {
+                  handleAction(resource.name, 'start')
+                }
+              }}
               onClick={() => {
                 setDetailName(resource.name)
                 onSelectResource?.(resource.name)
@@ -221,12 +358,21 @@ export function ResourcesPage({
 
 function ResourceRow({
   resource,
+  canStart,
+  canStop,
+  onToggle,
   onClick,
 }: {
   resource: ResourceEntry
+  canStart: boolean
+  canStop: boolean
+  onToggle: () => void
   onClick: () => void
 }) {
   const stateColor = STATE_COLORS[resource.state] ?? STATE_COLORS.unknown
+  const isStarted = resource.state === 'started'
+  const canToggle = isStarted ? canStop : canStart
+  const isSelf = resource.isProtected
 
   return (
     <div
@@ -241,24 +387,76 @@ function ResourceRow({
         }
       }}
     >
+      {/* State indicator */}
       <div
         className="shrink-0"
         style={{
-          width: 12,
-          height: 12,
+          width: 10,
+          height: 10,
           borderRadius: '50%',
           backgroundColor: stateColor,
         }}
         aria-label={`State: ${resource.state}`}
       />
-      <div className="list-item-content">
-        <div className="list-item-title">{resource.name}</div>
-        <div className="list-item-subtitle">
-          {resource.state}
-          {resource.isProtected ? ' (protected)' : ''}
+
+      {/* Content */}
+      <div className="list-item-content min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="list-item-title truncate">{resource.name}</span>
+          {resource.version && (
+            <span
+              className={`badge shrink-0 ${resource.outdated ? 'badge-warning' : ''}`}
+              title={
+                resource.outdated && resource.latestVersion
+                  ? `Update available: v${resource.latestVersion}`
+                  : `v${resource.version}`
+              }
+            >
+              {resource.outdated && resource.latestVersion ? (
+                <>
+                  <Icon name="arrow-up-circle" size="xs" />
+                  v{resource.version}
+                </>
+              ) : (
+                `v${resource.version}`
+              )}
+            </span>
+          )}
+          {resource.repository && (
+            <a
+              href={resource.repository}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted hover:text-foreground shrink-0"
+              title={resource.repository}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Icon name="external-link" size="xs" />
+            </a>
+          )}
         </div>
+        {resource.description && (
+          <div className="list-item-subtitle truncate" title={resource.description}>
+            {truncateDesc(resource.description, MAX_DESC_LENGTH)}
+          </div>
+        )}
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
+
+      {/* Inline action button */}
+      {canToggle && !isSelf && (
+        <button
+          className="btn btn-sm shrink-0 mr-1"
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggle()
+          }}
+          title={isStarted ? `Stop ${resource.name}` : `Start ${resource.name}`}
+        >
+          <Icon name={isStarted ? 'square' : 'play'} size="xs" />
+        </button>
+      )}
+
+      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle shrink-0" />
     </div>
   )
 }
@@ -289,6 +487,11 @@ function ResourceDetailView({
     ? ((window as any).parentResourceName ?? 'EasyAdmin')
     : 'EasyAdmin'
   const isSelf = name === currentResourceName
+
+  // Extract key metadata for header display
+  const version = metadata?.entries.find((e) => e.key === 'version')?.value
+  const description = metadata?.entries.find((e) => e.key === 'description')?.value
+  const repository = metadata?.entries.find((e) => e.key === 'repository')?.value
 
   const metadataRows: KeyValueRow[] = loading
     ? []
@@ -327,7 +530,28 @@ function ResourceDetailView({
             backgroundColor: stateColor,
           }}
         />
-        <h3 className="text-lg font-semibold text-mono">{name}</h3>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-mono">{name}</h3>
+            {version && (
+              <span className="text-muted text-sm font-mono shrink-0">v{version}</span>
+            )}
+            {repository && (
+              <a
+                href={repository}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted hover:text-foreground shrink-0"
+                title={repository}
+              >
+                <Icon name="external-link" size="xs" />
+              </a>
+            )}
+          </div>
+          {description && (
+            <p className="text-secondary text-sm mt-0.5">{description}</p>
+          )}
+        </div>
       </div>
 
       {/* Actions */}
@@ -341,7 +565,7 @@ function ResourceDetailView({
               disabled={isSelf}
               title={isSelf ? 'Cannot start self' : 'Start resource'}
             >
-              <Icon name="zap" size="xs" />
+              <Icon name="play" size="xs" />
               Start
             </button>
           )}
@@ -352,7 +576,7 @@ function ResourceDetailView({
               disabled={isSelf}
               title={isSelf ? 'Cannot stop EasyAdmin' : 'Stop resource'}
             >
-              <Icon name="x" size="xs" />
+              <Icon name="square" size="xs" />
               Stop
             </button>
           )}

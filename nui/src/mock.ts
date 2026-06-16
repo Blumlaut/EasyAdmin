@@ -361,15 +361,46 @@ const DEMO_REPORTS: Report[] = [
 ]
 
 const DEMO_RESOURCES: ResourceEntry[] = [
-  { name: 'EasyAdmin', state: 'started', isProtected: true },
+  {
+    name: 'EasyAdmin',
+    state: 'started',
+    isProtected: true,
+    version: '7.52',
+    description: 'EasyAdmin - Admin Menu for FiveM & RedM',
+    repository: 'https://github.com/Blumlaut/EasyAdmin',
+  },
   { name: 'essentialmode', state: 'started' },
   { name: 'async', state: 'started' },
   { name: 'mysql-async', state: 'started' },
-  { name: 'ox_lib', state: 'started' },
-  { name: 'ox_core', state: 'started' },
-  { name: 'ox_inventory', state: 'started' },
+  {
+    name: 'ox_lib',
+    state: 'started',
+    version: '3.20.0',
+    description: 'A library of common, utilitarian functions and a standardisations library for annotations, configs, and events.',
+    repository: 'https://github.com/overextended/ox_lib',
+  },
+  {
+    name: 'ox_core',
+    state: 'started',
+    version: '0.14.0',
+    description: 'A lightweight resource providing events and exports for common functionality.',
+    repository: 'https://github.com/overextended/ox_core',
+  },
+  {
+    name: 'ox_inventory',
+    state: 'started',
+    version: '2.3.1',
+    description: 'An inventory resource for covenant framework with storage to and from internal/external databases.',
+    repository: 'https://github.com/overextended/ox_inventory',
+  },
   { name: 'ox_target', state: 'started' },
-  { name: 'qb-core', state: 'stopped' },
+  {
+    name: 'qb-core',
+    state: 'stopped',
+    version: '1.0.0',
+    description: 'qb-core is now qbox-core',
+    repository: 'https://github.com/qbcore-framework/qb-core',
+  },
   { name: 'qb-phone', state: 'stopped' },
   { name: 'qb-garages', state: 'stopped' },
   { name: 'qb-houses', state: 'stopped' },
@@ -395,7 +426,13 @@ const DEMO_RESOURCES: ResourceEntry[] = [
   { name: 'bob74_ipl', state: 'stopped' },
   { name: 'renegade-vehicle-names', state: 'started' },
   { name: 'server-dui', state: 'started' },
-  { name: 'voice', state: 'started' },
+  {
+    name: 'voice',
+    state: 'started',
+    version: '2.4.0',
+    description: 'Server-side voice communication for FiveM with support for proximity voice, radio channels, and voice over IP.',
+    repository: 'https://github.com/overextended/voice',
+  },
 ]
 
 const DEMO_RESOURCE_METADATA: Record<string, ResourceMetadata> = {
@@ -702,8 +739,14 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         return toastAndReturn('Map name updated')
 
       // ---- Resources ----
-      case 'requestResources':
+      case 'requestResources': {
+        // Also push via NUI message (async server push pattern)
+        window.postMessage({
+          action: 'updateResources',
+          data: { resources: mockResources, protected: 'EasyAdmin' },
+        }, '*')
         return jsonResponse({ resources: mockResources, protected: 'EasyAdmin' })
+      }
 
       case 'requestResourceMetadata': {
         const name = body.name as string
@@ -719,11 +762,32 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         return jsonResponse({ metadata })
       }
 
+      case 'requestResourceMetadataBatch': {
+        const names = body.names as string[]
+        const metadataList = (names ?? []).map((name) =>
+          DEMO_RESOURCE_METADATA[name] || {
+            name,
+            state: mockResources.find((r) => r.name === name)?.state || 'unknown',
+            entries: [
+              { key: 'fx_version', value: 'cerulean' },
+              { key: 'game', value: 'gta5' },
+              { key: 'version', value: '1.0.0' },
+            ],
+          },
+        )
+        return jsonResponse({ metadata: metadataList })
+      }
+
       case 'startResource': {
         const startName = body.name as string
         mockResources = mockResources.map((r) =>
           r.name === startName ? { ...r, state: 'started' as const } : r,
         )
+        // Push updated list via NUI message
+        window.postMessage({
+          action: 'updateResources',
+          data: { resources: mockResources, protected: 'EasyAdmin' },
+        }, '*')
         return toastAndReturn(`Started ${startName}`)
       }
 
@@ -732,7 +796,36 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         mockResources = mockResources.map((r) =>
           r.name === stopName ? { ...r, state: 'stopped' as const } : r,
         )
+        // Push updated list via NUI message
+        window.postMessage({
+          action: 'updateResources',
+          data: { resources: mockResources, protected: 'EasyAdmin' },
+        }, '*')
         return toastAndReturn(`Stopped ${stopName}`)
+      }
+
+      case 'checkResourceUpdates': {
+        const names = body.names as string[]
+        // Simulate async GitHub check - some resources have updates
+        const updates = (names ?? []).map((name) => {
+          const res = mockResources.find((r) => r.name === name)
+          if (!res?.repository || !res?.version) {
+            return { name, latest: null, outdated: false }
+          }
+          // Simulate: ox_lib and voice have updates available
+          if (name === 'ox_lib') {
+            return { name, latest: '3.21.0', outdated: true }
+          }
+          if (name === 'voice') {
+            return { name, latest: '2.5.0', outdated: true }
+          }
+          // EasyAdmin is on latest
+          if (name === 'EasyAdmin') {
+            return { name, latest: '7.52', outdated: false }
+          }
+          return { name, latest: res.version, outdated: false }
+        })
+        return jsonResponse({ updates })
       }
 
       case 'setConvar':
