@@ -345,7 +345,7 @@ exports('GetFreshBanId', GetFreshBanId)
 ---@return nil
 function updateBan(id,newData)
     if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
-        Storage.updateBan(newData.banid, newData) -- persists to banlist.json + refreshes the enforcement view
+        Storage.updateBan(tostring(newData.banid), newData) -- persists to banlist.json + refreshes the enforcement view
         if GetConvar("ea_custombanlist", "false") == "true" then
             TriggerEvent("ea_data:updateBan", newData)
         end
