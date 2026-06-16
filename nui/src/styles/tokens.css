@@ -224,13 +224,6 @@
 /* 150% */
 .font-size-150 { --text-xs: 17px; --text-sm: 18px; --text-base: 20px; --text-lg: 21px; --text-xl: 24px; --text-2xl: 30px; --text-3xl: 36px; --text-heading: 42px; --text-section: 17px; }
 
-/* -- Reduced motion -- */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 /* -- Dashboard charts grid -- */
 

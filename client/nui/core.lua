@@ -253,9 +253,18 @@ RegisterCommand('+ea_setFocused', function()
   -- keypress is a no-op. We deliberately do NOT set keyFocused here
   -- so that releasing the key doesn't unhook focus the user did not
   -- opt into.
+  -- Guard against +command repeating while the key is held — only
+  -- act once per press to avoid spamming NUI messages and re-renders.
   if nuiBackground then
     keyFocused = true
-    SetNuiFocused(true)
+    if not nuiFocused then
+      nuiFocused = true
+      nuiBackground = false
+      SetNuiFocus(true, true)
+      SendNUIMessage({
+        action = 'nuiRehook',
+      })
+    end
   end
 end, false)
 

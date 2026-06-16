@@ -199,13 +199,15 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  /* Combine centering (-50%) with the drag offset (--ea-drag-x/y).
-     The variables are set in JS; default to 0 (no offset). */
+  /* Combine centering (-50%) with the drag offset (--ea-drag-x/y) and
+     the collapse shift (--ea-collapse-shift). The collapse shift keeps
+     the left edge pinned when the content area folds in/out. */
   transform: translate(
-    calc(-50% + var(--ea-drag-x, 0px)),
+    calc(-50% + var(--ea-drag-x, 0px) + var(--ea-collapse-shift, 0px)),
     calc(-50% + var(--ea-drag-y, 0px))
   );
-  width: min(92vw, 1210px);
+  width: 1210px;
+  max-width: 92vw;
   height: min(85vh, 750px);
   display: flex;
   flex-direction: row;
@@ -214,14 +216,16 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
-  /* Only animate width changes (e.g. when folding the main content).
-     Transform updates from dragging are NOT animated for snappier feel. */
-  transition: width var(--transition);
+  /* Width change is delayed so the content wrapper slides first (at full
+     width), then the window shrinks with the collapse shift keeping the
+     left edge pinned. Delay = transition duration (180ms). */
+  transition: width var(--transition) var(--transition) !important;
 }
 
 /* -- Menu size: large -- */
 .ea-window--large {
-  width: min(96vw, 1500px);
+  width: 1500px;
+  max-width: 96vw;
   height: min(92vh, 950px);
 }
 
@@ -238,19 +242,36 @@
   transition: none;
 }
 
-/* -- Menu: main content collapsed (sidebar only) -- */
-.ea-window--collapsed {
-  width: 320px;
-  min-width: 320px;
+/* Content wrapper base — slides via translateX (CEF-safe: transition, not @keyframes) */
+.ea-window > div:not(.sidebar) {
+  transform: translateX(0);
+  overflow: hidden;
+  transition: transform var(--transition) !important;
 }
 
+/* -- Menu: main content collapsed (sidebar only) -- */
+/* The left edge is pinned by --ea-collapse-shift (set in JS). */
+.ea-window--collapsed {
+  width: 320px;
+  max-width: 320px;
+  box-shadow: none;
+  border-right: none;
+}
+
+/* Content wrapper slides LEFT into the sidebar, then window shrinks after delay */
+.ea-window--collapsed > div:not(.sidebar) {
+  flex: 0 0 0 !important;
+  min-width: 0 !important;
+  transform: translateX(-100%);
+}
+
+.ea-window--collapsed .topbar,
 .ea-window--collapsed .main-content {
   width: 0 !important;
   min-width: 0 !important;
   padding: 0 !important;
   opacity: 0;
   overflow: hidden;
-  /* No transition on `animation`/CSS `animation` to stay CEF-safe. */
   transition: opacity var(--transition-fast);
 }
 

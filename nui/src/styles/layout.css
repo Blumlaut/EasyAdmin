@@ -117,7 +117,22 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
+  padding-right: var(--space-3);
   border-bottom: 1px solid var(--border-subtle);
+  cursor: grab;
+  user-select: none;
+}
+
+.sidebar-header:active {
+  cursor: grabbing;
+}
+
+/* Collapse button pushed to the right of the header */
+.sidebar-collapse-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
 }
 
 .sidebar-logo {

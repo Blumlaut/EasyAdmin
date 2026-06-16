@@ -422,6 +422,26 @@ function App() {
     windowRef.current.style.setProperty('--ea-drag-y', `${windowPos.y}px`)
   }, [windowPos])
 
+  // Calculate the horizontal shift needed to keep the left edge pinned
+  // when the content area folds in/out. The window is centered via
+  // `left: 50%; transform: translate(-50%)`, so when width changes the
+  // left edge would shift. We compensate by adding half the width
+  // difference to the transform.
+  useEffect(() => {
+    if (!windowRef.current) return
+    if (!contentCollapsed) {
+      windowRef.current.style.setProperty('--ea-collapse-shift', '0px')
+      return
+    }
+    // Pre-collapse width (matches .ea-window / .ea-window--large CSS)
+    const maxWidth = settings.menuSize === 'large' ? 1500 : 1210
+    const vwWidth = Math.round(window.innerWidth * (settings.menuSize === 'large' ? 0.96 : 0.92))
+    const preCollapseWidth = Math.min(vwWidth, maxWidth)
+    const collapsedWidth = 320
+    const shift = Math.round((collapsedWidth - preCollapseWidth) / 2)
+    windowRef.current.style.setProperty('--ea-collapse-shift', `${shift}px`)
+  }, [contentCollapsed, settings.menuSize])
+
   if (!visible) return null
 
   const closeMenu = () => callLua('closeMenu').catch(() => {})
@@ -469,12 +489,27 @@ function App() {
           </a>
 
           <aside className="sidebar">
-            <div className="sidebar-header">
+            <div className="sidebar-header" data-window-drag-handle>
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
               <div>
                 <h1 className="text-xl font-bold sidebar-title text-gradient">EasyAdmin</h1>
                 <p className="text-xs text-muted sidebar-subtitle">Admin Panel</p>
               </div>
+              <button
+                className="btn btn-ghost btn-icon sidebar-collapse-btn"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggleCollapsed()
+                }}
+                aria-label={contentCollapsed ? 'Expand main content' : 'Collapse main content'}
+                title={contentCollapsed ? 'Expand main content' : 'Collapse main content'}
+                disabled={nuiBackground}
+              >
+                <Icon
+                  name={contentCollapsed ? 'chevron-double-right' : 'chevron-double-left'}
+                  size="xs"
+                />
+              </button>
             </div>
             <div className="sidebar-nav">
               <Navigation
@@ -525,27 +560,6 @@ function App() {
                 {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
               </h2>
               <div className="topbar-actions">
-                <button
-                  className="btn btn-ghost btn-icon"
-                  onClick={toggleCollapsed}
-                  aria-label={contentCollapsed ? 'Expand main content' : 'Collapse main content'}
-                  title={contentCollapsed ? 'Expand main content' : 'Collapse main content'}
-                  disabled={nuiBackground}
-                >
-                  <Icon
-                    name={contentCollapsed ? 'chevron-double-left' : 'chevron-double-right'}
-                    size="xs"
-                  />
-                </button>
-                <button
-                  className="btn btn-ghost btn-icon"
-                  onClick={handleBackdropClick}
-                  aria-label="Release focus and play the game"
-                  title="Release focus (hold ALT to interact again)"
-                  disabled={nuiBackground}
-                >
-                  <Icon name="mouse-pointer-click" size="xs" />
-                </button>
                 <button
                   className="btn btn-ghost btn-icon btn-close"
                   onClick={closeMenu}
