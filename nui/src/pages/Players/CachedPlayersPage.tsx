@@ -2,8 +2,9 @@ import { useRef, useState } from 'react'
 import type { CachedPlayer, Notification } from '../../types'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
-import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
+import { ListItem } from '../../components/ListItem'
+import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { useModalContext } from '../../ModalContext'
 
 interface CachedPlayersPageProps {
@@ -45,17 +46,7 @@ export function CachedPlayersPage({
       </div>
 
       {loading ? (
-        <div className="list">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="list-item">
-              <Skeleton width={32} height={32} circle />
-              <div className="list-item-content flex flex-col gap-1">
-                <Skeleton width="40%" height={14} />
-                <Skeleton width="60%" height={12} />
-              </div>
-            </div>
-          ))}
-        </div>
+        <PlayerListSkeleton />
       ) : cachedPlayers.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
@@ -86,7 +77,7 @@ function CachedRow({
   onBan: () => void
 }) {
   return (
-    <div className="list-item">
+    <ListItem onClick={() => {}}>
       <div className="avatar avatar-sm avatar-offline">
         <Icon name="archive" size="xs" className="text-muted" />
       </div>
@@ -106,6 +97,6 @@ function CachedRow({
           Ban
         </button>
       </div>
-    </div>
+    </ListItem>
   )
 }

@@ -8,18 +8,22 @@ const mockPlayers: Player[] = [
   { id: 3, name: 'Charlie', license: 'license:ghi789' },
 ]
 
+const defaultProps = {
+  loading: false,
+  permissions: {} as Permissions,
+  onSelectPlayer: () => {},
+  onOpenCached: () => {},
+  onToast: () => {},
+  onRefresh: () => {},
+  refreshKey: 0,
+}
+
 describe('PlayerListPage', () => {
   it('renders all players passed in', () => {
     render(
       <PlayerListPage
         players={mockPlayers}
-        loading={false}
-        permissions={{} as Permissions}
-        onSelectPlayer={() => {}}
-        onOpenCached={() => {}}
-        onToast={() => {}}
-        onRefresh={() => {}}
-        refreshKey={0}
+        {...defaultProps}
       />,
     )
     expect(screen.getByText('Alice')).toBeInTheDocument()
@@ -31,13 +35,7 @@ describe('PlayerListPage', () => {
     render(
       <PlayerListPage
         players={[]}
-        loading={false}
-        permissions={{} as Permissions}
-        onSelectPlayer={() => {}}
-        onOpenCached={() => {}}
-        onToast={() => {}}
-        onRefresh={() => {}}
-        refreshKey={0}
+        {...defaultProps}
       />,
     )
     expect(screen.getByText('No players connected')).toBeInTheDocument()
@@ -47,13 +45,7 @@ describe('PlayerListPage', () => {
     render(
       <PlayerListPage
         players={mockPlayers}
-        loading={false}
-        permissions={{} as Permissions}
-        onSelectPlayer={() => {}}
-        onOpenCached={() => {}}
-        onToast={() => {}}
-        onRefresh={() => {}}
-        refreshKey={0}
+        {...defaultProps}
       />,
     )
     expect(screen.getByText('Cached players')).toBeInTheDocument()

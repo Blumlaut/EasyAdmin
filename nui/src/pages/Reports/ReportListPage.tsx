@@ -5,6 +5,7 @@ import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
+import { ListItem } from '../../components/ListItem'
 
 interface ReportListPageProps {
   reports: Report[]
@@ -100,18 +101,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
       : 'text-yellow'
 
   return (
-    <div
-      className={`list-item ${colorClass}`}
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onClick()
-        }
-      }}
-    >
+    <ListItem className={colorClass} onClick={onClick}>
       <div className={`avatar avatar-sm ${report.claimed ? 'avatar-report-claimed' : report.type === 1 ? 'avatar-report-emergency' : 'avatar-report'}`}>
         <Icon
           name="flag"
@@ -133,7 +123,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
         <span className="badge badge-default">{report.reportTimeFormatted}</span>
       </div>
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
-    </div>
+    </ListItem>
   )
 }
 

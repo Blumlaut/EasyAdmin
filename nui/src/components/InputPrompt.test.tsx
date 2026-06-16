@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { InputPrompt } from './InputPrompt'
+import { renderModal, testEscapeCloses } from '../test/renderModal'
 
 describe('InputPrompt', () => {
   it('renders title', () => {
@@ -17,9 +17,8 @@ describe('InputPrompt', () => {
   })
 
   it('calls onConfirm with the entered value', async () => {
-    const user = userEvent.setup()
     const onConfirm = vi.fn()
-    render(
+    const { user } = renderModal(
       <InputPrompt title="Reason" onCancel={() => {}} onConfirm={onConfirm} />,
     )
     await user.type(screen.getByRole('textbox'), 'spam')
@@ -28,9 +27,8 @@ describe('InputPrompt', () => {
   })
 
   it('calls onCancel when cancel is clicked', async () => {
-    const user = userEvent.setup()
     const onCancel = vi.fn()
-    render(
+    const { user } = renderModal(
       <InputPrompt title="Reason" onCancel={onCancel} onConfirm={() => {}} />,
     )
     await user.click(screen.getByText('Cancel'))
@@ -38,9 +36,8 @@ describe('InputPrompt', () => {
   })
 
   it('trims whitespace before confirm', async () => {
-    const user = userEvent.setup()
     const onConfirm = vi.fn()
-    render(
+    const { user } = renderModal(
       <InputPrompt title="Reason" onCancel={() => {}} onConfirm={onConfirm} />,
     )
     await user.type(screen.getByRole('textbox'), '  hi  ')
@@ -65,7 +62,6 @@ describe('InputPrompt', () => {
     render(
       <InputPrompt title="Reason" onCancel={onCancel} onConfirm={() => {}} />,
     )
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
-    expect(onCancel).toHaveBeenCalled()
+    testEscapeCloses(onCancel)
   })
 })

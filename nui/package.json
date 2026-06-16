@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run lint && npm run lint:css && npm run typecheck && npm run test"
+    "check": "npm run lint && npm run lint:css && npm run typecheck && npm run test",
+    "duplication": "jscpd src/"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -32,6 +33,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.6.0",
+    "jscpd": "^5.0.9",
     "jsdom": "^29.1.1",
     "stylelint": "^17.13.0",
     "stylelint-config-standard": "^40.0.0",

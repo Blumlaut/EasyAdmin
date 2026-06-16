@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useEscapeKey } from '../hooks/useEscapeKey'
+import { DialogWrapper } from './DialogWrapper'
 
 interface InputPromptProps {
   title: string
@@ -34,22 +35,13 @@ export function InputPrompt({
 }: InputPromptProps) {
   const [value, setValue] = useState(initialValue)
   const inputRef = useRef<HTMLInputElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
 
-  useFocusTrap(containerRef)
+  useEscapeKey(onCancel)
 
   useEffect(() => {
     inputRef.current?.focus()
     inputRef.current?.select()
   }, [])
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCancel()
-    }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [onCancel])
 
   function handleSubmit() {
     const trimmed = value.trim()
@@ -58,39 +50,11 @@ export function InputPrompt({
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="dialog-overlay"
-      role="presentation"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel()
-      }}
-    >
-      <div
-        className="dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="input-prompt-title"
-      >
-        <h2 id="input-prompt-title" className="dialog-title">
-          {title}
-        </h2>
-        {label && <p className="dialog-description">{label}</p>}
-        <input
-          ref={inputRef}
-          className="input"
-          placeholder={placeholder}
-          value={value}
-          maxLength={maxLength}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              handleSubmit()
-            }
-          }}
-          aria-label={label ?? title}
-        />
+    <DialogWrapper
+      title={title}
+      description={label}
+      onCancel={onCancel}
+      actions={
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={onCancel}>
             {cancelLabel}
@@ -103,7 +67,23 @@ export function InputPrompt({
             {confirmLabel}
           </button>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <input
+        ref={inputRef}
+        className="input"
+        placeholder={placeholder}
+        value={value}
+        maxLength={maxLength}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            handleSubmit()
+          }
+        }}
+        aria-label={label ?? title}
+      />
+    </DialogWrapper>
   )
 }

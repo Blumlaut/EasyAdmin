@@ -8,6 +8,7 @@ import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
+import { ListItem } from '../../components/ListItem'
 
 interface ResourcesPageProps {
   permissions: Permissions
@@ -365,18 +366,7 @@ function ResourceRow({
   const isSelf = resource.isProtected
 
   return (
-    <div
-      className="list-item"
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onClick()
-        }
-      }}
-    >
+    <ListItem onClick={onClick}>
       {/* State indicator */}
       <div
         className={`resource-state-dot resource-state-dot--${resource.state}`}
@@ -468,7 +458,7 @@ function ResourceRow({
       )}
 
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle shrink-0" />
-    </div>
+    </ListItem>
   )
 }
 

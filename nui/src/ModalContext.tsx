@@ -1,5 +1,4 @@
-import { createContext, useContext, useRef, useState, useCallback, type ReactNode } from 'react'
-import { useFocusTrap } from './hooks/useFocusTrap'
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 import type { CleanupRadius, CleanupType, Notification, Player } from './types'
 import { callLua } from './fivem'
 import { InputPrompt } from './components/InputPrompt'
@@ -8,6 +7,7 @@ import { CleanupModal } from './components/CleanupModal'
 import { ConfirmDialog } from './components/ConfirmDialog'
 import { SliderInput } from './components/SliderInput'
 import { BanDurationPicker } from './components/BanDurationPicker'
+import { DialogWrapper } from './components/DialogWrapper'
 
 // ---- Modal state types ----
 
@@ -420,23 +420,13 @@ function BanDurationFlow({
   onConfirm: (seconds: number | null) => void
 }) {
   const [duration, setDuration] = useState<number | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useFocusTrap(containerRef)
 
   return (
-    <div
-      ref={containerRef}
-      className="dialog-overlay"
-      role="presentation"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel()
-      }}
-    >
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="ban-flow-title">
-        <h2 id="ban-flow-title" className="dialog-title">Ban duration</h2>
-        <p className="dialog-description">Choose how long the ban should last.</p>
-        <BanDurationPicker value={duration} onChange={setDuration} />
+    <DialogWrapper
+      title="Ban duration"
+      description="Choose how long the ban should last."
+      onCancel={onCancel}
+      actions={
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={onBack}>Back</button>
           <button className="btn btn-secondary" onClick={onCancel}>Cancel</button>
@@ -448,8 +438,10 @@ function BanDurationFlow({
             Confirm ban
           </button>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <BanDurationPicker value={duration} onChange={setDuration} />
+    </DialogWrapper>
   )
 }
 
@@ -493,26 +485,16 @@ function OfflineBanDurationFlow({
   onCancel: () => void
 }) {
   const [duration, setDuration] = useState<number | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
   const ctx = useModalContext()
 
-  useFocusTrap(containerRef)
-
   return (
-    <div
-      ref={containerRef}
-      className="dialog-overlay"
-      role="presentation"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel()
-      }}
-    >
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="offline-ban-title">
-        <h2 id="offline-ban-title" className="dialog-title">Ban duration</h2>
-        <p className="dialog-description">Choose how long the ban should last.</p>
-        <BanDurationPicker value={duration} onChange={setDuration} />
+    <DialogWrapper
+      title="Ban duration"
+      description="Choose how long the ban should last."
+      onCancel={() => { onCancel(); ctx.closeAll() }}
+      actions={
         <div className="dialog-actions">
-          <button className="btn btn-secondary" onClick={onCancel}>Cancel</button>
+          <button className="btn btn-secondary" onClick={() => { onCancel(); ctx.closeAll() }}>Cancel</button>
           <button
             className="btn btn-danger"
             disabled={duration === null || duration === -1}
@@ -529,7 +511,9 @@ function OfflineBanDurationFlow({
             Confirm ban
           </button>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <BanDurationPicker value={duration} onChange={setDuration} />
+    </DialogWrapper>
   )
 }

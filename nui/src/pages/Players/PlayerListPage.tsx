@@ -3,9 +3,10 @@ import type { Notification, Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
-import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 import { RoleBadges } from '../../components/RoleBadges'
+import { ListItem } from '../../components/ListItem'
+import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { AllPlayersActions } from './AllPlayersActions'
 
 interface PlayerListPageProps {
@@ -70,17 +71,7 @@ export function PlayerListPage({
       </div>
 
       {loading ? (
-        <div className="list">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="list-item">
-              <Skeleton width={32} height={32} circle />
-              <div className="list-item-content flex flex-col gap-1">
-                <Skeleton width="40%" height={14} />
-                <Skeleton width="60%" height={12} />
-              </div>
-            </div>
-          ))}
-        </div>
+        <PlayerListSkeleton />
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
@@ -109,18 +100,7 @@ export function PlayerListPage({
 
 function PlayerRow({ player, onClick }: { player: Player; onClick: () => void }) {
   return (
-    <div
-      className="list-item"
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onClick()
-        }
-      }}
-    >
+    <ListItem onClick={onClick}>
       <div className="avatar avatar-sm">
         {player.name.charAt(0).toUpperCase()}
       </div>
@@ -139,6 +119,6 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
         {player.muted && <span className="badge badge-muted">Muted</span>}
       </div>
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
-    </div>
+    </ListItem>
   )
 }

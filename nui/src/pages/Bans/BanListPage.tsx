@@ -5,8 +5,9 @@ import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
-import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
+import { ListItem } from '../../components/ListItem'
+import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 
 interface BanListPageProps {
   ipPrivacy: boolean
@@ -161,18 +162,7 @@ function BanRow({
   const secondary = ban.reason || 'No reason'
 
   return (
-    <div
-      className="list-item"
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onClick()
-        }
-      }}
-    >
+    <ListItem onClick={onClick}>
       <div className="avatar avatar-sm avatar-ban">
         <Icon name="ban" size="xs" className="text-red" />
       </div>
@@ -187,22 +177,10 @@ function BanRow({
         {ban.expire === -1 && <span className="badge badge-danger">Permanent</span>}
       </div>
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
-    </div>
+    </ListItem>
   )
 }
 
 function BanListSkeleton() {
-  return (
-    <div className="list">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="list-item">
-          <Skeleton width={32} height={32} circle />
-          <div className="list-item-content flex flex-col gap-1">
-            <Skeleton width="40%" height={14} />
-            <Skeleton width="60%" height={12} />
-          </div>
-        </div>
-      ))}
-    </div>
-  )
+  return <PlayerListSkeleton />
 }

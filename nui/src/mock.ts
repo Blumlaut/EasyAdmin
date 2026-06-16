@@ -523,6 +523,16 @@ const DEMO_RESOURCE_METADATA: Record<string, ResourceMetadata> = {
   },
 }
 
+const DEFAULT_RESOURCE_METADATA: ResourceMetadata = {
+  name: '',
+  state: 'unknown',
+  entries: [
+    { key: 'fx_version', value: 'cerulean' },
+    { key: 'game', value: 'gta5' },
+    { key: 'version', value: '1.0.0' },
+  ],
+}
+
 let mockPlayers = [...DEMO_PLAYERS]
 let mockBans: BanEntry[] = [...DEMO_BANS]
 let mockReports: Report[] = [...DEMO_REPORTS]
@@ -751,13 +761,9 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
       case 'requestResourceMetadata': {
         const name = body.name as string
         const metadata = DEMO_RESOURCE_METADATA[name] || {
+          ...DEFAULT_RESOURCE_METADATA,
           name,
-          state: mockResources.find((r) => r.name === name)?.state || 'unknown',
-          entries: [
-            { key: 'fx_version', value: 'cerulean' },
-            { key: 'game', value: 'gta5' },
-            { key: 'version', value: '1.0.0' },
-          ],
+          state: mockResources.find((r) => r.name === name)?.state || DEFAULT_RESOURCE_METADATA.state,
         }
         return jsonResponse({ metadata })
       }
@@ -766,13 +772,9 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
         const names = body.names as string[]
         const metadataList = (names ?? []).map((name) =>
           DEMO_RESOURCE_METADATA[name] || {
+            ...DEFAULT_RESOURCE_METADATA,
             name,
-            state: mockResources.find((r) => r.name === name)?.state || 'unknown',
-            entries: [
-              { key: 'fx_version', value: 'cerulean' },
-              { key: 'game', value: 'gta5' },
-              { key: 'version', value: '1.0.0' },
-            ],
+            state: mockResources.find((r) => r.name === name)?.state || DEFAULT_RESOURCE_METADATA.state,
           },
         )
         return jsonResponse({ metadata: metadataList })

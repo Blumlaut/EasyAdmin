@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react'
-import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useState } from 'react'
+import { DialogWrapper } from './DialogWrapper'
 
 interface SliderInputProps {
   label: string
@@ -27,36 +27,17 @@ export function SliderInput({
 }: SliderInputProps) {
   const [value, setValue] = useState(initialValue ?? min)
   const display = formatValue ? formatValue(value) : String(value)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useFocusTrap(containerRef)
 
   return (
-    <div
-      ref={containerRef}
-      className="dialog-overlay"
-      role="presentation"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel()
-      }}
-    >
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="slider-title">
-        <h2 id="slider-title" className="dialog-title">
-          {label}
-        </h2>
-        <p className="dialog-description">
+    <DialogWrapper
+      title={label}
+      description={
+        <span>
           Value: <span className="text-mono font-semibold">{display}</span>
-        </p>
-        <input
-          className="slider"
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(e) => setValue(Number(e.target.value))}
-          aria-label={label}
-        />
+        </span>
+      }
+      onCancel={onCancel}
+      actions={
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={onCancel}>
             Cancel
@@ -65,7 +46,18 @@ export function SliderInput({
             Confirm
           </button>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <input
+        className="slider"
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => setValue(Number(e.target.value))}
+        aria-label={label}
+      />
+    </DialogWrapper>
   )
 }

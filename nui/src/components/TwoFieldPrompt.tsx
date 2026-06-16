@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useEscapeKey } from '../hooks/useEscapeKey'
+import { DialogWrapper } from './DialogWrapper'
 
 interface TwoFieldPromptProps {
   title: string
@@ -30,21 +31,12 @@ export function TwoFieldPrompt({
   const [first, setFirst] = useState(firstInitialValue)
   const [second, setSecond] = useState(secondInitialValue)
   const firstRef = useRef<HTMLInputElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
 
-  useFocusTrap(containerRef)
+  useEscapeKey(onCancel)
 
   useEffect(() => {
     firstRef.current?.focus()
   }, [])
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCancel()
-    }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [onCancel])
 
   function handleSubmit() {
     if (!first.trim() || !second.trim()) return
@@ -52,44 +44,10 @@ export function TwoFieldPrompt({
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="dialog-overlay"
-      role="presentation"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel()
-      }}
-    >
-      <div
-        className="dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="two-field-title"
-      >
-        <h2 id="two-field-title" className="dialog-title">
-          {title}
-        </h2>
-        <div className="two-field-prompt">
-          <label className="flex flex-col gap-1">
-            <span className="text-sm text-secondary">{firstLabel}</span>
-            <input
-              ref={firstRef}
-              className="input"
-              placeholder={firstPlaceholder}
-              value={first}
-              onChange={(e) => setFirst(e.target.value)}
-            />
-          </label>
-          <label className="flex flex-col gap-1">
-            <span className="text-sm text-secondary">{secondLabel}</span>
-            <input
-              className="input"
-              placeholder={secondPlaceholder}
-              value={second}
-              onChange={(e) => setSecond(e.target.value)}
-            />
-          </label>
-        </div>
+    <DialogWrapper
+      title={title}
+      onCancel={onCancel}
+      actions={
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={onCancel}>
             Cancel
@@ -102,7 +60,29 @@ export function TwoFieldPrompt({
             Confirm
           </button>
         </div>
+      }
+    >
+      <div className="two-field-prompt">
+        <label className="flex flex-col gap-1">
+          <span className="text-sm text-secondary">{firstLabel}</span>
+          <input
+            ref={firstRef}
+            className="input"
+            placeholder={firstPlaceholder}
+            value={first}
+            onChange={(e) => setFirst(e.target.value)}
+          />
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-sm text-secondary">{secondLabel}</span>
+          <input
+            className="input"
+            placeholder={secondPlaceholder}
+            value={second}
+            onChange={(e) => setSecond(e.target.value)}
+          />
+        </label>
       </div>
-    </div>
+    </DialogWrapper>
   )
 }

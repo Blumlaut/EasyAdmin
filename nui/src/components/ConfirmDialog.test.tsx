@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ConfirmDialog } from './ConfirmDialog'
+import { renderModal, testEscapeCloses, testDialogAria } from '../test/renderModal'
 
 describe('ConfirmDialog', () => {
   it('renders title and message', () => {
@@ -17,9 +18,8 @@ describe('ConfirmDialog', () => {
   })
 
   it('calls onCancel when backdrop is clicked', async () => {
-    const user = userEvent.setup()
     const onCancel = vi.fn()
-    render(
+    const { user } = renderModal(
       <ConfirmDialog
         title="Test"
         message="Test message"
@@ -27,15 +27,13 @@ describe('ConfirmDialog', () => {
         onCancel={onCancel}
       />,
     )
-    // Click on the backdrop (outside the dialog)
     await user.click(screen.getByRole('presentation'))
     expect(onCancel).toHaveBeenCalled()
   })
 
   it('does not cancel when clicking inside the dialog', async () => {
-    const user = userEvent.setup()
     const onCancel = vi.fn()
-    render(
+    const { user } = renderModal(
       <ConfirmDialog
         title="Test"
         message="Test message"
@@ -43,15 +41,13 @@ describe('ConfirmDialog', () => {
         onCancel={onCancel}
       />,
     )
-    // Click inside the dialog
     await user.click(screen.getByRole('dialog'))
     expect(onCancel).not.toHaveBeenCalled()
   })
 
   it('calls onConfirm when confirm button is clicked', async () => {
-    const user = userEvent.setup()
     const onConfirm = vi.fn()
-    render(
+    const { user } = renderModal(
       <ConfirmDialog
         title="Test"
         message="Test message"
@@ -64,9 +60,8 @@ describe('ConfirmDialog', () => {
   })
 
   it('calls onCancel when cancel button is clicked', async () => {
-    const user = userEvent.setup()
     const onCancel = vi.fn()
-    render(
+    const { user } = renderModal(
       <ConfirmDialog
         title="Test"
         message="Test message"
@@ -88,9 +83,7 @@ describe('ConfirmDialog', () => {
         onCancel={onCancel}
       />,
     )
-    // Dispatch Escape on window (global listener)
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
-    expect(onCancel).toHaveBeenCalled()
+    testEscapeCloses(onCancel)
   })
 
   it('has proper ARIA attributes', () => {
@@ -102,8 +95,6 @@ describe('ConfirmDialog', () => {
         onCancel={() => {}}
       />,
     )
-    const dialog = screen.getByRole('dialog')
-    expect(dialog).toHaveAttribute('aria-modal', 'true')
-    expect(dialog).toHaveAttribute('aria-labelledby', 'dialog-title')
+    testDialogAria('dialog-title')
   })
 })

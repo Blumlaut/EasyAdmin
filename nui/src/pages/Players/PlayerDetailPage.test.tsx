@@ -12,97 +12,80 @@ const player: Player = {
   frozen: true,
 }
 
-const permissions: Permissions = {
-  'player.kick': true,
-  'player.teleport.single': true,
-}
-
 const shortcuts: ReasonShortcut[] = []
 
-function wrap(ui: React.ReactElement) {
+function wrap(ui: React.ReactElement, permissions: Permissions = { 'player.kick': true, 'player.teleport.single': true }) {
   return (
     <ModalProvider
       cleanupTypes={['cars']}
       onToast={() => {}}
     >
-      {ui}
+      <PlayerDetailPage
+        player={player}
+        permissions={permissions}
+        ipPrivacy={false}
+        shortcuts={shortcuts}
+        onToast={() => {}}
+      >
+        {ui}
+      </PlayerDetailPage>
+    </ModalProvider>
+  )
+}
+
+function renderDefault(ipPrivacy = false) {
+  return render(
+    <ModalProvider
+      cleanupTypes={['cars']}
+      onToast={() => {}}
+    >
+      <PlayerDetailPage
+        player={player}
+        permissions={{ 'player.kick': true, 'player.teleport.single': true }}
+        ipPrivacy={ipPrivacy}
+        shortcuts={shortcuts}
+        onToast={() => {}}
+      />
     </ModalProvider>
   )
 }
 
 describe('PlayerDetailPage', () => {
   it('renders player info', () => {
-    render(
-      wrap(
-        <PlayerDetailPage
-          player={player}
-          permissions={permissions}
-          ipPrivacy={false}
-          shortcuts={shortcuts}
-          onToast={() => {}}
-        />,
-      ),
-    )
+    renderDefault()
     expect(screen.getAllByText('Alice').length).toBeGreaterThan(0)
   })
 
   it('hides IP when ipPrivacy is true', () => {
-    render(
-      wrap(
-        <PlayerDetailPage
-          player={player}
-          permissions={permissions}
-          ipPrivacy
-          shortcuts={shortcuts}
-          onToast={() => {}}
-        />,
-      ),
-    )
+    renderDefault(true)
     expect(screen.queryByText('127.0.0.1')).not.toBeInTheDocument()
     expect(screen.getByText(/IP hidden by ea_IpPrivacy/)).toBeInTheDocument()
   })
 
   it('shows the actions panel when permissions exist', () => {
-    render(
-      wrap(
-        <PlayerDetailPage
-          player={player}
-          permissions={permissions}
-          ipPrivacy={false}
-          shortcuts={shortcuts}
-          onToast={() => {}}
-        />,
-      ),
-    )
+    renderDefault()
     expect(screen.getByText('Actions')).toBeInTheDocument()
   })
 
   it('shows teleport dropdown button with permission', () => {
-    render(
-      wrap(
-        <PlayerDetailPage
-          player={player}
-          permissions={permissions}
-          ipPrivacy={false}
-          shortcuts={shortcuts}
-          onToast={() => {}}
-        />,
-      ),
-    )
+    renderDefault()
     expect(screen.getByText('Teleport')).toBeInTheDocument()
   })
 
   it('hides teleport dropdown without permission', () => {
     render(
-      wrap(
+      <ModalProvider
+        cleanupTypes={['cars']}
+        onToast={() => {}}
+      >
         <PlayerDetailPage
           player={player}
           permissions={{} as Permissions}
           ipPrivacy={false}
           shortcuts={shortcuts}
           onToast={() => {}}
-        />,
-      ),
+        />
+      </ModalProvider>
     )
     expect(screen.queryByText('Teleport')).not.toBeInTheDocument()
   })
