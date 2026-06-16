@@ -10,20 +10,16 @@ local currentResource = GetCurrentResourceName()
 -- Permission helpers
 -- ============================================================
 
-local function hasPermission(src, perm)
-  return permissions[perm] == true
-end
-
 local function canManageResources(src)
-  return hasPermission(src, 'server.resources.start') or hasPermission(src, 'server.resources.stop')
+  return DoesPlayerHavePermission(src, 'server.resources.start') or DoesPlayerHavePermission(src, 'server.resources.stop')
 end
 
 local function canStartResources(src)
-  return hasPermission(src, 'server.resources.start')
+  return DoesPlayerHavePermission(src, 'server.resources.start')
 end
 
 local function canStopResources(src)
-  return hasPermission(src, 'server.resources.stop')
+  return DoesPlayerHavePermission(src, 'server.resources.stop')
 end
 
 -- ============================================================
@@ -122,27 +118,10 @@ local function buildResourceList()
 
     local state = GetResourceState(name) or 'stopped'
 
-    -- Extract key metadata entries
-    local version = nil
-    local description = nil
-    local repository = nil
-
-    local metaCount = GetNumResourceMetadata(name, '') or 0
-    for j = 0, math.max(metaCount - 1, 0) do
-      local key = GetResourceMetadata(name, '', j)
-      if not key or key == '' then break end
-
-      if key == 'version' then
-        local val = GetResourceMetadata(name, 'version', 0)
-        if val then version = val end
-      elseif key == 'description' then
-        local val = GetResourceMetadata(name, 'description', 0)
-        if val then description = val end
-      elseif key == 'repository' then
-        local val = GetResourceMetadata(name, 'repository', 0)
-        if val then repository = val end
-      end
-    end
+    -- Extract key metadata entries (query known keys directly — API requires specific keys)
+    local version = GetResourceMetadata(name, 'version', 0)
+    local description = GetResourceMetadata(name, 'description', 0)
+    local repository = GetResourceMetadata(name, 'repository', 0)
 
     table.insert(resources, {
       name = name,
@@ -159,19 +138,31 @@ local function buildResourceList()
   return resources
 end
 
--- Build metadata entries for a single resource
+-- Known fxmanifest.lua metadata keys (FiveM API requires specific keys, cannot enumerate)
+local KNOWN_METADATA_KEYS = {
+  'game', 'games', 'fx_version', 'lua54', 'rdr3_warning', 'node_version',
+  'author', 'description', 'repository', 'version', 'is_master',
+  'map', 'client_script', 'server_script', 'shared_script', 'script',
+  'ui_page', 'ui_loop', 'html', 'file', 'files',
+  'dependency', 'dependencies', 'provide', 'loadscreen',
+  'toolbar_offset', 'tls_cert', 'tls_key',
+  'escrow_ignore', 'use_fxv2_oal', 'release_exports_early',
+  'no_reload', 'thread', 'rate', 'priority',
+}
+
+-- Build metadata entries for a single resource by querying known keys
 local function buildMetadata(name)
-  local metaCount = GetNumResourceMetadata(name, '') or 0
   local entries = {}
 
-  for i = 0, math.max(metaCount - 1, 0) do
-    local key = GetResourceMetadata(name, '', i)
-    if not key or key == '' then break end
-
-    local valCount = GetNumResourceMetadata(name, key) or 0
-    for idx = 0, math.max(valCount - 1, 0) do
-      local value = GetResourceMetadata(name, key, idx) or ''
-      table.insert(entries, { key = key, value = value })
+  for _, key in ipairs(KNOWN_METADATA_KEYS) do
+    local valCount = GetNumResourceMetadata(name, key)
+    if valCount and valCount > 0 then
+      for idx = 0, valCount - 1 do
+        local value = GetResourceMetadata(name, key, idx)
+        if value then
+          table.insert(entries, { key = key, value = value })
+        end
+      end
     end
   end
 
@@ -298,19 +289,8 @@ RegisterServerEvent('EasyAdmin:checkResourceUpdates', function(names)
   local pending = 0
 
   for _, name in ipairs(names) do
-    local metaCount = GetNumResourceMetadata(name, '') or 0
-    local version = nil
-    local repository = nil
-
-    for j = 0, math.max(metaCount - 1, 0) do
-      local key = GetResourceMetadata(name, '', j)
-      if not key or key == '' then break end
-      if key == 'version' then
-        version = GetResourceMetadata(name, 'version', 0)
-      elseif key == 'repository' then
-        repository = GetResourceMetadata(name, 'repository', 0)
-      end
-    end
+    local version = GetResourceMetadata(name, 'version', 0)
+    local repository = GetResourceMetadata(name, 'repository', 0)
 
     if not version or not repository then
       table.insert(results, { name = name, latest = nil, outdated = false })

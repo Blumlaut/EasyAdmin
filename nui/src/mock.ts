@@ -871,8 +871,6 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
       }
 
       case 'setAnonymous':
-      case 'setTtsEnabled':
-      case 'setTtsSpeed':
       case 'setEasterEgg':
       case 'setShowLicenses':
         return jsonResponse({ success: true })
@@ -926,8 +924,6 @@ setTimeout(() => {
   window.postMessage({
     action: 'initSettings',
     data: {
-      tts: false,
-      ttsSpeed: 4,
       anonymous: false,
       highContrast: false,
       fontSize: 100,
