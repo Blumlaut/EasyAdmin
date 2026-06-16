@@ -45,6 +45,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   ttsSpeed: 4,
   anonymous: false,
   showLicenses: false,
+  highContrast: false,
+  fontSize: 100,
+  menuSize: 'default',
 }
 
 const TOAST_DURATION_MS = 3000
@@ -81,8 +84,6 @@ function App() {
 
   // Settings
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
-  const [easterEggs, setEasterEggs] = useState<string[]>([])
-  const [currentEasterEgg, setCurrentEasterEgg] = useState<string | null>(null)
   const [shortcuts, setShortcuts] = useState<ReasonShortcut[]>([])
 
   // === Toast ===
@@ -170,14 +171,6 @@ function App() {
     return on<Player>('playerUpdated', (data) => {
       setPlayers((prev) => prev.map((p) => (p.id === data.id ? { ...p, ...data } : p)))
       setSelectedPlayer((prev) => (prev && prev.id === data.id ? { ...prev, ...data } : prev))
-    })
-  }, [])
-
-  // Easter eggs init
-  useEffect(() => {
-    return on<{ easterEggs: string[]; currentEgg: string | null }>('initEasterEggs', (data) => {
-      setEasterEggs(data.easterEggs)
-      setCurrentEasterEgg(data.currentEgg)
     })
   }, [])
 
@@ -343,6 +336,13 @@ function App() {
 
   const closeMenu = () => callLua('closeMenu').catch(() => {})
 
+  // Build accessibility + sizing classes
+  const windowClasses = ['ea-window']
+  if (settings.highContrast) windowClasses.push('high-contrast')
+  if (settings.fontSize !== 100) windowClasses.push(`font-size-${settings.fontSize}`)
+  if (settings.menuSize === 'large') windowClasses.push('ea-window--large')
+  if (settings.menuSize === 'fullscreen') windowClasses.push('ea-window--fullscreen')
+
   return (
     <>
       <ModalProvider
@@ -350,7 +350,7 @@ function App() {
         onToast={showToast}
         onPlayersUpdated={fetchPlayers}
       >
-        <div className="ea-window">
+        <div className={windowClasses.join(' ')}>
           <aside className="sidebar">
             <div className="sidebar-header">
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
@@ -543,9 +543,6 @@ function App() {
                 <SettingsPage
                   permissions={permissions}
                   settings={settings}
-                  easterEggs={easterEggs}
-                  currentEasterEgg={currentEasterEgg}
-                  isRedm={isRedm}
                   onChange={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
                   onToast={showToast}
                 />

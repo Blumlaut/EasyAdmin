@@ -37,6 +37,8 @@ function NuiToggle()
 
   if nuiVisible then
     SetNuiFocus(true, true)
+    -- Send current settings to NUI
+    NuiSendSettings()
     if DoesPlayerHavePermissionForCategory(-1, 'player') then
       TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
     end
@@ -130,6 +132,52 @@ function NuiBuildPlayerList()
   end
 
   return playerData
+end
+
+-- Send current settings to NUI (loaded from KVP)
+function NuiSendSettings()
+  if not nuiVisible then return end
+
+  -- Ensure defaults exist
+  if not GetResourceKvp('ea_menuorientation') then
+    SetResourceKvp('ea_menuorientation', 'middle')
+  end
+  if not GetResourceKvpInt('ea_menuwidth') then
+    SetResourceKvpInt('ea_menuwidth', 0)
+  end
+  if not GetResourceKvpInt('ea_tts_enabled') then
+    SetResourceKvpInt('ea_tts_enabled', 0)
+  end
+  if not GetResourceKvpInt('ea_tts_speed') then
+    SetResourceKvpInt('ea_tts_speed', 4)
+  end
+  if not GetResourceKvp('ea_showLicenses') then
+    SetResourceKvp('ea_showLicenses', 'false')
+  end
+  if not GetResourceKvp('ea_highContrast') then
+    SetResourceKvp('ea_highContrast', 'false')
+  end
+  if not GetResourceKvpInt('ea_fontSize') then
+    SetResourceKvpInt('ea_fontSize', 100)
+  end
+  if not GetResourceKvp('ea_menuSize') then
+    SetResourceKvp('ea_menuSize', 'default')
+  end
+
+  SendNUIMessage({
+    action = 'initSettings',
+    data = {
+      orientation = GetResourceKvpString('ea_menuorientation') or 'middle',
+      menuWidth = GetResourceKvpInt('ea_menuwidth') or 0,
+      tts = GetResourceKvpInt('ea_tts_enabled') == 1,
+      ttsSpeed = GetResourceKvpInt('ea_tts_speed') or 4,
+      anonymous = false, -- anonymous is per-session, not persisted
+      showLicenses = GetResourceKvpString('ea_showLicenses') == 'true',
+      highContrast = GetResourceKvpString('ea_highContrast') == 'true',
+      fontSize = GetResourceKvpInt('ea_fontSize') or 100,
+      menuSize = GetResourceKvpString('ea_menuSize') or 'default',
+    },
+  })
 end
 
 function NuiCloseMenu()

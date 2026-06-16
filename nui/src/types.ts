@@ -104,6 +104,11 @@ export interface AppSettings {
   ttsSpeed: number
   anonymous: boolean
   showLicenses: boolean
+  // Accessibility
+  highContrast: boolean
+  fontSize: number // percentage: 80–150, default 100
+  // Menu sizing
+  menuSize: 'default' | 'large' | 'fullscreen'
 }
 
 // Navigation views

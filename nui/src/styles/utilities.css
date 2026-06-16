@@ -209,4 +209,23 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
+  transition: width var(--transition-slow), height var(--transition-slow), border-radius var(--transition-slow);
+}
+
+/* -- Menu size: large -- */
+.ea-window--large {
+  width: min(96vw, 1500px);
+  height: min(92vh, 950px);
+}
+
+/* -- Menu size: fullscreen -- */
+.ea-window--fullscreen {
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
 }
