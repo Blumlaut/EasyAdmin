@@ -25,6 +25,7 @@ server_scripts {
 }
 
 client_scripts {
+    "client/gui_client.lua",
     "client/nui/*.lua",
     "client/gui_nui.lua",
     "client/*.lua",
