@@ -930,7 +930,7 @@ setTimeout(() => {
       players: DEMO_PLAYERS,
       permissions: DEMO_PERMISSIONS,
       redm: false,
-      ipprivacy: true,
+      ipprivacy: false,
     },
   }, '*')
   // Push demo easter eggs

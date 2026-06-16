@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
 import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
-import { copyToClipboard } from '../../utils/clipboard'
 import { Icon } from '../../components/icons'
+import { CopyButton } from '../../components/CopyButton'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
 import { PlayerActionsPanel } from './PlayerActionsPanel'
 
@@ -43,12 +43,7 @@ export function PlayerDetailPage({
       onToast('No Discord to copy', 'error')
       return
     }
-    try {
-      copyToClipboard(player.discord)
-      onToast('Discord copied to clipboard', 'success')
-    } catch {
-      onToast('Copy failed', 'error')
-    }
+    onToast('Discord copied to clipboard', 'success')
   }
 
   const handleToggleIdentifiers = useCallback(() => {
@@ -67,7 +62,6 @@ export function PlayerDetailPage({
     <div className="page-container">
       <PlayerInfoPanel
         player={player}
-        ipPrivacy={ipPrivacy}
         onCopyDiscord={copyDiscord}
       />
 
@@ -99,13 +93,7 @@ export function PlayerDetailPage({
                   >
                     <span className="badge badge-default">{kind}</span>
                     <span className="truncate flex-1">{value ?? id}</span>
-                    <button
-                      className="btn btn-ghost btn-sm"
-                      onClick={() => copyToClipboard(id)}
-                      aria-label={`Copy ${kind}`}
-                    >
-                      Copy
-                    </button>
+                    <CopyButton value={id} ariaLabel={`Copy ${kind}`} />
                   </li>
                 )
               })}

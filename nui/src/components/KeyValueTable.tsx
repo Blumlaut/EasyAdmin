@@ -5,8 +5,8 @@ export interface KeyValueRow {
   value: ReactNode
   /** If provided, row is clickable and onClick is called with the current value. */
   onClick?: () => void
-  /** Label for the action hint (e.g. "Click to edit"). */
-  actionLabel?: string
+  /** Label for the action hint (e.g. "Click to edit"), or a ReactNode (e.g. <CopyButton />). */
+  actionLabel?: ReactNode
   mono?: boolean
 }
 
@@ -40,15 +40,28 @@ export function KeyValueTable({ rows, ariaLabel }: KeyValueTableProps) {
               <button
                 className="btn btn-ghost btn-sm flex-1 justify-start text-left"
                 onClick={row.onClick}
-                title={row.actionLabel}
               >
                 <span className={row.mono ? 'text-mono' : ''}>{row.value}</span>
-                {row.actionLabel && (
+                {typeof row.actionLabel === 'string' && (
                   <span className="text-xs text-muted ml-auto kv-action-badge">
                     {row.actionLabel}
                   </span>
                 )}
+                {row.actionLabel && typeof row.actionLabel !== 'string' && (
+                  <span className="ml-auto kv-action-badge">
+                    {row.actionLabel}
+                  </span>
+                )}
               </button>
+            ) : row.actionLabel ? (
+              <div className="flex items-center gap-2 flex-1">
+                <span className={`text-sm text-primary truncate ${row.mono ? 'text-mono' : ''}`}>
+                  {row.value || <span className="text-muted">—</span>}
+                </span>
+                <span className="ml-auto shrink-0">
+                  {row.actionLabel}
+                </span>
+              </div>
             ) : (
               <span className={`text-sm text-primary flex-1 truncate ${row.mono ? 'text-mono' : ''}`}>
                 {row.value || <span className="text-muted">—</span>}

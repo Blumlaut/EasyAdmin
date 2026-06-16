@@ -37,10 +37,9 @@ describe('PlayerDetailPage', () => {
     expect(screen.getAllByText('Alice').length).toBeGreaterThan(0)
   })
 
-  it('hides IP when ipPrivacy is true', () => {
+  it('shows IP in info panel regardless of ipPrivacy', () => {
     renderDefault(true)
-    expect(screen.queryByText('127.0.0.1')).not.toBeInTheDocument()
-    expect(screen.getByText(/IP hidden by ea_IpPrivacy/)).toBeInTheDocument()
+    expect(screen.getByText('127.0.0.1')).toBeInTheDocument()
   })
 
   it('shows the actions panel when permissions exist', () => {

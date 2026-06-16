@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
-import { copyToClipboard } from '../../utils/clipboard'
 import type { BanEntry, Notification, Permissions } from '../../types'
 import { InputPrompt } from '../../components/InputPrompt'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
+import { CopyButton } from '../../components/CopyButton'
 
 interface BanDetailPageProps {
   banId: string
@@ -138,18 +138,13 @@ export function BanDetailPage({
     }
   }
 
-  function copy(text: string) {
-    if (!text) return
-    copyToClipboard(text)
-  }
-
   const rows: KeyValueRow[] = [
     {
       key: 'Ban ID',
       value: current.banid || '—',
       mono: true,
       ...(current.banid
-        ? { onClick: () => copy(current.banid), actionLabel: 'Copy' }
+        ? { actionLabel: <CopyButton value={current.banid} ariaLabel="Copy ban ID" /> }
         : {}),
     },
     {
@@ -230,13 +225,7 @@ export function BanDetailPage({
                 >
                   <span className="badge badge-default">{kind}</span>
                   <span className="truncate flex-1">{value ?? id}</span>
-                  <button
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => copy(id)}
-                    aria-label={`Copy ${kind}`}
-                  >
-                    Copy
-                  </button>
+                  <CopyButton value={id} ariaLabel={`Copy ${kind}`} />
                 </li>
               )
             })}

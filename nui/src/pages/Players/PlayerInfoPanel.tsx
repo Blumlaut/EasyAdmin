@@ -1,19 +1,15 @@
 import type { Player } from '../../types'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
-import { Icon } from '../../components/icons'
+import { CopyButton } from '../../components/CopyButton'
 import { RoleBadges } from '../../components/RoleBadges'
 
 interface PlayerInfoPanelProps {
   player: Player
-  ipPrivacy: boolean
   onCopyDiscord: () => void
 }
 
-export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfoPanelProps) {
-  const rows: KeyValueRow[] = [
-    { key: 'ID', value: player.id, mono: true },
-    { key: 'Name', value: player.name },
-  ]
+export function PlayerInfoPanel({ player, onCopyDiscord }: PlayerInfoPanelProps) {
+  const rows: KeyValueRow[] = []
 
   if (player.license) {
     rows.push({ key: 'License', value: player.license, mono: true })
@@ -23,8 +19,7 @@ export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfo
       key: 'Discord',
       value: player.discord,
       mono: true,
-      onClick: onCopyDiscord,
-      actionLabel: 'Copy',
+      actionLabel: <CopyButton value={player.discord} onCopy={onCopyDiscord} ariaLabel="Copy Discord ID" />,
     })
   }
   if (player.xbl) {
@@ -33,7 +28,7 @@ export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfo
   if (player.identifier) {
     rows.push({ key: 'Identifier', value: player.identifier, mono: true })
   }
-  if (player.ip && !ipPrivacy) {
+  if (player.ip) {
     rows.push({ key: 'IP', value: player.ip, mono: true })
   }
   if (player.coords) {
@@ -66,13 +61,6 @@ export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfo
         </div>
       </div>
       <KeyValueTable rows={rows} ariaLabel="Player info" />
-
-      {player.ip && ipPrivacy && (
-        <p className="text-xs text-muted flex items-center gap-1 mt-2">
-          <Icon name="shield" size="xs" />
-          IP hidden by ea_IpPrivacy
-        </p>
-      )}
     </div>
   )
 }
