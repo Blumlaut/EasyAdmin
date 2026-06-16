@@ -17,6 +17,7 @@ reports = {}
 MessageShortcuts = {}
 FrozenPlayers = {}
 MutedPlayers = {}
+settings = {}
 MyBucket = 0
 
 local cachedInfo = {

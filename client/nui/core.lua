@@ -139,13 +139,13 @@ function NuiSendSettings()
   if not nuiVisible then return end
 
   -- Ensure defaults exist
-  if not GetResourceKvp('ea_highContrast') then
+  if not GetResourceKvpString('ea_highContrast') then
     SetResourceKvp('ea_highContrast', 'false')
   end
   if not GetResourceKvpInt('ea_fontSize') then
     SetResourceKvpInt('ea_fontSize', 100)
   end
-  if not GetResourceKvp('ea_menuSize') then
+  if not GetResourceKvpString('ea_menuSize') then
     SetResourceKvp('ea_menuSize', 'default')
   end
 
