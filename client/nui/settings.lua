@@ -23,13 +23,6 @@ RegisterNUICallback('setEasterEgg', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('setShowLicenses', function(data, cb)
-  if not permissions['player.ban.view'] then return deny(cb) end
-  local value = data and data.value == true
-  SetResourceKvp('ea_showLicenses', value and 'true' or 'false')
-  cb({ ok = true })
-end)
-
 RegisterNUICallback('refreshBanList', function(data, cb)
   if not permissions['player.ban.view'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:updateBanlist')

@@ -9,7 +9,6 @@ import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 
 interface BanListPageProps {
-  showLicenses: boolean
   ipPrivacy: boolean
   onSelectBan: (banId: string) => void
   onToast: (text: string, type?: Notification['type']) => void
@@ -18,7 +17,6 @@ interface BanListPageProps {
 const PAGE_SIZE = 10
 
 export function BanListPage({
-  showLicenses,
   ipPrivacy,
   onSelectBan,
   onToast: _onToast,
@@ -130,7 +128,6 @@ export function BanListPage({
             <BanRow
               key={`${ban.banid}-${i}`}
               ban={ban}
-              showLicenses={showLicenses}
               ipPrivacy={ipPrivacy}
               onClick={() => onSelectBan(ban.banid)}
             />
@@ -152,12 +149,10 @@ export function BanListPage({
 
 function BanRow({
   ban,
-  showLicenses: _showLicenses,
   ipPrivacy: _ipPrivacy,
   onClick,
 }: {
   ban: BanListEntry
-  showLicenses: boolean
   ipPrivacy: boolean
   onClick: () => void
 }) {

@@ -145,9 +145,6 @@ function NuiSendSettings()
   if not GetResourceKvpInt('ea_menuwidth') then
     SetResourceKvpInt('ea_menuwidth', 0)
   end
-  if not GetResourceKvp('ea_showLicenses') then
-    SetResourceKvp('ea_showLicenses', 'false')
-  end
   if not GetResourceKvp('ea_highContrast') then
     SetResourceKvp('ea_highContrast', 'false')
   end
@@ -164,7 +161,6 @@ function NuiSendSettings()
       orientation = GetResourceKvpString('ea_menuorientation') or 'middle',
       menuWidth = GetResourceKvpInt('ea_menuwidth') or 0,
       anonymous = false, -- anonymous is per-session, not persisted
-      showLicenses = GetResourceKvpString('ea_showLicenses') == 'true',
       highContrast = GetResourceKvpString('ea_highContrast') == 'true',
       fontSize = GetResourceKvpInt('ea_fontSize') or 100,
       menuSize = GetResourceKvpString('ea_menuSize') or 'default',

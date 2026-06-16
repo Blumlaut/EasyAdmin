@@ -101,7 +101,6 @@ export interface AppSettings {
   orientation: 'left' | 'middle' | 'right'
   menuWidth: number
   anonymous: boolean
-  showLicenses: boolean
   // Accessibility
   highContrast: boolean
   fontSize: number // percentage: 80–150, default 100

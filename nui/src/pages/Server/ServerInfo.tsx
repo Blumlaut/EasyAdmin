@@ -18,7 +18,7 @@ export function ServerInfo() {
         </button>
         <button
           className="server-action-btn"
-          onClick={() => modal.openSessionName()}
+          onClick={() => modal.openMapName()}
         >
           <Icon name="map-pin" size="xs" className="text-muted" />
           <span className="flex-1 text-left">Set map name</span>

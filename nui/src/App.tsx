@@ -42,7 +42,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   orientation: 'middle',
   menuWidth: 0,
   anonymous: false,
-  showLicenses: false,
   highContrast: false,
   fontSize: 100,
   menuSize: 'default',
@@ -470,7 +469,6 @@ function App() {
 
               {view === 'bans' && (
                 <BanListPage
-                  showLicenses={settings.showLicenses}
                   ipPrivacy={ipPrivacy}
                   onSelectBan={selectBan}
                   onToast={showToast}

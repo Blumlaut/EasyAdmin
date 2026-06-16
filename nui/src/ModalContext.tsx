@@ -15,7 +15,7 @@ type ModalKind =
   | null
   | 'announcement'
   | 'set-gametype'
-  | 'set-sessionname'
+  | 'set-mapname'
   | 'convar'
   | 'cleanup'
   | 'resource-start'
@@ -30,7 +30,7 @@ type ModalKind =
 interface ModalContextValue {
   openAnnouncement: () => void
   openGametype: () => void
-  openSessionName: () => void
+  openMapName: () => void
   openConvar: () => void
   openCleanup: (types: CleanupType[]) => void
   openResourceStart: () => void
@@ -71,7 +71,7 @@ export function ModalProvider({
 
   const openAnnouncement = useCallback(() => setModal('announcement'), [])
   const openGametype = useCallback(() => setModal('set-gametype'), [])
-  const openSessionName = useCallback(() => setModal('set-sessionname'), [])
+  const openMapName = useCallback(() => setModal('set-mapname'), [])
   const openConvar = useCallback(() => setModal('convar'), [])
   const openCleanup = useCallback((_types: CleanupType[]) => setModal('cleanup'), [])
   const openResourceStart = useCallback(() => setModal('resource-start'), [])
@@ -107,12 +107,12 @@ export function ModalProvider({
     closeAll()
   }
 
-  async function setSessionName(value: string) {
+  async function setMapName(value: string) {
     try {
-      await callLua('setSessionName', { value })
-      onToast('Session name updated', 'success')
+      await callLua('setMapName', { value })
+      onToast('Map name updated', 'success')
     } catch {
-      onToast('Failed to set session name', 'error')
+      onToast('Failed to set map name', 'error')
     }
     closeAll()
   }
@@ -129,7 +129,7 @@ export function ModalProvider({
 
   async function doCleanup(type: CleanupType, radius: CleanupRadius, deep: boolean) {
     try {
-      await callLua('cleanup', { type, radius, deep })
+      await callLua('requestCleanup', { type, radius, deep })
       onToast('Cleanup executed', 'success')
     } catch {
       onToast('Cleanup failed', 'error')
@@ -139,7 +139,7 @@ export function ModalProvider({
 
   async function startResource(name: string) {
     try {
-      await callLua('executeConsole', { command: `ensure ${name}` })
+      await callLua('startResource', { name })
       onToast(`Starting ${name}`, 'success')
     } catch {
       onToast('Failed to start resource', 'error')
@@ -149,7 +149,7 @@ export function ModalProvider({
 
   async function stopResource(name: string) {
     try {
-      await callLua('executeConsole', { command: `stop ${name}` })
+      await callLua('stopResource', { name })
       onToast(`Stopping ${name}`, 'success')
     } catch {
       onToast('Failed to stop resource', 'error')
@@ -193,7 +193,7 @@ export function ModalProvider({
   const value: ModalContextValue = {
     openAnnouncement,
     openGametype,
-    openSessionName,
+    openMapName,
     openConvar,
     openCleanup,
     openResourceStart,
@@ -243,14 +243,14 @@ export function ModalProvider({
       )
     }
 
-    if (modal === 'set-sessionname') {
+    if (modal === 'set-mapname') {
       return (
         <InputPrompt
-          title="Set Session Name"
-          label="Session name"
-          placeholder="My Server"
+          title="Set Map Name"
+          label="Map name"
+          placeholder="Chaos Island"
           onCancel={closeAll}
-          onConfirm={setSessionName}
+          onConfirm={setMapName}
         />
       )
     }

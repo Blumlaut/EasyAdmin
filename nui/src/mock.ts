@@ -929,7 +929,6 @@ setTimeout(() => {
       tts: false,
       ttsSpeed: 4,
       anonymous: false,
-      showLicenses: false,
       highContrast: false,
       fontSize: 100,
       menuSize: 'default',
