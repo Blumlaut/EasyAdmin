@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import type { Notification, Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult } from '../../types'
 import { callLua, on } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useModalContext } from '../../ModalContext'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
@@ -59,6 +60,7 @@ export function ResourcesPage({
 
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
+  const { openConfirm } = useModalContext()
 
   // Fetch metadata for all resources (batch) to populate version/description/repository
   const fetchBatchMetadata = useCallback(async (resList: ResourceEntry[]) => {
@@ -159,10 +161,8 @@ export function ResourcesPage({
   const stoppedCount = resources.length - startedCount
   const outdatedCount = resources.filter((r) => r.outdated).length
 
-  const handleAction = async (name: string, action: 'start' | 'stop' | 'ensure') => {
-    if (action === 'start' && !canStart) return
-    if ((action === 'stop' || action === 'ensure') && !canStop) return
-
+  // Execute a resource action (called after confirmation)
+  const executeAction = useCallback(async (name: string, action: 'start' | 'stop' | 'ensure') => {
     try {
       if (action === 'ensure') {
         await callLua('stopResource', { name })
@@ -183,7 +183,21 @@ export function ResourcesPage({
     } catch {
       onToast(`Failed to ${action} ${name}`, 'error')
     }
-  }
+  }, [detailName, onToast])
+
+  // Show confirmation dialog then execute
+  const requestAction = useCallback((name: string, action: 'start' | 'stop' | 'ensure') => {
+    if (action === 'start' && !canStart) return
+    if ((action === 'stop' || action === 'ensure') && !canStop) return
+
+    const labels: Record<string, { title: string; message: string; confirm: string; variant: 'default' | 'danger' }> = {
+      start: { title: `Start ${name}`, message: `Are you sure you want to start ${name}?`, confirm: 'Start', variant: 'default' },
+      stop: { title: `Stop ${name}`, message: `Are you sure you want to stop ${name}?`, confirm: 'Stop', variant: 'danger' },
+      ensure: { title: `Restart ${name}`, message: `Are you sure you want to restart ${name}?`, confirm: 'Restart', variant: 'danger' },
+    }
+    const label = labels[action]
+    openConfirm(label.title, label.message, () => executeAction(name, action), label.variant)
+  }, [canStart, canStop, executeAction, openConfirm])
 
   const handleCheckUpdates = async () => {
     if (!canStart && !canStop) return
@@ -232,7 +246,7 @@ export function ResourcesPage({
         loading={detailLoading}
         canStart={canStart}
         canStop={canStop}
-        onAction={(action) => handleAction(detailName, action)}
+        onRequestAction={(action) => requestAction(detailName, action)}
       />
     )
   }
@@ -314,7 +328,7 @@ export function ResourcesPage({
               resource={resource}
               canStart={canStart}
               canStop={canStop}
-              onAction={(action) => handleAction(resource.name, action)}
+              onRequestAction={(action) => requestAction(resource.name, action)}
               onClick={() => {
                 setDetailName(resource.name)
                 onSelectResource?.(resource.name)
@@ -333,13 +347,13 @@ function ResourceRow({
   resource,
   canStart,
   canStop,
-  onAction,
+  onRequestAction,
   onClick,
 }: {
   resource: ResourceEntry
   canStart: boolean
   canStop: boolean
-  onAction: (action: 'start' | 'stop' | 'ensure') => void
+  onRequestAction: (action: 'start' | 'stop' | 'ensure') => void
   onClick: () => void
 }) {
   const isStarted = resource.state === 'started'
@@ -418,7 +432,7 @@ function ResourceRow({
               className="btn-split-half btn-split-half--restart"
               onClick={(e) => {
                 e.stopPropagation()
-                onAction('ensure')
+                onRequestAction('ensure')
               }}
               title={`Restart ${resource.name}`}
             >
@@ -428,7 +442,7 @@ function ResourceRow({
               className="btn-split-half btn-split-half--stop"
               onClick={(e) => {
                 e.stopPropagation()
-                onAction('stop')
+                onRequestAction('stop')
               }}
               title={`Stop ${resource.name}`}
             >
@@ -440,7 +454,7 @@ function ResourceRow({
             className={`btn btn-sm shrink-0 mr-1 ${isStarted ? 'btn-danger' : 'btn-success'}`}
             onClick={(e) => {
               e.stopPropagation()
-              onAction(isStarted ? 'stop' : 'start')
+              onRequestAction(isStarted ? 'stop' : 'start')
             }}
             title={isStarted ? `Stop ${resource.name}` : `Start ${resource.name}`}
           >
@@ -462,14 +476,14 @@ function ResourceDetailView({
   loading,
   canStart,
   canStop,
-  onAction,
+  onRequestAction,
 }: {
   name: string
   metadata: ResourceMetadata | null
   loading: boolean
   canStart: boolean
   canStop: boolean
-  onAction: (action: 'start' | 'stop' | 'ensure') => void
+  onRequestAction: (action: 'start' | 'stop' | 'ensure') => void
 }) {
   // Get the parent resource name from the window (set by FiveM)
   const currentResourceName = typeof window !== 'undefined'
@@ -536,7 +550,7 @@ function ResourceDetailView({
           {canStart && (
             <button
               className="btn btn-success btn-sm"
-              onClick={() => onAction('start')}
+              onClick={() => onRequestAction('start')}
               disabled={isSelf}
               title={isSelf ? 'Cannot start self' : 'Start resource'}
             >
@@ -547,7 +561,7 @@ function ResourceDetailView({
           {canStop && (
             <button
               className="btn btn-danger btn-sm"
-              onClick={() => onAction('stop')}
+              onClick={() => onRequestAction('stop')}
               disabled={isSelf}
               title={isSelf ? 'Cannot stop EasyAdmin' : 'Stop resource'}
             >
@@ -558,7 +572,7 @@ function ResourceDetailView({
           {canStart && canStop && (
             <button
               className="btn btn-secondary btn-sm"
-              onClick={() => onAction('ensure')}
+              onClick={() => onRequestAction('ensure')}
               disabled={isSelf}
               title={isSelf ? 'Cannot ensure self' : 'Refresh + Stop + Start'}
             >
