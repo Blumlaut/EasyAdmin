@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCollapse } from './hooks/useCollapse'
 import type {
   AppSettings,
   BanEntry,
@@ -125,6 +126,10 @@ function App() {
         setWindowPos({ x: 0, y: 0 })
         setContentCollapsed(false)
         setNuiBackground(false)
+        // Clear any inline width left by the collapse animation
+        windowRef.current?.style.removeProperty('width')
+        // Remove the collapsed class
+        windowRef.current?.classList.remove('ea-window--collapsed')
       }
     })
   }, [])
@@ -395,9 +400,16 @@ function App() {
     onPositionChange: handlePositionChange,
   })
 
-  const toggleCollapsed = useCallback(() => {
-    setContentCollapsed((prev) => !prev)
-  }, [])
+  const toggleCollapsed = useCollapse(
+    windowRef,
+    contentCollapsed,
+    setContentCollapsed,
+    () => {
+      const maxWidth = settings.menuSize === 'large' ? 1500 : 1210
+      const vwWidth = Math.round(window.innerWidth * (settings.menuSize === 'large' ? 0.96 : 0.92))
+      return Math.min(vwWidth, maxWidth)
+    },
+  )
 
   // The user clicked the area outside the window. Tell Lua to release
   // NUI focus so the game can receive input again, and optimistically
@@ -412,35 +424,38 @@ function App() {
     })
   }, [nuiBackground])
 
-  // Mirror the window position to CSS variables on the .ea-window
-  // element. We can't use the inline `style` prop because the CSS
-  // already sets `transform` to combine centering with our offset and
-  // inline styles would clobber the centering rule.
-  useEffect(() => {
-    if (!windowRef.current) return
-    windowRef.current.style.setProperty('--ea-drag-x', `${windowPos.x}px`)
-    windowRef.current.style.setProperty('--ea-drag-y', `${windowPos.y}px`)
-  }, [windowPos])
+  // Set horizontal position (--ea-left) so width changes don't move the
+  // left edge. Uses fixed pixel left instead of left:50% + translate(-50%).
+  // Recalculated on menu open, drag change, menu size change, and resize.
+  // NOT on collapse/expand — left edge stays pinned during animation.
+  const calculateAndSetLeft = useCallback(() => {
+    if (!windowRef.current || !visible) return
+    const el = windowRef.current
+    const raf = window.requestAnimationFrame(() => {
+      const w = el.offsetWidth
+      const left = Math.round(window.innerWidth / 2 - w / 2 + windowPos.x)
+      el.style.setProperty('--ea-left', `${left}px`)
+      el.style.setProperty('--ea-drag-y', `${windowPos.y}px`)
+    })
+    return () => window.cancelAnimationFrame(raf)
+  }, [visible, windowPos])
 
-  // Calculate the horizontal shift needed to keep the left edge pinned
-  // when the content area folds in/out. The window is centered via
-  // `left: 50%; transform: translate(-50%)`, so when width changes the
-  // left edge would shift. We compensate by adding half the width
-  // difference to the transform.
   useEffect(() => {
-    if (!windowRef.current) return
-    if (!contentCollapsed) {
-      windowRef.current.style.setProperty('--ea-collapse-shift', '0px')
-      return
+    return calculateAndSetLeft()
+  }, [visible, windowPos, settings.menuSize])
+
+  // Recalculate left position on viewport resize
+  useEffect(() => {
+    if (!windowRef.current || !visible) return
+    const el = windowRef.current
+    const onResize = () => {
+      const w = el.offsetWidth
+      const left = Math.round(window.innerWidth / 2 - w / 2 + windowPos.x)
+      el.style.setProperty('--ea-left', `${left}px`)
     }
-    // Pre-collapse width (matches .ea-window / .ea-window--large CSS)
-    const maxWidth = settings.menuSize === 'large' ? 1500 : 1210
-    const vwWidth = Math.round(window.innerWidth * (settings.menuSize === 'large' ? 0.96 : 0.92))
-    const preCollapseWidth = Math.min(vwWidth, maxWidth)
-    const collapsedWidth = 320
-    const shift = Math.round((collapsedWidth - preCollapseWidth) / 2)
-    windowRef.current.style.setProperty('--ea-collapse-shift', `${shift}px`)
-  }, [contentCollapsed, settings.menuSize])
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [visible, windowPos])
 
   if (!visible) return null
 

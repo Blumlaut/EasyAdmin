@@ -1,0 +1,25 @@
+/* ============================================================
+   Collapse / expand animation styles
+   ============================================================ */
+
+/* Window styling when collapsed (shadow, border) — applied immediately */
+.ea-window--collapsed {
+  box-shadow: none;
+  border-right: none;
+}
+
+/* Content wrapper flex collapse — applied AFTER animation finishes */
+.ea-content--collapsed {
+  flex: 0 0 0 !important;
+  min-width: 0 !important;
+}
+
+/* Child elements hidden in final collapsed state */
+.ea-content--collapsed .topbar,
+.ea-content--collapsed .main-content {
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+}

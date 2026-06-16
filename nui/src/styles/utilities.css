@@ -198,14 +198,10 @@
 .ea-window {
   position: fixed;
   top: 50%;
-  left: 50%;
-  /* Combine centering (-50%) with the drag offset (--ea-drag-x/y) and
-     the collapse shift (--ea-collapse-shift). The collapse shift keeps
-     the left edge pinned when the content area folds in/out. */
-  transform: translate(
-    calc(-50% + var(--ea-drag-x, 0px) + var(--ea-collapse-shift, 0px)),
-    calc(-50% + var(--ea-drag-y, 0px))
-  );
+  left: var(--ea-left, 50%);
+  /* Vertical centering + drag offset. Horizontal position is set by
+     --ea-left (JS) so width changes don't move the left edge. */
+  transform: translateY(calc(-50% + var(--ea-drag-y, 0px)));
   width: 1210px;
   max-width: 92vw;
   height: min(85vh, 750px);
@@ -216,10 +212,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
-  /* Width change is delayed so the content wrapper slides first (at full
-     width), then the window shrinks with the collapse shift keeping the
-     left edge pinned. Delay = transition duration (180ms). */
-  transition: width var(--transition) var(--transition) !important;
+  /* Width animated by JS (Web Animations API), not CSS transitions. */
 }
 
 /* -- Menu size: large -- */
@@ -242,37 +235,9 @@
   transition: none;
 }
 
-/* Content wrapper base — slides via translateX (CEF-safe: transition, not @keyframes) */
+/* Content wrapper — slide animated by JS */
 .ea-window > div:not(.sidebar) {
-  transform: translateX(0);
   overflow: hidden;
-  transition: transform var(--transition) !important;
-}
-
-/* -- Menu: main content collapsed (sidebar only) -- */
-/* The left edge is pinned by --ea-collapse-shift (set in JS). */
-.ea-window--collapsed {
-  width: 320px;
-  max-width: 320px;
-  box-shadow: none;
-  border-right: none;
-}
-
-/* Content wrapper slides LEFT into the sidebar, then window shrinks after delay */
-.ea-window--collapsed > div:not(.sidebar) {
-  flex: 0 0 0 !important;
-  min-width: 0 !important;
-  transform: translateX(-100%);
-}
-
-.ea-window--collapsed .topbar,
-.ea-window--collapsed .main-content {
-  width: 0 !important;
-  min-width: 0 !important;
-  padding: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  transition: opacity var(--transition-fast);
 }
 
 /* -- Menu: NUI in background mode (visible, but no focus) -- */
