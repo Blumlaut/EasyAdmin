@@ -1,0 +1,98 @@
+/* ============================================================
+   Slider
+   ============================================================ */
+
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border-color);
+  height: 6px;
+  border-radius: var(--radius-full);
+  outline: none;
+  margin: var(--space-4) 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  cursor: pointer;
+  border: 2px solid var(--brand-blue);
+  box-shadow: var(--shadow-sm);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  cursor: pointer;
+  border: 2px solid var(--brand-blue);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   Toggle (settings)
+   ============================================================ */
+
+.toggle {
+  --toggle-width: 40px;
+  --toggle-height: 22px;
+
+  position: relative;
+  display: inline-block;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--text-muted);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition), background var(--transition);
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--brand-gradient);
+  border-color: var(--brand-blue);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(18px) translateY(-50%);
+  background: #fff;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+

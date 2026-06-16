@@ -32,15 +32,6 @@ interface ResourceUpdatesResponse {
   updates: ResourceUpdateResult[]
 }
 
-const STATE_COLORS: Record<string, string> = {
-  started: 'var(--accent-green)',
-  stopped: 'var(--accent-red)',
-  starting: 'var(--accent-orange)',
-  stopping: 'var(--accent-orange)',
-  missing: 'var(--text-muted)',
-  unknown: 'var(--text-muted)',
-}
-
 // Truncate description to max chars
 const MAX_DESC_LENGTH = 80
 
@@ -369,7 +360,6 @@ function ResourceRow({
   onToggle: () => void
   onClick: () => void
 }) {
-  const stateColor = STATE_COLORS[resource.state] ?? STATE_COLORS.unknown
   const isStarted = resource.state === 'started'
   const canToggle = isStarted ? canStop : canStart
   const isSelf = resource.isProtected
@@ -389,13 +379,7 @@ function ResourceRow({
     >
       {/* State indicator */}
       <div
-        className="shrink-0"
-        style={{
-          width: 10,
-          height: 10,
-          borderRadius: '50%',
-          backgroundColor: stateColor,
-        }}
+        className={`resource-state-dot resource-state-dot--${resource.state}`}
         aria-label={`State: ${resource.state}`}
       />
 
@@ -480,8 +464,6 @@ function ResourceDetailView({
   onAction: (action: 'start' | 'stop' | 'ensure') => void
   onBack: () => void
 }) {
-  const stateColor = STATE_COLORS[metadata?.state ?? 'unknown'] ?? STATE_COLORS.unknown
-
   // Get the parent resource name from the window (set by FiveM)
   const currentResourceName = typeof window !== 'undefined'
     ? ((window as any).parentResourceName ?? 'EasyAdmin')
@@ -522,13 +504,7 @@ function ResourceDetailView({
           Back
         </button>
         <div
-          className="shrink-0"
-          style={{
-            width: 12,
-            height: 12,
-            borderRadius: '50%',
-            backgroundColor: stateColor,
-          }}
+          className={`resource-state-dot resource-state-dot-lg resource-state-dot--${metadata?.state ?? 'unknown'}`}
         />
         <div className="min-w-0">
           <div className="flex items-center gap-2">

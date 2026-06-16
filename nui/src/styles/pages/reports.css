@@ -1,0 +1,36 @@
+/* ============================================================
+   KeyValueTable
+   ============================================================ */
+
+.kv-row-divider {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.kv-key {
+  width: var(--space-32);
+  min-width: var(--space-32);
+  font-weight: var(--font-medium);
+}
+
+.kv-action-badge {
+  background: var(--bg-hover);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.text-green {
+  color: var(--accent-green);
+}
+
+.text-red {
+  color: var(--accent-red);
+}
+
+.text-orange {
+  color: var(--accent-orange);
+}
+
+.text-yellow {
+  color: var(--accent-yellow);
+}
+

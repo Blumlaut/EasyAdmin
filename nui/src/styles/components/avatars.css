@@ -1,0 +1,59 @@
+/* ============================================================
+   Avatar
+   ============================================================ */
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-weight: var(--font-semibold);
+  flex-shrink: 0;
+  font-size: var(--text-sm);
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-subtle);
+}
+
+.avatar-xs {
+  width: 24px;
+  height: 24px;
+  font-size: var(--text-xs);
+}
+
+.avatar-sm {
+  width: 32px;
+  height: 32px;
+  font-size: var(--text-xs);
+}
+
+.avatar-md {
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-sm);
+}
+
+.avatar-lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--text-base);
+}
+
+.avatar-player {
+  background: var(--brand-gradient);
+  color: #fff;
+  border: 2px solid var(--brand-blue);
+  font-size: 16px;
+}
+
+.avatar-offline {
+  background: var(--bg-hover);
+}
+
+.avatar-ban {
+  background: var(--bg-red);
+  border-color: rgba(248, 81, 73, 0.3);
+}
+

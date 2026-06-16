@@ -1,0 +1,33 @@
+/* ============================================================
+   Resource state indicator dot
+   ============================================================ */
+
+.resource-state-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.resource-state-dot-lg {
+  width: 12px;
+  height: 12px;
+}
+
+.resource-state-dot--started {
+  background-color: var(--accent-green);
+}
+
+.resource-state-dot--stopped {
+  background-color: var(--accent-red);
+}
+
+.resource-state-dot--starting,
+.resource-state-dot--stopping {
+  background-color: var(--accent-orange);
+}
+
+.resource-state-dot--missing,
+.resource-state-dot--unknown {
+  background-color: var(--text-muted);
+}

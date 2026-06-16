@@ -1,0 +1,196 @@
+/* ============================================================
+   Player actions — quick row
+   ============================================================ */
+
+.player-actions-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.player-actions-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+  height: 32px;
+}
+
+.player-actions-quick-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.player-actions-quick-btn:active {
+  opacity: 0.85;
+}
+
+.player-actions-quick-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.player-actions-quick-btn-active {
+  background: var(--bg-active);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--accent-blue);
+}
+
+.player-actions-quick-label {
+  line-height: 1;
+}
+
+/* ============================================================
+   Player discipline panel
+   ============================================================ */
+
+.player-discipline-panel {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Tab bar */
+
+.player-discipline-tabs {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.player-discipline-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-section);
+  height: 26px;
+}
+
+.player-discipline-tab:hover {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+.player-discipline-tab-active {
+  background: var(--bg-active);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--brand-blue-light);
+}
+
+/* Preset reason chips */
+
+.player-discipline-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.player-discipline-preset {
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.player-discipline-preset:hover {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.player-discipline-preset-active {
+  background: var(--bg-active);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--brand-blue-light);
+}
+
+/* Input + execute row */
+
+.player-discipline-input-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.player-discipline-input {
+  flex: 1;
+}
+
+.player-discipline-execute {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.player-discipline-execute:hover {
+  background: var(--brand-gradient-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.player-discipline-execute:active {
+  opacity: 0.9;
+}
+
+.player-discipline-execute:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.player-discipline-execute-danger {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+.player-discipline-execute-danger:hover {
+  background: #da3633;
+  border-color: #da3633;
+  box-shadow: none;
+}
