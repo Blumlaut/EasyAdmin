@@ -163,3 +163,76 @@
   width: 100%;
 }
 
+/* -- Split button (segmented pill) -- */
+
+.btn-split {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.btn-split-half {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1.4;
+  height: 28px;
+}
+
+.btn-split-half:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btn-split-half:active {
+  opacity: 0.85;
+}
+
+.btn-split-half:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-split-half:first-child {
+  border-radius: var(--radius-full) 0 0 var(--radius-full);
+  border-right: 1px solid var(--border-color);
+}
+
+.btn-split-half:last-child {
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+}
+
+.btn-split-half--restart {
+  color: var(--accent-green);
+}
+
+.btn-split-half--restart:hover {
+  background: color-mix(in srgb, var(--accent-green) 12%, transparent);
+  color: var(--accent-green);
+}
+
+.btn-split-half--stop {
+  color: var(--accent-red);
+}
+
+.btn-split-half--stop:hover {
+  background: color-mix(in srgb, var(--accent-red) 12%, transparent);
+  color: var(--accent-red);
+}
+

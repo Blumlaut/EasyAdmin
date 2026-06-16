@@ -314,13 +314,7 @@ export function ResourcesPage({
               resource={resource}
               canStart={canStart}
               canStop={canStop}
-              onToggle={() => {
-                if (resource.state === 'started') {
-                  handleAction(resource.name, 'stop')
-                } else {
-                  handleAction(resource.name, 'start')
-                }
-              }}
+              onAction={(action) => handleAction(resource.name, action)}
               onClick={() => {
                 setDetailName(resource.name)
                 onSelectResource?.(resource.name)
@@ -339,13 +333,13 @@ function ResourceRow({
   resource,
   canStart,
   canStop,
-  onToggle,
+  onAction,
   onClick,
 }: {
   resource: ResourceEntry
   canStart: boolean
   canStop: boolean
-  onToggle: () => void
+  onAction: (action: 'start' | 'stop' | 'ensure') => void
   onClick: () => void
 }) {
   const isStarted = resource.state === 'started'
@@ -416,16 +410,43 @@ function ResourceRow({
 
       {/* Inline action button */}
       {canToggle && !isSelf && (
-        <button
-          className="btn btn-sm shrink-0 mr-1"
-          onClick={(e) => {
-            e.stopPropagation()
-            onToggle()
-          }}
-          title={isStarted ? `Stop ${resource.name}` : `Start ${resource.name}`}
-        >
-          <Icon name={isStarted ? 'square' : 'play'} size="xs" />
-        </button>
+        isStarted && canStart && canStop ? (
+          <div
+            className="btn-split shrink-0 mr-1"
+          >
+            <button
+              className="btn-split-half btn-split-half--restart"
+              onClick={(e) => {
+                e.stopPropagation()
+                onAction('ensure')
+              }}
+              title={`Restart ${resource.name}`}
+            >
+              <Icon name="refresh" size="xs" />
+            </button>
+            <button
+              className="btn-split-half btn-split-half--stop"
+              onClick={(e) => {
+                e.stopPropagation()
+                onAction('stop')
+              }}
+              title={`Stop ${resource.name}`}
+            >
+              <Icon name="square" size="xs" />
+            </button>
+          </div>
+        ) : (
+          <button
+            className={`btn btn-sm shrink-0 mr-1 ${isStarted ? 'btn-danger' : 'btn-success'}`}
+            onClick={(e) => {
+              e.stopPropagation()
+              onAction(isStarted ? 'stop' : 'start')
+            }}
+            title={isStarted ? `Stop ${resource.name}` : `Start ${resource.name}`}
+          >
+            <Icon name={isStarted ? 'square' : 'play'} size="xs" />
+          </button>
+        )
       )}
 
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle shrink-0" />
