@@ -1,6 +1,6 @@
 ------------------------------------
 -- EasyAdmin NUI: settings
--- Kvp persistence, anonymous, tts, refresh actions
+-- Kvp persistence, anonymous, refresh actions
 ------------------------------------
 
 local function deny(cb, msg)
@@ -10,24 +10,6 @@ end
 RegisterNUICallback('setAnonymous', function(data, cb)
   if not permissions['anon'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:SetAnonymous', data and data.value == true)
-  cb({ ok = true })
-end)
-
-RegisterNUICallback('setTtsEnabled', function(data, cb)
-  local value = data and data.value == true
-  SetResourceKvpInt('ea_tts_enabled', value and 1 or 0)
-  SendNUIMessage({
-    action = 'toggle_speak',
-    enabled = value,
-    rate = GetResourceKvpInt('ea_tts_speed') or 4,
-  })
-  cb({ ok = true })
-end)
-
-RegisterNUICallback('setTtsSpeed', function(data, cb)
-  local speed = tonumber(data and data.value) or 4
-  SetResourceKvpInt('ea_tts_speed', speed)
-  SendNUIMessage({ action = 'speak_rate', rate = speed })
   cb({ ok = true })
 end)
 

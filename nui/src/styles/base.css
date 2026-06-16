@@ -20,6 +20,47 @@ body {
 }
 
 /* ============================================================
+   Skip link (visible only on focus)
+   ============================================================ */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 9999;
+  padding: var(--space-2) var(--space-3);
+  background: var(--brand-blue);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+  outline: 2px solid var(--brand-blue-light);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Screen reader only utility
+   ============================================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
    Focus ring (global)
    ============================================================ */
 

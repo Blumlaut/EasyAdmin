@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { CleanupRadius, CleanupType } from '../types'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface CleanupModalProps {
   availableTypes: CleanupType[]
@@ -21,9 +22,13 @@ export function CleanupModal({ availableTypes, onConfirm, onCancel }: CleanupMod
   const [type, setType] = useState<CleanupType>(availableTypes[0] ?? 'cars')
   const [radius, setRadius] = useState<CleanupRadius>(20)
   const [deep, setDeep] = useState(true)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(containerRef)
 
   return (
     <div
+      ref={containerRef}
       className="dialog-overlay"
       role="presentation"
       onClick={(e) => {

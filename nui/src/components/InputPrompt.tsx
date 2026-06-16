@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface InputPromptProps {
   title: string
@@ -33,6 +34,9 @@ export function InputPrompt({
 }: InputPromptProps) {
   const [value, setValue] = useState(initialValue)
   const inputRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(containerRef)
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -55,6 +59,7 @@ export function InputPrompt({
 
   return (
     <div
+      ref={containerRef}
       className="dialog-overlay"
       role="presentation"
       onClick={(e) => {

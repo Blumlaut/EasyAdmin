@@ -17,7 +17,7 @@ export function SettingsPage({
   onChange,
   onToast,
 }: SettingsPageProps) {
-  function patchAccessibility(patch: Partial<Pick<AppSettings, 'tts' | 'ttsSpeed' | 'highContrast' | 'fontSize'>>) {
+  function patchAccessibility(patch: Partial<Pick<AppSettings, 'highContrast' | 'fontSize'>>) {
     onChange(patch)
   }
 
@@ -45,8 +45,6 @@ export function SettingsPage({
         />
       )}
       <SettingsAccessibility
-        tts={settings.tts}
-        ttsSpeed={settings.ttsSpeed}
         highContrast={settings.highContrast}
         fontSize={settings.fontSize}
         onChange={patchAccessibility}

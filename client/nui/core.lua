@@ -145,12 +145,6 @@ function NuiSendSettings()
   if not GetResourceKvpInt('ea_menuwidth') then
     SetResourceKvpInt('ea_menuwidth', 0)
   end
-  if not GetResourceKvpInt('ea_tts_enabled') then
-    SetResourceKvpInt('ea_tts_enabled', 0)
-  end
-  if not GetResourceKvpInt('ea_tts_speed') then
-    SetResourceKvpInt('ea_tts_speed', 4)
-  end
   if not GetResourceKvp('ea_showLicenses') then
     SetResourceKvp('ea_showLicenses', 'false')
   end
@@ -169,8 +163,6 @@ function NuiSendSettings()
     data = {
       orientation = GetResourceKvpString('ea_menuorientation') or 'middle',
       menuWidth = GetResourceKvpInt('ea_menuwidth') or 0,
-      tts = GetResourceKvpInt('ea_tts_enabled') == 1,
-      ttsSpeed = GetResourceKvpInt('ea_tts_speed') or 4,
       anonymous = false, -- anonymous is per-session, not persisted
       showLicenses = GetResourceKvpString('ea_showLicenses') == 'true',
       highContrast = GetResourceKvpString('ea_highContrast') == 'true',

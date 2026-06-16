@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface ConfirmDialogProps {
   title: string
@@ -19,6 +20,9 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(containerRef)
+
   // Close on Escape key
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -32,6 +36,7 @@ export function ConfirmDialog({
 
   return (
     <div
+      ref={containerRef}
       className="dialog-overlay"
       role="presentation"
       onClick={(e) => {

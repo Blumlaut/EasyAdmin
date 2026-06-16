@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface SliderInputProps {
   label: string
@@ -26,9 +27,13 @@ export function SliderInput({
 }: SliderInputProps) {
   const [value, setValue] = useState(initialValue ?? min)
   const display = formatValue ? formatValue(value) : String(value)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(containerRef)
 
   return (
     <div
+      ref={containerRef}
       className="dialog-overlay"
       role="presentation"
       onClick={(e) => {

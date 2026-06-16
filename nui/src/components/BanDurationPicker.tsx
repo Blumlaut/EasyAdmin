@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 export interface BanDurationChoice {
   label: string
@@ -94,43 +95,87 @@ export function BanDurationPicker({
       </select>
 
       {customOpen && (
-        <div
-          className="dialog-overlay"
-          role="presentation"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) handleCustomCancel()
-          }}
-        >
-          <div
-            className="dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ban-custom-title"
-          >
-            <h2 id="ban-custom-title" className="dialog-title">
-              Custom Ban Length
-            </h2>
-            <p className="dialog-description">
-              Set the custom ban duration. Leave all at 0 for indefinite.
-            </p>
-            <div className="flex flex-col gap-3">
-              <NumberField label="Hours" value={hours} onChange={setHours} max={24} />
-              <NumberField label="Days" value={days} onChange={setDays} max={31} />
-              <NumberField label="Weeks" value={weeks} onChange={setWeeks} max={4} />
-              <NumberField label="Months" value={months} onChange={setMonths} max={12} />
-            </div>
-            <div className="dialog-actions">
-              <button className="btn btn-secondary" onClick={handleCustomCancel}>
-                Cancel
-              </button>
-              <button className="btn btn-primary" onClick={handleCustomConfirm}>
-                Apply
-              </button>
-            </div>
-          </div>
-        </div>
+        <CustomBanModal
+          hours={hours}
+          setHours={setHours}
+          days={days}
+          setDays={setDays}
+          weeks={weeks}
+          setWeeks={setWeeks}
+          months={months}
+          setMonths={setMonths}
+          onConfirm={handleCustomConfirm}
+          onCancel={handleCustomCancel}
+        />
       )}
     </>
+  )
+}
+
+function CustomBanModal({
+  hours,
+  setHours,
+  days,
+  setDays,
+  weeks,
+  setWeeks,
+  months,
+  setMonths,
+  onConfirm,
+  onCancel,
+}: {
+  hours: number
+  setHours: (n: number) => void
+  days: number
+  setDays: (n: number) => void
+  weeks: number
+  setWeeks: (n: number) => void
+  months: number
+  setMonths: (n: number) => void
+  onConfirm: () => void
+  onCancel: () => void
+}) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(containerRef)
+
+  return (
+    <div
+      ref={containerRef}
+      className="dialog-overlay"
+      role="presentation"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onCancel()
+      }}
+    >
+      <div
+        className="dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="ban-custom-title"
+      >
+        <h2 id="ban-custom-title" className="dialog-title">
+          Custom Ban Length
+        </h2>
+        <p className="dialog-description">
+          Set the custom ban duration. Leave all at 0 for indefinite.
+        </p>
+        <div className="flex flex-col gap-3">
+          <NumberField label="Hours" value={hours} onChange={setHours} max={24} />
+          <NumberField label="Days" value={days} onChange={setDays} max={31} />
+          <NumberField label="Weeks" value={weeks} onChange={setWeeks} max={4} />
+          <NumberField label="Months" value={months} onChange={setMonths} max={12} />
+        </div>
+        <div className="dialog-actions">
+          <button className="btn btn-secondary" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="btn btn-primary" onClick={onConfirm}>
+            Apply
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 

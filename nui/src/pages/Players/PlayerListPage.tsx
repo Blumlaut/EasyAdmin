@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { Notification, Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
@@ -39,6 +40,10 @@ export function PlayerListPage({
         (p.identifier ?? '').toLowerCase().includes(q),
     )
   }, [players, debouncedQuery])
+
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useListKeyboardNav(listRef, filtered.length)
 
   const canTeleportAll = !!permissions['player.teleport.everyone']
 
@@ -85,7 +90,7 @@ export function PlayerListPage({
           </p>
         </div>
       ) : (
-        <div className="list">
+        <div ref={listRef} className="list">
           {filtered.map((player) => (
             <PlayerRow
               key={player.id}

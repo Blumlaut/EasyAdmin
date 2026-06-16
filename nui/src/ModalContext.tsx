@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useRef, useState, useCallback, type ReactNode } from 'react'
+import { useFocusTrap } from './hooks/useFocusTrap'
 import type { CleanupRadius, CleanupType, Notification, Player } from './types'
 import { callLua } from './fivem'
 import { InputPrompt } from './components/InputPrompt'
@@ -419,9 +420,13 @@ function BanDurationFlow({
   onConfirm: (seconds: number | null) => void
 }) {
   const [duration, setDuration] = useState<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(containerRef)
 
   return (
     <div
+      ref={containerRef}
       className="dialog-overlay"
       role="presentation"
       onClick={(e) => {
@@ -488,10 +493,14 @@ function OfflineBanDurationFlow({
   onCancel: () => void
 }) {
   const [duration, setDuration] = useState<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const ctx = useModalContext()
+
+  useFocusTrap(containerRef)
 
   return (
     <div
+      ref={containerRef}
       className="dialog-overlay"
       role="presentation"
       onClick={(e) => {

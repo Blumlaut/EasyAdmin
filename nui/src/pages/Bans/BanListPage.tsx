@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { BanListEntry, Notification, PaginatedBanResponse } from '../../types'
 import { on, callLua } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
 import { Skeleton } from '../../components/Skeleton'
@@ -30,6 +31,9 @@ export function BanListPage({
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useListKeyboardNav(listRef, bans.length)
 
   // Stable refs so the NUI message handler doesn't stale-out
   const bansRef = useRef<BanListEntry[]>([])
@@ -121,7 +125,7 @@ export function BanListPage({
           <p className="text-secondary">{total === 0 ? 'No bans on record' : 'No bans match your search'}</p>
         </div>
       ) : (
-        <div className="list">
+        <div ref={listRef} className="list">
           {bans.map((ban, i) => (
             <BanRow
               key={`${ban.banid}-${i}`}

@@ -1,7 +1,8 @@
-import { useMemo, useState, useEffect, useCallback } from 'react'
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
 import type { Notification, Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult } from '../../types'
 import { callLua, on } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { useModalContext } from '../../ModalContext'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
@@ -160,6 +161,9 @@ export function ResourcesPage({
   const startedCount = resources.filter((r) => r.state === 'started').length
   const stoppedCount = resources.length - startedCount
   const outdatedCount = resources.filter((r) => r.outdated).length
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useListKeyboardNav(listRef, filtered.length)
 
   // Execute a resource action (called after confirmation)
   const executeAction = useCallback(async (name: string, action: 'start' | 'stop' | 'ensure') => {
@@ -321,7 +325,7 @@ export function ResourcesPage({
           </p>
         </div>
       ) : (
-        <div className="list">
+        <div ref={listRef} className="list">
           {filtered.map((resource) => (
             <ResourceRow
               key={resource.name}

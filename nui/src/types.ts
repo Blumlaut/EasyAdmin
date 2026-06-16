@@ -100,8 +100,6 @@ export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
 export interface AppSettings {
   orientation: 'left' | 'middle' | 'right'
   menuWidth: number
-  tts: boolean
-  ttsSpeed: number
   anonymous: boolean
   showLicenses: boolean
   // Accessibility

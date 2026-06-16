@@ -41,8 +41,6 @@ const NAV_ITEMS: NavItem[] = [
 const DEFAULT_SETTINGS: AppSettings = {
   orientation: 'middle',
   menuWidth: 0,
-  tts: false,
-  ttsSpeed: 4,
   anonymous: false,
   showLicenses: false,
   highContrast: false,
@@ -332,6 +330,15 @@ function App() {
     return () => window.removeEventListener('keydown', handleKey)
   }, [visible])
 
+  // Focus the page title on navigation (screen reader + keyboard users)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    if (visible && titleRef.current) {
+      titleRef.current.focus()
+    }
+  }, [view, visible])
+
   if (!visible) return null
 
   const closeMenu = () => callLua('closeMenu').catch(() => {})
@@ -351,6 +358,14 @@ function App() {
         onPlayersUpdated={fetchPlayers}
       >
         <div className={windowClasses.join(' ')}>
+          {/* Skip link — first focusable element, visible on :focus */}
+          <a
+            className="skip-link"
+            href="#ea-main-content"
+          >
+            Skip to main content
+          </a>
+
           <aside className="sidebar">
             <div className="sidebar-header">
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
@@ -399,7 +414,11 @@ function App() {
                   Back
                 </button>
               )}
-              <h2 className="text-xl font-semibold">
+              <h2
+                ref={titleRef}
+                className="text-xl font-semibold"
+                tabIndex={-1}
+              >
                 {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
               </h2>
               <button
@@ -411,7 +430,7 @@ function App() {
               </button>
             </header>
 
-            <main className="glass main-content">
+            <main id="ea-main-content" className="glass main-content" role="main">
               {view === 'main' && (
                 <Dashboard playerCount={players.length} />
               )}

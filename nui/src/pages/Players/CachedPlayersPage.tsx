@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { CachedPlayer, Notification } from '../../types'
+import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
@@ -20,6 +21,9 @@ export function CachedPlayersPage({
 }: CachedPlayersPageProps) {
   const modal = useModalContext()
   const [query, setQuery] = useState('')
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useListKeyboardNav(listRef, cachedPlayers.length)
 
   return (
     <div className="page-container">
@@ -60,7 +64,7 @@ export function CachedPlayersPage({
           <p className="text-secondary">No cached players</p>
         </div>
       ) : (
-        <div className="list">
+        <div ref={listRef} className="list">
           {cachedPlayers.map((player) => (
             <CachedRow
               key={player.id}

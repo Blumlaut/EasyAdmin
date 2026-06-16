@@ -1,47 +1,21 @@
-import { callLua } from '../../fivem'
 import { setResourceKvp } from '../../fivem'
 import type { Notification } from '../../types'
 
 interface SettingsAccessibilityProps {
-  tts: boolean
-  ttsSpeed: number
   highContrast: boolean
   fontSize: number
-  onChange: (patch: { tts?: boolean; ttsSpeed?: number; highContrast?: boolean; fontSize?: number }) => void
+  onChange: (patch: { highContrast?: boolean; fontSize?: number }) => void
   onToast: (text: string, type?: Notification['type']) => void
 }
 
-const SPEEDS = Array.from({ length: 10 }, (_, i) => i + 1)
 const FONT_SIZES = [80, 90, 100, 110, 120, 130, 140, 150]
 
 export function SettingsAccessibility({
-  tts,
-  ttsSpeed,
   highContrast,
   fontSize,
   onChange,
   onToast,
 }: SettingsAccessibilityProps) {
-  async function toggleTts(value: boolean) {
-    onChange({ tts: value })
-    try {
-      await callLua('setTtsEnabled', { value })
-      onToast(value ? 'TTS on' : 'TTS off', 'success')
-    } catch {
-      onToast('Failed to update TTS', 'error')
-    }
-  }
-
-  async function setSpeed(value: number) {
-    onChange({ ttsSpeed: value })
-    try {
-      await callLua('setTtsSpeed', { value })
-      onToast(`TTS speed set to ${value}`, 'success')
-    } catch {
-      onToast('Failed to update TTS speed', 'error')
-    }
-  }
-
   function toggleHighContrast(value: boolean) {
     onChange({ highContrast: value })
     setResourceKvp('ea_highContrast', value ? 'true' : 'false')
@@ -99,39 +73,6 @@ export function SettingsAccessibility({
             </button>
           ))}
         </div>
-      </label>
-
-      {/* TTS */}
-      <div className="section-divider mt-4" />
-      <div className="toggle-row mt-2">
-        <div className="flex flex-col">
-          <span className="text-sm">Text-to-speech</span>
-          <span className="text-xs text-muted">
-            Speaks menu items and notifications.
-          </span>
-        </div>
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={tts}
-            onChange={(e) => toggleTts(e.target.checked)}
-            aria-label="Enable text-to-speech"
-          />
-          <span className="toggle-slider" />
-        </label>
-      </div>
-
-      <label className="flex flex-col gap-1 mt-3">
-        <span className="text-sm text-secondary">TTS speed (1-10)</span>
-        <select
-          className="input"
-          value={ttsSpeed}
-          onChange={(e) => setSpeed(Number(e.target.value))}
-        >
-          {SPEEDS.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
       </label>
     </div>
   )

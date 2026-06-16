@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { Notification, Report } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
@@ -35,6 +36,10 @@ export function ReportListPage({
     })
   }, [reports, debouncedQuery])
 
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useListKeyboardNav(listRef, filtered.length)
+
   return (
     <div className="page-container">
       <div className="flex items-center gap-2 mb-3">
@@ -65,7 +70,7 @@ export function ReportListPage({
           <p className="text-secondary">{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
         </div>
       ) : (
-        <div className="list">
+        <div ref={listRef} className="list">
           {filtered.map((report) => (
             <ReportRow
               key={report.id}
