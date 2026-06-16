@@ -5,6 +5,38 @@
 
 ---
 
+## FiveM References
+
+All FiveM scripting decisions in this document reference the official documentation. Key references:
+
+| Topic | Documentation |
+|-------|---------------|
+| Resource model | [Introduction to Resources](https://docs.fivem.net/docs/scripting-manual/introduction/introduction-to-resources/) |
+| Resource manifest | [Resource Manifest Reference](https://docs.fivem.net/docs/scripting-reference/resource-manifest/) |
+| NUI (fullscreen) | [Fullscreen NUI](https://docs.fivem.net/docs/scripting-manual/nui-development/full-screen-nui/) |
+| NUI callbacks | [NUI Callbacks](https://docs.fivem.net/docs/scripting-manual/nui-development/nui-callbacks/) |
+| SendNUIMessage | [SendNUIMessage](https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/SendNUIMessage/) |
+| RegisterNUICallback | [RegisterNUICallback](https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/RegisterNUICallback/) |
+| Triggering events | [Triggering Events](https://docs.fivem.net/docs/scripting-manual/working-with-events/triggering-events/) |
+| Listening for events | [Listening for Events](https://docs.fivem.net/docs/scripting-manual/working-with-events/listening-for-events/) |
+| Lua scripting | [Scripting in Lua](https://docs.fivem.net/docs/scripting-manual/runtimes/lua/) |
+| Exports | [Using Exports](https://docs.fivem.net/docs/scripting-manual/runtimes/lua/#using-exports) |
+| `provide` keyword | [provide](https://docs.fivem.net/docs/scripting-reference/resource-manifest/#provide) |
+| `ui_page` | [ui_page](https://docs.fivem.net/docs/scripting-reference/resource-manifest/#ui_page) |
+| NUI focus | [SET_NUI_FOCUS](https://docs.fivem.net/natives/?_0x5B98AE30) |
+| Resource lifecycle | `onClientResourceStop` (see [AddEventHandler](https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/AddEventHandler/)) |
+
+### Key FiveM Constraints
+
+- **Resource isolation** — Each resource has its own `ui_page`. There is no mechanism for one resource's NUI to load another resource's JavaScript ([ui_page](https://docs.fivem.net/docs/scripting-reference/resource-manifest/#ui_page)).
+- **NUI callbacks** — The NUI communicates back to Lua via `fetch('https://' .. GetParentResourceName() .. '/callbackName')`. The resource that registered the callback must be the parent resource (EasyAdmin) ([NUI Callbacks](https://docs.fivem.net/docs/scripting-manual/nui-development/nui-callbacks/)).
+- **SendNUIMessage** — Only the resource that owns the NUI (EasyAdmin, via `ui_page`) can send messages to it via `SendNUIMessage()` ([SendNUIMessage](https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/SendNUIMessage/)).
+- **`provide` keyword** — EasyAdmin's `fxmanifest.lua` uses `provide 'EasyAdmin'`, which means other resources that depend on `EasyAdmin` will receive this resource instead. This allows the `EasyAdmin` global table to be shared across resources ([provide](https://docs.fivem.net/docs/scripting-reference/resource-manifest/#provide)).
+- **`onClientResourceStop`** — Fires when any client-side resource stops. Used to detect when plugin resources are stopped so their UI can be cleaned up. Already used in `client/nui/events.lua` for focus cleanup.
+- **Callback must always be called** — Per FiveM docs: "To prevent requests from stalling, you **have to** return the callback at all times" ([NUI Callbacks](https://docs.fivem.net/docs/scripting-manual/nui-development/nui-callbacks/)).
+
+---
+
 ## Problem Statement
 
 EasyAdmin's legacy NativeUI plugin system (`addPlugin()`) injects menu items directly into NativeUI's Lua-side menu tree. The new React NUI has no NativeUI — it's a compiled React SPA running in FiveM's CEF browser. We need a plugin system that:
@@ -67,7 +99,7 @@ Plugins define **structured data describing what they want to render**, using co
 │  │                  │         │                  │                 │
 │  │  EasyAdmin.      │register │  pluginRegistry  │push config      │
 │  │  registerPlugin()│────────▶│                  │────────────────▶│  ┌──────────┐│
-│  │                  │         │                  │                 │  │  NUI     ││
+│  │                  │         │                  │SendNUIMessage() │  │  NUI     ││
 │  │  EasyAdmin.      │action   │  forward to      │callLua()        │  │  (React) ││
 │  │  onPluginAction()│◀────────│  plugin handler  │◀────────────────│  │  App.tsx ││
 │  │                  │result   │                  │                 │  │          ││
@@ -76,24 +108,30 @@ Plugins define **structured data describing what they want to render**, using co
 └─────────────────────────────────────────────────────────────────────┘              │
                                                                                      │
                               Plugin updates UI via:                                 │
-                              EasyAdmin.updatePluginPage() ──▶ SendNUIMessage ──▶ NUI│
+                              EasyAdmin.updatePluginPage() ──▶ SendNUIMessage() ──▶ NUI│
 ```
 
 ### Data Flow
 
-1. **Registration** — Plugin calls `EasyAdmin.registerPlugin(config)` from its client Lua. EasyAdmin stores the config and pushes it to the NUI via `SendNUIMessage`.
+1. **Registration** — Plugin calls `EasyAdmin.registerPlugin(config)` from its client Lua. EasyAdmin stores the config and pushes it to the NUI via `SendNUIMessage()`.
 
-2. **Rendering** — The NUI receives the plugin config and renders a `PluginPage` using EasyAdmin's component library. Nav items appear in the sidebar.
+2. **Initial load** — When the NUI menu opens, it calls `callLua('getPlugins')` to fetch all currently registered plugins. This ensures plugins registered before the menu opened are included. (Matches the pattern used by `callLua('requestPlayers')`, `callLua('requestReports')`, etc.)
 
-3. **Actions** — User clicks a button on a plugin page. The NUI calls `callLua('pluginAction', { resource, action, data })`. EasyAdmin's Lua forwards this to the plugin's registered callback.
+3. **Rendering** — The NUI receives plugin configs and renders `PluginPage` components using EasyAdmin's component library. Nav items appear in the sidebar.
 
-4. **Updates** — Plugin calls `EasyAdmin.updatePluginPage(resource, update)` to push new data. The NUI receives it via `SendNUIMessage` and re-renders the affected sections.
+4. **Actions** — User clicks a button on a plugin page. The NUI calls `callLua('pluginAction', { resource, action, data })`. EasyAdmin's Lua forwards this to the plugin's registered callback via the handler stored in `pluginActionHandlers`.
+
+5. **Updates** — Plugin calls `EasyAdmin.updatePluginPage(resource, update)` to push new data. The NUI receives it via `SendNUIMessage()` and re-renders the affected sections using immutable state updates.
+
+6. **Unregistration** — When a plugin resource stops (`onClientResourceStop`), EasyAdmin removes it from the registry and notifies the NUI via `SendNUIMessage({ action = 'pluginUnregistered', data = { resource } })`. The NUI removes the plugin's nav items and pages.
 
 ---
 
 ## Plugin API (Lua)
 
 Plugins interact with EasyAdmin through three functions exposed on a global `EasyAdmin` table.
+
+The `EasyAdmin` global table is created in `client/nui/plugins.lua` (`if not EasyAdmin then EasyAdmin = {} end`). Because EasyAdmin's `fxmanifest.lua` declares `provide 'EasyAdmin'`, other resources that reference EasyAdmin will receive this resource's globals. Per the [FiveM `provide` documentation](https://docs.fivem.net/docs/scripting-reference/resource-manifest/#provide), the providing resource "will act as if it is said resource if started."
 
 ### `EasyAdmin.registerPlugin(config)`
 
@@ -112,7 +150,6 @@ Register a plugin with EasyAdmin. Called once during resource startup.
 --- @field icon string                          Icon name from EasyAdmin's icon set
 --- @field order number?                        Sort order (default: 99 — after built-in items)
 --- @field permission string?                   Permission required to see this nav item
---- @field badge fun(): (string|number|nil)?    Function called to get badge value
 
 --- @class PluginPageConfig
 --- @field id string                            Unique page ID (e.g. "my-plugin-main")
@@ -124,6 +161,7 @@ Register a plugin with EasyAdmin. Called once during resource startup.
 --- @field id string                            Unique section ID (for targeted updates)
 --- @field title string?                        Section heading
 --- @field component PluginComponent            Component definition
+--- @field loading boolean?                     Show skeleton while data loads (default: false)
 
 --- @class PluginComponent
 --- @field type string                          Component type (see registry below)
@@ -210,6 +248,34 @@ EasyAdmin.registerPlugin({
                 },
             },
         },
+        {
+            id = "combat-settings",
+            title = "Combat Settings",
+            sections = {
+                {
+                    id = "config",
+                    title = "Configuration",
+                    component = {
+                        type = "form",
+                        props = {
+                            fields = {
+                                {
+                                    key = "maxPlayers",
+                                    label = "Max Players",
+                                    placeholder = "32",
+                                    type = "number",
+                                },
+                            },
+                            submit = {
+                                label = "Save Settings",
+                                action = "save_settings",
+                                variant = "primary",
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
 })
 ```
@@ -224,6 +290,7 @@ Register a callback for actions triggered from the NUI.
 --- @param action string         The action identifier from the button/item
 --- @param data table?           Optional data sent with the action
 --- @param respond function      respond(resultTable) — send result back to NUI
+
 EasyAdmin.onPluginAction(GetCurrentResourceName(), function(action, data, respond)
     if action == "start_wave" then
         TriggerServerEvent("combat:startWave")
@@ -234,10 +301,15 @@ EasyAdmin.onPluginAction(GetCurrentResourceName(), function(action, data, respon
             confirm = true,
             title = "Reset Combat System",
             message = "This will reset all wave data. Are you sure?",
-            onConfirm = "confirm_reset",  -- action to call when confirmed
+            variant = "danger",
+            onConfirm = "confirm_reset",  -- action to call when user confirms
         })
     elseif action == "confirm_reset" then
         TriggerServerEvent("combat:reset")
+        respond({ success = true })
+    elseif action == "save_settings" then
+        -- data contains form field values: { maxPlayers = "32" }
+        TriggerServerEvent("combat:saveSettings", data)
         respond({ success = true })
     end
 end)
@@ -250,10 +322,12 @@ Push updated content to a plugin's page. Used for live data (timers, event logs,
 ```lua
 --- @param resourceName string   The resource name
 --- @param update table          Update payload
---- @field.pageId string?        Target page (default: first page)
---- @field.sections PluginSectionConfig[]?  Replace all sections
---- @field.sectionId string?     Target a specific section by ID
---- @field.component PluginComponent?      New component for targeted section
+
+--- Update payload fields:
+--- @field pageId string?        Target page (default: first page)
+--- @field sections PluginSectionConfig[]?  Replace all sections on page
+--- @field sectionId string?     Target a specific section by ID
+--- @field component PluginComponent?      New component for targeted section
 
 -- Replace all sections on the first page:
 EasyAdmin.updatePluginPage("combat-system", {
@@ -283,6 +357,21 @@ EasyAdmin.updatePluginPage("combat-system", {
         },
     },
 })
+
+-- Update a specific page by ID:
+EasyAdmin.updatePluginPage("combat-system", {
+    pageId = "combat-settings",
+    sections = {
+        {
+            id = "config",
+            title = "Configuration",
+            component = {
+                type = "info-table",
+                props = { rows = { { key = "Status", value = "Saved" } } },
+            },
+        },
+    },
+})
 ```
 
 ---
@@ -293,7 +382,7 @@ Plugins can only use components from this registry. EasyAdmin renders them using
 
 ### `info-table`
 
-Key-value pairs displayed in a clean table layout. Uses the existing `KeyValueTable` component.
+Key-value pairs displayed in a clean table layout. Uses the existing `KeyValueTable` component (`nui/src/components/KeyValueTable.tsx`).
 
 ```lua
 {
@@ -331,7 +420,7 @@ Key-value pairs displayed in a clean table layout. Uses the existing `KeyValueTa
 
 ### `button-group`
 
-A row of action buttons. Uses EasyAdmin's `btn` classes.
+A row of action buttons. Uses EasyAdmin's `.btn` classes (`nui/src/styles/components/buttons.css`).
 
 ```lua
 {
@@ -353,6 +442,12 @@ A row of action buttons. Uses EasyAdmin's `btn` classes.
                     message = "This cannot be undone.",
                 },
             },
+            {
+                label = "Settings",
+                action = "navigate",
+                variant = "secondary",
+                navigateTo = "combat-settings",  -- Navigate to another plugin page
+            },
         },
     },
 }
@@ -371,6 +466,7 @@ A row of action buttons. Uses EasyAdmin's `btn` classes.
 | `variant` | `string?` | No | Button style (default: `default`) |
 | `disabled` | `boolean?` | No | Whether button is disabled |
 | `confirm` | `ConfirmConfig?` | No | Confirmation dialog config |
+| `navigateTo` | `string?` | No | Page ID to navigate to (overrides action) |
 
 **`ConfirmConfig`:**
 | Field | Type | Required | Description |
@@ -382,7 +478,7 @@ A row of action buttons. Uses EasyAdmin's `btn` classes.
 
 ### `list`
 
-A vertical list of items. Uses EasyAdmin's `.list` / `.list-item` classes.
+A vertical list of items. Uses EasyAdmin's `.list` / `.list-item` classes (`nui/src/styles/components/lists.css`).
 
 ```lua
 {
@@ -421,7 +517,7 @@ A vertical list of items. Uses EasyAdmin's `.list` / `.list-item` classes.
 
 ### `form`
 
-A simple form with text inputs and a submit button. Renders using EasyAdmin's `InputPrompt` pattern.
+A simple form with text inputs and a submit button. Renders inline within the section card (not as a modal). Uses EasyAdmin's existing input styles (`nui/src/styles/components/inputs.css`) and button variants.
 
 ```lua
 {
@@ -472,13 +568,13 @@ A simple form with text inputs and a submit button. Renders using EasyAdmin's `I
 | `action` | `string` | Yes | Action ID sent on submit |
 | `variant` | `string?` | No | Button variant |
 
-When submitted, the action handler receives `data = { message = "hello", duration = "30" }` (field keys mapped to values).
+**Form submission flow:** When the user submits the form, the `FormRenderer` collects all field values into a table keyed by field `key` and calls `callLua('pluginAction', { resource = pluginResource, action = submit.action, data = { message = "hello", duration = "30" } })`. This follows the same pattern as all other plugin actions — EasyAdmin's `RegisterNUICallback("pluginAction", ...)` forwards the call to the plugin's registered handler. The handler receives `data` as the field values table.
 
 ---
 
 ### `status-bar`
 
-A progress/percentage bar. Good for timers, health bars, resource usage, etc.
+A progress/percentage bar. Good for timers, health bars, resource usage, etc. Uses the existing `.dashboard-bar-track` / `.dashboard-bar-fill` classes (`nui/src/styles/components/cards.css`).
 
 ```lua
 {
@@ -498,11 +594,22 @@ A progress/percentage bar. Good for timers, health bars, resource usage, etc.
 | `value` | `number` | Yes | Percentage (0–100) |
 | `color` | `string?` | No | Bar color (default: `blue`) |
 
+**Color mapping** — Maps to EasyAdmin's existing accent tokens from `nui/src/styles/tokens.css`:
+
+| Color Token | CSS Variable | Hex |
+|-------------|-------------|-----|
+| `blue` | `--accent-blue` | `#58a6ff` |
+| `green` | `--accent-green` | `#3fb950` |
+| `red` | `--accent-red` | `#f85149` |
+| `orange` | `--accent-orange` | `#d29922` |
+
+The `StatusBarRenderer` applies the color via inline `style={{ background: 'var(--accent-<color>)' }}` on the fill element. The track uses `var(--bg-hover)` for the background.
+
 ---
 
 ### `divider`
 
-A horizontal rule between sections. No props.
+A horizontal rule between sections. Renders as `<hr className="section-divider">` using the existing utility class (`nui/src/styles/utilities.css`).
 
 ```lua
 {
@@ -529,6 +636,97 @@ A text heading. Useful for section labels without a card wrapper.
 
 ---
 
+### `error-card` (internal)
+
+Not exposed to plugins. Rendered when a plugin sends an invalid component type or malformed props. Displays a styled error card with the component type that failed and a console warning.
+
+```tsx
+// Internal use only — rendered by PluginComponents.tsx for unknown types
+<div className="card card-danger-border">
+  <div className="card-title">Component Error</div>
+  <p className="text-muted text-sm">
+    Unknown component type: "{component.type}"
+  </p>
+</div>
+```
+
+When an unknown component type is encountered:
+1. `console.warn('[EasyAdmin Plugin] Unknown component type:', component.type, 'from plugin:', resource)` is logged
+2. An `error-card` is rendered in place of the unknown component, using the existing `.card-danger-border` class
+3. The rest of the page continues to render normally
+
+This provides visibility to both developers (console) and users (error card) without crashing the page.
+
+---
+
+## Multi-Page Plugins and Sub-Navigation
+
+Plugins can define multiple pages in their `pages` array. Only **one nav item** is created per plugin (the one defined in `nav`). Sub-navigation between plugin pages is handled through buttons with the `navigateTo` property.
+
+### How It Works
+
+1. The plugin's nav item always navigates to the **first page** in the `pages` array
+2. Buttons with `navigateTo = "some-page-id"` switch to that page within the same plugin context
+3. The `View` type includes plugin pages as `plugin-{resourceName}-{pageIndex}` where `pageIndex` is the 0-based index into the plugin's `pages` array
+4. The topbar title updates to the target page's `title`
+5. The back button in the topbar navigates back through view history (same as built-in pages)
+
+### Example
+
+```lua
+-- Two pages, one nav item
+EasyAdmin.registerPlugin({
+    name = "Combat System",
+    nav = { id = "combat-system", label = "Combat", icon = "zap" },
+    pages = {
+        {
+            id = "combat-dashboard",
+            title = "Combat Dashboard",
+            sections = {
+                {
+                    id = "nav",
+                    component = {
+                        type = "button-group",
+                        props = {
+                            buttons = {
+                                {
+                                    label = "⚙ Settings",
+                                    action = "navigate",
+                                    navigateTo = 1,  -- index of the settings page
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            id = "combat-settings",
+            title = "Combat Settings",
+            sections = {
+                {
+                    id = "nav-back",
+                    component = {
+                        type = "button-group",
+                        props = {
+                            buttons = {
+                                {
+                                    label = "← Dashboard",
+                                    action = "navigate",
+                                    navigateTo = 0,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+})
+```
+
+---
+
 ## NUI Integration
 
 ### New Files
@@ -536,16 +734,77 @@ A text heading. Useful for section labels without a card wrapper.
 | File | Purpose |
 |------|---------|
 | `nui/src/types/plugin.ts` | TypeScript types for plugin configs |
-| `nui/src/components/PluginPage.tsx` | Renders plugin page from config data |
+| `nui/src/components/PluginPage.tsx` | Renders plugin page from config data (wraps in `.page-container`) |
 | `nui/src/components/PluginComponents.tsx` | Individual renderers for each component type |
+| `nui/src/components/PluginErrorCard.tsx` | Error card for invalid components |
 | `nui/src/hooks/usePlugins.ts` | Manages plugin registry state and updates |
 
 ### App.tsx Changes
 
-1. **Plugin state** — `usePlugins()` hook manages the registered plugin registry
-2. **Nav items** — Plugin nav items are merged into `NAV_ITEMS` with proper ordering
-3. **Routing** — Plugin page IDs are added to the `View` type and routing logic
-4. **Listeners** — `on('pluginRegistered', ...)` and `on('pluginPageUpdate', ...)` handlers
+1. **Plugin state** — `usePlugins()` hook manages the registered plugin registry. Called on mount via `callLua('getPlugins')` (same pattern as `fetchPlayers`, `fetchReports`).
+
+2. **Nav items** — Plugin nav items are merged into `NAV_ITEMS` with proper ordering. Permission is resolved in Lua (see below) and sent as a boolean `disabled` flag, matching the existing `visibleNavItems` pattern.
+
+3. **Routing** — Plugin pages use the `View` type extended with `plugin-{resourceName}-{pageIndex}`. The `navigateTo` callback handles these views by looking up the plugin's page config.
+
+4. **Listeners** — Three `on()` handlers:
+   - `on('pluginRegistered', ...)` — Add/update a plugin in state
+   - `on('pluginPageUpdate', ...)` — Apply partial updates to plugin state (immutable: spread + filter by sectionId)
+   - `on('pluginUnregistered', ...)` — Remove a plugin from state and nav items
+
+5. **View history** — Plugin pages participate in the existing `viewHistoryRef` stack. The back button works normally.
+
+### TypeScript Types
+
+```typescript
+// nui/src/types/plugin.ts
+
+export interface PluginNavItem {
+  id: string
+  label: string
+  icon: string
+  order?: number
+  disabled?: boolean  // resolved from permission in Lua
+}
+
+export interface PluginSection {
+  id: string
+  title?: string
+  component: PluginComponent
+  loading?: boolean
+}
+
+export interface PluginPage {
+  id: string
+  title: string
+  sections: PluginSection[]
+}
+
+export interface PluginConfig {
+  resource: string
+  name: string
+  version?: string
+  nav: PluginNavItem
+  pages: PluginPage[]
+}
+
+export type PluginView = `plugin-${string}-${number}`
+
+// Component types
+export type ComponentType =
+  | 'info-table'
+  | 'button-group'
+  | 'list'
+  | 'form'
+  | 'status-bar'
+  | 'divider'
+  | 'heading'
+
+export interface PluginComponent {
+  type: ComponentType
+  props: Record<string, unknown>
+}
+```
 
 ### Navigation Integration
 
@@ -563,24 +822,48 @@ Plugin nav items are sorted by `order` and injected into the sidebar between bui
 99 (plugin items with default order)
 ```
 
-Permission gating works the same as built-in items: if `nav.permission` is set and the user lacks it, the nav item is hidden.
+Permission gating: The Lua side resolves `nav.permission` using `DoesPlayerHavePermission(-1, permission)` and includes the result as `disabled` in the config pushed to NUI. This matches the existing pattern in `App.tsx` where `visibleNavItems` maps over items and sets `disabled` based on the `permissions` record.
 
 ### Rendering Pipeline
 
 ```
 PluginPage (page config)
-  └─ Section wrapper (card with title)
-       └─ PluginComponents.tsx (dispatch on component.type)
-            ├─ InfoTableRenderer    → KeyValueTable
-            ├─ ButtonGroupRenderer  → <button className="btn ...">
-            ├─ ListRenderer         → <div className="list">
-            ├─ FormRenderer         → <form> with inputs
-            ├─ StatusBarRenderer    → progress bar
-            ├─ DividerRenderer      → <hr>
-            └─ HeadingRenderer      → <h{level}>
+  └─ <div className="page-container">  (existing class, matches all other pages)
+       └─ Section wrapper (card with title)
+            └─ PluginComponents.tsx (dispatch on component.type)
+                 ├─ InfoTableRenderer    → KeyValueTable
+                 ├─ ButtonGroupRenderer  → <button className="btn ...">
+                 ├─ ListRenderer         → <div className="list">
+                 ├─ FormRenderer         → <form> with inputs
+                 ├─ StatusBarRenderer    → progress bar
+                 ├─ DividerRenderer      → <hr className="section-divider">
+                 ├─ HeadingRenderer      → <h{level}>
+                 └─ ErrorCardRenderer    → error card (internal, unknown types)
 ```
 
 Each renderer uses EasyAdmin's existing CSS classes and component primitives. Plugins have no control over styling — they control data and structure only.
+
+### Loading States
+
+Plugin sections support a `loading` boolean flag. When `true`, the section renders a skeleton placeholder using the existing `Skeleton` component (`nui/src/components/Skeleton.tsx`), matching the pattern used by built-in pages (`loadingPlayers`, `loadingReports`, `loadingCached`).
+
+```tsx
+// In PluginPage.tsx
+{section.loading ? (
+  <div className="card">
+    <Skeleton className="dashboard-skeleton-label" />
+    <div className="mt-2 space-y-2">
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+    </div>
+  </div>
+) : (
+  <SectionRenderer section={section} />
+)}
+```
+
+Plugins set `loading: true` in their initial registration and set it to `false` via `updatePluginPage` when data is ready.
 
 ---
 
@@ -594,6 +877,7 @@ Plugin pages must look like they belong in EasyAdmin. The component registry enf
 - **Structure** — Which components, in what order
 - **Actions** — What buttons exist and what they do
 - **Labels** — Text shown to users (titles, keys, labels)
+- **Navigation** — Links between their own pages via `navigateTo`
 
 ### What Plugins Cannot Control
 
@@ -608,7 +892,7 @@ Plugin pages must look like they belong in EasyAdmin. The component registry enf
 
 Every plugin section is rendered inside a `.card` container with the section title as a `.card-title` heading. This ensures consistent padding, borders, and backgrounds regardless of component type.
 
-The `PluginPage` component wraps all sections in a `.page-container` (same as all other EasyAdmin pages), ensuring consistent padding and scroll behavior.
+The `PluginPage` component wraps all sections in a `.page-container` (existing class in `nui/src/styles/utilities.css`, used by all other EasyAdmin pages: Settings, Resources, Server, Reports, Bans, etc.), ensuring consistent padding and scroll behavior.
 
 ### CEF Safety
 
@@ -620,6 +904,51 @@ All plugin-rendered content inherits EasyAdmin's CEF-safe CSS:
 
 ---
 
+## Confirmation Dialog Flow
+
+Plugin buttons can trigger confirmation dialogs using the `confirm` property. The flow uses EasyAdmin's existing `ModalContext` and `ConfirmDialog` component:
+
+### Flow
+
+1. User clicks a button with `confirm` config
+2. The `ButtonGroupRenderer` calls `useModalContext().openConfirm(title, message, action, variant)` where `action` is a `Promise<void>` that re-invokes the plugin action
+3. The confirm dialog renders via `ModalContext` (existing pattern, see `ModalContext.tsx` `openConfirm`)
+4. On user confirmation, the action calls `callLua('pluginAction', { resource, action: button.action, data })`
+5. The plugin handler receives the action and processes it normally
+
+### Implementation
+
+```tsx
+// In ButtonGroupRenderer
+const handleConfirmButton = useCallback((button: PluginButton) => {
+  if (button.confirm) {
+    openConfirm(
+      button.confirm.title,
+      button.confirm.message,
+      async () => {
+        await callLua('pluginAction', {
+          resource: pluginResource,
+          action: button.action,
+          data: undefined,
+        }).catch(() => {})
+      },
+      'danger',
+    )
+    return
+  }
+  // No confirmation — call action directly
+  callLua('pluginAction', {
+    resource: pluginResource,
+    action: button.action,
+    data: undefined,
+  }).catch(() => {})
+}, [])
+```
+
+This matches the existing pattern used throughout EasyAdmin (ban confirm, resource stop confirm, etc.) where `openConfirm(title, message, action, variant)` is called with a `() => Promise<void>` action.
+
+---
+
 ## EasyAdmin Lua API Implementation
 
 ### New File: `client/nui/plugins.lua`
@@ -627,7 +956,12 @@ All plugin-rendered content inherits EasyAdmin's CEF-safe CSS:
 ```lua
 ------------------------------------
 -- EasyAdmin NUI: Plugin System
--- Registration, action forwarding, page updates
+-- Registration, action forwarding, page updates, lifecycle
+--
+-- FiveM references:
+--   SendNUIMessage: https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/SendNUIMessage/
+--   RegisterNUICallback: https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/RegisterNUICallback/
+--   onClientResourceStop: https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/AddEventHandler/
 ------------------------------------
 
 local pluginRegistry = {}          -- resource -> PluginConfig
@@ -651,20 +985,60 @@ function EasyAdmin.registerPlugin(config)
         return
     end
 
-    pluginRegistry[resource] = config
+    if type(config.pages) ~= 'table' or #config.pages == 0 then
+        print(("^1[EasyAdmin] Invalid plugin config from %s: pages must be a non-empty array^0"):format(resource))
+        return
+    end
+
+    -- Resolve permission to boolean for NUI
+    local resolvedConfig = {
+        name = config.name,
+        version = config.version,
+        nav = {
+            id = config.nav.id,
+            label = config.nav.label,
+            icon = config.nav.icon,
+            order = config.nav.order or 99,
+            disabled = false,
+        },
+        pages = {},
+    }
+
+    -- Check nav-level permission
+    if config.nav.permission then
+        resolvedConfig.nav.disabled = not DoesPlayerHavePermission(-1, config.nav.permission)
+    end
+
+    -- Copy pages, resolve page-level permissions
+    for i, page in ipairs(config.pages) do
+        local resolvedPage = {
+            id = page.id,
+            title = page.title,
+            sections = page.sections or {},
+        }
+        -- Page-level permission check
+        if page.permission and not DoesPlayerHavePermission(-1, page.permission) then
+            resolvedPage.hidden = true
+        end
+        table.insert(resolvedConfig.pages, resolvedPage)
+    end
+
+    pluginRegistry[resource] = resolvedConfig
 
     PrintDebugMessage(("Registered plugin '%s' by %s"):format(config.name, resource), 4)
 
-    -- Push to NUI
-    SendNUIMessage({
-        action = "pluginRegistered",
-        data = { resource = resource, config = config }
-    })
+    -- Push to NUI (only if menu is open)
+    if IsNuiVisible() then
+        SendNUIMessage({
+            action = 'pluginRegistered',
+            data = { resource = resource, config = resolvedConfig },
+        })
+    end
 end
 
 --- Register an action handler for a plugin
 function EasyAdmin.onPluginAction(resourceName, handler)
-    if type(handler) ~= "function" then
+    if type(handler) ~= 'function' then
         print(("^1[EasyAdmin] onPluginAction: handler must be a function^0"))
         return
     end
@@ -678,21 +1052,43 @@ function EasyAdmin.updatePluginPage(resourceName, update)
         return
     end
 
+    if not IsNuiVisible() then
+        return
+    end
+
     SendNUIMessage({
-        action = "pluginPageUpdate",
-        data = { resource = resourceName, update = update }
+        action = 'pluginPageUpdate',
+        data = { resource = resourceName, update = update },
     })
 end
 
+--- Unregister a plugin (called on resource stop)
+function EasyAdmin.unregisterPlugin(resource)
+    if pluginRegistry[resource] then
+        pluginRegistry[resource] = nil
+        pluginActionHandlers[resource] = nil
+        PrintDebugMessage(("Unregistered plugin by %s"):format(resource), 4)
+
+        if IsNuiVisible() then
+            SendNUIMessage({
+                action = 'pluginUnregistered',
+                data = { resource = resource },
+            })
+        end
+    end
+end
+
 -- NUI callback: forward actions to plugin handlers
-RegisterNUICallback("pluginAction", function(data, cb)
+-- Per FiveM docs: "To prevent requests from stalling, you have to return the callback at all times"
+-- https://docs.fivem.net/docs/scripting-manual/nui-development/nui-callbacks/
+RegisterNUICallback('pluginAction', function(data, cb)
     local handler = pluginActionHandlers[data.resource]
     if not handler then
         cb({ success = false, error = ("No action handler for plugin '%s'"):format(data.resource) })
         return
     end
 
-    -- Wrap cb to handle confirm dialogs
+    -- Wrap cb to ensure it's always called
     local function respond(result)
         cb(result or { success = true })
     end
@@ -700,24 +1096,23 @@ RegisterNUICallback("pluginAction", function(data, cb)
     handler(data.action, data.data, respond)
 end)
 
--- NUI callback: get all registered plugins (for initial load)
-RegisterNUICallback("getPlugins", function(_, cb)
+-- NUI callback: get all registered plugins (for initial load when menu opens)
+RegisterNUICallback('getPlugins', function(_, cb)
     cb(pluginRegistry)
+end)
+
+-- Handle plugin resource stop
+-- https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/AddEventHandler/
+AddEventHandler('onClientResourceStop', function(resource)
+    if pluginRegistry[resource] then
+        EasyAdmin.unregisterPlugin(resource)
+    end
 end)
 ```
 
 ### fxmanifest.lua Changes
 
-Add to `client_scripts`:
-
-```lua
-client_scripts {
-    -- ... existing scripts ...
-    "client/nui/*.lua",   -- already includes plugins.lua
-}
-```
-
-No changes needed — `client/nui/*.lua` glob already picks up the new file.
+No changes needed — `client/nui/*.lua` glob in `fxmanifest.lua` already picks up the new `plugins.lua` file. The `provide 'EasyAdmin'` declaration ensures the `EasyAdmin` global table is accessible to other resources.
 
 ---
 
@@ -789,7 +1184,7 @@ end)
 | State in global variables | State managed by plugin Lua |
 | NativeUI components only | EasyAdmin NUI components |
 | Menu items injected into existing menus | Dedicated plugin pages in sidebar |
-| `menuRemoved` callback for cleanup | No cleanup needed (no global state) |
+| `menuRemoved` callback for cleanup | Automatic cleanup via `onClientResourceStop` |
 
 ### Backward Compatibility
 
@@ -808,6 +1203,22 @@ end
 
 ---
 
+## Plugin Documentation
+
+Plugin authors should reference `docs/docs/plugins.md` for:
+- Available icon names (listed from `nui/src/components/icons.tsx` `IconName` type)
+- Permission system (same as legacy: shared Lua file with `permissions["key"] = false`)
+- Component registry reference (all component types and their props)
+- Multi-page navigation pattern (`navigateTo` on buttons)
+- Form submission pattern (field values sent as `data` in action handler)
+- Loading states (`loading: true` on sections, removed via `updatePluginPage`)
+- Available button variants: `default`, `primary`, `secondary`, `danger`, `warning`, `success`
+- Available status-bar colors: `blue`, `green`, `red`, `orange`
+
+The icon reference will be added as a new section in `docs/docs/plugins.md` listing all `IconName` values from `nui/src/components/icons.tsx`.
+
+---
+
 ## Limitations and Trade-offs
 
 ### What Plugins Cannot Do
@@ -816,9 +1227,10 @@ end
 |------------|--------|------------|
 | Custom React components | React instance isolation | Use the component registry |
 | Custom CSS | No stylesheet injection | Design system enforces consistency |
-| Direct NUI access | Resource isolation | All communication through EasyAdmin API |
+| Direct NUI access | Resource isolation ([ui_page](https://docs.fivem.net/docs/scripting-reference/resource-manifest/#ui_page)) | All communication through EasyAdmin API |
 | Complex layouts (grids, tabs) | Registry only provides linear sections | File a feature request to extend the registry |
 | Real-time animations | CEF safety + no custom CSS | Use `status-bar` for progress indicators |
+| Multiple nav items per plugin | Sidebar space, consistency | Use `navigateTo` buttons for sub-pages |
 
 ### Why These Limitations Are Acceptable
 
@@ -835,7 +1247,7 @@ end
 Plugins with complex UI requirements (maps, charts, custom editors) should:
 1. Provide their own standalone NUI (`ui_page` in their `fxmanifest.lua`)
 2. Register a nav item in EasyAdmin that triggers `ExecuteCommand("myplugin:open")`
-3. Manage their own window lifecycle with `SetNuiFocus()`
+3. Manage their own window lifecycle with `SetNuiFocus()` ([SET_NUI_FOCUS](https://docs.fivem.net/natives/?_0x5B98AE30))
 
 This keeps complex tools independent while still being accessible from EasyAdmin's sidebar.
 
@@ -865,7 +1277,15 @@ Each extension is a new renderer in `PluginComponents.tsx` plus type definitions
 | Plugin location | Standalone resources | Escrowable, independently versionable |
 | UI model | Data-driven (plugins describe, EasyAdmin renders) | React instance isolation makes component injection impossible |
 | Component surface | Curated registry | Guarantees visual consistency and CEF safety |
-| Communication | Lua → SendNUIMessage → React | FiveM's standard NUI pattern |
-| Actions | callLua → EasyAdmin forward → plugin callback | Clean separation, no direct plugin NUI access |
-| Dynamic updates | updatePluginPage() → SendNUIMessage | Plugins can refresh their UI reactively |
+| Communication | Lua → `SendNUIMessage()` → React | FiveM's standard NUI pattern ([SendNUIMessage](https://docs.fivem.net/docs/scripting-reference/runtimes/lua/functions/SendNUIMessage/)) |
+| Actions | `callLua()` → EasyAdmin forward → plugin callback | Clean separation, no direct plugin NUI access. Per [NUI Callbacks](https://docs.fivem.net/docs/scripting-manual/nui-development/nui-callbacks/), callback must always be called |
+| Dynamic updates | `updatePluginPage()` → `SendNUIMessage()` | Plugins can refresh their UI reactively |
+| Initial load | `callLua('getPlugins')` on menu open | Ensures plugins registered before menu open are included |
+| Unregistration | `onClientResourceStop` → `pluginUnregistered` NUI message | Clean removal when plugin resource stops |
+| Multi-page | One nav item, `navigateTo` buttons for sub-pages | Sidebar consistency, flexible internal navigation |
+| Permissions | Same system as legacy (`DoesPlayerHavePermission`) | Resolved in Lua, sent as `disabled` boolean to NUI |
+| Confirm dialogs | `ModalContext.openConfirm()` with action callback | Reuses existing dialog infrastructure |
+| Form submission | `FormRenderer` → `callLua('pluginAction', data)` | Same flow as all other actions |
+| Loading states | `loading` flag on sections, `Skeleton` component | Matches built-in page pattern |
+| Error handling | Error card + console warning | Visible to users and developers, non-fatal |
 | Legacy support | Deprecation notice, coexistence during transition | Graceful migration path |
