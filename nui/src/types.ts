@@ -117,6 +117,8 @@ export type View =
   | 'report-detail'
   | 'cached-players'
   | 'server'
+  | 'resources'
+  | 'resource-detail'
   | 'settings'
 
 // Ban duration preset indices
@@ -150,4 +152,18 @@ export type HistoryRange = '1h' | '6h' | '24h' | '7d'
 export interface ReasonShortcut {
   key: string
   value: string
+}
+
+// Resource entry from GetResourceByFindIndex / GetResourceState
+export interface ResourceEntry {
+  name: string
+  state: 'started' | 'stopped' | 'starting' | 'stopping' | 'missing' | 'unknown'
+  isProtected?: boolean
+}
+
+// Resource metadata fetched via GET_RESOURCE_METADATA
+export interface ResourceMetadata {
+  name: string
+  state: string
+  entries: { key: string; value: string }[]
 }

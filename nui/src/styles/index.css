@@ -369,6 +369,20 @@ body {
   border-color: #bb8009;
 }
 
+/* -- Success -- */
+
+.btn-success {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: var(--brand-dark);
+  font-weight: var(--font-semibold);
+}
+
+.btn-success:hover {
+  background: #2ea043;
+  border-color: #2ea043;
+}
+
 /* -- Ghost -- */
 
 .btn-ghost {
@@ -537,6 +551,16 @@ select.input {
 .badge-green {
   background: var(--bg-green);
   color: var(--accent-green);
+}
+
+.badge-started {
+  background: var(--bg-green);
+  color: var(--accent-green);
+}
+
+.badge-stopped {
+  background: var(--bg-red);
+  color: var(--accent-red);
 }
 
 /* ============================================================

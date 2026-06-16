@@ -25,6 +25,7 @@ import { BanDetailPage } from './pages/Bans/BanDetailPage'
 import { ReportListPage } from './pages/Reports/ReportListPage'
 import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
 import { ServerPage } from './pages/Server/ServerPage'
+import { ResourcesPage } from './pages/Resources/ResourcesPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
 
 const NAV_ITEMS: NavItem[] = [
@@ -33,6 +34,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'bans', label: 'Ban List', icon: 'ban' },
   { id: 'reports', label: 'Reports', icon: 'flag' },
   { id: 'server', label: 'Server', icon: 'server' },
+  { id: 'resources', label: 'Resources', icon: 'layers' },
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ]
 
@@ -60,6 +62,7 @@ function App() {
   const [banDetailCache, setBanDetailCache] = useState<Record<string, BanEntry>>({})
   const [reports, setReports] = useState<Report[]>([])
   const [cachedPlayers, setCachedPlayers] = useState<CachedPlayer[]>([])
+  const [selectedResource, setSelectedResource] = useState<string | null>(null)
   const [permissions, setPermissions] = useState<Permissions>({})
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [selectedBanId, setSelectedBanId] = useState<string | null>(null)
@@ -253,6 +256,7 @@ function App() {
     if (view === 'player-detail' || view === 'cached-players') return 'players'
     if (view === 'ban-detail') return 'bans'
     if (view === 'report-detail') return 'reports'
+    if (view === 'resource-detail') return 'resources'
     return view
   })()
 
@@ -269,6 +273,13 @@ function App() {
     ) {
       disabled = true
     }
+    if (
+      item.id === 'resources' &&
+      !permissions['server.resources.start'] &&
+      !permissions['server.resources.stop']
+    ) {
+      disabled = true
+    }
     return { ...item, disabled }
   })
 
@@ -281,6 +292,12 @@ function App() {
     permissions['player.ban.view']
   ) {
     availableViews.push('server')
+  }
+  if (
+    permissions['server.resources.start'] ||
+    permissions['server.resources.stop']
+  ) {
+    availableViews.push('resources', 'resource-detail')
   }
   availableViews.push('settings', 'cached-players')
 
@@ -349,6 +366,7 @@ function App() {
                   else if (id === 'bans') navigateTo('bans')
                   else if (id === 'reports') navigateTo('reports')
                   else if (id === 'server') navigateTo('server')
+                  else if (id === 'resources') navigateTo('resources')
                   else if (id === 'settings') navigateTo('settings')
                 }}
               />
@@ -491,6 +509,38 @@ function App() {
                 />
               )}
 
+              {view === 'resources' && (
+                <ResourcesPage
+                  permissions={permissions}
+                  onToast={showToast}
+                  onSelectResource={(name) => {
+                    setSelectedResource(name)
+                    navigateTo('resource-detail')
+                  }}
+                  selectedResource={selectedResource}
+                  onBack={() => {
+                    setSelectedResource(null)
+                    navigateTo('resources')
+                  }}
+                />
+              )}
+
+              {view === 'resource-detail' && selectedResource && (
+                <ResourcesPage
+                  permissions={permissions}
+                  onToast={showToast}
+                  onSelectResource={(name) => {
+                    setSelectedResource(name)
+                    navigateTo('resource-detail')
+                  }}
+                  selectedResource={selectedResource}
+                  onBack={() => {
+                    setSelectedResource(null)
+                    navigateTo('resources')
+                  }}
+                />
+              )}
+
               {view === 'settings' && (
                 <SettingsPage
                   permissions={permissions}
@@ -527,6 +577,8 @@ function getPageTitle(
   if (view === 'reports') return 'Reports'
   if (view === 'report-detail' && reportId !== null) return `Report #${reportId}`
   if (view === 'server') return 'Server Management'
+  if (view === 'resources') return 'Resource Management'
+  if (view === 'resource-detail') return 'Resource Details'
   if (view === 'settings') return 'Settings'
   return 'EasyAdmin'
 }

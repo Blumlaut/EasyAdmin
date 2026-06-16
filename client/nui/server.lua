@@ -110,6 +110,38 @@ RegisterNUICallback('stopResource', function(data, cb)
   cb({ ok = true })
 end)
 
+RegisterNUICallback('requestResourceMetadata', function(data, cb)
+  if not permissions['server.resources.start'] and not permissions['server.resources.stop'] then
+    return deny(cb)
+  end
+  local name = data and data.name
+  if not name or name == '' then
+    return deny(cb, 'Missing resource name')
+  end
+  -- Get unique metadata key count (empty key returns unique key count)
+  local keyCount = GetNumResourceMetadata(name, '') or 0
+  local entries = {}
+  for i = 0, math.max(keyCount - 1, 0) do
+    local key = GetResourceMetadata(name, '', i)
+    if not key or key == '' then
+      break
+    end
+    -- Get all values for this key (some keys like 'dependency' have multiple entries)
+    local valCount = GetNumResourceMetadata(name, key) or 0
+    for idx = 0, math.max(valCount - 1, 0) do
+      local value = GetResourceMetadata(name, key, idx) or ''
+      table.insert(entries, { key = key, value = value })
+    end
+  end
+  cb({
+    metadata = {
+      name = name,
+      state = GetResourceState(name) or 'unknown',
+      entries = entries,
+    },
+  })
+end)
+
 RegisterNUICallback('setConvar', function(data, cb)
   if not permissions['server.convars'] then return deny(cb) end
   if not data or not data.name or data.value == nil then
