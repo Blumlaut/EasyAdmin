@@ -60,6 +60,8 @@
   font-size: var(--text-xs);
   padding: 1px var(--space-1.5);
   vertical-align: middle;
+  margin-left: var(--space-1.5);
+  margin-right: var(--space-1);
 }
 
 .badge-danger {
