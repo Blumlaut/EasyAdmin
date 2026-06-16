@@ -12,7 +12,6 @@ interface ResourcesPageProps {
   onToast: (text: string, type?: Notification['type']) => void
   onSelectResource?: (name: string) => void
   selectedResource?: string | null
-  onBack?: () => void
 }
 
 interface ResourceListResponse {
@@ -44,7 +43,6 @@ export function ResourcesPage({
   onToast,
   onSelectResource,
   selectedResource,
-  onBack,
 }: ResourcesPageProps) {
   const [resources, setResources] = useState<ResourceEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -229,11 +227,6 @@ export function ResourcesPage({
     }
   }
 
-  const closeDetail = () => {
-    setDetailName(null)
-    if (onBack) onBack()
-  }
-
   // If a detail is open, show the detail view
   if (detailName) {
     return (
@@ -244,7 +237,6 @@ export function ResourcesPage({
         canStart={canStart}
         canStop={canStop}
         onAction={(action) => handleAction(detailName, action)}
-        onBack={closeDetail}
       />
     )
   }
@@ -454,7 +446,6 @@ function ResourceDetailView({
   canStart,
   canStop,
   onAction,
-  onBack,
 }: {
   name: string
   metadata: ResourceMetadata | null
@@ -462,7 +453,6 @@ function ResourceDetailView({
   canStart: boolean
   canStop: boolean
   onAction: (action: 'start' | 'stop' | 'ensure') => void
-  onBack: () => void
 }) {
   // Get the parent resource name from the window (set by FiveM)
   const currentResourceName = typeof window !== 'undefined'
@@ -495,14 +485,6 @@ function ResourceDetailView({
     <div className="page-container">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <button
-          className="btn btn-ghost btn-sm"
-          onClick={onBack}
-          aria-label="Go back"
-        >
-          <Icon name="chevron-left" size="xs" />
-          Back
-        </button>
         <div
           className={`resource-state-dot resource-state-dot-lg resource-state-dot--${metadata?.state ?? 'unknown'}`}
         />

@@ -241,12 +241,18 @@ function App() {
   const goBack = useCallback(() => {
     const previous = viewHistoryRef.current.pop()
     if (previous) {
+      // Clear detail selection when leaving a detail view
+      if (previous === 'players') setSelectedPlayer(null)
+      if (previous === 'bans') setSelectedBanId(null)
+      if (previous === 'reports') setSelectedReportId(null)
+      if (previous === 'resources') setSelectedResource(null)
       setView(previous)
     } else {
       setView('main')
       setSelectedPlayer(null)
       setSelectedBanId(null)
       setSelectedReportId(null)
+      setSelectedResource(null)
     }
   }, [])
 
@@ -518,10 +524,6 @@ function App() {
                     navigateTo('resource-detail')
                   }}
                   selectedResource={selectedResource}
-                  onBack={() => {
-                    setSelectedResource(null)
-                    navigateTo('resources')
-                  }}
                 />
               )}
 
@@ -534,10 +536,6 @@ function App() {
                     navigateTo('resource-detail')
                   }}
                   selectedResource={selectedResource}
-                  onBack={() => {
-                    setSelectedResource(null)
-                    navigateTo('resources')
-                  }}
                 />
               )}
 
