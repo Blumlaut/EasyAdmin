@@ -39,8 +39,6 @@ const NAV_ITEMS: NavItem[] = [
 ]
 
 const DEFAULT_SETTINGS: AppSettings = {
-  orientation: 'middle',
-  menuWidth: 0,
   anonymous: false,
   highContrast: false,
   fontSize: 100,

@@ -74,16 +74,6 @@ end)
 
 RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
 	reports[reportData.id] = reportData
-	if _menuPool and _menuPool:IsAnyMenuOpen() then
-		for i, menu in pairs(reportMenus) do
-			for o,item in pairs(menu.Items) do 
-				if getMenuItemTitle(item) == GetLocalisedText("claimreport") then
-					setMenuItemTitle(item, GetLocalisedText("claimedby"))
-					item:RightLabel(reportData.claimedName)
-				end
-			end
-		end
-	end
 end)
 
 RegisterNetEvent("EasyAdmin:RemoveReport", function(reportData)
@@ -97,28 +87,10 @@ end)
 
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(player,state)
 	FrozenPlayers[player] = state
-	if _menuPool and _menuPool:IsAnyMenuOpen() then
-		if playerMenus[tostring(player)].menu then
-			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
-				if getMenuItemTitle(item) == GetLocalisedText("setplayerfrozen") then
-					item.Checked = state
-				end
-			end
-		end
-	end
 end)
 
 RegisterNetEvent('EasyAdmin:SetPlayerMuted', function(player,state)
 	MutedPlayers[player] = state
-	if _menuPool and _menuPool:IsAnyMenuOpen() then
-		if playerMenus[tostring(player)].menu then
-			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
-				if getMenuItemTitle(item) == GetLocalisedText("mute") then
-					item.Checked = state
-				end
-			end
-		end
-	end
 end)
 
 function FreezeMyself(state)

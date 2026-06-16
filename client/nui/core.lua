@@ -139,12 +139,6 @@ function NuiSendSettings()
   if not nuiVisible then return end
 
   -- Ensure defaults exist
-  if not GetResourceKvp('ea_menuorientation') then
-    SetResourceKvp('ea_menuorientation', 'middle')
-  end
-  if not GetResourceKvpInt('ea_menuwidth') then
-    SetResourceKvpInt('ea_menuwidth', 0)
-  end
   if not GetResourceKvp('ea_highContrast') then
     SetResourceKvp('ea_highContrast', 'false')
   end
@@ -158,8 +152,6 @@ function NuiSendSettings()
   SendNUIMessage({
     action = 'initSettings',
     data = {
-      orientation = GetResourceKvpString('ea_menuorientation') or 'middle',
-      menuWidth = GetResourceKvpInt('ea_menuwidth') or 0,
       anonymous = false, -- anonymous is per-session, not persisted
       highContrast = GetResourceKvpString('ea_highContrast') == 'true',
       fontSize = GetResourceKvpInt('ea_fontSize') or 100,

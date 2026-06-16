@@ -9,18 +9,8 @@ RegisterCommand('ea_nui', function()
   NuiToggle()
 end, false)
 
--- NUI is the primary interface; always register the main easyadmin command.
--- When ea_useNUI is false, gui_c.lua handles it instead.
+-- NUI is the primary (and only) interface.
 RegisterCommand('easyadmin', function(_source, _args)
   if not IsNuiEnabled() then return end
-  CreateThread(function()
-    NuiToggle()
-    if _menuPool and _menuPool:IsAnyMenuOpen() then
-      Wait(500)
-      if IsNuiVisible() then
-        _menuPool:Remove()
-        _menuPool = nil
-      end
-    end
-  end)
+  NuiToggle()
 end, false)

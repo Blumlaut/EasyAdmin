@@ -259,24 +259,6 @@ function formatRightString(thisstring, customWidth)
 end
 
 
--- some util funcs so i dont have to mess with NativeUI Source Code.
-function getMenuItemTitle(item)
-	if (item.Base and type(item.Base.Text) == "table" and item.Base.Text._Text) then
-		return item.Base.Text._Text
-	elseif (item.Text and type(item.Text) == "table" and item.Text._Text) then
-		return item.Text._Text
-	end
-end
-
-function setMenuItemTitle(item,text)
-	if (item.Base and type(item.Base.Text) == "table" and item.Base.Text._Text) then
-		item.Base.Text._Text = text
-	elseif (item.Text and type(item.Text) == "table" and item.Text._Text) then
-		item.Text._Text = text
-	end
-end
-
-
 
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then

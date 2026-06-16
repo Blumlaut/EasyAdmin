@@ -99,8 +99,6 @@ export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
 
 // App settings (mirrors ea_* kvp entries)
 export interface AppSettings {
-  orientation: 'left' | 'middle' | 'right'
-  menuWidth: number
   anonymous: boolean
   // Accessibility
   highContrast: boolean

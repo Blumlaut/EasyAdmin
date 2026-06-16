@@ -926,8 +926,6 @@ setTimeout(() => {
   window.postMessage({
     action: 'initSettings',
     data: {
-      orientation: 'middle',
-      menuWidth: 0,
       tts: false,
       ttsSpeed: 4,
       anonymous: false,
