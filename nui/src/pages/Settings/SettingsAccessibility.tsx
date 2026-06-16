@@ -18,13 +18,13 @@ export function SettingsAccessibility({
 }: SettingsAccessibilityProps) {
   function toggleHighContrast(value: boolean) {
     onChange({ highContrast: value })
-    setResourceKvp('ea_highContrast', value ? 'true' : 'false')
+    setResourceKvp('shighContrast', value ? 'true' : 'false')
     onToast(value ? 'High contrast enabled' : 'High contrast disabled', 'success')
   }
 
   function setFontSize(value: number) {
     onChange({ fontSize: value })
-    setResourceKvp('ea_fontSize', String(value))
+    setResourceKvp('ifontSize', String(value))
     onToast(`Font size set to ${value}%`, 'success')
   }
 

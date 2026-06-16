@@ -1027,7 +1027,7 @@ exports('getLatestVersion', getLatestVersion)
 function checkVersion()
 	local remoteVersion,remoteURL = getLatestVersion()
 
-	if GetResourceKvpString('currentVersion') ~= curVersion then
+	if KvpGet('scurrentVersion') ~= curVersion then
 		local legacyFiles = {
 			'__resource.lua',
 			'version.json',
@@ -1081,7 +1081,7 @@ function checkVersion()
 
 		PrintDebugMessage('EasyAdmin has been updated, or just been installed for the first time, please restart EasyAdmin to ensure smooth operation.', 1)
 		
-		SetResourceKvpNoSync('currentVersion', curVersion)
+		KvpSetNoSync('scurrentVersion', curVersion)
 	end
 
 	if isMaster then

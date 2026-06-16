@@ -17,7 +17,7 @@ const SIZES = [
 export function SettingsMenuSize({ menuSize, onChange, onToast }: SettingsMenuSizeProps) {
   function setSize(value: AppSettings['menuSize']) {
     onChange({ menuSize: value })
-    setResourceKvp('ea_menuSize', value)
+    setResourceKvp('smenuSize', value)
     onToast(`Menu size set to ${value}`, 'success')
   }
 

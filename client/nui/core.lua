@@ -138,24 +138,13 @@ end
 function NuiSendSettings()
   if not nuiVisible then return end
 
-  -- Ensure defaults exist
-  if not GetResourceKvpString('ea_highContrast') then
-    SetResourceKvp('ea_highContrast', 'false')
-  end
-  if not GetResourceKvpInt('ea_fontSize') then
-    SetResourceKvpInt('ea_fontSize', 100)
-  end
-  if not GetResourceKvpString('ea_menuSize') then
-    SetResourceKvp('ea_menuSize', 'default')
-  end
-
   SendNUIMessage({
     action = 'initSettings',
     data = {
       anonymous = false, -- anonymous is per-session, not persisted
-      highContrast = GetResourceKvpString('ea_highContrast') == 'true',
-      fontSize = GetResourceKvpInt('ea_fontSize') or 100,
-      menuSize = GetResourceKvpString('ea_menuSize') or 'default',
+      highContrast = KvpGet('shighContrast') == 'true',
+      fontSize = KvpGet('ifontSize') or 100,
+      menuSize = KvpGet('smenuSize') or 'default',
     },
   })
 end
@@ -192,7 +181,7 @@ end)
 
 RegisterNUICallback('setResourceKvp', function(data, cb)
   if data and data.key and data.value then
-    SetResourceKvp(data.key, tostring(data.value))
+    KvpSet(data.key, data.value)
   end
   cb({ ok = true })
 end)

@@ -13,16 +13,6 @@ RegisterNUICallback('setAnonymous', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('setEasterEgg', function(data, cb)
-  local value = data and data.value
-  if value and value ~= '' then
-    SetResourceKvp('ea_overrideEgg', value)
-  else
-    DeleteResourceKvp('ea_overrideEgg')
-  end
-  cb({ ok = true })
-end)
-
 RegisterNUICallback('refreshBanList', function(data, cb)
   if not permissions['player.ban.view'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:updateBanlist')
