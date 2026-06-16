@@ -54,16 +54,7 @@ export function CachedPlayersPage({
         </div>
       ) : cachedPlayers.length === 0 ? (
         <div className="card empty-state">
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--bg-hover)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'var(--space-2)',
-          }}>
+          <div className="empty-state-icon">
             <Icon name="archive" size="lg" className="text-muted" />
           </div>
           <p className="text-secondary">No cached players</p>
@@ -92,9 +83,7 @@ function CachedRow({
 }) {
   return (
     <div className="list-item">
-      <div className="avatar avatar-sm" style={{
-        background: 'var(--bg-hover)',
-      }}>
+      <div className="avatar avatar-sm avatar-offline">
         <Icon name="archive" size="xs" className="text-muted" />
       </div>
       <div className="list-item-content">

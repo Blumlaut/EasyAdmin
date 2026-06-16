@@ -31,13 +31,16 @@ export function BanListPage({
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
 
-  // Stable ref so the NUI message handler doesn't stale-out
-  const bansRef = useRef(bans)
-  bansRef.current = bans
-  const totalRef = useRef(total)
-  totalRef.current = total
-  const pageRef = useRef(page)
-  pageRef.current = page
+  // Stable refs so the NUI message handler doesn't stale-out
+  const bansRef = useRef<BanListEntry[]>([])
+  const totalRef = useRef(0)
+  const pageRef = useRef(1)
+
+  useEffect(() => {
+    bansRef.current = bans
+    totalRef.current = total
+    pageRef.current = page
+  }, [bans, total, page])
 
   const fetchPage = useCallback((p: number, q: string) => {
     setLoading(true)
@@ -57,12 +60,14 @@ export function BanListPage({
 
   // Fetch page 1 on mount
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPage(1, '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Refetch when debounced search changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1)
     fetchPage(1, debouncedQuery)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,16 +115,7 @@ export function BanListPage({
         <BanListSkeleton />
       ) : bans.length === 0 ? (
         <div className="card empty-state">
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--bg-red)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'var(--space-2)',
-          }}>
+          <div className="empty-state-icon empty-state-icon-red">
             <Icon name="ban" size="lg" className="text-red" />
           </div>
           <p className="text-secondary">{total === 0 ? 'No bans on record' : 'No bans match your search'}</p>
@@ -178,10 +174,7 @@ function BanRow({
         }
       }}
     >
-      <div className="avatar avatar-sm" style={{
-        background: 'var(--bg-red)',
-        borderColor: 'rgba(248, 81, 73, 0.3)',
-      }}>
+      <div className="avatar avatar-sm avatar-ban">
         <Icon name="ban" size="xs" className="text-red" />
       </div>
       <div className="list-item-content">
@@ -194,7 +187,7 @@ function BanRow({
         )}
         {ban.expire === -1 && <span className="badge badge-danger">Permanent</span>}
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
+      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
     </div>
   )
 }

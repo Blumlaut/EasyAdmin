@@ -10,8 +10,8 @@ export function Toast({ message, type = 'info' }: ToastProps) {
   return (
     <div className="toast-container">
       <div className={`toast toast-${type}`} role="alert">
-        {type === 'error' && <Icon name="alert-triangle" size="xs" style={{ flexShrink: 0 }} />}
-        <span style={{ marginLeft: type === 'error' ? 'var(--space-2)' : 0 }}>{message}</span>
+        {type === 'error' && <Icon name="alert-triangle" size="xs" className="shrink-0" />}
+        <span className={type === 'error' ? 'ml-2' : ''}>{message}</span>
       </div>
     </div>
   )

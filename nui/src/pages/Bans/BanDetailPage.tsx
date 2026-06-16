@@ -96,16 +96,7 @@ export function BanDetailPage({
     return (
       <div className="page-container">
         <div className="card empty-state">
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--bg-red)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'var(--space-2)',
-          }}>
+          <div className="empty-state-icon empty-state-icon-red">
             <Icon name="ban" size="lg" className="text-red" />
           </div>
           <p className="text-secondary">Ban not found or failed to load</p>
@@ -195,19 +186,13 @@ export function BanDetailPage({
 
   return (
     <div className="page-container">
-      <div className="card" style={{
-        borderTop: '2px solid',
-        borderColor: 'var(--accent-red)',
-      }}>
+      <div className="card card-ban">
         <div className="flex items-center gap-3 mb-3">
-          <div className="avatar avatar-md" style={{
-            background: 'var(--bg-red)',
-            borderColor: 'rgba(248, 81, 73, 0.3)',
-          }}>
+          <div className="avatar avatar-md avatar-ban">
             <Icon name="ban" size="sm" className="text-red" />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold" style={{ letterSpacing: '-0.01em' }}>
+            <h3 className="text-xl font-bold">
               {current.name ?? 'Banned player'}
             </h3>
             <p className="text-sm text-muted text-mono">ID: {current.banid}</p>
@@ -229,7 +214,7 @@ export function BanDetailPage({
       <div className="card">
         <p className="section-label">
           Identifiers
-          <span className="text-sm text-muted" style={{ textTransform: 'none', letterSpacing: '0' }}>{visibleIdentifiers.length}</span>
+          <span className="text-sm text-muted identifier-count">{visibleIdentifiers.length}</span>
         </p>
         {visibleIdentifiers.length === 0 ? (
           <p className="text-sm text-muted">No identifiers available</p>
@@ -240,8 +225,7 @@ export function BanDetailPage({
               return (
                 <li
                   key={id}
-                  className="flex items-center gap-2 text-mono text-sm"
-                  style={{ padding: 'var(--space-2) var(--space-3)', borderRadius: 'var(--radius)', background: 'var(--bg-tertiary)' }}
+                  className="flex items-center gap-2 text-mono text-sm identifier-row"
                 >
                   <span className="badge badge-default">{kind}</span>
                   <span className="truncate flex-1">{value ?? id}</span>
@@ -260,11 +244,8 @@ export function BanDetailPage({
       </div>
 
       {canRemove && (
-        <div className="card" style={{
-          borderTop: '2px solid',
-          borderColor: 'rgba(248, 81, 73, 0.3)',
-        }}>
-          <p className="section-label" style={{ color: 'var(--accent-red)' }}>Danger zone</p>
+        <div className="card card-danger-border">
+          <p className="section-label section-label-danger">Danger zone</p>
           <button
             className="btn btn-danger btn-full"
             onClick={() => setConfirmUnban(true)}

@@ -7,6 +7,7 @@ import type {
   Notification,
   Permissions,
   Player,
+  ReasonShortcut,
   Report,
   View,
 } from './types'
@@ -79,6 +80,7 @@ function App() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [easterEggs, setEasterEggs] = useState<string[]>([])
   const [currentEasterEgg, setCurrentEasterEgg] = useState<string | null>(null)
+  const [shortcuts, setShortcuts] = useState<ReasonShortcut[]>([])
 
   // === Toast ===
 
@@ -123,8 +125,9 @@ function App() {
   // Ban detail pushed from Lua events.lua banDetailResult handler
   useEffect(() => {
     return on<{ ban: BanEntry | null }>('banDetail', (data) => {
-      if (data.ban && data.ban.banid) {
-        setBanDetailCache((prev) => ({ ...prev, [data.ban!.banid]: data.ban! }))
+      const ban = data.ban
+      if (ban && ban.banid) {
+        setBanDetailCache((prev) => ({ ...prev, [ban.banid]: ban }))
       }
     })
   }, [])
@@ -179,6 +182,13 @@ function App() {
   useEffect(() => {
     return on<AppSettings>('initSettings', (data) => {
       setSettings((prev) => ({ ...prev, ...data }))
+    })
+  }, [])
+
+  // Reason shortcuts from server (ea_addShortcut)
+  useEffect(() => {
+    return on<{ shortcuts: ReasonShortcut[] }>('updateShortcuts', (data) => {
+      setShortcuts(data.shortcuts ?? [])
     })
   }, [])
 
@@ -323,7 +333,7 @@ function App() {
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
               <div>
                 <h1 className="text-xl font-bold sidebar-title text-gradient">EasyAdmin</h1>
-                <p className="text-xs text-muted" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: '10px' }}>Admin Panel</p>
+                <p className="text-xs text-muted sidebar-subtitle">Admin Panel</p>
               </div>
             </div>
             <div className="sidebar-nav">
@@ -365,7 +375,7 @@ function App() {
                   Back
                 </button>
               )}
-              <h2 className="text-xl font-semibold" style={{ letterSpacing: '-0.01em' }}>
+              <h2 className="text-xl font-semibold">
                 {getPageTitle(view, selectedPlayer, selectedBanId, selectedReportId)}
               </h2>
               <button
@@ -399,6 +409,7 @@ function App() {
                   player={selectedPlayer}
                   permissions={permissions}
                   ipPrivacy={ipPrivacy}
+                  shortcuts={shortcuts}
                   onToast={showToast}
                 />
               )}
@@ -431,10 +442,13 @@ function App() {
                   onToast={showToast}
                   onUnbanned={() => {
                     // BanListPage manages its own paginated state; navigate back (user can refresh if needed)
-                    setBanDetailCache((prev) => {
-                      const { [selectedBanId!]: _, ...rest } = prev
-                      return rest
-                    })
+                    if (selectedBanId) {
+                      setBanDetailCache((prev) => {
+                        const entries = Object.entries(prev)
+                            .filter(([key]) => key !== selectedBanId)
+                        return Object.fromEntries(entries)
+                      })
+                    }
                     navigateTo('bans')
                   }}
                 />

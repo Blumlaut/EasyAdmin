@@ -77,16 +77,7 @@ export function PlayerListPage({
         </div>
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--bg-hover)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'var(--space-2)',
-          }}>
+          <div className="empty-state-icon">
             <Icon name="users" size="lg" className="text-muted" />
           </div>
           <p className="text-secondary">
@@ -140,7 +131,7 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
         {player.developer && <span className="badge badge-dev">Dev</span>}
         {player.contributor && <span className="badge badge-contributor">Contrib</span>}
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
+      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
     </div>
   )
 }

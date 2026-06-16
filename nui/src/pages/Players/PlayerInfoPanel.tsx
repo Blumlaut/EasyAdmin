@@ -49,16 +49,11 @@ export function PlayerInfoPanel({ player, ipPrivacy, onCopyDiscord }: PlayerInfo
   return (
     <div className="card">
       <div className="flex items-center gap-4 mb-3">
-        <div className="avatar avatar-lg" style={{
-          background: 'var(--brand-gradient)',
-          color: '#fff',
-          border: '2px solid var(--brand-blue)',
-          fontSize: '16px',
-        }}>
+        <div className="avatar avatar-lg avatar-player">
           {player.name.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-bold truncate" style={{ letterSpacing: '-0.01em' }}>{player.name}</h3>
+          <h3 className="text-xl font-bold truncate">{player.name}</h3>
           <p className="text-sm text-muted text-mono">ID: {player.id}</p>
         </div>
         <div className="flex gap-2 shrink-0">

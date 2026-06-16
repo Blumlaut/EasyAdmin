@@ -124,6 +124,22 @@ function _buildReportList()
   return rlist
 end
 
+-- Forward reason shortcuts to the NUI.
+RegisterNetEvent('EasyAdmin:fillShortcuts', function(shortcuts)
+  MessageShortcuts = shortcuts
+  if IsNuiVisible() then
+    -- Convert Lua table to array of { key, value } for JS
+    local shortcutList = {}
+    for k, v in pairs(shortcuts or {}) do
+      table.insert(shortcutList, { key = k, value = v })
+    end
+    SendNUIMessage({
+      action = 'updateShortcuts',
+      data = { shortcuts = shortcutList },
+    })
+  end
+end)
+
 -- Push frozen/muted state to the NUI.
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(playerId, state)
   FrozenPlayers[playerId] = state

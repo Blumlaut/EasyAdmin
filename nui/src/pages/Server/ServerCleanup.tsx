@@ -18,7 +18,7 @@ export function ServerCleanup({ permissions, onToast: _onToast }: ServerCleanupP
   if (availableTypes.length === 0) return null
 
   return (
-    <div className="card" style={{ borderTop: '2px solid', borderColor: 'rgba(210, 153, 34, 0.3)' }}>
+    <div className="card card-warning-border">
       <p className="section-label">Cleanup</p>
       <p className="text-sm text-secondary mb-3">
         Remove cars, peds, or props from an area around you.

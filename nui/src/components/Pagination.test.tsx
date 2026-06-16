@@ -28,7 +28,7 @@ describe('Pagination', () => {
         onLast={() => {}}
       />,
     )
-    expect(screen.getByText('Page 2 of 5')).toBeInTheDocument()
+    expect(screen.getByText('2 / 5')).toBeInTheDocument()
   })
 
   it('hides prev/first on first page', () => {

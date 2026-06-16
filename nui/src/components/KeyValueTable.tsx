@@ -33,7 +33,6 @@ export function KeyValueTable({ rows, ariaLabel }: KeyValueTableProps) {
           >
             <span
               className="text-sm text-muted shrink-0 kv-key"
-              style={{ fontWeight: 'var(--font-medium)' }}
             >
               {row.key}
             </span>
@@ -45,11 +44,7 @@ export function KeyValueTable({ rows, ariaLabel }: KeyValueTableProps) {
               >
                 <span className={row.mono ? 'text-mono' : ''}>{row.value}</span>
                 {row.actionLabel && (
-                  <span className="text-xs text-muted ml-auto" style={{
-                    background: 'var(--bg-hover)',
-                    padding: '2px 8px',
-                    borderRadius: 'var(--radius-full)',
-                  }}>
+                  <span className="text-xs text-muted ml-auto kv-action-badge">
                     {row.actionLabel}
                   </span>
                 )}

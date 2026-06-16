@@ -41,6 +41,7 @@ export function ReportDetailPage({
   useEffect(() => {
     const existing = reports.find((r) => r.id === reportId)
     if (existing) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setState({ status: 'success', report: existing })
     } else {
       // Report not yet in the list (e.g. navigated before list loaded)
@@ -127,16 +128,7 @@ export function ReportDetailPage({
     return (
       <div className="page-container">
         <div className="card empty-state">
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--bg-orange)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'var(--space-2)',
-          }}>
+          <div className="empty-state-icon empty-state-icon-orange">
             <Icon name="flag" size="lg" className="text-orange" />
           </div>
           <p className="text-secondary">Report not found or failed to load</p>
@@ -184,20 +176,11 @@ export function ReportDetailPage({
       ? 'text-red'
       : 'text-yellow'
 
-  const avatarBg = report.claimed
-    ? 'var(--bg-green)'
-    : report.type === 1
-      ? 'var(--bg-red)'
-      : 'var(--bg-orange)'
-
   return (
     <div className="page-container">
-      <div className="card" style={{
-        borderTop: '2px solid',
-        borderColor: report.claimed ? 'var(--accent-green)' : report.type === 1 ? 'var(--accent-red)' : 'var(--accent-yellow)',
-      }}>
+      <div className={`card ${report.claimed ? 'card-report-claimed' : report.type === 1 ? 'card-report-emergency' : 'card-report-normal'}`}>
         <div className="flex items-center gap-3 mb-3">
-          <div className="avatar avatar-md" style={{ background: avatarBg }}>
+          <div className={`avatar avatar-md ${report.claimed ? 'avatar-report-claimed' : report.type === 1 ? 'avatar-report-emergency' : 'avatar-report'}`}>
             <Icon
               name="flag"
               size="sm"
@@ -205,7 +188,7 @@ export function ReportDetailPage({
             />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold" style={{ letterSpacing: '-0.01em' }}>
+            <h3 className="text-xl font-bold">
               Report #{report.id}
             </h3>
             <p className="text-sm text-muted">

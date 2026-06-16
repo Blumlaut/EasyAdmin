@@ -73,6 +73,15 @@ function NuiSendPlayerData()
       ipprivacy = GetConvar('ea_IpPrivacy', 'true') == 'true',
     },
   })
+  -- Send reason shortcuts to NUI on every player data refresh
+  local shortcutList = {}
+  for k, v in pairs(MessageShortcuts or {}) do
+    table.insert(shortcutList, { key = k, value = v })
+  end
+  SendNUIMessage({
+    action = 'updateShortcuts',
+    data = { shortcuts = shortcutList },
+  })
 end
 
 function NuiBuildPlayerList()

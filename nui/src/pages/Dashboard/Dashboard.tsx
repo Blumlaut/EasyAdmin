@@ -47,9 +47,9 @@ function CircularProgressGauge({
   else if (pct >= 0.7) strokeColor = 'var(--accent-orange)'
 
   return (
-    <div className="card flex flex-col items-center justify-center" style={{ padding: 'var(--space-5)' }}>
+    <div className="card flex flex-col items-center justify-center dashboard-card">
       <p className="section-label mb-2">Player Capacity</p>
-      <div className="flex-1 flex items-center justify-center" style={{ minWidth: 0 }}>
+      <div className="flex-1 flex items-center justify-center">
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
         {/* Background track */}
         <circle
@@ -71,11 +71,7 @@ function CircularProgressGauge({
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          style={{
-            transform: 'rotate(-90deg)',
-            transformOrigin: 'center',
-            transition: 'stroke-dashoffset 300ms ease',
-          }}
+          className="dashboard-gauge-arc"
         />
         {/* Center text */}
         <text
@@ -84,7 +80,7 @@ function CircularProgressGauge({
           textAnchor="middle"
           dominantBaseline="central"
           fill="var(--text-primary)"
-          style={{ fontSize: '28px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}
+          className="dashboard-gauge-value"
         >
           {value}
         </text>
@@ -94,12 +90,13 @@ function CircularProgressGauge({
           textAnchor="middle"
           dominantBaseline="central"
           fill="var(--text-muted)"
-          style={{ fontSize: '12px', fontFamily: 'var(--font-sans)' }}
+          className="dashboard-gauge-max"
         >
           / {max}
         </text>
       </svg>
         </div>
+      {/* eslint-disable-next-line nui/no-inline-styles */}
       <p className="text-sm font-semibold mt-3" style={{ color: strokeColor }}>
         {pctText}% full
       </p>
@@ -126,7 +123,7 @@ interface SparklineChartProps {
 function SparklineChart({ data, label, current, height = 120, range, onRangeChange, ranges }: SparklineChartProps) {
   if (data.length < 2) {
     return (
-      <div className="card" style={{ padding: 'var(--space-5)' }}>
+      <div className="card dashboard-card">
         <div className="flex items-center justify-between mb-3">
           <p className="section-label">{label}</p>
           <div className="flex items-center gap-2">
@@ -138,9 +135,8 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
                 {ranges.map((r) => (
                   <button
                     key={r.value}
-                    className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'}`}
+                    className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'} dashboard-range-btn`}
                     onClick={() => onRangeChange(r.value)}
-                    style={{ fontSize: '10px', padding: '2px 6px' }}
                   >
                     {r.label}
                   </button>
@@ -149,7 +145,7 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
             )}
           </div>
         </div>
-        <div className="flex items-center justify-center" style={{ height }}>
+        <div className="flex items-center justify-center dashboard-sparkline-container">
           <p className="text-xs text-muted">Tracking player activity…</p>
         </div>
       </div>
@@ -177,6 +173,7 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
 
   // Time labels
   const timeLabels: { label: string; x: number }[] = []
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now()
   if (data.length >= 2) {
     const firstTs = data[0].timestamp
@@ -199,7 +196,7 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
   }
 
   return (
-    <div className="card" style={{ padding: 'var(--space-5)' }}>
+    <div className="card dashboard-card">
       <div className="flex items-center justify-between mb-3">
         <p className="section-label">{label}</p>
         <div className="flex items-center gap-2">
@@ -211,9 +208,8 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
               {ranges.map((r) => (
                 <button
                   key={r.value}
-                  className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'} dashboard-range-btn`}
                   onClick={() => onRangeChange(r.value)}
-                  style={{ fontSize: '10px', padding: '2px 6px' }}
                 >
                   {r.label}
                 </button>
@@ -222,7 +218,7 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
           )}
         </div>
       </div>
-      <svg width="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" style={{ overflow: 'visible' }}>
+      <svg width="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className="dashboard-sparkline-svg">
         <defs>
           <linearGradient id="sparklineGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--brand-blue-light)" stopOpacity="0.3" />
@@ -255,7 +251,7 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
             y={height - 2}
             textAnchor="middle"
             fill="var(--text-muted)"
-            style={{ fontSize: '9px', fontFamily: 'var(--font-sans)' }}
+            className="dashboard-gauge-label"
           >
             {tl.label}
           </text>
@@ -272,25 +268,21 @@ function SparklineChart({ data, label, current, height = 120, range, onRangeChan
 
 function StatCard({ config }: { config: StatCardConfig }) {
   return (
-    <div className="card" style={{ padding: 'var(--space-4)' }}>
+    <div className="card dashboard-card-sm">
       <div className="flex items-center gap-3">
         <div
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 'var(--radius)',
-            background: config.bgColor,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
+          className="dashboard-stat-icon"
+          // eslint-disable-next-line nui/no-inline-styles
+          style={{ background: config.bgColor }}
         >
-          <Icon name={config.icon} size="sm" style={{ color: config.color }} />
+          <Icon name={config.icon} size="sm"
+            // eslint-disable-next-line nui/no-inline-styles
+            style={{ color: config.color }}
+          />
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-muted" style={{ lineHeight: 1.2 }}>{config.label}</p>
-          <p className="text-xl font-bold" style={{ letterSpacing: '-0.02em', lineHeight: 1.3 }}>
+          <p className="text-xs text-muted dashboard-stat-label">{config.label}</p>
+          <p className="text-xl font-bold dashboard-stat-value">
             {config.value}
           </p>
         </div>
@@ -320,32 +312,26 @@ function EntityBars({ vehicles, peds, objects }: EntityBarProps) {
   ]
 
   return (
-    <div className="card" style={{ padding: 'var(--space-5)' }}>
+    <div className="card dashboard-card">
       <p className="section-label mb-3">World Entities</p>
       <div className="flex flex-col gap-3">
         {bars.map((bar) => (
           <div key={bar.label}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs text-secondary">{bar.label}</span>
-              <span className="text-xs font-semibold" style={{ color: bar.color }}>
+              <span className="text-xs font-semibold"
+                // eslint-disable-next-line nui/no-inline-styles
+                style={{ color: bar.color }}
+              >
                 {bar.value.toLocaleString()}
               </span>
             </div>
-            <div
-              style={{
-                height: 6,
-                borderRadius: 'var(--radius-full)',
-                background: 'var(--bg-hover)',
-                overflow: 'hidden',
-              }}
-            >
-              <div
+            <div className="dashboard-bar-track">
+              <div className="dashboard-bar-fill"
+                // eslint-disable-next-line nui/no-inline-styles
                 style={{
-                  height: '100%',
                   width: `${Math.max((bar.value / max) * 100, 2)}%`,
-                  borderRadius: 'var(--radius-full)',
                   background: bar.color,
-                  transition: 'width 300ms ease',
                 }}
               />
             </div>
@@ -423,8 +409,9 @@ function PrideGreeting() {
   const text = 'Happy Pride!'
   const stops = prideColors.map((color, i) => `${color} ${(i / (prideColors.length - 1)) * 100}%`)
   return (
-    <h3 className="text-2xl font-bold" style={{ letterSpacing: '-0.02em' }}>
+    <h3 className="text-2xl font-bold dashboard-greeting">
       <span
+        // eslint-disable-next-line nui/no-inline-styles
         style={{
           background: `linear-gradient(90deg, ${stops.join(', ')})`,
           WebkitBackgroundClip: 'text',
@@ -455,6 +442,7 @@ export function Dashboard({ playerCount }: DashboardProps) {
   // Fetch server stats on mount
   useEffect(() => {
     let cancelled = false
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true)
     callLua<ServerStats>('requestServerStats')
       .then((data) => {
@@ -505,22 +493,22 @@ export function Dashboard({ playerCount }: DashboardProps) {
   if (loading) {
     return (
       <div className="page-container">
-        <div className="grid grid-cols-2 gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
+        <div className="grid grid-cols-2 gap-3 dashboard-grid">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="card" style={{ padding: 'var(--space-4)' }}>
+            <div key={i} className="card dashboard-card-sm">
               <div className="flex items-center gap-3">
-                <div className="skeleton" style={{ width: 36, height: 36, borderRadius: 'var(--radius)' }} />
+                <div className="skeleton dashboard-skeleton-icon" />
                 <div className="flex-1">
-                  <div className="skeleton" style={{ width: '60%', height: 10, marginBottom: 6 }} />
-                  <div className="skeleton" style={{ width: '40%', height: 18 }} />
+                  <div className="skeleton dashboard-skeleton-label" />
+                  <div className="skeleton dashboard-skeleton-value" />
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="flex gap-3" style={{ flexWrap: 'wrap' }}>
-          <div className="skeleton card" style={{ width: 200, height: 220, padding: 'var(--space-5)' }} />
-          <div className="skeleton card" style={{ flex: 1, minWidth: 280, height: 220, padding: 'var(--space-5)' }} />
+        <div className="flex gap-3 dashboard-skeleton-row">
+          <div className="skeleton card dashboard-skeleton-card" />
+          <div className="skeleton card dashboard-skeleton-chart" />
         </div>
       </div>
     )
@@ -531,14 +519,14 @@ export function Dashboard({ playerCount }: DashboardProps) {
       {/* Greeting */}
       <div className="mb-5">
         {showPride ? <PrideGreeting /> : (
-          <h3 className="text-2xl font-bold" style={{ letterSpacing: '-0.02em' }}>
+          <h3 className="text-2xl font-bold dashboard-greeting">
             {greeting}
           </h3>
         )}
       </div>
 
       {/* Stat cards row */}
-      <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
+      <div className="grid gap-3 dashboard-grid">
         {statCards.map((card) => (
           <StatCard key={card.label} config={card} />
         ))}
@@ -591,6 +579,7 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
   // Fetch history when range changes
   useEffect(() => {
     let cancelled = false
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true)
     callLua<Array<{ timestamp: number; count: number }>>('requestPlayerHistory', { range })
       .then((result) => {

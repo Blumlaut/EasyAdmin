@@ -145,3 +145,9 @@ export interface PlayerCountPoint {
 
 // Time range filter for player history
 export type HistoryRange = '1h' | '6h' | '24h' | '7d'
+
+// Reason shortcut (from ea_addShortcut)
+export interface ReasonShortcut {
+  key: string
+  value: string
+}

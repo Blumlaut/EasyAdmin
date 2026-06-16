@@ -32,7 +32,7 @@ export function SearchBar({
         />
       </div>
       {resultCount && (
-        <span className="text-sm text-muted shrink-0" style={{ fontSize: '11px' }}>
+        <span className="text-xs text-muted shrink-0">
           {resultCount.shown}/{resultCount.total}
         </span>
       )}

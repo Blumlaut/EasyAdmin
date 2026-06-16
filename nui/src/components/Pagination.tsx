@@ -36,7 +36,7 @@ export function Pagination({
           Prev
         </button>
       )}
-      <span className="text-sm text-muted" style={{ fontFamily: 'var(--font-mono)' }}>
+      <span className="text-sm text-muted text-mono">
         {page} / {totalPages}
       </span>
       {page < totalPages && (

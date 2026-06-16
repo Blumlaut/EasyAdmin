@@ -59,16 +59,7 @@ export function ReportListPage({
         <ReportListSkeleton />
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--bg-orange)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'var(--space-2)',
-          }}>
+          <div className="empty-state-icon empty-state-icon-orange">
             <Icon name="flag" size="lg" className="text-orange" />
           </div>
           <p className="text-secondary">{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
@@ -103,12 +94,6 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
       ? 'text-red'
       : 'text-yellow'
 
-  const avatarBg = report.claimed
-    ? 'var(--bg-green)'
-    : report.type === 1
-      ? 'var(--bg-red)'
-      : 'var(--bg-orange)'
-
   return (
     <div
       className={`list-item ${colorClass}`}
@@ -122,7 +107,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
         }
       }}
     >
-      <div className="avatar avatar-sm" style={{ background: avatarBg }}>
+      <div className={`avatar avatar-sm ${report.claimed ? 'avatar-report-claimed' : report.type === 1 ? 'avatar-report-emergency' : 'avatar-report'}`}>
         <Icon
           name="flag"
           size="xs"
@@ -131,7 +116,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
       </div>
       <div className="list-item-content">
         <div className="list-item-title">
-          <span className="text-muted" style={{ marginRight: 'var(--space-1)' }}>#{report.id}</span>
+          <span className="text-muted report-id-prefix">#{report.id}</span>
           {targetName}
         </div>
         <div className="list-item-subtitle truncate">{report.reason}</div>
@@ -142,7 +127,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
         )}
         <span className="badge badge-default">{report.reportTimeFormatted}</span>
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted" style={{ opacity: 0.4 }} />
+      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
     </div>
   )
 }
