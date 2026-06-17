@@ -172,10 +172,11 @@ function App() {
             </div>
             <div className="sidebar-nav">
               <Navigation
-                items={nav.visibleNavItems.map((item) => ({
-                  ...item,
-                  badge: item.id === 'players' ? data.players.length : item.badge,
-                }))}
+                items={nav.visibleNavItems.map((item) =>
+                  'id' in item && item.id === 'players'
+                    ? { ...item, badge: data.players.length }
+                    : item,
+                )}
                 activeId={nav.activeNavId}
                 onSelect={handleNavSelect}
               />

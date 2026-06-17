@@ -8,6 +8,15 @@ const items = [
   { id: 'bans', label: 'Bans', icon: 'ban' as const, disabled: true },
 ]
 
+const itemsWithSeparators = [
+  { id: 'main', label: 'Dashboard', icon: 'home' as const },
+  { id: 'players', label: 'Players', icon: 'users' as const },
+  { type: 'separator' as const },
+  { type: 'header' as const, label: 'Moderation' },
+  { id: 'bans', label: 'Bans', icon: 'ban' as const },
+  { id: 'reports', label: 'Reports', icon: 'flag' as const },
+]
+
 const dropdownItems = [
   { id: 'main', label: 'Dashboard', icon: 'home' as const },
   {
@@ -96,7 +105,7 @@ describe('Navigation', () => {
     it('collapses dropdown on second click', async () => {
       const user = userEvent.setup()
       const onSelect = vi.fn()
-      render(<Navigation items={dropdownItems} activeId="player-statistics" onSelect={onSelect} />)
+      render(<Navigation items={dropdownItems} activeId="player-statistics" onSelect={() => {}} />)
       // Dropdown should be expanded (auto-expand because child is active)
       const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
       const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
@@ -104,6 +113,40 @@ describe('Navigation', () => {
       // Click to collapse
       await user.click(screen.getByText('Statistics'))
       expect(childrenContainer).not.toHaveClass('nav-dropdown-children-open')
+    })
+  })
+
+  describe('separators and headers', () => {
+    it('renders separator elements', () => {
+      render(<Navigation items={itemsWithSeparators} activeId="main" onSelect={() => {}} />)
+      const separators = document.querySelectorAll('.nav-separator')
+      expect(separators.length).toBe(1)
+    })
+
+    it('renders header elements with label', () => {
+      render(<Navigation items={itemsWithSeparators} activeId="main" onSelect={() => {}} />)
+      expect(screen.getByText('Moderation')).toBeInTheDocument()
+      const header = screen.getByText('Moderation').closest('.nav-header')
+      expect(header).toBeInTheDocument()
+      // Header should not be a button
+      expect(header?.tagName).not.toBe('BUTTON')
+    })
+
+    it('renders nav items alongside separators and headers', () => {
+      render(<Navigation items={itemsWithSeparators} activeId="main" onSelect={() => {}} />)
+      expect(screen.getByText('Dashboard')).toBeInTheDocument()
+      expect(screen.getByText('Players')).toBeInTheDocument()
+      expect(screen.getByText('Bans')).toBeInTheDocument()
+      expect(screen.getByText('Reports')).toBeInTheDocument()
+      expect(screen.getByText('Moderation')).toBeInTheDocument()
+    })
+
+    it('calls onSelect for items after separator', async () => {
+      const user = userEvent.setup()
+      const onSelect = vi.fn()
+      render(<Navigation items={itemsWithSeparators} activeId="main" onSelect={onSelect} />)
+      await user.click(screen.getByText('Bans'))
+      expect(onSelect).toHaveBeenCalledWith('bans')
     })
   })
 })

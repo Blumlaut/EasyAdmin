@@ -54,6 +54,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   { id: 'server', label: 'Server', icon: 'server' },
   { id: 'resources', label: 'Resources', icon: 'layers' },
+  { type: 'separator' as const },
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ]
 
@@ -136,12 +137,21 @@ export function useAppNavigation({
 
   // Permission gating for nav items
   const visibleNavItems: NavItem[] = NAV_ITEMS.map((item) => {
+    // Pass through separators and headers unchanged
+    if ('type' in item && (item.type === 'separator' || item.type === 'header')) {
+      return item
+    }
+
     let disabled = false
     if (item.id === 'bans' && !permissions['player.ban.view']) disabled = true
     if (item.id === 'reports' && !permissions['player.reports.view']) disabled = true
     if (item.id === 'statistics') {
       disabled = !permissions['server.statistics.view']
       const children = item.children?.map((child) => {
+        // Pass through separators and headers in dropdown children
+        if ('type' in child && (child.type === 'separator' || child.type === 'header')) {
+          return child
+        }
         let childDisabled = false
         if (child.id === 'player-statistics' && !permissions['server.statistics.view']) childDisabled = true
         if (child.id === 'server-metrics' && !permissions['server.statistics.view']) childDisabled = true

@@ -2,7 +2,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Icon } from './icons'
 
-export interface NavItem {
+export type NavItemType = 'item' | 'separator' | 'header'
+
+export interface NavItemBase {
+  type?: 'item'
   id: string
   label: string
   icon: string
@@ -10,6 +13,32 @@ export interface NavItem {
   disabled?: boolean
   // Dropdown support: when present, this item renders as an expandable group
   children?: NavItem[]
+}
+
+export interface NavSeparator {
+  type: 'separator'
+}
+
+export interface NavHeader {
+  type: 'header'
+  label: string
+}
+
+export type NavItem = NavItemBase | NavSeparator | NavHeader
+
+/** Type guard: is this a clickable nav item (not a separator or header)? */
+function isNavItem(item: NavItem): item is NavItemBase {
+  return item.type === 'item' || item.type === undefined
+}
+
+/** Type guard: is this a separator? */
+function isSeparator(item: NavItem): item is NavSeparator {
+  return item.type === 'separator'
+}
+
+/** Type guard: is this a section header? */
+function isHeader(item: NavItem): item is NavHeader {
+  return item.type === 'header'
 }
 
 interface NavigationProps {
@@ -26,8 +55,8 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
   // Auto-expand a dropdown when its parent or a child is active
   useEffect(() => {
     for (const item of items) {
-      if (!item.children) continue
-      const childIds = item.children.map((c) => c.id)
+      if (!isNavItem(item) || !item.children) continue
+      const childIds = item.children.filter(isNavItem).map((c) => c.id)
       if (activeId === item.id || childIds.includes(activeId)) {
         setExpanded((prev) => (prev[item.id] ? prev : { ...prev, [item.id]: true }))
         break
@@ -46,11 +75,14 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
   }, [])
 
   // Collect all leaf (non-dropdown) items for keyboard navigation
-  const leafItems = useCallback(() => {
-    const leaves: NavItem[] = []
+  const leafItems = useCallback((): NavItemBase[] => {
+    const leaves: NavItemBase[] = []
     for (const item of items) {
+      if (!isNavItem(item)) continue
       if (item.children && expanded[item.id]) {
-        leaves.push(...item.children)
+        for (const child of item.children) {
+          if (isNavItem(child)) leaves.push(child)
+        }
       } else if (!item.children) {
         leaves.push(item)
       }
@@ -91,7 +123,7 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
       onSelect(target.id)
       // Expand parent dropdown if the target is a child
       for (const item of items) {
-        if (item.children && item.children.some((c) => c.id === target.id)) {
+        if (isNavItem(item) && item.children && item.children.some((c) => isNavItem(c) && c.id === target.id)) {
           setExpanded((prev) => (prev[item.id] ? prev : { ...prev, [item.id]: true }))
           break
         }
@@ -104,33 +136,49 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
     }
   }, [items, activeId, onSelect, leafItems])
 
-  const renderItem = (item: NavItem) => {
-    const hasChildren = !!item.children && item.children.length > 0
-    const isExpanded = expanded[item.id]
-    const isActive = activeId === item.id
-    const isParentActive = hasChildren && item.children!.some((c) => c.id === activeId)
-    const isDisabled = item.disabled || (hasChildren && item.children!.every((c) => c.disabled))
+  const renderItem = (item: NavItem, index: number) => {
+    // Render separator
+    if (isSeparator(item)) {
+      return <div key={`sep-${index}`} className="nav-separator" />
+    }
+
+    // Render section header
+    if (isHeader(item)) {
+      return (
+        <div key={`header-${item.label}`} className="nav-header">
+          {item.label}
+        </div>
+      )
+    }
+
+    // At this point item is a NavItemBase
+    const navItem = item as NavItemBase
+    const hasChildren = !!navItem.children && navItem.children.length > 0
+    const isExpanded = expanded[navItem.id]
+    const isActive = activeId === navItem.id
+    const isParentActive = hasChildren && navItem.children!.some((c) => isNavItem(c) && c.id === activeId)
+    const isDisabled = navItem.disabled || (hasChildren && navItem.children!.every((c) => !isNavItem(c) || c.disabled))
 
     return (
-      <div key={item.id} className={hasChildren ? 'nav-dropdown' : undefined}>
+      <div key={navItem.id} className={hasChildren ? 'nav-dropdown' : undefined}>
         <button
           ref={initItemRefs}
-          data-nav-id={item.id}
+          data-nav-id={navItem.id}
           className={`nav-item${isActive ? ' nav-item-active' : ''}${hasChildren ? ' nav-dropdown-toggle' : ''}${isParentActive && !isActive ? ' nav-dropdown-parent-active' : ''}`}
           onClick={() => {
             if (hasChildren) {
-              toggleExpanded(item.id)
+              toggleExpanded(navItem.id)
               // If expanding and no child is active, navigate to first enabled child
               if (!isExpanded) {
-                const firstEnabled = item.children!.find((c) => !c.disabled)
+                const firstEnabled = navItem.children!.find((c) => isNavItem(c) && !c.disabled) as NavItemBase | undefined
                 if (firstEnabled && !isParentActive) onSelect(firstEnabled.id)
                 else if (isParentActive) {
-                  const activeChild = item.children!.find((c) => c.id === activeId)
+                  const activeChild = navItem.children!.find((c) => isNavItem(c) && c.id === activeId) as NavItemBase | undefined
                   if (activeChild) onSelect(activeChild.id)
                 }
               }
-            } else if (!item.disabled) {
-              onSelect(item.id)
+            } else if (!navItem.disabled) {
+              onSelect(navItem.id)
             }
           }}
           disabled={isDisabled}
@@ -141,10 +189,10 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
           style={isDisabled ? { opacity: 0.5 } : undefined}
         >
           {/* @ts-expect-error Icon name is dynamic but validated at runtime */}
-          <Icon name={item.icon} size="sm" />
-          <span className="nav-item-label">{item.label}</span>
-          {item.badge !== undefined && (
-            <span className="nav-item-badge">{item.badge}</span>
+          <Icon name={navItem.icon} size="sm" />
+          <span className="nav-item-label">{navItem.label}</span>
+          {navItem.badge !== undefined && (
+            <span className="nav-item-badge">{navItem.badge}</span>
           )}
           {hasChildren && (
             <Icon
@@ -158,7 +206,7 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
         {hasChildren && (
           <div className={`nav-dropdown-children${isExpanded ? ' nav-dropdown-children-open' : ''}`}>
             <div className="nav-dropdown-children-inner">
-              {item.children!.map((child) => renderItem(child))}
+              {navItem.children!.map((child, idx) => renderItem(child, idx))}
             </div>
           </div>
         )}
@@ -173,7 +221,7 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
       aria-label="Main navigation"
       onKeyDown={handleKeyDown}
     >
-      {items.map((item) => renderItem(item))}
+      {items.map((item, idx) => renderItem(item, idx))}
     </nav>
   )
 }
