@@ -198,3 +198,13 @@ RegisterNetEvent('EasyAdmin:playerRegistryResult', function(data)
     })
   end
 end)
+
+---Paginated player registry result — pushed to NUI for server-side pagination.
+RegisterNetEvent('EasyAdmin:playerRegistryPageResult', function(data)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'playerRegistryPage',
+      data = data or { players = {}, total = 0, page = 1, pageSize = 20, totalPages = 1 },
+    })
+  end
+end)

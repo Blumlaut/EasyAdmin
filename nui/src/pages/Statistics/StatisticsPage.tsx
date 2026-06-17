@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import type { DailyPeak, Notification, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { DailyPeak, Notification, PaginatedPlayerRegistryResponse, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
 import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
 import { SearchBar } from '../../components/SearchBar'
 import { SelectMenu, type SelectMenuItem } from '../../components/SelectMenu'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { BarChart } from '../../components/BarChart'
+import { Pagination } from '../../components/Pagination'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 
 // ============================================================
 // Types
@@ -158,27 +160,90 @@ function DailyPeaksChart({ data }: { data: DailyPeak[] }) {
 
 // ============================================================
 // PlayerRegistryTable
-// Searchable table of tracked players with session stats
+// Paginated, searchable table of tracked players with session stats.
+// Uses server-side pagination to avoid loading all players at once.
 // ============================================================
 
-function PlayerRegistryTable({ players, loading }: { players: PlayerRegistryEntry[]; loading: boolean }) {
-  const [query, setQuery] = useState('')
-  const [sortBy, setSortBy] = useState<'sessions' | 'playtime' | 'lastSeen'>('lastSeen')
-  const debouncedQuery = useDebounce(query, 200)
+const REGISTRY_PAGE_SIZE = 20
 
-  const filtered = useMemo(() => {
-    let result = players
-    if (debouncedQuery) {
-      const q = debouncedQuery.toLowerCase()
-      result = result.filter((p) => (p.name || '').toLowerCase().includes(q))
-    }
-    result = [...result].sort((a, b) => {
-      if (sortBy === 'sessions') return b.sessions - a.sessions
-      if (sortBy === 'playtime') return b.playtime - a.playtime
-      return b.lastSeen - a.lastSeen
+type RegistrySortBy = 'sessions' | 'playtime' | 'lastSeen'
+
+function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
+  const [query, setQuery] = useState('')
+  const [sortBy, setSortBy] = useState<RegistrySortBy>('lastSeen')
+  const [players, setPlayers] = useState<PlayerRegistryEntry[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const listRef = useRef<HTMLDivElement>(null)
+  const debouncedQuery = useDebounce(query, 300)
+
+  useListKeyboardNav(listRef, players.length)
+
+  const fetchPage = useCallback((p: number, q: string, sort: RegistrySortBy) => {
+    setLoading(true)
+    callLua('requestPlayerRegistryPage', { page: p, pageSize: REGISTRY_PAGE_SIZE, query: q, sortBy: sort, filterDays })
+  }, [filterDays])
+
+  // Listen for paginated results pushed from Lua
+  useEffect(() => {
+    return on<PaginatedPlayerRegistryResponse>('playerRegistryPage', (data) => {
+      // Server sends unix seconds; convert to ms for frontend
+      setPlayers(data.players.map((p) => ({
+        ...p,
+        firstSeen: p.firstSeen * 1000,
+        lastSeen: p.lastSeen * 1000,
+      })))
+      setTotal(data.total)
+      setPage(data.page)
+      setTotalPages(data.totalPages)
+      setLoading(false)
     })
-    return result
-  }, [players, debouncedQuery, sortBy])
+  }, [])
+
+  // Fetch page 1 on mount
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchPage(1, '', 'lastSeen')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Refetch when debounced search changes
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(1)
+    fetchPage(1, debouncedQuery, sortBy)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery])
+
+  // Refetch when sort changes
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(1)
+    fetchPage(1, debouncedQuery, sortBy)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortBy])
+
+  const handlePageChange = useCallback((p: number) => {
+    setPage(p)
+    fetchPage(p, debouncedQuery, sortBy)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery, sortBy])
+
+  const handleFirstPage = useCallback(() => handlePageChange(1), [handlePageChange])
+  const handleLastPage = useCallback(() => handlePageChange(totalPages), [handlePageChange, totalPages])
+  const handleNextPage = useCallback(() => handlePageChange(Math.min(page + 1, totalPages)), [handlePageChange, page, totalPages])
+  const handlePrevPage = useCallback(() => handlePageChange(Math.max(page - 1, 1)), [handlePageChange, page])
+
+  const handleRefresh = useCallback(() => {
+    fetchPage(page, debouncedQuery, sortBy)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, debouncedQuery, sortBy])
+
+  const handleSortChange = useCallback((item: SelectMenuItem) => {
+    setSortBy(item.value as RegistrySortBy)
+  }, [])
 
   const sortOptions: SelectMenuItem[] = [
     { value: 'lastSeen', label: 'Last Seen' },
@@ -186,83 +251,88 @@ function PlayerRegistryTable({ players, loading }: { players: PlayerRegistryEntr
     { value: 'playtime', label: 'Playtime' },
   ]
 
-  if (loading) {
-    return (
-      <div className="card statistics-chart-card">
-        <p className="section-label mb-3">Player Registry</p>
-        <div className="flex items-center justify-center" style={{ minHeight: '100px' }}>
-          <p className="text-xs text-muted">Loading player data…</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (players.length === 0) {
-    return (
-      <div className="card statistics-chart-card">
-        <p className="section-label mb-3">Player Registry</p>
-        <div className="flex flex-col items-center justify-center py-6">
-          <div className="empty-state-icon empty-state-icon-blue mb-3">
-            <Icon name="users" size="lg" className="text-blue" />
-          </div>
-          <p className="text-sm text-muted">No player data collected yet</p>
-          <p className="text-xs text-muted mt-1">Players will appear here after connecting</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="card statistics-chart-card">
-      <div className="flex items-center justify-between mb-3">
-        <p className="section-label">Player Registry ({players.length} tracked)</p>
-        <SelectMenu
-          items={sortOptions}
-          onChange={(item) => setSortBy(item.value as typeof sortBy)}
-          ariaLabel="Sort players by"
-        />
-      </div>
-      <div className="mb-3">
-        <SearchBar
-          value={query}
-          onChange={setQuery}
-          placeholder="Search by name…"
-          ariaLabel="Search player registry"
-        />
-      </div>
-      <div className="overflow-x-auto">
-        <table className="statistics-table">
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>First Seen</th>
-              <th>Last Seen</th>
-              <th>Sessions</th>
-              <th>Total Playtime</th>
-              <th>Avg Session</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.slice(0, 50).map((player) => (
-              <tr key={player.identifier}>
-                <td className="truncate max-w-[160px]" title={player.name}>
-                  {player.name}
-                </td>
-                <td className="text-xs text-muted">{formatDayLabelFull(player.firstSeen / 1000)}</td>
-                <td className="text-xs text-muted">{formatDayLabelFull(player.lastSeen / 1000)}</td>
-                <td className="text-xs font-semibold">{player.sessions}</td>
-                <td className="text-xs">{formatDuration(player.playtime)}</td>
-                <td className="text-xs">{player.sessions > 0 ? formatDuration(player.playtime / player.sessions) : '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {filtered.length > 50 && (
-          <p className="text-xs text-muted text-center mt-2">
-            Showing 50 of {filtered.length} players
-          </p>
+    <div>
+      <div className="card statistics-chart-card">
+        <div className="flex items-center justify-between mb-3">
+          <p className="section-label">Player Registry</p>
+          <div className="flex items-center gap-2">
+            <SelectMenu
+              items={sortOptions}
+              onChange={handleSortChange}
+              ariaLabel="Sort players by"
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-2 mb-3">
+          <SearchBar
+            value={query}
+            onChange={setQuery}
+            placeholder="Search by name…"
+            resultCount={players.length > 0 ? { shown: players.length, total: total } : undefined}
+            ariaLabel="Search player registry"
+          />
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={handleRefresh}
+            disabled={loading}
+          >
+            <Icon name="refresh" size="xs" />
+            Refresh
+          </button>
+        </div>
+
+        {loading && players.length === 0 ? (
+          <div className="flex items-center justify-center" style={{ minHeight: '100px' }}>
+            <p className="text-xs text-muted">Loading player data…</p>
+          </div>
+        ) : players.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-6">
+            <div className="empty-state-icon empty-state-icon-blue mb-3">
+              <Icon name="users" size="lg" className="text-blue" />
+            </div>
+            <p className="text-sm text-muted">{total === 0 ? 'No player data collected yet' : 'No players match your search'}</p>
+            {total === 0 && <p className="text-xs text-muted mt-1">Players will appear here after connecting</p>}
+          </div>
+        ) : (
+          <div ref={listRef} className="overflow-x-auto">
+            <table className="statistics-table">
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>First Seen</th>
+                  <th>Last Seen</th>
+                  <th>Sessions</th>
+                  <th>Total Playtime</th>
+                  <th>Avg Session</th>
+                </tr>
+              </thead>
+              <tbody>
+                {players.map((player) => (
+                  <tr key={player.identifier}>
+                    <td className="truncate max-w-[160px]" title={player.name}>
+                      {player.name}
+                    </td>
+                    <td className="text-xs text-muted">{formatDayLabelFull(player.firstSeen / 1000)}</td>
+                    <td className="text-xs text-muted">{formatDayLabelFull(player.lastSeen / 1000)}</td>
+                    <td className="text-xs font-semibold">{player.sessions}</td>
+                    <td className="text-xs">{formatDuration(player.playtime)}</td>
+                    <td className="text-xs">{player.sessions > 0 ? formatDuration(player.playtime / player.sessions) : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onFirst={handleFirstPage}
+        onPrev={handlePrevPage}
+        onNext={handleNextPage}
+        onLast={handleLastPage}
+      />
     </div>
   )
 }
@@ -307,9 +377,11 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
   const [range, setRange] = useState<StatsRange>('30d')
   const [summary, setSummary] = useState<StatsSummary | null>(null)
   const [dailyPeaks, setDailyPeaks] = useState<DailyPeak[]>([])
-  const [registry, setRegistry] = useState<PlayerRegistryEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const [loadingRegistry, setLoadingRegistry] = useState(true)
+
+  // Full registry data for bar chart summaries (top-N only).
+  // The paginated table uses its own server-side pagination.
+  const [registry, setRegistry] = useState<PlayerRegistryEntry[]>([])
 
   // Version refs to discard stale responses when range changes rapidly
   const rangeVer = useRef(0)
@@ -345,7 +417,8 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
     })
   }, [])
 
-  // Listen for player registry results pushed from Lua
+  // Listen for full player registry results (used for bar chart summaries only).
+  // The registry table uses server-side pagination via PlayerRegistryTable.
   useEffect(() => {
     return on<PlayerRegistryEntry[]>('playerRegistry', (data) => {
       if (currentRegistryVer.current === registryVer.current) {
@@ -355,7 +428,6 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           firstSeen: p.firstSeen * 1000,
           lastSeen: p.lastSeen * 1000,
         })))
-        setLoadingRegistry(false)
       }
     })
   }, [])
@@ -371,11 +443,11 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
     callLua('requestDailyPeaks', { range }).catch(() => {})
   }, [range])
 
-  // Fire registry request when range days changes
+  // Fire registry request for bar chart data when range days changes.
+  // This is kept for the top-N bar charts; the table uses pagination separately.
   useEffect(() => {
     const ver = ++registryVer.current
     currentRegistryVer.current = ver
-    setLoadingRegistry(true)
     setRegistry([])
     callLua('requestPlayerRegistry', { filterDays: rangeDays }).catch(() => {})
   }, [rangeDays])
@@ -506,8 +578,8 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
         </div>
       </div>
 
-      {/* Player registry table */}
-      <PlayerRegistryTable players={registry} loading={loadingRegistry} />
+      {/* Player registry table (server-side paginated) */}
+      <PlayerRegistryTable filterDays={rangeDays} />
     </div>
   )
 }

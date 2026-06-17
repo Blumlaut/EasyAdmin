@@ -620,6 +620,9 @@ end)
 
 ---Return player registry data for retention/churn analytics.
 ---Optional filter: only players first seen within the last N days.
+---
+---DEPRECATED: Use EasyAdmin:requestPlayerRegistryPage for server-side pagination.
+---Kept for backward compatibility — returns ALL matching players.
 RegisterServerEvent('EasyAdmin:requestPlayerRegistry', function(filterDays)
 	local src = source
 	local now = os.time()
@@ -642,6 +645,78 @@ RegisterServerEvent('EasyAdmin:requestPlayerRegistry', function(filterDays)
 	end
 
 	TriggerClientEvent('EasyAdmin:playerRegistryResult', src, result)
+end)
+
+---Paginated player registry request (server-side pagination for large registries).
+---Returns lightweight entries without full identifier lists to minimise payload size.
+---Supports server-side search by name and sort by sessions/playtime/lastSeen.
+RegisterServerEvent('EasyAdmin:requestPlayerRegistryPage', function(data)
+	local src = source
+	local now = os.time()
+
+	local page = tonumber(data and data.page) or 1
+	local pageSize = tonumber(data and data.pageSize) or 20
+	local query = (data and data.query) and tostring(data.query):lower() or nil
+	local sortBy = (data and data.sortBy) and tostring(data.sortBy) or 'lastSeen'
+	local filterDays = tonumber(data and data.filterDays) or nil
+
+	if page < 1 then page = 1 end
+	if pageSize < 1 or pageSize > 100 then pageSize = 20 end
+
+	local cutoff = filterDays and now - (filterDays * 86400) or 0
+
+	-- Build filtered list (server-side search)
+	local filtered = {}
+	for _, data in ipairs(playerRegistry) do
+		if data.firstSeen and data.firstSeen < cutoff then
+			goto continue
+		end
+		if query then
+			local name = (data.name or 'Unknown'):lower()
+			if not name:find(query, 1, true) then
+				goto continue
+			end
+		end
+		table.insert(filtered, {
+			name        = data.name or 'Unknown',
+			identifier  = pickStableIdentifier(data.identifiers),
+			firstSeen   = data.firstSeen or 0,
+			lastSeen    = data.lastSeen or 0,
+			sessions    = data.sessions or 0,
+			playtime    = data.playtime or 0,
+		})
+		::continue::
+	end
+
+	-- Server-side sort
+	if sortBy == 'sessions' then
+		table.sort(filtered, function(a, b) return a.sessions > b.sessions end)
+	elseif sortBy == 'playtime' then
+		table.sort(filtered, function(a, b) return a.playtime > b.playtime end)
+	else
+		table.sort(filtered, function(a, b) return a.lastSeen > b.lastSeen end)
+	end
+
+	local total = #filtered
+	local totalPages = math.max(1, math.ceil(total / pageSize))
+	if page > totalPages then page = totalPages end
+
+	local startIdx = (page - 1) * pageSize + 1
+	local endIdx = math.min(startIdx + pageSize - 1, total)
+
+	-- Return only the page slice
+	local entries = {}
+	for i = startIdx, endIdx do
+		table.insert(entries, filtered[i])
+	end
+
+	TriggerClientEvent('EasyAdmin:playerRegistryPageResult', src, {
+		players    = entries,
+		total      = total,
+		page       = page,
+		pageSize   = pageSize,
+		totalPages = totalPages,
+	})
 end)
 
 ---Return aggregated summary statistics for a given time range.

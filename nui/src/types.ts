@@ -157,11 +157,20 @@ export type StatsRange = '7d' | '30d' | '90d' | '120d'
 export interface PlayerRegistryEntry {
   name: string         // player username (latest known)
   identifier: string   // primary (most stable) identifier
-  identifiers: string[] // all identifiers for this player
-  firstSeen: number    // unix ms
-  lastSeen: number     // unix ms
+  identifiers?: string[] // all identifiers for this player (omitted in paginated responses)
+  firstSeen: number    // unix ms (paginated: unix seconds, converted on receive)
+  lastSeen: number     // unix ms (paginated: unix seconds, converted on receive)
   sessions: number
   playtime: number     // seconds
+}
+
+// Server-side paginated player registry response
+export interface PaginatedPlayerRegistryResponse {
+  players: PlayerRegistryEntry[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
 }
 
 // Daily aggregated player count stats
