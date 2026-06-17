@@ -228,13 +228,26 @@
 /* -- Dashboard charts grid -- */
 
 .dashboard-charts-grid {
-  display: grid;
-  grid-template-columns: 220px 1fr;
+  display: flex;
   gap: var(--space-3);
+}
+
+.dashboard-charts-grid > :first-child {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.dashboard-charts-grid > :last-child {
+  flex: 1;
+  min-width: 0;
 }
 
 @media (max-width: 700px) {
   .dashboard-charts-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .dashboard-charts-grid > :first-child {
+    width: 100%;
   }
 }

@@ -358,14 +358,12 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
           </div>
         </div>
       </div>
-      <div className="flex-1 min-h-0">
-        <TimeSeriesChart
-          lines={lines}
-          range={chartRange}
-          unit="players"
-          emptyMessage="No data for this time range"
-        />
-      </div>
+      <TimeSeriesChart
+        lines={lines}
+        range={chartRange}
+        unit="players"
+        emptyMessage="No data for this time range"
+      />
     </div>
   )
 }
