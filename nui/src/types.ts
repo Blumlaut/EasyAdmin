@@ -103,9 +103,10 @@ export interface AppSettings {
   // Accessibility
   highContrast: boolean
   fontSize: number // percentage: 80–150, default 100
-  // Menu sizing
-  menuSize: 'small' | 'default' | 'large' | 'fullscreen'
 }
+
+// Default window dimensions (used when no KVP saved size exists)
+export const DEFAULT_WINDOW_SIZE = { width: 1210, height: 750 }
 
 // Navigation views
 export type View =

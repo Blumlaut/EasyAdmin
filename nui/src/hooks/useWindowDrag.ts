@@ -8,7 +8,6 @@ export interface WindowPosition {
 export interface UseWindowDragOptions {
   /**
    * When false, no listeners are attached and drag is fully disabled.
-   * Use this to disable dragging in fullscreen mode.
    */
   enabled: boolean
   /**

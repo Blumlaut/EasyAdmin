@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCollapse } from './hooks/useCollapse'
+import { useWindowDrag, type WindowPosition } from './hooks/useWindowDrag'
+import { useWindowResize, type WindowSize } from './hooks/useWindowResize'
 import type {
   AppSettings,
   BanEntry,
@@ -12,11 +14,11 @@ import type {
   Report,
   View,
 } from './types'
+import { DEFAULT_WINDOW_SIZE } from './types'
 import { on, callLua, setResourceKvp } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation, type NavItem } from './components/Navigation'
 import { Toast } from './components/Toast'
-import { useWindowDrag, type WindowPosition } from './hooks/useWindowDrag'
 import { ModalProvider } from './ModalContext'
 import { Dashboard } from './pages/Dashboard/Dashboard'
 import { PlayerListPage } from './pages/Players/PlayerListPage'
@@ -46,7 +48,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   anonymous: false,
   highContrast: false,
   fontSize: 100,
-  menuSize: 'default',
 }
 
 const TOAST_DURATION_MS = 3000
@@ -85,19 +86,22 @@ function App() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [shortcuts, setShortcuts] = useState<ReasonShortcut[]>([])
 
-  // Window chrome: position, fold state, background mode.
+  // Window chrome: position, size, fold state, background mode.
   // - windowPos: absolute left/top edge of the window in viewport pixels.
   //   Stored as absolute position so width changes (collapse/expand) don't
   //   invalidate the drag offset — the left edge stays pinned.
+  // - windowSize: width/height of the window, user-resizable from edges.
   // - contentCollapsed: when true, the main content area is hidden and
   //   the window shrinks to just the sidebar width.
   // - nuiBackground: when true, the NUI is visible but has no input
   //   focus (the game has focus). The user can re-hook by holding ALT.
   const [windowPos, setWindowPos] = useState<WindowPosition>({ x: 0, y: 0 })
+  const [windowSize, setWindowSize] = useState<WindowSize>(DEFAULT_WINDOW_SIZE)
   const [contentCollapsed, setContentCollapsed] = useState(false)
   const [nuiBackground, setNuiBackground] = useState(false)
   const windowRef = useRef<HTMLDivElement>(null)
   const windowPosLoadedRef = useRef(false)
+  const windowSizeLoadedRef = useRef(false)
 
   // === Toast ===
 
@@ -126,12 +130,14 @@ function App() {
         // window is always centered, the main content is unfolded, and
         // the NUI starts in focused mode.
         setWindowPos({ x: 0, y: 0 })
+        setWindowSize(DEFAULT_WINDOW_SIZE)
         setContentCollapsed(false)
         setNuiBackground(false)
-        // Clear any inline width left by the collapse animation
-        windowRef.current?.style.removeProperty('width')
-        // Remove the collapsed class
-        windowRef.current?.classList.remove('ea-window--collapsed')
+        // Clear any inline styles left by collapse/resize animations
+        const el = windowRef.current
+        el?.style.removeProperty('width')
+        el?.style.removeProperty('height')
+        el?.classList.remove('ea-window--collapsed')
       }
     })
   }, [])
@@ -226,6 +232,16 @@ function App() {
       if (data && typeof data.x === 'number' && typeof data.y === 'number') {
         windowPosLoadedRef.current = true
         setWindowPos(data)
+      }
+    })
+  }, [])
+
+  // Restore saved window size from KVP
+  useEffect(() => {
+    return on<WindowSize>('initWindowSize', (data) => {
+      if (data && typeof data.width === 'number' && typeof data.height === 'number') {
+        windowSizeLoadedRef.current = true
+        setWindowSize(data)
       }
     })
   }, [])
@@ -435,10 +451,8 @@ function App() {
     saveWindowPosition(pos)
   }, [saveWindowPosition])
 
-  // Window dragging is only enabled in non-fullscreen modes (the user
-  // spec: drag the top bar when not fullscreen). In fullscreen the
-  // window is already maximized so dragging is meaningless.
-  const dragEnabled = visible && settings.menuSize !== 'fullscreen' && !nuiBackground
+  // Window dragging
+  const dragEnabled = visible && !nuiBackground
 
   useWindowDrag({
     enabled: dragEnabled,
@@ -447,13 +461,49 @@ function App() {
     onDragEnd: handleDragEnd,
   })
 
+  // Window resizing from edges
+  const saveWindowSize = useCallback((size: WindowSize) => {
+    setResourceKvp('iwSizeW', String(size.width))
+    setResourceKvp('iwSizeH', String(size.height))
+  }, [])
+
+  useWindowResize({
+    enabled: visible && !nuiBackground,
+    size: windowSize,
+    onSizeChange: (next) => {
+      setWindowSize(next)
+    },
+    onResizeEnd: saveWindowSize,
+    onPositionChange: (next) => {
+      setWindowPos(next)
+    },
+    applyStyles: (w, h, x, y) => {
+      const el = windowRef.current
+      if (!el) return
+      el.style.width = `${w}px`
+      el.style.height = `${h}px`
+      if (x !== undefined) {
+        el.style.setProperty('--ea-left', `${x}px`)
+        windowPosRef.current = { ...windowPosRef.current, x }
+      }
+      if (y !== undefined) {
+        el.style.setProperty('--ea-top', `${y}px`)
+        windowPosRef.current = { ...windowPosRef.current, y }
+      }
+      windowSizeRef.current = { width: w, height: h }
+      console.log('[resize] applied', { w, h, actualW: el.offsetWidth, actualH: el.offsetHeight, inlineW: el.style.width, inlineH: el.style.height })
+    },
+  })
+
   // After the collapse/expand animation finishes, ensure the window
   // is fully on-screen. On expand the width grows and the right edge
   // may extend past the viewport — bump the position left to compensate.
   // Uses a ref for windowPos so the async callback always reads the
   // latest value (closures capture stale state).
   const windowPosRef = useRef(windowPos)
+  const windowSizeRef = useRef(windowSize)
   windowPosRef.current = windowPos
+  windowSizeRef.current = windowSize
 
   const handleCollapseAnimationFinish = useCallback(() => {
     const el = windowRef.current
@@ -476,14 +526,7 @@ function App() {
     windowRef,
     contentCollapsed,
     setContentCollapsed,
-    () => {
-      let maxWidth = 1210
-      let vwRatio = 0.92
-      if (settings.menuSize === 'small') { maxWidth = 900; vwRatio = 0.8 }
-      else if (settings.menuSize === 'large') { maxWidth = 1500; vwRatio = 0.96 }
-      const vwWidth = Math.round(window.innerWidth * vwRatio)
-      return Math.min(vwWidth, maxWidth)
-    },
+    () => windowSize.width,
     handleCollapseAnimationFinish,
   )
 
@@ -500,22 +543,28 @@ function App() {
     })
   }, [nuiBackground])
 
-  // Apply window position as absolute left/top edge in viewport pixels.
-  // windowPos stores the absolute edge position, so width changes
-  // (collapse/expand) don't affect it — the left edge stays pinned.
-  const applyWindowPosition = useCallback(() => {
+  // Apply window position + size as inline styles.
+  // Uses refs inside RAF so it always reads latest values even when
+  // multiple state updates are batched across frames.
+  const applyWindowChrome = useCallback(() => {
     if (!windowRef.current || !visible) return
     const el = windowRef.current
     const raf = window.requestAnimationFrame(() => {
-      el.style.setProperty('--ea-left', `${windowPos.x}px`)
-      el.style.setProperty('--ea-top', `${windowPos.y}px`)
+      const pos = windowPosRef.current
+      const size = windowSizeRef.current
+      el.style.setProperty('--ea-left', `${pos.x}px`)
+      el.style.setProperty('--ea-top', `${pos.y}px`)
+      el.style.width = `${size.width}px`
+      el.style.height = `${size.height}px`
+      // window chrome applied (quiet — only log during debugging)
+      console.log('[chrome]', { x: pos.x, y: pos.y, w: size.width, h: size.height })
     })
     return () => window.cancelAnimationFrame(raf)
-  }, [visible, windowPos])
+  }, [visible])
 
   useEffect(() => {
-    return applyWindowPosition()
-  }, [visible, windowPos, settings.menuSize])
+    return applyWindowChrome()
+  }, [visible, windowPos, windowSize])
 
   // Clamp position to viewport bounds on resize so the window
   // never ends up off-screen if the viewport shrinks.
@@ -538,20 +587,12 @@ function App() {
 
   const closeMenu = () => callLua('closeMenu').catch(() => {})
 
-  // Build accessibility + sizing classes
+  // Build accessibility classes
   const windowClasses = ['ea-window']
   if (settings.highContrast) windowClasses.push('high-contrast')
   if (settings.fontSize !== 100) windowClasses.push(`font-size-${settings.fontSize}`)
-  if (settings.menuSize === 'small') windowClasses.push('ea-window--small')
-  if (settings.menuSize === 'large') windowClasses.push('ea-window--large')
-  if (settings.menuSize === 'fullscreen') windowClasses.push('ea-window--fullscreen')
   if (contentCollapsed) windowClasses.push('ea-window--collapsed')
   if (nuiBackground) windowClasses.push('ea-window--background')
-
-  // Backdrop is the "click to release focus" area behind the window.
-  // In fullscreen there is no visible background to click, so we hide
-  // it (the user can use the unhook button in the topbar instead).
-  const showBackdrop = settings.menuSize !== 'fullscreen'
 
   return (
     <>
@@ -560,16 +601,14 @@ function App() {
         onToast={showToast}
         onPlayersUpdated={fetchPlayers}
       >
-        {/* Backdrop sits behind the window. Clicking it releases NUI
-            focus (in non-fullscreen mode only). Rendered as a sibling
-            of the window so its onClick fires for clicks that miss
-            the window — siblings in a fragment are not nested. */}
-        {showBackdrop && (
-          <div
-            className="ea-backdrop"
-            onClick={handleBackdropClick}
-          />
-        )}
+        {/* Backdrop sits behind the window (lower z-index). Using
+            onMouseDown so it only fires when the mouse is actually
+            pressed outside the window — prevents false triggers from
+            drag operations that start outside and end inside. */}
+        <div
+          className="ea-backdrop"
+          onMouseDown={handleBackdropClick}
+        />
 
         <div ref={windowRef} className={windowClasses.join(' ')}>
           {/* Skip link — first focusable element, visible on :focus */}

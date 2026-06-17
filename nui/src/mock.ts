@@ -89,7 +89,6 @@ setTimeout(() => {
       anonymous: false,
       highContrast: false,
       fontSize: 100,
-      menuSize: 'default',
     },
   }, '*')
   window.postMessage({

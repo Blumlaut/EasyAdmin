@@ -192,18 +192,13 @@
 }
 
 /* ============================================================
-   App window (non-fullscreen, centered)
+   App window — dimensions set via inline style (JS-managed)
    ============================================================ */
 
 .ea-window {
   position: fixed;
   top: var(--ea-top, 50%);
   left: var(--ea-left, 50%);
-  /* Both axes use absolute pixel positions set by JS.
-     CSS fallbacks (50%) only apply before JS initializes. */
-  width: 1210px;
-  max-width: 92vw;
-  height: min(85vh, 750px);
   display: flex;
   flex-direction: row;
   border-radius: var(--radius-xl);
@@ -212,33 +207,6 @@
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
   /* Width animated by JS (Web Animations API), not CSS transitions. */
-}
-
-/* -- Menu size: small -- */
-.ea-window--small {
-  width: 900px;
-  max-width: 80vw;
-  height: min(75vh, 600px);
-}
-
-/* -- Menu size: large -- */
-.ea-window--large {
-  width: 1500px;
-  max-width: 96vw;
-  height: min(92vh, 950px);
-}
-
-/* -- Menu size: fullscreen -- */
-.ea-window--fullscreen {
-  top: 0;
-  left: 0;
-  transform: none;
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
-  transition: none;
 }
 
 /* Content wrapper — slide animated by JS */
@@ -261,9 +229,8 @@
 }
 
 /* The backdrop that sits behind the window and intercepts clicks to
-   release focus. Hidden in fullscreen mode (no "background" to click)
-   and when the menu is already in background mode (nothing useful to
-   click on). */
+   release focus. Hidden when the menu is already in background mode
+   (nothing useful to click on). */
 .ea-backdrop {
   position: fixed;
   inset: 0;

@@ -176,7 +176,6 @@ function NuiSendSettings()
       anonymous = false, -- anonymous is per-session, not persisted
       highContrast = KvpGet('shighContrast') == 'true',
       fontSize = KvpGet('ifontSize') or 100,
-      menuSize = KvpGet('smenuSize') or 'default',
     },
   })
 
@@ -188,6 +187,17 @@ function NuiSendSettings()
     data = {
       x = posX and tonumber(posX) or 0,
       y = posY and tonumber(posY) or 0,
+    },
+  })
+
+  -- Send saved window size
+  local sizeW = KvpGet('iwSizeW')
+  local sizeH = KvpGet('iwSizeH')
+  SendNUIMessage({
+    action = 'initWindowSize',
+    data = {
+      width = sizeW and tonumber(sizeW) or 1210,
+      height = sizeH and tonumber(sizeH) or 750,
     },
   })
 end

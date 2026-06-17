@@ -16,6 +16,7 @@ export function useCollapse(
     const isCollapsing = !contentCollapsed
 
     const toWidth = isCollapsing ? COLLAPSED_WIDTH : getExpandedWidth()
+    // collapse/expand started
     const contentEl = el.querySelector(':scope > div:not(.sidebar)') as HTMLElement | null
 
     // Remove content from flex layout so the window width can animate
@@ -60,6 +61,7 @@ export function useCollapse(
     widthAnim.onfinish = () => {
       document.documentElement.style.overflowX = ''
       el.style.width = isCollapsing ? `${toWidth}px` : ''
+      // collapse/expand finished
       onAnimationFinish?.()
       // Restore content to static + apply flex collapse
       if (contentEl) {

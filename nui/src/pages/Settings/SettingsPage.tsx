@@ -2,7 +2,6 @@ import type { AppSettings, Notification, Permissions } from '../../types'
 import { SettingsData } from './SettingsData'
 import { SettingsPrivacy } from './SettingsPrivacy'
 import { SettingsAccessibility } from './SettingsAccessibility'
-import { SettingsMenuSize } from './SettingsMenuSize'
 
 interface SettingsPageProps {
   permissions: Permissions
@@ -25,18 +24,9 @@ export function SettingsPage({
     onChange({ anonymous })
   }
 
-  function patchMenuSize(patch: Partial<Pick<AppSettings, 'menuSize'>>) {
-    onChange(patch)
-  }
-
   return (
     <div className="page-container">
       <SettingsData onToast={onToast} />
-      <SettingsMenuSize
-        menuSize={settings.menuSize}
-        onChange={patchMenuSize}
-        onToast={onToast}
-      />
       {permissions['anon'] && (
         <SettingsPrivacy
           anonymous={settings.anonymous}
