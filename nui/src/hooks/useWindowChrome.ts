@@ -3,6 +3,7 @@ import { useCollapse } from './useCollapse'
 import { useWindowDrag, type WindowPosition } from './useWindowDrag'
 import { useWindowResize, type WindowSize } from './useWindowResize'
 import { DEFAULT_WINDOW_SIZE, type SidebarDirection, type SidebarMode } from '../types'
+import { getRenderedWindowSize, clampWindowRectToViewport } from './collapseLayout'
 import { on, callLua, setResourceKvp } from '../fivem'
 
 const MIN_WIDTH = 500
@@ -155,15 +156,15 @@ export function useWindowChrome({
     const vh = window.innerHeight
     const pos = windowPosRef.current
 
-    const clamped = {
-      x: Math.max(0, Math.min(vw - ww, pos.x)),
-      y: Math.max(0, Math.min(vh - wh, pos.y)),
-    }
+    const clamped = clampWindowRectToViewport(
+      { x: pos.x, y: pos.y, width: ww, height: wh },
+      { width: vw, height: vh },
+    )
 
     if (clamped.x !== pos.x || clamped.y !== pos.y) {
-      setWindowPos(clamped)
-      windowPosRef.current = clamped
-      saveWindowPosition(clamped)
+      setWindowPos({ x: clamped.x, y: clamped.y })
+      windowPosRef.current = { x: clamped.x, y: clamped.y }
+      saveWindowPosition({ x: clamped.x, y: clamped.y })
     }
   }, [saveWindowPosition])
 
@@ -212,14 +213,19 @@ export function useWindowChrome({
     const el = windowRef.current
     const raf = window.requestAnimationFrame(() => {
       const pos = windowPosRef.current
-      const size = windowSizeRef.current
+      const expandedSize = windowSizeRef.current
+      const size = getRenderedWindowSize({
+        contentCollapsed,
+        sidebarMode,
+        expandedSize,
+      })
       el.style.setProperty('--ea-left', `${pos.x}px`)
       el.style.setProperty('--ea-top', `${pos.y}px`)
       el.style.width = `${size.width}px`
       el.style.height = `${size.height}px`
     })
     return () => window.cancelAnimationFrame(raf)
-  }, [visible])
+  }, [visible, contentCollapsed, sidebarMode])
 
   useEffect(() => {
     return applyWindowChrome()

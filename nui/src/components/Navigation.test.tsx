@@ -39,6 +39,11 @@ describe('Navigation', () => {
     expect(screen.getByText('Bans')).toBeInTheDocument()
   })
 
+  it('applies horizontal navigation class when requested', () => {
+    render(<Navigation items={items} activeId="main" onSelect={() => {}} orientation="horizontal" />)
+    expect(screen.getByRole('navigation')).toHaveClass('navigation--horizontal')
+  })
+
   it('shows badge when provided', () => {
     render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
     expect(screen.getByText('5')).toBeInTheDocument()
