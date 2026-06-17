@@ -59,13 +59,23 @@ export function useCollapse(
       sidebarDirection,
     })
 
-    if (!isCollapsing) {
-      el.style.width = `${targetRect.width}px`
-      el.style.height = `${targetRect.height}px`
-      el.style.setProperty('--ea-left', `${targetRect.x}px`)
-      el.style.setProperty('--ea-top', `${targetRect.y}px`)
-      setWindowPosition({ x: targetRect.x, y: targetRect.y })
-    }
+    const sizeAnim = el.animate(
+      [
+        {
+          width: `${el.offsetWidth}px`,
+          height: `${el.offsetHeight}px`,
+          left: `${currentPos.x}px`,
+          top: `${currentPos.y}px`,
+        },
+        {
+          width: `${targetRect.width}px`,
+          height: `${targetRect.height}px`,
+          left: `${targetRect.x}px`,
+          top: `${targetRect.y}px`,
+        },
+      ],
+      { duration: COLLAPSE_DURATION, easing: 'ease-out', fill: 'forwards' },
+    )
 
     const contentAnim = contentEl?.animate(
       isHorizontal
@@ -81,6 +91,7 @@ export function useCollapse(
     )
 
     // Apply styling class immediately (shadow, border)
+    el.classList.add('ea-window--collapse-animating')
     el.classList.toggle('ea-window--collapsed', isCollapsing)
     setContentCollapsed(isCollapsing)
 
@@ -89,17 +100,17 @@ export function useCollapse(
       contentEl.classList.remove('ea-content--collapsed')
     }
 
-    contentAnim?.addEventListener('finish', () => {
+    sizeAnim.addEventListener('finish', () => {
       document.documentElement.style.overflowX = ''
       document.documentElement.style.overflowY = ''
-      if (isCollapsing) {
-        el.style.width = `${targetRect.width}px`
-        el.style.height = `${targetRect.height}px`
-        el.style.setProperty('--ea-left', `${targetRect.x}px`)
-        el.style.setProperty('--ea-top', `${targetRect.y}px`)
-        setWindowPosition({ x: targetRect.x, y: targetRect.y })
-      }
-      contentAnim.cancel()
+      el.classList.remove('ea-window--collapse-animating')
+      el.style.width = `${targetRect.width}px`
+      el.style.height = `${targetRect.height}px`
+      el.style.setProperty('--ea-left', `${targetRect.x}px`)
+      el.style.setProperty('--ea-top', `${targetRect.y}px`)
+      setWindowPosition({ x: targetRect.x, y: targetRect.y })
+      sizeAnim.cancel()
+      contentAnim?.cancel()
       onAnimationFinish?.(isCollapsing)
       if (contentEl) {
         contentEl.style.position = ''
@@ -112,6 +123,13 @@ export function useCollapse(
       if (isCollapsing && contentEl) {
         contentEl.classList.add('ea-content--collapsed')
       }
+    }, { once: true })
+
+    sizeAnim.addEventListener('cancel', () => {
+      document.documentElement.style.overflowX = ''
+      document.documentElement.style.overflowY = ''
+      el.classList.remove('ea-window--collapse-animating')
+      contentAnim?.cancel()
     }, { once: true })
   }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth, getExpandedHeight, getWindowPosition, setWindowPosition, sidebarMode, sidebarDirection, onAnimationFinish])
 

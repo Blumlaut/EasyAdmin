@@ -20,6 +20,14 @@
   transform: rotate(180deg);
 }
 
+/* Hide the outer window border/shadow while expanding from a collapsed state,
+   otherwise the full expanded frame becomes visible before the content finishes
+   clipping in. */
+.ea-window--collapse-animating:not(.ea-window--collapsed) {
+  box-shadow: none;
+  border-color: transparent;
+}
+
 /* Content wrapper flex collapse — applied AFTER animation finishes */
 .ea-content--collapsed {
   flex: 0 0 0 !important;

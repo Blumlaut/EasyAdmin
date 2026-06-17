@@ -219,12 +219,11 @@ export function useWindowChrome({
         sidebarMode,
         expandedSize,
       })
+      if (el.classList.contains('ea-window--collapse-animating')) return
       el.style.setProperty('--ea-left', `${pos.x}px`)
       el.style.setProperty('--ea-top', `${pos.y}px`)
-      if (!contentCollapsed || sidebarDirection === 'right' || sidebarDirection === 'down') {
-        el.style.width = `${size.width}px`
-        el.style.height = `${size.height}px`
-      }
+      el.style.width = `${size.width}px`
+      el.style.height = `${size.height}px`
     })
     return () => window.cancelAnimationFrame(raf)
   }, [visible, contentCollapsed, sidebarMode, sidebarDirection])
