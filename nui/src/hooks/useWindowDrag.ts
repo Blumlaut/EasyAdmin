@@ -72,18 +72,16 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd }
       const ww = el ? el.offsetWidth : 1210
       const wh = el ? el.offsetHeight : 750
 
-      // X: --ea-left = innerWidth/2 - ww/2 + x.  Entire window on-screen means:
-      //   left edge >= 0  =>  x >= ww/2 - vw
-      //   right edge <= vw =>  x <= 0
-      const minX = Math.min(0, ww / 2 - vw)
-      const maxX = 0
-
-      // Y: top = vh/2 + translateY(-wh/2 + y).  Entire window on-screen means:
-      //   top >= 0  =>  y >= wh/2 - vh
-      //   bottom <= vh =>  y <= vh - wh/2 - vh = -wh/2 + vh ... simplified:
-      //   y <= vh/2 - wh/2
-      const minY = Math.min(0, wh / 2 - vh)
-      const maxY = 0
+      // windowPos stores the absolute left/top edge of the window.
+      // Entire window on-screen means:
+      //   left edge >= 0  =>  x >= 0
+      //   right edge <= vw =>  x + ww <= vw  =>  x <= vw - ww
+      //   top >= 0  =>  y >= 0
+      //   bottom <= vh =>  y + wh <= vh  =>  y <= vh - wh
+      const minX = 0
+      const maxX = vw - ww
+      const minY = 0
+      const maxY = vh - wh
 
       onPositionChange({
         x: Math.max(minX, Math.min(maxX, newX)),

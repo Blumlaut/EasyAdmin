@@ -197,11 +197,10 @@
 
 .ea-window {
   position: fixed;
-  top: 50%;
+  top: var(--ea-top, 50%);
   left: var(--ea-left, 50%);
-  /* Vertical centering + drag offset. Horizontal position is set by
-     --ea-left (JS) so width changes don't move the left edge. */
-  transform: translateY(calc(-50% + var(--ea-drag-y, 0px)));
+  /* Both axes use absolute pixel positions set by JS.
+     CSS fallbacks (50%) only apply before JS initializes. */
   width: 1210px;
   max-width: 92vw;
   height: min(85vh, 750px);

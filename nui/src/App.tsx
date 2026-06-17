@@ -85,9 +85,10 @@ function App() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [shortcuts, setShortcuts] = useState<ReasonShortcut[]>([])
 
-  // Window chrome: position offset, fold state, background mode.
-  // - windowPos: pixel offset from the centered default position.
-  //   Reset to {0,0} every time the menu opens.
+  // Window chrome: position, fold state, background mode.
+  // - windowPos: absolute left/top edge of the window in viewport pixels.
+  //   Stored as absolute position so width changes (collapse/expand) don't
+  //   invalidate the drag offset — the left edge stays pinned.
   // - contentCollapsed: when true, the main content area is hidden and
   //   the window shrinks to just the sidebar width.
   // - nuiBackground: when true, the NUI is visible but has no input
@@ -96,6 +97,7 @@ function App() {
   const [contentCollapsed, setContentCollapsed] = useState(false)
   const [nuiBackground, setNuiBackground] = useState(false)
   const windowRef = useRef<HTMLDivElement>(null)
+  const windowPosLoadedRef = useRef(false)
 
   // === Toast ===
 
@@ -222,10 +224,28 @@ function App() {
   useEffect(() => {
     return on<WindowPosition>('initWindowPos', (data) => {
       if (data && typeof data.x === 'number' && typeof data.y === 'number') {
+        windowPosLoadedRef.current = true
         setWindowPos(data)
       }
     })
   }, [])
+
+  // Center the window on first open (before KVP data arrives).
+  // KVP restore will override this if a saved position exists.
+  useEffect(() => {
+    if (!visible || windowPosLoadedRef.current) return
+    const el = windowRef.current
+    if (!el) return
+    const raf = window.requestAnimationFrame(() => {
+      const w = el.offsetWidth
+      const h = el.offsetHeight
+      setWindowPos({
+        x: Math.round(window.innerWidth / 2 - w / 2),
+        y: Math.round(window.innerHeight / 2 - h / 2),
+      })
+    })
+    return () => window.cancelAnimationFrame(raf)
+  }, [visible])
 
   // Reason shortcuts from server (ea_addShortcut)
   useEffect(() => {
@@ -480,34 +500,35 @@ function App() {
     })
   }, [nuiBackground])
 
-  // Set horizontal position (--ea-left) so width changes don't move the
-  // left edge. Uses fixed pixel left instead of left:50% + translate(-50%).
-  // Recalculated on menu open, drag change, menu size change, and resize.
-  // NOT on collapse/expand — left edge stays pinned during animation.
-  const calculateAndSetLeft = useCallback(() => {
+  // Apply window position as absolute left/top edge in viewport pixels.
+  // windowPos stores the absolute edge position, so width changes
+  // (collapse/expand) don't affect it — the left edge stays pinned.
+  const applyWindowPosition = useCallback(() => {
     if (!windowRef.current || !visible) return
     const el = windowRef.current
     const raf = window.requestAnimationFrame(() => {
-      const w = el.offsetWidth
-      const left = Math.round(window.innerWidth / 2 - w / 2 + windowPos.x)
-      el.style.setProperty('--ea-left', `${left}px`)
-      el.style.setProperty('--ea-drag-y', `${windowPos.y}px`)
+      el.style.setProperty('--ea-left', `${windowPos.x}px`)
+      el.style.setProperty('--ea-top', `${windowPos.y}px`)
     })
     return () => window.cancelAnimationFrame(raf)
   }, [visible, windowPos])
 
   useEffect(() => {
-    return calculateAndSetLeft()
+    return applyWindowPosition()
   }, [visible, windowPos, settings.menuSize])
 
-  // Recalculate left position on viewport resize
+  // Clamp position to viewport bounds on resize so the window
+  // never ends up off-screen if the viewport shrinks.
   useEffect(() => {
     if (!windowRef.current || !visible) return
     const el = windowRef.current
     const onResize = () => {
       const w = el.offsetWidth
-      const left = Math.round(window.innerWidth / 2 - w / 2 + windowPos.x)
-      el.style.setProperty('--ea-left', `${left}px`)
+      const h = el.offsetHeight
+      const clampedX = Math.max(0, Math.min(window.innerWidth - w, windowPos.x))
+      const clampedY = Math.max(0, Math.min(window.innerHeight - h, windowPos.y))
+      el.style.setProperty('--ea-left', `${clampedX}px`)
+      el.style.setProperty('--ea-top', `${clampedY}px`)
     }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
