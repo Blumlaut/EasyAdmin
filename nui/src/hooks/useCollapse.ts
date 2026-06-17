@@ -11,6 +11,8 @@ export function useCollapse(
   setContentCollapsed: (v: boolean) => void,
   getExpandedWidth: () => number,
   getExpandedHeight: () => number,
+  getWindowPosition: () => { x: number; y: number },
+  setWindowPosition: (pos: { x: number; y: number }) => void,
   sidebarMode: SidebarMode,
   sidebarDirection: SidebarDirection,
   onAnimationFinish?: () => void,
@@ -23,6 +25,7 @@ export function useCollapse(
     const toWidth = isHorizontal ? getExpandedWidth() : (isCollapsing ? COLLAPSED_WIDTH : getExpandedWidth())
     const toHeight = isHorizontal ? (isCollapsing ? COLLAPSED_HEIGHT : getExpandedHeight()) : getExpandedHeight()
     const contentEl = el.querySelector(':scope > div:not(.sidebar)') as HTMLElement | null
+    const currentPos = getWindowPosition()
 
     if (contentEl) {
       const w = contentEl.offsetWidth || Math.max(0, getExpandedWidth() - COLLAPSED_WIDTH)
@@ -43,10 +46,19 @@ export function useCollapse(
     document.documentElement.style.overflowX = 'hidden'
     document.documentElement.style.overflowY = 'hidden'
 
+    const currentWidth = el.offsetWidth
+    const currentHeight = el.offsetHeight
+    const toLeft = !isHorizontal && sidebarDirection === 'left'
+      ? currentPos.x + (currentWidth - toWidth)
+      : currentPos.x
+    const toTop = isHorizontal && sidebarDirection === 'up'
+      ? currentPos.y + (currentHeight - toHeight)
+      : currentPos.y
+
     const sizeAnim = el.animate(
       [
-        { width: `${el.offsetWidth}px`, height: `${el.offsetHeight}px` },
-        { width: `${toWidth}px`, height: `${toHeight}px` },
+        { width: `${currentWidth}px`, height: `${currentHeight}px`, left: `${currentPos.x}px`, top: `${currentPos.y}px` },
+        { width: `${toWidth}px`, height: `${toHeight}px`, left: `${toLeft}px`, top: `${toTop}px` },
       ],
       { duration: COLLAPSE_DURATION, easing: 'ease-out', fill: 'forwards' },
     )
@@ -77,6 +89,9 @@ export function useCollapse(
       document.documentElement.style.overflowY = ''
       el.style.width = `${toWidth}px`
       el.style.height = `${toHeight}px`
+      el.style.setProperty('--ea-left', `${toLeft}px`)
+      el.style.setProperty('--ea-top', `${toTop}px`)
+      setWindowPosition({ x: toLeft, y: toTop })
       sizeAnim.cancel()
       contentAnim?.cancel()
       // collapse/expand finished
@@ -99,7 +114,7 @@ export function useCollapse(
       document.documentElement.style.overflowY = ''
       contentAnim?.cancel()
     }
-  }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth, getExpandedHeight, sidebarMode, sidebarDirection, onAnimationFinish])
+  }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth, getExpandedHeight, getWindowPosition, setWindowPosition, sidebarMode, sidebarDirection, onAnimationFinish])
 
   return toggleCollapsed
 }

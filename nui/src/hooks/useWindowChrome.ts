@@ -167,6 +167,11 @@ export function useWindowChrome({
     setContentCollapsed,
     () => windowSize.width,
     () => windowSize.height,
+    () => windowPosRef.current,
+    (pos) => {
+      setWindowPos(pos)
+      windowPosRef.current = pos
+    },
     sidebarMode,
     sidebarDirection,
     handleCollapseAnimationFinish,
