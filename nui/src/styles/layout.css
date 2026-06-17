@@ -206,6 +206,9 @@
   overflow: auto;
   padding: var(--space-6);
   background: var(--bg-primary);
+  /* Inset scrollbars so the outer edge always has a gap for window resize. */
+  margin-right: 4px;
+  margin-bottom: 4px;
 }
 
 .coming-soon {

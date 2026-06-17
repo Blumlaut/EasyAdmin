@@ -212,6 +212,7 @@
 /* Content wrapper — slide animated by JS */
 .ea-window > div:not(.sidebar) {
   overflow: hidden;
+  background: var(--bg-primary);
 }
 
 /* -- Menu: NUI in background mode (visible, but no focus) -- */
