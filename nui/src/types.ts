@@ -15,6 +15,7 @@ export interface Player {
   contributor?: boolean
   coords?: { x: number; y: number; z: number }
   selfbucket?: number
+  avatar?: string
 }
 
 // Permission checks sent from Lua to NUI (mirrors the Lua permissions table)

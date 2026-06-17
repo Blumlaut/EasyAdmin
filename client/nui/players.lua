@@ -215,3 +215,10 @@ RegisterNUICallback('getPlayerIdentifiers', function(data, cb)
   -- Result arrives asynchronously via the 'playerIdentifiers' NUI event.
   cb({ ok = true })
 end)
+
+---Fetch avatars for all online players.
+---Each avatar is pushed individually via 'playerUpdated' NUI events.
+RegisterNUICallback('fetchPlayerAvatars', function(_data, cb)
+  TriggerServerEvent('EasyAdmin:fetchPlayerAvatars')
+  cb({ ok = true })
+end)

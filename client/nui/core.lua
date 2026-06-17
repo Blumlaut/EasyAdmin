@@ -108,6 +108,10 @@ function NuiSendPlayerData()
     action = 'updateShortcuts',
     data = { shortcuts = shortcutList },
   })
+  -- Fetch avatars for all players (server-side, pushes via playerUpdated NUI events)
+  if hasPlayerPerm and playerlist then
+    TriggerServerEvent('EasyAdmin:fetchPlayerAvatars')
+  end
 end
 
 function NuiBuildPlayerList()

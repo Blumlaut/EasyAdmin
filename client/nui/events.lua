@@ -150,6 +150,16 @@ RegisterNetEvent('EasyAdmin:playerIdentifiersResult', function(playerId, identif
   end
 end)
 
+-- Push player avatar to NUI (merged via playerUpdated handler).
+RegisterNetEvent('EasyAdmin:playerAvatarResult', function(playerId, avatar)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'playerUpdated',
+      data = { id = playerId, avatar = avatar },
+    })
+  end
+end)
+
 -- Push frozen/muted state to the NUI.
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(playerId, state)
   FrozenPlayers[playerId] = state

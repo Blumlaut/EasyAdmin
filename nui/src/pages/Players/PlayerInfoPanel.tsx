@@ -1,4 +1,5 @@
 import type { Player } from '../../types'
+import { Avatar } from '../../components/Avatar'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { CopyButton } from '../../components/CopyButton'
 import { RoleBadges } from '../../components/RoleBadges'
@@ -45,9 +46,7 @@ export function PlayerInfoPanel({ player, onCopyDiscord }: PlayerInfoPanelProps)
   return (
     <div className="card">
       <div className="flex items-center gap-4 mb-3">
-        <div className="avatar avatar-lg avatar-player">
-          {player.name.charAt(0).toUpperCase()}
-        </div>
+        <Avatar player={player} size="lg" variant="player" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="text-xl font-bold truncate">{player.name}</h3>

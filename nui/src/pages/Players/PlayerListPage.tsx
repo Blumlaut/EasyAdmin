@@ -3,6 +3,7 @@ import type { Notification, Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
+import { Avatar } from '../../components/Avatar'
 import { Icon } from '../../components/icons'
 import { RoleBadges } from '../../components/RoleBadges'
 import { ListItem } from '../../components/ListItem'
@@ -101,9 +102,7 @@ export function PlayerListPage({
 function PlayerRow({ player, onClick }: { player: Player; onClick: () => void }) {
   return (
     <ListItem onClick={onClick}>
-      <div className="avatar avatar-sm">
-        {player.name.charAt(0).toUpperCase()}
-      </div>
+      <Avatar player={player} size="sm" variant="player" />
       <div className="list-item-content">
         <div className="list-item-title">
           <span className="list-item-title-text">{player.name}</span>
