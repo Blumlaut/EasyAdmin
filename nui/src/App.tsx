@@ -119,6 +119,18 @@ function App() {
   // === Window classes ===
 
   const isHorizontalSidebar = data.settings.sidebarMode === 'horizontal'
+
+  // Base icon points toward the content area. CSS rotates it 180° when collapsed
+  // so it points toward the sidebar (expand direction). This keeps the spin animation smooth.
+  const collapseIconName = (() => {
+    if (isHorizontalSidebar) {
+      // sidebarDirection 'up' = sidebar at bottom, 'down' = sidebar at top
+      return data.settings.sidebarDirection === 'up' ? 'chevron-double-down' : 'chevron-double-up'
+    }
+    // sidebarDirection 'left' = sidebar at right, 'right' = sidebar at left
+    return data.settings.sidebarDirection === 'left' ? 'chevron-double-right' : 'chevron-double-left'
+  })()
+
   const windowClasses = [
     'ea-window',
     `ea-window--sidebar-${data.settings.sidebarMode}`,
@@ -196,7 +208,7 @@ function App() {
                 disabled={chrome.nuiBackground}
               >
                 <Icon
-                  name={isHorizontalSidebar ? 'chevron-double-right' : 'chevron-double-left'}
+                  name={collapseIconName as 'chevron-double-left' | 'chevron-double-right' | 'chevron-double-up' | 'chevron-double-down'}
                   size="xs"
                   className="sidebar-collapse-icon"
                 />

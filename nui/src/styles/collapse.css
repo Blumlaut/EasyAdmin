@@ -2,21 +2,15 @@
    Collapse / expand animation styles
    ============================================================ */
 
-/* Fold button icon spins 180° during collapse/expand */
+/* Collapse button icon spins 180° during collapse/expand.
+   The base icon points toward the sidebar (set in React per direction).
+   The CSS rotation flips it to point outward when collapsed. */
 .sidebar-collapse-icon {
   display: inline-block;
   transition: transform 180ms ease-out;
 }
 
-.ea-window--collapsed.ea-window--sidebar-horizontal .sidebar-collapse-icon,
-.ea-window--collapsed.ea-window--sidebar-down .sidebar-collapse-icon,
-.ea-window--collapsed.ea-window--sidebar-up .sidebar-collapse-icon {
-  transform: rotate(90deg);
-}
-
-.ea-window--collapsed.ea-window--sidebar-vertical .sidebar-collapse-icon,
-.ea-window--collapsed.ea-window--sidebar-right .sidebar-collapse-icon,
-.ea-window--collapsed.ea-window--sidebar-left .sidebar-collapse-icon {
+.ea-window--collapsed .sidebar-collapse-icon {
   transform: rotate(180deg);
 }
 

@@ -27,6 +27,8 @@ export type IconName =
   | 'chevron-up'
   | 'chevron-double-left'
   | 'chevron-double-right'
+  | 'chevron-double-up'
+  | 'chevron-double-down'
   | 'arrow-left'
   | 'arrow-right'
   | 'zap'
@@ -166,6 +168,18 @@ const ICONS: Record<IconName, React.ReactNode> = {
     <>
       <polyline points="13 17 18 12 13 7" />
       <polyline points="6 17 11 12 6 7" />
+    </>
+  ),
+  'chevron-double-up': (
+    <>
+      <polyline points="17 18 12 13 7 18" />
+      <polyline points="17 11 12 6 7 11" />
+    </>
+  ),
+  'chevron-double-down': (
+    <>
+      <polyline points="17 6 12 11 7 6" />
+      <polyline points="17 13 12 18 7 13" />
     </>
   ),
   'arrow-left': (
