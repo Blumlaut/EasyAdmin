@@ -5,12 +5,14 @@ interface ProfilerEmptyStateProps {
   onFrameChange: (frames: number) => void
   onStart: () => void
   frameOptions: { value: string; label: string; hint?: string }[]
+  framesSelected: boolean
 }
 
 export function ProfilerEmptyState({
   onFrameChange,
   onStart,
   frameOptions,
+  framesSelected,
 }: ProfilerEmptyStateProps) {
   const selectItems: SelectMenuItem[] = frameOptions.map((opt) => ({
     value: opt.value,
@@ -43,7 +45,12 @@ export function ProfilerEmptyState({
           <button
             className="btn btn-primary btn-lg profiler-start-btn"
             onClick={onStart}
-            title="Triggers a server-side profiler recording. Results appear below when complete."
+            disabled={!framesSelected}
+            title={
+              framesSelected
+                ? 'Triggers a server-side profiler recording. Results appear below when complete.'
+                : 'Select a frame count to record first'
+            }
           >
             <Icon name="play" size="sm" />
             Start Profile

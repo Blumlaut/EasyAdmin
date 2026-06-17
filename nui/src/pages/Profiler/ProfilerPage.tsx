@@ -28,7 +28,7 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
     percent: 0,
   })
   const [endpointError, setEndpointError] = useState<string | null>(null)
-  const [selectedFrames, setSelectedFrames] = useState(50)
+  const [selectedFrames, setSelectedFrames] = useState<number | null>(null)
 
   // Listen for progress updates from Lua
   useEffect(() => {
@@ -64,8 +64,10 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
     })
   }, [])
 
-  // Start a new profile capture
+  // Start a new profile capture (blocked until frames are explicitly selected)
   const handleStartProfile = useCallback(() => {
+    if (selectedFrames == null) return
+
     setUiState('recording')
     setProgress({ phase: 'recording', message: 'Starting...', percent: 0 })
     setProfile(null)
@@ -107,6 +109,7 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
           onFrameChange={handleFrameChange}
           onStart={handleStartProfile}
           frameOptions={FRAME_OPTIONS}
+          framesSelected={selectedFrames != null}
         />
       )}
 
@@ -135,7 +138,7 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
             <div className="profiler-progress-percent">{progress.percent}%</div>
 
             <p className="profiler-progress-hint text-xs text-muted mt-3">
-              This typically takes 2-5 seconds. Profiling adds slight overhead during the capture window.
+              This typically takes 4-20 seconds depending on frame count. Profiling adds slight overhead during the capture window.
             </p>
           </div>
         </div>
@@ -159,14 +162,6 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
                   Time each resource spends executing per server frame. Higher = more CPU usage.
                 </p>
               </div>
-              <button
-                className="btn btn-sm btn-secondary"
-                onClick={handleResetToEmpty}
-                title="Reset to profiler controls"
-              >
-                <Icon name="refresh" size="xs" />
-                New Profile
-              </button>
             </div>
 
             {profile.resources.length === 0 ? (

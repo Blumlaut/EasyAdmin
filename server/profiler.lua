@@ -337,8 +337,8 @@ local function captureProfile(src, frames, clientPort, cb)
   ExecuteCommand('profiler record ' .. frames)
 
   -- Phase 2: Wait for recording to complete
-  -- Estimated wait: frames * 50ms (at 20Hz), minimum 1000ms
-  local estimatedWait = math.max(frames * 50, 1000)
+  -- ~16Hz server tick (~62.5ms) + profiler overhead (~75ms) + 1.5s fixed startup + 1s safety buffer
+  local estimatedWait = (frames * 75) + 2500
 
   -- Send progress updates at 500ms intervals during the wait
   local progressCount = 0
