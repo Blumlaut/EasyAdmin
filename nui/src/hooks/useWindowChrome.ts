@@ -5,6 +5,10 @@ import { useWindowResize, type WindowSize } from './useWindowResize'
 import { DEFAULT_WINDOW_SIZE } from '../types'
 import { on, callLua, setResourceKvp } from '../fivem'
 
+const MIN_WIDTH = 500
+const MIN_HEIGHT = 400
+const MAX_PADDING = 16 // px from screen edges when maximized
+
 interface UseWindowChromeOptions {
   visible: boolean
   windowPosData: WindowPosition | null
@@ -19,7 +23,11 @@ export function useWindowChrome({
   const [windowPos, setWindowPos] = useState<WindowPosition>({ x: 0, y: 0 })
   const [windowSize, setWindowSize] = useState<WindowSize>(DEFAULT_WINDOW_SIZE)
   const [contentCollapsed, setContentCollapsed] = useState(false)
+  const [maximized, setMaximized] = useState(false)
   const [nuiBackground, setNuiBackground] = useState(false)
+  // Pre-maximize size/position (restored on unmaximize)
+  const preMaximizePosRef = useRef<WindowPosition>({ x: 0, y: 0 })
+  const preMaximizeSizeRef = useRef<WindowSize>(DEFAULT_WINDOW_SIZE)
   const windowRef = useRef<HTMLDivElement>(null)
   const windowPosLoadedRef = useRef(false)
   const windowSizeLoadedRef = useRef(false)
@@ -204,6 +212,37 @@ export function useWindowChrome({
     return () => window.removeEventListener('resize', onResize)
   }, [visible, windowPos])
 
+  // === Maximize / restore ===
+
+  const toggleMaximize = useCallback(() => {
+    if (maximized) {
+      // Restore previous size and position
+      setWindowSize(preMaximizeSizeRef.current)
+      setWindowPos(preMaximizePosRef.current)
+      setMaximized(false)
+    } else {
+      // Save current state
+      preMaximizePosRef.current = { ...windowPosRef.current }
+      preMaximizeSizeRef.current = { ...windowSizeRef.current }
+
+      // Compute max size that fits within viewport
+      const maxW = window.innerWidth - MAX_PADDING * 2
+      const maxH = window.innerHeight - MAX_PADDING * 2
+      const newSize: WindowSize = {
+        width: Math.max(MIN_WIDTH, maxW),
+        height: Math.max(MIN_HEIGHT, maxH),
+      }
+      const newPos: WindowPosition = {
+        x: Math.round(MAX_PADDING),
+        y: Math.round(MAX_PADDING),
+      }
+
+      setWindowSize(newSize)
+      setWindowPos(newPos)
+      setMaximized(true)
+    }
+  }, [maximized])
+
   // === Reset function (called by App on menu open) ===
 
   const resetWindowChrome = useCallback(() => {
@@ -213,6 +252,7 @@ export function useWindowChrome({
       y: Math.round(window.innerHeight / 2 - DEFAULT_WINDOW_SIZE.height / 2),
     })
     setContentCollapsed(false)
+    setMaximized(false)
     setNuiBackground(false)
     const el = windowRef.current
     el?.style.removeProperty('width')
@@ -225,8 +265,10 @@ export function useWindowChrome({
     windowPos,
     windowSize,
     contentCollapsed,
+    maximized,
     nuiBackground,
     toggleCollapsed,
+    toggleMaximize,
     handleBackdropClick,
     resetWindowChrome,
   }

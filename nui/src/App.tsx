@@ -211,6 +211,15 @@ function App() {
               </h2>
               <div className="topbar-actions">
                 <button
+                  className="btn btn-ghost btn-icon"
+                  onClick={() => chrome.toggleMaximize()}
+                  aria-label={chrome.maximized ? 'Restore window size' : 'Maximize window'}
+                  title={chrome.maximized ? 'Restore window size' : 'Maximize window'}
+                  disabled={chrome.nuiBackground}
+                >
+                  <Icon name={chrome.maximized ? 'minimize' : 'maximize'} size="xs" />
+                </button>
+                <button
                   className="btn btn-ghost btn-icon btn-close"
                   onClick={closeMenu}
                   aria-label="Close"
