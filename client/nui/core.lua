@@ -166,12 +166,31 @@ end
 function NuiSendSettings()
   if not nuiVisible then return end
 
+  local sidebarMode = KvpGet('ssidebarMode') or 'vertical'
+  local sidebarDirection = KvpGet('ssidebarDirection') or 'right'
+
+  if sidebarMode ~= 'vertical' and sidebarMode ~= 'horizontal' then
+    sidebarMode = 'vertical'
+  end
+
+  if sidebarMode == 'vertical' then
+    if sidebarDirection ~= 'right' and sidebarDirection ~= 'left' then
+      sidebarDirection = 'right'
+    end
+  else
+    if sidebarDirection ~= 'down' and sidebarDirection ~= 'up' then
+      sidebarDirection = 'down'
+    end
+  end
+
   SendNUIMessage({
     action = 'initSettings',
     data = {
       anonymous = false, -- anonymous is per-session, not persisted
       highContrast = KvpGet('shighContrast') == 'true',
       fontSize = KvpGet('ifontSize') or 100,
+      sidebarMode = sidebarMode,
+      sidebarDirection = sidebarDirection,
     },
   })
 

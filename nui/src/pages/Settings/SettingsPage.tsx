@@ -2,6 +2,7 @@ import type { AppSettings, Notification, Permissions } from '../../types'
 import { SettingsData } from './SettingsData'
 import { SettingsPrivacy } from './SettingsPrivacy'
 import { SettingsAccessibility } from './SettingsAccessibility'
+import { SettingsLayout } from './SettingsLayout'
 
 interface SettingsPageProps {
   permissions: Permissions
@@ -17,6 +18,10 @@ export function SettingsPage({
   onToast,
 }: SettingsPageProps) {
   function patchAccessibility(patch: Partial<Pick<AppSettings, 'highContrast' | 'fontSize'>>) {
+    onChange(patch)
+  }
+
+  function patchLayout(patch: Partial<Pick<AppSettings, 'sidebarMode' | 'sidebarDirection'>>) {
     onChange(patch)
   }
 
@@ -38,6 +43,12 @@ export function SettingsPage({
         highContrast={settings.highContrast}
         fontSize={settings.fontSize}
         onChange={patchAccessibility}
+        onToast={onToast}
+      />
+      <SettingsLayout
+        sidebarMode={settings.sidebarMode}
+        sidebarDirection={settings.sidebarDirection}
+        onChange={patchLayout}
         onToast={onToast}
       />
     </div>

@@ -99,11 +99,17 @@ export type CleanupType = 'cars' | 'peds' | 'props'
 export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
 
 // App settings (mirrors ea_* kvp entries)
+export type SidebarMode = 'vertical' | 'horizontal'
+export type SidebarDirection = 'right' | 'left' | 'down' | 'up'
+
 export interface AppSettings {
   anonymous: boolean
   // Accessibility
   highContrast: boolean
   fontSize: number // percentage: 80–150, default 100
+  // Layout
+  sidebarMode: SidebarMode
+  sidebarDirection: SidebarDirection
 }
 
 // Default window dimensions (used when no KVP saved size exists)

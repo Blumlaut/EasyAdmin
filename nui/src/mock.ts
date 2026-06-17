@@ -89,6 +89,8 @@ setTimeout(() => {
       anonymous: false,
       highContrast: false,
       fontSize: 100,
+      sidebarMode: 'vertical',
+      sidebarDirection: 'right',
     },
   }, '*')
   window.postMessage({

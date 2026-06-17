@@ -45,9 +45,10 @@ interface NavigationProps {
   items: NavItem[]
   activeId: string
   onSelect: (id: string) => void
+  orientation?: 'vertical' | 'horizontal'
 }
 
-export function Navigation({ items, activeId, onSelect }: NavigationProps) {
+export function Navigation({ items, activeId, onSelect, orientation = 'vertical' }: NavigationProps) {
   const navRef = useRef<HTMLButtonElement[]>([])
   // Track which dropdown groups are expanded (keyed by parent id)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
@@ -97,12 +98,17 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
     const currentIndex = enabledItems.findIndex((item) => item.id === activeId)
     let newIndex: number
 
+    const nextKeys = orientation === 'horizontal' ? ['ArrowRight', 'ArrowDown'] : ['ArrowDown', 'ArrowRight']
+    const prevKeys = orientation === 'horizontal' ? ['ArrowLeft', 'ArrowUp'] : ['ArrowUp', 'ArrowLeft']
+
     switch (e.key) {
-      case 'ArrowDown':
+      case nextKeys[0]:
+      case nextKeys[1]:
         e.preventDefault()
         newIndex = (currentIndex + 1) % enabledItems.length
         break
-      case 'ArrowUp':
+      case prevKeys[0]:
+      case prevKeys[1]:
         e.preventDefault()
         newIndex = (currentIndex - 1 + enabledItems.length) % enabledItems.length
         break
@@ -134,7 +140,7 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
       )
       targetEl?.focus()
     }
-  }, [items, activeId, onSelect, leafItems])
+  }, [items, activeId, onSelect, leafItems, orientation])
 
   const renderItem = (item: NavItem, index: number) => {
     // Render separator
@@ -216,7 +222,7 @@ export function Navigation({ items, activeId, onSelect }: NavigationProps) {
 
   return (
     <nav
-      className="flex flex-col gap-0.5"
+      className={`navigation navigation--${orientation}`}
       role="navigation"
       aria-label="Main navigation"
       onKeyDown={handleKeyDown}

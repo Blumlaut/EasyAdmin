@@ -209,6 +209,18 @@
   /* Width animated by JS (Web Animations API), not CSS transitions. */
 }
 
+.ea-window--sidebar-left {
+  flex-direction: row-reverse;
+}
+
+.ea-window--sidebar-down {
+  flex-direction: column;
+}
+
+.ea-window--sidebar-up {
+  flex-direction: column-reverse;
+}
+
 /* Content wrapper — slide animated by JS */
 .ea-window > div:not(.sidebar) {
   overflow: hidden;

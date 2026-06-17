@@ -47,6 +47,8 @@ function App() {
     visible,
     windowPosData: data.windowPosData,
     windowSizeData: data.windowSizeData,
+    sidebarMode: data.settings.sidebarMode,
+    sidebarDirection: data.settings.sidebarDirection,
   })
 
   // === Menu toggle ===
@@ -116,7 +118,12 @@ function App() {
 
   // === Window classes ===
 
-  const windowClasses = ['ea-window']
+  const isHorizontalSidebar = data.settings.sidebarMode === 'horizontal'
+  const windowClasses = [
+    'ea-window',
+    `ea-window--sidebar-${data.settings.sidebarMode}`,
+    `ea-window--sidebar-${data.settings.sidebarDirection}`,
+  ]
   if (data.settings.highContrast) windowClasses.push('high-contrast')
   if (data.settings.fontSize !== 100) windowClasses.push(`font-size-${data.settings.fontSize}`)
   if (chrome.contentCollapsed) windowClasses.push('ea-window--collapsed')
@@ -189,7 +196,7 @@ function App() {
                 disabled={chrome.nuiBackground}
               >
                 <Icon
-                  name="chevron-double-left"
+                  name={isHorizontalSidebar ? 'chevron-double-right' : 'chevron-double-left'}
                   size="xs"
                   className="sidebar-collapse-icon"
                 />
@@ -204,6 +211,7 @@ function App() {
                 )}
                 activeId={nav.activeNavId}
                 onSelect={handleNavSelect}
+                orientation={data.settings.sidebarMode}
               />
             </div>
             <div className="sidebar-footer">

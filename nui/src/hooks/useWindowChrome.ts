@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCollapse } from './useCollapse'
 import { useWindowDrag, type WindowPosition } from './useWindowDrag'
 import { useWindowResize, type WindowSize } from './useWindowResize'
-import { DEFAULT_WINDOW_SIZE } from '../types'
+import { DEFAULT_WINDOW_SIZE, type SidebarDirection, type SidebarMode } from '../types'
 import { on, callLua, setResourceKvp } from '../fivem'
 
 const MIN_WIDTH = 500
@@ -13,12 +13,16 @@ interface UseWindowChromeOptions {
   visible: boolean
   windowPosData: WindowPosition | null
   windowSizeData: WindowSize | null
+  sidebarMode: SidebarMode
+  sidebarDirection: SidebarDirection
 }
 
 export function useWindowChrome({
   visible,
   windowPosData,
   windowSizeData,
+  sidebarMode,
+  sidebarDirection,
 }: UseWindowChromeOptions) {
   const [windowPos, setWindowPos] = useState<WindowPosition>({ x: 0, y: 0 })
   const [windowSize, setWindowSize] = useState<WindowSize>(DEFAULT_WINDOW_SIZE)
@@ -162,6 +166,9 @@ export function useWindowChrome({
     contentCollapsed,
     setContentCollapsed,
     () => windowSize.width,
+    () => windowSize.height,
+    sidebarMode,
+    sidebarDirection,
     handleCollapseAnimationFinish,
   )
 
