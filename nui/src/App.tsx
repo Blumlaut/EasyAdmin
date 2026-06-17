@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useToast } from './hooks/useToast'
@@ -27,6 +27,8 @@ const CLEANUP_TYPES: CleanupType[] = ['cars', 'peds', 'props']
 
 function App() {
   const [visible, setVisible] = useState(false)
+  const [hintFading, setHintFading] = useState(false)
+  const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // === Hooks ===
 
@@ -63,6 +65,29 @@ function App() {
       }
     })
   }, [chrome, nav])
+
+  // === Background hint auto-fade ===
+
+  useEffect(() => {
+    if (chrome.nuiBackground) {
+      setHintFading(false)
+      hintTimerRef.current = setTimeout(() => {
+        setHintFading(true)
+      }, 5000)
+    } else {
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current)
+        hintTimerRef.current = null
+      }
+      setHintFading(false)
+    }
+    return () => {
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current)
+        hintTimerRef.current = null
+      }
+    }
+  }, [chrome.nuiBackground])
 
   // Player updates (selected player state pushed from Lua)
   useEffect(() => {
@@ -374,7 +399,11 @@ function App() {
       {toast && <Toast message={toast.text} type={toast.type} />}
 
       {chrome.nuiBackground && (
-        <div className="ea-background-hint" role="status" aria-live="polite">
+        <div
+          className={`ea-background-hint${hintFading ? ' ea-background-hint--fading' : ''}`}
+          role="status"
+          aria-live="polite"
+        >
           <kbd>ALT</kbd>
           <span>Press ALT to unfold</span>
         </div>

@@ -257,9 +257,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
-  background: rgba(10, 14, 20, 0.85);
-  backdrop-filter: var(--blur-sm);
-  -webkit-backdrop-filter: var(--blur-sm);
+  background: rgba(10, 14, 20, 0.5);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   color: var(--text-secondary);
@@ -268,6 +266,12 @@
   z-index: calc(var(--z-window) + 1);
   pointer-events: none;
   white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.ea-background-hint--fading {
+  opacity: 0;
 }
 
 .ea-background-hint kbd {
