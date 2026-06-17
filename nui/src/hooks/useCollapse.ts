@@ -8,6 +8,7 @@ export function useCollapse(
   contentCollapsed: boolean,
   setContentCollapsed: (v: boolean) => void,
   getExpandedWidth: () => number,
+  onAnimationFinish?: () => void,
 ) {
   const toggleCollapsed = useCallback(() => {
     const el = windowRef.current
@@ -59,6 +60,7 @@ export function useCollapse(
     widthAnim.onfinish = () => {
       document.documentElement.style.overflowX = ''
       el.style.width = isCollapsing ? `${toWidth}px` : ''
+      onAnimationFinish?.()
       // Restore content to static + apply flex collapse
       if (contentEl) {
         contentEl.style.position = ''
@@ -73,7 +75,7 @@ export function useCollapse(
       }
     }
     widthAnim.oncancel = () => { document.documentElement.style.overflowX = '' }
-  }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth])
+  }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth, onAnimationFinish])
 
   return toggleCollapsed
 }

@@ -20,6 +20,11 @@ export interface UseWindowDragOptions {
    * Called with the new clamped position on every mouse-move during a drag.
    */
   onPositionChange: (next: WindowPosition) => void
+  /**
+   * Called once when a drag ends (mouseup), with the final clamped position.
+   * Use this to persist the position (e.g. save to KVP).
+   */
+  onDragEnd?: (position: WindowPosition) => void
 }
 
 /**
@@ -32,10 +37,10 @@ export interface UseWindowDragOptions {
  * The drag is global (uses document-level mousemove/mouseup) so it
  * continues correctly even when the cursor leaves the window.
  *
- * The position is clamped so that at least ~100px of the window
- * remains on-screen in any direction.
+ * The position is clamped so the entire window stays on-screen
+ * (0px margin). Actual window dimensions are measured dynamically.
  */
-export function useWindowDrag({ enabled, position, onPositionChange }: UseWindowDragOptions) {
+export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd }: UseWindowDragOptions) {
   // Keep the latest position in a ref so the effect below can read it
   // without needing to re-subscribe on every move.
   const positionRef = useRef<WindowPosition>(position)
@@ -57,15 +62,29 @@ export function useWindowDrag({ enabled, position, onPositionChange }: UseWindow
       const dy = e.clientY - drag.startY
       const newX = drag.startPos.x + dx
       const newY = drag.startPos.y + dy
-      // Clamp so that at least 100px width / 40px height of the window
-      // stays visible. This prevents the user from dragging the window
-      // entirely off-screen.
-      const minVisibleW = 100
-      const minVisibleH = 40
-      const maxX = window.innerWidth - minVisibleW
-      const maxY = window.innerHeight - minVisibleH
-      const minX = -(1210 - minVisibleW) // sidebar(260) + minVisibleW(100) - maxW(1210) ~ −850
-      const minY = -(750 - minVisibleH)
+
+      // Clamp so the entire window stays on-screen (0px margin).
+      // Measure actual dimensions each frame to account for any
+      // CSS changes (font scaling, etc.) while dragging.
+      const el = document.querySelector('.ea-window') as HTMLElement | null
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const ww = el ? el.offsetWidth : 1210
+      const wh = el ? el.offsetHeight : 750
+
+      // X: --ea-left = innerWidth/2 - ww/2 + x.  Entire window on-screen means:
+      //   left edge >= 0  =>  x >= ww/2 - vw
+      //   right edge <= vw =>  x <= 0
+      const minX = Math.min(0, ww / 2 - vw)
+      const maxX = 0
+
+      // Y: top = vh/2 + translateY(-wh/2 + y).  Entire window on-screen means:
+      //   top >= 0  =>  y >= wh/2 - vh
+      //   bottom <= vh =>  y <= vh - wh/2 - vh = -wh/2 + vh ... simplified:
+      //   y <= vh/2 - wh/2
+      const minY = Math.min(0, wh / 2 - vh)
+      const maxY = 0
+
       onPositionChange({
         x: Math.max(minX, Math.min(maxX, newX)),
         y: Math.max(minY, Math.min(maxY, newY)),
@@ -73,6 +92,10 @@ export function useWindowDrag({ enabled, position, onPositionChange }: UseWindow
     }
 
     function onMouseUp() {
+      if (drag) {
+        // Fire onDragEnd with the latest position from the ref
+        onDragEnd?.(positionRef.current)
+      }
       drag = null
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
@@ -108,5 +131,5 @@ export function useWindowDrag({ enabled, position, onPositionChange }: UseWindow
       document.removeEventListener('mouseup', onMouseUp)
       drag = null
     }
-  }, [enabled, onPositionChange])
+  }, [enabled, onPositionChange, onDragEnd])
 }

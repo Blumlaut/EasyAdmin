@@ -12,7 +12,7 @@ import type {
   Report,
   View,
 } from './types'
-import { on, callLua } from './fivem'
+import { on, callLua, setResourceKvp } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation, type NavItem } from './components/Navigation'
 import { Toast } from './components/Toast'
@@ -218,6 +218,15 @@ function App() {
     })
   }, [])
 
+  // Restore saved window position from KVP
+  useEffect(() => {
+    return on<WindowPosition>('initWindowPos', (data) => {
+      if (data && typeof data.x === 'number' && typeof data.y === 'number') {
+        setWindowPos(data)
+      }
+    })
+  }, [])
+
   // Reason shortcuts from server (ea_addShortcut)
   useEffect(() => {
     return on<{ shortcuts: ReasonShortcut[] }>('updateShortcuts', (data) => {
@@ -389,6 +398,23 @@ function App() {
     setWindowPos(pos)
   }, [])
 
+  // Persist window position to KVP (throttled to 500ms).
+  // KVP writes are expensive so we avoid spamming them during rapid
+  // drag/expand operations.
+  const lastWindowPosSaveRef = useRef(0)
+  const saveWindowPosition = useCallback((pos: WindowPosition) => {
+    const now = Date.now()
+    if (now - lastWindowPosSaveRef.current < 500) return
+    lastWindowPosSaveRef.current = now
+    setResourceKvp('ixWindowPos', String(pos.x))
+    setResourceKvp('iyWindowPos', String(pos.y))
+  }, [])
+
+  // Called once per drag when the user releases the mouse.
+  const handleDragEnd = useCallback((pos: WindowPosition) => {
+    saveWindowPosition(pos)
+  }, [saveWindowPosition])
+
   // Window dragging is only enabled in non-fullscreen modes (the user
   // spec: drag the top bar when not fullscreen). In fullscreen the
   // window is already maximized so dragging is meaningless.
@@ -398,7 +424,33 @@ function App() {
     enabled: dragEnabled,
     position: windowPos,
     onPositionChange: handlePositionChange,
+    onDragEnd: handleDragEnd,
   })
+
+  // After the collapse/expand animation finishes, ensure the window
+  // is fully on-screen. On expand the width grows and the right edge
+  // may extend past the viewport — bump the position left to compensate.
+  // Uses a ref for windowPos so the async callback always reads the
+  // latest value (closures capture stale state).
+  const windowPosRef = useRef(windowPos)
+  windowPosRef.current = windowPos
+
+  const handleCollapseAnimationFinish = useCallback(() => {
+    const el = windowRef.current
+    if (!el) return
+    const ww = el.offsetWidth
+    const vw = window.innerWidth
+    const pos = windowPosRef.current
+    const rightEdge = Math.round(vw / 2 - ww / 2 + pos.x)
+    if (rightEdge > vw) {
+      // Bump left so the right edge sits at the viewport edge
+      setWindowPos((prev) => {
+        const adjusted = { ...prev, x: prev.x - (rightEdge - vw) }
+        saveWindowPosition(adjusted)
+        return adjusted
+      })
+    }
+  }, [saveWindowPosition])
 
   const toggleCollapsed = useCollapse(
     windowRef,
@@ -409,6 +461,7 @@ function App() {
       const vwWidth = Math.round(window.innerWidth * (settings.menuSize === 'large' ? 0.96 : 0.92))
       return Math.min(vwWidth, maxWidth)
     },
+    handleCollapseAnimationFinish,
   )
 
   // The user clicked the area outside the window. Tell Lua to release

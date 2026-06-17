@@ -179,6 +179,17 @@ function NuiSendSettings()
       menuSize = KvpGet('smenuSize') or 'default',
     },
   })
+
+  -- Send saved window position
+  local posX = KvpGet('ixWindowPos')
+  local posY = KvpGet('iyWindowPos')
+  SendNUIMessage({
+    action = 'initWindowPos',
+    data = {
+      x = posX and tonumber(posX) or 0,
+      y = posY and tonumber(posY) or 0,
+    },
+  })
 end
 
 function NuiCloseMenu()
