@@ -146,19 +146,19 @@ export function useWindowChrome({
 
   // === Collapse ===
 
-  const handleCollapseAnimationFinish = useCallback(() => {
+  const handleCollapseAnimationFinish = useCallback((collapsed: boolean) => {
     const el = windowRef.current
     if (!el) return
 
-    const ww = el.offsetWidth
-    const wh = el.offsetHeight
-    const vw = window.innerWidth
-    const vh = window.innerHeight
+    const size = getRenderedWindowSize({
+      contentCollapsed: collapsed,
+      sidebarMode,
+      expandedSize: windowSizeRef.current,
+    })
     const pos = windowPosRef.current
-
     const clamped = clampWindowRectToViewport(
-      { x: pos.x, y: pos.y, width: ww, height: wh },
-      { width: vw, height: vh },
+      { x: pos.x, y: pos.y, width: size.width, height: size.height },
+      { width: window.innerWidth, height: window.innerHeight },
     )
 
     if (clamped.x !== pos.x || clamped.y !== pos.y) {
@@ -166,7 +166,7 @@ export function useWindowChrome({
       windowPosRef.current = { x: clamped.x, y: clamped.y }
       saveWindowPosition({ x: clamped.x, y: clamped.y })
     }
-  }, [saveWindowPosition])
+  }, [saveWindowPosition, sidebarMode])
 
   const toggleCollapsed = useCollapse(
     windowRef,
@@ -221,11 +221,13 @@ export function useWindowChrome({
       })
       el.style.setProperty('--ea-left', `${pos.x}px`)
       el.style.setProperty('--ea-top', `${pos.y}px`)
-      el.style.width = `${size.width}px`
-      el.style.height = `${size.height}px`
+      if (!contentCollapsed || sidebarDirection === 'right' || sidebarDirection === 'down') {
+        el.style.width = `${size.width}px`
+        el.style.height = `${size.height}px`
+      }
     })
     return () => window.cancelAnimationFrame(raf)
-  }, [visible, contentCollapsed, sidebarMode])
+  }, [visible, contentCollapsed, sidebarMode, sidebarDirection])
 
   useEffect(() => {
     return applyWindowChrome()

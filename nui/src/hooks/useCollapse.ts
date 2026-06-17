@@ -14,7 +14,7 @@ export function useCollapse(
   setWindowPosition: (pos: { x: number; y: number }) => void,
   sidebarMode: SidebarMode,
   sidebarDirection: SidebarDirection,
-  onAnimationFinish?: () => void,
+  onAnimationFinish?: (collapsed: boolean) => void,
 ) {
   const toggleCollapsed = useCallback(() => {
     const el = windowRef.current
@@ -100,7 +100,7 @@ export function useCollapse(
         setWindowPosition({ x: targetRect.x, y: targetRect.y })
       }
       contentAnim.cancel()
-      onAnimationFinish?.()
+      onAnimationFinish?.(isCollapsing)
       if (contentEl) {
         contentEl.style.position = ''
         contentEl.style.left = ''
