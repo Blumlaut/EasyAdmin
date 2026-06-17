@@ -13,7 +13,10 @@
 function KvpGet(key)
   local prefix = key:sub(1, 1)
   if prefix == 'i' then
-    return GetResourceKvpInt(key)
+    -- GetResourceKvpInt returns 0 for unset keys, so treat 0 as nil
+    -- to allow `or` fallbacks to work correctly
+    local val = GetResourceKvpInt(key)
+    return val ~= 0 and val or nil
   elseif prefix == 'f' then
     return GetResourceKvpFloat(key)
   else

@@ -179,25 +179,21 @@ function NuiSendSettings()
     },
   })
 
-  -- Send saved window position
-  local posX = KvpGet('ixWindowPos')
-  local posY = KvpGet('iyWindowPos')
+  -- Send saved window position (nil if unset — JS handles centering)
   SendNUIMessage({
     action = 'initWindowPos',
     data = {
-      x = posX and tonumber(posX) or 0,
-      y = posY and tonumber(posY) or 0,
+      x = KvpGet('ixWindowPos'),
+      y = KvpGet('iyWindowPos'),
     },
   })
 
   -- Send saved window size
-  local sizeW = KvpGet('iwSizeW')
-  local sizeH = KvpGet('iwSizeH')
   SendNUIMessage({
     action = 'initWindowSize',
     data = {
-      width = sizeW and tonumber(sizeW) or 1210,
-      height = sizeH and tonumber(sizeH) or 750,
+      width = KvpGet('iwSizeW') or 1210,
+      height = KvpGet('iwSizeH') or 750,
     },
   })
 end
