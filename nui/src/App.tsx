@@ -543,7 +543,6 @@ function App() {
           <div
             className="ea-backdrop"
             onClick={handleBackdropClick}
-            aria-hidden="true"
           />
         )}
 
