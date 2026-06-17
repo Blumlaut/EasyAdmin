@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Icon } from './icons'
 
 export type NavItemType = 'item' | 'separator' | 'header'
@@ -46,20 +46,12 @@ interface NavigationProps {
   activeId: string
   onSelect: (id: string) => void
   orientation?: 'vertical' | 'horizontal'
-  dropdownDirection?: 'up' | 'down'
 }
 
-export function Navigation({
-  items,
-  activeId,
-  onSelect,
-  orientation = 'vertical',
-  dropdownDirection = 'down',
-}: NavigationProps) {
-  const navRef = useRef<Record<string, HTMLButtonElement | null>>({})
+export function Navigation({ items, activeId, onSelect, orientation = 'vertical' }: NavigationProps) {
+  const navRef = useRef<HTMLButtonElement[]>([])
   // Track which dropdown groups are expanded (keyed by parent id)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
-  const [dropdownPositions, setDropdownPositions] = useState<Record<string, CSSProperties>>({})
 
   // Auto-expand a dropdown when its parent or a child is active
   useEffect(() => {
@@ -77,8 +69,10 @@ export function Navigation({
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))
   }, [])
 
-  const setItemRef = useCallback((id: string) => (el: HTMLButtonElement | null) => {
-    navRef.current[id] = el
+  const initItemRefs = useCallback((el: HTMLButtonElement | null) => {
+    if (el) {
+      navRef.current.push(el)
+    }
   }, [])
 
   // Collect all leaf (non-dropdown) items for keyboard navigation
@@ -140,59 +134,13 @@ export function Navigation({
           break
         }
       }
-      navRef.current[target.id]?.focus()
+      // Find the DOM element for the target and focus it
+      const targetEl = navRef.current.find(
+        (el) => el && el.getAttribute('data-nav-id') === target.id,
+      )
+      targetEl?.focus()
     }
   }, [items, activeId, onSelect, leafItems, orientation])
-
-  const updateDropdownPositions = useCallback(() => {
-    if (orientation !== 'horizontal') {
-      setDropdownPositions({})
-      return
-    }
-
-    const nextPositions: Record<string, CSSProperties> = {}
-    const gap = 4
-
-    for (const item of items) {
-      if (!isNavItem(item) || !item.children || !expanded[item.id]) continue
-
-      const triggerEl = navRef.current[item.id]
-      if (!triggerEl) continue
-
-      const rect = triggerEl.getBoundingClientRect()
-      nextPositions[item.id] = dropdownDirection === 'up'
-        ? {
-            left: rect.left,
-            bottom: window.innerHeight - rect.top + gap,
-          }
-        : {
-            left: rect.left,
-            top: rect.bottom + gap,
-          }
-    }
-
-    setDropdownPositions(nextPositions)
-  }, [dropdownDirection, expanded, items, orientation])
-
-  useEffect(() => {
-    if (orientation !== 'horizontal') {
-      setDropdownPositions({})
-      return
-    }
-
-    updateDropdownPositions()
-
-    if (!Object.values(expanded).some(Boolean)) {
-      return
-    }
-
-    window.addEventListener('resize', updateDropdownPositions)
-    document.addEventListener('scroll', updateDropdownPositions, true)
-    return () => {
-      window.removeEventListener('resize', updateDropdownPositions)
-      document.removeEventListener('scroll', updateDropdownPositions, true)
-    }
-  }, [expanded, orientation, updateDropdownPositions])
 
   const renderItem = (item: NavItem, index: number) => {
     // Render separator
@@ -220,7 +168,7 @@ export function Navigation({
     return (
       <div key={navItem.id} className={hasChildren ? 'nav-dropdown' : undefined}>
         <button
-          ref={setItemRef(navItem.id)}
+          ref={initItemRefs}
           data-nav-id={navItem.id}
           className={`nav-item${isActive ? ' nav-item-active' : ''}${hasChildren ? ' nav-dropdown-toggle' : ''}${isParentActive && !isActive ? ' nav-dropdown-parent-active' : ''}`}
           onClick={() => {
@@ -262,10 +210,7 @@ export function Navigation({
         </button>
         {/* Always render children container for animated expand/collapse */}
         {hasChildren && (
-          <div
-            className={`nav-dropdown-children${isExpanded ? ' nav-dropdown-children-open' : ''}`}
-            style={orientation === 'horizontal' ? dropdownPositions[navItem.id] : undefined}
-          >
+          <div className={`nav-dropdown-children${isExpanded ? ' nav-dropdown-children-open' : ''}`}>
             <div className="nav-dropdown-children-inner">
               {navItem.children!.map((child, idx) => renderItem(child, idx))}
             </div>
@@ -277,7 +222,7 @@ export function Navigation({
 
   return (
     <nav
-      className={`navigation navigation--${orientation}${orientation === 'horizontal' ? ` navigation--dropdown-${dropdownDirection}` : ''}`}
+      className={`navigation navigation--${orientation}`}
       role="navigation"
       aria-label="Main navigation"
       onKeyDown={handleKeyDown}

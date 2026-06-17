@@ -44,17 +44,16 @@ describe('Navigation', () => {
     expect(screen.getByRole('navigation')).toHaveClass('navigation--horizontal')
   })
 
-  it('applies upward dropdown class for horizontal navigation when requested', () => {
-    render(
-      <Navigation
-        items={dropdownItems}
-        activeId="main"
-        onSelect={() => {}}
-        orientation="horizontal"
-        dropdownDirection="up"
-      />,
-    )
-    expect(screen.getByRole('navigation')).toHaveClass('navigation--dropdown-up')
+  it('renders expanded dropdown children inline in horizontal mode', async () => {
+    const user = userEvent.setup()
+    render(<Navigation items={dropdownItems} activeId="main" onSelect={() => {}} orientation="horizontal" />)
+
+    await user.click(screen.getByText('Statistics'))
+
+    const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
+    expect(dropdown).toBeInTheDocument()
+    expect(dropdown?.querySelector('.nav-dropdown-children')).toHaveClass('nav-dropdown-children-open')
+    expect(dropdown?.querySelector('.nav-dropdown-children .nav-item')).toBeInTheDocument()
   })
 
   it('shows badge when provided', () => {
