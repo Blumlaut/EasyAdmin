@@ -12,12 +12,6 @@
   transform: rotate(180deg);
 }
 
-/* Window styling when collapsed — keep subtle shadow, remove border */
-.ea-window--collapsed {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
-  border: none !important;
-}
-
 /* Content wrapper flex collapse — applied AFTER animation finishes */
 .ea-content--collapsed {
   flex: 0 0 0 !important;
