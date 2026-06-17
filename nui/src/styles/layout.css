@@ -210,6 +210,16 @@
   padding: var(--space-3) var(--space-4);
 }
 
+.ea-window--sidebar-horizontal .topbar {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.ea-window--sidebar-up .main-content {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .topbar {
   height: 52px;
   display: flex;
@@ -219,6 +229,8 @@
   z-index: var(--z-topbar);
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg-secondary);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
   /* The topbar is the window drag handle. Cursors on buttons are
      restored to `pointer` below so the drag affordance is only shown
      on the empty/title areas. */
@@ -254,6 +266,8 @@
   overflow: auto;
   padding: var(--space-6);
   background: var(--bg-primary);
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
   /* Inset scrollbars so the outer edge always has a gap for window resize. */
   margin-right: 4px;
   margin-bottom: 4px;
