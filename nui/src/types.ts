@@ -121,7 +121,8 @@ export type View =
   | 'server'
   | 'resources'
   | 'resource-detail'
-  | 'statistics'
+  | 'player-statistics'
+  | 'server-metrics'
   | 'settings'
 
 // Ban duration preset indices

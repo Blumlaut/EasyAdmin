@@ -28,7 +28,8 @@ import { BanListPage } from './pages/Bans/BanListPage'
 import { BanDetailPage } from './pages/Bans/BanDetailPage'
 import { ReportListPage } from './pages/Reports/ReportListPage'
 import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
-import { StatisticsPage } from './pages/Statistics/StatisticsPage'
+import { PlayerStatisticsPage } from './pages/PlayerStatistics/PlayerStatisticsPage'
+import { ServerMetricsPage } from './pages/ServerMetrics/ServerMetricsPage'
 import { ServerPage } from './pages/Server/ServerPage'
 import { ResourcesPage } from './pages/Resources/ResourcesPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
@@ -38,7 +39,15 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'players', label: 'Players', icon: 'users' },
   { id: 'bans', label: 'Ban List', icon: 'ban' },
   { id: 'reports', label: 'Reports', icon: 'flag' },
-  { id: 'statistics', label: 'Statistics', icon: 'chart-bar' },
+  {
+    id: 'statistics',
+    label: 'Statistics',
+    icon: 'chart-bar',
+    children: [
+      { id: 'player-statistics', label: 'Player Statistics', icon: 'users' },
+      { id: 'server-metrics', label: 'Server Metrics', icon: 'activity' },
+    ],
+  },
   { id: 'server', label: 'Server', icon: 'server' },
   { id: 'resources', label: 'Resources', icon: 'layers' },
   { id: 'settings', label: 'Settings', icon: 'settings' },
@@ -343,7 +352,7 @@ function App() {
     if (view === 'ban-detail') return 'bans'
     if (view === 'report-detail') return 'reports'
     if (view === 'resource-detail') return 'resources'
-    if (view === 'statistics') return 'statistics'
+    if (view === 'player-statistics' || view === 'server-metrics') return view
     return view
   })()
 
@@ -352,7 +361,18 @@ function App() {
     let disabled = false
     if (item.id === 'bans' && !permissions['player.ban.view']) disabled = true
     if (item.id === 'reports' && !permissions['player.reports.view']) disabled = true
-    if (item.id === 'statistics' && !permissions['server.statistics.view']) disabled = true
+    if (item.id === 'statistics') {
+      // Statistics dropdown: disable if the user can't access any child
+      disabled = !permissions['server.statistics.view']
+      // Also gate children individually
+      const children = item.children?.map((child) => {
+        let childDisabled = false
+        if (child.id === 'player-statistics' && !permissions['server.statistics.view']) childDisabled = true
+        if (child.id === 'server-metrics' && !permissions['server.statistics.view']) childDisabled = true
+        return { ...child, disabled: childDisabled }
+      })
+      return { ...item, disabled, children: children?.length ? children : undefined }
+    }
     if (
       item.id === 'server' &&
       !permissions['server.announce'] &&
@@ -374,7 +394,7 @@ function App() {
   const availableViews: View[] = ['main', 'players']
   if (permissions['player.ban.view']) availableViews.push('bans')
   if (permissions['player.reports.view']) availableViews.push('reports')
-  if (permissions['server.statistics.view']) availableViews.push('statistics')
+  if (permissions['server.statistics.view']) availableViews.push('player-statistics', 'server-metrics')
   if (
     permissions['server.announce'] ||
     permissions['server.convars'] ||
@@ -656,30 +676,28 @@ function App() {
                 }))}
                 activeId={activeNavId}
                 onSelect={(id) => {
+                  const viewMap: Record<string, View> = {
+                    'main': 'main',
+                    'players': 'players',
+                    'bans': 'bans',
+                    'reports': 'reports',
+                    'player-statistics': 'player-statistics',
+                    'server-metrics': 'server-metrics',
+                    'server': 'server',
+                    'resources': 'resources',
+                    'settings': 'settings',
+                  }
+                  const targetView = viewMap[id]
+                  if (!targetView) return
+
                   // Auto-unfold when clicking a sidebar item while collapsed,
                   // but delay navigation so the animation isn't interrupted
                   if (contentCollapsed) {
                     toggleCollapsed()
-                    setTimeout(() => {
-                      if (id === 'main') navigateTo('main')
-                      else if (id === 'players') navigateTo('players')
-                      else if (id === 'bans') navigateTo('bans')
-                      else if (id === 'reports') navigateTo('reports')
-                      else if (id === 'statistics') navigateTo('statistics')
-                      else if (id === 'server') navigateTo('server')
-                      else if (id === 'resources') navigateTo('resources')
-                      else if (id === 'settings') navigateTo('settings')
-                    }, 50)
+                    setTimeout(() => navigateTo(targetView), 50)
                     return
                   }
-                  if (id === 'main') navigateTo('main')
-                  else if (id === 'players') navigateTo('players')
-                  else if (id === 'bans') navigateTo('bans')
-                  else if (id === 'reports') navigateTo('reports')
-                  else if (id === 'statistics') navigateTo('statistics')
-                  else if (id === 'server') navigateTo('server')
-                  else if (id === 'resources') navigateTo('resources')
-                  else if (id === 'settings') navigateTo('settings')
+                  navigateTo(targetView)
                 }}
               />
             </div>
@@ -818,8 +836,14 @@ function App() {
                 />
               )}
 
-              {view === 'statistics' && (
-                <StatisticsPage
+              {view === 'player-statistics' && (
+                <PlayerStatisticsPage
+                  onToast={showToast}
+                />
+              )}
+
+              {view === 'server-metrics' && (
+                <ServerMetricsPage
                   onToast={showToast}
                 />
               )}
@@ -902,7 +926,8 @@ function getPageTitle(
   if (view === 'ban-detail' && banId) return `Ban ${banId}`
   if (view === 'reports') return 'Reports'
   if (view === 'report-detail' && reportId !== null) return `Report #${reportId}`
-  if (view === 'statistics') return 'Statistics'
+  if (view === 'player-statistics') return 'Player Statistics'
+  if (view === 'server-metrics') return 'Server Metrics'
   if (view === 'server') return 'Server Management'
   if (view === 'resources') return 'Resource Management'
   if (view === 'resource-detail') return 'Resource Details'

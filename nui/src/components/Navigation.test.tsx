@@ -8,6 +8,20 @@ const items = [
   { id: 'bans', label: 'Bans', icon: 'ban' as const, disabled: true },
 ]
 
+const dropdownItems = [
+  { id: 'main', label: 'Dashboard', icon: 'home' as const },
+  {
+    id: 'statistics',
+    label: 'Statistics',
+    icon: 'chart-bar' as const,
+    children: [
+      { id: 'player-statistics', label: 'Player Statistics', icon: 'users' as const },
+      { id: 'server-metrics', label: 'Server Metrics', icon: 'activity' as const },
+    ],
+  },
+  { id: 'settings', label: 'Settings', icon: 'settings' as const },
+]
+
 describe('Navigation', () => {
   it('renders all navigation items', () => {
     render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
@@ -39,5 +53,57 @@ describe('Navigation', () => {
     render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
     const bansBtn = screen.getByText('Bans').closest('button')
     expect(bansBtn).toBeDisabled()
+  })
+
+  describe('dropdown items', () => {
+    it('renders dropdown parent with children collapsed by default', () => {
+      render(<Navigation items={dropdownItems} activeId="main" onSelect={() => {}} />)
+      expect(screen.getByText('Statistics')).toBeInTheDocument()
+      // Children are in DOM for animation but hidden via grid-template-rows: 0fr
+      const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
+      expect(dropdown).toBeInTheDocument()
+      const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
+      expect(childrenContainer).not.toHaveClass('nav-dropdown-children-open')
+    })
+
+    it('expands dropdown when clicked', async () => {
+      const user = userEvent.setup()
+      const onSelect = vi.fn()
+      render(<Navigation items={dropdownItems} activeId="main" onSelect={onSelect} />)
+      await user.click(screen.getByText('Statistics'))
+      const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
+      const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
+      expect(childrenContainer).toHaveClass('nav-dropdown-children-open')
+      // Should navigate to first enabled child
+      expect(onSelect).toHaveBeenCalledWith('player-statistics')
+    })
+
+    it('highlights parent when a child is active', () => {
+      render(<Navigation items={dropdownItems} activeId="player-statistics" onSelect={() => {}} />)
+      const parentBtn = screen.getByText('Statistics').closest('button')
+      expect(parentBtn).toHaveClass('nav-dropdown-parent-active')
+      const childBtn = screen.getByText('Player Statistics').closest('button')
+      expect(childBtn).toHaveClass('nav-item-active')
+    })
+
+    it('auto-expands dropdown when child is active', () => {
+      render(<Navigation items={dropdownItems} activeId="server-metrics" onSelect={() => {}} />)
+      const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
+      const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
+      expect(childrenContainer).toHaveClass('nav-dropdown-children-open')
+    })
+
+    it('collapses dropdown on second click', async () => {
+      const user = userEvent.setup()
+      const onSelect = vi.fn()
+      render(<Navigation items={dropdownItems} activeId="player-statistics" onSelect={onSelect} />)
+      // Dropdown should be expanded (auto-expand because child is active)
+      const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
+      const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
+      expect(childrenContainer).toHaveClass('nav-dropdown-children-open')
+      // Click to collapse
+      await user.click(screen.getByText('Statistics'))
+      expect(childrenContainer).not.toHaveClass('nav-dropdown-children-open')
+    })
   })
 })

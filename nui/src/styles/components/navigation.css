@@ -56,3 +56,69 @@
   font-weight: var(--font-normal);
 }
 
+/* ============================================================
+   Navigation dropdown
+   ============================================================ */
+
+.nav-dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-dropdown-toggle {
+  /* No extra padding — inherits from .nav-item */
+}
+
+.nav-dropdown-chevron {
+  transition: transform 200ms ease-out;
+  flex-shrink: 0;
+}
+
+.nav-dropdown-chevron-open {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-parent-active {
+  background: var(--bg-active);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* Animated expand/collapse using grid-template-rows trick.
+   Transitions from 0fr to 1fr for smooth height animation
+   without needing JS measurement. */
+.nav-dropdown-children {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease-out;
+}
+
+.nav-dropdown-children-open {
+  grid-template-rows: 1fr;
+}
+
+.nav-dropdown-children-inner {
+  overflow: hidden;
+}
+
+.nav-dropdown-children .nav-item {
+  margin-left: var(--space-5);
+  margin-right: var(--space-3);
+  padding-left: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.nav-dropdown-children .nav-item::before {
+  content: '';
+  position: absolute;
+  left: var(--space-5);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-subtle);
+  pointer-events: none;
+}
+
+.nav-dropdown-children .nav-item {
+  position: relative;
+}
+

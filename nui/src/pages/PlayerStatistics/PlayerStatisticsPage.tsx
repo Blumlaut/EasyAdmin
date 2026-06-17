@@ -16,7 +16,7 @@ import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 // Types
 // ============================================================
 
-interface StatisticsPageProps {
+interface PlayerStatisticsPageProps {
   onToast: (text: string, type?: Notification['type']) => void
 }
 
@@ -385,7 +385,7 @@ function StatisticsSkeleton() {
 // StatisticsPage
 // ============================================================
 
-export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
+export function PlayerStatisticsPage({ onToast: _onToast }: PlayerStatisticsPageProps) {
   const [range, setRange] = useState<StatsRange>('30d')
   const [summary, setSummary] = useState<StatsSummary | null>(null)
   const [dailyPeaks, setDailyPeaks] = useState<DailyPeak[]>([])
@@ -491,7 +491,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
       {/* Header with range selector */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">Server Statistics</h3>
+          <h3 className="text-lg font-semibold">Player Statistics</h3>
           <p className="text-xs text-muted mt-0.5">Long-term analytics and player insights</p>
         </div>
         <div className="flex items-center gap-0.5">
