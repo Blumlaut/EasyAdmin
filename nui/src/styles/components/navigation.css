@@ -191,6 +191,12 @@
   z-index: 20;
 }
 
+.navigation--horizontal.navigation--dropdown-up .nav-dropdown-children {
+  top: auto;
+  bottom: calc(100% + var(--space-1));
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+}
+
 .navigation--horizontal .nav-dropdown-children-open {
   display: block;
 }

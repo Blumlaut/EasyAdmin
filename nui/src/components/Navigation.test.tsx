@@ -44,6 +44,19 @@ describe('Navigation', () => {
     expect(screen.getByRole('navigation')).toHaveClass('navigation--horizontal')
   })
 
+  it('applies upward dropdown class for horizontal navigation when requested', () => {
+    render(
+      <Navigation
+        items={dropdownItems}
+        activeId="main"
+        onSelect={() => {}}
+        orientation="horizontal"
+        dropdownDirection="up"
+      />,
+    )
+    expect(screen.getByRole('navigation')).toHaveClass('navigation--dropdown-up')
+  })
+
   it('shows badge when provided', () => {
     render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
     expect(screen.getByText('5')).toBeInTheDocument()

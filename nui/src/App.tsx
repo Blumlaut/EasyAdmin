@@ -229,6 +229,7 @@ function App() {
                 activeId={nav.activeNavId}
                 onSelect={handleNavSelect}
                 orientation={data.settings.sidebarMode}
+                dropdownDirection={data.settings.sidebarDirection === 'up' ? 'up' : 'down'}
               />
             </div>
             <div className="sidebar-footer">
