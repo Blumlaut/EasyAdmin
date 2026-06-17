@@ -80,13 +80,15 @@ export function useWindowChrome({
   }, [])
 
   // Persist window position to KVP (throttled to 500ms)
+  // Clamp to minimum 1 because KvpGet treats 0 as nil (unset), which would
+  // cause position (0,0) to be lost and the window to re-center on next open.
   const lastWindowPosSaveRef = useRef(0)
   const saveWindowPosition = useCallback((pos: WindowPosition) => {
     const now = Date.now()
     if (now - lastWindowPosSaveRef.current < 500) return
     lastWindowPosSaveRef.current = now
-    setResourceKvp('ixWindowPos', String(pos.x))
-    setResourceKvp('iyWindowPos', String(pos.y))
+    setResourceKvp('ixWindowPos', String(Math.max(1, pos.x)))
+    setResourceKvp('iyWindowPos', String(Math.max(1, pos.y)))
   }, [])
 
   const handleDragEnd = useCallback((pos: WindowPosition) => {
@@ -104,9 +106,10 @@ export function useWindowChrome({
 
   // === Window resizing ===
 
+  // Clamp to minimum 1 for the same KvpGet(0)=nil reason as position.
   const saveWindowSize = useCallback((size: WindowSize) => {
-    setResourceKvp('iwSizeW', String(size.width))
-    setResourceKvp('iwSizeH', String(size.height))
+    setResourceKvp('iwSizeW', String(Math.max(1, size.width)))
+    setResourceKvp('iwSizeH', String(Math.max(1, size.height)))
   }, [])
 
   useWindowResize({

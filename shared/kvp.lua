@@ -60,8 +60,8 @@ function KvpEnsureDefaults()
     { key = 'shighContrast', value = 'false' },
     { key = 'ifontSize',     value = 100 },
     { key = 'smenuSize',     value = 'default' },
-    { key = 'ixWindowPos',   value = 0 },
-    { key = 'iyWindowPos',   value = 0 },
+    { key = 'ixWindowPos',   value = 1 },
+    { key = 'iyWindowPos',   value = 1 },
   }
 
   for _, d in ipairs(defaults) do
