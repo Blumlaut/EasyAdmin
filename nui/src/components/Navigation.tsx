@@ -194,11 +194,11 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
     const isDisabled = navItem.disabled || (hasChildren && navItem.children!.every((c) => !isNavItem(c) || c.disabled))
 
     return (
-      <div key={navItem.id} className={hasChildren ? 'nav-dropdown' : undefined}>
+      <div key={navItem.id} className={`${hasChildren ? 'nav-dropdown' : ''}${hasChildren && (isActive || isParentActive) ? ' nav-dropdown-parent' : ''}`.trimStart()}>
         <button
           ref={initItemRefs}
           data-nav-id={navItem.id}
-          className={`nav-item${isActive ? ' nav-item-active' : ''}${hasChildren ? ' nav-dropdown-toggle' : ''}${isParentActive && !isActive ? ' nav-dropdown-parent-active' : ''}`}
+          className={`nav-item${hasChildren && (isActive || isParentActive) ? ' nav-dropdown-parent-active' : ''}${!hasChildren && isActive ? ' nav-item-active' : ''}${hasChildren ? ' nav-dropdown-toggle' : ''}`}
           onClick={() => {
             if (hasChildren) {
               toggleExpanded(navItem.id)
@@ -216,10 +216,10 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
             }
           }}
           disabled={isDisabled}
-          aria-current={isActive ? 'page' : undefined}
+          aria-current={(isActive || (hasChildren && isParentActive)) ? 'page' : undefined}
           aria-disabled={isDisabled}
           aria-expanded={hasChildren ? isExpanded : undefined}
-          tabIndex={isActive ? 0 : -1}
+          tabIndex={(isActive || (hasChildren && isParentActive)) ? 0 : -1}
           style={isDisabled ? { opacity: 0.5 } : undefined}
         >
           {/* @ts-expect-error Icon name is dynamic but validated at runtime */}
