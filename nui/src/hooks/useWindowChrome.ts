@@ -65,13 +65,7 @@ export function useWindowChrome({
     })
   }, [visible])
 
-  // === Focus sync from Lua ===
-
-  useEffect(() => {
-    return on('nuiRehook', () => {
-      setNuiBackground(false)
-    })
-  }, [])
+  // === Focus sync from Lua (nuiUnhook) ===
 
   useEffect(() => {
     return on('nuiUnhook', () => {
@@ -168,13 +162,27 @@ export function useWindowChrome({
     handleCollapseAnimationFinish,
   )
 
-  // === Backdrop click ===
+  // === Focus sync from Lua (nuiRehook — unfold if collapsed) ===
+
+  useEffect(() => {
+    return on('nuiRehook', () => {
+      setNuiBackground(false)
+      if (contentCollapsed) {
+        toggleCollapsed()
+      }
+    })
+  }, [contentCollapsed, toggleCollapsed])
+
+  // === Backdrop click — collapse to sidebar + release focus ===
 
   const handleBackdropClick = useCallback(() => {
     if (nuiBackground) return
+    if (!contentCollapsed) {
+      toggleCollapsed()
+    }
     setNuiBackground(true)
     callLua('releaseFocus').catch(() => {})
-  }, [nuiBackground])
+  }, [nuiBackground, contentCollapsed, toggleCollapsed])
 
   // === Apply window chrome styles ===
 

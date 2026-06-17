@@ -5,14 +5,10 @@
 
 -- `nuiVisible`  - the menu is shown (NUI is rendering)
 -- `nuiFocused`  - the NUI has input focus (mouse + keyboard)
--- `keyFocused`  - the current focus session was initiated by the
---                 +ea_setFocused keybind. Used to avoid releasing
---                 focus that the user did not opt into.
 -- `nuiBackground` is the inverse of `nuiFocused` (kept for readability
 -- in `SendNUIMessage` payloads and for the NUI to render correctly).
 local nuiVisible   = false
 local nuiFocused   = false
-local keyFocused   = false
 local nuiBackground = false
 
 function IsNuiVisible()
@@ -26,7 +22,7 @@ end
 -- Centralized focus setter so the NUI stays in sync with the Lua state.
 -- Whenever focus is acquired we send `nuiRehook`; whenever it is
 -- released we send `nuiUnhook`. The NUI uses these to dim/undim the
--- window and show/hide the "Hold ALT to interact" hint.
+-- window and show/hide the "Press ALT to interact" hint.
 local function SetNuiFocused(focused)
   if nuiFocused == focused then
     -- No-op: still send a sync message in case the NUI state drifted
@@ -63,10 +59,7 @@ function NuiToggle()
   })
 
   if nuiVisible then
-    -- Opening the menu: always start with focus. The keyFocused flag
-    -- is reset so a subsequent -ea_setFocused does NOT release the
-    -- focus that the user did not opt into.
-    keyFocused = false
+    -- Opening the menu: always start with focus.
     SetNuiFocused(true)
     -- Send current settings to NUI
     NuiSendSettings()
@@ -83,7 +76,6 @@ function NuiToggle()
       NuiSendPlayerData()
     end)
   else
-    keyFocused = false
     SetNuiFocused(false)
   end
 end
@@ -200,7 +192,6 @@ end
 
 function NuiCloseMenu()
   nuiVisible = false
-  keyFocused = false
   SetNuiFocused(false)
   SendNUIMessage({
     action = 'menuToggle',
@@ -215,11 +206,10 @@ RegisterNUICallback('closeMenu', function(_data, cb)
 end)
 
 -- Release NUI focus but keep the menu rendered. The user can re-engage
--- by holding the +ea_setFocused keybind. Used by the "click the
+-- by pressing the -ea_setFocused keybind. Used by the "click the
 -- background" affordance in the NUI.
 RegisterNUICallback('releaseFocus', function(_data, cb)
   if nuiVisible and nuiFocused then
-    keyFocused = false
     SetNuiFocused(false)
   end
   cb({ ok = true })
@@ -248,51 +238,19 @@ RegisterNUICallback('setResourceKvp', function(data, cb)
 end)
 
 -- ============================================================
--- "Hold to interact" keybind
+-- "Press to toggle focus" keybind
 -- ============================================================
 -- The user can release the NUI into background mode (by clicking the
--- backdrop or via the unhook button) and then re-engage by holding the
--- bound key. Releasing the key returns focus to the game.
---
--- We use the +command / -command hold pattern instead of a polling
--- thread on INPUT_CHARACTER_WHEEL — this is the idiomatic FiveM
--- approach, lets the user rebind the key via FiveM's settings UI, and
--- avoids burning a render frame on a per-tick IsControlPressed check.
+-- backdrop or via the unhook button) and then re-engage by pressing
+-- the bound key. Pressing again toggles focus off.
 --
 -- The default key is Left Alt (the `lmenu` VK code). FiveM only
 -- supports RegisterKeyMapping on FiveM (not RedM), so we guard the
 -- registration behind the existing RedM flag.
 
-RegisterCommand('+ea_setFocused', function()
-  if not nuiVisible then return end
-  -- Only re-engage if we are currently in background mode. If the NUI
-  -- is already focused (e.g. the user just opened the menu), the
-  -- keypress is a no-op. We deliberately do NOT set keyFocused here
-  -- so that releasing the key doesn't unhook focus the user did not
-  -- opt into.
-  -- Guard against +command repeating while the key is held — only
-  -- act once per press to avoid spamming NUI messages and re-renders.
-  if nuiBackground then
-    keyFocused = true
-    if not nuiFocused then
-      nuiFocused = true
-      nuiBackground = false
-      SetNuiFocus(true, true)
-      SendNUIMessage({
-        action = 'nuiRehook',
-      })
-    end
-  end
-end, false)
-
 RegisterCommand('-ea_setFocused', function()
-  -- Only release focus if THIS keybind session is the one that
-  -- focused the NUI. Otherwise, leave the focus state alone so we
-  -- don't steal focus the user acquired some other way.
-  if nuiVisible and keyFocused then
-    keyFocused = false
-    SetNuiFocused(false)
-  end
+  if not nuiVisible then return end
+  SetNuiFocused(not nuiFocused)
 end, false)
 
 -- Only register the key mapping on FiveM. We can't rely on the
@@ -303,8 +261,8 @@ end, false)
 -- for the `easyadmin` keybind.
 if not CompendiumHorseObserved then
   RegisterKeyMapping(
-    '+ea_setFocused',
-    'EasyAdmin - Hold to interact with menu',
+    '-ea_setFocused',
+    'EasyAdmin - Toggle menu focus',
     'keyboard',
     'lmenu'
   )

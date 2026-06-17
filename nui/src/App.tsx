@@ -375,7 +375,7 @@ function App() {
       {chrome.nuiBackground && (
         <div className="ea-background-hint" role="status" aria-live="polite">
           <kbd>ALT</kbd>
-          <span>Hold to interact with EasyAdmin</span>
+          <span>Press ALT to unfold</span>
         </div>
       )}
     </>
