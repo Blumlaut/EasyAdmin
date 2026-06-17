@@ -188,7 +188,7 @@ function NuiSendSettings()
     data = {
       anonymous = false, -- anonymous is per-session, not persisted
       highContrast = KvpGet('shighContrast') == 'true',
-      fontSize = KvpGet('ifontSize') or 100,
+      fontSize = KvpGet('ifontSize') or 12,
       sidebarMode = sidebarMode,
       sidebarDirection = sidebarDirection,
     },

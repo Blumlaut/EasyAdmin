@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { setResourceKvp } from '../../fivem'
 import type { Notification } from '../../types'
 
@@ -8,7 +9,9 @@ interface SettingsAccessibilityProps {
   onToast: (text: string, type?: Notification['type']) => void
 }
 
-const FONT_SIZES = [80, 90, 100, 110, 120, 130, 140, 150]
+const FONT_SIZE_MIN = 10
+const FONT_SIZE_MAX = 20
+const FONT_SIZE_STEP = 1
 
 export function SettingsAccessibility({
   highContrast,
@@ -16,6 +19,8 @@ export function SettingsAccessibility({
   onChange,
   onToast,
 }: SettingsAccessibilityProps) {
+  const dragStartFontSize = useRef(fontSize)
+
   function toggleHighContrast(value: boolean) {
     onChange({ highContrast: value })
     setResourceKvp('shighContrast', value ? 'true' : 'false')
@@ -25,7 +30,7 @@ export function SettingsAccessibility({
   function setFontSize(value: number) {
     onChange({ fontSize: value })
     setResourceKvp('ifontSize', String(value))
-    onToast(`Font size set to ${value}%`, 'success')
+    onToast(`Font size set to ${value}px`, 'success')
   }
 
   return (
@@ -53,25 +58,33 @@ export function SettingsAccessibility({
 
       {/* Font Size */}
       <div className="flex flex-col gap-1 mt-3">
-        <span className="text-sm text-secondary">
-          Font size ({fontSize}%)
-        </span>
-        <span className="text-xs text-muted mb-1">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-secondary">Font size</span>
+          <span className="text-sm font-medium">{fontSize}px</span>
+        </div>
+        <span className="text-xs text-muted">
           Adjust the base text size across the entire menu.
         </span>
-        <div className="flex flex-wrap gap-1">
-          {FONT_SIZES.map((size) => (
-            <button
-              key={size}
-              type="button"
-              className={`btn btn-sm ${fontSize === size ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setFontSize(size)}
-              aria-label={`Set font size to ${size}%`}
-              aria-pressed={fontSize === size}
-            >
-              {size}%
-            </button>
-          ))}
+        <input
+          type="range"
+          className="slider"
+          min={FONT_SIZE_MIN}
+          max={FONT_SIZE_MAX}
+          step={FONT_SIZE_STEP}
+          value={fontSize}
+          onPointerDown={() => { dragStartFontSize.current = fontSize }}
+          onChange={(e) => onChange({ fontSize: Number(e.target.value) })}
+          onPointerUp={(e) => {
+            const value = Number((e.target as HTMLInputElement).value)
+            if (value !== dragStartFontSize.current) {
+              setFontSize(value)
+            }
+          }}
+          aria-label={`Font size, currently ${fontSize}px`}
+        />
+        <div className="flex justify-between text-xs text-muted">
+          <span>{FONT_SIZE_MIN}px</span>
+          <span>{FONT_SIZE_MAX}px</span>
         </div>
       </div>
     </div>

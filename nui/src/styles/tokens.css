@@ -77,14 +77,15 @@
   /* -- Typography -- */
   --font-sans: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, sans-serif;
   --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-  --text-xs: 11px;
-  --text-sm: 12px;
-  --text-base: 13px;
-  --text-lg: 14px;
-  --text-xl: 16px;
-  --text-2xl: 20px;
-  --text-3xl: 24px;
-  --text-heading: 28px;
+  /* Text sizes in em — scale with inherited font-size from .ea-window (default 12px) */
+  --text-xs: 0.917em;    /* 11px at 12px base */
+  --text-sm: 1em;        /* 12px */
+  --text-base: 1.083em;  /* 13px */
+  --text-lg: 1.167em;    /* 14px */
+  --text-xl: 1.333em;    /* 16px */
+  --text-2xl: 1.667em;   /* 20px */
+  --text-3xl: 2em;       /* 24px */
+  --text-heading: 2.333em; /* 28px */
   --leading-tight: 1.25;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
@@ -129,7 +130,7 @@
   --blur-lg: blur(24px);
 
   /* -- Section header (uppercase, muted) -- */
-  --text-section: 11px;
+  --text-section: 0.917em; /* 11px at 12px base */
   --letter-section: 0.08em;
 }
 
@@ -199,30 +200,8 @@
   --text-muted: #b0b8c0;
 }
 
-/* -- Font size scaling (applied on #root) -- */
-
-/* 80% */
-.font-size-80 { --text-xs: 9px; --text-sm: 10px; --text-base: 10px; --text-lg: 11px; --text-xl: 13px; --text-2xl: 16px; --text-3xl: 19px; --text-heading: 22px; --text-section: 9px; }
-
-/* 90% */
-.font-size-90 { --text-xs: 10px; --text-sm: 11px; --text-base: 12px; --text-lg: 13px; --text-xl: 14px; --text-2xl: 18px; --text-3xl: 22px; --text-heading: 25px; --text-section: 10px; }
-
-/* 100% (default — no override needed) */
-
-/* 110% */
-.font-size-110 { --text-xs: 12px; --text-sm: 13px; --text-base: 14px; --text-lg: 15px; --text-xl: 18px; --text-2xl: 22px; --text-3xl: 26px; --text-heading: 31px; --text-section: 12px; }
-
-/* 120% */
-.font-size-120 { --text-xs: 13px; --text-sm: 14px; --text-base: 16px; --text-lg: 17px; --text-xl: 19px; --text-2xl: 24px; --text-3xl: 29px; --text-heading: 34px; --text-section: 13px; }
-
-/* 130% */
-.font-size-130 { --text-xs: 14px; --text-sm: 15px; --text-base: 17px; --text-lg: 18px; --text-xl: 21px; --text-2xl: 26px; --text-3xl: 31px; --text-heading: 36px; --text-section: 14px; }
-
-/* 140% */
-.font-size-140 { --text-xs: 15px; --text-sm: 16px; --text-base: 18px; --text-lg: 20px; --text-xl: 22px; --text-2xl: 28px; --text-3xl: 34px; --text-heading: 39px; --text-section: 15px; }
-
-/* 150% */
-.font-size-150 { --text-xs: 17px; --text-sm: 18px; --text-base: 20px; --text-lg: 21px; --text-xl: 24px; --text-2xl: 30px; --text-3xl: 36px; --text-heading: 42px; --text-section: 17px; }
+/* -- Font size scaling -- */
+/* .ea-window sets font-size (default 12px). All text tokens use em and scale automatically. */
 
 
 /* -- Dashboard charts grid -- */

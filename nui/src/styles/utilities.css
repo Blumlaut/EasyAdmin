@@ -206,6 +206,8 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
+  /* Base font size for rem-based text tokens. Overridden by inline style from settings. */
+  font-size: 12px;
   /* Width animated by JS (Web Animations API), not CSS transitions. */
 }
 

@@ -88,7 +88,7 @@ setTimeout(() => {
     data: {
       anonymous: false,
       highContrast: false,
-      fontSize: 100,
+      fontSize: 12,
       sidebarMode: 'vertical',
       sidebarDirection: 'right',
     },

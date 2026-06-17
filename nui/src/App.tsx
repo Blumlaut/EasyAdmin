@@ -137,9 +137,12 @@ function App() {
     `ea-window--sidebar-${data.settings.sidebarDirection}`,
   ]
   if (data.settings.highContrast) windowClasses.push('high-contrast')
-  if (data.settings.fontSize !== 100) windowClasses.push(`font-size-${data.settings.fontSize}`)
   if (chrome.contentCollapsed) windowClasses.push('ea-window--collapsed')
   if (chrome.nuiBackground) windowClasses.push('ea-window--background')
+
+  const windowStyle: React.CSSProperties = {
+    fontSize: `${data.settings.fontSize}px`,
+  }
 
   if (!visible) return null
 
@@ -185,7 +188,7 @@ function App() {
           onMouseDown={chrome.handleBackdropClick}
         />
 
-        <div ref={chrome.windowRef} className={windowClasses.join(' ')}>
+        <div ref={chrome.windowRef} className={windowClasses.join(' ')} style={windowStyle}>
           <a className="skip-link" href="#ea-main-content">
             Skip to main content
           </a>

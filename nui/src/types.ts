@@ -106,7 +106,7 @@ export interface AppSettings {
   anonymous: boolean
   // Accessibility
   highContrast: boolean
-  fontSize: number // percentage: 80–150, default 100
+  fontSize: number // base font size in px: 10–20, default 12
   // Layout
   sidebarMode: SidebarMode
   sidebarDirection: SidebarDirection
