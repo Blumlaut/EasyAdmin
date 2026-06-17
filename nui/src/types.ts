@@ -104,7 +104,7 @@ export interface AppSettings {
   highContrast: boolean
   fontSize: number // percentage: 80–150, default 100
   // Menu sizing
-  menuSize: 'default' | 'large' | 'fullscreen'
+  menuSize: 'small' | 'default' | 'large' | 'fullscreen'
 }
 
 // Navigation views

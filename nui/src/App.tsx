@@ -457,8 +457,11 @@ function App() {
     contentCollapsed,
     setContentCollapsed,
     () => {
-      const maxWidth = settings.menuSize === 'large' ? 1500 : 1210
-      const vwWidth = Math.round(window.innerWidth * (settings.menuSize === 'large' ? 0.96 : 0.92))
+      let maxWidth = 1210
+      let vwRatio = 0.92
+      if (settings.menuSize === 'small') { maxWidth = 900; vwRatio = 0.8 }
+      else if (settings.menuSize === 'large') { maxWidth = 1500; vwRatio = 0.96 }
+      const vwWidth = Math.round(window.innerWidth * vwRatio)
       return Math.min(vwWidth, maxWidth)
     },
     handleCollapseAnimationFinish,
@@ -518,6 +521,7 @@ function App() {
   const windowClasses = ['ea-window']
   if (settings.highContrast) windowClasses.push('high-contrast')
   if (settings.fontSize !== 100) windowClasses.push(`font-size-${settings.fontSize}`)
+  if (settings.menuSize === 'small') windowClasses.push('ea-window--small')
   if (settings.menuSize === 'large') windowClasses.push('ea-window--large')
   if (settings.menuSize === 'fullscreen') windowClasses.push('ea-window--fullscreen')
   if (contentCollapsed) windowClasses.push('ea-window--collapsed')

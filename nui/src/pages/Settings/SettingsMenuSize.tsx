@@ -9,6 +9,7 @@ interface SettingsMenuSizeProps {
 }
 
 const SIZES = [
+  { value: 'small' as const, label: 'Small', description: 'Compact window, less screen coverage.' },
   { value: 'default' as const, label: 'Default', description: 'Centered window, responsive to screen size.' },
   { value: 'large' as const, label: 'Large', description: 'Expanded window for more screen real estate.' },
   { value: 'fullscreen' as const, label: 'Fullscreen', description: 'Fill the entire screen.' },

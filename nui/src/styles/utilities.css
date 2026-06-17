@@ -215,6 +215,13 @@
   /* Width animated by JS (Web Animations API), not CSS transitions. */
 }
 
+/* -- Menu size: small -- */
+.ea-window--small {
+  width: 900px;
+  max-width: 80vw;
+  height: min(75vh, 600px);
+}
+
 /* -- Menu size: large -- */
 .ea-window--large {
   width: 1500px;
