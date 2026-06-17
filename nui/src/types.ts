@@ -128,6 +128,7 @@ export type View =
   | 'server'
   | 'resources'
   | 'resource-detail'
+  | 'profiler'
   | 'player-statistics'
   | 'server-metrics'
   | 'settings'
@@ -236,3 +237,77 @@ export interface ResourceUpdateResult {
   latest: string | null
   outdated: boolean
 }
+
+// ============================================================
+// Profiler types
+// ============================================================
+
+// Per-thread execution data
+export interface ThreadTickData {
+  label: string                  // Full label: "thread @resource/file.lua[10..25]"
+  resource: string               // Extracted resource name
+  filePath: string               // Extracted file path (e.g. "server/admin_server.lua")
+  lineRange: string              // Extracted line range (e.g. "10..25")
+  durationUs: number             // This thread's execution time in μs
+}
+
+// Per-resource tick data
+export interface ResourceTickData {
+  name: string                   // Resource name (e.g. "EasyAdmin")
+  tickCount: number              // Number of ticks across all frames
+  totalUs: number                // Total time spent in ticks (μs)
+  avgUs: number                  // Average tick time (μs)
+  maxUs: number                  // Worst single tick (μs)
+  minUs: number                  // Best single tick (μs)
+  pctOfTotal: number             // Percentage of total tick time (0-100)
+  threads: ThreadTickData[]      // Thread-level breakdown
+}
+
+// Profile summary statistics
+export interface ProfileSummary {
+  framesCaptured: number         // Total frames recorded
+  frameTimes: {                  // Frame-to-frame timing
+    avgMs: number                // Average frame time in ms
+    minMs: number
+    maxMs: number
+    fps: number                  // Derived: 1000 / avgMs
+  }
+  totalTickTime: {               // Sum of all resource ticks per frame (avg)
+    avgUs: number                // Average total tick time per frame in microseconds
+    maxUs: number
+  }
+}
+
+// Complete parsed profile
+export interface ParsedProfile {
+  summary: ProfileSummary
+  resources: ResourceTickData[]  // Sorted by totalUs descending
+  capturedAt: number             // Unix timestamp (ms) when profile was captured
+}
+
+// Endpoint detection info sent with results
+export interface ProfilerDetection {
+  method: string                 // "GetCurrentServerEndpoint" | "cached" | "convar"
+  port: number
+}
+
+// Profiler progress state
+export interface ProfilerProgress {
+  phase: 'recording' | 'generating' | 'fetching' | 'parsing' | 'retrying' | 'complete'
+  message: string
+  percent: number
+}
+
+// Profiler error payload
+export interface ProfilerError {
+  message: string
+}
+
+// Profiler result payload (from server)
+export interface ProfilerResult {
+  profile: ParsedProfile
+  detection: ProfilerDetection
+}
+
+// Profiler UI state
+export type ProfilerUIState = 'empty' | 'recording' | 'results' | 'error' | 'endpoint-error'

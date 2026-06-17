@@ -21,6 +21,7 @@ import { PlayerStatisticsPage } from './pages/PlayerStatistics/PlayerStatisticsP
 import { ServerMetricsPage } from './pages/ServerMetrics/ServerMetricsPage'
 import { ServerPage } from './pages/Server/ServerPage'
 import { ResourcesPage } from './pages/Resources/ResourcesPage'
+import { ProfilerPage } from './pages/Profiler/ProfilerPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
 
 const CLEANUP_TYPES: CleanupType[] = ['cars', 'peds', 'props']
@@ -160,6 +161,7 @@ function App() {
       'server-metrics': 'server-metrics',
       'server': 'server',
       'resources': 'resources',
+      'profiler': 'profiler',
       'settings': 'settings',
     }
     const targetView = viewMap[id]
@@ -404,6 +406,10 @@ function App() {
                   onSelectResource={handleSelectResource}
                   selectedResource={nav.selectedResource}
                 />
+              )}
+
+              {nav.view === 'profiler' && (
+                <ProfilerPage onToast={showToast} />
               )}
 
               {nav.view === 'settings' && (

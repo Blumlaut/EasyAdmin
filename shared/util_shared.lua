@@ -39,6 +39,7 @@ permissions = {
 	["server.convars"] = false,
 	["server.resources.start"] = false,
 	["server.resources.stop"] = false,
+	["server.resources.monitor"] = false,
 	["server.chat"] = false,
 	
 	["immune"] = false,

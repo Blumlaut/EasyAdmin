@@ -52,8 +52,16 @@ const NAV_ITEMS: NavItem[] = [
       { id: 'server-metrics', label: 'Server Metrics', icon: 'activity' },
     ],
   },
-  { id: 'server', label: 'Server', icon: 'server' },
-  { id: 'resources', label: 'Resources', icon: 'layers' },
+  {
+    id: 'server',
+    label: 'Server',
+    icon: 'server',
+    children: [
+      { id: 'server', label: 'Server Management', icon: 'server' },
+      { id: 'resources', label: 'Resources', icon: 'layers' },
+      { id: 'profiler', label: 'Profiler', icon: 'activity' },
+    ],
+  },
   { type: 'separator' as const },
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ]
@@ -112,6 +120,7 @@ export function useAppNavigation({
     if (view === 'ban-detail') return 'bans'
     if (view === 'report-detail') return 'reports'
     if (view === 'resource-detail') return 'resources'
+    if (view === 'server' || view === 'resources' || view === 'profiler') return view
     if (view === 'player-statistics' || view === 'server-metrics') return view
     return view
   })()
@@ -128,9 +137,10 @@ export function useAppNavigation({
     if (view === 'report-detail' && selectedReportId !== null) return `Report #${selectedReportId}`
     if (view === 'player-statistics') return 'Player Statistics'
     if (view === 'server-metrics') return 'Server Metrics'
-    if (view === 'server') return 'Server Management'
+    if (view === 'server') return 'Server'
     if (view === 'resources') return 'Resource Management'
     if (view === 'resource-detail') return 'Resource Details'
+    if (view === 'profiler') return 'Profiler'
     if (view === 'settings') return 'Settings'
     return 'EasyAdmin'
   })()
@@ -159,20 +169,23 @@ export function useAppNavigation({
       })
       return { ...item, disabled, children: children?.length ? children : undefined }
     }
-    if (
-      item.id === 'server' &&
-      !permissions['server.announce'] &&
-      !permissions['server.convars'] &&
-      !permissions['player.ban.view']
-    ) {
-      disabled = true
-    }
-    if (
-      item.id === 'resources' &&
-      !permissions['server.resources.start'] &&
-      !permissions['server.resources.stop']
-    ) {
-      disabled = true
+    if (item.id === 'server') {
+      // Server dropdown: check permissions for each child
+      const hasServerPerm = permissions['server.announce'] || permissions['server.convars'] || permissions['player.ban.view']
+      const hasResourcePerm = permissions['server.resources.start'] || permissions['server.resources.stop']
+      const hasProfilerPerm = permissions['server.resources.monitor']
+      disabled = !hasServerPerm && !hasResourcePerm && !hasProfilerPerm
+      const children = item.children?.map((child) => {
+        if ('type' in child && (child.type === 'separator' || child.type === 'header')) {
+          return child
+        }
+        let childDisabled = false
+        if (child.id === 'server' && !hasServerPerm) childDisabled = true
+        if (child.id === 'resources' && !hasResourcePerm) childDisabled = true
+        if (child.id === 'profiler' && !hasProfilerPerm) childDisabled = true
+        return { ...child, disabled: childDisabled }
+      })
+      return { ...item, disabled, children: children?.length ? children : undefined }
     }
     return { ...item, disabled }
   })
@@ -193,6 +206,9 @@ export function useAppNavigation({
     permissions['server.resources.stop']
   ) {
     availableViews.push('resources', 'resource-detail')
+  }
+  if (permissions['server.resources.monitor']) {
+    availableViews.push('profiler')
   }
   availableViews.push('settings', 'cached-players')
 
