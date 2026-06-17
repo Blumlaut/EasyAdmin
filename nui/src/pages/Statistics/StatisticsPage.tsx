@@ -4,7 +4,7 @@ import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
 import { StatCard } from '../../components/StatCard'
 import { SearchBar } from '../../components/SearchBar'
-import { SelectMenu, type SelectMenuItem } from '../../components/SelectMenu'
+
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { BarChart } from '../../components/BarChart'
 import { Pagination } from '../../components/Pagination'
@@ -312,25 +312,72 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
 
 function StatisticsSkeleton() {
   return (
-    <div className="page-container">
-      {/* Summary cards skeleton */}
+    <>
+      {/* Summary cards skeleton — matches StatCard overlay variant */}
       <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="card statistics-card relative">
-            <div className="skeleton" style={{ width: '60%', height: '12px' }} />
-            <div className="skeleton mt-2" style={{ width: '40%', height: '24px' }} />
-            <div className="absolute top-[0.875rem] right-[1rem] skeleton" style={{ width: '36px', height: '36px', borderRadius: '8px' }} />
+          <div key={i} className="card statistics-card" style={{ overflow: 'hidden' }}>
+            <div className="skeleton" style={{ width: '55%', height: '12px' }} />
+            <div className="skeleton mt-1" style={{ width: '40%', height: '24px' }} />
+            <div className="skeleton mt-0.5" style={{ width: '70%', height: '12px' }} />
+            <div
+              className="skeleton"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                position: 'absolute',
+                top: '0.875rem',
+                right: '1rem',
+              }}
+            />
           </div>
         ))}
       </div>
-      {/* Chart skeleton */}
-      <div className="grid grid-cols-1 gap-3">
+      {/* Daily peaks chart skeleton */}
+      <div className="mb-4">
         <div className="card statistics-chart-card">
-          <div className="skeleton" style={{ width: '30%', height: '16px' }} />
-          <div className="skeleton mt-4" style={{ width: '100%', height: '160px' }} />
+          <div className="flex items-center justify-between mb-3">
+            <div className="skeleton" style={{ width: '120px', height: '14px' }} />
+            <div className="flex items-center gap-3">
+              <div className="skeleton" style={{ width: '28px', height: '12px' }} />
+              <div className="skeleton" style={{ width: '24px', height: '12px' }} />
+              <div className="skeleton" style={{ width: '24px', height: '12px' }} />
+            </div>
+          </div>
+          <div className="skeleton" style={{ width: '100%', height: '160px', borderRadius: '4px' }} />
         </div>
       </div>
-    </div>
+      {/* Bar charts skeleton */}
+      <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
+        {[1, 2].map((i) => (
+          <div key={i} className="card statistics-chart-card">
+            <div className="skeleton mb-3" style={{ width: '45%', height: '14px' }} />
+            <div className="space-y-2.5">
+              {[1, 2, 3, 4, 5].map((j) => (
+                <div key={j} className="flex items-center gap-2">
+                  <div className="skeleton" style={{ width: '90px', height: '12px', flexShrink: 0 }} />
+                  <div className="skeleton" style={{ height: '16px', borderRadius: '999px', width: `${60 + Math.random() * 35}%` }} />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Player registry table skeleton */}
+      <div className="card statistics-chart-card">
+        <div className="skeleton mb-3" style={{ width: '25%', height: '14px' }} />
+        <div className="flex items-center gap-2 mb-3">
+          <div className="skeleton" style={{ width: '240px', height: '36px', borderRadius: '8px' }} />
+          <div className="skeleton" style={{ width: '80px', height: '32px', borderRadius: '8px' }} />
+        </div>
+        <div className="space-y-2">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="skeleton" style={{ width: '100%', height: '28px' }} />
+          ))}
+        </div>
+      </div>
+    </>
   )
 }
 
@@ -439,13 +486,6 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
       }))
   }, [registry])
 
-  const rangeSelectItems: SelectMenuItem[] = rangeOptions.map((r) => ({
-    value: r.value,
-    label: r.label,
-  }))
-
-  if (loading) return <StatisticsSkeleton />
-
   return (
     <div className="page-container">
       {/* Header with range selector */}
@@ -454,15 +494,25 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           <h3 className="text-lg font-semibold">Server Statistics</h3>
           <p className="text-xs text-muted mt-0.5">Long-term analytics and player insights</p>
         </div>
-        <SelectMenu
-          items={rangeSelectItems}
-          onChange={(item) => setRange(item.value as StatsRange)}
-          ariaLabel="Statistics time range"
-        />
+        <div className="flex items-center gap-0.5">
+          {rangeOptions.map((r) => (
+            <button
+              key={r.value}
+              className={`btn btn-xs ${range === r.value ? 'btn-primary' : 'btn-ghost'}`}
+              onClick={() => setRange(r.value)}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Summary cards */}
-      <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
+      {loading ? (
+        <StatisticsSkeleton />
+      ) : (
+        <>
+          {/* Summary cards */}
+          <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
         <StatCard variant="overlay"
           label="Unique Players"
           value={summary?.totalUnique ?? '—'}
@@ -545,6 +595,8 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
 
       {/* Player registry table (server-side paginated) */}
       <PlayerRegistryTable filterDays={rangeDays} />
+        </>
+      )}
     </div>
   )
 }
