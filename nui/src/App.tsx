@@ -231,14 +231,6 @@ function App() {
                 orientation={data.settings.sidebarMode}
               />
             </div>
-            <div className="sidebar-footer">
-              <div className="flex items-center gap-2 text-xs text-muted">
-                <Icon name="shield" size="xs" />
-                <span>
-                  {Object.values(data.permissions).filter(Boolean).length} permissions active
-                </span>
-              </div>
-            </div>
           </aside>
 
           <div className="flex flex-col flex-1 h-full overflow-hidden">

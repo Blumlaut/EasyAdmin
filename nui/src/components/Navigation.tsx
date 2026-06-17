@@ -53,20 +53,40 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
   // Track which dropdown groups are expanded (keyed by parent id)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
-  // Auto-expand a dropdown when its parent or a child is active
+  // Auto-expand a dropdown when its parent or a child is active (accordion: close others)
   useEffect(() => {
     for (const item of items) {
       if (!isNavItem(item) || !item.children) continue
       const childIds = item.children.filter(isNavItem).map((c) => c.id)
       if (activeId === item.id || childIds.includes(activeId)) {
-        setExpanded((prev) => (prev[item.id] ? prev : { ...prev, [item.id]: true }))
+        setExpanded((prev) => {
+          if (prev[item.id]) return prev // already expanded, no change needed
+          const collapsed: Record<string, boolean> = {}
+          for (const key of Object.keys(prev)) {
+            collapsed[key] = false
+          }
+          collapsed[item.id] = true
+          return collapsed
+        })
         break
       }
     }
   }, [activeId, items])
 
   const toggleExpanded = useCallback((id: string) => {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))
+    setExpanded((prev) => {
+      const isCurrentlyExpanded = prev[id]
+      // Accordion behavior: when opening a dropdown, close all others
+      const collapsed: Record<string, boolean> = {}
+      for (const key of Object.keys(prev)) {
+        collapsed[key] = false
+      }
+      // If toggling closed, leave it closed; if toggling open, set it open
+      if (!isCurrentlyExpanded) {
+        collapsed[id] = true
+      }
+      return collapsed
+    })
   }, [])
 
   const initItemRefs = useCallback((el: HTMLButtonElement | null) => {
@@ -127,10 +147,18 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
     const target = enabledItems[newIndex]
     if (target) {
       onSelect(target.id)
-      // Expand parent dropdown if the target is a child
+      // Expand parent dropdown if the target is a child (accordion: close others)
       for (const item of items) {
         if (isNavItem(item) && item.children && item.children.some((c) => isNavItem(c) && c.id === target.id)) {
-          setExpanded((prev) => (prev[item.id] ? prev : { ...prev, [item.id]: true }))
+          setExpanded((prev) => {
+            if (prev[item.id]) return prev
+            const collapsed: Record<string, boolean> = {}
+            for (const key of Object.keys(prev)) {
+              collapsed[key] = false
+            }
+            collapsed[item.id] = true
+            return collapsed
+          })
           break
         }
       }

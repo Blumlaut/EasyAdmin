@@ -196,20 +196,6 @@
   align-items: center;
 }
 
-.sidebar-footer {
-  padding: var(--space-3) var(--space-5);
-  border-top: 1px solid var(--border-subtle);
-}
-
-.ea-window--sidebar-horizontal .sidebar-footer {
-  border-top: none;
-  border-left: 1px solid var(--border-subtle);
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  padding: var(--space-3) var(--space-4);
-}
-
 .ea-window--sidebar-horizontal .topbar {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
