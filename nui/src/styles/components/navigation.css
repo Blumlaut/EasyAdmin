@@ -175,26 +175,30 @@
 
 .navigation--horizontal .nav-dropdown {
   display: flex;
+  flex-direction: row;
   align-items: center;
   flex-shrink: 0;
 }
 
 .navigation--horizontal .nav-dropdown-children {
-  display: none;
-  grid-template-rows: none;
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 200ms ease-out;
   min-width: 0;
-  margin-left: var(--space-1);
+  margin-left: 0;
 }
 
 .navigation--horizontal .nav-dropdown-children-open {
-  display: block;
+  grid-template-columns: 1fr;
 }
 
 .navigation--horizontal .nav-dropdown-children-inner {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  overflow: visible;
+  overflow: hidden;
+  min-width: 0;
+  padding-left: var(--space-1);
 }
 
 .navigation--horizontal .nav-dropdown-children .nav-item {
@@ -204,6 +208,7 @@
   padding: var(--space-2) var(--space-3);
   padding-left: var(--space-3);
   font-size: var(--text-base);
+  flex-shrink: 0;
 }
 
 .navigation--horizontal .nav-dropdown-children .nav-item::before {

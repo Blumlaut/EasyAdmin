@@ -51,9 +51,13 @@ describe('Navigation', () => {
     await user.click(screen.getByText('Statistics'))
 
     const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
+    const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
+    const childrenInner = dropdown?.querySelector('.nav-dropdown-children-inner')
+
     expect(dropdown).toBeInTheDocument()
-    expect(dropdown?.querySelector('.nav-dropdown-children')).toHaveClass('nav-dropdown-children-open')
-    expect(dropdown?.querySelector('.nav-dropdown-children .nav-item')).toBeInTheDocument()
+    expect(childrenContainer).toHaveClass('nav-dropdown-children-open')
+    expect(childrenInner).toBeInTheDocument()
+    expect(dropdown).toContainElement(screen.getByText('Player Statistics'))
   })
 
   it('shows badge when provided', () => {
