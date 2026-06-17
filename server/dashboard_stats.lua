@@ -658,6 +658,8 @@ RegisterServerEvent('EasyAdmin:requestPlayerRegistryPage', function(data)
 	local pageSize = tonumber(data and data.pageSize) or 20
 	local query = (data and data.query) and tostring(data.query):lower() or nil
 	local sortBy = (data and data.sortBy) and tostring(data.sortBy) or 'lastSeen'
+	local sortDir = (data and data.sortDir) and tostring(data.sortDir) or 'desc'
+	local asc = (sortDir == 'asc')
 	local filterDays = tonumber(data and data.filterDays) or nil
 
 	if page < 1 then page = 1 end
@@ -690,11 +692,19 @@ RegisterServerEvent('EasyAdmin:requestPlayerRegistryPage', function(data)
 
 	-- Server-side sort
 	if sortBy == 'sessions' then
-		table.sort(filtered, function(a, b) return a.sessions > b.sessions end)
+		table.sort(filtered, function(a, b) return asc and a.sessions < b.sessions or a.sessions > b.sessions end)
 	elseif sortBy == 'playtime' then
-		table.sort(filtered, function(a, b) return a.playtime > b.playtime end)
+		table.sort(filtered, function(a, b) return asc and a.playtime < b.playtime or a.playtime > b.playtime end)
+	elseif sortBy == 'firstSeen' then
+		table.sort(filtered, function(a, b) return asc and a.firstSeen < b.firstSeen or a.firstSeen > b.firstSeen end)
+	elseif sortBy == 'avgSession' then
+		table.sort(filtered, function(a, b)
+			local avgA = a.sessions > 0 and a.playtime / a.sessions or 0
+			local avgB = b.sessions > 0 and b.playtime / b.sessions or 0
+			return asc and avgA < avgB or avgA > avgB
+		end)
 	else
-		table.sort(filtered, function(a, b) return a.lastSeen > b.lastSeen end)
+		table.sort(filtered, function(a, b) return asc and a.lastSeen < b.lastSeen or a.lastSeen > b.lastSeen end)
 	end
 
 	local total = #filtered

@@ -15,10 +15,7 @@ canvas.chartjs-chart {
 
 /* Stat card */
 .statistics-card {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 0.75rem;
+  position: relative;
   padding: 0.875rem 1rem;
 }
 
@@ -64,6 +61,33 @@ canvas.chartjs-chart {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
+}
+
+.statistics-table th.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: color 150ms ease;
+}
+
+.statistics-table th.sortable-header:hover {
+  color: var(--text-primary);
+}
+
+.statistics-table .sort-header-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statistics-table .sort-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.statistics-table .sort-icon-inactive {
+  opacity: 0.3;
 }
 
 .statistics-table td {

@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { DailyPeak, Notification, PaginatedPlayerRegistryResponse, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
 import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
+import { StatCard } from '../../components/StatCard'
 import { SearchBar } from '../../components/SearchBar'
 import { SelectMenu, type SelectMenuItem } from '../../components/SelectMenu'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { BarChart } from '../../components/BarChart'
 import { Pagination } from '../../components/Pagination'
+import { SortableTable, type TableColumn, type SortState } from '../../components/SortableTable'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 
@@ -49,46 +51,6 @@ const rangeOptions: Array<{ value: StatsRange; label: string }> = [
   { value: '90d', label: '90 Days' },
   { value: '120d', label: '120 Days' },
 ]
-
-// ============================================================
-// StatCard
-// ============================================================
-
-function StatCard({
-  label,
-  value,
-  subValue,
-  icon,
-  iconColor,
-  bgColor,
-}: {
-  label: string
-  value: string | number
-  subValue?: string
-  icon: string
-  iconColor: string
-  bgColor: string
-}) {
-  return (
-    <div className="card statistics-card">
-      <div className="flex items-start justify-between">
-        <div className="min-w-0">
-          <p className="text-xs text-muted statistics-label">{label}</p>
-          <p className="text-2xl font-bold statistics-value mt-1">{value}</p>
-          {subValue && <p className="text-xs text-muted mt-0.5">{subValue}</p>}
-        </div>
-        <div
-          className="statistics-icon"
-          // eslint-disable-next-line nui/no-inline-styles
-          style={{ background: bgColor }}
-        >
-          {/* @ts-expect-error dynamic icon name */}
-          <Icon name={icon} size="md" style={{ color: iconColor }} />
-        </div>
-      </div>
-    </div>
-  )
-}
 
 // ============================================================
 // DailyPeaksChart
@@ -166,11 +128,12 @@ function DailyPeaksChart({ data }: { data: DailyPeak[] }) {
 
 const REGISTRY_PAGE_SIZE = 20
 
-type RegistrySortBy = 'sessions' | 'playtime' | 'lastSeen'
+type RegistrySortBy = 'sessions' | 'playtime' | 'lastSeen' | 'firstSeen' | 'avgSession'
 
 function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState<RegistrySortBy>('lastSeen')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [players, setPlayers] = useState<PlayerRegistryEntry[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -181,9 +144,9 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
 
   useListKeyboardNav(listRef, players.length)
 
-  const fetchPage = useCallback((p: number, q: string, sort: RegistrySortBy) => {
+  const fetchPage = useCallback((p: number, q: string, sort: RegistrySortBy, dir: 'asc' | 'desc') => {
     setLoading(true)
-    callLua('requestPlayerRegistryPage', { page: p, pageSize: REGISTRY_PAGE_SIZE, query: q, sortBy: sort, filterDays })
+    callLua('requestPlayerRegistryPage', { page: p, pageSize: REGISTRY_PAGE_SIZE, query: q, sortBy: sort, sortDir: dir, filterDays })
   }, [filterDays])
 
   // Listen for paginated results pushed from Lua
@@ -205,7 +168,7 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   // Fetch page 1 on mount
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchPage(1, '', 'lastSeen')
+    fetchPage(1, '', 'lastSeen', 'desc')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -213,7 +176,7 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1)
-    fetchPage(1, debouncedQuery, sortBy)
+    fetchPage(1, debouncedQuery, sortBy, sortDir)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery])
 
@@ -221,15 +184,15 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1)
-    fetchPage(1, debouncedQuery, sortBy)
+    fetchPage(1, debouncedQuery, sortBy, sortDir)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy])
+  }, [sortBy, sortDir])
 
   const handlePageChange = useCallback((p: number) => {
     setPage(p)
-    fetchPage(p, debouncedQuery, sortBy)
+    fetchPage(p, debouncedQuery, sortBy, sortDir)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQuery, sortBy])
+  }, [debouncedQuery, sortBy, sortDir])
 
   const handleFirstPage = useCallback(() => handlePageChange(1), [handlePageChange])
   const handleLastPage = useCallback(() => handlePageChange(totalPages), [handlePageChange, totalPages])
@@ -237,33 +200,57 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   const handlePrevPage = useCallback(() => handlePageChange(Math.max(page - 1, 1)), [handlePageChange, page])
 
   const handleRefresh = useCallback(() => {
-    fetchPage(page, debouncedQuery, sortBy)
+    fetchPage(page, debouncedQuery, sortBy, sortDir)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, debouncedQuery, sortBy])
+  }, [page, debouncedQuery, sortBy, sortDir])
 
-  const handleSortChange = useCallback((item: SelectMenuItem) => {
-    setSortBy(item.value as RegistrySortBy)
+  const handleSortChange = useCallback((state: SortState) => {
+    setSortBy(state.sortBy as RegistrySortBy)
+    setSortDir(state.sortDir)
   }, [])
 
-  const sortOptions: SelectMenuItem[] = [
-    { value: 'lastSeen', label: 'Last Seen' },
-    { value: 'sessions', label: 'Sessions' },
-    { value: 'playtime', label: 'Playtime' },
-  ]
+  const columns = useMemo<TableColumn<PlayerRegistryEntry>[]>(() => [
+    {
+      key: 'name',
+      label: 'Player',
+      render: (p) => <span className="truncate max-w-[160px]" title={p.name}>{p.name}</span>,
+    },
+    {
+      key: 'firstSeen',
+      label: 'First Seen',
+      sortable: true,
+      render: (p) => <span className="text-xs text-muted">{formatDayLabelFull(p.firstSeen / 1000)}</span>,
+    },
+    {
+      key: 'lastSeen',
+      label: 'Last Seen',
+      sortable: true,
+      render: (p) => <span className="text-xs text-muted">{formatDayLabelFull(p.lastSeen / 1000)}</span>,
+    },
+    {
+      key: 'sessions',
+      label: 'Sessions',
+      sortable: true,
+      render: (p) => <span className="text-xs font-semibold">{p.sessions}</span>,
+    },
+    {
+      key: 'playtime',
+      label: 'Total Playtime',
+      sortable: true,
+      render: (p) => <span className="text-xs">{formatDuration(p.playtime)}</span>,
+    },
+    {
+      key: 'avgSession',
+      label: 'Avg Session',
+      sortable: true,
+      render: (p) => <span className="text-xs">{p.sessions > 0 ? formatDuration(p.playtime / p.sessions) : '—'}</span>,
+    },
+  ], [])
 
   return (
     <div>
       <div className="card statistics-chart-card">
-        <div className="flex items-center justify-between mb-3">
-          <p className="section-label">Player Registry</p>
-          <div className="flex items-center gap-2">
-            <SelectMenu
-              items={sortOptions}
-              onChange={handleSortChange}
-              ariaLabel="Sort players by"
-            />
-          </div>
-        </div>
+        <p className="section-label mb-3">Player Registry</p>
         <div className="flex items-center gap-2 mb-3">
           <SearchBar
             value={query}
@@ -295,33 +282,15 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
             {total === 0 && <p className="text-xs text-muted mt-1">Players will appear here after connecting</p>}
           </div>
         ) : (
-          <div ref={listRef} className="overflow-x-auto">
-            <table className="statistics-table">
-              <thead>
-                <tr>
-                  <th>Player</th>
-                  <th>First Seen</th>
-                  <th>Last Seen</th>
-                  <th>Sessions</th>
-                  <th>Total Playtime</th>
-                  <th>Avg Session</th>
-                </tr>
-              </thead>
-              <tbody>
-                {players.map((player) => (
-                  <tr key={player.identifier}>
-                    <td className="truncate max-w-[160px]" title={player.name}>
-                      {player.name}
-                    </td>
-                    <td className="text-xs text-muted">{formatDayLabelFull(player.firstSeen / 1000)}</td>
-                    <td className="text-xs text-muted">{formatDayLabelFull(player.lastSeen / 1000)}</td>
-                    <td className="text-xs font-semibold">{player.sessions}</td>
-                    <td className="text-xs">{formatDuration(player.playtime)}</td>
-                    <td className="text-xs">{player.sessions > 0 ? formatDuration(player.playtime / player.sessions) : '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div ref={listRef}>
+            <SortableTable
+              columns={columns}
+              rows={players}
+              sortBy={sortBy}
+              sortDir={sortDir}
+              onSortChange={handleSortChange}
+              getKey={(p) => p.identifier}
+            />
           </div>
         )}
       </div>
@@ -347,14 +316,10 @@ function StatisticsSkeleton() {
       {/* Summary cards skeleton */}
       <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="card statistics-card">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="skeleton" style={{ width: '60%', height: '12px' }} />
-                <div className="skeleton mt-2" style={{ width: '40%', height: '24px' }} />
-              </div>
-              <div className="skeleton" style={{ width: '36px', height: '36px', borderRadius: '8px' }} />
-            </div>
+          <div key={i} className="card statistics-card relative">
+            <div className="skeleton" style={{ width: '60%', height: '12px' }} />
+            <div className="skeleton mt-2" style={{ width: '40%', height: '24px' }} />
+            <div className="absolute top-[0.875rem] right-[1rem] skeleton" style={{ width: '36px', height: '36px', borderRadius: '8px' }} />
           </div>
         ))}
       </div>
@@ -498,7 +463,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
-        <StatCard
+        <StatCard variant="overlay"
           label="Unique Players"
           value={summary?.totalUnique ?? '—'}
           subValue={`All time tracked`}
@@ -506,7 +471,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           iconColor="var(--accent-blue)"
           bgColor="var(--bg-blue)"
         />
-        <StatCard
+        <StatCard variant="overlay"
           label="New Players"
           value={summary?.newPlayers ?? '—'}
           subValue={`Joined in last ${range}`}
@@ -514,7 +479,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           iconColor="var(--accent-green)"
           bgColor="var(--bg-green)"
         />
-        <StatCard
+        <StatCard variant="overlay"
           label="Returning Players"
           value={summary?.returningPlayers ?? '—'}
           subValue={`${summary?.retentionRate ?? 0}% retention rate`}
@@ -522,7 +487,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           iconColor="var(--accent-purple)"
           bgColor="var(--bg-purple)"
         />
-        <StatCard
+        <StatCard variant="overlay"
           label="Avg Session"
           value={summary ? formatDuration(summary.avgSessionLength) : '—'}
           subValue={summary && summary.totalSessions > 0
@@ -532,7 +497,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           iconColor="var(--accent-orange)"
           bgColor="var(--bg-orange)"
         />
-        <StatCard
+        <StatCard variant="overlay"
           label="Total Sessions"
           value={summary?.totalSessions?.toLocaleString() ?? '—'}
           subValue={`All tracked players`}
@@ -540,7 +505,7 @@ export function StatisticsPage({ onToast: _onToast }: StatisticsPageProps) {
           iconColor="var(--accent-pink)"
           bgColor="var(--bg-pink)"
         />
-        <StatCard
+        <StatCard variant="overlay"
           label="Total Playtime"
           value={summary ? formatDuration(summary.totalPlaytime) : '—'}
           subValue={`All time accumulated`}

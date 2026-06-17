@@ -203,6 +203,8 @@ async function handleRequestPlayerRegistryPage(body: Record<string, unknown>): P
   const pageSize = Number(body.pageSize) || 20
   const query = String(body.query || '').toLowerCase()
   const sortBy = String(body.sortBy || 'lastSeen')
+  const sortDir = String(body.sortDir || 'desc')
+  const asc = sortDir === 'asc'
   const filterDays = Number(body.filterDays) || 120
   const now = Date.now() / 1000
   const cutoff = now - filterDays * 86400
@@ -213,11 +215,19 @@ async function handleRequestPlayerRegistryPage(body: Record<string, unknown>): P
   }
 
   if (sortBy === 'sessions') {
-    filtered = [...filtered].sort((a, b) => b.sessions - a.sessions)
+    filtered = [...filtered].sort((a, b) => asc ? a.sessions - b.sessions : b.sessions - a.sessions)
   } else if (sortBy === 'playtime') {
-    filtered = [...filtered].sort((a, b) => b.playtime - a.playtime)
+    filtered = [...filtered].sort((a, b) => asc ? a.playtime - b.playtime : b.playtime - a.playtime)
+  } else if (sortBy === 'firstSeen') {
+    filtered = [...filtered].sort((a, b) => asc ? a.firstSeen - b.firstSeen : b.firstSeen - a.firstSeen)
+  } else if (sortBy === 'avgSession') {
+    filtered = [...filtered].sort((a, b) => {
+      const avgA = a.sessions > 0 ? a.playtime / a.sessions : 0
+      const avgB = b.sessions > 0 ? b.playtime / b.sessions : 0
+      return asc ? avgA - avgB : avgB - avgA
+    })
   } else {
-    filtered = [...filtered].sort((a, b) => b.lastSeen - a.lastSeen)
+    filtered = [...filtered].sort((a, b) => asc ? a.lastSeen - b.lastSeen : b.lastSeen - a.lastSeen)
   }
 
   const total = filtered.length

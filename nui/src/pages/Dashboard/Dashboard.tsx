@@ -1,51 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ServerStats } from '../../types'
 import { callLua } from '../../fivem'
-import { Icon, type IconName } from '../../components/icons'
+import { type IconName } from '../../components/icons'
+import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
-
-// ============================================================
-// Types
-// ============================================================
-
-interface StatCardConfig {
-  label: string
-  value: string | number
-  icon: IconName
-  color: string
-  bgColor: string
-}
-
-// ============================================================
-// StatCard
-// Small metric card with icon, label, value
-// ============================================================
-
-function StatCard({ config }: { config: StatCardConfig }) {
-  return (
-    <div className="card dashboard-card-sm">
-      <div className="flex items-center gap-3">
-        <div
-          className="dashboard-stat-icon"
-          // eslint-disable-next-line nui/no-inline-styles
-          style={{ background: config.bgColor }}
-        >
-          <Icon name={config.icon} size="sm"
-            // eslint-disable-next-line nui/no-inline-styles
-            style={{ color: config.color }}
-          />
-        </div>
-        <div className="min-w-0">
-          <p className="text-xs text-muted dashboard-stat-label">{config.label}</p>
-          <p className="text-xl font-bold dashboard-stat-value">
-            {config.value}
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 // ============================================================
 // EntityBar
@@ -212,26 +171,26 @@ export function Dashboard({ playerCount }: DashboardProps) {
   }, [])
 
   // Build stat cards
-  const statCards: StatCardConfig[] = [
+  const statCards: StatCardProps[] = [
     {
       label: 'Players Online',
       value: playerCount,
       icon: 'users',
-      color: 'var(--accent-green)',
+      iconColor: 'var(--accent-green)',
       bgColor: 'var(--bg-green)',
     },
     {
       label: 'Resources',
       value: stats ? `${stats.resources.started}/${stats.resources.total}` : '—',
       icon: 'layers',
-      color: 'var(--accent-blue)',
+      iconColor: 'var(--accent-blue)',
       bgColor: 'var(--bg-blue)',
     },
     {
       label: 'Resources Stopped',
       value: stats?.resources.stopped ?? '—',
       icon: 'user-minus',
-      color: 'var(--accent-orange)',
+      iconColor: 'var(--accent-orange)',
       bgColor: 'var(--bg-orange)',
     },
     {
@@ -240,7 +199,7 @@ export function Dashboard({ playerCount }: DashboardProps) {
         ? (stats.entities.vehicles + stats.entities.peds + stats.entities.objects).toLocaleString()
         : '—',
       icon: 'box',
-      color: 'var(--accent-purple)',
+      iconColor: 'var(--accent-purple)',
       bgColor: 'var(--bg-purple)',
     },
   ]
@@ -284,7 +243,7 @@ export function Dashboard({ playerCount }: DashboardProps) {
       {/* Stat cards row */}
       <div className="grid gap-3 dashboard-grid">
         {statCards.map((card) => (
-          <StatCard key={card.label} config={card} />
+          <StatCard key={card.label} {...card} />
         ))}
       </div>
 

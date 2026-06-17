@@ -73,9 +73,11 @@ export function BarChart({
       backgroundColor: bgColors,
       borderColor: bgColors,
       borderWidth: 0,
-      borderRadius: 4,
-      barThickness: Math.min(barHeight, 24),
-      maxBarThickness: 28,
+      borderRadius: 999,
+      barPercentage: 0.6,
+      categoryPercentage: 0.85,
+      barThickness: Math.min(barHeight, 16),
+      maxBarThickness: 20,
     }],
   }), [labels, values, bgColors, barHeight])
 
