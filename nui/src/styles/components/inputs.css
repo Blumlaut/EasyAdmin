@@ -72,10 +72,10 @@ select.input {
   width: 100%;
   padding: var(--space-2) var(--space-3);
   padding-right: var(--space-3);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(60, 70, 85, 0.8);
   border-radius: var(--radius);
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
+  background: rgba(30, 35, 44, 0.95);
+  color: var(--text-primary);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   font-family: inherit;
@@ -90,8 +90,8 @@ select.input {
 }
 
 .select-menu-trigger:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-color);
+  background: rgba(45, 55, 72, 0.95);
+  border-color: rgba(59, 130, 246, 0.5);
   color: var(--text-primary);
 }
 

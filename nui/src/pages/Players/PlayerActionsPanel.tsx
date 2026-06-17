@@ -40,7 +40,6 @@ interface QuickActionDef {
   label: string
   icon: IconName
   permission: string
-  colorClass?: string
 }
 
 // Teleport options
@@ -76,16 +75,16 @@ const ACTION_GROUPS: ActionGroup[] = [
     actions: [
       { id: 'spectate', label: 'Spectate', icon: 'eye', permission: 'player.spectate' },
       { id: 'bucket-join', label: 'Join bucket', icon: 'arrow-left', permission: 'player.bucket.join' },
-      { id: 'bucket-force', label: 'Force bucket', icon: 'map-pin', permission: 'player.bucket.force', colorClass: 'text-accent-orange' },
+      { id: 'bucket-force', label: 'Force bucket', icon: 'map-pin', permission: 'player.bucket.force' },
     ],
   },
   {
     label: 'Control',
     icon: 'sliders',
     actions: [
-      { id: 'slap', label: 'Slap', icon: 'zap', permission: 'player.slap', colorClass: 'text-accent-orange' },
+      { id: 'slap', label: 'Slap', icon: 'zap', permission: 'player.slap' },
       { id: 'freeze', label: 'Freeze', icon: 'snowflake', permission: 'player.freeze' },
-      { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute', colorClass: 'text-accent-orange' },
+      { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute' },
       { id: 'screenshot', label: 'Screenshot', icon: 'camera', permission: 'player.screenshot' },
     ],
   },
@@ -251,7 +250,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
           <div className="player-discipline-tabs">
             {canWarn && (
               <button
-                className={`player-discipline-tab${disciplineTab === 'warn' ? ' player-discipline-tab-active' : ''}`}
+                className={`player-discipline-tab player-discipline-tab--warn${disciplineTab === 'warn' ? ' player-discipline-tab-active' : ''}`}
                 onClick={() => setDisciplineTab('warn')}
               >
                 <Icon name="alert-triangle" size="xs" />
@@ -260,7 +259,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
             )}
             {canKick && (
               <button
-                className={`player-discipline-tab${disciplineTab === 'kick' ? ' player-discipline-tab-active' : ''}`}
+                className={`player-discipline-tab player-discipline-tab--kick${disciplineTab === 'kick' ? ' player-discipline-tab-active' : ''}`}
                 onClick={() => setDisciplineTab('kick')}
               >
                 <Icon name="log-out" size="xs" />
@@ -269,7 +268,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
             )}
             {canBan && (
               <button
-                className={`player-discipline-tab${disciplineTab === 'ban' ? ' player-discipline-tab-active' : ''}`}
+                className={`player-discipline-tab player-discipline-tab--ban${disciplineTab === 'ban' ? ' player-discipline-tab-active' : ''}`}
                 onClick={() => setDisciplineTab('ban')}
               >
                 <Icon name="ban" size="xs" />
@@ -307,7 +306,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
               aria-label={`${disciplineTab} reason`}
             />
             <button
-              className={`player-discipline-execute${disciplineTab === 'kick' || disciplineTab === 'ban' ? ' player-discipline-execute-danger' : ''}`}
+              className={`player-discipline-execute player-discipline-execute--${disciplineTab}`}
               onClick={() => handleDiscipline(disciplineTab)}
               disabled={busyAction === disciplineTab}
             >
@@ -337,7 +336,6 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
                 {group.actions.map((action) => {
                   const isToggle = action.id === 'freeze' || action.id === 'mute'
                   const isActive = action.id === 'freeze' ? player.frozen : player.muted
-                  const actionColor = action.colorClass ?? ''
 
                   return (
                     <button
@@ -350,7 +348,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
                         : `${action.label} ${player.name}`
                       }
                     >
-                      <Icon name={action.icon} size="sm" className={actionColor} />
+                      <Icon name={action.icon} size="sm" />
                       <span className="player-action-group-btn-label">
                         {isToggle && isActive ? `Un${action.label}` : action.label}
                       </span>

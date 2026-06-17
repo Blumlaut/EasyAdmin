@@ -86,16 +86,17 @@
 }
 
 /* ---- Group action button ---- */
+/* Solid opaque backgrounds — CEF compositing makes semi-transparent tokens invisible */
 
 .player-action-group-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(60, 70, 85, 0.8);
   border-radius: var(--radius);
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
+  background: rgba(30, 35, 44, 0.95);
+  color: var(--text-primary);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   font-family: inherit;
@@ -105,11 +106,12 @@
   user-select: none;
   justify-content: flex-start;
   min-height: 34px;
+  line-height: 1;
 }
 
 .player-action-group-btn:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-color);
+  background: rgba(45, 55, 72, 0.95);
+  border-color: rgba(59, 130, 246, 0.5);
   color: var(--text-primary);
 }
 
@@ -124,18 +126,13 @@
 }
 
 .player-action-group-btn-active {
-  background: var(--bg-active);
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
   color: var(--accent-blue);
 }
 
 .player-action-group-btn-label {
   line-height: 1;
-}
-
-/* Dropdown variant — fills grid cell */
-.player-action-group-btn--dropdown {
-  width: 100%;
 }
 
 /* ============================================================
@@ -175,15 +172,55 @@
   height: 26px;
 }
 
-.player-discipline-tab:hover {
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+/* -- Severity: Warn (yellow) -- */
+
+.player-discipline-tab--warn {
+  color: var(--accent-yellow);
 }
 
-.player-discipline-tab-active {
-  background: var(--bg-active);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: var(--brand-blue-light);
+.player-discipline-tab--warn:hover {
+  background: rgba(227, 179, 65, 0.1);
+  color: var(--accent-yellow);
+}
+
+.player-discipline-tab--warn.player-discipline-tab-active {
+  background: rgba(227, 179, 65, 0.2);
+  border-color: rgba(227, 179, 65, 0.5);
+  color: var(--accent-yellow);
+}
+
+/* -- Severity: Kick (orange) -- */
+
+.player-discipline-tab--kick {
+  color: var(--accent-orange);
+}
+
+.player-discipline-tab--kick:hover {
+  background: rgba(210, 153, 34, 0.1);
+  color: var(--accent-orange);
+}
+
+.player-discipline-tab--kick.player-discipline-tab-active {
+  background: rgba(210, 153, 34, 0.2);
+  border-color: rgba(210, 153, 34, 0.5);
+  color: var(--accent-orange);
+}
+
+/* -- Severity: Ban (red) -- */
+
+.player-discipline-tab--ban {
+  color: var(--accent-red);
+}
+
+.player-discipline-tab--ban:hover {
+  background: rgba(248, 81, 73, 0.1);
+  color: var(--accent-red);
+}
+
+.player-discipline-tab--ban.player-discipline-tab-active {
+  background: rgba(248, 81, 73, 0.2);
+  border-color: rgba(248, 81, 73, 0.5);
+  color: var(--accent-red);
 }
 
 /* Preset reason chips */
@@ -237,9 +274,8 @@
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid transparent;
   border-radius: var(--radius-full);
-  background: var(--brand-gradient);
   color: #fff;
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
@@ -249,11 +285,6 @@
   white-space: nowrap;
   height: 38px;
   flex-shrink: 0;
-}
-
-.player-discipline-execute:hover {
-  background: var(--brand-gradient-hover);
-  box-shadow: var(--shadow-glow);
 }
 
 .player-discipline-execute:active {
@@ -266,13 +297,40 @@
   pointer-events: none;
 }
 
-.player-discipline-execute-danger {
+/* -- Severity: Warn (yellow) -- */
+
+.player-discipline-execute--warn {
+  background: var(--accent-yellow);
+  border-color: var(--accent-yellow);
+  color: var(--brand-dark);
+}
+
+.player-discipline-execute--warn:hover {
+  background: #c99a2e;
+  border-color: #c99a2e;
+}
+
+/* -- Severity: Kick (orange) -- */
+
+.player-discipline-execute--kick {
+  background: var(--accent-orange);
+  border-color: var(--accent-orange);
+  color: var(--brand-dark);
+}
+
+.player-discipline-execute--kick:hover {
+  background: #bb8009;
+  border-color: #bb8009;
+}
+
+/* -- Severity: Ban (red) -- */
+
+.player-discipline-execute--ban {
   background: var(--accent-red);
   border-color: var(--accent-red);
 }
 
-.player-discipline-execute-danger:hover {
+.player-discipline-execute--ban:hover {
   background: #da3633;
   border-color: #da3633;
-  box-shadow: none;
 }
