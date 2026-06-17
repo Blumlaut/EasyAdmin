@@ -129,8 +129,15 @@ function App() {
         // Reset window chrome state every time the menu opens. The
         // window is always centered, the main content is unfolded, and
         // the NUI starts in focused mode.
-        setWindowPos({ x: 0, y: 0 })
+        // Compute the centered position here (not in a separate effect)
+        // so the first render already has the correct position — avoids
+        // a one-frame flash at (0, 0) before an effect-based centering
+        // could correct it.
         setWindowSize(DEFAULT_WINDOW_SIZE)
+        setWindowPos({
+          x: Math.round(window.innerWidth / 2 - DEFAULT_WINDOW_SIZE.width / 2),
+          y: Math.round(window.innerHeight / 2 - DEFAULT_WINDOW_SIZE.height / 2),
+        })
         setContentCollapsed(false)
         setNuiBackground(false)
         // Clear any inline styles left by collapse/resize animations
@@ -248,19 +255,17 @@ function App() {
 
   // Center the window on first open (before KVP data arrives).
   // KVP restore will override this if a saved position exists.
+  // Uses the windowSize ref instead of measuring the DOM — the element
+  // may not have its inline width/height applied yet (applyWindowChrome
+  // runs in a separate RAF), so measuring offsetWidth would give wrong
+  // dimensions and offset the centering.
   useEffect(() => {
     if (!visible || windowPosLoadedRef.current) return
-    const el = windowRef.current
-    if (!el) return
-    const raf = window.requestAnimationFrame(() => {
-      const w = el.offsetWidth
-      const h = el.offsetHeight
-      setWindowPos({
-        x: Math.round(window.innerWidth / 2 - w / 2),
-        y: Math.round(window.innerHeight / 2 - h / 2),
-      })
+    const size = windowSizeRef.current
+    setWindowPos({
+      x: Math.round(window.innerWidth / 2 - size.width / 2),
+      y: Math.round(window.innerHeight / 2 - size.height / 2),
     })
-    return () => window.cancelAnimationFrame(raf)
   }, [visible])
 
   // Reason shortcuts from server (ea_addShortcut)
