@@ -148,16 +148,22 @@ export function useWindowChrome({
   const handleCollapseAnimationFinish = useCallback(() => {
     const el = windowRef.current
     if (!el) return
+
     const ww = el.offsetWidth
+    const wh = el.offsetHeight
     const vw = window.innerWidth
+    const vh = window.innerHeight
     const pos = windowPosRef.current
-    const rightEdge = Math.round(vw / 2 - ww / 2 + pos.x)
-    if (rightEdge > vw) {
-      setWindowPos((prev) => {
-        const adjusted = { ...prev, x: prev.x - (rightEdge - vw) }
-        saveWindowPosition(adjusted)
-        return adjusted
-      })
+
+    const clamped = {
+      x: Math.max(0, Math.min(vw - ww, pos.x)),
+      y: Math.max(0, Math.min(vh - wh, pos.y)),
+    }
+
+    if (clamped.x !== pos.x || clamped.y !== pos.y) {
+      setWindowPos(clamped)
+      windowPosRef.current = clamped
+      saveWindowPosition(clamped)
     }
   }, [saveWindowPosition])
 
