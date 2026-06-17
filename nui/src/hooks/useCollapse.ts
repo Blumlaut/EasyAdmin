@@ -36,12 +36,15 @@ export function useCollapse(
     // Lock scrollbar so width change doesn't shift layout
     document.documentElement.style.overflowX = 'hidden'
 
-    // Animate width + clip-path together
+    // Animate width + clip-path together. The animations are cancelled in
+    // onfinish after manually applying the final styles; leaving finished
+    // fill-forwards animations active keeps their width in the animation
+    // cascade and blocks later inline width changes from horizontal resize.
     const widthAnim = el.animate(
       [{ width: `${el.offsetWidth}px` }, { width: `${toWidth}px` }],
       { duration: COLLAPSE_DURATION, easing: 'ease-out', fill: 'forwards' },
     )
-    contentEl?.animate(
+    const contentAnim = contentEl?.animate(
       [
         { clipPath: isCollapsing ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)' },
         { clipPath: isCollapsing ? 'inset(0 100% 0 0)' : 'inset(0 0 0 0)' },
@@ -60,7 +63,9 @@ export function useCollapse(
 
     widthAnim.onfinish = () => {
       document.documentElement.style.overflowX = ''
-      el.style.width = isCollapsing ? `${toWidth}px` : ''
+      el.style.width = `${toWidth}px`
+      widthAnim.cancel()
+      contentAnim?.cancel()
       // collapse/expand finished
       onAnimationFinish?.()
       // Restore content to static + apply flex collapse
@@ -76,7 +81,10 @@ export function useCollapse(
         contentEl.classList.add('ea-content--collapsed')
       }
     }
-    widthAnim.oncancel = () => { document.documentElement.style.overflowX = '' }
+    widthAnim.oncancel = () => {
+      document.documentElement.style.overflowX = ''
+      contentAnim?.cancel()
+    }
   }, [contentCollapsed, windowRef, setContentCollapsed, getExpandedWidth, onAnimationFinish])
 
   return toggleCollapsed
