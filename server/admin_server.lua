@@ -1048,6 +1048,9 @@ function getLatestVersion()
 end
 exports('getLatestVersion', getLatestVersion)
 
+local curVersion, isMaster = GetVersion()
+local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
+
 function checkVersion()
 	local remoteVersion,remoteURL = getLatestVersion()
 
@@ -1288,9 +1291,6 @@ Citizen.CreateThread(function()
 	
 end)
 
-
-curVersion, isMaster = GetVersion()
-local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 
 Citizen.CreateThread(function()
 	repeat
