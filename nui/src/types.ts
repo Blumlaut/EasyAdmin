@@ -339,6 +339,26 @@ export interface AdminNoteEntry {
 }
 
 // ============================================================
+// Name History & Aliases
+// ============================================================
+
+// Single name history entry (automatic, from telemetry)
+export interface NameHistoryEntry {
+  name: string
+  firstSeen: number        // Unix seconds
+  lastSeen: number | null  // null = current name
+}
+
+// AKA alias entry (admin-added)
+export interface PlayerAliasEntry {
+  id: number
+  alias: string
+  addedBy: string
+  addedAt: number          // Unix seconds
+  note?: string
+}
+
+// ============================================================
 // Update Info
 // ============================================================
 

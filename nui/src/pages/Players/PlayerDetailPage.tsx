@@ -52,7 +52,7 @@ export function PlayerDetailPage({
 
   return (
     <div className="page-container">
-      <PlayerInfoPanel player={player} />
+      <PlayerInfoPanel player={player} permissions={permissions} />
 
       {/* Collapsible identifiers card */}
       {visibleIdentifiers.length > 0 && (
