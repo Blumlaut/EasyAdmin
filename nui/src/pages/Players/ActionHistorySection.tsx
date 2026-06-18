@@ -3,7 +3,7 @@ import { callLua, on } from '../../fivem'
 import type { ActionHistoryEntry, Notification, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
-import { ConfirmDialog } from '../../components/ConfirmDialog'
+import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
 
 interface ActionHistorySectionProps {
@@ -42,9 +42,9 @@ export function ActionHistorySection({
   onToast,
 }: ActionHistorySectionProps) {
   const canDelete = permissions['player.actionhistory.delete']
+  const modal = useModalContext()
 
   const [state, setState] = useState<HistoryState>({ status: 'loading' })
-  const [deletingId, setDeletingId] = useState<number | null>(null)
 
   // Fetch action history from server
   useEffect(() => {
@@ -62,24 +62,20 @@ export function ActionHistorySection({
   }, [playerId])
 
   const handleDelete = useCallback((entryId: number) => {
-    setDeletingId(entryId)
-  }, [])
-
-  const confirmDelete = useCallback(async () => {
-    if (deletingId === null) return
-    try {
-      await callLua('deleteActionHistoryEntry', { id: deletingId, playerId })
-      onToast('Action entry deleted', 'success')
-    } catch {
-      onToast('Failed to delete action entry', 'error')
-    } finally {
-      setDeletingId(null)
-    }
-  }, [deletingId, playerId, onToast])
-
-  const cancelDelete = useCallback(() => {
-    setDeletingId(null)
-  }, [])
+    modal.openConfirm(
+      'Delete action entry',
+      'Are you sure you want to delete this action history entry? This cannot be undone.',
+      async () => {
+        try {
+          await callLua('deleteActionHistoryEntry', { id: entryId, playerId })
+          onToast('Action entry deleted', 'success')
+        } catch {
+          onToast('Failed to delete action entry', 'error')
+        }
+      },
+      'danger'
+    )
+  }, [playerId, onToast, modal])
 
   // Sort entries by time descending (newest first)
   const sortedEntries = useMemo(() => {
@@ -178,17 +174,6 @@ export function ActionHistorySection({
           )
         })}
       </div>
-
-      {deletingId !== null && (
-        <ConfirmDialog
-          title="Delete action entry"
-          message="Are you sure you want to delete this action history entry? This cannot be undone."
-          confirmLabel="Delete"
-          variant="danger"
-          onConfirm={confirmDelete}
-          onCancel={cancelDelete}
-        />
-      )}
     </div>
   )
 }

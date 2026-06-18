@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
 import type { BanEntry, Notification, Permissions } from '../../types'
-import { InputPrompt } from '../../components/InputPrompt'
-import { ConfirmDialog } from '../../components/ConfirmDialog'
+import { useModalContext } from '../../ModalContext'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
@@ -15,7 +14,6 @@ interface BanDetailPageProps {
   permissions: Permissions
   onBack: () => void
   onToast: (text: string, type?: Notification['type']) => void
-  onUnbanned: () => void
 }
 
 type DetailState =
@@ -30,17 +28,15 @@ export function BanDetailPage({
   permissions,
   onBack: _onBack,
   onToast,
-  onUnbanned,
 }: BanDetailPageProps) {
   const canEdit = !!permissions['player.ban.edit']
   const canRemove = !!permissions['player.ban.remove']
+  const modal = useModalContext()
 
   const [state, setState] = useState<DetailState>(
     initialBan ? { status: 'success', ban: initialBan } : { status: 'loading' },
   )
   const [edited, setEdited] = useState<BanEntry | null>(initialBan ?? null)
-  const [editing, setEditing] = useState<null | 'reason' | 'name' | 'banner' | 'expire'>(null)
-  const [confirmUnban, setConfirmUnban] = useState(false)
   const [saving, setSaving] = useState(false)
 
   // Fetch ban detail from server if not provided via props
@@ -108,9 +104,11 @@ export function BanDetailPage({
 
   const current = edited
 
-  function applyEdit(field: keyof BanEntry, value: string) {
-    setEdited((prev) => (prev ? { ...prev, [field]: value } : prev))
-    setEditing(null)
+  function handleEditField(field: 'reason' | 'name' | 'banner' | 'expire') {
+    const currentValue = field === 'expire' ? String(current.expire ?? '') : String(current[field] ?? '')
+    modal.openEditBanField(banId, field, currentValue, (f, value) => {
+      setEdited((prev) => (prev ? { ...prev, [f]: value } : prev))
+    })
   }
 
   async function handleSave() {
@@ -126,16 +124,9 @@ export function BanDetailPage({
     }
   }
 
-  async function handleUnban() {
+  function handleUnban() {
     if (!edited) return
-    try {
-      await callLua('unbanPlayer', { banid: edited.banid })
-      onToast('Player unbanned', 'success')
-      setConfirmUnban(false)
-      onUnbanned()
-    } catch {
-      onToast('Failed to unban', 'error')
-    }
+    modal.openUnbanPlayer(edited.banid, edited.name ?? 'this player')
   }
 
   const rows: KeyValueRow[] = [
@@ -151,7 +142,7 @@ export function BanDetailPage({
       key: 'Reason',
       value: current.reason || '—',
       ...(canEdit
-        ? { onClick: () => setEditing('reason'), actionLabel: 'Edit' }
+        ? { onClick: () => handleEditField('reason'), actionLabel: 'Edit' }
         : {}),
     },
     {
@@ -159,7 +150,7 @@ export function BanDetailPage({
       value: current.name ?? '—',
       ...(canEdit
         ? {
-            onClick: () => setEditing('name'),
+            onClick: () => handleEditField('name'),
             actionLabel: 'Edit',
           }
         : {}),
@@ -168,14 +159,14 @@ export function BanDetailPage({
       key: 'Banner',
       value: current.banner ?? '—',
       ...(canEdit
-        ? { onClick: () => setEditing('banner'), actionLabel: 'Edit' }
+        ? { onClick: () => handleEditField('banner'), actionLabel: 'Edit' }
         : {}),
     },
     {
       key: 'Expires',
       value: current.expireString ?? '—',
       ...(canEdit
-        ? { onClick: () => setEditing('expire'), actionLabel: 'Edit' }
+        ? { onClick: () => handleEditField('expire'), actionLabel: 'Edit' }
         : {}),
     },
   ]
@@ -238,63 +229,12 @@ export function BanDetailPage({
           <p className="section-label section-label-danger">Danger zone</p>
           <button
             className="btn btn-danger btn-full"
-            onClick={() => setConfirmUnban(true)}
+            onClick={handleUnban}
           >
             <Icon name="trash" size="xs" />
             Unban player
           </button>
         </div>
-      )}
-
-      {editing === 'reason' && (
-        <InputPrompt
-          title="Edit reason"
-          label="Ban reason"
-          initialValue={current.reason}
-          onConfirm={(v) => applyEdit('reason', v)}
-          onCancel={() => setEditing(null)}
-        />
-      )}
-      {editing === 'name' && (
-        <InputPrompt
-          title="Edit name"
-          label="Banned player name"
-          initialValue={current.name}
-          onConfirm={(v) => applyEdit('name', v)}
-          onCancel={() => setEditing(null)}
-        />
-      )}
-      {editing === 'banner' && (
-        <InputPrompt
-          title="Edit banner"
-          label="Admin name to display"
-          initialValue={current.banner}
-          onConfirm={(v) => applyEdit('banner', v)}
-          onCancel={() => setEditing(null)}
-        />
-      )}
-      {editing === 'expire' && (
-        <InputPrompt
-          title="Edit expire"
-          label="Unix timestamp (-1 for permanent)"
-          initialValue={String(current.expire ?? '')}
-          onConfirm={(v) => {
-            const num = Number(v)
-            applyEdit('expire', String(Number.isFinite(num) ? num : -1))
-          }}
-          onCancel={() => setEditing(null)}
-        />
-      )}
-
-      {confirmUnban && (
-        <ConfirmDialog
-          title="Unban player"
-          message={`Are you sure you want to unban ${current.name ?? 'this player'}?`}
-          confirmLabel="Unban"
-          variant="danger"
-          onConfirm={handleUnban}
-          onCancel={() => setConfirmUnban(false)}
-        />
       )}
     </div>
   )

@@ -201,6 +201,18 @@ function App() {
         cleanupTypes={CLEANUP_TYPES}
         onToast={showToast}
         onPlayersUpdated={data.fetchPlayers}
+        onReportRemoved={(reportId) => {
+          data.setReports((prev) => prev.filter((r) => r.id !== reportId))
+          nav.navigateTo('reports')
+        }}
+        onUnbanned={(banId) => {
+          data.setBanDetailCache((prev) => {
+            const entries = Object.entries(prev)
+              .filter(([key]) => key !== banId)
+            return Object.fromEntries(entries)
+          })
+          nav.navigateTo('bans')
+        }}
       >
         <div
           className="ea-backdrop"
@@ -341,16 +353,6 @@ function App() {
                   permissions={data.permissions}
                   onBack={handleGoBack}
                   onToast={showToast}
-                  onUnbanned={() => {
-                    if (nav.selectedBanId) {
-                      data.setBanDetailCache((prev) => {
-                        const entries = Object.entries(prev)
-                          .filter(([key]) => key !== nav.selectedBanId)
-                        return Object.fromEntries(entries)
-                      })
-                    }
-                    nav.navigateTo('bans')
-                  }}
                 />
               )}
 
@@ -374,10 +376,6 @@ function App() {
                     const p = data.players.find((pl) => pl.id === id)
                     if (p) nav.selectPlayer(p)
                     else showToast('Player not online', 'error')
-                  }}
-                  onRemoved={() => {
-                    data.setReports((prev) => prev.filter((r) => r.id !== nav.selectedReportId))
-                    nav.navigateTo('reports')
                   }}
                   onToast={showToast}
                 />

@@ -26,6 +26,17 @@ type ModalKind =
   | { kind: 'slap'; player: Player }
   | { kind: 'confirm'; title: string; message: string; variant?: 'default' | 'danger'; action: () => Promise<void> }
   | { kind: 'offline-ban'; id: number; name: string }
+  // Admin notes
+  | { kind: 'admin-note'; playerId: number }
+  // Action history
+  | { kind: 'delete-action-history'; entryId: number; playerId: number }
+  // Ban detail editing
+  | { kind: 'edit-ban-field'; banId: string; field: 'reason' | 'name' | 'banner' | 'expire'; currentValue: string; onSaved: (field: string, value: string) => void }
+  // Unban confirmation
+  | { kind: 'unban-player'; banId: string; playerName: string }
+  // Report actions
+  | { kind: 'close-report'; reportId: number }
+  | { kind: 'close-similar-reports'; reportId: number }
 
 interface ModalContextValue {
   openAnnouncement: () => void
@@ -41,6 +52,17 @@ interface ModalContextValue {
   openSlap: (player: Player) => void
   openConfirm: (title: string, message: string, action: () => Promise<void>, variant?: 'default' | 'danger') => void
   openOfflineBan: (id: number, name: string) => void
+  // Admin notes
+  openAdminNote: (playerId: number) => void
+  // Action history
+  openDeleteActionHistory: (entryId: number, playerId: number) => void
+  // Ban detail editing
+  openEditBanField: (banId: string, field: 'reason' | 'name' | 'banner' | 'expire', currentValue: string, onSaved: (field: string, value: string) => void) => void
+  // Unban confirmation
+  openUnbanPlayer: (banId: string, playerName: string) => void
+  // Report actions
+  openCloseReport: (reportId: number) => void
+  openCloseSimilarReports: (reportId: number) => void
   closeAll: () => void
 }
 
@@ -57,6 +79,8 @@ interface ModalProviderProps {
   cleanupTypes: CleanupType[]
   onToast: (text: string, type?: Notification['type']) => void
   onPlayersUpdated?: () => void
+  onReportRemoved?: (reportId: number) => void
+  onUnbanned?: (banId: string) => void
 }
 
 export function ModalProvider({
@@ -64,6 +88,8 @@ export function ModalProvider({
   cleanupTypes,
   onToast,
   onPlayersUpdated,
+  onReportRemoved,
+  onUnbanned,
 }: ModalProviderProps) {
   const [modal, setModal] = useState<ModalKind>(null)
 
@@ -84,6 +110,14 @@ export function ModalProvider({
     setModal({ kind: 'confirm', title, message, variant, action })
   }, [])
   const openOfflineBan = useCallback((id: number, name: string) => setModal({ kind: 'offline-ban', id, name }), [])
+  const openAdminNote = useCallback((playerId: number) => setModal({ kind: 'admin-note', playerId }), [])
+  const openDeleteActionHistory = useCallback((entryId: number, playerId: number) => setModal({ kind: 'delete-action-history', entryId, playerId }), [])
+  const openEditBanField = useCallback((banId: string, field: 'reason' | 'name' | 'banner' | 'expire', currentValue: string, onSaved: (field: string, value: string) => void) => {
+    setModal({ kind: 'edit-ban-field', banId, field, currentValue, onSaved })
+  }, [])
+  const openUnbanPlayer = useCallback((banId: string, playerName: string) => setModal({ kind: 'unban-player', banId, playerName }), [])
+  const openCloseReport = useCallback((reportId: number) => setModal({ kind: 'close-report', reportId }), [])
+  const openCloseSimilarReports = useCallback((reportId: number) => setModal({ kind: 'close-similar-reports', reportId }), [])
 
   // ---- Action helpers ----
 
@@ -188,6 +222,59 @@ export function ModalProvider({
     closeAll()
   }
 
+  async function addAdminNote(playerId: number, content: string) {
+    try {
+      await callLua('addAdminNote', { id: playerId, note: content.trim() })
+      onToast('Note added', 'success')
+    } catch {
+      onToast('Failed to add note', 'error')
+    }
+    closeAll()
+  }
+
+  async function deleteActionHistoryEntry(entryId: number, playerId: number) {
+    try {
+      await callLua('deleteActionHistoryEntry', { id: entryId, playerId })
+      onToast('Action entry deleted', 'success')
+    } catch {
+      onToast('Failed to delete action entry', 'error')
+    }
+    closeAll()
+  }
+
+  async function unbanPlayer(banId: string) {
+    try {
+      await callLua('unbanPlayer', { banid: banId })
+      onToast('Player unbanned', 'success')
+      onUnbanned?.(banId)
+    } catch {
+      onToast('Failed to unban', 'error')
+    }
+    closeAll()
+  }
+
+  async function closeReport(reportId: number) {
+    try {
+      await callLua('closeReport', { id: reportId })
+      onToast('Report closed', 'success')
+      onReportRemoved?.(reportId)
+    } catch {
+      onToast('Failed to close report', 'error')
+    }
+    closeAll()
+  }
+
+  async function closeSimilarReports(reportId: number) {
+    try {
+      await callLua('closeSimilarReports', { id: reportId })
+      onToast('Similar reports closed', 'success')
+      onReportRemoved?.(reportId)
+    } catch {
+      onToast('Failed to close similar reports', 'error')
+    }
+    closeAll()
+  }
+
   // ---- Context value ----
 
   const value: ModalContextValue = {
@@ -204,6 +291,12 @@ export function ModalProvider({
     openSlap,
     openConfirm,
     openOfflineBan,
+    openAdminNote,
+    openDeleteActionHistory,
+    openEditBanField,
+    openUnbanPlayer,
+    openCloseReport,
+    openCloseSimilarReports,
     closeAll,
   }
 
@@ -370,6 +463,107 @@ export function ModalProvider({
     // Offline ban (cached players)
     if (modal.kind === 'offline-ban') {
       return <OfflineBanFlow id={modal.id} name={modal.name} />
+    }
+
+    // Admin note
+    if (modal.kind === 'admin-note') {
+      return (
+        <InputPrompt
+          title="Add admin note"
+          label="Note content"
+          placeholder="Type your note..."
+          maxLength={512}
+          confirmLabel="Add note"
+          required
+          onCancel={closeAll}
+          onConfirm={(v) => addAdminNote(modal.playerId, v)}
+        />
+      )
+    }
+
+    // Delete action history entry
+    if (modal.kind === 'delete-action-history') {
+      return (
+        <ConfirmDialog
+          title="Delete action entry"
+          message="Are you sure you want to delete this action history entry? This cannot be undone."
+          confirmLabel="Delete"
+          variant="danger"
+          onCancel={closeAll}
+          onConfirm={() => deleteActionHistoryEntry(modal.entryId, modal.playerId)}
+        />
+      )
+    }
+
+    // Edit ban field
+    if (modal.kind === 'edit-ban-field') {
+      const fieldLabels: Record<string, { title: string; label: string; placeholder: string }> = {
+        reason: { title: 'Edit reason', label: 'Ban reason', placeholder: 'Enter ban reason...' },
+        name: { title: 'Edit name', label: 'Banned player name', placeholder: 'Enter player name...' },
+        banner: { title: 'Edit banner', label: 'Admin name to display', placeholder: 'Enter admin name...' },
+        expire: { title: 'Edit expire', label: 'Unix timestamp (-1 for permanent)', placeholder: '-1' },
+      }
+      const fl = fieldLabels[modal.field]
+      return (
+        <InputPrompt
+          title={fl.title}
+          label={fl.label}
+          placeholder={fl.placeholder}
+          initialValue={modal.currentValue}
+          onCancel={closeAll}
+          onConfirm={(v) => {
+            if (modal.field === 'expire') {
+              const num = Number(v)
+              modal.onSaved(modal.field, String(Number.isFinite(num) ? num : -1))
+            } else {
+              modal.onSaved(modal.field, v)
+            }
+            closeAll()
+          }}
+        />
+      )
+    }
+
+    // Unban player
+    if (modal.kind === 'unban-player') {
+      return (
+        <ConfirmDialog
+          title="Unban player"
+          message={`Are you sure you want to unban ${modal.playerName ?? 'this player'}?`}
+          confirmLabel="Unban"
+          variant="danger"
+          onCancel={closeAll}
+          onConfirm={() => unbanPlayer(modal.banId)}
+        />
+      )
+    }
+
+    // Close report
+    if (modal.kind === 'close-report') {
+      return (
+        <ConfirmDialog
+          title="Close report"
+          message={`Are you sure you want to close report #${modal.reportId}?`}
+          confirmLabel="Close"
+          variant="danger"
+          onCancel={closeAll}
+          onConfirm={() => closeReport(modal.reportId)}
+        />
+      )
+    }
+
+    // Close similar reports
+    if (modal.kind === 'close-similar-reports') {
+      return (
+        <ConfirmDialog
+          title="Close similar reports"
+          message="This will close all reports with the same reporter, reported player, and reason. Continue?"
+          confirmLabel="Close similar"
+          variant="danger"
+          onCancel={closeAll}
+          onConfirm={() => closeSimilarReports(modal.reportId)}
+        />
+      )
     }
 
     return null

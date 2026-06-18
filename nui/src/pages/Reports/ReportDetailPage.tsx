@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { callLua } from '../../fivem'
 import type { Notification, Permissions, Player, Report } from '../../types'
+import { useModalContext } from '../../ModalContext'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
-import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { Icon } from '../../components/icons'
 
 interface ReportDetailPageProps {
@@ -11,7 +11,6 @@ interface ReportDetailPageProps {
   permissions: Permissions
   players: Player[]
   onOpenPlayer: (playerId: number) => void
-  onRemoved: () => void
   onToast: (text: string, type?: Notification['type']) => void
 }
 
@@ -26,15 +25,13 @@ export function ReportDetailPage({
   permissions,
   players,
   onOpenPlayer,
-  onRemoved,
   onToast,
 }: ReportDetailPageProps) {
   const canClaim = !!permissions['player.reports.claim']
   const canProcess = !!permissions['player.reports.process']
+  const modal = useModalContext()
 
   const [state, setState] = useState<DetailState>({ status: 'loading' })
-  const [confirmClose, setConfirmClose] = useState(false)
-  const [confirmSimilar, setConfirmSimilar] = useState(false)
   const [busy, setBusy] = useState(false)
 
   // Derive report from parent's reports array; fall back to fetch if not found
@@ -79,34 +76,14 @@ export function ReportDetailPage({
     }
   }
 
-  async function closeReport() {
+  function handleCloseReport() {
     if (state.status !== 'success') return
-    setBusy(true)
-    try {
-      await callLua('closeReport', { id: state.report.id })
-      onToast('Report closed', 'success')
-      setConfirmClose(false)
-      onRemoved()
-    } catch {
-      onToast('Failed to close report', 'error')
-    } finally {
-      setBusy(false)
-    }
+    modal.openCloseReport(state.report.id)
   }
 
-  async function closeSimilar() {
+  function handleCloseSimilar() {
     if (state.status !== 'success') return
-    setBusy(true)
-    try {
-      await callLua('closeSimilarReports', { id: state.report.id })
-      onToast('Similar reports closed', 'success')
-      setConfirmSimilar(false)
-      onRemoved()
-    } catch {
-      onToast('Failed to close similar reports', 'error')
-    } finally {
-      setBusy(false)
-    }
+    modal.openCloseSimilarReports(state.report.id)
   }
 
   if (state.status === 'loading') {
@@ -216,16 +193,14 @@ export function ReportDetailPage({
             <>
               <button
                 className="btn btn-danger btn-full"
-                onClick={() => setConfirmClose(true)}
-                disabled={busy}
+                onClick={handleCloseReport}
               >
                 <Icon name="x" size="xs" />
                 Close report
               </button>
               <button
                 className="btn btn-warning btn-full"
-                onClick={() => setConfirmSimilar(true)}
-                disabled={busy}
+                onClick={handleCloseSimilar}
               >
                 <Icon name="trash-2" size="xs" />
                 Close similar reports
@@ -234,28 +209,6 @@ export function ReportDetailPage({
           )}
         </div>
       </div>
-
-      {confirmClose && (
-        <ConfirmDialog
-          title="Close report"
-          message={`Are you sure you want to close report #${report.id}?`}
-          confirmLabel="Close"
-          variant="danger"
-          onConfirm={closeReport}
-          onCancel={() => setConfirmClose(false)}
-        />
-      )}
-
-      {confirmSimilar && (
-        <ConfirmDialog
-          title="Close similar reports"
-          message="This will close all reports with the same reporter, reported player, and reason. Continue?"
-          confirmLabel="Close similar"
-          variant="danger"
-          onConfirm={closeSimilar}
-          onCancel={() => setConfirmSimilar(false)}
-        />
-      )}
     </div>
   )
 }

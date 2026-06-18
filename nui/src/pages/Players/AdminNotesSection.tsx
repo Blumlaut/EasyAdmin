@@ -2,8 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
 import type { AdminNoteEntry, Notification, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
-import { ConfirmDialog } from '../../components/ConfirmDialog'
-import { InputPrompt } from '../../components/InputPrompt'
+import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
 
 interface AdminNotesSectionProps {
@@ -23,10 +22,9 @@ export function AdminNotesSection({
 }: AdminNotesSectionProps) {
   const canAdd = permissions['player.adminnotes.add']
   const canDelete = permissions['player.adminnotes.delete']
+  const modal = useModalContext()
 
   const [state, setState] = useState<NotesState>({ status: 'loading' })
-  const [adding, setAdding] = useState(false)
-  const [deletingId, setDeletingId] = useState<number | null>(null)
 
   // Fetch admin notes from server
   useEffect(() => {
@@ -43,36 +41,21 @@ export function AdminNotesSection({
     }
   }, [playerId])
 
-  const handleAddNote = useCallback(async (content: string) => {
-    setAdding(false)
-    if (!content.trim()) return
-    try {
-      await callLua('addAdminNote', { id: playerId, note: content.trim() })
-      onToast('Note added', 'success')
-    } catch {
-      onToast('Failed to add note', 'error')
-    }
-  }, [playerId, onToast])
-
   const handleDelete = useCallback((noteId: number) => {
-    setDeletingId(noteId)
-  }, [])
-
-  const confirmDelete = useCallback(async () => {
-    if (deletingId === null) return
-    try {
-      await callLua('deleteAdminNote', { id: deletingId, playerId })
-      onToast('Note deleted', 'success')
-    } catch {
-      onToast('Failed to delete note', 'error')
-    } finally {
-      setDeletingId(null)
-    }
-  }, [deletingId, playerId, onToast])
-
-  const cancelDelete = useCallback(() => {
-    setDeletingId(null)
-  }, [])
+    modal.openConfirm(
+      'Delete admin note',
+      'Are you sure you want to delete this note? This cannot be undone.',
+      async () => {
+        try {
+          await callLua('deleteAdminNote', { id: noteId, playerId })
+          onToast('Note deleted', 'success')
+        } catch {
+          onToast('Failed to delete note', 'error')
+        }
+      },
+      'danger'
+    )
+  }, [playerId, onToast, modal])
 
   // Sort entries by time descending (newest first).
   // Note: time is a formatted string "DD/MM/YYYY HH:MM" so we sort by id descending as proxy.
@@ -107,7 +90,7 @@ export function AdminNotesSection({
           {canAdd && (
             <button
               className="btn btn-sm btn-secondary"
-              onClick={() => setAdding(true)}
+              onClick={() => modal.openAdminNote(playerId)}
               title="Add note"
               aria-label="Add admin note"
             >
@@ -145,30 +128,6 @@ export function AdminNotesSection({
             </div>
           ))}
         </div>
-      )}
-
-      {adding && (
-        <InputPrompt
-          title="Add admin note"
-          label="Note content"
-          placeholder="Type your note..."
-          maxLength={512}
-          confirmLabel="Add note"
-          required
-          onConfirm={handleAddNote}
-          onCancel={() => setAdding(false)}
-        />
-      )}
-
-      {deletingId !== null && (
-        <ConfirmDialog
-          title="Delete admin note"
-          message="Are you sure you want to delete this note? This cannot be undone."
-          confirmLabel="Delete"
-          variant="danger"
-          onConfirm={confirmDelete}
-          onCancel={cancelDelete}
-        />
       )}
     </div>
   )
