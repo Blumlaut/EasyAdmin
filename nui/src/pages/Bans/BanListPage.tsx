@@ -100,7 +100,7 @@ export function BanListPage({
           onChange={(v) => {
             setQuery(v)
           }}
-          placeholder="Search by ID, name, reason, or identifier..."
+          placeholder="Search by ID, name, or identifier..."
           resultCount={{ shown: bans.length, total: total }}
           ariaLabel="Search bans"
         />

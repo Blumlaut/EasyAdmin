@@ -209,12 +209,14 @@ RegisterServerEvent("EasyAdmin:requestBanPage", function(data)
     for _, ban in ipairs(blacklist) do
         if query then
             local match = false
-            if tostring(ban.banid or ''):lower():find(query, 1, true) then match = true end
+            if tostring(ban.banid or '') == query then match = true end
             if not match and ban.name and tostring(ban.name):lower():find(query, 1, true) then match = true end
-            if not match and ban.reason and tostring(ban.reason):lower():find(query, 1, true) then match = true end
             if not match and ban.identifiers then
                 for _, id in ipairs(ban.identifiers) do
-                    if tostring(id):lower():find(query, 1, true) then match = true; break end
+                    local fullId = tostring(id):lower()
+                    -- match full identifier (e.g. "discord:123456789") or just the ID portion after the colon
+                    local _, _, idPart = fullId:find(':([^:]+)$')
+                    if fullId == query or (idPart and idPart == query) then match = true; break end
                 end
             end
             if not match then goto continue end
