@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
 import type { AdminNoteEntry, Notification, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
+import { TimelineEntry } from '../../components/TimelineEntry'
 import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
 import { createConfirmModal, createTextAreaModal, getStringValue, runModalAction } from '../../modals/helpers'
@@ -123,28 +124,32 @@ export function AdminNotesSection({
       {sortedEntries.length === 0 ? (
         <p className="text-sm text-muted">No notes for this player</p>
       ) : (
-        <div className="admin-notes-list">
+        <div className="timeline-list">
           {sortedEntries.map((entry) => (
-            <div key={entry.id} className="admin-note-entry">
-              <div className="admin-note-entry-header">
-                <span className="admin-note-entry-moderator">
+            <TimelineEntry
+              key={entry.id}
+              time={entry.time}
+              footer={
+                <span className="timeline-entry-moderator">
                   <Icon name="shield" size="xs" />
                   {entry.moderator}
                 </span>
-                <span className="admin-note-entry-time">{entry.time}</span>
-                {canDelete && (
+              }
+              actions={
+                canDelete && (
                   <button
-                    className="admin-note-entry-delete"
+                    className="timeline-entry-delete"
                     onClick={() => handleDelete(entry.id)}
                     title="Delete this note"
                     aria-label="Delete admin note"
                   >
                     <Icon name="trash-2" size="xs" />
                   </button>
-                )}
-              </div>
-              <p className="admin-note-entry-content">{entry.content}</p>
-            </div>
+                )
+              }
+            >
+              {entry.content}
+            </TimelineEntry>
           ))}
         </div>
       )}

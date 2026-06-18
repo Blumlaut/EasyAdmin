@@ -1,28 +1,16 @@
 /* ============================================================
-   Action History Section
+   Shared timeline list wrapper (used by Action History, Admin Notes)
    ============================================================ */
 
-.action-history-list {
+.timeline-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
-.action-history-entry {
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius);
-  background: var(--bg-tertiary);
-  border-left: 3px solid var(--entry-accent, var(--text-muted));
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.action-history-entry-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
+/* ============================================================
+   Action History — section-specific additions
+   ============================================================ */
 
 .action-history-entry-badge {
   display: inline-flex;
@@ -35,35 +23,6 @@
   letter-spacing: 0.04em;
 }
 
-.action-history-entry-time {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-.action-history-entry-reason {
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: var(--leading-normal);
-}
-
-.action-history-entry-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.action-history-entry-moderator {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-}
-
 .action-history-entry-banid {
   display: inline-flex;
   align-items: center;
@@ -72,88 +31,56 @@
   color: var(--text-muted);
 }
 
-.action-history-entry-delete {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-1);
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  margin-left: auto;
-}
-
-.action-history-entry-delete:hover {
-  background: var(--bg-red);
-  color: var(--accent-red);
-}
-
 /* ============================================================
-   Admin Notes Section
+   Name History Dropdown (inline in PlayerInfoPanel)
    ============================================================ */
 
-.admin-notes-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.admin-note-entry {
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius);
-  background: var(--bg-tertiary);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.admin-note-entry-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.admin-note-entry-moderator {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-}
-
-.admin-note-entry-time {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-.admin-note-entry-delete {
+.name-history-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-1);
+  padding: 2px;
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
-.admin-note-entry-delete:hover {
-  background: var(--bg-red);
-  color: var(--accent-red);
+.name-history-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
-.admin-note-entry-content {
+.name-history-dropdown {
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--bg-tertiary);
+}
+
+.name-history-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.name-history-names {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.name-history-name {
   font-size: var(--text-sm);
   color: var(--text-secondary);
-  margin: 0;
-  line-height: var(--leading-normal);
-  white-space: pre-wrap;
-  word-break: break-word;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
