@@ -275,11 +275,11 @@ RegisterNUICallback('requestUpdateInfo', function(_data, cb)
 end)
 
 -- ============================================================
--- "Press to toggle focus" keybind
+-- "Press to toggle focus" keybind (Alt to unfold/fold)
 -- ============================================================
 -- The user can release the NUI into background mode (by clicking the
 -- backdrop or via the unhook button) and then re-engage by pressing
--- the bound key. Pressing again toggles focus off.
+-- the bound key. Pressing again toggles focus off (folds back in).
 --
 -- The default key is Left Alt (the `lmenu` VK code). FiveM only
 -- supports RegisterKeyMapping on FiveM (not RedM), so we guard the

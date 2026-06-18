@@ -195,9 +195,9 @@ export function useWindowChrome({
     })
   }, [contentCollapsed, toggleCollapsed])
 
-  // === Backdrop click — collapse to sidebar + release focus ===
+  // === Fold in — collapse to sidebar + release focus ===
 
-  const handleBackdropClick = useCallback(() => {
+  const foldIn = useCallback(() => {
     if (nuiBackground) return
     if (!contentCollapsed) {
       toggleCollapsed()
@@ -205,6 +205,8 @@ export function useWindowChrome({
     setNuiBackground(true)
     callLua('releaseFocus').catch(() => {})
   }, [nuiBackground, contentCollapsed, toggleCollapsed])
+
+  const handleBackdropClick = foldIn
 
   // === Apply window chrome styles ===
 
@@ -305,6 +307,7 @@ export function useWindowChrome({
     nuiBackground,
     toggleCollapsed,
     toggleMaximize,
+    foldIn,
     handleBackdropClick,
     resetWindowChrome,
   }

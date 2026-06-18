@@ -4,7 +4,7 @@ import { useAppNavigation } from './hooks/useAppNavigation'
 import { useToast } from './hooks/useToast'
 import { useWindowChrome } from './hooks/useWindowChrome'
 import type { CleanupType, View } from './types'
-import { on, callLua } from './fivem'
+import { on } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
 import { Toast } from './components/Toast'
@@ -162,7 +162,7 @@ function App() {
     fontSize: `${data.settings.fontSize}px`,
   }
 
-  const closeMenu = () => callLua('closeMenu').catch(() => {})
+  const handleFoldIn = chrome.foldIn
 
   // === Navigation select handler ===
 
@@ -293,8 +293,10 @@ function App() {
                 </button>
                 <button
                   className="btn btn-ghost btn-icon btn-close"
-                  onClick={closeMenu}
-                  aria-label="Close"
+                  onClick={handleFoldIn}
+                  aria-label="Fold in"
+                  title="Fold in (press ALT to unfold)"
+                  disabled={chrome.nuiBackground}
                 >
                   <Icon name="x" size="xs" />
                 </button>
