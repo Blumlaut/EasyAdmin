@@ -337,3 +337,14 @@ export interface AdminNoteEntry {
   content: string          // Note content
   moderator: string        // Moderator name
 }
+
+// ============================================================
+// Update Info
+// ============================================================
+
+// Update availability info pushed from server
+export interface UpdateInfo {
+  currentVersion: string
+  latestVersion: string
+  available: boolean
+}

@@ -76,6 +76,13 @@ exports('getLatestVersion', getLatestVersion)
 local curVersion, isMaster = GetVersion()
 local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 
+-- Update info state: populated by checkVersion(), consumed by NUI
+local updateInfo = {
+  currentVersion = curVersion,
+  latestVersion = curVersion,
+  available = false,
+}
+
 function checkVersion()
 	local remoteVersion,remoteURL = getLatestVersion()
 
@@ -115,6 +122,12 @@ function checkVersion()
 		print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..remoteURL)
 		print("\n--------------------------------------------------------------------------")
 		updateAvailable = remoteVersion
+		updateInfo.latestVersion = remoteVersion
+		updateInfo.available = true
+		-- Push update notification to all online admins
+		for adminId,_ in pairs(OnlineAdmins or {}) do
+			TriggerClientEvent('EasyAdmin:updateInfo', adminId, updateInfo)
+		end
 	elseif tonumber(curVersion) > tonumber(remoteVersion) then
 		PrintDebugMessage("Your version of "..resourceName.." seems to be higher than the current stable version.", 2)
 	end
@@ -151,6 +164,12 @@ function HTTPRequest(url, ...)
 	return response
 end
 exports('HTTPRequest', HTTPRequest)
+
+-- NUI requests current update info (sent when menu opens)
+RegisterServerEvent('EasyAdmin:requestUpdateInfo', function()
+  local src = source
+  TriggerClientEvent('EasyAdmin:updateInfo', src, updateInfo)
+end)
 
 Citizen.CreateThread(function()
 	while true do

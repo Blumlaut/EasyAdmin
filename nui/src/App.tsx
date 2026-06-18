@@ -303,7 +303,12 @@ function App() {
 
             <main id="ea-main-content" className="glass main-content" role="main">
               {nav.view === 'main' && (
-                <Dashboard playerCount={data.players.length} />
+                <Dashboard
+                  playerCount={data.players.length}
+                  updateInfo={data.updateInfo}
+                  onDismissUpdate={data.dismissUpdate}
+                  onToast={showToast}
+                />
               )}
 
               {nav.view === 'players' && (

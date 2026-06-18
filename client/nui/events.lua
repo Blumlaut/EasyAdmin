@@ -244,3 +244,17 @@ RegisterNetEvent('EasyAdmin:ReceiveAdminNotes', function(notes, playerId)
     })
   end
 end)
+
+-- ============================================================
+-- Update Info: forward server result to NUI
+-- Pushed when checkVersion detects a new version, or on request.
+-- ============================================================
+
+RegisterNetEvent('EasyAdmin:updateInfo', function(data)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'updateInfo',
+      data = data or { available = false },
+    })
+  end
+end)

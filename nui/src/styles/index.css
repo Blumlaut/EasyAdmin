@@ -14,6 +14,7 @@
 @import './collapse.css';
 
 /* -- Components -- */
+@import './components/alerts.css';
 @import './components/buttons.css';
 @import './components/inputs.css';
 @import './components/badges.css';

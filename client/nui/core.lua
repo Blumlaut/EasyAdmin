@@ -117,7 +117,7 @@ end
 function NuiBuildPlayerList()
   local playerData = {}
 
-  if (RedM and settings.infinity) or not RedM then
+  if (RedM and infinity) or not RedM then
     local localplayers = playerlist or {}
     local temp = {}
     for i, thePlayer in pairs(localplayers) do
@@ -264,6 +264,13 @@ RegisterNUICallback('setResourceKvp', function(data, cb)
   if data and data.key and data.value then
     KvpSet(data.key, data.value)
   end
+  cb({ ok = true })
+end)
+
+-- Request current update info from the server
+RegisterNUICallback('requestUpdateInfo', function(_data, cb)
+  TriggerServerEvent('EasyAdmin:requestUpdateInfo')
+  -- Server responds asynchronously via the 'updateInfo' NUI event
   cb({ ok = true })
 end)
 

@@ -7,6 +7,10 @@ const COPIED_TIMEOUT = 2000
 interface CopyButtonProps {
   /** Text to copy to clipboard. */
   value: string
+  /** Label shown before copying. Defaults to "Copy". */
+  label?: string
+  /** Label shown after copying. Defaults to "Copied". */
+  copiedLabel?: string
   /** Called after successful copy. Optional — for side effects like toasts. */
   onCopy?: () => void
   /** Aria label for accessibility. */
@@ -14,10 +18,16 @@ interface CopyButtonProps {
 }
 
 /**
- * Copy button that briefly shows "Copied ✓" with a fade transition,
- * then returns to "Copy". CEF-safe — uses CSS transitions only.
+ * Copy button that briefly shows a "Copied ✓" state with a fade transition,
+ * then returns to the default label. CEF-safe — uses CSS transitions only.
  */
-export function CopyButton({ value, onCopy, ariaLabel = 'Copy' }: CopyButtonProps) {
+export function CopyButton({
+  value,
+  label = 'Copy',
+  copiedLabel = 'Copied',
+  onCopy,
+  ariaLabel = `Copy ${label}`,
+}: CopyButtonProps) {
   const [copied, setCopied] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -45,10 +55,10 @@ export function CopyButton({ value, onCopy, ariaLabel = 'Copy' }: CopyButtonProp
       aria-label={ariaLabel}
       title={ariaLabel}
     >
-      <span className="copy-btn-text copy-btn-text-copy">Copy</span>
+      <span className="copy-btn-text copy-btn-text-copy">{label}</span>
       <span className="copy-btn-text copy-btn-text-copied">
         <Icon name="check" size="xs" />
-        Copied
+        {copiedLabel}
       </span>
     </button>
   )

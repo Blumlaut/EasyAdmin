@@ -90,7 +90,7 @@ RegisterNUICallback('teleportToPlayer', function(data, cb)
   if not permissions['player.teleport.single'] then return deny(cb) end
   local id = tonumber(data and data.id)
   if not id then return deny(cb, 'Missing player id') end
-  if settings.infinity then
+  if infinity then
     TriggerServerEvent('EasyAdmin:TeleportAdminToPlayer', id)
   else
     local targetPed = GetPlayerPed(GetPlayerFromServerId(id))

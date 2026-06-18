@@ -55,5 +55,6 @@ export const dashboardMock: DomainMock = {
   handlers: {
     requestServerStats: handleRequestServerStats,
     requestPlayerHistory: handleRequestPlayerHistory,
+    requestUpdateInfo: async () => jsonResponse({ ok: true }),
   },
 }

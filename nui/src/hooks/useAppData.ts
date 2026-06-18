@@ -7,6 +7,7 @@ import type {
   Player,
   ReasonShortcut,
   Report,
+  UpdateInfo,
 } from '../types'
 import type { WindowPosition } from './useWindowDrag'
 import type { WindowSize } from './useWindowResize'
@@ -49,6 +50,10 @@ export interface AppDataResult {
   // Window init data (position/size restored from KVP)
   windowPosData: WindowPosition | null
   windowSizeData: WindowSize | null
+
+  // Update info
+  updateInfo: UpdateInfo | null
+  dismissUpdate: () => void
 }
 
 export function useAppData(): AppDataResult {
@@ -79,6 +84,13 @@ export function useAppData(): AppDataResult {
   // Window init data from KVP
   const [windowPosData, setWindowPosData] = useState<WindowPosition | null>(null)
   const [windowSizeData, setWindowSizeData] = useState<WindowSize | null>(null)
+
+  // Update info (pushed from server when a new version is detected)
+  const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
+
+  const dismissUpdate = useCallback(() => {
+    setUpdateInfo(null)
+  }, [])
 
   // === Event listeners from Lua ===
 
@@ -159,6 +171,15 @@ export function useAppData(): AppDataResult {
     })
   }, [])
 
+  // Update notification from server (pushed when checkVersion detects a new version)
+  useEffect(() => {
+    return on<UpdateInfo>('updateInfo', (data) => {
+      if (data && data.available) {
+        setUpdateInfo(data)
+      }
+    })
+  }, [])
+
   // === Fetch functions ===
 
   const fetchPlayers = useCallback(() => {
@@ -198,5 +219,7 @@ export function useAppData(): AppDataResult {
     shortcuts,
     windowPosData,
     windowSizeData,
+    updateInfo,
+    dismissUpdate,
   }
 }

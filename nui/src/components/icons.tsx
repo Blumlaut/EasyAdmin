@@ -75,6 +75,10 @@ export type IconName =
   | 'minimize'
   | 'history'
   | 'book-open'
+  | 'info'
+  | 'check-circle'
+  | 'alert-circle'
+  | 'download'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -477,6 +481,33 @@ const ICONS: Record<IconName, React.ReactNode> = {
     <>
       <path d="M2 3h6a4 4 0 0 1 4 4v14" />
       <path d="M22 3h-6a4 4 0 0 0-4 4v14" />
+    </>
+  ),
+  info: (
+    <>
+      <circle cx={12} cy={12} r={10} />
+      <line x1={12} y1={16} x2={12} y2={12} />
+      <line x1={12} y1={8} x2={12.01} y2={8} />
+    </>
+  ),
+  'check-circle': (
+    <>
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <polyline points="22 4 12 14.01 9 11.01" />
+    </>
+  ),
+  'alert-circle': (
+    <>
+      <circle cx={12} cy={12} r={10} />
+      <line x1={12} y1={8} x2={12} y2={12} />
+      <line x1={12} y1={16} x2={12.01} y2={16} />
+    </>
+  ),
+  download: (
+    <>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1={12} y1={15} x2={12} y2={3} />
     </>
   ),
 }

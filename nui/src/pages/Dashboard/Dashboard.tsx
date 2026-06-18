@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ServerStats } from '../../types'
+import type { ServerStats, UpdateInfo } from '../../types'
 import { callLua } from '../../fivem'
 import { type IconName } from '../../components/icons'
+import { Alert } from '../../components/Alert'
+import { CopyButton } from '../../components/CopyButton'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
@@ -146,9 +148,12 @@ function PrideGreeting() {
 
 interface DashboardProps {
   playerCount: number
+  updateInfo: UpdateInfo | null
+  onDismissUpdate: () => void
+  onToast: (text: string, type?: 'info' | 'success' | 'error') => void
 }
 
-export function Dashboard({ playerCount }: DashboardProps) {
+export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast }: DashboardProps) {
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [showPride] = useState(shouldShowPride)
@@ -168,6 +173,11 @@ export function Dashboard({ playerCount }: DashboardProps) {
         if (!cancelled) setLoading(false)
       })
     return () => { cancelled = true }
+  }, [])
+
+  // Request update info from server on mount
+  useEffect(() => {
+    callLua('requestUpdateInfo').catch(() => {})
   }, [])
 
   // Build stat cards
@@ -239,6 +249,29 @@ export function Dashboard({ playerCount }: DashboardProps) {
           </h3>
         )}
       </div>
+
+      {/* Update notification banner */}
+      {updateInfo && (
+        <div className="mb-4">
+          <Alert
+            variant="info"
+            title="Update available"
+            icon="download"
+            action={
+              <CopyButton
+                value={`https://github.com/Blumlaut/EasyAdmin/releases/${updateInfo.latestVersion}`}
+                label="Copy URL"
+                onCopy={() => onToast('Release URL copied to clipboard', 'success')}
+              />
+            }
+            onDismiss={onDismissUpdate}
+          >
+            <span>
+              EasyAdmin {updateInfo.latestVersion} is available (you have {updateInfo.currentVersion}).
+            </span>
+          </Alert>
+        </div>
+      )}
 
       {/* Stat cards row */}
       <div className="grid gap-3 dashboard-grid">

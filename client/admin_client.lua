@@ -17,7 +17,6 @@ reports = {}
 MessageShortcuts = {}
 FrozenPlayers = {}
 MutedPlayers = {}
-settings = {}
 MyBucket = 0
 
 local cachedInfo = {
@@ -42,8 +41,8 @@ RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 end)
 
 
-RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
-	settings[setting] = state
+RegisterNetEvent('EasyAdmin:setInfinity', function(state)
+	infinity = state == true
 end)
 
 RegisterNetEvent('EasyAdmin:SetLanguage', function(newstrings)

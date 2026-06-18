@@ -7,11 +7,7 @@
 isAdmin = false
 showLicenses = false
 RedM = false
-
-settings = {
-	button = "none",
-	forceShowGUIButtons = false,
-}
+infinity = false
 
 -- ea command alias — forwards to easyadmin with arguments
 RegisterCommand('ea', function(_source, args)
@@ -23,7 +19,6 @@ Citizen.CreateThread(function()
 	-- Detect RedM via native existence check
 	if CompendiumHorseObserved then
 		RedM = true
-		settings.button = "PhotoModePc"
 	end
 
 	-- Register keyboard shortcut mapping (FiveM only — RedM lacks RegisterKeyMapping)

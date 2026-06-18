@@ -131,32 +131,8 @@ Citizen.CreateThread(function()
 			TriggerClientEvent('chat:addSuggestion', source, '/'..GetConvar("ea_callAdminCommandName", "calladmin"), "Call Admin", {{name='reason', help="Reason"}})
 		end
 
-		if RedM then
-			local key = GetConvar("ea_defaultKey", "none")
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "button", key)
-		end
-
-		if GetConvar("ea_alwaysShowButtons", "false") == "true" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", true)
-		else
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "forceShowGUIButtons", false)
-		end
-		if updateAvailable then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "updateAvailable", updateAvailable)
-		end
-
-		if os.date("%d/%m") == "22/08" then
-			local age = tonumber(os.date("%Y"))-2017 local ordinal = "th" local last_digit = age % 10 if last_digit == 1 and age ~= 11 then ordinal = 'st' elseif last_digit == 2 and age ~= 12 then ordinal = 'nd' elseif last_digit == 3 and age ~= 13 then ordinal = 'rd' end
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeTitle", "~b~Today is EasyAdmin's "..age..""..ordinal.." birthday! :)")
-		elseif os.date("%m") == "06" and (tonumber(os.date("%d")) >= 1 and tonumber(os.date("%d")) <= 14)  then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeLogo", "pride")
-		elseif os.date("%m") == "04" and os.date("%d") == "01" then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeLogo", "logo-hardadmin")
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "alternativeBanner", "banner-hardadmin")
-		end
-
-		if (infinity) then
-			TriggerClientEvent("EasyAdmin:SetSetting", source, "infinity", true)
+		if infinity then
+			TriggerClientEvent('EasyAdmin:setInfinity', source, true)
 		end
 
 		TriggerLatentClientEvent("EasyAdmin:fillShortcuts", source, 10000, MessageShortcuts)
