@@ -40,14 +40,6 @@ export function PlayerDetailPage({
     }
   }, [player.id])
 
-  function copyDiscord() {
-    if (!player.discord) {
-      onToast('No Discord to copy', 'error')
-      return
-    }
-    onToast('Discord copied to clipboard', 'success')
-  }
-
   const handleToggleIdentifiers = useCallback(() => {
     setIdentifiersExpanded((prev) => !prev)
   }, [])
@@ -62,10 +54,7 @@ export function PlayerDetailPage({
 
   return (
     <div className="page-container">
-      <PlayerInfoPanel
-        player={player}
-        onCopyDiscord={copyDiscord}
-      />
+      <PlayerInfoPanel player={player} />
 
       {/* Collapsible identifiers card */}
       {visibleIdentifiers.length > 0 && (

@@ -1,33 +1,20 @@
 import type { Player } from '../../types'
 import { Avatar } from '../../components/Avatar'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
-import { CopyButton } from '../../components/CopyButton'
 import { RoleBadges } from '../../components/RoleBadges'
 
 interface PlayerInfoPanelProps {
   player: Player
-  onCopyDiscord: () => void
 }
 
-export function PlayerInfoPanel({ player, onCopyDiscord }: PlayerInfoPanelProps) {
+export function PlayerInfoPanel({ player }: PlayerInfoPanelProps) {
   const rows: KeyValueRow[] = []
 
   if (player.license) {
     rows.push({ key: 'License', value: player.license, mono: true })
   }
-  if (player.discord) {
-    rows.push({
-      key: 'Discord',
-      value: player.discord,
-      mono: true,
-      actionLabel: <CopyButton value={player.discord} onCopy={onCopyDiscord} ariaLabel="Copy Discord ID" />,
-    })
-  }
   if (player.xbl) {
     rows.push({ key: 'XBL', value: player.xbl, mono: true })
-  }
-  if (player.identifier) {
-    rows.push({ key: 'Identifier', value: player.identifier, mono: true })
   }
   if (player.ip) {
     rows.push({ key: 'IP', value: player.ip, mono: true })
