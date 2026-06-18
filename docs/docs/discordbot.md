@@ -20,6 +20,8 @@ The bot offers the following functionality:
 | Feature | Description |
 |--------|-------------|
 | **User Actions** | Kick, Ban, Unban, Mute, Unmute, Freeze, Slap, Warn |
+| **Action History** | View a player's past moderation actions with `/history` |
+| **Admin Notes** | View admin notes left on a player with `/notes` |
 | **Principals** | Add/remove Discord users to ACE groups directly from Discord |
 | **Live Server Status** | Player count, admins online, reports, uptime, upvotes |
 | **Area Cleanup** | Remove vehicles, peds, and objects in an area |
@@ -93,6 +95,8 @@ add_ace group.admin easyadmin.bot.unfreeze allow
 add_ace group.admin easyadmin.bot.slap allow
 add_ace group.admin easyadmin.bot.playerinfo allow
 add_ace group.admin easyadmin.bot.playerlist allow
+add_ace group.admin easyadmin.bot.history allow
+add_ace group.admin easyadmin.bot.notes allow
 ```
 
 ---
