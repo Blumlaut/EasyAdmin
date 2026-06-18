@@ -1,12 +1,26 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ServerStats, UpdateInfo } from '../../types'
 import { callLua } from '../../fivem'
-import { type IconName } from '../../components/icons'
+import { type IconName, Icon } from '../../components/icons'
 import { Alert } from '../../components/Alert'
 import { CopyButton } from '../../components/CopyButton'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
+
+// ============================================================
+// Resource update summary types
+// ============================================================
+
+interface OutdatedResource {
+  name: string
+  current: string | null
+  latest: string
+}
+
+interface ResourceUpdateSummary {
+  outdated: OutdatedResource[]
+}
 
 // ============================================================
 // EntityBar
@@ -151,13 +165,15 @@ interface DashboardProps {
   updateInfo: UpdateInfo | null
   onDismissUpdate: () => void
   onToast: (text: string, type?: 'info' | 'success' | 'error') => void
+  onNavigateToResources: () => void
 }
 
-export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast }: DashboardProps) {
+export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, onNavigateToResources }: DashboardProps) {
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [showPride] = useState(shouldShowPride)
   const [greeting] = useState(getGreeting)
+  const [resourceUpdates, setResourceUpdates] = useState<OutdatedResource[]>([])
 
   // Fetch server stats on mount
   useEffect(() => {
@@ -178,6 +194,19 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast }:
   // Request update info from server on mount
   useEffect(() => {
     callLua('requestUpdateInfo').catch(() => {})
+  }, [])
+
+  // Request cached resource update summary on mount
+  useEffect(() => {
+    let cancelled = false
+    callLua<ResourceUpdateSummary>('requestResourceUpdateSummary')
+      .then((res) => {
+        if (!cancelled && res?.outdated && res.outdated.length > 0) {
+          setResourceUpdates(res.outdated)
+        }
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
   }, [])
 
   // Build stat cards
@@ -269,6 +298,36 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast }:
             <span>
               EasyAdmin {updateInfo.latestVersion} is available (you have {updateInfo.currentVersion}).
             </span>
+          </Alert>
+        </div>
+      )}
+
+      {/* Resource updates alert */}
+      {resourceUpdates.length > 0 && (
+        <div className="mb-4">
+          <Alert
+            variant="warning"
+            title={`${resourceUpdates.length} resource(s) have updates available`}
+            onDismiss={() => setResourceUpdates([])}
+          >
+            <div className="flex flex-col gap-1">
+              {resourceUpdates.map((r) => (
+                <span key={r.name} className="text-sm">
+                  <span className="font-medium text-mono">{r.name}</span>
+                  {' '}
+                  <span className="text-muted">v{r.current ?? '?'} → v{r.latest}</span>
+                </span>
+              ))}
+            </div>
+            <div className="mt-2">
+              <button
+                className="btn btn-sm btn-ghost"
+                onClick={onNavigateToResources}
+              >
+                <Icon name="layers" size="xs" />
+                View resources
+              </button>
+            </div>
           </Alert>
         </div>
       )}

@@ -8,6 +8,7 @@ local pendingResourcesCb = nil
 local pendingMetadataCb = nil
 local pendingMetadataBatchCb = nil
 local pendingUpdatesCb = nil
+local pendingUpdateSummaryCb = nil
 
 -- Resource list
 RegisterNUICallback('requestResources', function(_data, cb)
@@ -63,6 +64,16 @@ RegisterNUICallback('checkResourceUpdates', function(data, cb)
   TriggerServerEvent('EasyAdmin:checkResourceUpdates', data and data.names)
 end)
 
+-- Get cached update summary
+RegisterNUICallback('requestResourceUpdateSummary', function(_data, cb)
+  if pendingUpdateSummaryCb then
+    pendingUpdateSummaryCb = cb
+    return
+  end
+  pendingUpdateSummaryCb = cb
+  TriggerServerEvent('EasyAdmin:requestResourceUpdateSummary')
+end)
+
 -- ============================================================
 -- Server -> Client event handlers
 -- ============================================================
@@ -107,6 +118,14 @@ RegisterNetEvent('EasyAdmin:resourceUpdatesResult', function(data)
     PrintDebugMessage('[NUI] resourceUpdatesResult: callback resolved', 4)
   else
     PrintDebugMessage('[NUI] resourceUpdatesResult: no pending callback found!', 4)
+  end
+end)
+
+RegisterNetEvent('EasyAdmin:resourceUpdateSummaryResult', function(data)
+  if pendingUpdateSummaryCb then
+    local cb = pendingUpdateSummaryCb
+    pendingUpdateSummaryCb = nil
+    cb(data or { outdated = {} })
   end
 end)
 

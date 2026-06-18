@@ -290,6 +290,7 @@ function App() {
                   updateInfo={data.updateInfo}
                   onDismissUpdate={data.dismissUpdate}
                   onToast={showToast}
+                  onNavigateToResources={() => nav.navigateTo('resources')}
                 />
               )}
 
