@@ -5,6 +5,8 @@ import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
 import { PlayerActionsPanel } from './PlayerActionsPanel'
+import { ActionHistorySection } from './ActionHistorySection'
+import { AdminNotesSection } from './AdminNotesSection'
 
 interface PlayerDetailPageProps {
   player: Player
@@ -108,6 +110,24 @@ export function PlayerDetailPage({
         shortcuts={shortcuts}
         onToast={onToast}
       />
+
+      {/* Action History — shown when user has view permission */}
+      {permissions['player.actionhistory.view'] && (
+        <ActionHistorySection
+          playerId={player.id}
+          permissions={permissions}
+          onToast={onToast}
+        />
+      )}
+
+      {/* Admin Notes — shown when user has view permission */}
+      {permissions['player.adminnotes.view'] && (
+        <AdminNotesSection
+          playerId={player.id}
+          permissions={permissions}
+          onToast={onToast}
+        />
+      )}
     </div>
   )
 }

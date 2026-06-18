@@ -218,3 +218,29 @@ RegisterNetEvent('EasyAdmin:playerRegistryPageResult', function(data)
     })
   end
 end)
+
+-- ============================================================
+-- Action History: forward server result to NUI
+-- ============================================================
+
+RegisterNetEvent('EasyAdmin:ReceiveActionHistory', function(history, playerId)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'actionHistory',
+      data = { id = playerId, entries = history or {} },
+    })
+  end
+end)
+
+-- ============================================================
+-- Admin Notes: forward server result to NUI
+-- ============================================================
+
+RegisterNetEvent('EasyAdmin:ReceiveAdminNotes', function(notes, playerId)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'adminNotes',
+      data = { id = playerId, entries = notes or {} },
+    })
+  end
+end)

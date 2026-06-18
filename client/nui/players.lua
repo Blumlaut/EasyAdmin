@@ -222,3 +222,65 @@ RegisterNUICallback('fetchPlayerAvatars', function(_data, cb)
   TriggerServerEvent('EasyAdmin:fetchPlayerAvatars')
   cb({ ok = true })
 end)
+
+---Request action history for a player.
+---Result is pushed asynchronously via 'actionHistory' NUI event.
+RegisterNUICallback('getActionHistory', function(data, cb)
+  local id = tonumber(data and data.id)
+  if not id then return cb({ error = 'Missing player id' }) end
+  TriggerServerEvent('EasyAdmin:GetActionHistory', id)
+  cb({ ok = true })
+end)
+
+---Request admin notes for a player.
+---Result is pushed asynchronously via 'adminNotes' NUI event.
+RegisterNUICallback('getAdminNotes', function(data, cb)
+  local id = tonumber(data and data.id)
+  if not id then return cb({ error = 'Missing player id' }) end
+  TriggerServerEvent('EasyAdmin:GetAdminNotes', id)
+  cb({ ok = true })
+end)
+
+---Add an admin note for a player.
+RegisterNUICallback('addAdminNote', function(data, cb)
+  if not permissions['player.adminnotes.add'] then return deny(cb) end
+  local id = tonumber(data and data.id)
+  if not id then return deny(cb, 'Missing player id') end
+  local note = data and data.note
+  if not note or note == '' then return deny(cb, 'Note is empty') end
+  TriggerServerEvent('EasyAdmin:AddAdminNote', note, id)
+  -- Refresh notes after adding
+  TriggerServerEvent('EasyAdmin:GetAdminNotes', id)
+  toast('Admin note added')
+  cb({ ok = true })
+end)
+
+---Delete an admin note.
+RegisterNUICallback('deleteAdminNote', function(data, cb)
+  if not permissions['player.adminnotes.delete'] then return deny(cb) end
+  local noteId = tonumber(data and data.id)
+  if not noteId then return deny(cb, 'Missing note id') end
+  TriggerServerEvent('EasyAdmin:DeleteAdminNote', noteId)
+  -- Refresh notes after deleting
+  local playerId = tonumber(data and data.playerId)
+  if playerId then
+    TriggerServerEvent('EasyAdmin:GetAdminNotes', playerId)
+  end
+  toast('Admin note deleted')
+  cb({ ok = true })
+end)
+
+---Delete an action history entry.
+RegisterNUICallback('deleteActionHistoryEntry', function(data, cb)
+  if not permissions['player.actionhistory.delete'] then return deny(cb) end
+  local actionId = tonumber(data and data.id)
+  if not actionId then return deny(cb, 'Missing action id') end
+  TriggerServerEvent('EasyAdmin:DeleteAction', actionId)
+  -- Refresh action history after deleting
+  local playerId = tonumber(data and data.playerId)
+  if playerId then
+    TriggerServerEvent('EasyAdmin:GetActionHistory', playerId)
+  end
+  toast('Action history entry deleted')
+  cb({ ok = true })
+end)

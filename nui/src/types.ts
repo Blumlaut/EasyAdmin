@@ -311,3 +311,29 @@ export interface ProfilerResult {
 
 // Profiler UI state
 export type ProfilerUIState = 'empty' | 'recording' | 'results' | 'error' | 'endpoint-error'
+
+// ============================================================
+// Action History
+// ============================================================
+
+// Single action history entry (from Storage.addAction)
+export interface ActionHistoryEntry {
+  id: number               // Sequential ID
+  time: number             // Unix timestamp (seconds)
+  action: string           // Action type (e.g. "Ban", "Kick", "Warn")
+  reason: string           // Reason text
+  moderator: string        // Moderator name
+  banid?: string | number  // Optional ban ID linkage
+}
+
+// ============================================================
+// Admin Notes
+// ============================================================
+
+// Single admin note entry (from Storage.addNote)
+export interface AdminNoteEntry {
+  id: number               // Sequential ID
+  time: string             // Formatted date string ("DD/MM/YYYY HH:MM")
+  content: string          // Note content
+  moderator: string        // Moderator name
+}

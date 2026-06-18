@@ -73,6 +73,8 @@ export type IconName =
   | 'chart-bar'
   | 'maximize'
   | 'minimize'
+  | 'history'
+  | 'book-open'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -462,6 +464,19 @@ const ICONS: Record<IconName, React.ReactNode> = {
       <polyline points="20 10 14 10 14 4" />
       <line x1={14} y1={10} x2={21} y2={3} />
       <line x1={3} y1={21} x2={10} y2={14} />
+    </>
+  ),
+  history: (
+    <>
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
+      <path d="M12 7v5l4 2" />
+    </>
+  ),
+  'book-open': (
+    <>
+      <path d="M2 3h6a4 4 0 0 1 4 4v14" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14" />
     </>
   ),
 }
