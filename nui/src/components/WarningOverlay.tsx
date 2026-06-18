@@ -60,8 +60,9 @@ export function WarningOverlay({ warning, onDismiss }: WarningOverlayProps) {
     if (isHoldingRef.current) cancelHold()
   }, [cancelHold])
 
-  // Prevent Spacebar from scrolling the page
+  // Prevent Spacebar from scrolling the page (only when warning is actually shown)
   useEffect(() => {
+    if (!warning) return
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         e.preventDefault()
@@ -84,7 +85,7 @@ export function WarningOverlay({ warning, onDismiss }: WarningOverlayProps) {
       window.removeEventListener('keydown', handleKeyDown, { capture: true })
       window.removeEventListener('keyup', handleKeyUp, { capture: true })
     }
-  }, [startHold, cancelHold])
+  }, [warning, startHold, cancelHold])
 
   // Cleanup on unmount
   useEffect(() => () => {
@@ -109,23 +110,18 @@ export function WarningOverlay({ warning, onDismiss }: WarningOverlayProps) {
         <div className="warning-dismiss-wrap">
           <button
             className="warning-dismiss-btn"
-            onMouseDown={startHold}
-            onMouseUp={cancelHold}
+            onPointerDown={startHold}
+            onPointerUp={cancelHold}
+            onPointerCancel={cancelHold}
             onMouseLeave={handlePointerLeave}
-            onTouchStart={startHold}
-            onTouchEnd={cancelHold}
-            onPointerLeave={handlePointerLeave}
             onBlur={handleBlur}
-            style={{
-              '--hold-progress': `${holdProgress * 100}%`,
-            } as React.CSSProperties}
             autoFocus
           >
             <span className="warning-dismiss-label">{warning.dismissText}</span>
-            <span className="warning-progress-track">
-              <span className="warning-progress-fill" />
-            </span>
           </button>
+          <div className="warning-progress-track">
+            <div className="warning-progress-fill" style={{ width: `${holdProgress * 100}%` }} />
+          </div>
         </div>
       </div>
     </div>

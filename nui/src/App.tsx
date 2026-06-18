@@ -162,8 +162,6 @@ function App() {
     fontSize: `${data.settings.fontSize}px`,
   }
 
-  if (!visible) return null
-
   const closeMenu = () => callLua('closeMenu').catch(() => {})
 
   // === Navigation select handler ===
@@ -197,8 +195,10 @@ function App() {
 
   return (
     <>
-      <ModalProvider
-        cleanupTypes={CLEANUP_TYPES}
+      {visible && (
+      <>
+        <ModalProvider
+          cleanupTypes={CLEANUP_TYPES}
         onToast={showToast}
         onPlayersUpdated={data.fetchPlayers}
         onReportRemoved={(reportId) => {
@@ -432,8 +432,6 @@ function App() {
         </div>
       </ModalProvider>
 
-      {toast && <Toast message={toast.text} type={toast.type} />}
-
       {chrome.nuiBackground && (
         <div
           className={`ea-background-hint${hintFading ? ' ea-background-hint--fading' : ''}`}
@@ -444,13 +442,17 @@ function App() {
           <span>Press ALT to unfold</span>
         </div>
       )}
+      </>
+    )}
+
+      {toast && <Toast message={toast.text} type={toast.type} />}
 
       <WarningOverlay
         warning={warning}
         onDismiss={() => setWarning(null)}
       />
     </>
-  )
+  );
 }
 
 export default App
