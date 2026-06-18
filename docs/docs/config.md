@@ -75,6 +75,9 @@ EasyAdmin is configured using **convars**. You can set them in your server confi
 | `ea_warningBanTime` | `set ea_warningBanTime 604800` | Duration of ban after too many warnings. |
 | `ea_IpPrivacy` | `setr ea_IpPrivacy "true"` | Hides IP identifiers in GUI. |
 | `ea_adminCooldown:<ACTION>` | `set ea_adminCooldown:ban 60` | Cooldown in seconds for admin actions. |
+| `ea_enableActionHistory` | `set ea_enableActionHistory "true"` | Records moderation actions taken against players so admins can review them later, in-game or with the bot's `/history` command. |
+| `ea_actionHistoryExpiry` | `set ea_actionHistoryExpiry 30` | Number of days to keep action history entries before they are pruned. |
+| `ea_enableAdminNotes` | `set ea_enableAdminNotes "true"` | Lets admins leave persistent notes on players, viewable in-game or with the bot's `/notes` command. |
 
 ---
 

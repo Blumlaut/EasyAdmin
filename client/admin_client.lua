@@ -40,12 +40,6 @@ RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	end
 end)
 
-function DoesPlayerHavePermission(player,perm)
-	if not player == -1 then
-		return false
-	end
-	return permissions[perm]
-end
 
 RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
 	settings[setting] = state
@@ -264,7 +258,7 @@ Citizen.CreateThread(function()
 					end
 					Wait(1)
 				end
-				toDelete[i] = nil
+				toDelete[_] = nil
 			end
 		end
 	end)
@@ -347,7 +341,7 @@ RegisterCommand("ban", function(source, args, rawCommand)
 			end
 		end
 		if args[1] and tonumber(args[1]) then
-			TriggerServerEvent("EasyAdmin:banPlayer", tonumber(args[1]), reason, false, GetPlayerName(args[1]))
+			TriggerServerEvent("EasyAdmin:banPlayer", tonumber(args[1]), reason, false, GetPlayerName(GetPlayerFromServerId(tonumber(args[1]))))
 		end
 	end
 end, false)

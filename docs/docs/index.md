@@ -20,6 +20,8 @@ EasyAdmin is packed with features that help server admins manage their communiti
 - **Banlist System**: A robust system to prevent ban evasion.
 - **Server Settings GUI**: Modify server settings through a graphical interface.
 - **Report/Admin Call System**: View and handle reports or admin calls via a GUI.
+- **Action History**: Keeps an audit trail of moderation actions taken against each player.
+- **Admin Notes**: Leave persistent notes on players for other admins to see.
 - **Permission System**: Uses FiveM's built-in ACE system for granular control.
 - **Permission Editor**: Edit permissions in real-time and save to config.
 - **Server Tools**: Clean up spawned vehicles, peds, and objects.

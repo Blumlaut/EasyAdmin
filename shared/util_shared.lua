@@ -14,10 +14,19 @@ permissions = {
 	["player.screenshot"] = false,
 	["player.mute"] = false,
 	["player.warn"] = false,
+	["player.actionhistory.view"] = false,
+	["player.actionhistory.add"] = false,
+	["player.actionhistory.delete"] = false,
+	["player.adminnotes.view"] = false,
+	["player.adminnotes.add"] = false,
+	["player.adminnotes.delete"] = false,
 	["player.teleport.everyone"] = false,
 	["player.reports.view"] = false,
 	["player.reports.claim"] = false,
 	["player.reports.process"] = false,
+
+	["bot.history"] = false,
+	["bot.notes"] = false,
 	
 	["server.cleanup.cars"] = false,
 	["server.cleanup.props"] = false,
@@ -281,7 +290,7 @@ function string.split(inputstr, sep)
 	if sep == nil then
 		sep = "%s"
 	end
-	local t={} ; i=1
+	local t={} ; local i=1
 	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
 		t[i] = str
 		i = i + 1

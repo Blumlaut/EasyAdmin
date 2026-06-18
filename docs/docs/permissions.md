@@ -60,6 +60,12 @@ Here is a list of all available permissions and what they do:
 | `easyadmin.player.reports.view` | Allows viewing user reports |
 | `easyadmin.player.reports.claim` | Allows claiming user reports |
 | `easyadmin.player.reports.process` | Allows deleting user reports |
+| `easyadmin.player.actionhistory.view` | Allows viewing a player's action history |
+| `easyadmin.player.actionhistory.add` | Allows adding entries to a player's action history |
+| `easyadmin.player.actionhistory.delete` | Allows deleting entries from a player's action history |
+| `easyadmin.player.adminnotes.view` | Allows viewing admin notes on a player |
+| `easyadmin.player.adminnotes.add` | Allows adding admin notes to a player |
+| `easyadmin.player.adminnotes.delete` | Allows deleting admin notes from a player |
 | `easyadmin.player.allowlist` | Allows joining the server even when allowlist is enabled |
 | `easyadmin.server.shortcut.add` | Allows using the `ea_addShortcut` command (non-persistent) |
 | `easyadmin.server.reminder.add` | Allows using the `ea_addReminder` command (non-persistent) |
