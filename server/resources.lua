@@ -49,6 +49,10 @@ local function parseGitHubRepo(url)
   return nil, nil
 end
 
+-- Short TTL for failed fetches: retry failed repos after 5 minutes
+-- instead of 6 hours (so flaky/404 repos stop hammering the API immediately)
+local GITHUB_CACHE_FAIL_TTL = 300
+
 -- Fetch latest release tag from GitHub (async via PerformHttpRequest)
 local function fetchLatestRelease(owner, repo, cb)
   local url = string.format('https://api.github.com/repos/%s/%s/releases/latest', owner, repo)
@@ -56,6 +60,7 @@ local function fetchLatestRelease(owner, repo, cb)
   PerformHttpRequest(url, function(err, response, headers)
     PrintDebugMessage('[Server] fetchLatestRelease: HTTP status=' .. tostring(err) .. ', response=' .. tostring(response and string.sub(response, 1, 120) or 'nil'), 4)
     if err ~= 200 or not response then
+      PrintDebugMessage('[Server] fetchLatestRelease: request failed (status=' .. tostring(err) .. '), callback(nil)', 4)
       cb(nil)
       return
     end
@@ -64,27 +69,44 @@ local function fetchLatestRelease(owner, repo, cb)
       PrintDebugMessage('[Server] fetchLatestRelease: tag_name=' .. data.tag_name, 4)
       cb(data.tag_name)
     else
+      PrintDebugMessage('[Server] fetchLatestRelease: no tag_name in response, callback(nil)', 4)
       cb(nil)
     end
   end, 'GET')
 end
 
--- Get cached or fetch latest release for a repo key
+-- Get cached or fetch latest release for a repo key.
+-- Always caches the result (including failures with nil tag) to prevent
+-- repeated failed requests from the same GitHub repo across multiple resources.
+-- A nil tag means "we fetched but the request failed" — this stops hammering
+-- broken/404 repo URLs when many resources share the same GitHub source.
 local function getLatestRelease(owner, repo, cb)
   local key = string.format('%s/%s', owner, repo)
   local cached = githubCache[key]
-  if cached and os.time() - cached.checkedAt < GITHUB_CACHE_TTL then
-    PrintDebugMessage('[Server] getLatestRelease: using cache for ' .. key .. ' (tag=' .. cached.tag .. ')', 4)
-    cb(cached.tag)
-    return
+  if cached then
+    local ttl = cached.tag and GITHUB_CACHE_TTL or GITHUB_CACHE_FAIL_TTL
+    if os.time() - cached.checkedAt < ttl then
+      PrintDebugMessage('[Server] getLatestRelease: using cache for ' .. key .. ' (tag=' .. (cached.tag or '(fail)') .. ')', 4)
+      cb(cached.tag)
+      return
+    end
   end
   PrintDebugMessage('[Server] getLatestRelease: cache miss for ' .. key .. ', fetching', 4)
   fetchLatestRelease(owner, repo, function(tag)
     if tag then
       githubCache[key] = { tag = tag, checkedAt = os.time() }
       PrintDebugMessage('[Server] getLatestRelease: cached ' .. key .. ' = ' .. tag, 4)
+      cb(tag)
+    else
+      -- Cache the failure with nil tag and short TTL.
+      -- This prevents every resource sharing this GitHub repo from
+      -- triggering independent failed requests.
+      -- Uses nil (falsy in Lua) so the TTL branch and downstream checks
+      -- correctly treat it as "no tag available".
+      githubCache[key] = { tag = nil, checkedAt = os.time() }
+      PrintDebugMessage('[Server] getLatestRelease: cached failure for ' .. key .. ' (short TTL: 5m)', 4)
+      cb(nil)
     end
-    cb(tag)
   end)
 end
 
