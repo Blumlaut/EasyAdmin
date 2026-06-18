@@ -6,6 +6,7 @@ import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
+import { createConfirmModal, createTextInputModal, getStringValue, runModalAction } from '../../modals/helpers'
 
 interface BanDetailPageProps {
   banId: string
@@ -26,12 +27,12 @@ export function BanDetailPage({
   ban: initialBan,
   ipPrivacy,
   permissions,
-  onBack: _onBack,
+  onBack,
   onToast,
 }: BanDetailPageProps) {
   const canEdit = !!permissions['player.ban.edit']
   const canRemove = !!permissions['player.ban.remove']
-  const modal = useModalContext()
+  const { openModal, closeModal } = useModalContext()
 
   const [state, setState] = useState<DetailState>(
     initialBan ? { status: 'success', ban: initialBan } : { status: 'loading' },
@@ -106,9 +107,27 @@ export function BanDetailPage({
 
   function handleEditField(field: 'reason' | 'name' | 'banner' | 'expire') {
     const currentValue = field === 'expire' ? String(current.expire ?? '') : String(current[field] ?? '')
-    modal.openEditBanField(banId, field, currentValue, (f, value) => {
-      setEdited((prev) => (prev ? { ...prev, [f]: value } : prev))
-    })
+    const fieldLabels: Record<string, { title: string; label: string; placeholder: string }> = {
+      reason: { title: 'Edit reason', label: 'Ban reason', placeholder: 'Enter ban reason...' },
+      name: { title: 'Edit name', label: 'Banned player name', placeholder: 'Enter player name...' },
+      banner: { title: 'Edit banner', label: 'Admin name to display', placeholder: 'Enter admin name...' },
+      expire: { title: 'Edit expire', label: 'Unix timestamp (-1 for permanent)', placeholder: '-1' },
+    }
+    const config = fieldLabels[field]
+    openModal(createTextInputModal({
+      title: config.title,
+      label: config.label,
+      placeholder: config.placeholder,
+      initialValue: currentValue,
+      onSubmit: async (values) => {
+        const raw = getStringValue(values, 'value')
+        const value = field === 'expire'
+          ? String(Number.isFinite(Number(raw)) ? Number(raw) : -1)
+          : raw
+        setEdited((prev) => (prev ? { ...prev, [field]: value } : prev))
+        closeModal()
+      },
+    }))
   }
 
   async function handleSave() {
@@ -126,7 +145,22 @@ export function BanDetailPage({
 
   function handleUnban() {
     if (!edited) return
-    modal.openUnbanPlayer(edited.banid, edited.name ?? 'this player')
+    openModal(createConfirmModal({
+      title: 'Unban player',
+      description: `Are you sure you want to unban ${edited.name ?? 'this player'}?`,
+      submitLabel: 'Unban',
+      submitVariant: 'danger',
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => callLua('unbanPlayer', { banid: edited.banid }),
+          onToast,
+          closeModal,
+          successMessage: 'Player unbanned',
+          errorMessage: 'Failed to unban',
+          onSuccess: onBack,
+        })
+      },
+    }))
   }
 
   const rows: KeyValueRow[] = [

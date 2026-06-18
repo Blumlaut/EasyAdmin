@@ -3,7 +3,7 @@ import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useToast } from './hooks/useToast'
 import { useWindowChrome } from './hooks/useWindowChrome'
-import type { CleanupType, View } from './types'
+import type { View } from './types'
 import { on } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
@@ -24,8 +24,6 @@ import { ServerPage } from './pages/Server/ServerPage'
 import { ResourcesPage } from './pages/Resources/ResourcesPage'
 import { ProfilerPage } from './pages/Profiler/ProfilerPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
-
-const CLEANUP_TYPES: CleanupType[] = ['cars', 'peds', 'props']
 
 interface WarningData {
   title: string
@@ -197,23 +195,7 @@ function App() {
     <>
       {visible && (
       <>
-        <ModalProvider
-          cleanupTypes={CLEANUP_TYPES}
-        onToast={showToast}
-        onPlayersUpdated={data.fetchPlayers}
-        onReportRemoved={(reportId) => {
-          data.setReports((prev) => prev.filter((r) => r.id !== reportId))
-          nav.navigateTo('reports')
-        }}
-        onUnbanned={(banId) => {
-          data.setBanDetailCache((prev) => {
-            const entries = Object.entries(prev)
-              .filter(([key]) => key !== banId)
-            return Object.fromEntries(entries)
-          })
-          nav.navigateTo('bans')
-        }}
-      >
+        <ModalProvider>
         <div
           className="ea-backdrop"
           onMouseDown={chrome.handleBackdropClick}
@@ -385,6 +367,10 @@ function App() {
                     else showToast('Player not online', 'error')
                   }}
                   onToast={showToast}
+                  onClosed={() => {
+                    data.setReports((prev) => prev.filter((r) => r.id !== nav.selectedReportId))
+                    nav.navigateTo('reports')
+                  }}
                 />
               )}
 

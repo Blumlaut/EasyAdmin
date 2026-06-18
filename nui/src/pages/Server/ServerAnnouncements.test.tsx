@@ -5,10 +5,7 @@ import { ModalProvider } from '../../ModalContext'
 
 function wrap(ui: React.ReactElement) {
   return (
-    <ModalProvider
-      cleanupTypes={['cars']}
-      onToast={() => {}}
-    >
+    <ModalProvider>
       {ui}
     </ModalProvider>
   )

@@ -1,14 +1,17 @@
-import type { CleanupType, Notification, Permissions } from '../../types'
+import type { CleanupRadius, CleanupType, Notification, Permissions } from '../../types'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
+import { callLua } from '../../fivem'
 
 interface ServerCleanupProps {
   permissions: Permissions
   onToast: (text: string, type?: Notification['type']) => void
 }
 
-export function ServerCleanup({ permissions, onToast: _onToast }: ServerCleanupProps) {
-  const modal = useModalContext()
+const RADII: CleanupRadius[] = [10, 20, 50, 100, 'global']
+
+export function ServerCleanup({ permissions, onToast }: ServerCleanupProps) {
+  const { openModal, closeModal } = useModalContext()
 
   const availableTypes: CleanupType[] = []
   if (permissions['server.cleanup.cars']) availableTypes.push('cars')
@@ -25,7 +28,59 @@ export function ServerCleanup({ permissions, onToast: _onToast }: ServerCleanupP
       </p>
       <button
         className="btn btn-warning btn-full"
-        onClick={() => modal.openCleanup(availableTypes)}
+        onClick={() => openModal({
+          title: 'Clean Area',
+          description: 'Choose what to clean and how far from your position.',
+          submitLabel: 'Clean',
+          submitVariant: 'warning',
+          fields: [
+            {
+              key: 'type',
+              type: 'select',
+              label: 'Type',
+              initialValue: availableTypes[0],
+              options: availableTypes.map((type) => ({
+                value: type,
+                label: type === 'cars' ? 'Cars' : type === 'peds' ? 'Peds' : 'Props',
+              })),
+              required: true,
+            },
+            {
+              key: 'radius',
+              type: 'select',
+              label: 'Radius',
+              initialValue: '20',
+              options: RADII.map((radius) => ({
+                value: String(radius),
+                label: radius === 'global' ? 'Global' : `${radius}m`,
+              })),
+              required: true,
+            },
+            {
+              key: 'deep',
+              type: 'checkbox',
+              label: 'Deep clean',
+              initialValue: true,
+            },
+          ],
+          onSubmit: async (values) => {
+            try {
+              const type = values.type
+              const radiusValue = values.radius
+              const deep = values.deep === true
+              const radius = radiusValue === 'global' ? 'global' : Number(radiusValue)
+              await callLua('requestCleanup', {
+                type,
+                radius,
+                deep,
+              })
+              onToast('Cleanup executed', 'success')
+            } catch {
+              onToast('Cleanup failed', 'error')
+            }
+            closeModal()
+          },
+        })}
       >
         <Icon name="trash" size="xs" />
         Clean area

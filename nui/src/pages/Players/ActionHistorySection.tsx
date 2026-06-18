@@ -5,6 +5,7 @@ import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
 import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
+import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
 interface ActionHistorySectionProps {
   playerId: number
@@ -42,7 +43,7 @@ export function ActionHistorySection({
   onToast,
 }: ActionHistorySectionProps) {
   const canDelete = permissions['player.actionhistory.delete']
-  const modal = useModalContext()
+  const { openModal, closeModal } = useModalContext()
 
   const [state, setState] = useState<HistoryState>({ status: 'loading' })
 
@@ -62,20 +63,21 @@ export function ActionHistorySection({
   }, [playerId])
 
   const handleDelete = useCallback((entryId: number) => {
-    modal.openConfirm(
-      'Delete action entry',
-      'Are you sure you want to delete this action history entry? This cannot be undone.',
-      async () => {
-        try {
-          await callLua('deleteActionHistoryEntry', { id: entryId, playerId })
-          onToast('Action entry deleted', 'success')
-        } catch {
-          onToast('Failed to delete action entry', 'error')
-        }
+    openModal(createConfirmModal({
+      title: 'Delete action entry',
+      description: 'Are you sure you want to delete this action history entry? This cannot be undone.',
+      submitVariant: 'danger',
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => callLua('deleteActionHistoryEntry', { id: entryId, playerId }),
+          onToast,
+          closeModal,
+          successMessage: 'Action entry deleted',
+          errorMessage: 'Failed to delete action entry',
+        })
       },
-      'danger'
-    )
-  }, [playerId, onToast, modal])
+    }))
+  }, [playerId, onToast, openModal, closeModal])
 
   // Sort entries by time descending (newest first)
   const sortedEntries = useMemo(() => {

@@ -16,10 +16,7 @@ const shortcuts: ReasonShortcut[] = []
 
 function renderDefault(ipPrivacy = false) {
   return render(
-    <ModalProvider
-      cleanupTypes={['cars']}
-      onToast={() => {}}
-    >
+    <ModalProvider>
       <PlayerDetailPage
         player={player}
         permissions={{ 'player.kick': true, 'player.teleport.single': true }}
@@ -54,10 +51,7 @@ describe('PlayerDetailPage', () => {
 
   it('hides teleport dropdown without permission', () => {
     render(
-      <ModalProvider
-        cleanupTypes={['cars']}
-        onToast={() => {}}
-      >
+      <ModalProvider>
         <PlayerDetailPage
           player={player}
           permissions={{} as Permissions}

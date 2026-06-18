@@ -4,6 +4,7 @@ import type { Notification, Permissions, Player, Report } from '../../types'
 import { useModalContext } from '../../ModalContext'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
+import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
 interface ReportDetailPageProps {
   reportId: number
@@ -12,6 +13,7 @@ interface ReportDetailPageProps {
   players: Player[]
   onOpenPlayer: (playerId: number) => void
   onToast: (text: string, type?: Notification['type']) => void
+  onClosed?: () => void
 }
 
 type DetailState =
@@ -26,10 +28,11 @@ export function ReportDetailPage({
   players,
   onOpenPlayer,
   onToast,
+  onClosed,
 }: ReportDetailPageProps) {
   const canClaim = !!permissions['player.reports.claim']
   const canProcess = !!permissions['player.reports.process']
-  const modal = useModalContext()
+  const { openModal, closeModal } = useModalContext()
 
   const [state, setState] = useState<DetailState>({ status: 'loading' })
   const [busy, setBusy] = useState(false)
@@ -78,12 +81,42 @@ export function ReportDetailPage({
 
   function handleCloseReport() {
     if (state.status !== 'success') return
-    modal.openCloseReport(state.report.id)
+    openModal(createConfirmModal({
+      title: 'Close report',
+      description: `Are you sure you want to close report #${state.report.id}?`,
+      submitLabel: 'Close',
+      submitVariant: 'danger',
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => callLua('closeReport', { id: state.report.id }),
+          onToast,
+          closeModal,
+          successMessage: 'Report closed',
+          errorMessage: 'Failed to close report',
+          onSuccess: onClosed,
+        })
+      },
+    }))
   }
 
   function handleCloseSimilar() {
     if (state.status !== 'success') return
-    modal.openCloseSimilarReports(state.report.id)
+    openModal(createConfirmModal({
+      title: 'Close similar reports',
+      description: 'This will close all reports with the same reporter, reported player, and reason. Continue?',
+      submitLabel: 'Close similar',
+      submitVariant: 'danger',
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => callLua('closeSimilarReports', { id: state.report.id }),
+          onToast,
+          closeModal,
+          successMessage: 'Similar reports closed',
+          errorMessage: 'Failed to close similar reports',
+          onSuccess: onClosed,
+        })
+      },
+    }))
   }
 
   if (state.status === 'loading') {

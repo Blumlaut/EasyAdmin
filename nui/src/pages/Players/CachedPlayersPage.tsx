@@ -6,6 +6,7 @@ import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { useModalContext } from '../../ModalContext'
+import { OfflineBanFlowModal } from '../../modals/BanFlowModal'
 
 interface CachedPlayersPageProps {
   cachedPlayers: CachedPlayer[]
@@ -17,10 +18,10 @@ interface CachedPlayersPageProps {
 export function CachedPlayersPage({
   cachedPlayers,
   loading,
-  onToast: _onToast,
+  onToast,
   onRefresh,
 }: CachedPlayersPageProps) {
-  const modal = useModalContext()
+  const { openModal, closeModal } = useModalContext()
   const [query, setQuery] = useState('')
   const listRef = useRef<HTMLDivElement>(null)
 
@@ -60,7 +61,18 @@ export function CachedPlayersPage({
             <CachedRow
               key={player.id}
               player={player}
-              onBan={() => modal.openOfflineBan(player.id, player.name)}
+              onBan={() => openModal({
+                kind: 'custom',
+                render: () => (
+                  <OfflineBanFlowModal
+                    id={player.id}
+                    name={player.name}
+                    onCancel={closeModal}
+                    onComplete={closeModal}
+                    onToast={onToast}
+                  />
+                ),
+              })}
             />
           ))}
         </div>

@@ -4,6 +4,7 @@ import type { AdminNoteEntry, Notification, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
+import { createConfirmModal, createTextAreaModal, getStringValue, runModalAction } from '../../modals/helpers'
 
 interface AdminNotesSectionProps {
   playerId: number
@@ -22,7 +23,7 @@ export function AdminNotesSection({
 }: AdminNotesSectionProps) {
   const canAdd = permissions['player.adminnotes.add']
   const canDelete = permissions['player.adminnotes.delete']
-  const modal = useModalContext()
+  const { openModal, closeModal } = useModalContext()
 
   const [state, setState] = useState<NotesState>({ status: 'loading' })
 
@@ -42,20 +43,21 @@ export function AdminNotesSection({
   }, [playerId])
 
   const handleDelete = useCallback((noteId: number) => {
-    modal.openConfirm(
-      'Delete admin note',
-      'Are you sure you want to delete this note? This cannot be undone.',
-      async () => {
-        try {
-          await callLua('deleteAdminNote', { id: noteId, playerId })
-          onToast('Note deleted', 'success')
-        } catch {
-          onToast('Failed to delete note', 'error')
-        }
+    openModal(createConfirmModal({
+      title: 'Delete admin note',
+      description: 'Are you sure you want to delete this note? This cannot be undone.',
+      submitVariant: 'danger',
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => callLua('deleteAdminNote', { id: noteId, playerId }),
+          onToast,
+          closeModal,
+          successMessage: 'Note deleted',
+          errorMessage: 'Failed to delete note',
+        })
       },
-      'danger'
-    )
-  }, [playerId, onToast, modal])
+    }))
+  }, [playerId, onToast, openModal, closeModal])
 
   // Sort entries by time descending (newest first).
   // Note: time is a formatted string "DD/MM/YYYY HH:MM" so we sort by id descending as proxy.
@@ -90,7 +92,24 @@ export function AdminNotesSection({
           {canAdd && (
             <button
               className="btn btn-sm btn-secondary"
-              onClick={() => modal.openAdminNote(playerId)}
+              onClick={() => openModal(createTextAreaModal({
+                title: 'Add admin note',
+                label: 'Note content',
+                placeholder: 'Type your note...',
+                maxLength: 512,
+                required: true,
+                submitLabel: 'Add note',
+                onSubmit: async (values) => {
+                  const content = getStringValue(values, 'value')
+                  await runModalAction({
+                    action: () => callLua('addAdminNote', { id: playerId, note: content }),
+                    onToast,
+                    closeModal,
+                    successMessage: 'Note added',
+                    errorMessage: 'Failed to add note',
+                  })
+                },
+              }))}
               title="Add note"
               aria-label="Add admin note"
             >

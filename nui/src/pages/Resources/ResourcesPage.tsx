@@ -9,6 +9,7 @@ import { Skeleton } from '../../components/Skeleton'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
+import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
 interface ResourcesPageProps {
   permissions: Permissions
@@ -62,7 +63,7 @@ export function ResourcesPage({
 
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
-  const { openConfirm } = useModalContext()
+  const { openModal, closeModal } = useModalContext()
 
   // Fetch metadata for all resources (batch) to populate version/description/repository
   const fetchBatchMetadata = useCallback(async (resList: ResourceEntry[]) => {
@@ -186,23 +187,36 @@ export function ResourcesPage({
         setDetailLoading(false)
       }
     } catch {
-      onToast(`Failed to ${action} ${name}`, 'error')
+      throw new Error(`Failed to ${action} ${name}`)
     }
-  }, [detailName, onToast])
+  }, [detailName])
 
   // Show confirmation dialog then execute
   const requestAction = useCallback((name: string, action: 'start' | 'stop' | 'ensure') => {
     if (action === 'start' && !canStart) return
     if ((action === 'stop' || action === 'ensure') && !canStop) return
 
-    const labels: Record<string, { title: string; message: string; confirm: string; variant: 'default' | 'danger' }> = {
-      start: { title: `Start ${name}`, message: `Are you sure you want to start ${name}?`, confirm: 'Start', variant: 'default' },
+    const labels: Record<string, { title: string; message: string; confirm: string; variant: 'primary' | 'danger' }> = {
+      start: { title: `Start ${name}`, message: `Are you sure you want to start ${name}?`, confirm: 'Start', variant: 'primary' },
       stop: { title: `Stop ${name}`, message: `Are you sure you want to stop ${name}?`, confirm: 'Stop', variant: 'danger' },
       ensure: { title: `Restart ${name}`, message: `Are you sure you want to restart ${name}?`, confirm: 'Restart', variant: 'danger' },
     }
     const label = labels[action]
-    openConfirm(label.title, label.message, () => executeAction(name, action), label.variant)
-  }, [canStart, canStop, executeAction, openConfirm])
+    openModal(createConfirmModal({
+      title: label.title,
+      description: label.message,
+      submitLabel: label.confirm,
+      submitVariant: label.variant,
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => executeAction(name, action),
+          onToast,
+          closeModal,
+          errorMessage: `Failed to ${action} ${name}`,
+        })
+      },
+    }))
+  }, [canStart, canStop, executeAction, openModal, closeModal])
 
   const handleCheckUpdates = async () => {
     if (!canStart && !canStop) return

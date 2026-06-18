@@ -5,6 +5,7 @@ import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
 import { SelectMenu } from '../../components/SelectMenu'
 import { callLua } from '../../fivem'
+import { BanFlowModal } from '../../modals/BanFlowModal'
 
 interface PlayerActionsPanelProps {
   player: Player
@@ -91,7 +92,7 @@ const ACTION_GROUPS: ActionGroup[] = [
 ]
 
 export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: PlayerActionsPanelProps) {
-  const modal = useModalContext()
+  const { openModal, closeModal } = useModalContext()
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
   const canKick = permissions['player.kick']
@@ -134,7 +135,30 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
     try {
       switch (actionId) {
         case 'slap':
-          modal.openSlap(player)
+          openModal({
+            title: 'Slap player',
+            fields: [
+              {
+                key: 'amount',
+                type: 'slider',
+                label: 'Slap player',
+                min: 1,
+                max: 20,
+                initialValue: 5,
+                formatValue: (n) => `${n * 10} damage`,
+              },
+            ],
+            onSubmit: async (values) => {
+              try {
+                const amount = typeof values.amount === 'number' ? values.amount * 10 : 50
+                await callLua('slapPlayer', { id: player.id, name: player.name, amount })
+                onToast('Slapped', 'success')
+              } catch {
+                onToast('Slap failed', 'error')
+              }
+              closeModal()
+            },
+          })
           break
         case 'spectate':
           await callLua('spectatePlayer', { id: player.id, name: player.name })
@@ -190,9 +214,17 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
           break
         }
         case 'ban': {
-          // Open ban duration picker from modal context
-          modal.openBan(player)
-          // Don't clear busy — ban flow is handled by modal
+          openModal({
+            kind: 'custom',
+            render: () => (
+              <BanFlowModal
+                player={player}
+                onCancel={closeModal}
+                onComplete={closeModal}
+                onToast={onToast}
+              />
+            ),
+          })
           setBusyAction(null)
           return
         }
@@ -202,7 +234,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
     } finally {
       setBusyAction(null)
     }
-  }, [player, reason, modal, onToast])
+  }, [player, reason, openModal, closeModal, onToast])
 
   // ---- Teleport handler ----
 
