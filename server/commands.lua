@@ -84,9 +84,6 @@ end, false)
 
 RegisterCommand("slap", function(source, args, rawCommand)
     if args[1] and args[2] and DoesPlayerHavePermission(source, "player.slap") then
-        local preferredWebhook = getPreferredWebhook()
-        SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("adminslappedplayer"), getName(source, false, true), getName(args[1], true, true), args[2]), "slap", 16711680)
-        PrintDebugMessage("Player "..getName(source,true).." slapped "..getName(args[1],true).." for "..args[2].." HP", 3)
-        TriggerClientEvent("EasyAdmin:SlapPlayer", args[1], args[2])
+        TriggerEvent("EasyAdmin:SlapPlayer", tonumber(args[1]), tonumber(args[2]))
     end
 end, false)	

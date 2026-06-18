@@ -38,6 +38,15 @@ function IsSelfBan(banner, target)
     return tonumber(banner) == tonumber(target)
 end
 
+local function canModerateBanTarget(src, playerId)
+    if IsSelfBan(src, playerId) and not IsDangerousDevModeEnabled() then
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("cantbanself"))
+        return false
+    end
+
+    return CanTargetPlayerForModeration(src, playerId)
+end
+
 ---Handles the banning of a player
 ---@param playerId number @The ID of the player to ban
 ---@param reason string @The reason for the ban
@@ -49,13 +58,8 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
         TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("invalidplayer"))
         return
     end
-    if IsSelfBan(src, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
-        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("cantbanself"))
-        return
-    end
-
     if playerId ~= nil and CheckAdminCooldown(src, "ban") then
-        if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and not isPlayerImmune(playerId) then
+        if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and canModerateBanTarget(src, playerId) then
             SetAdminCooldown(src, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
             local username = getCachedPlayerName(playerId) or getName(playerId, true)
@@ -79,8 +83,6 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             PrintDebugMessage("Player "..getName(src,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
             DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
-        elseif isPlayerImmune(playerId) then
-            TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("adminimmune"))
         end
     end
 end)
@@ -92,12 +94,8 @@ end)
 ---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
     local src = source
-    if playerId ~= nil and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "ban") then
-        if IsSelfBan(source, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
-            return
-        end
-        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
+    if playerId ~= nil and CheckAdminCooldown(source, "ban") then
+        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and canModerateBanTarget(source, playerId) then
             SetAdminCooldown(source, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
             local username = getCachedPlayerName(playerId) or getName(playerId, true)
@@ -117,8 +115,6 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
         end
-    elseif isPlayerImmune(playerId) then
-        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
     end
 end)
 
@@ -143,7 +139,7 @@ function addBanExport(playerId,reason,expires,banner)
         if hasPlayerDropped(playerId) then
             offline = true
         end
-        if isPlayerImmune(playerId) then
+        if not CanTargetPlayerForModeration(source, playerId) then
             return false
         end
         bannedIdentifiers = getCachedPlayerIdentifiers(playerId)
