@@ -30,6 +30,8 @@ local vehicleInfo = {
 	seat = nil,
 }
 
+local freezeThreadRunning = false
+
 RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	permissions = perms
 
@@ -126,7 +128,8 @@ end)
 function FreezeMyself(state)
 
 	if state then
-		if frozen then return end -- prevents double threads
+		if freezeThreadRunning then return end -- prevents double threads
+		freezeThreadRunning = true
 		CreateThread(function()
 	
 			while frozen do 
@@ -141,6 +144,7 @@ function FreezeMyself(state)
 	
 			end
 	
+			freezeThreadRunning = false
 		end)
 	else
 		-- unfreeze
