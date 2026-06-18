@@ -106,49 +106,33 @@ local function setCachedUpdate(resourceName, latest, outdated)
   }
 end
 
--- Check updates sequentially with delays between requests to avoid GitHub rate limits
-local function checkUpdatesSequential(names, index, results, src)
-  if index > #names then
-    -- All done, send results
-    PrintDebugMessage('[Server] checkUpdatesSequential: all complete, sending results (count=' .. #results .. ')', 4)
-    TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, {
-      updates = results,
-    })
-    return
-  end
-
-  local name = names[index]
+-- Check a single resource against GitHub, cache result, then call next()
+local function checkOneResource(name, results, next)
   local version = GetResourceMetadata(name, 'version', 0)
   local repository = GetResourceMetadata(name, 'repository', 0)
 
-  PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ' (index=' .. index .. '/' .. #names .. '), version=' .. tostring(version) .. ', repository=' .. tostring(repository), 4)
+  PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ', version=' .. tostring(version) .. ', repository=' .. tostring(repository), 4)
 
   if not version or not repository then
+    PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': skipping (missing version or repository)', 4)
     table.insert(results, { name = name, latest = nil, outdated = false })
-    -- Delay before next request
-    PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': skipping (missing version or repository), delaying ' .. GITHUB_REQUEST_DELAY .. 'ms', 4)
-    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, function()
-      checkUpdatesSequential(names, index + 1, results, src)
-    end)
+    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
     return
   end
 
   local owner, repo = parseGitHubRepo(repository)
   if not owner or not repo then
+    PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': could not parse GitHub repo', 4)
     table.insert(results, { name = name, latest = nil, outdated = false })
-    PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': could not parse GitHub repo, delaying ' .. GITHUB_REQUEST_DELAY .. 'ms', 4)
-    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, function()
-      checkUpdatesSequential(names, index + 1, results, src)
-    end)
+    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
     return
   end
 
-  PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': fetching latest release for ' .. owner .. '/' .. repo, 4)
+  PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': fetching latest release for ' .. owner .. '/' .. repo, 4)
   getLatestRelease(owner, repo, function(latest)
     local isOutdated = latest and compareVersions(version, latest) < 1
-    PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': latest=' .. tostring(latest) .. ', outdated=' .. tostring(isOutdated), 4)
+    PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': latest=' .. tostring(latest) .. ', outdated=' .. tostring(isOutdated), 4)
 
-    -- Cache the result
     setCachedUpdate(name, latest, isOutdated)
 
     table.insert(results, {
@@ -156,12 +140,24 @@ local function checkUpdatesSequential(names, index, results, src)
       latest = latest,
       outdated = isOutdated,
     })
+    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
+  end)
+end
 
-    -- Delay before next request to avoid rate limiting
-    PrintDebugMessage('[Server] checkUpdatesSequential: delaying ' .. GITHUB_REQUEST_DELAY .. 'ms before next request', 4)
-    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, function()
-      checkUpdatesSequential(names, index + 1, results, src)
-    end)
+-- Sequential update checker: processes names[index..#names] one at a time.
+-- onComplete is called when all are done. Pass nil for src to skip client event.
+local function checkUpdatesSequential(names, index, results, onComplete)
+  if index > #names then
+    PrintDebugMessage('[Server] checkUpdatesSequential: all complete (count=' .. #results .. ')', 4)
+    onComplete(results)
+    return
+  end
+
+  local name = names[index]
+  PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ' (index=' .. index .. '/' .. #names .. ')', 4)
+
+  checkOneResource(name, results, function()
+    checkUpdatesSequential(names, index + 1, results, onComplete)
   end)
 end
 
@@ -371,6 +367,28 @@ RegisterServerEvent('EasyAdmin:stopResource', function(name)
   })
 end)
 
+-- Get cached update summary (for Dashboard alert)
+RegisterServerEvent('EasyAdmin:requestResourceUpdateSummary', function()
+  local src = source
+  if not canManageResources(src) then return end
+
+  local outdated = {}
+  for name, cached in pairs(resourceUpdateCache) do
+    if cached.outdated and cached.latest then
+      local version = GetResourceMetadata(name, 'version', 0)
+      table.insert(outdated, {
+        name = name,
+        current = version,
+        latest = cached.latest,
+      })
+    end
+  end
+
+  TriggerClientEvent('EasyAdmin:resourceUpdateSummaryResult', src, {
+    outdated = outdated,
+  })
+end)
+
 -- Check for updates on specific resources (sequential with delays)
 RegisterServerEvent('EasyAdmin:checkResourceUpdates', function(names)
   local src = source
@@ -385,6 +403,64 @@ RegisterServerEvent('EasyAdmin:checkResourceUpdates', function(names)
     return
   end
 
-  -- Start sequential check from index 1
-  checkUpdatesSequential(names, 1, {}, src)
+  checkUpdatesSequential(names, 1, {}, function(results)
+    TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, { updates = results })
+  end)
+end)
+
+-- ============================================================
+-- Background update check (every 24 hours)
+-- ============================================================
+
+-- Collect all resources that have both a version and a GitHub repository
+local function collectCheckableResources()
+  local checkable = {}
+  local count = GetNumResources() - 1
+
+  for i = 0, count - 1 do
+    local name = GetResourceByFindIndex(i)
+    if not name then goto continue end
+
+    local version = GetResourceMetadata(name, 'version', 0)
+    local repository = GetResourceMetadata(name, 'repository', 0)
+
+    if version and repository then
+      local owner, repo = parseGitHubRepo(repository)
+      if owner and repo then
+        table.insert(checkable, name)
+      end
+    end
+
+    ::continue::
+  end
+
+  return checkable
+end
+
+-- Run update check and cache results (no client target needed)
+local function runBackgroundUpdateCheck()
+  local names = collectCheckableResources()
+  if #names == 0 then
+    PrintDebugMessage('[Server] backgroundUpdateCheck: no checkable resources found', 4)
+    return
+  end
+
+  PrintDebugMessage('[Server] backgroundUpdateCheck: checking ' .. #names .. ' resources', 4)
+
+  checkUpdatesSequential(names, 1, {}, function(results)
+    PrintDebugMessage('[Server] backgroundUpdateCheck: complete, cached ' .. #results .. ' results', 4)
+  end)
+end
+
+-- Periodic background update check thread
+Citizen.CreateThread(function()
+  -- Wait a bit after startup before first check
+  Wait(30000)
+  PrintDebugMessage('[Server] backgroundUpdateCheck: starting periodic checks (interval: 24h)', 4)
+
+  while true do
+    runBackgroundUpdateCheck()
+    -- Wait 24 hours between checks
+    Wait(24 * 60 * 60 * 1000)
+  end
 end)
