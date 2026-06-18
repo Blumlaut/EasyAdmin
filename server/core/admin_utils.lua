@@ -206,3 +206,32 @@ function getName(src,anonymousdisabled,identifierenabled)
 	end
 end
 exports('getName', getName)
+
+--- Check whether two identifier sets share at least N common identifiers.
+--- N defaults to the ea_minIdentifierMatches convar (default: 2).
+--- Returns true if the overlap meets or exceeds the threshold.
+---@param aents table<string> @First identifier set
+---@param bents table<string> @Second identifier set
+---@param minMatches? number @Minimum common identifiers required (default: ea_minIdentifierMatches)
+---@return boolean
+function DoIdentifiersMatch(aents, bents, minMatches)
+    if not aents or not bents or #aents == 0 or #bents == 0 then
+        return false
+    end
+    minMatches = minMatches or GetConvarInt("ea_minIdentifierMatches", 2)
+    local lookup = {}
+    for _, id in ipairs(bents) do
+        lookup[id] = true
+    end
+    local count = 0
+    for _, id in ipairs(aents) do
+        if lookup[id] then
+            count = count + 1
+            if count >= minMatches then
+                return true
+            end
+        end
+    end
+    return false
+end
+exports('DoIdentifiersMatch', DoIdentifiersMatch)

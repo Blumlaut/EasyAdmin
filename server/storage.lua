@@ -88,18 +88,13 @@ local function nextId(list)
     return max_id + 1
 end
 
--- Returns all entries from `list` whose .idents table shares at least one value with `idents`
+-- Returns all entries from `list` whose .idents table shares identifiers with `idents`
+-- Uses DoIdentifiersMatch with minMatches=1 (any overlap means the entry belongs to this player)
 local function findByIdentifiers(list, idents)
-    local playerHasIdent = {}
-    for _, id in ipairs(idents) do playerHasIdent[id] = true end
-
     local results = {}
     for _, entry in ipairs(list) do
-        for _, ident in ipairs(entry.idents) do
-            if playerHasIdent[ident] then
-                results[#results + 1] = entry
-                break
-            end
+        if DoIdentifiersMatch(entry.idents, idents, 1) then
+            results[#results + 1] = entry
         end
     end
     return results

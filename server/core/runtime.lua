@@ -184,7 +184,6 @@ Citizen.CreateThread(function()
 		local numIds = getAllPlayerIdentifiers(player)
 		local showProgress = GetConvar("ea_presentDeferral", "true")
 		local loglevel = GetConvarInt("ea_logLevel", 1)
-		local minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
 
 		deferrals.defer()
 		Wait(0)
@@ -209,22 +208,18 @@ Citizen.CreateThread(function()
 		Wait(0)
 
 		local matchedBan = nil
-		local matchedIdentifiers = {}
-		local matchingIdentifierCount = 0
+		local checkedBans = {}
 
 		for _, pid in ipairs(numIds) do
 			local ban = banIndex[pid]
-			if ban then
-				if not matchedIdentifiers[ban.banid] then
-					matchedIdentifiers[ban.banid] = true
-					matchingIdentifierCount = matchingIdentifierCount + 1
+			if ban and not checkedBans[ban.banid] then
+				checkedBans[ban.banid] = true
+				if DoIdentifiersMatch(numIds, ban.identifiers) then
 					matchedBan = ban
 					if loglevel >= 3 then
-						PrintDebugMessage("IDENTIFIER MATCH! "..pid.." Required: "..matchingIdentifierCount.."/"..minimumMatchingIdentifierCount, 3)
+						PrintDebugMessage("IDENTIFIER MATCH for ban "..ban.banid, 3)
 					end
-					if matchingIdentifierCount >= minimumMatchingIdentifierCount then
-						break
-					end
+					break
 				end
 			end
 		end

@@ -90,7 +90,6 @@ Citizen.CreateThread(function()
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	reportNotification = GetConvar("ea_reportNotification", "false")
 	detailNotification = GetConvar("ea_detailNotification", "false")
-	minimumMatchingIdentifierCount = GetConvarInt("ea_minIdentifierMatches", 2)
 
 	initEnvironmentChecks()
 
