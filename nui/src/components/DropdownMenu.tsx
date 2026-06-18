@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { IconName } from './icons'
 import { Icon } from './icons'
+import { useClickOutside } from '../hooks/useClickOutside'
 
 interface DropdownItem {
   label: string
@@ -23,24 +24,7 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!open) return
-
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    const handleClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    window.addEventListener('keydown', handleKey)
-    document.addEventListener('mousedown', handleClick)
-    return () => {
-      window.removeEventListener('keydown', handleKey)
-      document.removeEventListener('mousedown', handleClick)
-    }
-  }, [open])
+  useClickOutside(open, () => setOpen(false), ref)
 
   return (
     <div ref={ref} className="relative inline-block">
@@ -66,7 +50,7 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
             <button
               key={i}
               role="menuitem"
-              className={`dropdown-item${item.danger ? ' dropdown-item-danger' : ''}`}
+              className={`menu-item dropdown-item${item.danger ? ' dropdown-item-danger' : ''}`}
               onClick={() => {
                 item.onSelect()
                 setOpen(false)

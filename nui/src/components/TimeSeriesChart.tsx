@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Line } from 'react-chartjs-2'
 import type { ChartData } from 'chart.js'
+import { chartFont, chartGrid, chartLegend, chartTick, chartTooltip } from '../lib/chartTheme'
 
 // ============================================================
 // Types
@@ -51,6 +52,17 @@ function formatTooltipDate(ts: number): string {
 // Chart defaults (dark theme — hardcoded hex, CSS vars don't work in canvas)
 // ============================================================
 
+const chartLegendLabels = {
+  ...chartLegend,
+  labels: {
+    color: '#8b949e',
+    boxWidth: 12,
+    boxHeight: 2,
+    padding: 12,
+    font: { size: 11, family: chartFont.family },
+  },
+} as const
+
 const chartDefaults = {
   animation: false,
   responsive: true,
@@ -61,33 +73,9 @@ const chartDefaults = {
     intersect: false,
   },
   plugins: {
-    legend: {
-      display: false,
-      labels: {
-        color: '#8b949e',
-        boxWidth: 12,
-        boxHeight: 2,
-        padding: 12,
-        font: { size: 11, family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif' },
-      },
-    },
+    legend: chartLegendLabels,
     tooltip: {
-      backgroundColor: '#161b22',
-      titleColor: '#f0f6fc',
-      bodyColor: '#c9d1d9',
-      borderColor: '#30363d',
-      borderWidth: 1,
-      cornerRadius: 8,
-      padding: 10,
-      titleFont: {
-        size: 12,
-        weight: 600,
-        family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-      },
-      bodyFont: {
-        size: 11,
-        family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-      },
+      ...chartTooltip,
       displayColors: true,
       boxWidth: 10,
       boxHeight: 10,
@@ -111,35 +99,14 @@ const chartDefaults = {
         },
         tooltipFormat: 'MMM d, HH:mm',
       },
-      grid: {
-        color: 'rgba(48, 54, 61, 0.4)',
-        drawTicks: false,
-      },
-      ticks: {
-        color: '#8b949e',
-        font: {
-          size: 10,
-          family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-        },
-        maxRotation: 0,
-        autoSkip: true,
-        maxTicksLimit: 6,
-      },
+      grid: chartGrid,
+      ticks: { ...chartTick, maxRotation: 0, autoSkip: true, maxTicksLimit: 6 },
       border: { display: false },
     },
     y: {
       beginAtZero: true,
-      grid: {
-        color: 'rgba(48, 54, 61, 0.4)',
-        drawTicks: false,
-      },
-      ticks: {
-        color: '#8b949e',
-        font: {
-          size: 10,
-          family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-        },
-      },
+      grid: chartGrid,
+      ticks: chartTick,
       border: { display: false },
     },
   },

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from './icons'
 import type { IconName } from './icons'
+import { useClickOutside } from '../hooks/useClickOutside'
 
 export interface SelectMenuItem {
   value: string
@@ -34,24 +35,7 @@ export function SelectMenu({
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   // Close on outside click / Escape
-  useEffect(() => {
-    if (!open) return
-
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    const handleClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    window.addEventListener('keydown', handleKey)
-    document.addEventListener('mousedown', handleClick)
-    return () => {
-      window.removeEventListener('keydown', handleKey)
-      document.removeEventListener('mousedown', handleClick)
-    }
-  }, [open])
+  useClickOutside(open, () => setOpen(false), containerRef)
 
   // Measure available space and flip dropdown direction if it would clip off-screen.
   // The default CSS opens upward (bottom: calc(100% + 4px)).
@@ -88,7 +72,7 @@ export function SelectMenu({
     <div ref={containerRef} className="select-menu-container">
       <button
         ref={triggerRef}
-        className="select-menu-trigger"
+        className="panel-btn select-menu-trigger"
         onClick={() => setOpen(!open)}
         disabled={disabled}
         aria-haspopup="listbox"
@@ -108,7 +92,7 @@ export function SelectMenu({
           {items.map((item) => (
             <button
               key={item.value}
-              className={`select-menu-item${selected?.value === item.value ? ' select-menu-item-selected' : ''}`}
+              className={`menu-item select-menu-item${selected?.value === item.value ? ' select-menu-item-selected' : ''}`}
               role="option"
               aria-selected={selected?.value === item.value}
               onClick={() => handleSelect(item)}

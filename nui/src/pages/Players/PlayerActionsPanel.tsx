@@ -340,7 +340,7 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
                   return (
                     <button
                       key={action.id}
-                      className={`player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
+                      className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
                       onClick={() => handleQuickAction(action.id)}
                       disabled={busyAction === action.id}
                       title={isToggle

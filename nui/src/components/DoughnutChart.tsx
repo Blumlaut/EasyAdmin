@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import type { ChartData, Plugin } from 'chart.js'
+import { chartLegend, chartTooltip } from '../lib/chartTheme'
 
 // ============================================================
 // Types
@@ -98,25 +99,10 @@ export function DoughnutChart({
     responsive: false,
     cutout: '80%',
     plugins: {
-      legend: { display: false },
+      legend: chartLegend,
       tooltip: {
         enabled: true,
-        backgroundColor: '#161b22',
-        titleColor: '#f0f6fc',
-        bodyColor: '#c9d1d9',
-        borderColor: '#30363d',
-        borderWidth: 1,
-        cornerRadius: 8,
-        padding: 10,
-        titleFont: {
-          size: 12,
-          weight: 600,
-          family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-        },
-        bodyFont: {
-          size: 11,
-          family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-        },
+        ...chartTooltip,
         callbacks: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           label: (ctx: any) => {

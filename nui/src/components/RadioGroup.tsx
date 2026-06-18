@@ -29,7 +29,7 @@ export function RadioGroup<T = string>({
         {options.map((option, i) => (
           <React.Fragment key={String(option.value)}>
             <label
-              className={`radio-group-option ${value === option.value ? 'radio-group-option--checked' : ''}`}
+              className={`radio-group-option selectable-card${value === option.value ? ' selectable-card--checked' : ''}`}
             >
               <input
                 type="radio"

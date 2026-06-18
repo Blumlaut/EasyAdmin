@@ -86,43 +86,11 @@
 }
 
 /* ---- Group action button ---- */
-/* Solid opaque backgrounds — CEF compositing makes semi-transparent tokens invisible */
+/* Uses .panel-btn base (see inputs.css). Adds justify-content and line-height. */
 
 .player-action-group-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid rgba(60, 70, 85, 0.8);
-  border-radius: var(--radius);
-  background: rgba(30, 35, 44, 0.95);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  font-family: inherit;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  white-space: nowrap;
-  user-select: none;
   justify-content: flex-start;
-  min-height: 34px;
   line-height: 1;
-}
-
-.player-action-group-btn:hover {
-  background: rgba(45, 55, 72, 0.95);
-  border-color: rgba(59, 130, 246, 0.5);
-  color: var(--text-primary);
-}
-
-.player-action-group-btn:active {
-  opacity: 0.85;
-}
-
-.player-action-group-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 .player-action-group-btn-active {

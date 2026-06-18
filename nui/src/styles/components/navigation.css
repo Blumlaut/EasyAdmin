@@ -174,6 +174,8 @@
   margin: var(--space-1) var(--space-3) 0;
 }
 
+/* -- Horizontal overrides -- */
+
 .navigation--horizontal .nav-item {
   width: auto;
   min-width: max-content;

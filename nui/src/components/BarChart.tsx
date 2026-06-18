@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Bar } from 'react-chartjs-2'
 import type { ChartData } from 'chart.js'
+import { chartGrid, chartLegend, chartTick, chartTickSm, chartTooltip } from '../lib/chartTheme'
 
 // ============================================================
 // Types
@@ -93,25 +94,10 @@ export function BarChart({
       },
     },
     plugins: {
-      legend: { display: false },
+      legend: chartLegend,
       tooltip: {
         enabled: true,
-        backgroundColor: '#161b22',
-        titleColor: '#f0f6fc',
-        bodyColor: '#c9d1d9',
-        borderColor: '#30363d',
-        borderWidth: 1,
-        cornerRadius: 8,
-        padding: 10,
-        titleFont: {
-          size: 12,
-          weight: 600,
-          family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-        },
-        bodyFont: {
-          size: 11,
-          family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-        },
+        ...chartTooltip,
         callbacks: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           title: (ctx: any[]) => ctx[0]?.label || '',
@@ -123,30 +109,13 @@ export function BarChart({
     scales: {
       x: {
         beginAtZero: true,
-        grid: {
-          color: 'rgba(48, 54, 61, 0.4)',
-          drawTicks: false,
-        },
-        ticks: {
-          color: '#8b949e',
-          font: {
-            size: 10,
-            family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-          },
-          maxTicksLimit: 4,
-        },
+        grid: chartGrid,
+        ticks: { ...chartTick, maxTicksLimit: 4 },
         border: { display: false },
       },
       y: {
         grid: { display: false },
-        ticks: {
-          color: '#8b949e',
-          font: {
-            size: 11,
-            family: '-apple-system, blinkmacsystemfont, Segoe UI, roboto, sans-serif',
-          },
-          crossAlign: 'far',
-        },
+        ticks: { ...chartTickSm, crossAlign: 'far' },
         border: { display: false },
       },
     },

@@ -88,7 +88,7 @@ export function SettingsLayout({
           return (
             <label
               key={opt.variant}
-              className={`layout-grid-option${checked ? ' layout-grid-option--checked' : ''}`}
+              className={`layout-grid-option selectable-card${checked ? ' selectable-card--checked' : ''}`}
               onClick={() => setLayout(opt.mode, opt.direction)}
             >
               <input

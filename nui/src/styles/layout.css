@@ -37,76 +37,9 @@
   border-right: 1px solid var(--border-subtle);
 }
 
-/* -- Dashboard action button -- */
+/* -- Action button (shared by dashboard, teleport, server actions) -- */
 
-.dashboard-action-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-secondary);
-  font-size: var(--text-base);
-  font-weight: var(--font-medium);
-  font-family: inherit;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-align: left;
-  width: 100%;
-  letter-spacing: 0.01em;
-}
-
-.dashboard-action-btn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border-subtle);
-}
-
-.dashboard-action-btn:active {
-  opacity: 0.85;
-}
-
-/* -- Teleport button -- */
-
-.teleport-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-secondary);
-  font-size: var(--text-base);
-  font-weight: var(--font-medium);
-  font-family: inherit;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-align: left;
-  width: 100%;
-  letter-spacing: 0.01em;
-}
-
-.teleport-btn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border-subtle);
-}
-
-.teleport-btn:active {
-  opacity: 0.85;
-}
-
-.teleport-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* -- Server action button -- */
-
+.action-btn,
 .server-action-btn {
   display: flex;
   align-items: center;
@@ -126,12 +59,14 @@
   letter-spacing: 0.01em;
 }
 
+.action-btn:hover,
 .server-action-btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
   border-color: var(--border-subtle);
 }
 
+.action-btn:active,
 .server-action-btn:active {
   opacity: 0.85;
 }

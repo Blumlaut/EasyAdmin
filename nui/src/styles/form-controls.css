@@ -97,6 +97,30 @@
 }
 
 /* ============================================================
+   Shared selectable card (used by radio group, layout grid, etc.)
+   ============================================================ */
+
+.selectable-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.selectable-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.selectable-card--checked {
+  background: var(--bg-active);
+  border-color: var(--border-glow);
+  box-shadow: 0 0 0 1px var(--brand-blue-light);
+}
+
+/* ============================================================
    Radio Group
    ============================================================ */
 
@@ -104,18 +128,6 @@
   border: none;
   padding: 0;
   margin: 0;
-}
-
-.radio-group .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
 }
 
 .radio-group-options {
@@ -129,23 +141,6 @@
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--bg-card);
-  cursor: pointer;
-  transition: all var(--transition);
-  user-select: none;
-}
-
-.radio-group-option:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-}
-
-.radio-group-option--checked {
-  background: var(--bg-active);
-  border-color: var(--border-glow);
-  box-shadow: 0 0 0 1px var(--brand-blue-light);
 }
 
 /* Hidden native input */
@@ -184,11 +179,11 @@
   transition: transform var(--transition);
 }
 
-.radio-group-option--checked .radio-group-radio {
+.selectable-card--checked .radio-group-radio {
   border-color: var(--brand-blue-light);
 }
 
-.radio-group-option--checked .radio-group-radio::after {
+.selectable-card--checked .radio-group-radio::after {
   transform: translate(-50%, -50%) scale(1);
 }
 
@@ -213,7 +208,7 @@
   line-height: 1.4;
 }
 
-.radio-group-option--checked .radio-group-label {
+.selectable-card--checked .radio-group-label {
   color: #fff;
 }
 
@@ -225,21 +220,6 @@
   border: none;
   padding: 0;
   margin: 0;
-}
-
-.layout-grid .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-.layout-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-3);
@@ -251,24 +231,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--bg-card);
-  cursor: pointer;
-  transition: all var(--transition);
-  user-select: none;
   text-align: center;
-}
-
-.layout-grid-option:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-}
-
-.layout-grid-option--checked {
-  background: var(--bg-active);
-  border-color: var(--border-glow);
-  box-shadow: 0 0 0 1px var(--brand-blue-light);
 }
 
 /* Wireframe container */
@@ -307,7 +270,7 @@
   line-height: 1.3;
 }
 
-.layout-grid-option--checked .layout-grid-label {
+.selectable-card--checked .layout-grid-label {
   color: #fff;
 }
 

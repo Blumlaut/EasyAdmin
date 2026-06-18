@@ -134,32 +134,6 @@
   --letter-section: 0.08em;
 }
 
-/* -- RedM theme override -- */
-
-.redm {
-  --brand-dark: #1a0e0a;
-  --brand-blue: #cd853f;
-  --brand-blue-light: #deb887;
-  --brand-teal: #d2691e;
-  --brand-gradient: linear-gradient(135deg, #cd853f 0%, #d2691e 100%);
-  --brand-gradient-hover: linear-gradient(135deg, #b87333 0%, #c0601a 100%);
-  --brand-glow: rgba(205, 133, 63, 0.3);
-  --brand-glow-strong: rgba(205, 133, 63, 0.5);
-  --bg-primary: rgba(26, 14, 10, 0.92);
-  --bg-secondary: rgba(35, 20, 15, 0.88);
-  --bg-tertiary: rgba(56, 38, 30, 0.7);
-  --bg-hover: rgba(80, 55, 40, 0.5);
-  --bg-active: rgba(205, 133, 63, 0.15);
-  --bg-card: rgba(40, 28, 22, 0.6);
-  --bg-card-hover: rgba(50, 35, 28, 0.7);
-  --bg-input: rgba(40, 28, 22, 0.8);
-  --border-color: rgba(80, 55, 40, 0.5);
-  --border-subtle: rgba(80, 55, 40, 0.3);
-  --border-hover: rgba(205, 133, 63, 0.3);
-  --border-glow: rgba(205, 133, 63, 0.4);
-  --accent-orange: #cd853f;
-}
-
 /* -- High contrast mode -- */
 
 .high-contrast {
@@ -183,21 +157,6 @@
   --accent-green: #56d364;
   --accent-red: #ff6b6b;
   --accent-orange: #ffb347;
-}
-
-.high-contrast .redm {
-  --bg-primary: rgba(0, 0, 0, 0.97);
-  --bg-secondary: rgba(0, 0, 0, 0.95);
-  --bg-tertiary: rgba(5, 5, 10, 0.95);
-  --bg-hover: rgba(60, 60, 60, 0.8);
-  --bg-card: rgba(10, 10, 15, 0.9);
-  --bg-card-hover: rgba(20, 20, 30, 0.95);
-  --bg-input: rgba(10, 10, 15, 0.95);
-  --border-color: rgba(100, 100, 120, 0.9);
-  --border-subtle: rgba(80, 80, 100, 0.7);
-  --text-primary: #fff;
-  --text-secondary: #e8ecf0;
-  --text-muted: #b0b8c0;
 }
 
 /* -- Font size scaling -- */

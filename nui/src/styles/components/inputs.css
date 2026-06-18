@@ -57,21 +57,16 @@ select.input {
   padding-right: 36px;
 }
 
-/* -- SelectMenu (custom dropdown, CEF-safe) -- */
+/* ============================================================
+   Panel button (shared base for select-menu-trigger,
+   player-action-group-btn, and similar interactive surfaces)
+   ============================================================ */
 
-.select-menu-container {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.select-menu-trigger {
+.panel-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  width: 100%;
   padding: var(--space-2) var(--space-3);
-  padding-right: var(--space-3);
   border: 1px solid rgba(60, 70, 85, 0.8);
   border-radius: var(--radius);
   background: rgba(30, 35, 44, 0.95);
@@ -84,30 +79,43 @@ select.input {
   white-space: nowrap;
   user-select: none;
   min-height: 34px;
-  line-height: 1.4;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.select-menu-trigger:hover {
+.panel-btn:hover {
   background: rgba(45, 55, 72, 0.95);
   border-color: rgba(59, 130, 246, 0.5);
   color: var(--text-primary);
 }
 
-.select-menu-trigger:active {
+.panel-btn:active {
   opacity: 0.85;
+}
+
+.panel-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* -- SelectMenu (custom dropdown, CEF-safe) -- */
+
+.select-menu-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-menu-trigger {
+  width: 100%;
+  padding-right: var(--space-3);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .select-menu-trigger:focus-visible {
   border-color: var(--brand-blue);
   box-shadow: 0 0 0 3px var(--bg-active);
-}
-
-.select-menu-trigger:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 .select-menu-trigger-label {
@@ -146,28 +154,10 @@ select.input {
 }
 
 .select-menu-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  font-family: inherit;
-  cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast);
-  text-align: left;
-  width: 100%;
+  /* Inherits from .menu-item */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.select-menu-item:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
 }
 
 .select-menu-item-selected {
