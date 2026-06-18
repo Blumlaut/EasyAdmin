@@ -86,10 +86,7 @@ export function AdminNotesSection({
   if (state.status === 'loading') {
     return (
       <div className="card">
-        <p className="section-label">
-          <Icon name="book-open" size="xs" />
-          Admin Notes
-        </p>
+        <p className="section-label">Admin Notes</p>
         <div className="flex flex-col gap-2">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} width="100%" height={48} />
@@ -104,10 +101,7 @@ export function AdminNotesSection({
   return (
     <div className="card">
       <div className="card-header">
-        <p className="section-label" style={{ marginBottom: 0 }}>
-          <Icon name="book-open" size="xs" />
-          Admin Notes
-        </p>
+        <p className="section-label" style={{ marginBottom: 0 }}>Admin Notes</p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted">{sortedEntries.length} note{sortedEntries.length === 1 ? '' : 's'}</span>
           {canAdd && (

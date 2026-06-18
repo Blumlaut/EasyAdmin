@@ -92,10 +92,7 @@ export function ActionHistorySection({
   if (state.status === 'loading') {
     return (
       <div className="card">
-        <p className="section-label">
-          <Icon name="history" size="xs" />
-          Action History
-        </p>
+        <p className="section-label">Action History</p>
         <div className="flex flex-col gap-2">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} width="100%" height={40} />
@@ -110,10 +107,7 @@ export function ActionHistorySection({
   if (sortedEntries.length === 0) {
     return (
       <div className="card">
-        <p className="section-label">
-          <Icon name="history" size="xs" />
-          Action History
-        </p>
+        <p className="section-label">Action History</p>
         <p className="text-sm text-muted">No actions recorded for this player</p>
       </div>
     )
@@ -124,10 +118,7 @@ export function ActionHistorySection({
   return (
     <div className="card">
       <div className="card-header">
-        <p className="section-label" style={{ marginBottom: 0 }}>
-          <Icon name="history" size="xs" />
-          Action History
-        </p>
+        <p className="section-label" style={{ marginBottom: 0 }}>Action History</p>
         <span className="text-xs text-muted">{sortedEntries.length} entr{sortedEntries.length === 1 ? 'y' : 'ies'}</span>
       </div>
 
