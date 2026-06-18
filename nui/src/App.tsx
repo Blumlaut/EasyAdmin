@@ -312,7 +312,6 @@ function App() {
                   player={nav.selectedPlayer}
                   permissions={data.permissions}
                   ipPrivacy={data.ipPrivacy}
-                  shortcuts={data.shortcuts}
                   onToast={showToast}
                 />
               )}

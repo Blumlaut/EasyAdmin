@@ -39,7 +39,8 @@
   line-height: var(--leading-relaxed);
 }
 
-.dialog .input {
+.dialog .input,
+.dialog .select-menu-container {
   margin-bottom: var(--space-4);
 }
 

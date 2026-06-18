@@ -13,6 +13,8 @@ interface SelectMenuProps {
   items: SelectMenuItem[]
   placeholder?: string
   onChange: (item: SelectMenuItem) => void
+  /** Controlled selected value (matches item.value). When omitted, SelectMenu manages its own selection. */
+  value?: string
   disabled?: boolean
   ariaLabel?: string
 }
@@ -25,12 +27,19 @@ export function SelectMenu({
   items,
   placeholder = 'Select...',
   onChange,
+  value,
   disabled = false,
   ariaLabel,
 }: SelectMenuProps) {
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<SelectMenuItem | null>(null)
+  const [uncontrolledSelected, setUncontrolledSelected] = useState<SelectMenuItem | null>(null)
   const [flip, setFlip] = useState(false)
+
+  // Controlled mode: derive selection from value prop
+  const controlledSelected = value !== undefined
+    ? items.find((item) => item.value === value) ?? null
+    : null
+  const selected = value !== undefined ? controlledSelected : uncontrolledSelected
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
@@ -60,13 +69,15 @@ export function SelectMenu({
   }, [open])
 
   const handleSelect = (item: SelectMenuItem) => {
-    setSelected(item)
+    if (value === undefined) {
+      setUncontrolledSelected(item)
+    }
     setOpen(false)
     onChange(item)
   }
 
-  const displayLabel = selected ? selected.label : placeholder
-  const displayIcon = selected ? selected.icon : undefined
+  const displayLabel = selected?.label ?? placeholder
+  const displayIcon = selected?.icon
 
   return (
     <div ref={containerRef} className="select-menu-container">

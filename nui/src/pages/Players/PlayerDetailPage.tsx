@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
-import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
+import type { Notification, Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
@@ -12,7 +12,6 @@ interface PlayerDetailPageProps {
   player: Player
   permissions: Permissions
   ipPrivacy: boolean
-  shortcuts: ReasonShortcut[]
   onToast: (text: string, type?: Notification['type']) => void
 }
 
@@ -20,7 +19,6 @@ export function PlayerDetailPage({
   player,
   permissions,
   ipPrivacy,
-  shortcuts,
   onToast,
 }: PlayerDetailPageProps) {
   const [identifiers, setIdentifiers] = useState<string[] | null>(null)
@@ -96,7 +94,6 @@ export function PlayerDetailPage({
       <PlayerActionsPanel
         player={player}
         permissions={permissions}
-        shortcuts={shortcuts}
         onToast={onToast}
       />
 

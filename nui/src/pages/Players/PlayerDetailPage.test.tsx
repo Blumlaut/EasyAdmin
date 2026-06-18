@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { PlayerDetailPage } from './PlayerDetailPage'
 import { ModalProvider } from '../../ModalContext'
-import type { Permissions, Player, ReasonShortcut } from '../../types'
+import type { Permissions, Player } from '../../types'
 
 const player: Player = {
   id: 1,
@@ -12,8 +12,6 @@ const player: Player = {
   frozen: true,
 }
 
-const shortcuts: ReasonShortcut[] = []
-
 function renderDefault(ipPrivacy = false) {
   return render(
     <ModalProvider>
@@ -21,7 +19,6 @@ function renderDefault(ipPrivacy = false) {
         player={player}
         permissions={{ 'player.kick': true, 'player.teleport.single': true }}
         ipPrivacy={ipPrivacy}
-        shortcuts={shortcuts}
         onToast={() => {}}
       />
     </ModalProvider>
@@ -56,7 +53,6 @@ describe('PlayerDetailPage', () => {
           player={player}
           permissions={{} as Permissions}
           ipPrivacy={false}
-          shortcuts={shortcuts}
           onToast={() => {}}
         />
       </ModalProvider>

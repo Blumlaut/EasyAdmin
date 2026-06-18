@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
-import type { ModalFieldDefinition, ModalValue, ModalValues, SelectFieldDefinition, SliderFieldDefinition } from './types'
+import type { ModalFieldDefinition, ModalValue, ModalValues, SliderFieldDefinition } from './types'
 import { DialogWrapper } from '../components/DialogWrapper'
+import { SelectMenu } from '../components/SelectMenu'
 import { useEscapeKey } from '../hooks/useEscapeKey'
 
 interface ModalBuilderProps {
@@ -198,13 +199,17 @@ export function ModalBuilder({
         )
       case 'select':
         return (
-          <SelectField
-            key={field.key}
-            field={field}
-            value={normalizeTextValue(value)}
-            inputRef={commonRef as RefObject<HTMLSelectElement> | undefined}
-            onChange={(nextValue) => setFieldValue(field.key, nextValue)}
-          />
+          <div key={field.key} className="flex flex-col gap-1">
+            {field.label && <span className="text-sm text-secondary">{field.label}</span>}
+            <SelectMenu
+              items={field.options.map((opt) => ({ value: opt.value, label: opt.label }))}
+              placeholder={field.placeholder}
+              value={normalizeTextValue(value)}
+              onChange={(item) => setFieldValue(field.key, item.value)}
+              ariaLabel={field.label ?? field.key}
+            />
+            {field.description && <span className="text-xs text-muted">{field.description}</span>}
+          </div>
         )
       case 'checkbox':
         return (
@@ -290,39 +295,4 @@ function SliderField({
   )
 }
 
-function SelectField({
-  field,
-  value,
-  inputRef,
-  onChange,
-}: {
-  field: SelectFieldDefinition
-  value: string
-  inputRef?: RefObject<HTMLSelectElement>
-  onChange: (value: string) => void
-}) {
-  return (
-    <label className="flex flex-col gap-1">
-      {field.label && <span className="text-sm text-secondary">{field.label}</span>}
-      <select
-        ref={inputRef}
-        className="input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={field.label ?? field.key}
-      >
-        {field.placeholder && (
-          <option value="" disabled>
-            {field.placeholder}
-          </option>
-        )}
-        {field.options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {field.description && <span className="text-xs text-muted">{field.description}</span>}
-    </label>
-  )
-}
+

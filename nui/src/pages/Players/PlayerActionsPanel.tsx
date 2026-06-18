@@ -1,29 +1,17 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { IconName } from '../../components/icons'
-import type { Notification, Permissions, Player, ReasonShortcut } from '../../types'
+import type { Notification, Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
 import { SelectMenu } from '../../components/SelectMenu'
 import { callLua } from '../../fivem'
-import { BanFlowModal } from '../../modals/BanFlowModal'
+import { createBanModal, createTextInputModal } from '../../modals/helpers'
 
 interface PlayerActionsPanelProps {
   player: Player
   permissions: Permissions
-  shortcuts: ReasonShortcut[]
   onToast: (text: string, type?: Notification['type']) => void
 }
-
-type DisciplineTab = 'kick' | 'warn' | 'ban'
-
-// Default fallback when no server shortcuts are configured
-const DEFAULT_PRESETS = [
-  'No reason',
-  'Spam / flooding chat',
-  'Inappropriate name',
-  'Disrupting gameplay',
-  'Exploiting / cheating',
-]
 
 // ---- Quick action types ----
 
@@ -91,7 +79,7 @@ const ACTION_GROUPS: ActionGroup[] = [
   },
 ]
 
-export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: PlayerActionsPanelProps) {
+export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActionsPanelProps) {
   const { openModal, closeModal } = useModalContext()
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
@@ -99,24 +87,6 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
   const canWarn = permissions['player.warn']
   const canBan = permissions['player.ban.temporary']
   const canTeleport = permissions['player.teleport.single']
-
-  // Default to first available discipline tab in escalation order
-  const defaultDisciplineTab = useMemo((): DisciplineTab => {
-    if (canWarn) return 'warn'
-    if (canKick) return 'kick'
-    return 'ban'
-  }, [canWarn, canKick])
-
-  const [disciplineTab, setDisciplineTab] = useState<DisciplineTab>(defaultDisciplineTab)
-  const [reason, setReason] = useState('')
-
-  // Use server shortcuts if available, otherwise fall back to defaults
-  const presetReasons = useMemo(() => {
-    if (shortcuts.length > 0) {
-      return shortcuts.map((s) => s.value)
-    }
-    return DEFAULT_PRESETS
-  }, [shortcuts])
 
   // Build filtered groups based on permissions
   const filteredGroups = useMemo(() => {
@@ -127,6 +97,8 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
   }, [permissions])
 
   const hasAnyQuickAction = filteredGroups.length > 0 || canTeleport
+  const hasAnyDiscipline = canWarn || canKick || canBan
+  const hasAnyPermission = hasAnyQuickAction || hasAnyDiscipline
 
   // ---- Quick action handler ----
 
@@ -177,15 +149,15 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
           onToast('Forced bucket', 'success')
           break
         case 'freeze': {
-          const newState = !player.frozen
-          await callLua('toggleFreeze', { id: player.id, name: player.name, freeze: newState })
-          onToast(`${newState ? 'Frozen' : 'Unfrozen'} ${player.name}`, 'success')
+          const newFrozen = !player.frozen
+          await callLua('toggleFreeze', { id: player.id, name: player.name, freeze: newFrozen })
+          onToast(`${newFrozen ? 'Frozen' : 'Unfrozen'} ${player.name}`, 'success')
           break
         }
         case 'mute': {
-          const newState = !player.muted
-          await callLua('toggleMute', { id: player.id, name: player.name, mute: newState })
-          onToast(`${newState ? 'Muted' : 'Unmuted'} ${player.name}`, 'success')
+          const newMuted = !player.muted
+          await callLua('toggleMute', { id: player.id, name: player.name, mute: newMuted })
+          onToast(`${newMuted ? 'Muted' : 'Unmuted'} ${player.name}`, 'success')
           break
         }
       }
@@ -196,45 +168,70 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
     }
   }
 
-  // ---- Discipline (kick/warn/ban) handlers ----
+  // ---- Discipline handlers (modal-based) ----
 
-  const handleDiscipline = useCallback(async (type: DisciplineTab) => {
-    const r = reason.trim() || 'No reason'
-    setBusyAction(type)
-    try {
-      switch (type) {
-        case 'kick': {
-          await callLua('kickPlayer', { id: player.id, name: player.name, reason: r })
-          onToast(`Kicked ${player.name}`, 'success')
-          break
-        }
-        case 'warn': {
-          await callLua('warnPlayer', { id: player.id, name: player.name, reason: r })
-          onToast(`Warned ${player.name}`, 'success')
-          break
-        }
-        case 'ban': {
-          openModal({
-            kind: 'custom',
-            render: () => (
-              <BanFlowModal
-                player={player}
-                onCancel={closeModal}
-                onComplete={closeModal}
-                onToast={onToast}
-              />
-            ),
-          })
-          setBusyAction(null)
-          return
-        }
-      }
-    } catch {
-      onToast(`Failed to ${type} player`, 'error')
-    } finally {
-      setBusyAction(null)
-    }
-  }, [player, reason, openModal, closeModal, onToast])
+  function handleWarn() {
+    openModal(
+      createTextInputModal({
+        title: `Warn ${player.name}`,
+        label: 'Reason',
+        placeholder: 'No reason',
+        required: true,
+        submitLabel: 'Warn',
+        submitVariant: 'warning',
+        onSubmit: async (values) => {
+          const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
+          try {
+            await callLua('warnPlayer', { id: player.id, name: player.name, reason })
+            onToast(`Warned ${player.name}`, 'success')
+          } catch {
+            onToast('Warn failed', 'error')
+          }
+          closeModal()
+        },
+      }),
+    )
+  }
+
+  function handleKick() {
+    openModal(
+      createTextInputModal({
+        title: `Kick ${player.name}`,
+        label: 'Reason',
+        placeholder: 'No reason',
+        required: true,
+        submitLabel: 'Kick',
+        submitVariant: 'warning',
+        onSubmit: async (values) => {
+          const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
+          try {
+            await callLua('kickPlayer', { id: player.id, name: player.name, reason })
+            onToast(`Kicked ${player.name}`, 'success')
+          } catch {
+            onToast('Kick failed', 'error')
+          }
+          closeModal()
+        },
+      }),
+    )
+  }
+
+  function handleBan() {
+    openModal(
+      createBanModal({
+        title: `Ban ${player.name}`,
+        onSubmit: async (reason, duration) => {
+          try {
+            await callLua('banPlayer', { id: player.id, name: player.name, reason, duration })
+            onToast(`Banned ${player.name}`, 'success')
+          } catch {
+            onToast('Failed to ban player', 'error')
+          }
+          closeModal()
+        },
+      }),
+    )
+  }
 
   // ---- Teleport handler ----
 
@@ -265,8 +262,6 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
 
   // ---- Render ----
 
-  const hasAnyPermission = hasAnyQuickAction || canKick || canWarn || canBan
-
   return (
     <div className="card">
       <p className="section-label">Actions</p>
@@ -275,82 +270,42 @@ export function PlayerActionsPanel({ player, permissions, shortcuts, onToast }: 
         <p className="text-muted text-sm">No permissions for this player</p>
       )}
 
-      {/* Discipline panel (kick / warn / ban) — highest priority */}
-      {(canKick || canWarn || canBan) && (
-        <div className="player-discipline-panel">
-          {/* Tab bar — escalation order: Warn → Kick → Ban */}
-          <div className="player-discipline-tabs">
-            {canWarn && (
-              <button
-                className={`player-discipline-tab player-discipline-tab--warn${disciplineTab === 'warn' ? ' player-discipline-tab-active' : ''}`}
-                onClick={() => setDisciplineTab('warn')}
-              >
-                <Icon name="alert-triangle" size="xs" />
-                Warn
-              </button>
-            )}
-            {canKick && (
-              <button
-                className={`player-discipline-tab player-discipline-tab--kick${disciplineTab === 'kick' ? ' player-discipline-tab-active' : ''}`}
-                onClick={() => setDisciplineTab('kick')}
-              >
-                <Icon name="log-out" size="xs" />
-                Kick
-              </button>
-            )}
-            {canBan && (
-              <button
-                className={`player-discipline-tab player-discipline-tab--ban${disciplineTab === 'ban' ? ' player-discipline-tab-active' : ''}`}
-                onClick={() => setDisciplineTab('ban')}
-              >
-                <Icon name="ban" size="xs" />
-                Ban
-              </button>
-            )}
-          </div>
-
-          {/* Preset reasons */}
-          <div className="player-discipline-presets">
-            {presetReasons.map((preset) => (
-              <button
-                key={preset}
-                className={`player-discipline-preset${reason === preset ? ' player-discipline-preset-active' : ''}`}
-                onClick={() => setReason(preset)}
-              >
-                {preset}
-              </button>
-            ))}
-          </div>
-
-          {/* Reason input + execute button */}
-          <div className="player-discipline-input-row">
-            <input
-              className="input player-discipline-input"
-              placeholder="Or type a custom reason..."
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  handleDiscipline(disciplineTab)
-                }
-              }}
-              aria-label={`${disciplineTab} reason`}
-            />
+      {/* Discipline buttons (warn / kick / ban) */}
+      {hasAnyDiscipline && (
+        <div className="player-discipline-buttons">
+          {canWarn && (
             <button
-              className={`player-discipline-execute player-discipline-execute--${disciplineTab}`}
-              onClick={() => handleDiscipline(disciplineTab)}
-              disabled={busyAction === disciplineTab}
+              className="btn btn-warning btn-sm"
+              onClick={handleWarn}
             >
-              <Icon name={disciplineTab === 'kick' ? 'log-out' : disciplineTab === 'warn' ? 'alert-triangle' : 'ban'} size="xs" />
-              {disciplineTab === 'kick' ? 'Kick' : disciplineTab === 'warn' ? 'Warn' : 'Ban'}
+              <Icon name="alert-triangle" size="xs" />
+              Warn
             </button>
-          </div>
+          )}
+          {canKick && (
+            <button
+              className="btn btn-warning btn-sm"
+              style={{ background: 'var(--accent-orange)', borderColor: 'var(--accent-orange)' }}
+              onClick={handleKick}
+            >
+              <Icon name="log-out" size="xs" />
+              Kick
+            </button>
+          )}
+          {canBan && (
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={handleBan}
+            >
+              <Icon name="ban" size="xs" />
+              Ban
+            </button>
+          )}
         </div>
       )}
 
       {/* Divider between discipline and quick actions */}
-      {(canKick || canWarn || canBan) && hasAnyQuickAction && (
+      {hasAnyDiscipline && hasAnyQuickAction && (
         <div className="section-divider" />
       )}
 

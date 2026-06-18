@@ -6,7 +6,8 @@ import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { useModalContext } from '../../ModalContext'
-import { OfflineBanFlowModal } from '../../modals/BanFlowModal'
+import { callLua } from '../../fivem'
+import { createBanModal } from '../../modals/helpers'
 
 interface CachedPlayersPageProps {
   cachedPlayers: CachedPlayer[]
@@ -61,18 +62,20 @@ export function CachedPlayersPage({
             <CachedRow
               key={player.id}
               player={player}
-              onBan={() => openModal({
-                kind: 'custom',
-                render: () => (
-                  <OfflineBanFlowModal
-                    id={player.id}
-                    name={player.name}
-                    onCancel={closeModal}
-                    onComplete={closeModal}
-                    onToast={onToast}
-                  />
-                ),
-              })}
+              onBan={() => openModal(
+                createBanModal({
+                  title: `Ban ${player.name}`,
+                  onSubmit: async (reason, duration) => {
+                    try {
+                      await callLua('offlineBanPlayer', { id: player.id, name: player.name, reason, duration })
+                      onToast(`Banned ${player.name}`, 'success')
+                    } catch {
+                      onToast('Failed to ban player', 'error')
+                    }
+                    closeModal()
+                  },
+                }),
+              )}
             />
           ))}
         </div>
