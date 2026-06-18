@@ -49,8 +49,10 @@ export function DialogWrapper({
           {title}
         </h2>
         {description && <p className="dialog-description">{description}</p>}
-        {children}
-        {actions}
+        <div className="dialog-body">
+          {children}
+          {actions}
+        </div>
       </div>
     </div>
   )
