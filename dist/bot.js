@@ -74858,11 +74858,6 @@ Version ${latestVersionInfo[0]} is Available!
       console.log(`${info}`);
     }
   });
-  on("debug", function(info) {
-    if (GetConvarInt("ea_logLevel", 1) >= 4) {
-      console.log(`${info}`);
-    }
-  });
   client.login(GetConvar("ea_botToken", ""));
 }
 /*! Bundled license information:
