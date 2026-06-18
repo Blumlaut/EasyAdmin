@@ -18,6 +18,7 @@ shared_script 'shared/util_shared.lua'
 shared_script 'shared/kvp.lua'
 
 server_scripts {
+    "server/lib/*.lua",
     "server/storage.lua",
     "server/*.lua",
     "dist/*.js",

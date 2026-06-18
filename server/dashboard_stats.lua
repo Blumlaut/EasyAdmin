@@ -155,28 +155,13 @@ end
 ---@param path string
 ---@return table
 local function loadJson(path)
-	local data = LoadResourceFile(GetCurrentResourceName(), path)
-	if not data then return {} end
-	local ok, decoded = pcall(json.decode, data)
-	if ok and type(decoded) == 'table' then
-		return decoded
-	end
-	PrintDebugMessage(string.format('Failed to decode %s, starting fresh.', path), 1)
-	return {}
+	return LoadJsonResourceFile(path, {}) or {}
 end
 ---Save a table as indented JSON to a file
 ---@param path string
 ---@param data table
 local function saveJson(path, data)
-	local encoded = json.encode(data, { indent = true })
-	if not encoded then
-		PrintDebugMessage(string.format('Failed to encode %s.', path), 1)
-		return
-	end
-	local success = SaveResourceFile(GetCurrentResourceName(), path, encoded, -1)
-	if not success then
-		PrintDebugMessage(string.format('Failed to save %s — check folder write permissions.', path), 1)
-	end
+	SaveJsonResourceFile(path, data)
 end
 
 ---Prune time-series entries older than STATS_RETENTION (oldest-first arrays)
