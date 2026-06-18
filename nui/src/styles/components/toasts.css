@@ -1,24 +1,11 @@
 /* ============================================================
-   Toast
+   Toast — styled to match sidebar design principles:
+   bg-secondary, border-subtle, radius-md, no shadow/backdrop.
    ============================================================ */
 
-@keyframes toastSlideIn {
-  from {
-    opacity: 0;
-    margin-right: var(--space-8);
-  }
-
-  to {
-    opacity: 1;
-    margin-right: 0;
-  }
-}
-
-@keyframes toastFadeOut {
-  from { opacity: 1; }
-
-  to { opacity: 0; }
-}
+/* NOTE: No @keyframes — CEF renders elements with opacity/transform
+   keyframe animations as fully invisible. We use CSS transition
+   triggered by class toggle instead. */
 
 .toast-container {
   position: fixed;
@@ -32,35 +19,58 @@
 }
 
 .toast {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
+  background: #0d1118;
+  border: 1px solid var(--border-subtle);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
-  box-shadow: var(--shadow);
-  animation: toastSlideIn var(--transition-slow) ease-out;
-  border: 1px solid var(--border-color);
-  backdrop-filter: var(--blur-sm);
-  -webkit-backdrop-filter: var(--blur-sm);
+  color: var(--text-primary);
   letter-spacing: 0.01em;
+
+  /* Transition for slide-in/out (CEF-safe: no @keyframes).
+     Driven by inline styles so the className never changes —
+     CEF replays transitions when the class attribute is touched. */
+  transition: opacity var(--transition-slow), margin-right var(--transition-slow);
 }
 
+/* ---- Variant accent borders ---- */
+
 .toast-info {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
   border-color: var(--brand-blue);
 }
 
 .toast-success {
-  background: var(--bg-green);
+  border-color: rgba(63, 185, 80, 0.5);
   color: var(--accent-green);
-  border-color: rgba(63, 185, 80, 0.4);
 }
 
 .toast-error {
-  background: var(--bg-red);
+  border-color: rgba(248, 81, 73, 0.5);
   color: var(--accent-red);
-  border-color: rgba(248, 81, 73, 0.4);
 }
 
+/* ---- Dismiss button ---- */
+
+.toast-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1);
+  margin-left: auto;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.toast-dismiss:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

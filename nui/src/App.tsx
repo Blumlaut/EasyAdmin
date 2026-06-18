@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useToast } from './hooks/useToast'
@@ -41,7 +41,8 @@ function App() {
 
   // === Hooks ===
 
-  const { toast, showToast } = useToast()
+  const { queue, showToast, dismissToast } = useToast()
+  const onDismissToast = useCallback((id: number) => dismissToast(id), [dismissToast])
   const data = useAppData()
   const nav = useAppNavigation({
     permissions: data.permissions,
@@ -434,7 +435,20 @@ function App() {
       </>
     )}
 
-      {toast && <Toast message={toast.text} type={toast.type} />}
+      {queue.length > 0 && (
+        <div className="toast-container">
+          {queue.map((t) => (
+            <Toast
+              key={t.id}
+              id={t.id}
+              message={t.text}
+              type={t.type}
+              dismissing={t.dismissing}
+              onDismiss={onDismissToast}
+            />
+          ))}
+        </div>
+      )}
 
       <WarningOverlay
         warning={warning}

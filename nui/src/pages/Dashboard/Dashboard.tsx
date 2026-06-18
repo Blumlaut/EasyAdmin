@@ -277,6 +277,11 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
             {greeting}
           </h3>
         )}
+        <div className="flex gap-2 mt-2">
+          <button className="btn btn-xs btn-ghost" onClick={() => onToast('Info toast test', 'info')}>Test info</button>
+          <button className="btn btn-xs btn-ghost" onClick={() => onToast('Success toast test', 'success')}>Test success</button>
+          <button className="btn btn-xs btn-ghost" onClick={() => onToast('Error toast test', 'error')}>Test error</button>
+        </div>
       </div>
 
       {/* Update notification banner */}
