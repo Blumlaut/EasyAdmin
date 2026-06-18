@@ -42,23 +42,15 @@ function loadBackupName(name)
 		local backupJson = json.decode(backup)
 		if backupJson then
 			PrintDebugMessage("Loading Backup..")
-			for i,ban in pairs(blacklist) do
-				UnbanId(ban.banid)
-				PrintDebugMessage("removing ban "..ban.banid, 4)
-				Wait(50)
+			-- Replace the live banlist via Storage (the single banlist.json owner); this also
+			-- rebuilds the enforcement view, and avoids the per-ban mutate-while-iterate hazard.
+			Storage.updateBanlist(backupJson)
+			if GetConvar("ea_custombanlist", "false") == "true" then
+				for _,ban in pairs(backupJson) do
+					TriggerEvent("ea_data:addBan", ban)
+				end
 			end
-			
-			for i,ban in pairs(backupJson) do
-				addBan(ban)
-				PrintDebugMessage("adding ban "..ban.banid, 4)
-				TriggerEvent("ea_data:addBan", ban)
-				Wait(50)
-			end
-			local saved = SaveResourceFile(GetCurrentResourceName(), "banlist.json", json.encode(blacklist, {indent = true}), -1)
-			if not saved then
-				PrintDebugMessage("^1Saving banlist.json failed! Please check if EasyAdmin has Permission to write in its own folder!^7", 1)
-			end
-			updateBlacklist()
+			updateBlacklist() -- validate/expire/upgrade the restored list
 			PrintDebugMessage("Backup should be loaded!")
 		else
 			PrintDebugMessage("^1EasyAdmin:^7 Backup Could not be loaded, in most cases this comes from there being a formatting error, please use a JSON Validator on the file and fix the errors!")
@@ -79,7 +71,7 @@ function createBackup()
 	local resourceName = GetCurrentResourceName()
 	PrintDebugMessage("Creating Banlist Backup to "..backupName, 3)
 	
-	local saved = SaveResourceFile(resourceName, "backups/"..backupName, json.encode(blacklist, {indent = true}), -1)
+	local saved = SaveResourceFile(resourceName, "backups/"..backupName, json.encode(Storage.getBanList(), {indent = true}), -1)
 	
 	if not saved then
 		PrintDebugMessage("^1Saving banlist backup failed! Please check if EasyAdmin has Permission to write in the backups folder!^7", 1)

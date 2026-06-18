@@ -4,6 +4,15 @@ This guide provides instructions for updating EasyAdmin between versions.
 
 ---
 
+## Updating to 7.52
+
+### Plugin API: client-local `DoesPlayerHavePermission` removed
+
+- The redundant client-only `DoesPlayerHavePermission` that lived in `client/admin_client.lua` has been **removed**. The function is still provided by the shared script (`shared/util_shared.lua`), so it remains available on **both the client and the server** (and as an export) — most plugins are unaffected.
+- If your plugin relied on the old client-local global, switch to the shared `DoesPlayerHavePermission`; its behaviour matches the server-side permission check.
+
+---
+
 ## Updating to 7.5
 
 **EasyAdmin 7.5** removes the Permission Editor due to a new security feature by FiveM.

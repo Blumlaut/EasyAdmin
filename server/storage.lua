@@ -20,14 +20,23 @@ local notes = {}
 -- end
 
 local function awaitReady()
-    if not listsReady then
-        repeat Citizen.Wait(0) until listsReady
+    if listsReady then return end
+    -- Bounded wait: the loader thread always sets listsReady (even on failure, see below),
+    -- so this is a safety cap against a never-scheduled loader rather than the normal path.
+    local waited = 0
+    while not listsReady do
+        Citizen.Wait(50)
+        waited = waited + 50
+        if waited >= 10000 then
+            PrintDebugMessage("^1Storage.awaitReady timed out after 10s; proceeding with current (possibly empty) lists.^7", 1)
+            return
+        end
     end
 end
 
 local function loadJsonFile(filename, currentVersion)
     local content = LoadResourceFile(GetCurrentResourceName(), filename)
-    if content then
+    if not content then
         PrintDebugMessage(filename .. " file was missing, we created a new one.", 2)
         content = json.encode({})
     end
@@ -70,6 +79,12 @@ local function findByIdentifiers(list, idents)
     return results
 end
 
+-- Notify banlist.lua to rebuild its derived enforcement view (blacklist + banIndex) after any
+-- banlist mutation, so Storage remains the single source of truth and bans take effect immediately.
+local function syncBanlistView()
+    if RebuildBanlistView then RebuildBanlistView() end
+end
+
 Storage = {
     getBan = function(banId)
         awaitReady()
@@ -104,9 +119,9 @@ Storage = {
             expire = expires,
             expiryString = expiryString,
             type = type,
-            timeLeft = time,
         })
         saveJsonFile("banlist.json", banlist)
+        syncBanlistView()
     end,
     updateBan = function(id, newData)
         if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
@@ -114,13 +129,16 @@ Storage = {
                 if ban.banid == newData.banid then
                     banlist[i] = newData
                     saveJsonFile("banlist.json", banlist)
+                    syncBanlistView()
                     break
                 end
             end
         end
     end,
-    updateBanlist = function(banlist)
+    updateBanlist = function(newList)
+        banlist = newList
         saveJsonFile("banlist.json", banlist)
+        syncBanlistView()
     end,
     removeBan = function(banId)
         awaitReady()
@@ -128,6 +146,7 @@ Storage = {
             if ban.banid == banId then
                 table.remove(banlist, i)
                 saveJsonFile("banlist.json", banlist)
+                syncBanlistView()
                 return true
             end
         end
@@ -141,6 +160,7 @@ Storage = {
                     if identifier == id then
                         table.remove(banlist, i)
                         saveJsonFile("banlist.json", banlist)
+                        syncBanlistView()
                         PrintDebugMessage("removed ban as per unbanidentifier func", 4)
                         return
                     end
@@ -156,7 +176,7 @@ Storage = {
         awaitReady()
         return findByIdentifiers(actions, idents)
     end,
-    addAction = function(type, identifiers, reason, moderatorName, moderatorIdentifiers)
+    addAction = function(type, identifiers, reason, moderatorName, moderatorIdentifiers, banId)
         awaitReady()
         table.insert(actions, {
             time = os.time(),
@@ -166,6 +186,7 @@ Storage = {
             reason = reason,
             moderator = moderatorName,
             moderatorIdents = moderatorIdentifiers,
+            banid = banId,
         })
         saveJsonFile("actions.json", actions)
     end,
@@ -174,9 +195,11 @@ Storage = {
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
+                saveJsonFile("actions.json", actions)
+                return true
             end
         end
-        saveJsonFile("actions.json", actions)
+        return false
     end,
     addNote = function(noteContent, identifiers, moderatorName, moderatorIdentifiers)
         awaitReady()
@@ -195,14 +218,18 @@ Storage = {
         for i, note in ipairs(notes) do
             if note.id == noteId then
                 table.remove(notes, i)
+                saveJsonFile("notes.json", notes)
+                return true
             end
         end
-        saveJsonFile("notes.json", notes)
+        return false
     end,
     getNotes = function(id)
         awaitReady()
-        if not CachedPlayers[id] then return {} end
-        local idents = CachedPlayers[id].identifiers
+        -- Resolve identifiers via the player cache (works for online AND recently-dropped players);
+        -- callers that already hold identifiers should use getNotesByIdents directly.
+        local idents = getCachedPlayerIdentifiers(tonumber(id))
+        if not idents then return {} end
         return findByIdentifiers(notes, idents)
     end,
     getNotesByIdents = function(idents)
@@ -211,31 +238,52 @@ Storage = {
     end,
 }
 
-Citizen.CreateThread(function()
-    local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
-    local banContent = loadJsonFile("banlist.json", currentVersion)
-
-    banlist = json.decode(banContent) or {}
-
-    local actionContent = loadJsonFile("actions.json", currentVersion)
-    actions = json.decode(actionContent) or {}
-
-    local notesContent = loadJsonFile("notes.json", currentVersion)
-    notes = json.decode(notesContent) or {}
-
-    local actionsPruned = false
-    PrintDebugMessage("Clearing expired actions from action history", 4)
-    for i, action in ipairs(actions) do
-        if action.time + (GetConvar("ea_actionHistoryExpiry", 30) * 24 * 60 * 60) < os.time() then
+-- Removes actions older than ea_actionHistoryExpiry days. Safe to call repeatedly.
+local function pruneExpiredActions()
+    local expirySeconds = GetConvarInt("ea_actionHistoryExpiry", 30) * 24 * 60 * 60
+    local pruned = false
+    for i = #actions, 1, -1 do
+        local action = actions[i]
+        if action.time and action.time + expirySeconds < os.time() then
             table.remove(actions, i)
-            actionsPruned = true
+            pruned = true
             PrintDebugMessage("Removed expired action: " .. json.encode(action), 4)
         end
     end
+    if pruned then
+        saveJsonFile("actions.json", actions)
+    end
+end
 
-    if actionsPruned then
-         saveJsonFile("actions.json", actions)
-     end
+Citizen.CreateThread(function()
+    -- Load all lists inside pcall: a decode/IO failure must never leave listsReady false,
+    -- otherwise awaitReady() (and thus every Storage call) would block indefinitely.
+    local ok, err = pcall(function()
+        local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
+        banlist = json.decode(loadJsonFile("banlist.json", currentVersion)) or {}
+        actions = json.decode(loadJsonFile("actions.json", currentVersion)) or {}
+        notes = json.decode(loadJsonFile("notes.json", currentVersion)) or {}
+        PrintDebugMessage("Clearing expired actions from action history", 4)
+        pruneExpiredActions()
+    end)
+    if not ok then
+        PrintDebugMessage("^1Storage failed to load lists: " .. tostring(err) .. " - starting with empty lists.^7", 1)
+        banlist = banlist or {}
+        actions = actions or {}
+        notes = notes or {}
+    end
 
     listsReady = true
+    -- Build the enforcement view now that Storage is ready (guarded: banlist.lua may load after us).
+    syncBanlistView()
+end)
+
+-- Recurring cleanup so expired actions are pruned during runtime, not only at startup.
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(60 * 60 * 1000) -- hourly
+        if listsReady then
+            pruneExpiredActions()
+        end
+    end
 end)
