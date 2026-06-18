@@ -340,28 +340,39 @@ local function captureProfile(src, frames, clientPort, cb)
   -- ~16Hz server tick (~62.5ms) + profiler overhead (~75ms) + 1.5s fixed startup + 1s safety buffer
   local estimatedWait = (frames * 75) + 2500
 
-  -- Send progress updates at 500ms intervals during the wait
+  -- Progress budget: 0-50% recording, 50-70% generating, 70-85% fetching, 85-100% parsing
   local progressCount = 0
-  local function updateProgress()
+  local function updateRecordingProgress()
     progressCount = progressCount + 1
-    local percent = math.min(math.floor((progressCount * 500 / estimatedWait) * 60), 60)
+    local percent = math.min(math.floor((progressCount * 500 / estimatedWait) * 50), 50)
     sendProgress(src, 'recording', 'Recording frames...', percent)
-    if percent < 60 then
-      SetTimeout(500, updateProgress)
+    if percent < 50 then
+      SetTimeout(500, updateRecordingProgress)
     end
   end
-  SetTimeout(500, updateProgress)
+  SetTimeout(500, updateRecordingProgress)
 
   -- Phase 3: After recording, generate the view
   SetTimeout(estimatedWait, function()
     captureInProgress = false
-    sendProgress(src, 'generating', 'Generating profile data...', 65)
+    sendProgress(src, 'generating', 'Generating profile data...', 50)
 
     ExecuteCommand('profiler view')
 
-    -- Phase 4: Wait for profileData.json to be generated (3 seconds)
+    -- Phase 4: Wait for profileData.json to be generated (~3 seconds)
+    -- Send incremental progress during the wait (50% -> 70%)
+    local genProgress = 52
+    local function updateGeneratingProgress()
+      sendProgress(src, 'generating', 'Generating profile data...', genProgress)
+      if genProgress < 68 then
+        genProgress = genProgress + 2
+        SetTimeout(150, updateGeneratingProgress)
+      end
+    end
+    SetTimeout(150, updateGeneratingProgress)
+
     SetTimeout(3000, function()
-      sendProgress(src, 'fetching', 'Fetching profile data...', 75)
+      sendProgress(src, 'fetching', 'Fetching profile data...', 70)
 
       -- Phase 5: Fetch profile data via HTTP
       local retries = 0
@@ -370,7 +381,7 @@ local function captureProfile(src, frames, clientPort, cb)
       local function tryFetch()
         PerformHttpRequest(endpoint.url, function(errorCode, result)
           if errorCode == 200 and result then
-            sendProgress(src, 'parsing', 'Parsing profile data...', 90)
+            sendProgress(src, 'parsing', 'Parsing profile data...', 85)
 
             -- Parse the JSON
             local data = json.decode(result)
@@ -387,7 +398,7 @@ local function captureProfile(src, frames, clientPort, cb)
             end
           elseif retries < maxRetries then
             retries = retries + 1
-            sendProgress(src, 'retrying', 'Retrying... (' .. retries .. '/' .. maxRetries .. ')', 75)
+            sendProgress(src, 'retrying', 'Retrying... (' .. retries .. '/' .. maxRetries .. ')', 72)
             SetTimeout(500, tryFetch)
           else
             sendError(src, 'Failed to fetch profile data. HTTP error: ' .. tostring(errorCode))

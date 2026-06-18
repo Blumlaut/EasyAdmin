@@ -123,7 +123,6 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
             </div>
 
             <div className="profiler-progress-info">
-              <span className="profiler-progress-phase">Phase: {progress.phase}</span>
               <span className="profiler-progress-message">{progress.message}</span>
             </div>
 
