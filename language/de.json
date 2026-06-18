@@ -166,7 +166,7 @@
     "confirmwarnguide": "~r~~h~ACHTUNG:~h~~w~ Durch das drücken von bestätigen wird der Spieler mit dem angegebenen Grund gewarnt.",
     "warnedtitle": "Warnung",
     "warnedby": "verwarnt durch",
-    "warndismiss": "Halte die Leertaste für 10 Sekunden gedrückt, um die Warnung zu schließen.",
+    "warndismiss": "Halte die Leertaste für 5 Sekunden gedrückt, um die Warnung zu schließen.",
     "warned": "Du wurdest verwarnt, Grund: %s, Warnung %s/%s",
     "warnkicked": "Du wurdest gekickt, weil du zu oft verwarnt wurdest.",
     "warnbanned": "Du wurdest gebannt, weil du zu oft verwarnt wurdest.",

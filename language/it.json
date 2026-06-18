@@ -166,7 +166,7 @@
     "confirmwarnguide": "~r~~h~ATTENZIONE:~h~~w~ Premendo conferma si Warnerà questo giocatore con le impostazioni attuali.",
     "warnedtitle": "Attenzione",
     "warnedby": "warnato da",
-    "warndismiss": "Tieni premuto spazio per 10 Secondi per chiudere questa schermata.",
+    "warndismiss": "Tieni premuto spazio per 5 Secondi per chiudere questa schermata.",
     "warned": "Sei stato warnato, Motivo: %s, Warn %s di %s",
     "warnkicked": "Sei stato espulso per aver preso troppi Warn. Rientra",
     "warnbanned": "Warnato troppe volte.",

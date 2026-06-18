@@ -8,6 +8,7 @@ import { on, callLua } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
 import { Toast } from './components/Toast'
+import { WarningOverlay } from './components/WarningOverlay'
 import { ModalProvider } from './ModalContext'
 import { Dashboard } from './pages/Dashboard/Dashboard'
 import { PlayerListPage } from './pages/Players/PlayerListPage'
@@ -26,9 +27,17 @@ import { SettingsPage } from './pages/Settings/SettingsPage'
 
 const CLEANUP_TYPES: CleanupType[] = ['cars', 'peds', 'props']
 
+interface WarningData {
+  title: string
+  message: string
+  warnedBy: string
+  dismissText: string
+}
+
 function App() {
   const [visible, setVisible] = useState(false)
   const [hintFading, setHintFading] = useState(false)
+  const [warning, setWarning] = useState<WarningData | null>(null)
   const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // === Hooks ===
@@ -68,6 +77,14 @@ function App() {
       }
     })
   }, [chrome, nav])
+
+  // === Player warning (full-screen overlay) ===
+
+  useEffect(() => {
+    return on<WarningData>('showWarning', (data) => {
+      setWarning(data)
+    })
+  }, [])
 
   // === Background hint auto-fade ===
 
@@ -429,6 +446,11 @@ function App() {
           <span>Press ALT to unfold</span>
         </div>
       )}
+
+      <WarningOverlay
+        warning={warning}
+        onDismiss={() => setWarning(null)}
+      />
     </>
   )
 }

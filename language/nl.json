@@ -167,7 +167,7 @@
     "confirmwarnguide": "~r~~h~NOTITIE:~h~~w~ Als je het bevestigt, krijgt de speler de waarschuwing te zien.",
     "warnedtitle": "Waarschuwing",
     "warnedby": "gewaarschuwd door",
-    "warndismiss": "Houd spatiebalk 10 seconden ingedrukt, om de waarschuwing te accepteren.",
+    "warndismiss": "Houd spatiebalk 5 seconden ingedrukt, om de waarschuwing te accepteren.",
     "warned": "Je bent gewaarschuwd, Reden: %s, Waarschuwing %s/%s",
     "warnkicked": "Je bent gekicked, omdat je teveel waarschuwingen hebt ontvangen.",
     "warnbanned": "Te vaak gewaarschuwd.",

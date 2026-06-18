@@ -165,7 +165,7 @@
     "confirmwarnguide": "~r~~h~NOTA:~h~~w~ Al pulsar Confirmar, se advertirá a este usuario con los ajustes especificados.",
     "warnedtitle": "Advertencia",
     "warnedby": "advertido por",
-    "warndismiss": "Mantén la Barra Espaciadora durante 10 segundos para cancelar.",
+    "warndismiss": "Mantén la Barra Espaciadora durante 5 segundos para cancelar.",
     "warned": "Has recibido una advertencia, Razon: %s, Aviso: %s/%s",
     "warnkicked": "Has sido kickeado por recibir demasiadas advertencias.",
     "warnbanned": "Has sido baneado por recibir demasiadas advertencias.",

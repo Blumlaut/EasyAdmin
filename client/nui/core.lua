@@ -228,6 +228,13 @@ RegisterNUICallback('closeMenu', function(_data, cb)
   cb({ ok = true })
 end)
 
+-- Player dismissed the full-screen warning overlay.
+-- Release NUI focus so the game regains input.
+RegisterNUICallback('dismissWarning', function(_data, cb)
+  SetNuiFocus(false, false)
+  cb({ ok = true })
+end)
+
 -- Release NUI focus but keep the menu rendered. The user can re-engage
 -- by pressing the -ea_setFocused keybind. Used by the "click the
 -- background" affordance in the NUI.
@@ -290,3 +297,25 @@ if not CompendiumHorseObserved then
     'lmenu'
   )
 end
+
+-- ============================================================
+-- Player warning overlay (full-screen, replaces txAdmin warning)
+-- ============================================================
+-- Server pushes warning data; client grants NUI focus so keyboard
+-- input (hold-to-dismiss) is captured. The NUI calls back via
+-- 'dismissWarning' to release focus.
+
+RegisterNetEvent('EasyAdmin:showWarning')
+AddEventHandler('EasyAdmin:showWarning', function(warnedBy, message, title, labelWarnedBy, labelDismiss) 
+  -- Grab NUI focus so the overlay can capture keyboard input
+  SetNuiFocus(true, true)
+  SendNUIMessage({
+    action = 'showWarning',
+    data = {
+      title = title,
+      message = message,
+      warnedBy = labelWarnedBy .. ' ' .. warnedBy,
+      dismissText = labelDismiss,
+    },
+  })
+end)

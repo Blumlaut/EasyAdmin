@@ -166,7 +166,7 @@
     "confirmwarnguide": "~r~~h~UWAGA:~h~~w~ Naciśnięcie Potwierdź spowoduje ostrzeżenie użytkownika z określonymi ustawieniami.",
     "warnedtitle": "Ostrzeżenie",
     "warnedby": "ostrzeżony przez",
-    "warndismiss": "Przytrzymaj spację przez 10 sekund aby odrzucić powiadomienie.",
+    "warndismiss": "Przytrzymaj spację przez 5 sekund aby odrzucić powiadomienie.",
     "warned": "Zostałeś ostrzeżony, Powód: %s, Ostrzeżenie %s/%s",
     "warnkicked": "Zostałeś wyrzucony z serwera, z powodu otrzymania zbyt wielu ostrzeżeń..",
     "warnbanned": "Ostrzeżono cię zbyt wiele razy.",
