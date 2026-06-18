@@ -52,15 +52,14 @@ export function PlayerListPage({
 
   return (
     <div className="page-container">
-      <SearchBar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search by name, ID, or license..."
-        resultCount={{ shown: filtered.length, total: players.length }}
-        ariaLabel="Search players"
-      />
-
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex items-center gap-2 mb-3">
+        <SearchBar
+          value={query}
+          onChange={setQuery}
+          placeholder="Search by name, ID, or license..."
+          resultCount={{ shown: filtered.length, total: players.length }}
+          ariaLabel="Search players"
+        />
         <button className="btn btn-secondary btn-sm" onClick={onOpenCached}>
           <Icon name="archive" size="xs" />
           Cached players

@@ -6,25 +6,20 @@ import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { useModalContext } from '../../ModalContext'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
-import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
+import { Alert } from '../../components/Alert'
 import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
-interface ResourcesPageProps {
+interface ResourceListPageProps {
   permissions: Permissions
   onToast: (text: string, type?: Notification['type']) => void
-  onSelectResource?: (name: string) => void
-  selectedResource?: string | null
+  onSelectResource: (name: string) => void
 }
 
 interface ResourceListResponse {
   resources: ResourceEntry[]
   protected: string
-}
-
-interface ResourceMetadataResponse {
-  metadata: ResourceMetadata | null
 }
 
 interface ResourceMetadataBatchResponse {
@@ -42,24 +37,21 @@ function truncateDesc(text: string, max: number): string {
   return text.length > max ? text.slice(0, max) + '…' : text
 }
 
-export function ResourcesPage({
+export function ResourceListPage({
   permissions,
   onToast,
   onSelectResource,
-  selectedResource,
-}: ResourcesPageProps) {
+}: ResourceListPageProps) {
   const [resources, setResources] = useState<ResourceEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
 
-  // Detail panel state
-  const [detailName, setDetailName] = useState<string | null>(selectedResource ?? null)
-  const [detailMetadata, setDetailMetadata] = useState<ResourceMetadata | null>(null)
-  const [detailLoading, setDetailLoading] = useState(false)
-
   // Update check state
   const [checkingUpdates, setCheckingUpdates] = useState(false)
+  const [outdatedResources, setOutdatedResources] = useState<
+    { name: string; current: string; latest: string }[]
+  >([])
 
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
@@ -92,17 +84,30 @@ export function ResourcesPage({
     }
   }, [])
 
+  // Build outdated resources list from a resource array
+  const buildOutdatedList = useCallback((resList: ResourceEntry[]) => {
+    return resList
+      .filter((r) => r.outdated && r.latestVersion)
+      .map((r) => ({
+        name: r.name,
+        current: r.version ?? '?',
+        latest: r.latestVersion!,
+      }))
+  }, [])
+
   const fetchResources = useCallback(() => {
     setLoading(true)
     callLua<ResourceListResponse>('requestResources')
       .then((res) => {
         setResources(res.resources ?? [])
+        // Populate outdated list from cached server data
+        setOutdatedResources(buildOutdatedList(res.resources ?? []))
         // After loading resources, fetch batch metadata
         fetchBatchMetadata(res.resources ?? [])
       })
       .catch(() => onToast('Failed to fetch resources', 'error'))
       .finally(() => setLoading(false))
-  }, [onToast, fetchBatchMetadata])
+  }, [onToast, fetchBatchMetadata, buildOutdatedList])
 
   // Initial fetch + event subscriptions (side effects, not render logic)
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -111,6 +116,7 @@ export function ResourcesPage({
 
     const unsubResources = on<ResourceListResponse>('updateResources', (payload) => {
       setResources(payload.resources ?? [])
+      setOutdatedResources(buildOutdatedList(payload.resources ?? []))
       fetchBatchMetadata(payload.resources ?? [])
     })
     const unsubToast = on<Notification>('notification', (payload) => {
@@ -122,32 +128,6 @@ export function ResourcesPage({
       unsubToast()
     }
   }, [fetchResources, fetchBatchMetadata, onToast])
-  /* eslint-enable react-hooks/set-state-in-effect */
-
-  // Fetch metadata when detailName changes
-  /* eslint-disable react-hooks/set-state-in-effect */
-  // legitimate data fetching effect
-  useEffect(() => {
-    if (!detailName) {
-      setDetailMetadata(null)
-      return
-    }
-    setDetailLoading(true)
-    callLua<ResourceMetadataResponse>('requestResourceMetadata', { name: detailName })
-      .then((res) => setDetailMetadata(res.metadata ?? null))
-      .catch(() => setDetailMetadata(null))
-      .finally(() => setDetailLoading(false))
-  }, [detailName])
-  /* eslint-enable react-hooks/set-state-in-effect */
-
-  // Sync with parent-selected resource (nav from outside)
-  /* eslint-disable react-hooks/set-state-in-effect */
-  // legitimate prop-to-state sync effect
-  useEffect(() => {
-    if (selectedResource && selectedResource !== detailName) {
-      setDetailName(selectedResource)
-    }
-  }, [selectedResource, detailName])
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const filtered = useMemo(() => {
@@ -179,17 +159,10 @@ export function ResourcesPage({
         await callLua('stopResource', { name })
       }
       // List is refreshed via server push
-      // Refresh metadata if viewing this resource
-      if (detailName === name) {
-        setDetailLoading(true)
-        const res = await callLua<ResourceMetadataResponse>('requestResourceMetadata', { name })
-        setDetailMetadata(res.metadata ?? null)
-        setDetailLoading(false)
-      }
     } catch {
       throw new Error(`Failed to ${action} ${name}`)
     }
-  }, [detailName])
+  }, [])
 
   // Show confirmation dialog then execute
   const requestAction = useCallback((name: string, action: 'start' | 'stop' | 'ensure') => {
@@ -216,7 +189,7 @@ export function ResourcesPage({
         })
       },
     }))
-  }, [canStart, canStop, executeAction, openModal, closeModal])
+  }, [canStart, canStop, executeAction, openModal, closeModal, onToast])
 
   const handleCheckUpdates = async () => {
     if (!canStart && !canStop) return
@@ -243,31 +216,31 @@ export function ResourcesPage({
           }
         }),
       )
+      // Build outdated resources list for the alert
+      const outdatedList = updates
+        .filter((u) => u.outdated && u.latest)
+        .map((u) => {
+          const res = resources.find((r) => r.name === u.name)
+          return {
+            name: u.name,
+            current: res?.version ?? '?',
+            latest: u.latest!,
+          }
+        })
+      setOutdatedResources(outdatedList)
+
       const outdatedNames = updates.filter((u) => u.outdated).map((u) => u.name)
       if (outdatedNames.length > 0) {
         onToast(`${outdatedNames.length} resource(s) have updates available`, 'info')
       } else {
         onToast('All resources are up to date', 'success')
+        setOutdatedResources([])
       }
     } catch {
       onToast('Failed to check for updates', 'error')
     } finally {
       setCheckingUpdates(false)
     }
-  }
-
-  // If a detail is open, show the detail view
-  if (detailName) {
-    return (
-      <ResourceDetailView
-        name={detailName}
-        metadata={detailMetadata}
-        loading={detailLoading}
-        canStart={canStart}
-        canStop={canStop}
-        onRequestAction={(action) => requestAction(detailName, action)}
-      />
-    )
   }
 
   return (
@@ -317,6 +290,29 @@ export function ResourcesPage({
         </span>
       </div>
 
+      {/* Update available alert */}
+      {outdatedResources.length > 0 && (
+        <Alert
+          variant="warning"
+          title={`${outdatedResources.length} resource(s) have updates available`}
+          onDismiss={() => setOutdatedResources([])}
+        >
+          <div className="flex flex-col gap-1">
+            {outdatedResources.map((r) => (
+              <button
+                key={r.name}
+                className="text-sm hover:underline text-left cursor-pointer p-0 bg-none border-none"
+                onClick={() => onSelectResource(r.name)}
+              >
+                <span className="font-medium text-mono">{r.name}</span>
+                {' '}
+                <span className="text-muted">v{r.current} → v{r.latest}</span>
+              </button>
+            ))}
+          </div>
+        </Alert>
+      )}
+
       {loading ? (
         <div className="list">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -348,10 +344,7 @@ export function ResourcesPage({
               canStart={canStart}
               canStop={canStop}
               onRequestAction={(action) => requestAction(resource.name, action)}
-              onClick={() => {
-                setDetailName(resource.name)
-                onSelectResource?.(resource.name)
-              }}
+              onClick={() => onSelectResource(resource.name)}
             />
           ))}
         </div>
@@ -473,140 +466,5 @@ function ResourceRow({
 
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle shrink-0" />
     </ListItem>
-  )
-}
-
-// ---- Detail view for a single resource ----
-
-function ResourceDetailView({
-  name,
-  metadata,
-  loading,
-  canStart,
-  canStop,
-  onRequestAction,
-}: {
-  name: string
-  metadata: ResourceMetadata | null
-  loading: boolean
-  canStart: boolean
-  canStop: boolean
-  onRequestAction: (action: 'start' | 'stop' | 'ensure') => void
-}) {
-  // Get the parent resource name from the window (set by FiveM)
-  const currentResourceName = typeof window !== 'undefined'
-    ? ((window as unknown as Record<string, unknown>).parentResourceName as string | undefined ?? 'EasyAdmin')
-    : 'EasyAdmin'
-  const isSelf = name === currentResourceName
-
-  // Extract key metadata for header display
-  const version = metadata?.entries.find((e) => e.key === 'version')?.value
-  const description = metadata?.entries.find((e) => e.key === 'description')?.value
-  const repository = metadata?.entries.find((e) => e.key === 'repository')?.value
-
-  const metadataRows: KeyValueRow[] = loading
-    ? []
-    : (metadata?.entries ?? []).map((entry) => ({
-        key: entry.key,
-        value: entry.value,
-        mono: true,
-      }))
-
-  // If no metadata entries found, show a message
-  if (!loading && metadataRows.length === 0) {
-    metadataRows.push({
-      key: 'metadata',
-      value: <span className="text-muted">No metadata entries found</span>,
-    })
-  }
-
-  return (
-    <div className="page-container">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <div
-          className={`resource-state-dot resource-state-dot-lg resource-state-dot--${metadata?.state ?? 'unknown'}`}
-        />
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-mono">{name}</h3>
-            {version && (
-              <span className="text-muted text-sm font-mono shrink-0">v{version}</span>
-            )}
-            {repository && (
-              <a
-                href={repository}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted hover:text-foreground shrink-0"
-                title={repository}
-              >
-                <Icon name="external-link" size="xs" />
-              </a>
-            )}
-          </div>
-          {description && (
-            <p className="text-secondary text-sm mt-0.5">{description}</p>
-          )}
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="card mb-4">
-        <p className="section-label mb-3">Actions</p>
-        <div className="flex flex-wrap gap-2">
-          {canStart && (
-            <button
-              className="btn btn-success btn-sm"
-              onClick={() => onRequestAction('start')}
-              disabled={isSelf}
-              title={isSelf ? 'Cannot start self' : 'Start resource'}
-            >
-              <Icon name="play" size="xs" />
-              Start
-            </button>
-          )}
-          {canStop && (
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() => onRequestAction('stop')}
-              disabled={isSelf}
-              title={isSelf ? 'Cannot stop EasyAdmin' : 'Stop resource'}
-            >
-              <Icon name="square" size="xs" />
-              Stop
-            </button>
-          )}
-          {canStart && canStop && (
-            <button
-              className="btn btn-secondary btn-sm"
-              onClick={() => onRequestAction('ensure')}
-              disabled={isSelf}
-              title={isSelf ? 'Cannot ensure self' : 'Refresh + Stop + Start'}
-            >
-              <Icon name="refresh" size="xs" />
-              Ensure
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Metadata */}
-      <div className="card">
-        <p className="section-label mb-3">Metadata</p>
-        {loading ? (
-          <div className="flex flex-col gap-2">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex gap-3 py-2 kv-row-divider">
-                <Skeleton width={100} height={14} />
-                <Skeleton width="60%" height={14} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <KeyValueTable rows={metadataRows} ariaLabel="Resource metadata" />
-        )}
-      </div>
-    </div>
   )
 }

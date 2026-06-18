@@ -53,7 +53,9 @@ end)
 
 -- Check for updates
 RegisterNUICallback('checkResourceUpdates', function(data, cb)
+  PrintDebugMessage('[NUI] checkResourceUpdates callback received, names: ' .. (data and json.encode(data.names) or 'nil'), 4)
   if pendingUpdatesCb then
+    PrintDebugMessage('[NUI] checkResourceUpdates: pending callback already exists, overwriting', 4)
     pendingUpdatesCb = cb
     return
   end
@@ -97,10 +99,14 @@ RegisterNetEvent('EasyAdmin:resourceMetadataBatchResult', function(data)
 end)
 
 RegisterNetEvent('EasyAdmin:resourceUpdatesResult', function(data)
+  PrintDebugMessage('[NUI] resourceUpdatesResult event received, data: ' .. (data and json.encode(data) or 'nil'), 4)
   if pendingUpdatesCb then
     local cb = pendingUpdatesCb
     pendingUpdatesCb = nil
     cb(data or { updates = {} })
+    PrintDebugMessage('[NUI] resourceUpdatesResult: callback resolved', 4)
+  else
+    PrintDebugMessage('[NUI] resourceUpdatesResult: no pending callback found!', 4)
   end
 end)
 

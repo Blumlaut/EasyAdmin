@@ -21,7 +21,8 @@ import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
 import { PlayerStatisticsPage } from './pages/PlayerStatistics/PlayerStatisticsPage'
 import { ServerMetricsPage } from './pages/ServerMetrics/ServerMetricsPage'
 import { ServerPage } from './pages/Server/ServerPage'
-import { ResourcesPage } from './pages/Resources/ResourcesPage'
+import { ResourceListPage } from './pages/Resources/ResourceListPage'
+import { ResourceDetailPage } from './pages/Resources/ResourceDetailPage'
 import { ProfilerPage } from './pages/Profiler/ProfilerPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
 
@@ -127,10 +128,7 @@ function App() {
     if (previousView === 'resources') nav.setSelectedResource(null)
   }
 
-  const handleSelectResource = (name: string) => {
-    nav.setSelectedResource(name)
-    nav.navigateTo('resource-detail')
-  }
+
 
   // === Window classes ===
 
@@ -390,20 +388,18 @@ function App() {
               )}
 
               {nav.view === 'resources' && (
-                <ResourcesPage
+                <ResourceListPage
                   permissions={data.permissions}
                   onToast={showToast}
-                  onSelectResource={handleSelectResource}
-                  selectedResource={nav.selectedResource}
+                  onSelectResource={nav.selectResource}
                 />
               )}
 
               {nav.view === 'resource-detail' && nav.selectedResource && (
-                <ResourcesPage
+                <ResourceDetailPage
+                  resourceName={nav.selectedResource}
                   permissions={data.permissions}
                   onToast={showToast}
-                  onSelectResource={handleSelectResource}
-                  selectedResource={nav.selectedResource}
                 />
               )}
 

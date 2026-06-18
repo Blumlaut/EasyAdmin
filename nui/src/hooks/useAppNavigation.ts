@@ -35,6 +35,7 @@ export interface UseAppNavigationResult {
   selectPlayer: (player: Player) => void
   selectBan: (banId: string) => void
   selectReport: (reportId: number) => void
+  selectResource: (name: string) => void
   titleRef: React.RefObject<HTMLHeadingElement | null>
 }
 
@@ -231,6 +232,11 @@ export function useAppNavigation({
     navigateTo('report-detail')
   }, [navigateTo])
 
+  const selectResource = useCallback((name: string) => {
+    setSelectedResource(name)
+    navigateTo('resource-detail')
+  }, [navigateTo])
+
   // Track which data sets have already been fetched (lazy-load once)
   const fetchedRef = useRef({ reports: false, cachedPlayers: false })
 
@@ -292,6 +298,7 @@ export function useAppNavigation({
     selectPlayer,
     selectBan,
     selectReport,
+    selectResource,
     titleRef,
   }
 }

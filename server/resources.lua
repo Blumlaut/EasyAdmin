@@ -31,16 +31,20 @@ local githubCache = {}
 -- TTL: 6 hours
 local GITHUB_CACHE_TTL = 6 * 3600
 
+-- Resource update results cache (shared across all admins)
+-- { [resourceName] = { latest = string|nil, outdated = boolean, checkedAt = number } }
+local resourceUpdateCache = {}
+-- TTL: 1 hour (stale results are still useful for admins opening the page later)
+local UPDATE_CACHE_TTL = 3600
+-- Delay between GitHub API requests (ms) to avoid rate limiting
+local GITHUB_REQUEST_DELAY = 1000
+
 -- Extract owner/repo from a GitHub URL
 local function parseGitHubRepo(url)
   if not url then return nil, nil end
-  local match = string.match(url, 'github[.]com/([^/]+)/([^/]+)')
-  if match then
-    local parts = {}
-    for p in string.gmatch(match, '([^/]+)') do
-      table.insert(parts, p)
-    end
-    return parts[1], parts[2]
+  local owner, repo = string.match(url, 'github[.]com/([^/]+)/([^/]+)')
+  if owner and repo then
+    return owner, repo
   end
   return nil, nil
 end
@@ -48,13 +52,16 @@ end
 -- Fetch latest release tag from GitHub (async via PerformHttpRequest)
 local function fetchLatestRelease(owner, repo, cb)
   local url = string.format('https://api.github.com/repos/%s/%s/releases/latest', owner, repo)
+  PrintDebugMessage('[Server] fetchLatestRelease: GET ' .. url, 4)
   PerformHttpRequest(url, function(err, response, headers)
+    PrintDebugMessage('[Server] fetchLatestRelease: HTTP status=' .. tostring(err) .. ', response=' .. tostring(response and string.sub(response, 1, 120) or 'nil'), 4)
     if err ~= 200 or not response then
       cb(nil)
       return
     end
     local data = json.decode(response)
     if data and data.tag_name then
+      PrintDebugMessage('[Server] fetchLatestRelease: tag_name=' .. data.tag_name, 4)
       cb(data.tag_name)
     else
       cb(nil)
@@ -67,14 +74,94 @@ local function getLatestRelease(owner, repo, cb)
   local key = string.format('%s/%s', owner, repo)
   local cached = githubCache[key]
   if cached and os.time() - cached.checkedAt < GITHUB_CACHE_TTL then
+    PrintDebugMessage('[Server] getLatestRelease: using cache for ' .. key .. ' (tag=' .. cached.tag .. ')', 4)
     cb(cached.tag)
     return
   end
+  PrintDebugMessage('[Server] getLatestRelease: cache miss for ' .. key .. ', fetching', 4)
   fetchLatestRelease(owner, repo, function(tag)
     if tag then
       githubCache[key] = { tag = tag, checkedAt = os.time() }
+      PrintDebugMessage('[Server] getLatestRelease: cached ' .. key .. ' = ' .. tag, 4)
     end
     cb(tag)
+  end)
+end
+
+-- Get cached update info for a resource (returns nil if expired)
+local function getCachedUpdate(resourceName)
+  local cached = resourceUpdateCache[resourceName]
+  if cached and os.time() - cached.checkedAt < UPDATE_CACHE_TTL then
+    return cached.latest, cached.outdated
+  end
+  return nil, nil
+end
+
+-- Store update info for a resource in the shared cache
+local function setCachedUpdate(resourceName, latest, outdated)
+  resourceUpdateCache[resourceName] = {
+    latest = latest,
+    outdated = outdated,
+    checkedAt = os.time(),
+  }
+end
+
+-- Check updates sequentially with delays between requests to avoid GitHub rate limits
+local function checkUpdatesSequential(names, index, results, src)
+  if index > #names then
+    -- All done, send results
+    PrintDebugMessage('[Server] checkUpdatesSequential: all complete, sending results (count=' .. #results .. ')', 4)
+    TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, {
+      updates = results,
+    })
+    return
+  end
+
+  local name = names[index]
+  local version = GetResourceMetadata(name, 'version', 0)
+  local repository = GetResourceMetadata(name, 'repository', 0)
+
+  PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ' (index=' .. index .. '/' .. #names .. '), version=' .. tostring(version) .. ', repository=' .. tostring(repository), 4)
+
+  if not version or not repository then
+    table.insert(results, { name = name, latest = nil, outdated = false })
+    -- Delay before next request
+    PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': skipping (missing version or repository), delaying ' .. GITHUB_REQUEST_DELAY .. 'ms', 4)
+    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, function()
+      checkUpdatesSequential(names, index + 1, results, src)
+    end)
+    return
+  end
+
+  local owner, repo = parseGitHubRepo(repository)
+  if not owner or not repo then
+    table.insert(results, { name = name, latest = nil, outdated = false })
+    PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': could not parse GitHub repo, delaying ' .. GITHUB_REQUEST_DELAY .. 'ms', 4)
+    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, function()
+      checkUpdatesSequential(names, index + 1, results, src)
+    end)
+    return
+  end
+
+  PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': fetching latest release for ' .. owner .. '/' .. repo, 4)
+  getLatestRelease(owner, repo, function(latest)
+    local isOutdated = latest and compareVersions(version, latest) < 1
+    PrintDebugMessage('[Server] checkUpdatesSequential resource=' .. name .. ': latest=' .. tostring(latest) .. ', outdated=' .. tostring(isOutdated), 4)
+
+    -- Cache the result
+    setCachedUpdate(name, latest, isOutdated)
+
+    table.insert(results, {
+      name = name,
+      latest = latest,
+      outdated = isOutdated,
+    })
+
+    -- Delay before next request to avoid rate limiting
+    PrintDebugMessage('[Server] checkUpdatesSequential: delaying ' .. GITHUB_REQUEST_DELAY .. 'ms before next request', 4)
+    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, function()
+      checkUpdatesSequential(names, index + 1, results, src)
+    end)
   end)
 end
 
@@ -123,6 +210,9 @@ local function buildResourceList()
     local description = GetResourceMetadata(name, 'description', 0)
     local repository = GetResourceMetadata(name, 'repository', 0)
 
+    -- Merge cached update info (from last check)
+    local cachedLatest, cachedOutdated = getCachedUpdate(name)
+
     table.insert(resources, {
       name = name,
       state = state,
@@ -130,6 +220,8 @@ local function buildResourceList()
       version = version,
       description = description,
       repository = repository,
+      latestVersion = cachedLatest,
+      outdated = cachedOutdated or false,
     })
 
     ::continue::
@@ -279,52 +371,20 @@ RegisterServerEvent('EasyAdmin:stopResource', function(name)
   })
 end)
 
--- Check for updates on specific resources
+-- Check for updates on specific resources (sequential with delays)
 RegisterServerEvent('EasyAdmin:checkResourceUpdates', function(names)
   local src = source
-  if not canManageResources(src) then return end
-  if type(names) ~= 'table' then return end
-
-  local results = {}
-  local pending = 0
-
-  for _, name in ipairs(names) do
-    local version = GetResourceMetadata(name, 'version', 0)
-    local repository = GetResourceMetadata(name, 'repository', 0)
-
-    if not version or not repository then
-      table.insert(results, { name = name, latest = nil, outdated = false })
-      goto continue
-    end
-
-    local owner, repo = parseGitHubRepo(repository)
-    if not owner or not repo then
-      table.insert(results, { name = name, latest = nil, outdated = false })
-      goto continue
-    end
-
-    pending = pending + 1
-    getLatestRelease(owner, repo, function(latest)
-      table.insert(results, {
-        name = name,
-        latest = latest,
-        outdated = latest and compareVersions(version, latest) < 1,
-      })
-      pending = pending - 1
-      if pending == 0 then
-        TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, {
-          updates = results,
-        })
-      end
-    end)
-
-    ::continue::
+  PrintDebugMessage('[Server] EasyAdmin:checkResourceUpdates event received from src=' .. src .. ', names: ' .. (names and json.encode(names) or 'nil'), 4)
+  if not canManageResources(src) then
+    PrintDebugMessage('[Server] checkResourceUpdates: src=' .. src .. ' lacks permissions', 4)
+    return
+  end
+  if type(names) ~= 'table' or #names == 0 then
+    PrintDebugMessage('[Server] checkResourceUpdates: names is empty or not a table', 4)
+    TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, { updates = {} })
+    return
   end
 
-  -- If no async checks needed, send immediately
-  if pending == 0 then
-    TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, {
-      updates = results,
-    })
-  end
+  -- Start sequential check from index 1
+  checkUpdatesSequential(names, 1, {}, src)
 end)
