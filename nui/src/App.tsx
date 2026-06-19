@@ -431,15 +431,15 @@ function App() {
           <span>Press ALT to unfold</span>
         </div>
       )}
+
+        <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
+        <WarningOverlay
+          warning={warning}
+          onDismiss={() => setWarning(null)}
+        />
       </>
     )}
-
-      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
-
-      <WarningOverlay
-        warning={warning}
-        onDismiss={() => setWarning(null)}
-      />
     </>
   );
 }
