@@ -115,25 +115,22 @@ Remember: AI is a tool to assist developers, not replace human judgment and resp
 
 ## FiveM NUI / CEF UI Known Issues
 
-The NUI runs inside FiveM's Chromium Embedded Framework (CEF) which has several rendering quirks. **All changes to NUI CSS require in-game testing** — they cannot be verified by reading code alone.
+The NUI runs inside FiveM's Chromium Embedded Framework (CEF) in Off-Screen Rendering (OSR) mode. **All changes to NUI CSS require in-game testing** — they cannot be verified by reading code alone.
 
-### CEF Rendering Bugs
+### Unsupported Features
 
-**`transform` in `@keyframes` causes full element invisibility.** Animations that use `transform: scale()`, `translateY()`, or any transform property inside `@keyframes` will render the element completely invisible in CEF. The DOM exists and is interactive (cursor changes correctly) but nothing is painted. **Never use `transform` inside CSS animations for NUI elements.**
+**`backdrop-filter` / `-webkit-backdrop-filter` is not supported.** The blur effect is not applied in FiveM's CEF build. **Do not use `backdrop-filter` in NUI styles.**
 
-**`@keyframes` with `opacity` also causes invisibility.** Even opacity-only animations can trigger the same compositing bug. **Avoid CSS `animation` on modal/overlay elements entirely.**
+### OSR Rendering
 
-**`box-shadow` with large blur radius can cause invisibility.** The value `0 8px 32px rgba(0, 0, 0, 0.5)` (the original `--shadow` variable) makes `.dialog` invisible. Use smaller values like `0 4px 16px rgba(0, 0, 0, 0.4)` instead.
-
-**`backdrop-filter` and `-webkit-backdrop-filter` are safe** — `blur(4px)` works fine on `.dialog-overlay`.
+**Overlay components must render inside the visible tree.** Elements rendered outside the `{visible && ...}` conditional in App.tsx may not paint correctly when the NUI window is folded or backgrounded. `ToastContainer` and `WarningOverlay` are inside the visible block for this reason.
 
 ### Modal/Dialog CSS Rules
 
 - Modals render via `ModalProvider` as siblings of `.ea-window` inside `#root` (not nested children)
 - `.dialog-overlay` uses `position: fixed; inset: 0; z-index: 9999`
 - `.dialog` uses hardcoded solid background `#1e293b` (CSS variable backgrounds may not resolve reliably)
-- No `animation` property on either element
-- `box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4)` is the safe shadow value
+- `box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4)` on `.dialog`
 
 ### Viewport Coordinates — No Hardcoded Pixels
 
