@@ -3,6 +3,7 @@ import { callLua, on } from '../../fivem'
 import type { ActionHistoryEntry, Notification, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
+import { TimelineEntry } from '../../components/TimelineEntry'
 import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
@@ -93,25 +94,14 @@ export function ActionHistorySection({
         <p className="section-label">Action History</p>
         <div className="flex flex-col gap-2">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} width="100%" height={40} />
+            <Skeleton key={i} width="100%" height={48} />
           ))}
         </div>
       </div>
     )
   }
 
-  // ---- Empty state ----
-
-  if (sortedEntries.length === 0) {
-    return (
-      <div className="card">
-        <p className="section-label">Action History</p>
-        <p className="text-sm text-muted">No actions recorded for this player</p>
-      </div>
-    )
-  }
-
-  // ---- Entries ----
+  // ---- Render ----
 
   return (
     <div className="card">
@@ -120,62 +110,60 @@ export function ActionHistorySection({
         <span className="text-xs text-muted">{sortedEntries.length} entr{sortedEntries.length === 1 ? 'y' : 'ies'}</span>
       </div>
 
-      <div className="action-history-list">
-        {sortedEntries.map((entry) => {
-          const color = ACTION_COLORS[entry.action] || 'var(--text-muted)'
-          return (
-            <div
-              key={entry.id}
-              className="action-history-entry"
-              style={{ '--entry-accent': color } as React.CSSProperties}
-            >
-              <div className="action-history-entry-header">
-                <span
-                  className="action-history-entry-badge"
-                  style={{ backgroundColor: `${color}22`, color }}
-                >
-                  {capitalize(entry.action)}
-                </span>
-                <span className="action-history-entry-time">
-                  {formatTime(entry.time)}
-                </span>
-              </div>
-
-              {entry.reason && (
-                <p className="action-history-entry-reason">{entry.reason}</p>
-              )}
-
-              <div className="action-history-entry-meta">
-                <span className="action-history-entry-moderator">
-                  <Icon name="shield" size="xs" />
-                  {entry.moderator}
-                </span>
-
-                {entry.banid != null && (
-                  <span className="action-history-entry-banid">
-                    Ban #{entry.banid}
-                    <CopyButton
-                      value={String(entry.banid)}
-                      ariaLabel="Copy ban ID"
-                    />
-                  </span>
-                )}
-
-                {canDelete && (
-                  <button
-                    className="action-history-entry-delete"
-                    onClick={() => handleDelete(entry.id)}
-                    title="Delete this entry"
-                    aria-label="Delete action entry"
+      {sortedEntries.length === 0 ? (
+        <p className="text-sm text-muted">No actions recorded for this player</p>
+      ) : (
+        <div className="timeline-list">
+          {sortedEntries.map((entry) => {
+            const color = ACTION_COLORS[entry.action] || 'var(--text-muted)'
+            return (
+              <TimelineEntry
+                key={entry.id}
+                title={
+                  <span
+                    className="action-history-entry-badge"
+                    style={{ backgroundColor: `${color}22`, color }}
                   >
-                    <Icon name="trash-2" size="xs" />
-                  </button>
-                )}
-              </div>
-            </div>
-          )
-        })}
-      </div>
+                    {capitalize(entry.action)}
+                  </span>
+                }
+                time={formatTime(entry.time)}
+                footer={
+                  <>
+                    <span className="timeline-entry-moderator">
+                      <Icon name="shield" size="xs" />
+                      {entry.moderator}
+                    </span>
+                    {entry.banid != null && (
+                      <span className="action-history-entry-banid">
+                        Ban #{entry.banid}
+                        <CopyButton
+                          value={String(entry.banid)}
+                          ariaLabel="Copy ban ID"
+                        />
+                      </span>
+                    )}
+                  </>
+                }
+                actions={
+                  canDelete && (
+                    <button
+                      className="timeline-entry-delete"
+                      onClick={() => handleDelete(entry.id)}
+                      title="Delete this entry"
+                      aria-label="Delete action entry"
+                    >
+                      <Icon name="trash-2" size="xs" />
+                    </button>
+                  )
+                }
+              >
+                {entry.reason && entry.reason}
+              </TimelineEntry>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

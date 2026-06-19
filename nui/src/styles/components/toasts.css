@@ -139,6 +139,11 @@
   color: var(--text-primary);
   line-height: var(--leading-normal);
   letter-spacing: 0.01em;
+
+  /* Transition for slide-in/out (CEF-safe: no @keyframes).
+     Driven by inline styles so the className never changes —
+     CEF replays transitions when the class attribute is touched. */
+  transition: opacity var(--transition-slow), margin-right var(--transition-slow);
 }
 
 /* -- Progress bar (bottom edge) -- */

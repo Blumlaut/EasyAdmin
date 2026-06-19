@@ -1,4 +1,3 @@
-
 function PrintDebugMessage(msg,level)
 	loglevel = (GetConvarInt("ea_logLevel", 1))
 	if not level or not tonumber(level) then level = 3 end

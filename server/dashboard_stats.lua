@@ -34,6 +34,7 @@ local worldSnapshots = {}
 -- { id, identifiers, firstSeen, lastSeen, sessions, playtime, sessionLengths }
 local playerRegistry = {}
 local nextPlayerId = 1
+local nextAliasId = 1
 
 -- Reverse index: any identifier string → player registry entry ID
 -- Enables O(1) lookup by ANY of a player's identifiers (matches banlist pattern)
@@ -190,10 +191,15 @@ end
 -- {
 --   playerCounts: [ { timestamp, count }, ... ],
 --   players: [
---     { id, identifiers, firstSeen, lastSeen, sessions, playtime, sessionLengths },
+--     {
+--       id, identifiers, name, firstSeen, lastSeen, sessions, playtime, sessionLengths,
+--       nameHistory: [ { name, firstSeen, lastSeen }, ... ],
+--       aliases: [ { id, alias, addedBy, addedAt, note }, ... ]
+--     },
 --     ...
 --   ],
---   nextPlayerId: number
+--   nextPlayerId: number,
+--   nextAliasId: number
 -- }
 
 local function loadPlayers()
@@ -201,6 +207,7 @@ local function loadPlayers()
 	playerCounts = data.playerCounts or {}
 	playerRegistry = data.players or {}
 	nextPlayerId = data.nextPlayerId or 1
+	nextAliasId = data.nextAliasId or 1
 	playerIndex = {}
 
 	-- Build reverse index from loaded data
@@ -217,6 +224,7 @@ local function savePlayers()
 		playerCounts = playerCounts,
 		players = playerRegistry,
 		nextPlayerId = nextPlayerId,
+		nextAliasId = nextAliasId,
 	})
 end
 
@@ -289,6 +297,32 @@ local function migrateOldHistory()
 end
 
 -- ============================================================
+-- Migration: backfill nameHistory / aliases for existing entries
+-- ============================================================
+
+local function migrateNameHistory()
+	local migrated = 0
+	for _, entry in ipairs(playerRegistry) do
+		-- Migrate nameHistory: seed from existing name field
+		if not entry.nameHistory or #entry.nameHistory == 0 then
+			if entry.name then
+				entry.nameHistory = {
+					{ name = entry.name, firstSeen = entry.firstSeen or 0, lastSeen = nil },
+				}
+				migrated = migrated + 1
+			end
+		end
+		-- Migrate aliases: default to empty array
+		if not entry.aliases then
+			entry.aliases = {}
+		end
+	end
+	if migrated > 0 then
+		PrintDebugMessage(string.format('Backfilled nameHistory for %d player entries.', migrated), 2)
+	end
+end
+
+-- ============================================================
 -- Recording: player counts
 -- ============================================================
 
@@ -357,6 +391,24 @@ RegisterServerEvent('EasyAdmin:sessionStart', function()
 
 	if existingEntry then
 		-- Update name (players change names, keep the latest)
+		-- Track name changes in nameHistory
+		if existingEntry.name ~= playerName then
+			-- Seal the old name entry (set lastSeen)
+			for _, nh in ipairs(existingEntry.nameHistory or {}) do
+				if nh.name == existingEntry.name and nh.lastSeen == nil then
+					nh.lastSeen = now
+				end
+			end
+			-- Add new name to history
+			if not existingEntry.nameHistory then
+				existingEntry.nameHistory = {}
+			end
+			table.insert(existingEntry.nameHistory, {
+				name = playerName,
+				firstSeen = now,
+				lastSeen = nil,
+			})
+		end
 		existingEntry.name = playerName
 
 		-- Check if there are NEW identifiers not yet in the entry
@@ -395,6 +447,8 @@ RegisterServerEvent('EasyAdmin:sessionStart', function()
 			sessions       = 1,
 			playtime       = 0,
 			sessionLengths = {},
+			nameHistory    = { { name = playerName, firstSeen = now, lastSeen = nil } },
+			aliases        = {},
 		}
 		nextPlayerId = nextPlayerId + 1
 		table.insert(playerRegistry, entry)
@@ -476,6 +530,7 @@ end)
 
 loadPlayers()
 migrateOldHistory()
+migrateNameHistory()
 loadWorld()
 backfillPlayerCounts()
 
@@ -861,4 +916,133 @@ RegisterServerEvent('EasyAdmin:requestDailyPeaks', function(range) -- luacheck: 
 	table.sort(result, function(a, b) return a.day < b.day end)
 
 	TriggerClientEvent('EasyAdmin:dailyPeaksResult', source, result)
+end)
+
+-- ============================================================
+-- Name History & Aliases: server events
+-- ============================================================
+
+---Return name history and aliases for a player (by online source ID).
+RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
+	local src = source
+	if not DoesPlayerHavePermission(src, 'player.namehistory.view') then
+		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
+			nameHistory = {},
+			aliases = {},
+			currentName = 'Unknown',
+		}, playerId)
+		return
+	end
+
+	local targetPlayerId = tonumber(playerId)
+	if not targetPlayerId then
+		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
+			nameHistory = {},
+			aliases = {},
+			currentName = 'Unknown',
+		}, playerId)
+		return
+	end
+
+	-- Resolve identifiers: online player first, then cached
+	local identifiers = GetPlayerIdentifiers(targetPlayerId)
+	if #identifiers == 0 then
+		-- Try cached player identifiers (for recently dropped players)
+		identifiers = (getCachedPlayerIdentifiers and getCachedPlayerIdentifiers(targetPlayerId)) or {}
+	end
+
+	if #identifiers == 0 then
+		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
+			nameHistory = {},
+			aliases = {},
+			currentName = 'Unknown',
+		}, playerId)
+		return
+	end
+
+	-- Look up in player registry
+	local entry = findPlayerByIdentifiers(identifiers)
+
+	if not entry then
+		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
+			nameHistory = {},
+			aliases = {},
+			currentName = 'Unknown',
+		}, playerId)
+		return
+	end
+
+	TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
+		nameHistory = entry.nameHistory or {},
+		aliases     = entry.aliases or {},
+		currentName = entry.name or 'Unknown',
+	}, playerId)
+end)
+
+---Add an alias (AKA) for a player.
+RegisterServerEvent('EasyAdmin:AddPlayerAlias', function(data)
+	local src = source
+	if not DoesPlayerHavePermission(src, 'player.aliases.add') then return end
+
+	local playerId = tonumber(data and data.playerId)
+	if not playerId then return end
+
+	local aliasText = data and data.alias
+	if not aliasText or aliasText == '' or #aliasText > 128 then return end
+
+	local note = data and data.note
+	if note and #note > 256 then note = note:sub(1, 256) end
+
+	-- Resolve identifiers
+	local identifiers = GetPlayerIdentifiers(playerId)
+	if #identifiers == 0 then
+		identifiers = (getCachedPlayerIdentifiers and getCachedPlayerIdentifiers(playerId)) or {}
+	end
+	if #identifiers == 0 then return end
+
+	local entry = findPlayerByIdentifiers(identifiers)
+	if not entry then return end
+
+	if not entry.aliases then entry.aliases = {} end
+
+	table.insert(entry.aliases, {
+		id      = nextAliasId,
+		alias   = aliasText,
+		addedBy = GetPlayerName(src) or 'Console',
+		addedAt = os.time(),
+		note    = note,
+	})
+	nextAliasId = nextAliasId + 1
+
+	savePlayers()
+	PrintDebugMessage(string.format('Alias "%s" added to player "%s" by "%s".', aliasText, entry.name or 'Unknown', GetPlayerName(src) or 'Console'), 3)
+end)
+
+---Remove an alias (AKA) from a player.
+RegisterServerEvent('EasyAdmin:RemovePlayerAlias', function(data)
+	local src = source
+	if not DoesPlayerHavePermission(src, 'player.aliases.delete') then return end
+
+	local playerId = tonumber(data and data.playerId)
+	local aliasId = tonumber(data and data.aliasId)
+	if not playerId or not aliasId then return end
+
+	-- Resolve identifiers
+	local identifiers = GetPlayerIdentifiers(playerId)
+	if #identifiers == 0 then
+		identifiers = (getCachedPlayerIdentifiers and getCachedPlayerIdentifiers(playerId)) or {}
+	end
+	if #identifiers == 0 then return end
+
+	local entry = findPlayerByIdentifiers(identifiers)
+	if not entry or not entry.aliases then return end
+
+	for i = #entry.aliases, 1, -1 do
+		if entry.aliases[i].id == aliasId then
+			table.remove(entry.aliases, i)
+			savePlayers()
+			PrintDebugMessage(string.format('Alias #%d removed from player "%s" by "%s".', aliasId, entry.name or 'Unknown', GetPlayerName(src) or 'Console'), 3)
+			return
+		end
+	end
 end)

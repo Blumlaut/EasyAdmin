@@ -184,7 +184,7 @@ local function checkUpdatesSequential(names, index, results, onComplete)
 end
 
 -- Simple semver comparison (handles X.Y.Z and v-prefixed)
-local function compareVersions(a, b)
+function compareVersions(a, b)
   if not a or not b then return 0 end
   -- Strip leading 'v'
   a = string.gsub(a, '^v', '')

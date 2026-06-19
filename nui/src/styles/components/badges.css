@@ -73,6 +73,11 @@
   color: var(--accent-green);
 }
 
+.badge-current {
+  background: var(--bg-green);
+  color: var(--accent-green);
+}
+
 .badge-started {
   background: var(--bg-green);
   color: var(--accent-green);

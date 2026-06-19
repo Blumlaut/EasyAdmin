@@ -258,3 +258,21 @@ RegisterNetEvent('EasyAdmin:updateInfo', function(data)
     })
   end
 end)
+
+-- ============================================================
+-- Name History & Aliases: forward server result to NUI
+-- ============================================================
+
+RegisterNetEvent('EasyAdmin:ReceivePlayerNameHistory', function(data, playerId)
+  if IsNuiVisible() then
+    SendNUIMessage({
+      action = 'playerNameHistory',
+      data = {
+        id = playerId,
+        nameHistory = data and data.nameHistory or {},
+        aliases = data and data.aliases or {},
+        currentName = data and data.currentName or 'Unknown',
+      },
+    })
+  end
+end)
