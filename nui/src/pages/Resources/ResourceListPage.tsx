@@ -299,15 +299,18 @@ export function ResourceListPage({
         >
           <div className="flex flex-col gap-1">
             {outdatedResources.map((r) => (
-              <button
+              <span
                 key={r.name}
-                className="text-sm hover:underline text-left cursor-pointer p-0 bg-none border-none"
+                className="resource-link"
+                role="button"
+                tabIndex={0}
                 onClick={() => onSelectResource(r.name)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelectResource(r.name); } }}
               >
                 <span className="font-medium text-mono">{r.name}</span>
                 {' '}
                 <span className="text-muted">v{r.current} → v{r.latest}</span>
-              </button>
+              </span>
             ))}
           </div>
         </Alert>

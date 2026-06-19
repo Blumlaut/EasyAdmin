@@ -357,9 +357,9 @@ local function fetchCodeSnippet(resource, filePath, startLine, endLine)
     end
   end
 
-  -- Split into lines
+  -- Split into lines (normalize \r\n -> \n, strip trailing \n to avoid phantom extra line)
   local allLines = {}
-  for line in content:gmatch('([^\r\n]*)') do
+  for line in content:gsub('\r\n', '\n'):gsub('\r', '\n'):gsub('\n$', ''):gmatch('([^\n]*)') do
     table.insert(allLines, line)
   end
 
