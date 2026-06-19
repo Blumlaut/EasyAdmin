@@ -1,0 +1,3 @@
+[submodule ".agents/skills/fivem-natives/natives"]
+	path = .agents/skills/fivem-natives/natives
+	url = https://github.com/citizenfx/natives.git
