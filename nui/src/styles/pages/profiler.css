@@ -506,13 +506,13 @@
   cursor: help;
 }
 
-/* Hover tooltip */
+/* Hover tooltip — portal'd to .ea-window to escape overflow clipping */
 .profiler-code-tooltip {
-  position: absolute;
+  position: fixed;
   z-index: 100;
   transform: translate(-50%, -100%);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(15, 18, 23, 0.95);
+  border: 1px solid rgba(60, 70, 85, 0.7);
   border-radius: var(--radius);
   padding: var(--space-2) var(--space-3);
   max-width: 320px;

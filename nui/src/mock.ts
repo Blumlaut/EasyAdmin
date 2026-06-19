@@ -18,6 +18,7 @@ import {
   dashboardMock,
   serverMock,
   settingsMock,
+  profilerMock,
   DEMO_PLAYERS,
   DEMO_PERMISSIONS,
   DEMO_REPORTS,
@@ -34,6 +35,7 @@ const HANDLERS: Record<string, NonNullable<Parameters<typeof executeHandler>[0]>
   ...dashboardMock.handlers,
   ...serverMock.handlers,
   ...settingsMock.handlers,
+  ...profilerMock.handlers,
 }
 
 async function executeHandler(fn: (body: Record<string, unknown>) => Promise<Response>, body: Record<string, unknown>): Promise<Response> {

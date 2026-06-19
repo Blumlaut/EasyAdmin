@@ -47,6 +47,7 @@ export const DEMO_PERMISSIONS: Permissions = {
   'server.convars': true,
   'server.resources.start': true,
   'server.resources.stop': true,
+  'server.resources.monitor': true,
   'server.cleanup.cars': true,
   'server.cleanup.peds': true,
   'server.cleanup.props': true,
