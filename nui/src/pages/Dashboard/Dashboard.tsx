@@ -220,6 +220,13 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
       bgColor: 'var(--bg-green)',
     },
     {
+      label: 'Average Ping',
+      value: stats ? (stats.avgPing > 0 ? `${stats.avgPing} ms` : '—') : '—',
+      icon: 'activity',
+      iconColor: 'var(--accent-red)',
+      bgColor: 'var(--bg-red)',
+    },
+    {
       label: 'Resources',
       value: stats ? `${stats.resources.started}/${stats.resources.total}` : '—',
       icon: 'layers',
@@ -249,7 +256,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
     return (
       <div className="page-container">
         <div className="grid grid-cols-2 gap-3 dashboard-grid">
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="card dashboard-card-sm">
               <div className="flex items-center gap-3">
                 <div className="skeleton dashboard-skeleton-icon" />

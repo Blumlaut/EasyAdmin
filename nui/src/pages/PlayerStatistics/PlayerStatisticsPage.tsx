@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { DailyPeak, Notification, PaginatedPlayerRegistryResponse, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
+import type { DailyPeak, Notification, PaginatedPlayerRegistryResponse, PlayerPeakPoint, PlayerPeaksResponse, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
 import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
 import { StatCard } from '../../components/StatCard'
@@ -53,59 +53,133 @@ const rangeOptions: Array<{ value: StatsRange; label: string }> = [
 ]
 
 // ============================================================
-// DailyPeaksChart
-// Multi-line time series showing daily max/avg/min player counts.
-// Uses Chart.js for proper time-axis rendering.
+// PlayerPeaksChart
+// Adaptive chart: raw 15-min snapshots for ≤7d, daily aggregates for >7d.
+// Uses Chart.js for proper time-axis rendering (auto-picks tick granularity).
 // ============================================================
 
-function DailyPeaksChart({ data }: { data: DailyPeak[] }) {
-  const lines: TimeSeriesLine[] = useMemo(() => [
-    {
-      label: 'Max',
-      data: data.map((d) => ({ timestamp: d.day * 1000, value: d.max })),
-      color: '#3fb950',
-      fillColor: 'rgba(63, 185, 80, 0.12)',
-    },
-    {
-      label: 'Avg',
-      data: data.map((d) => ({ timestamp: d.day * 1000, value: d.avg })),
-      color: '#3b82f6',
-      fillColor: 'rgba(59, 130, 246, 0.15)',
-    },
-    {
-      label: 'Min',
-      data: data.map((d) => ({ timestamp: d.day * 1000, value: d.min })),
-      color: '#d29922',
-      fill: false,
-      borderDash: [4, 3],
-    },
-  ], [data])
+interface PlayerPeaksChartProps {
+  points: PlayerPeakPoint[]       // chart data (raw or daily)
+  dailyPeaks: DailyPeak[]         // daily aggregates (for legend ping check)
+  granularity: 'raw' | 'daily'
+}
+
+function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartProps) {
+  const hasPing = useMemo(() => points.some((p) => p.avgPing > 0), [points])
+
+  const lines: TimeSeriesLine[] = useMemo(() => {
+    if (granularity === 'raw') {
+      // Raw snapshots: single "Players" line + optional ping
+      const baseLines: TimeSeriesLine[] = [
+        {
+          label: 'Players',
+          data: points.map((p) => ({ timestamp: p.timestamp * 1000, value: p.count })),
+          color: '#3b82f6',
+          fillColor: 'rgba(59, 130, 246, 0.15)',
+          unit: 'players',
+        },
+      ]
+      if (hasPing) {
+        baseLines.push({
+          label: 'Avg Ping',
+          data: points.map((p) => ({ timestamp: p.timestamp * 1000, value: p.avgPing })),
+          color: '#f85149',
+          fill: false,
+          borderDash: [2, 2],
+          unit: 'ms',
+        })
+      }
+      return baseLines
+    }
+
+    // Daily aggregates: Max / Avg / Min + optional ping
+    const baseLines: TimeSeriesLine[] = [
+      {
+        label: 'Max',
+        data: dailyPeaks.map((d) => ({ timestamp: d.day * 1000, value: d.max })),
+        color: '#3fb950',
+        fillColor: 'rgba(63, 185, 80, 0.12)',
+        unit: 'players',
+      },
+      {
+        label: 'Avg',
+        data: dailyPeaks.map((d) => ({ timestamp: d.day * 1000, value: d.avg })),
+        color: '#3b82f6',
+        fillColor: 'rgba(59, 130, 246, 0.15)',
+        unit: 'players',
+      },
+      {
+        label: 'Min',
+        data: dailyPeaks.map((d) => ({ timestamp: d.day * 1000, value: d.min })),
+        color: '#d29922',
+        fill: false,
+        borderDash: [4, 3],
+        unit: 'players',
+      },
+    ]
+    const hasDailyPing = dailyPeaks.some((d) => d.avgPing > 0)
+    if (hasDailyPing) {
+      baseLines.push({
+        label: 'Avg Ping',
+        data: dailyPeaks.map((d) => ({ timestamp: d.day * 1000, value: d.avgPing })),
+        color: '#f85149',
+        fill: false,
+        borderDash: [2, 2],
+        unit: 'ms',
+      })
+    }
+    return baseLines
+  }, [points, dailyPeaks, granularity, hasPing])
 
   const chartRange = useMemo(() => {
-    if (data.length === 0) return { start: Date.now() - 86400000 * 7, end: Date.now() }
+    if (points.length === 0) return { start: Date.now() - 86400000 * 7, end: Date.now() }
+    const timestamps = points.map((p) => p.timestamp * 1000)
     return {
-      start: data[0].day * 1000 - 43200000, // 12h padding
-      end: data[data.length - 1].day * 1000 + 43200000,
+      start: Math.min(...timestamps) - 43200000, // 12h padding
+      end: Math.max(...timestamps) + 43200000,
     }
-  }, [data])
+  }, [points])
 
   return (
     <div className="card statistics-chart-card">
       <div className="flex items-center justify-between mb-3">
-        <p className="section-label">Daily Player Peaks</p>
+        <p className="section-label">{granularity === 'raw' ? 'Player Activity' : 'Daily Player Peaks'}</p>
         <div className="flex items-center gap-3 text-xs text-muted">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--accent-green)' }} />
-            Max
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--brand-blue-light)' }} />
-            Avg
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--accent-orange)' }} />
-            Min
-          </span>
+          {granularity === 'raw' ? (
+            <>
+              <span className="flex items-center gap-1.5">
+                <span className="legend-line" style={{ background: 'var(--brand-blue-light)' }} />
+                Players
+              </span>
+              {hasPing && (
+                <span className="flex items-center gap-1.5">
+                  <span className="legend-line legend-line-dotted" style={{ background: 'var(--accent-red)' }} />
+                  Avg Ping
+                </span>
+              )}
+            </>
+          ) : (
+            <>
+              <span className="flex items-center gap-1.5">
+                <span className="legend-line" style={{ background: 'var(--accent-green)' }} />
+                Max
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="legend-line" style={{ background: 'var(--brand-blue-light)' }} />
+                Avg
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="legend-line legend-line-dashed" style={{ background: 'var(--accent-orange)' }} />
+                Min
+              </span>
+              {dailyPeaks.some((d) => d.avgPing > 0) && (
+                <span className="flex items-center gap-1.5">
+                  <span className="legend-line legend-line-dotted" style={{ background: 'var(--accent-red)' }} />
+                  Avg Ping
+                </span>
+              )}
+            </>
+          )}
         </div>
       </div>
       <TimeSeriesChart
@@ -388,7 +462,7 @@ function StatisticsSkeleton() {
 export function PlayerStatisticsPage({ onToast: _onToast }: PlayerStatisticsPageProps) {
   const [range, setRange] = useState<StatsRange>('30d')
   const [summary, setSummary] = useState<StatsSummary | null>(null)
-  const [dailyPeaks, setDailyPeaks] = useState<DailyPeak[]>([])
+  const [peaks, setPeaks] = useState<PlayerPeaksResponse | null>(null)
   const [loading, setLoading] = useState(true)
 
   // Full registry data for bar chart summaries (top-N only).
@@ -419,11 +493,11 @@ export function PlayerStatisticsPage({ onToast: _onToast }: PlayerStatisticsPage
     })
   }, [])
 
-  // Listen for daily peaks results pushed from Lua
+  // Listen for peaks results pushed from Lua
   useEffect(() => {
-    return on<DailyPeak[]>('dailyPeaks', (data) => {
+    return on<PlayerPeaksResponse>('dailyPeaks', (data) => {
       if (currentRangeVer.current === rangeVer.current) {
-        setDailyPeaks(data)
+        setPeaks(data)
         setLoading(false)
       }
     })
@@ -450,7 +524,7 @@ export function PlayerStatisticsPage({ onToast: _onToast }: PlayerStatisticsPage
     currentRangeVer.current = ver
     setLoading(true)
     setSummary(null)
-    setDailyPeaks([])
+    setPeaks(null)
     callLua('requestStatsSummary', { range }).catch(() => {})
     callLua('requestDailyPeaks', { range }).catch(() => {})
   }, [range])
@@ -565,10 +639,16 @@ export function PlayerStatisticsPage({ onToast: _onToast }: PlayerStatisticsPage
         />
       </div>
 
-      {/* Daily peaks chart */}
-      <div className="mb-4">
-        <DailyPeaksChart data={dailyPeaks} />
-      </div>
+      {/* Player peaks chart (adaptive granularity) */}
+      {peaks && (
+        <div className="mb-4">
+          <PlayerPeaksChart
+            points={peaks.points}
+            dailyPeaks={peaks.dailyPeaks}
+            granularity={peaks.granularity}
+          />
+        </div>
+      )}
 
       {/* Player insights row */}
       <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">

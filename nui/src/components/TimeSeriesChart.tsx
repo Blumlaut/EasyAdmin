@@ -19,6 +19,7 @@ export interface TimeSeriesLine {
   fillColor?: string   // area fill top color (hex with alpha)
   fill?: boolean       // default true
   borderDash?: number[]
+  unit?: string        // per-line unit override for tooltips (falls back to chart-level unit)
 }
 
 interface TimeSeriesChartProps {
@@ -92,6 +93,7 @@ const chartDefaults = {
       type: 'time' as const,
       time: {
         displayFormats: {
+          minute: 'HH:mm',
           hour: 'HH:mm',
           day: 'MMM d',
           week: 'MMM d',
@@ -141,7 +143,7 @@ export function TimeSeriesChart({
     }
   }, [range, allTimestamps])
 
-  // Build Chart.js datasets
+  // Build Chart.js datasets (attach unit as custom property for tooltip)
   const datasets = useMemo(() =>
     lines.map((line) => ({
       label: line.label,
@@ -154,6 +156,7 @@ export function TimeSeriesChart({
       pointHitRadius: 10,
       tension: 0.3,
       borderDash: line.borderDash,
+      _unit: line.unit, // custom prop for tooltip callback
     })),
     [lines],
   )
@@ -172,8 +175,10 @@ export function TimeSeriesChart({
           return formatTooltipDate(typeof ts === 'number' ? ts : new Date(ts).getTime())
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        label: (ctx: any) =>
-          `${ctx.dataset.label}: ${Math.round(ctx.parsed.y)}${unit ? ` ${unit}` : ''}`,
+        label: (ctx: any) => {
+          const lineUnit = ctx.dataset._unit ?? unit
+          return `${ctx.dataset.label}: ${Math.round(ctx.parsed.y)}${lineUnit ? ` ${lineUnit}` : ''}`
+        },
       },
     }),
     [unit],
@@ -194,7 +199,6 @@ export function TimeSeriesChart({
       ...chartDefaults.scales,
       x: {
         type: 'time' as const,
-        time: (chartDefaults.scales!.x as any)?.time || {},
         grid: (chartDefaults.scales!.x as any)?.grid || {},
         ticks: (chartDefaults.scales!.x as any)?.ticks || {},
         border: (chartDefaults.scales!.x as any)?.border || {},

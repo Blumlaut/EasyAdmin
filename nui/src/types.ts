@@ -147,6 +147,7 @@ export type BanDurationPreset = 'permanent' | 'custom' | number
 // Server stats for dashboard
 export interface ServerStats {
   maxPlayers: number
+  avgPing: number           // current server-wide average ping (ms), 0 if no players
   resources: {
     total: number
     started: number
@@ -198,6 +199,23 @@ export interface DailyPeak {
   avg: number
   min: number
   entries: number      // number of data points that day
+  avgPing: number      // average ping across all snapshots that day (ms), 0 if no players
+  pingMin: number      // lowest avgPing snapshot that day (ms)
+  pingMax: number      // highest avgPing snapshot that day (ms)
+}
+
+// Single time-series data point (raw snapshot or daily aggregate)
+export interface PlayerPeakPoint {
+  timestamp: number    // unix seconds
+  count: number
+  avgPing: number      // ms, 0 if no players
+}
+
+// Combined response from requestDailyPeaks
+export interface PlayerPeaksResponse {
+  granularity: 'raw' | 'daily'  // 'raw' = 15-min snapshots, 'daily' = daily aggregates
+  points: PlayerPeakPoint[]     // chart data (matches granularity)
+  dailyPeaks: DailyPeak[]       // always daily (for summary cards, ping stats)
 }
 
 // Summary statistics returned by server

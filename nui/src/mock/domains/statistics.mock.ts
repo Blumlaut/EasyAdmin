@@ -3,7 +3,7 @@
  * Covers: stats summary, daily peaks, player registry, paginated registry.
  */
 
-import type { DailyPeak, PlayerRegistryEntry, StatsSummary } from '../../types'
+import type { DailyPeak, PlayerPeakPoint, PlayerRegistryEntry, StatsSummary } from '../../types'
 import type { DomainMock } from '../types'
 import { jsonResponse } from '../types'
 
@@ -120,7 +120,14 @@ function generateDailyPeaks(days: number): DailyPeak[] {
     const avg = Math.floor((max + min) / 2 + Math.random() * 5)
     const entries = Math.floor(Math.random() * 50) + 20
 
-    peaks.push({ day, max, avg, min, entries })
+    // Simulate ping: higher player count = slightly higher ping, base 30-80ms
+    const basePing = 30 + Math.floor(Math.random() * 50)
+    const loadFactor = avg > 0 ? Math.floor(avg * 0.5) : 0
+    const avgPing = basePing + loadFactor
+    const pingMin = Math.max(15, avgPing - Math.floor(Math.random() * 20) - 10)
+    const pingMax = avgPing + Math.floor(Math.random() * 30) + 10
+
+    peaks.push({ day, max, avg, min, entries, avgPing, pingMin, pingMax })
   }
 
   return peaks
@@ -180,9 +187,40 @@ async function handleRequestStatsSummary(body: Record<string, unknown>): Promise
 
 async function handleRequestDailyPeaks(body: Record<string, unknown>): Promise<Response> {
   const statsRange = (body.range as '7d' | '30d' | '90d' | '120d') || '30d'
-  const peaks = generatePeaksForRange(statsRange)
+  const rangeDays = statsRange === '7d' ? 7 : statsRange === '30d' ? 30 : statsRange === '90d' ? 90 : 120
+  const dailyPeaks = generatePeaksForRange(statsRange)
+
+  // For short ranges, generate raw 15-min snapshot points
+  let points: PlayerPeakPoint[]
+  if (rangeDays <= 7) {
+    const now = Math.floor(Date.now() / 1000)
+    const interval = 900 // 15 min
+    const totalPoints = Math.ceil(rangeDays * 86400 / interval)
+    points = []
+    for (let i = totalPoints - 1; i >= 0; i--) {
+      const ts = now - i * interval
+      const hour = new Date(ts * 1000).getHours()
+      const isPeakHour = hour >= 14 && hour <= 22
+      const baseCount = isPeakHour ? 20 : 8
+      const count = Math.max(0, baseCount + Math.floor(Math.random() * 15) - 7)
+      const avgPing = count > 0 ? 30 + Math.floor(Math.random() * 50) + Math.floor(count * 0.5) : 0
+      points.push({ timestamp: ts, count, avgPing })
+    }
+  } else {
+    // For long ranges, points are the daily averages
+    points = dailyPeaks.map((d) => ({
+      timestamp: d.day,
+      count: d.avg,
+      avgPing: d.avgPing,
+    }))
+  }
+
   setTimeout(() => {
-    window.postMessage({ action: 'dailyPeaks', data: peaks }, '*')
+    window.postMessage({ action: 'dailyPeaks', data: {
+      granularity: rangeDays <= 7 ? 'raw' : 'daily',
+      points,
+      dailyPeaks,
+    }}, '*')
   }, 200)
   return jsonResponse({ success: true })
 }

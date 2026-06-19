@@ -54,6 +54,7 @@ RegisterServerEvent('EasyAdmin:requestServerStats', function()
 
 	TriggerClientEvent('EasyAdmin:serverStatsResult', src, {
 		maxPlayers = maxPlayers,
+		avgPing    = GetLastAvgPing(),
 		resources = {
 			total = resourceCount,
 			started = started,
@@ -197,16 +198,59 @@ RegisterServerEvent('EasyAdmin:requestStatsSummary', function(range) -- luacheck
 end)
 
 -- ============================================================
--- Daily peaks
+-- Player peaks (adaptive granularity)
+-- Short ranges (<=7d): raw 15-min snapshots (~672 pts)
+-- Long ranges (>7d): daily aggregates (~30-120 pts)
+-- Always includes dailyPeaks for summary stats.
 -- ============================================================
 
-RegisterServerEvent('EasyAdmin:requestDailyPeaks', function(range) -- luacheck: ignore 212
+---Count days from a range string
+local function rangeToDays(range)
+	if range == '1h' then return 0
+	elseif range == '6h' then return 0
+	elseif range == '24h' then return 1
+	elseif range == '7d' then return 7
+	elseif range == '30d' then return 30
+	elseif range == '90d' then return 90
+	elseif range == '120d' then return 120
+	else return 1
+	end
+end
+
+RegisterServerEvent('EasyAdmin:requestDailyPeaks', function(range)
 	local src = source
 	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local cutoff = rangeToCutoff(range)
-	local result = GetDailyPlayerStats(cutoff)
+	local days = rangeToDays(range)
 
-	TriggerClientEvent('EasyAdmin:dailyPeaksResult', src, result)
+	-- Daily aggregates always (for summary cards, ping min/max, etc.)
+	local dailyPeaks = GetDailyPlayerStats(cutoff)
+
+	-- Chart points: raw snapshots for short ranges, daily for long
+	local points
+	if days <= 7 then
+		-- Raw 15-min snapshots
+		points = GetPlayerCountsAfter(cutoff)
+		if #points == 0 then
+			table.insert(points, { timestamp = os.time(), count = #GetPlayers(), avgPing = CalculateAvgPing() })
+		end
+	else
+		-- Daily aggregates flattened into points
+		points = {}
+		for _, day in ipairs(dailyPeaks) do
+			table.insert(points, {
+				timestamp = day.day,
+				count     = day.avg,
+				avgPing   = day.avgPing or 0,
+			})
+		end
+	end
+
+	TriggerClientEvent('EasyAdmin:dailyPeaksResult', src, {
+		granularity = days <= 7 and 'raw' or 'daily',
+		points      = points,
+		dailyPeaks  = dailyPeaks,
+	})
 end)
 
 -- ============================================================

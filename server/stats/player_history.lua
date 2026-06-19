@@ -82,7 +82,7 @@ local function backfill()
 	local gapEnd = now - (now % STATS_INTERVAL) -- align to interval boundary
 	local t = gapStart
 	while t <= gapEnd do
-		table.insert(playerCounts, { timestamp = t, count = 0 })
+		table.insert(playerCounts, { timestamp = t, count = 0, avgPing = 0 })
 		t = t + STATS_INTERVAL
 	end
 end
@@ -105,7 +105,7 @@ local function migrateOldHistory()
 	local migrated = 0
 	for _, entry in ipairs(decoded) do
 		if entry.timestamp and entry.count and entry.timestamp + STATS_RETENTION >= os.time() then
-			table.insert(playerCounts, { timestamp = entry.timestamp, count = entry.count })
+			table.insert(playerCounts, { timestamp = entry.timestamp, count = entry.count, avgPing = entry.avgPing or 0 })
 			migrated = migrated + 1
 		end
 	end
@@ -119,6 +119,21 @@ end
 -- Recording
 -- ============================================================
 
+---Calculate average ping across all connected players (ms).
+---@return number average ping in ms, 0 if no players
+function CalculateAvgPing()
+	local players = GetPlayers()
+	local count = #players
+	if count == 0 then return 0 end
+
+	local totalPing = 0
+	for _, playerId in ipairs(players) do
+		totalPing = totalPing + GetPlayerPing(playerId)
+	end
+
+	return math.floor(totalPing / count + 0.5)
+end
+
 local function recordPlayerCount()
 	local count = #GetPlayers()
 	local now = os.time()
@@ -129,7 +144,8 @@ local function recordPlayerCount()
 		return
 	end
 
-	table.insert(playerCounts, { timestamp = now, count = count })
+	local avgPing = CalculateAvgPing()
+	table.insert(playerCounts, { timestamp = now, count = count, avgPing = avgPing })
 	pruneEntries(playerCounts)
 	save()
 end
@@ -151,7 +167,7 @@ function GetPlayerCountsAfter(cutoff)
 	return result
 end
 
----Get daily aggregated peak/avg/min player counts.
+---Get daily aggregated peak/avg/min player counts (with avg ping).
 ---@param cutoff number unix timestamp
 ---@return table
 function GetDailyPlayerStats(cutoff)
@@ -161,24 +177,43 @@ function GetDailyPlayerStats(cutoff)
 		if entry.timestamp >= cutoff then
 			local dayStart = entry.timestamp - (entry.timestamp % 86400)
 			if not daily[dayStart] then
-				daily[dayStart] = { max = 0, min = math.huge, sum = 0, count = 0 }
+				daily[dayStart] = { max = 0, min = math.huge, sum = 0, count = 0, pingSum = 0, pingCount = 0, pingMin = math.huge, pingMax = 0 }
 			end
 			local d = daily[dayStart]
 			if entry.count > d.max then d.max = entry.count end
 			if entry.count < d.min then d.min = entry.count end
 			d.sum = d.sum + entry.count
 			d.count = d.count + 1
+
+			-- Accumulate ping data (only when players were online)
+			if entry.avgPing and entry.avgPing > 0 then
+				d.pingSum = d.pingSum + entry.avgPing
+				d.pingCount = d.pingCount + 1
+				if entry.avgPing < d.pingMin then d.pingMin = entry.avgPing end
+				if entry.avgPing > d.pingMax then d.pingMax = entry.avgPing end
+			end
 		end
 	end
 
 	local result = {}
 	for day, stats in pairs(daily) do
+		local avgPing = 0
+		local pingMin = 0
+		local pingMax = 0
+		if stats.pingCount > 0 then
+			avgPing = math.floor(stats.pingSum / stats.pingCount + 0.5)
+			pingMin = math.floor(stats.pingMin + 0.5)
+			pingMax = math.floor(stats.pingMax + 0.5)
+		end
 		table.insert(result, {
-			day     = day,
-			max     = stats.max,
-			avg     = math.floor(stats.sum / stats.count),
-			min     = stats.min == math.huge and 0 or stats.min,
-			entries = stats.count,
+			day      = day,
+			max      = stats.max,
+			avg      = math.floor(stats.sum / stats.count),
+			min      = stats.min == math.huge and 0 or stats.min,
+			entries  = stats.count,
+			avgPing  = avgPing,
+			pingMin  = pingMin,
+			pingMax  = pingMax,
 		})
 	end
 	table.sort(result, function(a, b) return a.day < b.day end)
@@ -188,6 +223,14 @@ end
 ---Get retention period in seconds
 function GetRetention()
 	return STATS_RETENTION
+end
+
+---Get average ping from the last recorded snapshot (ms).
+---Returns 0 if no snapshots exist. Avoids iterating live players.
+---@return number average ping in ms, 0 if no snapshots
+function GetLastAvgPing()
+	local last = playerCounts[#playerCounts]
+	return last and last.avgPing or 0
 end
 
 -- ============================================================

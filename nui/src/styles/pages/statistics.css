@@ -44,6 +44,27 @@ canvas.chartjs-chart {
   padding: 1rem;
 }
 
+/* Legend line indicators (solid / dashed / dotted) */
+.legend-line {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.legend-line-dashed {
+  background: none !important;
+  border-top: 2px dashed;
+  height: 0;
+}
+
+.legend-line-dotted {
+  background: none !important;
+  border-top: 2px dotted;
+  height: 0;
+}
+
 /* Player registry table */
 .statistics-table {
   width: 100%;
