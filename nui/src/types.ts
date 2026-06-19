@@ -377,3 +377,100 @@ export interface UpdateInfo {
   latestVersion: string
   available: boolean
 }
+
+// ============================================================
+// Server Metrics types
+// ============================================================
+
+// CPU snapshot from server
+export interface CPUSnapshot {
+  timestamp: number        // unix seconds
+  usagePercent: number     // 0-100
+  coreCount: number
+}
+
+// Memory snapshot from server
+export interface MemorySnapshot {
+  timestamp: number        // unix seconds
+  totalMB: number
+  usedMB: number
+  freeMB: number
+  usagePercent: number     // 0-100
+}
+
+// Disk drive info from server
+export interface DiskDrive {
+  path: string
+  device: string
+  totalGB: number
+  usedGB: number
+  freeGB: number
+  usagePercent: number     // 0-100
+}
+
+// Disk snapshot from server
+export interface DiskSnapshot {
+  timestamp: number        // unix seconds
+  drives: DiskDrive[]
+}
+
+// Network snapshot from server
+export interface NetworkSnapshot {
+  timestamp: number        // unix seconds
+  bytesInMBps: number      // MB/s inbound
+  bytesOutMBps: number     // MB/s outbound
+  totalBytesIn: number
+  totalBytesOut: number
+}
+
+// Process entry from server
+export interface ProcessEntry {
+  name: string
+  pid: number
+  cpuPercent: number
+  memoryMB: number
+  user?: string
+  state?: string
+}
+
+// OS info response
+export interface OSInfo {
+  os: 'windows' | 'linux'
+}
+
+// CPU history response
+export interface CPUHistoryResponse {
+  snapshots: CPUSnapshot[]
+  coreCount: number
+}
+
+// Memory history response
+export interface MemoryHistoryResponse {
+  snapshots: MemorySnapshot[]
+  current: MemorySnapshot | null
+}
+
+// Disk history response
+export interface DiskHistoryResponse {
+  snapshots: DiskSnapshot[]
+  current: DiskSnapshot | null
+}
+
+// Network history response
+export interface NetworkHistoryResponse {
+  snapshots: NetworkSnapshot[]
+  current: NetworkSnapshot | null
+}
+
+// Processes response
+export interface ProcessesResponse {
+  timestamp: number
+  os: string
+  processes: ProcessEntry[]
+}
+
+// Metrics time range
+export type MetricsRange = '1h' | '6h' | '24h' | '7d' | '30d'
+
+// Metrics tab
+export type MetricsTab = 'overview' | 'cpu' | 'memory' | 'disk' | 'network' | 'processes'

@@ -80,6 +80,10 @@ export type IconName =
   | 'check-circle'
   | 'alert-circle'
   | 'download'
+  | 'trending-up'
+  | 'arrow-down-circle'
+  | 'hard-drive'
+  | 'database'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -517,6 +521,35 @@ const ICONS: Record<IconName, React.ReactNode> = {
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
       <polyline points="7 10 12 15 17 10" />
       <line x1={12} y1={15} x2={12} y2={3} />
+    </>
+  ),
+  'trending-up': (
+    <>
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </>
+  ),
+  'arrow-down-circle': (
+    <>
+      <circle cx={12} cy={12} r={10} />
+      <polyline points="12 16 16 12 12 8" />
+      <line x1={8} y1={12} x2={16} y2={12} />
+    </>
+  ),
+  'hard-drive': (
+    <>
+      <line x1={2} y1={20} x2={22} y2={20} />
+      <line x1={5} y1={12} x2={19} y2={12} />
+      <line x1={5} y1={8} x2={19} y2={8} />
+      <line x1={5} y1={16} x2={19} y2={16} />
+      <rect x={2} y={2} width={20} height={20} rx={2} />
+    </>
+  ),
+  database: (
+    <>
+      <ellipse cx={12} cy={5} rx={9} ry={4} />
+      <path d="M21 12c0 2.2-4 4-9 4s-9-1.8-9-4" />
+      <path d="M3 5v14c0 2.2 4 4 9 4s9-1.8 9-4V5" />
     </>
   ),
 }
