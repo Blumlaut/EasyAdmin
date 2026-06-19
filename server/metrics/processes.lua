@@ -39,40 +39,39 @@ local function sampleLinuxProcesses()
 
 	for line in output:gmatch('[^\r\n]+') do
 		-- Skip header
-		if line:find('USER') and line:find('COMMAND') then goto continue end
+		if not (line:find('USER') and line:find('COMMAND')) then
+			-- ps aux format: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+			local user, pid, cpu, mem, vsz, rss, tty, stat, start, time, command = line:match(
+				'^%s*(%S+)%s+(%d+)%s+(%d+%.?%d*)%s+(%d+%.?%d*)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.+)$'
+			)
 
-		-- ps aux format: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
-		local user, pid, cpu, mem, vsz, rss, tty, stat, start, time, command = line:match(
-			'^%s*(%S+)%s+(%d+)%s+(%d+%.?%d*)%s+(%d+%.?%d*)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.+)$'
-		)
+			if pid and command then
+				-- RSS is in KB, convert to MB
+				local memoryMB = math.floor(tonumber(rss) / 1024)
 
-		if pid and command then
-			-- RSS is in KB, convert to MB
-			local memoryMB = math.floor(tonumber(rss) / 1024)
+				-- Extract just the command name (not full path + args)
+				local cmdName = command:match('^[^/]*')  -- before first /
+				if not cmdName or cmdName == '' then
+					cmdName = command:match('([^/]+)$')   -- last path component
+				end
+				-- Truncate long command names
+				if cmdName and #cmdName > 64 then
+					cmdName = cmdName:sub(1, 61) .. '...'
+				end
 
-			-- Extract just the command name (not full path + args)
-			local cmdName = command:match('^[^/]*')  -- before first /
-			if not cmdName or cmdName == '' then
-				cmdName = command:match('([^/]+)$')   -- last path component
+				table.insert(processes, {
+					name       = cmdName or 'unknown',
+					pid        = tonumber(pid),
+					cpuPercent = tonumber(cpu) or 0,
+					memoryMB   = memoryMB,
+					user       = user,
+					state      = stat,
+				})
+
+				count = count + 1
+				if count >= MAX_PROCESSES then break end
 			end
-			-- Truncate long command names
-			if cmdName and #cmdName > 64 then
-				cmdName = cmdName:sub(1, 61) .. '...'
-			end
-
-			table.insert(processes, {
-				name       = cmdName or 'unknown',
-				pid        = tonumber(pid),
-				cpuPercent = tonumber(cpu) or 0,
-				memoryMB   = memoryMB,
-				user       = user,
-				state      = stat,
-			})
-
-			count = count + 1
-			if count >= MAX_PROCESSES then break end
 		end
-		::continue::
 	end
 
 	return processes

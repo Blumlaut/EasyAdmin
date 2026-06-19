@@ -31,6 +31,16 @@ local diskSnapshots = {}
 
 ---Parse df output for disk usage on Linux.
 ---@return table|nil array of drive info
+local function shouldSkipDisk(device, mount)
+	if device:find('^tmpfs') or device:find('^devtmpfs') or device:find('^overlay') then
+		return true
+	end
+	if mount:find('^/proc') or mount:find('^/sys') or mount:find('^/dev') then
+		return true
+	end
+	return false
+end
+
 local function sampleLinuxDisk()
 	local output = execCommand('df -BG --output=source,size,used,avail,pcent,target 2>/dev/null | tail -n +2')
 	if not output then return nil end
@@ -39,15 +49,7 @@ local function sampleLinuxDisk()
 	for line in output:gmatch('[^\r\n]+') do
 		-- df -BG output: /dev/sda1 50G 20G 28G 42% /
 		local device, sizeStr, usedStr, availStr, pctStr, mount = line:match('^(%S+)%s+(%d+G)%s+(%d+G)%s+(%d+G)%s+(%d+%%)%s+(%S+)')
-		if device and mount then
-			-- Skip pseudo-filesystems
-			if device:find('^tmpfs') or device:find('^devtmpfs') or device:find('^overlay') then
-				goto continue
-			end
-			if mount:find('^/proc') or mount:find('^/sys') or mount:find('^/dev') then
-				goto continue
-			end
-
+		if device and mount and not shouldSkipDisk(device, mount) then
 			local totalGB = tonumber(sizeStr:match('(%d+)')) or 0
 			local usedGB = tonumber(usedStr:match('(%d+)')) or 0
 			local freeGB = tonumber(availStr:match('(%d+)')) or 0
@@ -62,7 +64,6 @@ local function sampleLinuxDisk()
 				usagePercent = pct,
 			})
 		end
-		::continue::
 	end
 
 	return #drives > 0 and drives or nil

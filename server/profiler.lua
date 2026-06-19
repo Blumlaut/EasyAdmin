@@ -349,7 +349,7 @@ local function fetchCodeSnippet(resource, filePath, startLine, endLine)
   end
 
   -- Binary detection via extension (content is already a string, check filePath extension)
-  local ext = filePath:match('\.(%a+)$')
+  local ext = filePath:match('[.](%a+)$')
   if ext then
     local binaryExts = { ['dll'] = true, ['exe'] = true, ['dat'] = true, ['bin'] = true, ['png'] = true, ['jpg'] = true, ['jpeg'] = true, ['gif'] = true, ['webp'] = true, ['mp3'] = true, ['ogg'] = true, ['wav'] = true, ['stl'] = true, ['yft'] = true, ['ydr'] = true, ['ymt'] = true, ['ybn'] = true }
     if binaryExts[ext:lower()] then

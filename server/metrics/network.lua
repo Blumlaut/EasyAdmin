@@ -36,6 +36,40 @@ local prevTimestamp = 0
 
 ---Read cumulative network bytes from /proc/net/dev.
 ---@return number bytesIn, number bytesOut
+local function processLinuxNetLine(line, totalIn, totalOut)
+	-- Skip header lines
+	if line:find('Inter-') or line:find('Recv-') then
+		return totalIn, totalOut
+	end
+
+	-- Format: "eth0: 1234 567 890 ...  abc  def ghi ..."
+	-- Fields: iface: recv_bytes recv_packets ... transmit_bytes transmit_packets ...
+	local iface = line:match('^%s*(%S+):')
+	if not iface then
+		return totalIn, totalOut
+	end
+
+	-- Skip loopback
+	if iface == 'lo' then
+		return totalIn, totalOut
+	end
+
+	local fields = {}
+	for word in line:gmatch('%S+') do
+		table.insert(fields, word)
+	end
+
+	-- Remove the "iface:" prefix entry
+	table.remove(fields, 1)
+
+	if #fields >= 9 then
+		totalIn = totalIn + (tonumber(fields[1]) or 0)  -- recv_bytes
+		totalOut = totalOut + (tonumber(fields[9]) or 0) -- transmit_bytes
+	end
+
+	return totalIn, totalOut
+end
+
 local function readLinuxNetCounters()
 	local dev = io.open('/proc/net/dev', 'r')
 	if not dev then return 0, 0 end
@@ -44,34 +78,11 @@ local function readLinuxNetCounters()
 	local totalOut = 0
 
 	for line in dev:lines() do
-		-- Skip header lines
-		if line:find('Inter-') or line:find('Recv-') then goto continue end
-
-		-- Format: "eth0: 1234 567 890 ...  abc  def ghi ..."
-		-- Fields: iface: recv_bytes recv_packets ... transmit_bytes transmit_packets ...
-		local iface = line:match('^%s*(%S+):')
-		if not iface then goto continue end
-
-		-- Skip loopback
-		if iface == 'lo' then goto continue end
-
-		local fields = {}
-		for word in line:gmatch('%S+') do
-			table.insert(fields, word)
-		end
-
-		-- Remove the "iface:" prefix entry
-		table.remove(fields, 1)
-
-		if #fields >= 9 then
-			totalIn = totalIn + (tonumber(fields[1]) or 0)  -- recv_bytes
-			totalOut = totalOut + (tonumber(fields[9]) or 0) -- transmit_bytes
-		end
+		totalIn, totalOut = processLinuxNetLine(line, totalIn, totalOut)
 	end
 
 	dev:close()
 	return totalIn, totalOut
-	::continue::
 end
 
 -- ============================================================

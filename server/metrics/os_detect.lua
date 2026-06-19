@@ -78,7 +78,7 @@ end
 ---@param command string
 ---@return string|nil output
 ---@return string|nil error
-local function execCommand(command)
+function execCommand(command)
 	local handle = io.popen(command, 'r')
 	if not handle then
 		return nil, string.format('Failed to execute: %s', command)
