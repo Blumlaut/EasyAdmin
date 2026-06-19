@@ -44,7 +44,16 @@ export interface BanDuration {
 // Notification from Lua
 export interface Notification {
   text: string
-  type?: 'info' | 'success' | 'error'
+  type?: 'info' | 'success' | 'warn' | 'error'
+}
+
+// Individual toast in the queue
+export interface ToastItem {
+  id: string
+  message: string
+  type: 'info' | 'success' | 'warn' | 'error'
+  createdAt: number
+  duration: number
 }
 
 // Lightweight ban entry for list view (no identifiers, fetched from server paginated)

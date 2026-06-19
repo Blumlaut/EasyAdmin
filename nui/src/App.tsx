@@ -7,7 +7,7 @@ import type { View } from './types'
 import { on } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
-import { Toast } from './components/Toast'
+import { ToastContainer } from './components/ToastContainer'
 import { WarningOverlay } from './components/WarningOverlay'
 import { ModalProvider } from './ModalContext'
 import { Dashboard } from './pages/Dashboard/Dashboard'
@@ -41,7 +41,7 @@ function App() {
 
   // === Hooks ===
 
-  const { toast, showToast } = useToast()
+  const { toasts, showToast, dismissToast } = useToast()
   const data = useAppData()
   const nav = useAppNavigation({
     permissions: data.permissions,
@@ -434,7 +434,7 @@ function App() {
       </>
     )}
 
-      {toast && <Toast message={toast.text} type={toast.type} />}
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
 
       <WarningOverlay
         warning={warning}
