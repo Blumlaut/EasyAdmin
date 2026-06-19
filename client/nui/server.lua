@@ -108,3 +108,27 @@ RegisterNetEvent('EasyAdmin:playerHistoryResult', function(data)
     cb(data or {})
   end
 end)
+
+-- Network statistics
+local pendingNetworkCb = nil
+
+RegisterNUICallback('requestNetworkStats', function(data, cb)
+  if pendingNetworkCb then
+    pendingNetworkCb = cb
+    return
+  end
+  pendingNetworkCb = cb
+  TriggerServerEvent('EasyAdmin:requestNetworkStats', data)
+end)
+
+RegisterNetEvent('EasyAdmin:networkStatsResult', function(data)
+  if pendingNetworkCb then
+    local cb = pendingNetworkCb
+    pendingNetworkCb = nil
+    cb(data or {
+      players = {},
+      names = {},
+      history = nil,
+    })
+  end
+end)

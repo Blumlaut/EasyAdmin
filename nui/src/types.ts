@@ -139,6 +139,7 @@ export type View =
   | 'resource-detail'
   | 'profiler'
   | 'player-statistics'
+  | 'network-monitor'
   | 'settings'
 
 // Ban duration preset indices
@@ -426,6 +427,45 @@ export interface UpdateInfo {
   currentVersion: string
   latestVersion: string
   available: boolean
+}
+
+// ============================================================
+// Network Statistics
+// ============================================================
+
+// Per-player peer statistics (from GetPlayerPeerStatistics)
+export interface PlayerNetworkStats {
+  rtt: number              // Mean round-trip time (ping) in ms
+  rttVariance: number      // RTT variance (jitter) in ms
+  lastRtt: number          // Last recorded RTT in ms
+  packetLoss: number       // Packet loss percentage (1 decimal)
+}
+
+// Single historical network snapshot (summary only)
+export interface NetworkSnapshot {
+  timestamp: number        // Unix seconds
+  avgPing: number          // Average ping across all players (ms)
+  worstPing: number        // Worst ping among all players (ms)
+  avgJitter: number        // Average jitter across all players (ms)
+  avgLoss: number          // Average packet loss across all players (%)
+}
+
+// Per-player historical data point
+export interface PlayerNetworkHistoryPoint {
+  timestamp: number        // Unix seconds
+  rtt: number              // Mean RTT (ms)
+  rttVariance: number      // RTT variance (ms)
+  lastRtt: number          // Last RTT (ms)
+  packetLoss: number       // Packet loss (%)
+}
+
+// Live network stats response from server
+export interface NetworkStatsResponse {
+  players: Record<string, PlayerNetworkStats>  // keyed by serverId
+  names: Record<string, string>                // serverId -> player name
+  snapshotTimestamp?: number                   // unix seconds — when the snapshot was taken
+  history?: NetworkSnapshot[]                   // optional, when range is requested
+  playerHistory?: PlayerNetworkHistoryPoint[]   // optional, when playerId is requested
 }
 
 

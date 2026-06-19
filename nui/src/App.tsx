@@ -24,6 +24,7 @@ import { ResourceListPage } from './pages/Resources/ResourceListPage'
 import { ResourceDetailPage } from './pages/Resources/ResourceDetailPage'
 import { ProfilerPage } from './pages/Profiler/ProfilerPage'
 import { SettingsPage } from './pages/Settings/SettingsPage'
+import { NetworkMonitorPage } from './pages/Statistics/NetworkMonitorPage'
 
 interface WarningData {
   title: string
@@ -168,6 +169,7 @@ function App() {
       'bans': 'bans',
       'reports': 'reports',
       'player-statistics': 'player-statistics',
+      'network-monitor': 'network-monitor',
       'server': 'server',
       'resources': 'resources',
       'profiler': 'profiler',
@@ -372,6 +374,10 @@ function App() {
 
               {nav.view === 'player-statistics' && (
                 <PlayerStatisticsPage onToast={showToast} />
+              )}
+
+              {nav.view === 'network-monitor' && (
+                <NetworkMonitorPage onToast={showToast} />
               )}
 
               {nav.view === 'server' && (

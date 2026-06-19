@@ -50,6 +50,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: 'chart-bar',
     children: [
       { id: 'player-statistics', label: 'Player Statistics', icon: 'users' },
+      { id: 'network-monitor', label: 'Network Monitor', icon: 'activity' },
     ],
   },
   {
@@ -121,7 +122,7 @@ export function useAppNavigation({
     if (view === 'report-detail') return 'reports'
     if (view === 'resource-detail') return 'resources'
     if (view === 'server' || view === 'resources' || view === 'profiler') return view
-    if (view === 'player-statistics') return view
+    if (view === 'player-statistics' || view === 'network-monitor') return view
     return view
   })()
 
@@ -136,6 +137,7 @@ export function useAppNavigation({
     if (view === 'reports') return 'Reports'
     if (view === 'report-detail' && selectedReportId !== null) return `Report #${selectedReportId}`
     if (view === 'player-statistics') return 'Player Statistics'
+    if (view === 'network-monitor') return 'Network Monitor'
     if (view === 'server') return 'Server'
     if (view === 'resources') return 'Resource Management'
     if (view === 'resource-detail') return 'Resource Details'
@@ -155,7 +157,7 @@ export function useAppNavigation({
     if (item.id === 'bans' && !permissions['player.ban.view']) disabled = true
     if (item.id === 'reports' && !permissions['player.reports.view']) disabled = true
     if (item.id === 'statistics') {
-      disabled = !permissions['server.statistics.view']
+      disabled = !permissions['server.statistics.view'] && !permissions['server.network.monitor']
       const children = item.children?.map((child) => {
         // Pass through separators and headers in dropdown children
         if ('type' in child && (child.type === 'separator' || child.type === 'header')) {
@@ -163,6 +165,7 @@ export function useAppNavigation({
         }
         let childDisabled = false
         if (child.id === 'player-statistics' && !permissions['server.statistics.view']) childDisabled = true
+        if (child.id === 'network-monitor' && !permissions['server.network.monitor']) childDisabled = true
         return { ...child, disabled: childDisabled }
       })
       return { ...item, disabled, children: children?.length ? children : undefined }
@@ -192,6 +195,7 @@ export function useAppNavigation({
   if (permissions['player.ban.view']) availableViews.push('bans')
   if (permissions['player.reports.view']) availableViews.push('reports')
   if (permissions['server.statistics.view']) availableViews.push('player-statistics')
+  if (permissions['server.network.monitor']) availableViews.push('network-monitor')
   if (
     permissions['server.announce'] ||
     permissions['server.convars'] ||

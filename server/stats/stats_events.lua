@@ -269,6 +269,52 @@ RegisterServerEvent('EasyAdmin:requestDailyPeaks', function(range)
 end)
 
 -- ============================================================
+-- Network statistics
+-- ============================================================
+
+RegisterServerEvent('EasyAdmin:requestNetworkStats', function(data)
+	local src = source
+	if not DoesPlayerHavePermission(src, 'server.network.monitor') then return end
+
+	-- Use last snapshot for current stats (no live native calls).
+	-- Snapshot is collected every 15 minutes by the periodic thread.
+	local lastSnapshot = GetLastNetworkSnapshot()
+
+	-- Build player name map: resolve names for players still online.
+	-- GetPlayerName returns false for disconnected players.
+	local playerNames = {}
+	if lastSnapshot and lastSnapshot.players then
+		for sid in pairs(lastSnapshot.players) do
+			local targetId = tonumber(sid)
+			local name = targetId and GetPlayerName(targetId)
+			playerNames[sid] = name and name ~= '' and name or 'Offline'
+		end
+	end
+
+	-- Global historical data (optional, controlled by range param)
+	local history = nil
+	if data and data.range then
+		local cutoff = rangeToCutoff(data.range)
+		history = GetNetworkSnapshotsAfter(cutoff)
+	end
+
+	-- Per-player historical data (optional, controlled by playerId param)
+	local playerHistory = nil
+	if data and data.playerId and data.range then
+		local cutoff = rangeToCutoff(data.range)
+		playerHistory = GetPlayerNetworkHistory(tostring(data.playerId), cutoff)
+	end
+
+	TriggerClientEvent('EasyAdmin:networkStatsResult', src, {
+		players = lastSnapshot and lastSnapshot.players or {},
+		names = playerNames,
+		snapshotTimestamp = lastSnapshot and lastSnapshot.timestamp or nil,
+		history = history,
+		playerHistory = playerHistory,
+	})
+end)
+
+-- ============================================================
 -- Name History & Aliases
 -- ============================================================
 
