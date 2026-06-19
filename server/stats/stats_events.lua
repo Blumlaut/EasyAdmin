@@ -52,6 +52,17 @@ RegisterServerEvent('EasyAdmin:requestServerStats', function()
 		end
 	end
 
+	-- Count admins online
+	local adminsOnline = 0
+	for _ in pairs(OnlineAdmins) do adminsOnline = adminsOnline + 1 end
+
+	-- Count pending reports
+	local pendingReports = 0
+	for _ in pairs(reports) do pendingReports = pendingReports + 1 end
+
+	-- Server uptime in seconds
+	local uptime = os.time() - ServerStartTime
+
 	TriggerClientEvent('EasyAdmin:serverStatsResult', src, {
 		maxPlayers = maxPlayers,
 		avgPing    = GetLastAvgPing(),
@@ -61,6 +72,10 @@ RegisterServerEvent('EasyAdmin:requestServerStats', function()
 			stopped = stopped,
 		},
 		entities = GetCurrentEntities(),
+		adminsOnline = adminsOnline,
+		pendingReports = pendingReports,
+		uptime = uptime,
+		peakToday = GetTodayPeak(),
 	})
 end)
 

@@ -158,6 +158,10 @@ export interface ServerStats {
     peds: number
     objects: number
   }
+  adminsOnline: number
+  pendingReports: number
+  uptime: number            // seconds since server start
+  peakToday: number
 }
 
 // Single data point for sparkline charts

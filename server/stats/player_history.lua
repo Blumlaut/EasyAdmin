@@ -233,6 +233,24 @@ function GetLastAvgPing()
 	return last and last.avgPing or 0
 end
 
+---Get peak player count for today (from snapshots, or live count if no snapshots).
+---@return number peak player count today
+function GetTodayPeak()
+	local now = os.time()
+	local todayStart = now - (now % 86400)
+	local peak = 0
+	for _, entry in ipairs(playerCounts) do
+		if entry.timestamp >= todayStart and entry.count > peak then
+			peak = entry.count
+		end
+	end
+	-- If no snapshots today yet, fall back to live count
+	if peak == 0 then
+		peak = #GetPlayers()
+	end
+	return peak
+end
+
 -- ============================================================
 -- Periodic recording thread
 -- ============================================================

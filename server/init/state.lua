@@ -15,6 +15,7 @@ DefaultWatermark = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAACACAYAAA
 
 MutedPlayers = {} -- DO NOT TOUCH THIS
 OnlineAdmins = {} -- DO NOT TOUCH THIS
+ServerStartTime = os.time() -- DO NOT TOUCH THIS
 ChatReminders = {} -- DO NOT TOUCH THIS
 MessageShortcuts = {} -- DO NOT TOUCH THIS
 WarnedPlayers = {} -- DO NOT TOUCH THIS

@@ -7,7 +7,6 @@ import { CopyButton } from '../../components/CopyButton'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
-import { CefTestCards } from './CefTestCards'
 
 // ============================================================
 // Resource update summary types
@@ -210,6 +209,16 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
     return () => { cancelled = true }
   }, [])
 
+  // Format uptime (seconds) into a human-readable string
+  const formatUptime = (seconds: number): string => {
+    const days = Math.floor(seconds / 86400)
+    const hours = Math.floor((seconds % 86400) / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
+    if (days > 0) return `${days}d ${hours}h`
+    if (hours > 0) return `${hours}h ${mins}m`
+    return `${mins}m`
+  }
+
   // Build stat cards
   const statCards: StatCardProps[] = [
     {
@@ -218,6 +227,13 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
       icon: 'users',
       iconColor: 'var(--accent-green)',
       bgColor: 'var(--bg-green)',
+    },
+    {
+      label: 'Peak Today',
+      value: stats?.peakToday ?? '—',
+      icon: 'arrow-up-circle',
+      iconColor: 'var(--accent-blue)',
+      bgColor: 'var(--bg-blue)',
     },
     {
       label: 'Average Ping',
@@ -230,22 +246,27 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
       label: 'Resources',
       value: stats ? `${stats.resources.started}/${stats.resources.total}` : '—',
       icon: 'layers',
-      iconColor: 'var(--accent-blue)',
-      bgColor: 'var(--bg-blue)',
-    },
-    {
-      label: 'Resources Stopped',
-      value: stats?.resources.stopped ?? '—',
-      icon: 'user-minus',
       iconColor: 'var(--accent-orange)',
       bgColor: 'var(--bg-orange)',
     },
     {
-      label: 'Active Entities',
-      value: stats
-        ? (stats.entities.vehicles + stats.entities.peds + stats.entities.objects).toLocaleString()
-        : '—',
-      icon: 'box',
+      label: 'Admins Online',
+      value: stats?.adminsOnline ?? '—',
+      icon: 'shield',
+      iconColor: 'var(--accent-purple)',
+      bgColor: 'var(--bg-purple)',
+    },
+    {
+      label: 'Server Uptime',
+      value: stats ? formatUptime(stats.uptime) : '—',
+      icon: 'clock',
+      iconColor: 'var(--accent-green)',
+      bgColor: 'var(--bg-green)',
+    },
+    {
+      label: 'Pending Reports',
+      value: stats?.pendingReports ?? '—',
+      icon: 'flag',
       iconColor: 'var(--accent-purple)',
       bgColor: 'var(--bg-purple)',
     },
@@ -256,7 +277,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
     return (
       <div className="page-container">
         <div className="grid grid-cols-2 gap-3 dashboard-grid">
-          {[1, 2, 3, 4, 5].map((i) => (
+          {[1, 2, 3, 4, 5, 6, 7].map((i) => (
             <div key={i} className="card dashboard-card-sm">
               <div className="flex items-center gap-3">
                 <div className="skeleton dashboard-skeleton-icon" />
@@ -373,8 +394,6 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
         />
       )}
 
-      {/* CEF rendering validation tests */}
-      <CefTestCards />
     </div>
   )
 }
