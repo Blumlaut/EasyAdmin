@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useToast } from './hooks/useToast'

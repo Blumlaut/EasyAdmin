@@ -7,6 +7,7 @@ import { CopyButton } from '../../components/CopyButton'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
+import { CefTestCards } from './CefTestCards'
 
 // ============================================================
 // Resource update summary types
@@ -364,6 +365,9 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
           objects={stats.entities.objects}
         />
       )}
+
+      {/* CEF rendering validation tests */}
+      <CefTestCards />
     </div>
   )
 }
