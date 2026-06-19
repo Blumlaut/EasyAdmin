@@ -7,6 +7,47 @@ Every change requires manual testing. AI agents cannot verify that changes work 
 2. Explain what functionality is affected
 3. Provide specific testing steps for the developer to verify the changes
 
+## Contributing Guidelines
+
+Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It covers issue templates, code organization, PR requirements, AI disclosure rules, and documentation expectations.
+
+## Repository Layout
+
+| Path | Description |
+|---|---|
+| `fxmanifest.lua` | Resource manifest — defines scripts, dependencies, convars, and entry points |
+| `client/` | Client-side FiveM logic (Lua). Only runs on connected clients. |
+| `server/` | Server-side FiveM logic (Lua). Only runs on the server. |
+| `shared/` | Code shared between client and server. Functions and variables defined here are available across all Lua files. |
+| `nui/` | Frontend UI built with React/TypeScript, runs inside FiveM's CEF browser. |
+| `language/` | Internationalization (i18n) translation files. |
+| `src/` | Discord bot code (Node.js), bundled into `dist/`. |
+| `docs/` | EasyAdmin user and developer documentation. |
+| `plugins/` | Plugin system — `*_shared.lua`, `*_client.lua`, `*_server.lua` naming conventions. |
+
+## Handy Commands
+
+Run from the respective subdirectories after installing dependencies (`npm install`).
+
+### NUI (`nui/`)
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Vite dev server |
+| `npm run dev:browser` | Start dev server and open in browser |
+| `npm run build` | TypeScript check + Vite production build |
+| `npm run lint` | ESLint on `src/` |
+| `npm run lint:css` | Stylelint on CSS files |
+| `npm run typecheck` | TypeScript type checking (`tsc --noEmit`) |
+| `npm run test` | Run Vitest test suite |
+| `npm run check` | Run all checks (lint, CSS lint, typecheck, tests) |
+
+### Discord Bot (`src/`)
+
+| Command | Description |
+|---|---|
+| `npm run build` | Install deps + bundle with esbuild into `dist/` |
+
 ## FiveM Documentation
 
 When working on any code related to FiveM, always consult the official documentation:
