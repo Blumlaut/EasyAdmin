@@ -1,11 +1,30 @@
-import { useState } from 'react'
-import type { ResourceTickData } from '../../../types'
+import { useCallback, useEffect, useState } from 'react'
+import type { CodeSnippet, ProfilerSnippetError, ProfilerSnippetResult, ResourceTickData, ThreadTickData } from '../../../types'
+import { on, callLua } from '../../../fivem'
 import { Icon } from '../../../components/icons'
 import { ThreadDetailRow } from './ThreadDetailRow'
+import { CodeSnippet as CodeSnippetView } from './CodeSnippet'
 
 interface ResourceTickBarProps {
   resource: ResourceTickData
   maxAvgUs: number
+}
+
+// Per-thread snippet state
+interface SnippetState {
+  loading: boolean
+  data: CodeSnippet | null
+  error: string | null
+  filePath: string
+  resource: string
+}
+
+const initialSnippetState: SnippetState = {
+  loading: false,
+  data: null,
+  error: null,
+  filePath: '',
+  resource: '',
 }
 
 // Color coding thresholds
@@ -25,6 +44,82 @@ function getBarColorClass(avgUs: number): string {
 
 export function ResourceTickBar({ resource, maxAvgUs }: ResourceTickBarProps) {
   const [expanded, setExpanded] = useState(false)
+  // Map threadId string -> snippet state
+  const [snippets, setSnippets] = useState<Record<string, SnippetState>>({})
+
+  // Listen for snippet results
+  useEffect(() => {
+    return on<ProfilerSnippetResult>('profilerSnippetResult', (data) => {
+      setSnippets((prev) => {
+        const existing = prev[data.threadId]
+        if (!existing) return prev
+        return {
+          ...prev,
+          [data.threadId]: {
+            ...existing,
+            loading: false,
+            data: data.snippet,
+            filePath: data.filePath,
+            resource: data.resource,
+          },
+        }
+      })
+    })
+  }, [])
+
+  // Listen for snippet errors
+  useEffect(() => {
+    return on<ProfilerSnippetError>('profilerSnippetError', (data) => {
+      setSnippets((prev) => {
+        const existing = prev[data.threadId]
+        if (!existing) return prev
+        return {
+          ...prev,
+          [data.threadId]: {
+            ...existing,
+            loading: false,
+            error: data.message,
+          },
+        }
+      })
+    })
+  }, [])
+
+  const handleThreadExpand = useCallback((idx: number, thread: ThreadTickData) => {
+    const threadId = `${thread.filePath}-${thread.lineRange}-${idx}`
+    setSnippets((prev) => {
+      const existing = prev[threadId]
+      // Already loaded or loading — toggle visibility
+      if (existing && (existing.data || existing.loading)) {
+        if (existing.data) {
+          // Close the snippet
+          return {
+            ...prev,
+            [threadId]: { ...existing, data: null },
+          }
+        }
+        return prev // Still loading, don't re-trigger
+      }
+      // Start loading
+      callLua('profilerGetSnippet', { threadId, label: thread.label }).catch(() => {})
+      return {
+        ...prev,
+        [threadId]: { ...initialSnippetState, loading: true },
+      }
+    })
+  }, [])
+
+  const handleCloseSnippet = useCallback((idx: number, thread: ThreadTickData) => {
+    const threadId = `${thread.filePath}-${thread.lineRange}-${idx}`
+    setSnippets((prev) => {
+      const existing = prev[threadId]
+      if (!existing) return prev
+      return {
+        ...prev,
+        [threadId]: { ...existing, data: null, error: null },
+      }
+    })
+  }, [])
 
   const barColor = getBarColor(resource.avgUs)
   const barColorClass = getBarColorClass(resource.avgUs)
@@ -87,12 +182,29 @@ export function ResourceTickBar({ resource, maxAvgUs }: ResourceTickBarProps) {
       {/* Thread details (expandable) */}
       {expanded && hasThreads && (
         <div className="profiler-threads-list">
-          {resource.threads.map((thread, idx) => (
-            <ThreadDetailRow
-              key={`${thread.filePath}-${thread.lineRange}-${idx}`}
-              thread={thread}
-            />
-          ))}
+          {resource.threads.map((thread, idx) => {
+            const threadId = `${thread.filePath}-${thread.lineRange}-${idx}`
+            const state = snippets[threadId] ?? initialSnippetState
+
+            return (
+              <ThreadDetailRow
+                key={threadId}
+                thread={thread}
+                snippetLoading={state.loading}
+                snippetError={state.error}
+                onExpand={() => handleThreadExpand(idx, thread)}
+              >
+                {state.data && (
+                  <CodeSnippetView
+                    snippet={state.data}
+                    filePath={state.filePath || thread.filePath}
+                    resource={state.resource || thread.resource}
+                    onClose={() => handleCloseSnippet(idx, thread)}
+                  />
+                )}
+              </ThreadDetailRow>
+            )
+          })}
         </div>
       )}
     </div>

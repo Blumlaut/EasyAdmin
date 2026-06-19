@@ -302,6 +302,98 @@ end
 -- Main capture function
 -- ============================================================
 
+-- ============================================================
+-- Snippet cache (LRU, max 50 entries)
+-- ============================================================
+
+local SNIPPET_CACHE_MAX = 50
+local snippetCache = {}       -- [key] = snippet data
+local cacheOrder = {}         -- access order (oldest first)
+local cacheOrderSet = {}      -- fast lookup: key -> true
+
+local function cacheAccess(key)
+  -- Move key to end of order (most recently used)
+  if cacheOrderSet[key] then
+    for i = #cacheOrder, 1, -1 do
+      if cacheOrder[i] == key then
+        table.remove(cacheOrder, i)
+        break
+      end
+    end
+  end
+  table.insert(cacheOrder, key)
+  cacheOrderSet[key] = true
+end
+
+local function cacheEvict()
+  while #cacheOrder > SNIPPET_CACHE_MAX do
+    local oldest = table.remove(cacheOrder, 1)
+    cacheOrderSet[oldest] = nil
+    snippetCache[oldest] = nil
+  end
+end
+
+-- Fetch a code snippet for a given resource/file/line range
+-- Returns: { lines = { { number, content, highlighted }, ... }, windowStart, windowEnd, targetRange } or nil
+local function fetchCodeSnippet(resource, filePath, startLine, endLine)
+  local cacheKey = resource .. ':' .. filePath .. ':' .. startLine .. '..' .. endLine
+
+  if snippetCache[cacheKey] then
+    cacheAccess(cacheKey)
+    return snippetCache[cacheKey]
+  end
+
+  local content = LoadResourceFile(resource, filePath)
+  if not content then
+    return nil
+  end
+
+  -- Binary detection via extension (content is already a string, check filePath extension)
+  local ext = filePath:match('\.(%a+)$')
+  if ext then
+    local binaryExts = { ['dll'] = true, ['exe'] = true, ['dat'] = true, ['bin'] = true, ['png'] = true, ['jpg'] = true, ['jpeg'] = true, ['gif'] = true, ['webp'] = true, ['mp3'] = true, ['ogg'] = true, ['wav'] = true, ['stl'] = true, ['yft'] = true, ['ydr'] = true, ['ymt'] = true, ['ybn'] = true }
+    if binaryExts[ext:lower()] then
+      return { binary = true }
+    end
+  end
+
+  -- Split into lines
+  local allLines = {}
+  for line in content:gmatch('([^\r\n]*)') do
+    table.insert(allLines, line)
+  end
+
+  -- Extract window: startLine-3 to endLine+3 (clamped)
+  local windowStart = math.max(startLine - 3, 1)
+  local windowEnd = math.min(endLine + 3, #allLines)
+
+  local snippetLines = {}
+  for i = windowStart, windowEnd do
+    table.insert(snippetLines, {
+      number = i,
+      content = allLines[i] or '',
+      highlighted = (i >= startLine and i <= endLine),
+    })
+  end
+
+  local result = {
+    lines = snippetLines,
+    windowStart = windowStart,
+    windowEnd = windowEnd,
+    targetRange = startLine .. '..' .. endLine,
+  }
+
+  snippetCache[cacheKey] = result
+  cacheAccess(cacheKey)
+  cacheEvict()
+
+  return result
+end
+
+-- ============================================================
+-- Main capture function
+-- ============================================================
+
 local captureInProgress = false
 
 local function captureProfile(src, frames, clientPort, cb)
@@ -412,7 +504,7 @@ local function captureProfile(src, frames, clientPort, cb)
 end
 
 -- ============================================================
--- Server event handler
+-- Server event handlers
 -- ============================================================
 
 RegisterServerEvent('EasyAdmin:startProfiler', function(data)
@@ -430,4 +522,48 @@ RegisterServerEvent('EasyAdmin:startProfiler', function(data)
   local port = data and data.port
 
   captureProfile(src, frames, port)
+end)
+
+-- Fetch a code snippet for a thread row
+RegisterServerEvent('EasyAdmin:profilerGetSnippet', function(data)
+  local src = source
+
+  -- Permission check
+  if not canProfile(src) then
+    return
+  end
+
+  local threadId = data and data.threadId
+  local info = extractThreadInfo(data and data.label)
+  if not info then
+    TriggerClientEvent('EasyAdmin:profilerSnippetError', src, {
+      threadId = threadId,
+      message = 'Could not parse thread label.',
+    })
+    return
+  end
+
+  local snippet = fetchCodeSnippet(info.resource, info.filePath, info.startLine, info.endLine)
+  if not snippet then
+    TriggerClientEvent('EasyAdmin:profilerSnippetError', src, {
+      threadId = threadId,
+      message = 'Could not load file: ' .. info.filePath,
+    })
+    return
+  end
+
+  if snippet.binary then
+    TriggerClientEvent('EasyAdmin:profilerSnippetError', src, {
+      threadId = threadId,
+      message = 'Binary file — code preview not available.',
+    })
+    return
+  end
+
+  TriggerClientEvent('EasyAdmin:profilerSnippetResult', src, {
+    threadId = threadId,
+    snippet = snippet,
+    filePath = info.filePath,
+    resource = info.resource,
+  })
 end)

@@ -321,6 +321,35 @@ export interface ProfilerResult {
 // Profiler UI state
 export type ProfilerUIState = 'empty' | 'recording' | 'results' | 'error' | 'endpoint-error'
 
+// Code snippet line (from server)
+export interface CodeSnippetLine {
+  number: number             // Line number in the file
+  content: string            // Line content
+  highlighted: boolean       // Within the hot line range
+}
+
+// Code snippet payload (from server)
+export interface CodeSnippet {
+  lines: CodeSnippetLine[]
+  windowStart: number        // First line number shown
+  windowEnd: number          // Last line number shown
+  targetRange: string        // Original hot range (e.g. "10..25")
+}
+
+// Code snippet error payload
+export interface ProfilerSnippetError {
+  threadId: string
+  message: string
+}
+
+// Code snippet result payload
+export interface ProfilerSnippetResult {
+  threadId: string
+  snippet: CodeSnippet
+  filePath: string
+  resource: string
+}
+
 // ============================================================
 // Action History
 // ============================================================

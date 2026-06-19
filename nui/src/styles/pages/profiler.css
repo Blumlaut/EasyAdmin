@@ -292,6 +292,11 @@
   gap: 1px;
 }
 
+.profiler-thread-row-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .profiler-thread-row {
   display: flex;
   align-items: center;
@@ -301,11 +306,26 @@
   font-size: var(--text-xs);
   color: var(--text-muted);
   transition: background var(--transition-fast);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
 }
 
 .profiler-thread-row:hover {
   background: var(--bg-hover);
   color: var(--text-secondary);
+}
+
+.profiler-thread-row:active {
+  opacity: 0.85;
+}
+
+.profiler-thread-row--loading {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .profiler-thread-icon {
@@ -327,6 +347,191 @@
   color: var(--text-secondary);
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.profiler-thread-expand-hint {
+  font-size: 11px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.profiler-thread-error {
+  font-size: var(--text-xs);
+  color: var(--accent-orange);
+  padding: var(--space-1) var(--space-2);
+  font-style: italic;
+}
+
+/* -- Code snippet -- */
+
+.profiler-code-snippet {
+  margin: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+.profiler-code-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+}
+
+.profiler-code-path {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.profiler-code-range {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.profiler-code-range-target {
+  color: var(--accent-orange);
+  font-weight: var(--font-medium);
+}
+
+.profiler-code-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  padding: 0 var(--space-1);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.profiler-code-close:hover {
+  color: var(--text-primary);
+}
+
+.profiler-code-block {
+  max-height: 240px;
+  overflow: auto;
+  position: relative;
+}
+
+.profiler-code-line {
+  display: flex;
+  align-items: baseline;
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  min-height: 1.4em;
+}
+
+.profiler-code-line--hot {
+  background: var(--bg-orange);
+  border-left: 2px solid var(--accent-orange);
+  padding-left: calc(var(--space-2) - 2px);
+}
+
+.profiler-code-line-number {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  opacity: 0.5;
+  user-select: none;
+  padding-right: var(--space-3);
+  text-align: right;
+  min-width: 2.5em;
+  flex-shrink: 0;
+}
+
+.profiler-code-line--hot .profiler-code-line-number {
+  opacity: 0.8;
+  color: var(--accent-orange);
+}
+
+.profiler-code-line-content {
+  font-family: var(--font-mono);
+  flex: 1;
+  white-space: pre;
+  overflow: visible;
+  color: var(--text-primary);
+}
+
+/* Syntax highlighting tokens */
+.code-token {
+  /* base */
+}
+
+.code-keyword {
+  color: #c678dd;
+  font-weight: var(--font-medium);
+}
+
+.code-string {
+  color: #98c379;
+}
+
+.code-comment {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.code-number {
+  color: #d19a66;
+}
+
+.code-builtin {
+  color: #61afef;
+}
+
+.code-native {
+  color: #e5c07b;
+  font-weight: var(--font-medium);
+}
+
+.code-operator {
+  color: var(--text-secondary);
+}
+
+/* Hover hint word */
+.profiler-code-hint-word {
+  border-bottom: 1px dashed var(--accent-blue);
+  cursor: help;
+}
+
+/* Hover tooltip */
+.profiler-code-tooltip {
+  position: absolute;
+  z-index: 100;
+  transform: translate(-50%, -100%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  max-width: 320px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.profiler-code-tooltip-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--accent-blue);
+  margin-bottom: var(--space-1);
+}
+
+.profiler-code-tooltip-desc {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
 }
 
 /* -- Error banner -- */
