@@ -20,7 +20,7 @@ Only run this if `natives/` or `cfx-natives/` are missing or appear empty/outdat
 .agents/skills/fivem-natives/setup.sh
 ```
 
-This initializes the `natives/` git submodule and does a sparse clone (~6MB) of the CFX natives. The script skips sources that are already populated.
+This initializes the `natives/` git submodule and does a sparse clone (~6MB) of the CFX natives. Running the script again will update both sources to their latest versions.
 
 ## GTA V Natives (`natives/`)
 

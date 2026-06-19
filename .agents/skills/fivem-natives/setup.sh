@@ -7,17 +7,22 @@ SKILL_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # 1. GTA V natives (submodule)
 if [ -d "$SKILL_DIR/natives" ] && [ -n "$(ls -A "$SKILL_DIR/natives" 2>/dev/null)" ]; then
-    echo "GTA V natives already initialized."
+    echo "GTA V natives already initialized — updating…"
+    git -C "$SKILL_DIR/.." submodule update --remote --recursive
+    echo "GTA V natives updated."
 elif [ -d "$SKILL_DIR/natives" ]; then
     echo "Initializing GTA V natives submodule…"
     git -C "$SKILL_DIR/.." submodule update --init --recursive
 else
-    echo "GTA V natives already initialized."
+    echo "Initializing GTA V natives submodule…"
+    git -C "$SKILL_DIR/.." submodule update --init --recursive
 fi
 
 # 2. CFX natives (sparse clone — only ext/native-decls/)
 if [ -d "$SKILL_DIR/cfx-natives/ext/native-decls" ]; then
-    echo "CFX natives already initialized."
+    echo "CFX natives already initialized — updating…"
+    git -C "$SKILL_DIR/cfx-natives" pull --rebase
+    echo "CFX natives updated."
 else
     echo "Cloning CFX natives (sparse, ~6MB)…"
     git -c protocol.file.allow=always clone \
