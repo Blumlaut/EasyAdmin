@@ -34,6 +34,7 @@ end
 
 RegisterServerEvent('EasyAdmin:requestServerStats', function()
 	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local maxPlayers = tonumber(GetConvar('sv_maxClients', '48')) or 48
 
 	local resourceCount = GetNumResources() - 1
@@ -68,6 +69,7 @@ end)
 
 RegisterServerEvent('EasyAdmin:requestPlayerHistory', function(range)
 	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local cutoff = rangeToCutoff(range)
 	local result = GetPlayerCountsAfter(cutoff)
 
@@ -84,6 +86,7 @@ end)
 
 RegisterServerEvent('EasyAdmin:requestWorldHistory', function(range)
 	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local cutoff = rangeToCutoff(range)
 	local result = GetWorldSnapshotsAfter(cutoff)
 
@@ -97,6 +100,7 @@ end)
 ---DEPRECATED: Use requestPlayerRegistryPage for server-side pagination.
 RegisterServerEvent('EasyAdmin:requestPlayerRegistry', function(filterDays)
 	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local now = os.time()
 	local cutoff = filterDays and now - (tonumber(filterDays) * 86400) or 0
 	local result = {}
@@ -124,6 +128,7 @@ end)
 
 RegisterServerEvent('EasyAdmin:requestPlayerRegistryPage', function(data)
 	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local now = os.time()
 
 	local page = tonumber(data and data.page) or 1
@@ -184,9 +189,11 @@ end)
 -- ============================================================
 
 RegisterServerEvent('EasyAdmin:requestStatsSummary', function(range) -- luacheck: ignore 212
+	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local summary = ComputeStatsSummary()
 
-	TriggerClientEvent('EasyAdmin:statsSummaryResult', source, summary)
+	TriggerClientEvent('EasyAdmin:statsSummaryResult', src, summary)
 end)
 
 -- ============================================================
@@ -194,10 +201,12 @@ end)
 -- ============================================================
 
 RegisterServerEvent('EasyAdmin:requestDailyPeaks', function(range) -- luacheck: ignore 212
+	local src = source
+	if not DoesPlayerHavePermission(src, 'server.statistics.view') then return end
 	local cutoff = rangeToCutoff(range)
 	local result = GetDailyPlayerStats(cutoff)
 
-	TriggerClientEvent('EasyAdmin:dailyPeaksResult', source, result)
+	TriggerClientEvent('EasyAdmin:dailyPeaksResult', src, result)
 end)
 
 -- ============================================================

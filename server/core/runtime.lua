@@ -168,6 +168,7 @@ exports('HTTPRequest', HTTPRequest)
 -- NUI requests current update info (sent when menu opens)
 RegisterServerEvent('EasyAdmin:requestUpdateInfo', function()
   local src = source
+  if not IsPlayerAdmin(src) then return end
   TriggerClientEvent('EasyAdmin:updateInfo', src, updateInfo)
 end)
 
