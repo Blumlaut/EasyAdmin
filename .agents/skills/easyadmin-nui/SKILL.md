@@ -81,15 +81,14 @@ Use the modal context from any component — don't build standalone modal stacks
 
 ## CEF Rendering Quirks
 
-The NUI runs in Chromium Embedded Framework, which has critical rendering bugs. **All CSS changes require in-game testing.**
+The NUI runs in Chromium Embedded Framework (OSR mode). **All CSS changes require in-game testing.**
 
 | Rule | Why |
 |---|---|
-| **Never use `transform` inside `@keyframes`** | Full element invisibility — DOM exists but nothing paints |
-| **Avoid `animation` on modal/overlay elements** | Triggers the same compositing bug |
-| **Keep `box-shadow` blur small** (`0 4px 16px` max) | Large blur values (`32px+`) render elements invisible |
-| **`backdrop-filter: blur()` is safe** | Works reliably at `blur(4-8px)` |
-| **Use `transition` instead of `@keyframes` for enter/exit** | Transitions are CEF-safe |
+| **Do not use `backdrop-filter`** | Not supported in FiveM's CEF build — blur is simply not applied |
+| **Overlay components must be inside the visible tree** | Elements outside `{visible && ...}` may not paint in OSR mode |
+
+Verified working: `@keyframes` with `transform` (rotate, scale, translateY), `box-shadow` at any blur, `transition` with `transform`, `@keyframes` with `opacity`/`margin`/`background-position`.
 
 ## Testing
 
