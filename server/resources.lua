@@ -23,35 +23,20 @@ local function canStopResources(src)
 end
 
 -- ============================================================
--- GitHub latest release cache
+-- GitHub latest release cache (raw API responses)
 -- ============================================================
 
--- Cache: { [repoKey] = { tag = string, checkedAt = number } }
+-- Cache: { [repoKey] = { tag = string|nil, checkedAt = number } }
 local githubCache = {}
--- TTL: 6 hours
-local GITHUB_CACHE_TTL = 6 * 3600
-
--- Resource update results cache (shared across all admins)
--- { [resourceName] = { latest = string|nil, outdated = boolean, checkedAt = number } }
-local resourceUpdateCache = {}
--- TTL: 1 hour (stale results are still useful for admins opening the page later)
-local UPDATE_CACHE_TTL = 3600
--- Delay between GitHub API requests (ms) to avoid rate limiting
-local GITHUB_REQUEST_DELAY = 1000
+local GITHUB_CACHE_TTL = 6 * 3600            -- 6 hours for successful fetches
+local GITHUB_CACHE_FAIL_TTL = 3600           -- 1 hour for failed fetches
 
 -- Extract owner/repo from a GitHub URL
 local function parseGitHubRepo(url)
   if not url then return nil, nil end
   local owner, repo = string.match(url, 'github[.]com/([^/]+)/([^/]+)')
-  if owner and repo then
-    return owner, repo
-  end
-  return nil, nil
+  return owner and repo and { owner, repo } or nil
 end
-
--- Short TTL for failed fetches: retry failed repos after 5 minutes
--- instead of 6 hours (so flaky/404 repos stop hammering the API immediately)
-local GITHUB_CACHE_FAIL_TTL = 300
 
 -- Fetch latest release tag from GitHub (async via PerformHttpRequest)
 local function fetchLatestRelease(owner, repo, cb)
@@ -65,21 +50,15 @@ local function fetchLatestRelease(owner, repo, cb)
       return
     end
     local data = json.decode(response)
-    if data and data.tag_name then
-      PrintDebugMessage('[Server] fetchLatestRelease: tag_name=' .. data.tag_name, 4)
-      cb(data.tag_name)
-    else
-      PrintDebugMessage('[Server] fetchLatestRelease: no tag_name in response, callback(nil)', 4)
-      cb(nil)
-    end
+    local tag = data and data.tag_name
+    PrintDebugMessage('[Server] fetchLatestRelease: tag_name=' .. tostring(tag), 4)
+    cb(tag)
   end, 'GET')
 end
 
 -- Get cached or fetch latest release for a repo key.
--- Always caches the result (including failures with nil tag) to prevent
--- repeated failed requests from the same GitHub repo across multiple resources.
--- A nil tag means "we fetched but the request failed" — this stops hammering
--- broken/404 repo URLs when many resources share the same GitHub source.
+-- Always caches the result (including failures) to prevent repeated
+-- requests from the same GitHub repo across multiple resources.
 local function getLatestRelease(owner, repo, cb)
   local key = string.format('%s/%s', owner, repo)
   local cached = githubCache[key]
@@ -93,81 +72,139 @@ local function getLatestRelease(owner, repo, cb)
   end
   PrintDebugMessage('[Server] getLatestRelease: cache miss for ' .. key .. ', fetching', 4)
   fetchLatestRelease(owner, repo, function(tag)
-    if tag then
-      githubCache[key] = { tag = tag, checkedAt = os.time() }
-      PrintDebugMessage('[Server] getLatestRelease: cached ' .. key .. ' = ' .. tag, 4)
-      cb(tag)
-    else
-      -- Cache the failure with nil tag and short TTL.
-      -- This prevents every resource sharing this GitHub repo from
-      -- triggering independent failed requests.
-      -- Uses nil (falsy in Lua) so the TTL branch and downstream checks
-      -- correctly treat it as "no tag available".
-      githubCache[key] = { tag = nil, checkedAt = os.time() }
-      PrintDebugMessage('[Server] getLatestRelease: cached failure for ' .. key .. ' (short TTL: 5m)', 4)
-      cb(nil)
-    end
+    githubCache[key] = { tag = tag, checkedAt = os.time() }
+    PrintDebugMessage('[Server] getLatestRelease: cached ' .. key .. ' = ' .. tostring(tag or '(fail)'), 4)
+    cb(tag)
   end)
+end
+
+-- ============================================================
+-- Resource update cache (per-resource, persisted to disk)
+-- ============================================================
+
+-- { [resourceName] = { latest = string|nil, outdated = boolean, checkedAt = number } }
+local resourceUpdateCache = {}
+local UPDATE_CACHE_TTL = 3600                       -- 1 hour
+local UPDATE_CACHE_FILE = 'data/resource_cache/updates.json'
+
+-- Load persisted update cache from disk
+local function loadUpdateCache()
+  local data = LoadJsonResourceFile(UPDATE_CACHE_FILE, {})
+  if type(data) == 'table' then
+    resourceUpdateCache = data
+  end
+end
+
+-- Persist update cache to disk
+local function saveUpdateCache()
+  SaveJsonResourceFile(UPDATE_CACHE_FILE, resourceUpdateCache)
+end
+
+-- Check if a resource has a fresh cache entry (not expired)
+local function isUpdateCacheFresh(resourceName)
+  local cached = resourceUpdateCache[resourceName]
+  return cached and (os.time() - cached.checkedAt < UPDATE_CACHE_TTL)
 end
 
 -- Get cached update info for a resource (returns nil if expired)
 local function getCachedUpdate(resourceName)
-  local cached = resourceUpdateCache[resourceName]
-  if cached and os.time() - cached.checkedAt < UPDATE_CACHE_TTL then
+  if isUpdateCacheFresh(resourceName) then
+    local cached = resourceUpdateCache[resourceName]
     return cached.latest, cached.outdated
   end
   return nil, nil
 end
 
--- Store update info for a resource in the shared cache
+-- Store update info for a resource in the shared cache and persist to disk
 local function setCachedUpdate(resourceName, latest, outdated)
   resourceUpdateCache[resourceName] = {
     latest = latest,
     outdated = outdated,
     checkedAt = os.time(),
   }
+  saveUpdateCache()
 end
 
--- Check a single resource against GitHub, cache result, then call next()
+-- Load cache on startup
+loadUpdateCache()
+
+-- ============================================================
+-- Version comparison
+-- ============================================================
+
+-- Simple semver comparison (handles X.Y.Z and v-prefixed)
+function compareVersions(a, b)
+  if not a or not b then return 0 end
+  a = string.gsub(a, '^v', '')
+  b = string.gsub(b, '^v', '')
+
+  local partsA, partsB = {}, {}
+  for part in string.gmatch(a, '%d+') do table.insert(partsA, tonumber(part)) end
+  for part in string.gmatch(b, '%d+') do table.insert(partsB, tonumber(part)) end
+
+  for i = 1, math.max(#partsA, #partsB) do
+    local va, vb = partsA[i] or 0, partsB[i] or 0
+    if va < vb then return -1 end
+    if va > vb then return 1 end
+  end
+  return 0
+end
+
+-- ============================================================
+-- Update checking
+-- ============================================================
+
+-- Delay between GitHub API requests (ms) to avoid rate limiting
+local GITHUB_REQUEST_DELAY = 1000
+
+-- Push a result entry and schedule the next callback after the rate-limit delay
+local function pushResultAndContinue(results, entry, next)
+  table.insert(results, entry)
+  Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
+end
+
+-- Check a single resource against GitHub, cache result, then call next().
+-- Skips the GitHub fetch entirely if the resource-level cache is still fresh.
 local function checkOneResource(name, results, next)
   local version = GetResourceMetadata(name, 'version', 0)
   local repository = GetResourceMetadata(name, 'repository', 0)
 
   PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ', version=' .. tostring(version) .. ', repository=' .. tostring(repository), 4)
 
+  -- Fast path: use cached update info if still fresh
+  local cachedLatest, cachedOutdated = getCachedUpdate(name)
+  if cachedLatest ~= nil or cachedOutdated ~= nil then
+    PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': using fresh cache (latest=' .. tostring(cachedLatest) .. ')', 4)
+    pushResultAndContinue(results, { name = name, latest = cachedLatest, outdated = cachedOutdated or false }, next)
+    return
+  end
+
+  -- Must have both version and a parseable GitHub URL to check
   if not version or not repository then
     PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': skipping (missing version or repository)', 4)
-    table.insert(results, { name = name, latest = nil, outdated = false })
-    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
+    pushResultAndContinue(results, { name = name, latest = nil, outdated = false }, next)
     return
   end
 
-  local owner, repo = parseGitHubRepo(repository)
-  if not owner or not repo then
+  local parsed = parseGitHubRepo(repository)
+  if not parsed then
     PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': could not parse GitHub repo', 4)
-    table.insert(results, { name = name, latest = nil, outdated = false })
-    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
+    pushResultAndContinue(results, { name = name, latest = nil, outdated = false }, next)
     return
   end
 
+  local owner, repo = parsed[1], parsed[2]
   PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': fetching latest release for ' .. owner .. '/' .. repo, 4)
   getLatestRelease(owner, repo, function(latest)
     local isOutdated = latest and compareVersions(version, latest) < 1
     PrintDebugMessage('[Server] checkOneResource resource=' .. name .. ': latest=' .. tostring(latest) .. ', outdated=' .. tostring(isOutdated), 4)
-
     setCachedUpdate(name, latest, isOutdated)
-
-    table.insert(results, {
-      name = name,
-      latest = latest,
-      outdated = isOutdated,
-    })
-    Citizen.SetTimeout(GITHUB_REQUEST_DELAY, next)
+    pushResultAndContinue(results, { name = name, latest = latest, outdated = isOutdated }, next)
   end)
 end
 
 -- Sequential update checker: processes names[index..#names] one at a time.
--- onComplete is called when all are done. Pass nil for src to skip client event.
+-- onComplete is called when all are done.
 local function checkUpdatesSequential(names, index, results, onComplete)
   if index > #names then
     PrintDebugMessage('[Server] checkUpdatesSequential: all complete (count=' .. #results .. ')', 4)
@@ -183,31 +220,64 @@ local function checkUpdatesSequential(names, index, results, onComplete)
   end)
 end
 
--- Simple semver comparison (handles X.Y.Z and v-prefixed)
-function compareVersions(a, b)
-  if not a or not b then return 0 end
-  -- Strip leading 'v'
-  a = string.gsub(a, '^v', '')
-  b = string.gsub(b, '^v', '')
+-- Collect all resources that have both a version and a parseable GitHub repository
+local function collectCheckableResources()
+  local checkable = {}
+  local count = GetNumResources() - 1
 
-  local partsA = {}
-  local partsB = {}
-  for part in string.gmatch(a, '%d+') do
-    table.insert(partsA, tonumber(part))
-  end
-  for part in string.gmatch(b, '%d+') do
-    table.insert(partsB, tonumber(part))
+  for i = 0, count - 1 do
+    local name = GetResourceByFindIndex(i)
+    if name then
+      local version = GetResourceMetadata(name, 'version', 0)
+      local repository = GetResourceMetadata(name, 'repository', 0)
+      if version and repository and parseGitHubRepo(repository) then
+        table.insert(checkable, name)
+      end
+    end
   end
 
-  local len = math.max(#partsA, #partsB)
-  for i = 1, len do
-    local va = partsA[i] or 0
-    local vb = partsB[i] or 0
-    if va < vb then return -1 end
-    if va > vb then return 1 end
-  end
-  return 0
+  return checkable
 end
+
+-- Run background update check. Skips entirely if all checkable resources
+-- have fresh cache entries.
+local function runBackgroundUpdateCheck()
+  local names = collectCheckableResources()
+  if #names == 0 then
+    PrintDebugMessage('[Server] backgroundUpdateCheck: no checkable resources found', 4)
+    return
+  end
+
+  -- Skip entirely if all checkable resources have fresh cache entries
+  local needsCheck = false
+  for _, name in ipairs(names) do
+    if not isUpdateCacheFresh(name) then
+      needsCheck = true
+      break
+    end
+  end
+
+  if not needsCheck then
+    PrintDebugMessage('[Server] backgroundUpdateCheck: all resources have fresh cache, skipping', 4)
+    return
+  end
+
+  PrintDebugMessage('[Server] backgroundUpdateCheck: checking ' .. #names .. ' resources', 4)
+  checkUpdatesSequential(names, 1, {}, function(results)
+    PrintDebugMessage('[Server] backgroundUpdateCheck: complete, cached ' .. #results .. ' results', 4)
+  end)
+end
+
+-- Periodic background update check thread
+Citizen.CreateThread(function()
+  Wait(30000)
+  PrintDebugMessage('[Server] backgroundUpdateCheck: starting periodic checks (interval: 24h)', 4)
+
+  while true do
+    runBackgroundUpdateCheck()
+    Wait(24 * 60 * 60 * 1000)
+  end
+end)
 
 -- ============================================================
 -- Build resource list with metadata summaries
@@ -219,30 +289,23 @@ local function buildResourceList()
 
   for i = 0, count - 1 do
     local name = GetResourceByFindIndex(i)
-    if not name then goto continue end
+    if name then
+      local version = GetResourceMetadata(name, 'version', 0)
+      local description = GetResourceMetadata(name, 'description', 0)
+      local repository = GetResourceMetadata(name, 'repository', 0)
+      local cachedLatest, cachedOutdated = getCachedUpdate(name)
 
-    local state = GetResourceState(name) or 'stopped'
-
-    -- Extract key metadata entries (query known keys directly — API requires specific keys)
-    local version = GetResourceMetadata(name, 'version', 0)
-    local description = GetResourceMetadata(name, 'description', 0)
-    local repository = GetResourceMetadata(name, 'repository', 0)
-
-    -- Merge cached update info (from last check)
-    local cachedLatest, cachedOutdated = getCachedUpdate(name)
-
-    table.insert(resources, {
-      name = name,
-      state = state,
-      isProtected = (name == currentResource),
-      version = version,
-      description = description,
-      repository = repository,
-      latestVersion = cachedLatest,
-      outdated = cachedOutdated or false,
-    })
-
-    ::continue::
+      table.insert(resources, {
+        name = name,
+        state = GetResourceState(name) or 'stopped',
+        isProtected = (name == currentResource),
+        version = version,
+        description = description,
+        repository = repository,
+        latestVersion = cachedLatest,
+        outdated = cachedOutdated or false,
+      })
+    end
   end
 
   return resources
@@ -347,7 +410,6 @@ RegisterServerEvent('EasyAdmin:startResource', function(name)
     text = 'Started ' .. name,
     type = 'success',
   })
-  -- Push updated list
   TriggerClientEvent('EasyAdmin:resourcesResult', src, {
     resources = buildResourceList(),
     protected = currentResource,
@@ -382,7 +444,6 @@ RegisterServerEvent('EasyAdmin:stopResource', function(name)
     text = 'Stopped ' .. name,
     type = 'success',
   })
-  -- Push updated list
   TriggerClientEvent('EasyAdmin:resourcesResult', src, {
     resources = buildResourceList(),
     protected = currentResource,
@@ -428,61 +489,4 @@ RegisterServerEvent('EasyAdmin:checkResourceUpdates', function(names)
   checkUpdatesSequential(names, 1, {}, function(results)
     TriggerClientEvent('EasyAdmin:resourceUpdatesResult', src, { updates = results })
   end)
-end)
-
--- ============================================================
--- Background update check (every 24 hours)
--- ============================================================
-
--- Collect all resources that have both a version and a GitHub repository
-local function collectCheckableResources()
-  local checkable = {}
-  local count = GetNumResources() - 1
-
-  for i = 0, count - 1 do
-    local name = GetResourceByFindIndex(i)
-    if not name then goto continue end
-
-    local version = GetResourceMetadata(name, 'version', 0)
-    local repository = GetResourceMetadata(name, 'repository', 0)
-
-    if version and repository then
-      local owner, repo = parseGitHubRepo(repository)
-      if owner and repo then
-        table.insert(checkable, name)
-      end
-    end
-
-    ::continue::
-  end
-
-  return checkable
-end
-
--- Run update check and cache results (no client target needed)
-local function runBackgroundUpdateCheck()
-  local names = collectCheckableResources()
-  if #names == 0 then
-    PrintDebugMessage('[Server] backgroundUpdateCheck: no checkable resources found', 4)
-    return
-  end
-
-  PrintDebugMessage('[Server] backgroundUpdateCheck: checking ' .. #names .. ' resources', 4)
-
-  checkUpdatesSequential(names, 1, {}, function(results)
-    PrintDebugMessage('[Server] backgroundUpdateCheck: complete, cached ' .. #results .. ' results', 4)
-  end)
-end
-
--- Periodic background update check thread
-Citizen.CreateThread(function()
-  -- Wait a bit after startup before first check
-  Wait(30000)
-  PrintDebugMessage('[Server] backgroundUpdateCheck: starting periodic checks (interval: 24h)', 4)
-
-  while true do
-    runBackgroundUpdateCheck()
-    -- Wait 24 hours between checks
-    Wait(24 * 60 * 60 * 1000)
-  end
 end)

@@ -25,7 +25,6 @@ const dropdownItems = [
     icon: 'chart-bar' as const,
     children: [
       { id: 'player-statistics', label: 'Player Statistics', icon: 'users' as const },
-      { id: 'server-metrics', label: 'Server Metrics', icon: 'activity' as const },
     ],
   },
   { id: 'settings', label: 'Settings', icon: 'settings' as const },
@@ -117,7 +116,7 @@ describe('Navigation', () => {
     })
 
     it('auto-expands dropdown when child is active', () => {
-      render(<Navigation items={dropdownItems} activeId="server-metrics" onSelect={() => {}} />)
+      render(<Navigation items={dropdownItems} activeId="player-statistics" onSelect={() => {}} />)
       const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')
       const childrenContainer = dropdown?.querySelector('.nav-dropdown-children')
       expect(childrenContainer).toHaveClass('nav-dropdown-children-open')

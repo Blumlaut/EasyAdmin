@@ -19,7 +19,6 @@ import { BanDetailPage } from './pages/Bans/BanDetailPage'
 import { ReportListPage } from './pages/Reports/ReportListPage'
 import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
 import { PlayerStatisticsPage } from './pages/PlayerStatistics/PlayerStatisticsPage'
-import { ServerMetricsPage } from './pages/ServerMetrics/ServerMetricsPage'
 import { ServerPage } from './pages/Server/ServerPage'
 import { ResourceListPage } from './pages/Resources/ResourceListPage'
 import { ResourceDetailPage } from './pages/Resources/ResourceDetailPage'
@@ -169,7 +168,6 @@ function App() {
       'bans': 'bans',
       'reports': 'reports',
       'player-statistics': 'player-statistics',
-      'server-metrics': 'server-metrics',
       'server': 'server',
       'resources': 'resources',
       'profiler': 'profiler',
@@ -374,10 +372,6 @@ function App() {
 
               {nav.view === 'player-statistics' && (
                 <PlayerStatisticsPage onToast={showToast} />
-              )}
-
-              {nav.view === 'server-metrics' && (
-                <ServerMetricsPage onToast={showToast} />
               )}
 
               {nav.view === 'server' && (

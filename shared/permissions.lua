@@ -44,7 +44,6 @@ permissions = {
 	["bot.notes"] = false,
 
 	["server.statistics.view"] = false,
-	["server.metrics.view"] = false,
 
 	["server.cleanup.cars"] = false,
 	["server.cleanup.props"] = false,

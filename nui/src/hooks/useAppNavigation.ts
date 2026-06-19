@@ -50,7 +50,6 @@ const NAV_ITEMS: NavItem[] = [
     icon: 'chart-bar',
     children: [
       { id: 'player-statistics', label: 'Player Statistics', icon: 'users' },
-      { id: 'server-metrics', label: 'Server Metrics', icon: 'activity' },
     ],
   },
   {
@@ -122,7 +121,7 @@ export function useAppNavigation({
     if (view === 'report-detail') return 'reports'
     if (view === 'resource-detail') return 'resources'
     if (view === 'server' || view === 'resources' || view === 'profiler') return view
-    if (view === 'player-statistics' || view === 'server-metrics') return view
+    if (view === 'player-statistics') return view
     return view
   })()
 
@@ -137,7 +136,6 @@ export function useAppNavigation({
     if (view === 'reports') return 'Reports'
     if (view === 'report-detail' && selectedReportId !== null) return `Report #${selectedReportId}`
     if (view === 'player-statistics') return 'Player Statistics'
-    if (view === 'server-metrics') return 'Server Metrics'
     if (view === 'server') return 'Server'
     if (view === 'resources') return 'Resource Management'
     if (view === 'resource-detail') return 'Resource Details'
@@ -165,7 +163,6 @@ export function useAppNavigation({
         }
         let childDisabled = false
         if (child.id === 'player-statistics' && !permissions['server.statistics.view']) childDisabled = true
-        if (child.id === 'server-metrics' && !permissions['server.statistics.view']) childDisabled = true
         return { ...child, disabled: childDisabled }
       })
       return { ...item, disabled, children: children?.length ? children : undefined }
@@ -194,7 +191,7 @@ export function useAppNavigation({
   const availableViews: View[] = ['main', 'players']
   if (permissions['player.ban.view']) availableViews.push('bans')
   if (permissions['player.reports.view']) availableViews.push('reports')
-  if (permissions['server.statistics.view']) availableViews.push('player-statistics', 'server-metrics')
+  if (permissions['server.statistics.view']) availableViews.push('player-statistics')
   if (
     permissions['server.announce'] ||
     permissions['server.convars'] ||
