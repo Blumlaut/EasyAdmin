@@ -7,6 +7,55 @@ Every change requires manual testing. AI agents cannot verify that changes work 
 2. Explain what functionality is affected
 3. Provide specific testing steps for the developer to verify the changes
 
+## Server-Side Permission Guarding
+
+**All server-side functions and events that perform administrative actions MUST be permission-guarded.** There is no implicit trust — every handler must verify the caller has the appropriate permission before proceeding.
+
+### Permission System Overview
+
+EasyAdmin uses a single permission check function that works on both client and server:
+
+| Context | Check Method | What Decides |
+|---|---|---|
+| **Server** | `DoesPlayerHavePermission(src, "perm.name")` | FiveM ACL (`IsPlayerAceAllowed` with `easyadmin.` prefix) |
+| **Client** | `DoesPlayerHavePermission(-1, "perm.name")` | Local permissions state (populated by server handshake) |
+
+The `permissions` table is defined in [`shared/permissions.lua`](shared/permissions.lua). **New permissions MUST be added to this table** before EasyAdmin will recognise them — the admin session handshake (`EasyAdmin:amiadmin`) iterates `pairs(permissions)` to build the permission set sent to each client.
+
+### Adding New Permissions
+
+1. Add the entry to the `permissions` table in [`shared/permissions.lua`](shared/permissions.lua)
+2. Follow the naming convention: `"category.action.detail"` (e.g. `"player.ban.temporary"`, `"server.resources.start"`)
+3. The `"easyadmin."` prefix is added automatically by `DoesPlayerHavePermission()` — **do not include it in the table key**
+
+### Guarding Patterns
+
+Server: 
+```lua
+RegisterServerEvent("EasyAdmin:doAction", function(targetId)
+    local src = source
+    if not DoesPlayerHavePermission(src, "category.action") then return end
+    -- do the thing
+end)
+```
+
+Client: 
+```lua
+RegisterNUICallback('doAction', function(data, cb)
+    if not DoesPlayerHavePermission(-1, 'category.action') then return cb({ error = 'Permission denied' }) end
+    TriggerServerEvent('EasyAdmin:doAction', data)
+    cb({ ok = true })
+end)
+```
+
+### Quick Reference
+
+| Function | Where | Purpose |
+|---|---|---|
+| `DoesPlayerHavePermission(player, object)` | Server & Client | Server: checks FiveM ACL. Client: use `player = -1`. |
+| `DoesPlayerHavePermissionForCategory(player, object)` | Server & Client | Check if player has any perm starting with `object` |
+| `CanTargetPlayerForModeration(src, target)` | Server | Check immunity/targeting rules (use alongside perm checks) |
+
 ## Contributing Guidelines
 
 Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It covers issue templates, code organization, PR requirements, AI disclosure rules, and documentation expectations.
@@ -19,6 +68,7 @@ Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It cov
 | `client/` | Client-side FiveM logic (Lua). Only runs on connected clients. |
 | `server/` | Server-side FiveM logic (Lua). Only runs on the server. |
 | `shared/` | Code shared between client and server. Functions and variables defined here are available across all Lua files. |
+| `shared/permissions.lua` | Permission definitions — new permissions MUST be added here before EasyAdmin recognises them. |
 | `nui/` | Frontend UI built with React/TypeScript, runs inside FiveM's CEF browser. |
 | `language/` | Internationalization (i18n) translation files. |
 | `src/` | Discord bot code (Node.js), bundled into `dist/`. |
@@ -53,7 +103,7 @@ Run from the respective subdirectories after installing dependencies (`npm insta
 When working on any code related to FiveM, always consult the official documentation:
 
 - **FiveM Docs**: https://docs.fivem.net/docs/ — Server framework, client/server API, resources, events, etc.
-- **GTA V Native Reference**: https://docs.fivem.net/natives/ — Complete reference for all GTA V natives available in FiveM
+- **Natives (GTA V & CFX)**: Use the **fivem-natives** skill to look up native function signatures, parameters, return types, and examples. 6,400+ GTA V natives and 800+ FiveM-specific CFX natives are indexed locally.
 
 Never guess at API behavior or native signatures. Always verify against the official docs before suggesting changes.
 
