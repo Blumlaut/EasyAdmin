@@ -80,18 +80,6 @@
 	flex-grow: 1;
 }
 
-.card-link {
-	font-size: .75rem;
-	color: var(--md-primary-fg-color);
-	text-decoration: none;
-	font-weight: 600;
-	margin-top: .25rem;
-}
-
-.card-link:hover {
-	text-decoration: underline;
-}
-
 /* ---- Tables ---- */
 .md-typeset table:not([class]) {
 	font-size: .75rem;
