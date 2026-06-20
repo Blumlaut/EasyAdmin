@@ -48,7 +48,6 @@ theme:
     - navigation.instant.progress
     - navigation.tracking
     - navigation.sections
-    - navigation.indexes
     - navigation.top
     - navigation.expand
     - navigation.path
@@ -72,10 +71,8 @@ extra_css:
 
 nav:
     - Home: index.md
-    - Getting Started:
-        - install.md
-        - configuration/basic.md
-        - permissions/index.md
+    - Installation: install.md
+    - Permissions: permissions/index.md
     - Discord Integration:
         - discord/bot-setup.md
         - discord/bot-commands.md
