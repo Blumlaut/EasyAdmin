@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
+import type { RefObject } from 'react'
 
 const MIN_WIDTH = 500
 const MIN_HEIGHT = 400
@@ -18,19 +19,35 @@ export interface UseWindowResizeOptions {
   onPositionChange?: (next: { x: number; y: number }) => void
   /** If provided, styles are applied synchronously during drag for immediate visual feedback. */
   applyStyles?: (width: number, height: number, x?: number, y?: number) => void
-  /** Ref to the resizable element. Defaults to querying `.ea-window`. */
-  elementRef?: RefObject<HTMLElement | null>
+  /**
+   * Ref to the resizable element. Required — resize detection is scoped to
+   * this element so multiple resizable windows can coexist without one
+   * window's edges triggering another's resize.
+   */
+  elementRef: RefObject<HTMLElement | null>
 }
 
 type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
-/**
- * Window-resizing hook. Listeners are attached once globally and never
- * removed — a ref gate prevents them from firing when disabled. This
- * avoids CEF quirks where removing/re-adding document listeners breaks them.
- */
-let listenersAttached = false
+const CURSORS: Record<string, string> = {
+  n: 'ns-resize', s: 'ns-resize', e: 'ew-resize', w: 'ew-resize',
+  ne: 'nesw-resize', nw: 'nwse-resize', se: 'nwse-resize', sw: 'nesw-resize',
+}
 
+/**
+ * Window-resizing hook (instance-scoped).
+ *
+ * Edge-detection `mousedown` and the resize-cursor-preview `mousemove` are
+ * attached to the element itself (via `elementRef`), so each window only
+ * reacts to interaction with its own edges. Multiple resizable windows can
+ * coexist without interference.
+ *
+ * While a resize is active, `mousemove`/`mouseup` are attached to the
+ * document so the resize continues correctly even when the cursor leaves
+ * the window. These document listeners are added on resize start and
+ * removed on resize end, so only the instance that started the resize
+ * responds.
+ */
 export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPositionChange, applyStyles, elementRef }: UseWindowResizeOptions) {
   // Refs for latest values so listeners don't need to be re-bound
   const enabledRef = useRef(enabled)
@@ -39,18 +56,20 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
   const onResizeEndRef = useRef(onResizeEnd)
   const onPositionChangeRef = useRef(onPositionChange)
   const applyStylesRef = useRef(applyStyles)
-  const elementRefLocal = elementRef
 
-  enabledRef.current = enabled
-  sizeRef.current = size
-  onSizeChangeRef.current = onSizeChange
-  onResizeEndRef.current = onResizeEnd
-  onPositionChangeRef.current = onPositionChange
-  applyStylesRef.current = applyStyles
+  // Keep refs in sync inside an effect (never during render) so the
+  // element-scoped listeners always see the latest values without needing
+  // to be re-bound on every change.
+  useEffect(() => {
+    enabledRef.current = enabled
+    sizeRef.current = size
+    onSizeChangeRef.current = onSizeChange
+    onResizeEndRef.current = onResizeEnd
+    onPositionChangeRef.current = onPositionChange
+    applyStylesRef.current = applyStyles
+  }, [enabled, size, onSizeChange, onResizeEnd, onPositionChange, applyStyles])
 
-  const detectEdge = useCallback((e: MouseEvent): ResizeDir | null => {
-    const el = elementRefLocal?.current ?? document.querySelector('.ea-window') as HTMLElement | null
-    if (!el) return null
+  const detectEdge = (el: HTMLElement, e: MouseEvent): ResizeDir | null => {
     const rect = el.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
@@ -66,17 +85,14 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
     const vEdge = y < HANDLE_THRESHOLD ? 'n' : fromBottom < HANDLE_THRESHOLD ? 's' : ''
     if (hEdge || vEdge) return `${vEdge}${hEdge}` as ResizeDir
     return null
-  }, [elementRefLocal])
+  }
 
-  const detectEdgeRef = useRef(detectEdge)
-  detectEdgeRef.current = detectEdge
-
-  // Attach listeners once, never remove them
   useEffect(() => {
-    const cursors: Record<string, string> = {
-      n: 'ns-resize', s: 'ns-resize', e: 'ew-resize', w: 'ew-resize',
-      ne: 'nesw-resize', nw: 'nwse-resize', se: 'nwse-resize', sw: 'nesw-resize',
-    }
+    if (!enabled) return
+    const elOrNull = elementRef.current
+    if (!elOrNull) return
+    // Non-nullable alias so closures keep the narrowing.
+    const el: HTMLElement = elOrNull
 
     interface DragState {
       startX: number
@@ -87,14 +103,7 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
     }
     let drag: DragState | null = null
 
-    function getWindowElement(): HTMLElement | null {
-      if (elementRefLocal?.current) return elementRefLocal.current
-      return document.querySelector('.ea-window') as HTMLElement | null
-    }
-
     function onMouseMove(e: MouseEvent) {
-      if (!enabledRef.current) return
-
       if (drag) {
         e.preventDefault()
         const d = drag
@@ -126,13 +135,10 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
         }
         // Apply styles synchronously for immediate visual feedback
         applyStylesRef.current?.(width, height, dpx !== 0 ? d.startPos.x + dpx : undefined, dpy !== 0 ? d.startPos.y + dpy : undefined)
-      } else {
-        const dir = detectEdgeRef.current(e)
-        document.body.style.cursor = dir ? cursors[dir] : ''
       }
     }
 
-    function onMouseUp() {
+    function endResize() {
       if (drag) {
         const finalSize = sizeRef.current
         // drag ended, committing to state
@@ -141,27 +147,33 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
         onResizeEndRef.current?.(finalSize)
       }
       drag = null
-      document.body.style.cursor = ''
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', endResize)
     }
 
-    function onMouseDown(e: MouseEvent) {
+    // Element-scoped: only react to the mouse when it's over THIS window.
+    function onElMouseMove(e: MouseEvent) {
+      if (!enabledRef.current) return
+      if (drag) return // active drag is handled by the document listener
+      const dir = detectEdge(el, e)
+      document.body.style.cursor = dir ? CURSORS[dir] : ''
+    }
+
+    function onElMouseDown(e: MouseEvent) {
       if (!enabledRef.current) return
       if (e.button !== 0) return
       const target = e.target as HTMLElement | null
       if (!target) return
       if (target.closest('button, a, input, select, textarea, [role="button"]')) return
 
-      const dir = detectEdgeRef.current(e)
+      const dir = detectEdge(el, e)
       if (!dir) return
 
-      const startPos = (() => {
-        const el = getWindowElement()
-        const cs = el ? getComputedStyle(el) : null
-        return {
-          x: cs ? parseInt(cs.getPropertyValue('--ea-left') || cs.left || '0') : 0,
-          y: cs ? parseInt(cs.getPropertyValue('--ea-top') || cs.top || '0') : 0,
-        }
-      })()
+      const cs = getComputedStyle(el)
+      const startPos = {
+        x: parseInt(cs.getPropertyValue('--ea-left') || cs.left || '0'),
+        y: parseInt(cs.getPropertyValue('--ea-top') || cs.top || '0'),
+      }
 
       // drag started
       drag = {
@@ -171,15 +183,22 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
         startPos,
         dir,
       }
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', endResize)
       e.preventDefault()
     }
 
-    if (listenersAttached) return
-    listenersAttached = true
-
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mousedown', onMouseDown)
-    document.addEventListener('mouseup', onMouseUp)
-    // Intentionally no cleanup — listeners are ref-gated
-  }, [elementRefLocal])
+    el.addEventListener('mousemove', onElMouseMove)
+    el.addEventListener('mousedown', onElMouseDown)
+    return () => {
+      el.removeEventListener('mousemove', onElMouseMove)
+      el.removeEventListener('mousedown', onElMouseDown)
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', endResize)
+      // Clear any cursor we may have set so a disabled/removed window
+      // doesn't leave the body stuck with a resize cursor.
+      document.body.style.cursor = ''
+      drag = null
+    }
+  }, [enabled, elementRef])
 }

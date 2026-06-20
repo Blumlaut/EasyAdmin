@@ -317,7 +317,7 @@ end)
 --- Receives: result (hosted URL, data URI, or 'ERROR').
 RegisterServerEvent("EasyAdmin:TookScreenshot", function(result)
 	if scrinprogress_timer then
-		CancelTimeout(scrinprogress_timer)
+		ClearTimeout(scrinprogress_timer)
 		scrinprogress_timer = nil
 	end
 	completeScreenshot(scrinprogress_target, result)

@@ -7,12 +7,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <!-- Three.js (ESM) — loaded as module and exposed as window.THREE for screenshot capture. -->
-    <!-- CfxTexture is injected separately by FiveM's CEF as window.CfxTexture. -->
-    <script type="module">
-      import * as THREE from 'https://esm.sh/three@0.184.0'
-      window.THREE = THREE
-    </script>
+    <!-- Three.js (@citizenfx/three with CfxTexture) is imported and exposed by main.tsx -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

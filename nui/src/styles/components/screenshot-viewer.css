@@ -5,8 +5,10 @@
 .ea-screenshot-viewer {
   position: fixed;
   z-index: 10000;
-  width: 800px;
+  min-width: 500px;
+  min-height: 400px;
   max-width: 95vw;
+  max-height: 95vh;
   display: flex;
   flex-direction: column;
   background: var(--bg-secondary);
@@ -65,7 +67,7 @@
 
 .ea-screenshot-viewer-body img {
   max-width: 100%;
-  max-height: 70vh;
+  max-height: 100%;
   object-fit: contain;
   border-radius: var(--radius-sm);
 }

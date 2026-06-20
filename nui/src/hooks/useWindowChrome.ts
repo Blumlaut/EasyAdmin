@@ -107,6 +107,7 @@ export function useWindowChrome({
     position: windowPos,
     onPositionChange: handlePositionChange,
     onDragEnd: handleDragEnd,
+    elementRef: windowRef,
   })
 
   // === Window resizing ===
@@ -120,6 +121,7 @@ export function useWindowChrome({
   useWindowResize({
     enabled: visible && !nuiBackground,
     size: windowSize,
+    elementRef: windowRef,
     onSizeChange: (next) => {
       setWindowSize(next)
     },

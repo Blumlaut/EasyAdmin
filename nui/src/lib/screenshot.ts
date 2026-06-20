@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Screenshot capture module.
  *
@@ -42,8 +43,43 @@ export class ScreenshotCaptureCtx {
   private canvas: HTMLCanvasElement
   private destroyed = false
 
+  // Continuous render loop — keeps WebGL context and CfxTexture warm.
+  // Mirrors screenshot-basic's requestAnimationFrame loop.
+  private rafId = 0
+
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
+  }
+
+  /**
+   * Start the continuous render loop.
+   * Keeps the CfxTexture current so on-demand captures always get a fresh frame.
+   */
+  startRenderLoop(): void {
+    if (this.destroyed || !this.renderer || !this.scene || !this.camera || !this.rtTexture) {
+      console.warn('[EA-Screenshot] startRenderLoop: prerequisites not met')
+      return
+    }
+    let frameCount = 0
+    const tick = () => {
+      if (this.destroyed || !this.renderer || !this.scene || !this.camera || !this.rtTexture) return
+      this.renderer.clear()
+      this.renderer.render(this.scene, this.camera, this.rtTexture, true)
+      frameCount++
+      if (frameCount <= 3) {
+        console.log('[EA-Screenshot] Render loop tick #' + frameCount)
+      }
+      this.rafId = requestAnimationFrame(tick)
+    }
+    this.rafId = requestAnimationFrame(tick)
+  }
+
+  /** Stop the continuous render loop. */
+  stopRenderLoop(): void {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId)
+      this.rafId = 0
+    }
   }
 
   /**
@@ -133,6 +169,7 @@ export class ScreenshotCaptureCtx {
 
   /**
    * Resize the internal buffers to match the current window size.
+   * Restarts the render loop with updated dimensions.
    */
   resize(): void {
     if (!this.renderer || !this.scene) return
@@ -181,61 +218,87 @@ export class ScreenshotCaptureCtx {
     })
 
     this.renderer.setSize(width, height)
+
+    // Restart render loop with new dimensions
+    this.stopRenderLoop()
+    this.startRenderLoop()
   }
 
   /**
    * Capture a single frame and return a data URI.
+   *
+   * The render loop keeps the RTT current — this method only reads pixels
+   * and encodes them. A 10-second timeout guards against hanging operations.
    *
    * @param maxResolution  Max length of the longer dimension (default 1280).
    *                       The shorter dimension is scaled to preserve aspect ratio.
    * @param quality        Encoding quality 0-1 (default 0.8).
    */
   async capture(maxResolution = 1280, quality = 0.8): Promise<string | null> {
-    if (!this.renderer || this.destroyed) return null
+    if (!this.renderer || !this.rtTexture || this.destroyed) return null
 
-    // Render the game texture to the RTT target
-    this.renderer.clear()
-    this.renderer.render(this.scene, this.camera, this.rtTexture, true)
-
-    const srcWidth = window.innerWidth
-    const srcHeight = window.innerHeight
-
-    // Cap the longer dimension, scale the shorter to preserve aspect ratio.
-    const longer = Math.max(srcWidth, srcHeight)
-    const scale = longer > maxResolution ? maxResolution / longer : 1
-
-    const dstWidth = Math.round(srcWidth * scale)
-    const dstHeight = Math.round(srcHeight * scale)
-
-    // Read raw pixels from the render target
-    const pixelCount = srcWidth * srcHeight * 4
-    const read = new Uint8Array(pixelCount)
-    this.renderer.readRenderTargetPixels(this.rtTexture, 0, 0, srcWidth, srcHeight, read)
-
-    // Draw to an offscreen canvas at the target resolution
-    const offscreen = document.createElement('canvas')
-    offscreen.width = dstWidth
-    offscreen.height = dstHeight
-
-    const ctx = offscreen.getContext('2d', { willReadFrequently: true })
-    if (!ctx) return null
-
-    const imageData = new ImageData(
-      new Uint8ClampedArray(read.buffer),
-      srcWidth,
-      srcHeight,
+    // Guard against hanging operations (createImageBitmap / toDataURL)
+    const timeoutPromise = new Promise<string | null>((_, reject) =>
+      setTimeout(() => reject(new Error('Screenshot capture timed out')), 10000),
     )
-    ctx.drawImage(offscreen, 0, 0) // clear
-    // putImageData doesn't scale, so we use drawImage with the source as an ImageBitmap
-    const bitmap = await createImageBitmap(imageData)
-    ctx.drawImage(bitmap, 0, 0, dstWidth, dstHeight)
-    bitmap.close()
 
-    return offscreen.toDataURL('image/webp', quality)
+    const capturePromise = (async () => {
+      console.log('[EA-Screenshot] capture: starting pixel read')
+      const srcWidth = window.innerWidth
+      const srcHeight = window.innerHeight
+
+      // Read raw pixels from the render target (rendered by the continuous loop)
+      const pixelCount = srcWidth * srcHeight * 4
+      const read = new Uint8Array(pixelCount)
+      const renderer = this.renderer
+      const rt = this.rtTexture
+      if (!renderer || !rt) {
+        console.error('[EA-Screenshot] capture: renderer or rtTexture is null')
+        return null
+      }
+      console.log('[EA-Screenshot] capture: readRenderTargetPixels (' + srcWidth + 'x' + srcHeight + ')')
+      renderer.readRenderTargetPixels(rt, 0, 0, srcWidth, srcHeight, read)
+      console.log('[EA-Screenshot] capture: pixel read complete, nonZeroBytes=' + read.reduce((a, b) => a + (b !== 0 ? 1 : 0), 0) + '/' + pixelCount)
+
+      // Cap the longer dimension, scale the shorter to preserve aspect ratio.
+      const longer = Math.max(srcWidth, srcHeight)
+      const scale = longer > maxResolution ? maxResolution / longer : 1
+
+      const dstWidth = Math.round(srcWidth * scale)
+      const dstHeight = Math.round(srcHeight * scale)
+
+      // Draw to an offscreen canvas at the target resolution
+      const offscreen = document.createElement('canvas')
+      offscreen.width = dstWidth
+      offscreen.height = dstHeight
+
+      const ctx = offscreen.getContext('2d', { willReadFrequently: true })
+      if (!ctx) return null
+
+      const imageData = new ImageData(
+        new Uint8ClampedArray(read.buffer),
+        srcWidth,
+        srcHeight,
+      )
+
+      console.log('[EA-Screenshot] capture: createImageBitmap')
+      const bitmap = await createImageBitmap(imageData)
+      console.log('[EA-Screenshot] capture: drawImage (scale ' + srcWidth + 'x' + srcHeight + ' -> ' + dstWidth + 'x' + dstHeight + ')')
+      ctx.drawImage(bitmap, 0, 0, dstWidth, dstHeight)
+      bitmap.close()
+
+      console.log('[EA-Screenshot] capture: toDataURL webp')
+      const dataUrl = offscreen.toDataURL('image/webp', quality)
+      console.log('[EA-Screenshot] capture: toDataURL complete, length=' + dataUrl.length)
+      return dataUrl
+    })()
+
+    return Promise.race([capturePromise, timeoutPromise]).catch(() => null)
   }
 
   destroy(): void {
     this.destroyed = true
+    this.stopRenderLoop()
     if (this.renderer) {
       this.renderer.dispose()
       this.renderer = null

@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import type { RefObject } from 'react'
 
 export interface WindowPosition {
   x: number
@@ -25,32 +26,53 @@ export interface UseWindowDragOptions {
    */
   onDragEnd?: (position: WindowPosition) => void
   /**
-   * Ref to the draggable element. Defaults to querying `.ea-window`.
+   * Ref to the draggable element. Required — drag is scoped to this element
+   * so multiple windows can be draggable independently without interfering
+   * with each other.
    */
-  elementRef?: RefObject<HTMLElement | null>
+  elementRef: RefObject<HTMLElement | null>
 }
 
 /**
- * Window-dragging hook.
+ * Window-dragging hook (instance-scoped).
  *
- * Listens for `mousedown` on the document and starts a drag when the
- * target is inside an element marked with `data-window-drag-handle`
- * (typically the topbar) and is NOT inside a button/link/input.
+ * `mousedown` is attached to the element itself (via `elementRef`), and a
+ * drag only starts when the target is inside an element marked with
+ * `data-window-drag-handle` (typically the topbar) within this element and
+ * is NOT inside a button/link/input. Because the listener is scoped to the
+ * element, multiple draggable windows can coexist without one window's
+ * mousedown triggering another's drag.
  *
- * The drag is global (uses document-level mousemove/mouseup) so it
- * continues correctly even when the cursor leaves the window.
+ * While a drag is active, `mousemove`/`mouseup` are attached to the document
+ * so the drag continues correctly even when the cursor leaves the window.
+ * These document listeners are added on drag start and removed on drag end,
+ * so only the instance that started the drag responds.
  *
  * The position is clamped so the entire window stays on-screen
  * (0px margin). Actual window dimensions are measured dynamically.
  */
 export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, elementRef }: UseWindowDragOptions) {
-  // Keep the latest position in a ref so the effect below can read it
-  // without needing to re-subscribe on every move.
+  // Keep the latest values in refs so the element listener doesn't need to
+  // be re-bound on every move / callback change.
   const positionRef = useRef<WindowPosition>(position)
-  positionRef.current = position
+  const onPositionChangeRef = useRef(onPositionChange)
+  const onDragEndRef = useRef(onDragEnd)
+
+  // Keep refs in sync inside an effect (never during render) so the
+  // element-scoped listener always sees the latest values without needing
+  // to be re-bound on every move / callback change.
+  useEffect(() => {
+    positionRef.current = position
+    onPositionChangeRef.current = onPositionChange
+    onDragEndRef.current = onDragEnd
+  }, [position, onPositionChange, onDragEnd])
 
   useEffect(() => {
     if (!enabled) return
+    const elOrNull = elementRef.current
+    if (!elOrNull) return
+    // Non-nullable alias so closures keep the narrowing.
+    const el: HTMLElement = elOrNull
 
     interface DragState {
       startX: number
@@ -58,11 +80,6 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, 
       startPos: WindowPosition
     }
     let drag: DragState | null = null
-
-    function getWindowElement(): HTMLElement | null {
-      if (elementRef?.current) return elementRef.current
-      return document.querySelector('.ea-window') as HTMLElement | null
-    }
 
     function onMouseMove(e: MouseEvent) {
       if (!drag) return
@@ -74,11 +91,10 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, 
       // Clamp so the entire window stays on-screen (0px margin).
       // Measure actual dimensions each frame to account for any
       // CSS changes (font scaling, etc.) while dragging.
-      const el = getWindowElement()
       const vw = window.innerWidth
       const vh = window.innerHeight
-      const ww = el ? el.offsetWidth : 1210
-      const wh = el ? el.offsetHeight : 750
+      const ww = el.offsetWidth
+      const wh = el.offsetHeight
 
       // windowPos stores the absolute left/top edge of the window.
       // Entire window on-screen means:
@@ -91,20 +107,20 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, 
       const minY = 0
       const maxY = vh - wh
 
-      onPositionChange({
+      onPositionChangeRef.current({
         x: Math.max(minX, Math.min(maxX, newX)),
         y: Math.max(minY, Math.min(maxY, newY)),
       })
     }
 
-    function onMouseUp() {
+    function endDrag() {
       if (drag) {
         // Fire onDragEnd with the latest position from the ref
-        onDragEnd?.(positionRef.current)
+        onDragEndRef.current?.(positionRef.current)
       }
       drag = null
       document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('mouseup', endDrag)
     }
 
     function onMouseDown(e: MouseEvent) {
@@ -116,8 +132,9 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, 
       // inside the topbar (back / fold / close buttons, links, inputs).
       if (target.closest('button, a, input, select, textarea, [role="button"]')) return
       // Only start a drag if the target is inside an element marked as a
-      // drag handle. This is the topbar.
-      if (!target.closest('[data-window-drag-handle]')) return
+      // drag handle within THIS element. Scoping to `el` ensures a
+      // mousedown on another window's handle can't start our drag.
+      if (!el.contains(target) || !target.closest('[data-window-drag-handle]')) return
 
       drag = {
         startX: e.clientX,
@@ -125,17 +142,17 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, 
         startPos: { ...positionRef.current },
       }
       document.addEventListener('mousemove', onMouseMove)
-      document.addEventListener('mouseup', onMouseUp)
+      document.addEventListener('mouseup', endDrag)
       // Prevent text selection while dragging.
       e.preventDefault()
     }
 
-    document.addEventListener('mousedown', onMouseDown)
+    el.addEventListener('mousedown', onMouseDown)
     return () => {
-      document.removeEventListener('mousedown', onMouseDown)
+      el.removeEventListener('mousedown', onMouseDown)
       document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('mouseup', endDrag)
       drag = null
     }
-  }, [enabled, onPositionChange, onDragEnd, elementRef])
+  }, [enabled, elementRef])
 }

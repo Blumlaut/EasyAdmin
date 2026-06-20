@@ -76,7 +76,7 @@ local function removeViewer(targetId, adminSrc)
     if next(session.viewers) == nil then
         -- Last viewer left — stop the capture loop
         if session.timeout then
-            CancelTimeout(session.timeout)
+            ClearTimeout(session.timeout)
             session.timeout = nil
         end
         TriggerClientEvent('EasyAdmin:StopStream', targetId)
@@ -92,7 +92,7 @@ local function forceStopStream(targetId)
     if not session then return end
 
     if session.timeout then
-        CancelTimeout(session.timeout)
+        ClearTimeout(session.timeout)
     end
 
     local playerName = getName(targetId, true)
@@ -112,7 +112,7 @@ local function relayFrame(targetId, frameData)
 
     -- Clear the startup timeout on first successful frame
     if session.timeout then
-        CancelTimeout(session.timeout)
+        ClearTimeout(session.timeout)
         session.timeout = nil
     end
 

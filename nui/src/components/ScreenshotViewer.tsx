@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { on } from '../fivem'
 import { useWindowDrag, type WindowPosition } from '../hooks/useWindowDrag'
+import { useWindowResize, type WindowSize } from '../hooks/useWindowResize'
 import { Icon } from './icons'
 
 interface ScreenshotData {
@@ -18,10 +19,12 @@ interface ScreenshotData {
 }
 
 const DEFAULT_POS: WindowPosition = { x: 0, y: 0 }
+const DEFAULT_SIZE: WindowSize = { width: 800, height: 560 }
 
 export function ScreenshotViewer() {
   const [data, setData] = useState<ScreenshotData | null>(null)
   const [position, setPosition] = useState<WindowPosition>(DEFAULT_POS)
+  const [size, setSize] = useState<WindowSize>(DEFAULT_SIZE)
   const ref = useRef<HTMLDivElement>(null)
 
   // Center on open
@@ -50,6 +53,22 @@ export function ScreenshotViewer() {
     elementRef: ref,
   })
 
+  useWindowResize({
+    enabled: !!data,
+    size,
+    elementRef: ref,
+    onSizeChange: setSize,
+    onPositionChange: setPosition,
+    applyStyles: (w, h, x, y) => {
+      const el = ref.current
+      if (!el) return
+      el.style.width = `${w}px`
+      el.style.height = `${h}px`
+      if (x !== undefined) el.style.left = `${x}px`
+      if (y !== undefined) el.style.top = `${y}px`
+    },
+  })
+
   // Listen for screenshot results from Lua
   useEffect(() => {
     return on<ScreenshotData>('screenshot:received', (payload) => {
@@ -66,6 +85,8 @@ export function ScreenshotViewer() {
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
+        width: `${size.width}px`,
+        height: `${size.height}px`,
       }}
     >
       <div className="ea-screenshot-viewer-header" data-window-drag-handle>
