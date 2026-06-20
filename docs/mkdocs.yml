@@ -11,7 +11,6 @@ markdown_extensions:
   - pymdownx.superfences
   - toc:
       permalink: True
-      permalink_link: ""
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.keys
