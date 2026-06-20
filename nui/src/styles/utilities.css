@@ -243,6 +243,18 @@
   pointer-events: none;
 }
 
+/* -- Floating windows: same translucent/disabled treatment when NUI is backgrounded -- */
+.ea-nui-background .ea-floating-window {
+  cursor: default;
+  opacity: 0.85;
+  filter: saturate(0.6);
+}
+
+.ea-nui-background .ea-floating-window,
+.ea-nui-background .ea-floating-window * {
+  pointer-events: none;
+}
+
 /* The backdrop that sits behind the window and intercepts clicks to
    release focus. Hidden when the menu is already in background mode
    (nothing useful to click on). */

@@ -89,6 +89,19 @@ function App() {
     })
   }, [])
 
+  // === Global NUI background class for floating windows ===
+
+  useEffect(() => {
+    const unhook = () => document.body.classList.add('ea-nui-background')
+    const rehook = () => document.body.classList.remove('ea-nui-background')
+    const unsubUnhook = on('nuiUnhook', unhook)
+    const unsubRehook = on('nuiRehook', rehook)
+    return () => {
+      unsubUnhook()
+      unsubRehook()
+    }
+  }, [])
+
   // === Background hint auto-fade ===
 
   useEffect(() => {

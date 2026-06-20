@@ -112,7 +112,7 @@ export function StreamViewer() {
   return (
     <div
       ref={windowRef}
-      className="ea-stream-viewer"
+      className="ea-floating-window ea-stream-viewer"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

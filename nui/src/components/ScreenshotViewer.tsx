@@ -81,7 +81,7 @@ export function ScreenshotViewer() {
   return (
     <div
       ref={ref}
-      className="ea-screenshot-viewer"
+      className="ea-floating-window ea-screenshot-viewer"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
