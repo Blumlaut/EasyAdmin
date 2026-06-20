@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { IconName } from '../../components/icons'
 import type { Notification, Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
 import { SelectMenu } from '../../components/SelectMenu'
-import { callLua } from '../../fivem'
+import { callLua, on } from '../../fivem'
 import { createBanModal, createTextInputModal } from '../../modals/helpers'
 
 interface PlayerActionsPanelProps {
@@ -85,6 +85,14 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
   const { openModal, closeModal } = useModalContext()
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
+  const [screenshotLoading, setScreenshotLoading] = useState(false)
+
+  // Screenshot callback returns immediately; actual image arrives via 'screenshot:received'
+  useEffect(() => {
+    return on<{ playerName: string }>('screenshot:received', () => {
+      setScreenshotLoading(false)
+    })
+  }, [])
   const canKick = permissions['player.kick']
   const canWarn = permissions['player.warn']
   const canBan = permissions['player.ban.temporary']
@@ -139,8 +147,14 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
           onToast(`Spectating ${player.name}`, 'success')
           break
         case 'screenshot':
-          await callLua('screenshotPlayer', { id: player.id, name: player.name })
+          setScreenshotLoading(true)
+          try {
+            await callLua('screenshotPlayer', { id: player.id, name: player.name })
+          } catch {
+            setScreenshotLoading(false)
+          }
           // Screenshot opens in a floating viewer window — no toast needed
+          // setScreenshotLoading(false) is called by the screenshot:received listener above
           break
         case 'stream':
           await callLua('streamPlayer', { id: player.id, name: player.name })
@@ -329,19 +343,24 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
                 {group.actions.map((action) => {
                   const isToggle = action.id === 'freeze' || action.id === 'mute'
                   const isActive = action.id === 'freeze' ? player.frozen : player.muted
+                  const isLoading = action.id === 'screenshot' && screenshotLoading
 
                   return (
                     <button
                       key={action.id}
                       className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
                       onClick={() => handleQuickAction(action.id)}
-                      disabled={busyAction === action.id}
+                      disabled={isLoading || busyAction === action.id}
                       title={isToggle
                         ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
                         : `${action.label} ${player.name}`
                       }
                     >
-                      <Icon name={action.icon} size="sm" />
+                      {isLoading ? (
+                        <Icon name="loader-2" size="sm" className="icon-spin" />
+                      ) : (
+                        <Icon name={action.icon} size="sm" />
+                      )}
                       <span className="player-action-group-btn-label">
                         {isToggle && isActive ? `Un${action.label}` : action.label}
                       </span>

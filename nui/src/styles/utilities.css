@@ -183,6 +183,11 @@
   justify-content: center;
 }
 
+/* Inline spinning icon (e.g. for button loading states) */
+.icon-spin {
+  animation: spin 800ms linear infinite;
+}
+
 /* ============================================================
    Hidden utility
    ============================================================ */

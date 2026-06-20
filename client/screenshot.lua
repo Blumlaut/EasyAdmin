@@ -22,12 +22,9 @@ end
 RegisterNUICallback('screenshotResult', function(data, cb)
     cb({ ok = true })
 
-    print('[EA-Screenshot] NUICallback screenshotResult received, correlationId=' .. tostring(data.correlationId) .. ', hasData=' .. tostring(data.data ~= nil))
-
     local id = data.correlationId
     local pending = EasyAdminScreenshotPending
     if not pending or pending.id ~= id then
-        print('[EA-Screenshot] WARNING: no pending request for correlationId=' .. tostring(id))
         return
     end
 
@@ -38,12 +35,8 @@ end)
 --- Called via TriggerClientEvent from the server.
 --- RegisterNetEvent handlers run in their own thread, so Citizen.Await is safe.
 RegisterNetEvent('EasyAdmin:CaptureScreenshot', function()
-    print('[EA-Screenshot] CaptureScreenshot event received on client')
-
     local maxResolution = GetConvarInt('ea_screenshotMaxResolution', 1280)
     local quality = GetConvarFloat('ea_screenshotQuality', 0.8)
-
-    print('[EA-Screenshot] maxResolution=' .. maxResolution .. ', quality=' .. quality)
 
     local id = nextCorrelationId()
     local p = promise.new()
@@ -59,7 +52,6 @@ RegisterNetEvent('EasyAdmin:CaptureScreenshot', function()
     end)
 
     -- Send capture request to the NUI
-    print('[EA-Screenshot] Sending SendNUIMessage with correlationId=' .. id)
     SendNUIMessage({
         action = 'screenshot:request',
         data = {
@@ -78,20 +70,15 @@ RegisterNetEvent('EasyAdmin:CaptureScreenshot', function()
     end
 
     if result == 'timeout' then
-        print('[EA-Screenshot] TIMEOUT (25s) for correlationId=' .. id .. ', sending ERROR to server')
         TriggerLatentServerEvent('EasyAdmin:TookScreenshot', 100000, 'ERROR')
         return
     end
 
     if result == 'ERROR' then
-        print('[EA-Screenshot] NUI returned ERROR, sending to server')
         TriggerLatentServerEvent('EasyAdmin:TookScreenshot', 100000, 'ERROR')
         return
     end
 
     -- Send data URI directly to server (relay to admin)
-    local dataLen = #result
-    print('[EA-Screenshot] Capture success, data URI length=' .. dataLen .. ', sending to server via TriggerLatentServerEvent')
     TriggerLatentServerEvent('EasyAdmin:TookScreenshot', 100000, result)
-    print('[EA-Screenshot] TriggerLatentServerEvent called (async, may not appear immediately)')
 end)

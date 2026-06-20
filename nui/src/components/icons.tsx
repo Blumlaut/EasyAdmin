@@ -84,6 +84,7 @@ export type IconName =
   | 'arrow-down-circle'
   | 'hard-drive'
   | 'database'
+  | 'loader-2'
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
   const dimension = SIZES[size] ?? SIZES.md
@@ -551,5 +552,8 @@ const ICONS: Record<IconName, React.ReactNode> = {
       <path d="M21 12c0 2.2-4 4-9 4s-9-1.8-9-4" />
       <path d="M3 5v14c0 2.2 4 4 9 4s9-1.8 9-4V5" />
     </>
+  ),
+  'loader-2': (
+    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
   ),
 }
