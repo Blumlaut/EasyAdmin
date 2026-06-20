@@ -91,7 +91,7 @@ set ea_enableReportScreenshots "true"
 
 Default: `true`
 
-Requires `screenshot-basic` to be installed.
+Screenshot capture is built into EasyAdmin — no external resources required.
 
 ## Report Lifecycle
 

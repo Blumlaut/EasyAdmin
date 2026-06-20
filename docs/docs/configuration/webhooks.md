@@ -73,13 +73,14 @@ Default: `%d/%m/%Y %H:%M:%S`
 
 ## Screenshot Upload
 
-When an admin takes a screenshot of a player, the image is uploaded to a configured endpoint.
+When an admin takes a screenshot of a player, the image is captured natively (Three.js + CfxTexture), downsampled, encoded as WebP, and uploaded to a configured endpoint.
 
 | Convar | Default | Description |
 |--------|---------|-------------|
 | `ea_screenshoturl` | `https://wew.wtf/upload.php` | URL to upload screenshots to |
 | `ea_screenshotfield` | `files[]` | Form field name for the uploaded file |
-| `ea_screenshotOptions` | `{}` | Extra JSON options passed to screenshot-basic |
+| `ea_screenshotMaxResolution` | `1280` | Max length of the longer dimension (px). Shorter dimension scales to match aspect ratio. |
+| `ea_screenshotQuality` | `0.8` | WebP encoding quality (0.0–1.0). |
 | `ea_enableReportScreenshots` | `true` | Automatically take a screenshot when a player is reported |
 
 To use Discord as a screenshot uploader:
@@ -89,7 +90,7 @@ setr ea_screenshoturl "https://discord.com/api/webhooks/123456789/abcdefghijklmn
 setr ea_screenshotfield "files[]"
 ```
 
-The screenshot endpoint receives a POST request with the image as a multipart form file.
+The screenshot endpoint receives a POST request with the image data.
 
 ## Log Identifiers
 

@@ -207,6 +207,46 @@ function isScreenshotInProgress()
 end
 exports('isScreenshotInProgress', isScreenshotInProgress)
 
+--- Complete a pending screenshot (called by client/screenshot.lua via TookScreenshot).
+--- Args: targetPlayerId (the player who was captured), result (data URI or 'ERROR').
+local function completeScreenshot(targetPlayerId, result)
+	if scrinprogress == false then return end
+	scrinprogress = false
+
+	local adminSrc = scrinprogress_admin or source
+
+	if result == "ERROR" then
+		PrintDebugMessage("Screenshot failed for player "..getName(targetPlayerId, true), 2)
+		TriggerClientEvent("EasyAdmin:showNotification", adminSrc, GetLocalisedText("screenshotinprogress") or "Screenshot Failed!")
+		return
+	end
+
+	local res = matchURL(tostring(result))
+	if not res then
+		PrintDebugMessage("Screenshot URL extraction failed for player "..getName(targetPlayerId, true), 2)
+		return
+	end
+
+	local invokingResource
+	if scrinprogress_invoking then
+		invokingResource = scrinprogress_invoking
+	elseif GetInvokingResource() and GetInvokingResource() ~= GetCurrentResourceName() then
+		invokingResource = "`"..GetInvokingResource().."`"
+	end
+
+	PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
+	SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), invokingResource or getName(adminSrc), getName(targetPlayerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
+	TriggerClientEvent('chat:addMessage', adminSrc, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
+	TriggerClientEvent("chat:addMessage", adminSrc, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
+	PrintDebugMessage("Screenshot for Player "..getName(targetPlayerId, true).." done, "..res.." requested by "..getName(adminSrc, true), 3)
+end
+
+--- Global state for tracking the in-progress screenshot.
+local scrinprogress_admin = nil
+local scrinprogress_target = nil
+local scrinprogress_invoking = nil
+local scrinprogress_timer = nil
+
 RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
 	local src = source
 	if not playerId or not isPlayerOnline(playerId) then
@@ -223,32 +263,38 @@ RegisterServerEvent("EasyAdmin:TakeScreenshot", function(playerId)
 			invokingResource = "`"..GetInvokingResource().."`"
 		end
 		SetAdminCooldown(src, "screenshot")
+
+		-- Track state for the async callback
 		scrinprogress = true
-		thistemporaryevent = RegisterServerEvent("EasyAdmin:TookScreenshot", function(result)
-			if result == "ERROR" then return false end
-			res = matchURL(tostring(result))
-			PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
-			SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), invokingResource or getName(src), getName(playerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
-			TriggerClientEvent('chat:addMessage', src, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
-			TriggerClientEvent("chat:addMessage", src, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
-			PrintDebugMessage("Screenshot for Player "..getName(playerId,true).." done, "..res.." requsted by"..getName(src,true), 3)
-			scrinprogress = false
-			RemoveEventHandler(thistemporaryevent)
+		scrinprogress_admin = src
+		scrinprogress_target = playerId
+		scrinprogress_invoking = invokingResource
+
+		-- 25-second timeout (non-blocking)
+		scrinprogress_timer = SetTimeout(25000, function()
+			if scrinprogress then
+				PrintDebugMessage("Screenshot timed out for player "..getName(playerId, true), 4)
+				TriggerClientEvent("EasyAdmin:showNotification", scrinprogress_admin, "Screenshot Failed!")
+				scrinprogress = false
+				scrinprogress_admin = nil
+				scrinprogress_target = nil
+				scrinprogress_invoking = nil
+				scrinprogress_timer = nil
+			end
 		end)
 
-		TriggerClientEvent("EasyAdmin:CaptureScreenshot", playerId)
-		local timeoutwait = 0
-		repeat
-			timeoutwait=timeoutwait+1
-			Wait(5000)
-			if timeoutwait == 5 then
-				RemoveEventHandler(thistemporaryevent)
-				scrinprogress = false
-				PrintDebugMessage("Screenshot timed out", 4)
-				TriggerClientEvent("EasyAdmin:showNotification", src, "Screenshot Failed!")
-			end
-		until not scrinprogress
+		TriggerClientEvent("EasyAdmin:CaptureScreenshot", playerId, src)
 	end
+end)
+
+--- Result callback from client/screenshot.lua.
+--- Receives: result (hosted URL, data URI, or 'ERROR').
+RegisterServerEvent("EasyAdmin:TookScreenshot", function(result)
+	if scrinprogress_timer then
+		CancelTimeout(scrinprogress_timer)
+		scrinprogress_timer = nil
+	end
+	completeScreenshot(scrinprogress_target, result)
 end)
 
 RegisterServerEvent("EasyAdmin:mutePlayer", function(playerId)

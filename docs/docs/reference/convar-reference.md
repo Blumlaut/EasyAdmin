@@ -463,14 +463,23 @@ Registers routing bucket permission options. Actual gating is controlled by `pla
 
 Form field name for screenshot upload POST requests.
 
-## ea_screenshotOptions
+## ea_screenshotMaxResolution
 
 | | |
 |---|---|
-| **Default** | `{}` |
-| **Type** | String |
+| **Default** | `1280` |
+| **Type** | Integer |
 
-Extra JSON options passed to screenshot-basic.
+Maximum length of the longer dimension for captured screenshots (in pixels). The shorter dimension is scaled proportionally to preserve aspect ratio. For example, a 1920×1080 screen with a max resolution of 1280 produces a 1280×720 image.
+
+## ea_screenshotQuality
+
+| | |
+|---|---|
+| **Default** | `0.8` |
+| **Type** | Float |
+
+WebP encoding quality for screenshots (0.0–1.0). Higher values produce larger files with better quality.
 
 ## ea_screenshoturl
 
@@ -479,7 +488,7 @@ Extra JSON options passed to screenshot-basic.
 | **Default** | `https://wew.wtf/upload.php` |
 | **Type** | String |
 
-URL to upload screenshots to. Can be a Discord webhook URL.
+URL to upload screenshots to. Can be a Discord webhook URL or any endpoint that accepts POST requests with image data.
 
 ## ea_useTokenIdentifiers
 

@@ -5,7 +5,7 @@ EasyAdmin is a feature-rich administration suite designed specifically for FiveM
 **Key Features:**
 
 * Basic Administration: Kick players, temp/perma ban, mute, teleport, slap, freeze player, and issue warnings.
-* Screenshot other Players' Game (requires screenshot-basic).
+* Screenshot other Players' Game (built-in, no external resources required).
 * Extensive Banlist System to prevent ban evasion.
 * Modify Server Settings from a GUI.
 * Report/ Admin Call System with GUI to view and handle reports.

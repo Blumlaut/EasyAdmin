@@ -135,12 +135,8 @@ end
 exports('checkVersion', checkVersion)
 
 function initEnvironmentChecks()
-	if GetResourceState("screenshot-basic") == "missing" then
-		PrintDebugMessage("screenshot-basic is not installed, screenshots unavailable", 3)
-	else
-		StartResource("screenshot-basic")
-		screenshots = true
-	end
+	-- Screenshot capture is now first-party (client/screenshot.lua + NUI)
+	screenshots = true
 
 	local onesync = GetConvar("onesync", "off")
 	if (onesync ~= "off" and onesync ~= "legacy") then

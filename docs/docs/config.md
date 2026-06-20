@@ -43,7 +43,8 @@ EasyAdmin is configured using **convars**. You can set them in your server confi
 | `ea_dateFormat` | `setr ea_dateFormat "%d/%m/%Y %H:%M:%S"` | Custom date/time format. |
 | `ea_screenshoturl` | `setr ea_screenshoturl "https://wew.wtf/upload.php"` | Image upload URL for screenshots. |
 | `ea_screenshotfield` | `setr ea_screenshotfield "files[]"` | Form field name for screenshot upload. |
-| `ea_screenshotOptions` | `setr ea_screenshotOptions "{}"` | Extra options for screenshot-basic. |
+| `ea_screenshotMaxResolution` | `set ea_screenshotMaxResolution 1280` | Max length of the longer dimension (px). Shorter dimension scales to match aspect ratio. |
+| `ea_screenshotQuality` | `set ea_screenshotQuality 0.8` | WebP encoding quality (0.0–1.0). |
 | `ea_enableReportScreenshots` | `set ea_enableReportScreenshots "true"` | Take screenshot when someone is reported. |
 | `ea_logIdentifier` | `set ea_logIdentifier "discord,steam,license"` | List of identifiers to log in webhooks (order matters). |
 

@@ -44,9 +44,10 @@ set ea_presentDeferral "false"
 
 ## Screenshot upload fails
 
-- Verify `screenshot-basic` is installed and started before EasyAdmin.
 - Check that `ea_screenshoturl` points to a valid upload endpoint.
-- Ensure the endpoint accepts POST requests with multipart form data.
+- Ensure the endpoint accepts POST requests with image data.
+- Increase the timeout by checking server latency — screenshots have a 25-second timeout.
+- Verify the target player's client is responsive (not frozen or disconnected).
 
 ## Discord bot does not connect
 

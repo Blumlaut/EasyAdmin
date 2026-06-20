@@ -4,6 +4,19 @@ This guide provides instructions for updating EasyAdmin between versions.
 
 ---
 
+## Updating to 7.53
+
+### Screenshot capture is now first-party
+
+- The `screenshot-basic` dependency has been **removed**. Screenshot capture is now built directly into EasyAdmin using Three.js + FiveM's `CfxTexture`.
+- If you have `screenshot-basic` installed solely for EasyAdmin, you can safely remove it from your `server.cfg`.
+- Two new convars replace the old `ea_screenshotOptions`:
+  - `ea_screenshotMaxResolution` (default `1280`) — caps the longer dimension of the captured image
+  - `ea_screenshotQuality` (default `0.8`) — WebP encoding quality
+- Screenshots are now encoded as **WebP** instead of JPEG for smaller file sizes.
+
+---
+
 ## Updating to 7.52
 
 ### Plugin API: client-local `DoesPlayerHavePermission` removed

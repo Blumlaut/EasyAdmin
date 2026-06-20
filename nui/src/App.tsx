@@ -7,6 +7,7 @@ import type { View } from './types'
 import { on } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
+import { ScreenshotCapture } from './components/ScreenshotCapture'
 import { ToastContainer } from './components/ToastContainer'
 import { WarningOverlay } from './components/WarningOverlay'
 import { ModalProvider } from './ModalContext'
@@ -433,6 +434,9 @@ function App() {
       )}
 
         <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
+        {/* Hidden canvas for screenshot capture — must be in visible tree for OSR */}
+        <ScreenshotCapture />
 
         <WarningOverlay
           warning={warning}

@@ -1,13 +1,13 @@
 # Using Discord as a Screenshot Uploader
 
-> **⚠️ Security Warning:**  
+> **⚠️ Security Warning:**
 > If you use this method, your **Discord webhook URL will be visible to players** through the game's console or scripts. If you're concerned about webhook security, it's not recommended to use this method.
 
 ---
 
 ## Overview
 
-By default, EasyAdmin uses `wew.wtf` as the screenshot image uploader. However, since this service is no longer available, you'll need an alternative.
+Screenshot capture is built directly into EasyAdmin — no external resources required. Screenshots are captured natively using Three.js + FiveM's `CfxTexture`, encoded as WebP, and uploaded to a configured endpoint.
 
 EasyAdmin supports using **Discord** as a screenshot uploader. This means screenshots will be uploaded directly to a Discord channel via a **webhook**.
 

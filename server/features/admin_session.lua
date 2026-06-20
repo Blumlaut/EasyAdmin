@@ -108,9 +108,6 @@ Citizen.CreateThread(function()
 		local perms = {}
 		for perm,val in pairs(permissions) do
 			local thisPerm = DoesPlayerHavePermission(source, perm)
-			if perm == "player.screenshot" and not screenshots then
-				thisPerm = false
-			end
 			if thisPerm == true then
 				OnlineAdmins[source] = true
 			end
