@@ -55,6 +55,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: .5rem;
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
 }
 
 .card:hover {
@@ -78,18 +81,6 @@
 	color: var(--md-default-fg-color--medium);
 	line-height: 1.4;
 	flex-grow: 1;
-}
-
-.card-link {
-	font-size: .75rem;
-	color: var(--md-primary-fg-color);
-	text-decoration: none;
-	font-weight: 600;
-	margin-top: .25rem;
-}
-
-.card-link:hover {
-	text-decoration: underline;
 }
 
 /* ---- Tables ---- */

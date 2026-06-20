@@ -26,33 +26,29 @@ You want full control over your server, including moderation tools, Discord inte
 
 <div class="card-grid">
 
-<div class="card">
+<a class="card" href="install">
 <div class="card-icon">&#x1F4E5;</div>
 <div class="card-title">Installation</div>
 <div class="card-desc">Set up EasyAdmin on your server in minutes.</div>
-<a class="card-link" href="install">Get started &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="permissions">
 <div class="card-icon">&#x1F512;</div>
 <div class="card-title">Permissions</div>
 <div class="card-desc">Configure admin roles and access levels.</div>
-<a class="card-link" href="permissions">Configure &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="configuration/basic">
 <div class="card-icon">&#x2699;</div>
 <div class="card-title">Configuration</div>
 <div class="card-desc">Set up webhooks, ban screens, and core options.</div>
-<a class="card-link" href="configuration/basic">Configure &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="discord/bot-setup">
 <div class="card-icon">&#x1F4E6;</div>
 <div class="card-title">Discord Bot</div>
 <div class="card-desc">Manage your server from Discord.</div>
-<a class="card-link" href="discord/bot-setup">Set up &rarr;</a>
-</div>
+</a>
 
 </div>
 
@@ -62,33 +58,29 @@ You need to manage players, handle reports, and monitor server activity.
 
 <div class="card-grid">
 
-<div class="card">
+<a class="card" href="nui/pages">
 <div class="card-icon">&#x1F465;</div>
 <div class="card-title">Player Management</div>
 <div class="card-desc">Kick, ban, mute, freeze, and spectate players.</div>
-<a class="card-link" href="nui/pages">View pages &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="features/ban-list">
 <div class="card-icon">&#x1F6AB;</div>
 <div class="card-title">Ban List</div>
 <div class="card-desc">Search, edit, and manage bans.</div>
-<a class="card-link" href="features/ban-list">View guide &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="features/reports">
 <div class="card-icon">&#x1F6A9;</div>
 <div class="card-title">Reports</div>
 <div class="card-desc">Review and process player reports.</div>
-<a class="card-link" href="features/reports">View guide &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="features/action-history">
 <div class="card-icon">&#x23F2;</div>
 <div class="card-title">Action History</div>
 <div class="card-desc">View moderation history for any player.</div>
-<a class="card-link" href="features/action-history">View guide &rarr;</a>
-</div>
+</a>
 
 </div>
 
@@ -98,33 +90,29 @@ You want to extend EasyAdmin with custom plugins, integrations, or exports.
 
 <div class="card-grid">
 
-<div class="card">
+<a class="card" href="plugins/plugin-api">
 <div class="card-icon">&#x1F527;</div>
 <div class="card-title">Plugin API</div>
 <div class="card-desc">Available exports and events for custom integrations.</div>
-<a class="card-link" href="plugins/plugin-api">View API &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="nui/design-system">
 <div class="card-icon">&#x1F4BB;</div>
 <div class="card-title">NUI Architecture</div>
 <div class="card-desc">React/TypeScript SPA, communication with Lua, design system.</div>
-<a class="card-link" href="nui/design-system">View guide &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="reference/convar-reference">
 <div class="card-icon">&#x1F4DD;</div>
 <div class="card-title">Convar Reference</div>
 <div class="card-desc">All configuration variables with defaults and types.</div>
-<a class="card-link" href="reference/convar-reference">Browse &rarr;</a>
-</div>
+</a>
 
-<div class="card">
+<a class="card" href="i18n/translating">
 <div class="card-icon">&#x1F310;</div>
 <div class="card-title">Translating</div>
 <div class="card-desc">Add or update language files.</div>
-<a class="card-link" href="i18n/translating">View guide &rarr;</a>
-</div>
+</a>
 
 </div>
 
