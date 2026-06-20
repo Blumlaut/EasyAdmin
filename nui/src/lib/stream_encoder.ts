@@ -1,3 +1,5 @@
+import { callLua } from '../fivem'
+
 /**
  * StreamEncoder — continuous frame capture for live streaming.
  *
@@ -180,7 +182,7 @@ export class StreamEncoder {
       const frame = await this.captureFrame(this.opts.maxResolution, this.opts.quality)
       if (frame) {
         // Send to Lua (fire-and-forget, no await to avoid blocking the loop)
-        import('../fivem').then(({ callLua }) => callLua('streamFrame', { frame }))
+        callLua('streamFrame', { frame })
       }
     } catch {
       // Silently skip bad frames
