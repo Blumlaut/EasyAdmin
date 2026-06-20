@@ -73,7 +73,9 @@ setr ea_defaultKey "F2"
 
 Use a standard GTA V key name (e.g., `F2`, `K`, `LCTRL`). You can also use the `/easyadmin` chat command as a fallback.
 
-## Next Steps
+## See Also
 
 - [Configuration](configuration/basic.md) — Set up webhooks, Discord bot, and other options
 - [Permissions](permissions/index.md) — Set up granular permissions for moderators and admins
+- [Troubleshooting](troubleshooting.md) — Common issues and solutions
+- [Updating](updates/updating.md) — How to update EasyAdmin

@@ -1,8 +1,9 @@
 site_name: EasyAdmin
-site_description: EasyAdmin Documentation
-
+site_description: EasyAdmin Documentation — administration system for FiveM and RedM
 repo_url: "https://github.com/Blumlaut/EasyAdmin"
 edit_uri: "https://github.com/Blumlaut/EasyAdmin/edit/main/docs/docs/"
+
+docs_dir: docs
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -10,9 +11,14 @@ markdown_extensions:
   - pymdownx.superfences
   - toc:
       permalink: True
+      permalink_link: ""
   - pymdownx.tabbed:
       alternate_style: true
-
+  - pymdownx.keys
+  - pymdownx.caret
+  - pymdownx.critic
+  - attr_list
+  - md_in_html
 
 plugins:
   - search
@@ -22,85 +28,95 @@ theme:
   name: material
   logo: assets/logo.png
   favicon: assets/favicon.png
+  language: en
   palette:
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: blue
-      accent: blue
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: light blue
-      accent: light blue
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
   features:
     - navigation.instant
+    - navigation.instant.progress
     - navigation.tracking
+    - navigation.sections
+    - navigation.indexes
     - navigation.top
     - navigation.expand
+    - navigation.path
+    - navigation.prune
+    - search.suggest
     - search.highlight
     - toc.integrate
+  icon:
+    repo: fontawesome/brands/github
 
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: "https://github.com/Blumlaut/EasyAdmin"
+    - icon: fontawesome/brands/discord
+      link: "https://discord.gg/easyadmin"
+  generator: false
 
 extra_css:
   - stylesheets/extra.css
 
 nav:
-    - "Home": 'index.md'
-    - 'install.md'
-    - Configuration:
-        - 'configuration/basic.md'
-        - 'configuration/webhooks.md'
-        - 'configuration/commands.md'
-        - 'configuration/action-history.md'
-        - 'configuration/backups.md'
-        - 'configuration/shortcuts.md'
-        - 'configuration/advanced.md'
-        - 'configuration/nui-settings.md'
-    - Permissions:
-        - 'permissions/index.md'
-        - 'permissions/player-permissions.md'
-        - 'permissions/server-permissions.md'
-        - 'permissions/bot-permissions.md'
+    - Home: index.md
+    - Getting Started:
+        - install.md
+        - configuration/basic.md
+        - permissions/index.md
     - Discord Integration:
-        - 'discord/bot-setup.md'
-        - 'discord/bot-commands.md'
-        - 'discord/logging.md'
-        - 'discord/chat-bridge.md'
-        - 'discord/server-status.md'
-        - 'discord/discord-ace.md'
+        - discord/bot-setup.md
+        - discord/bot-commands.md
+        - discord/logging.md
+        - discord/chat-bridge.md
+        - discord/server-status.md
+        - discord/discord-ace.md
+    - Configuration:
+        - configuration/basic.md
+        - configuration/webhooks.md
+        - configuration/commands.md
+        - configuration/action-history.md
+        - configuration/backups.md
+        - configuration/shortcuts.md
+        - configuration/advanced.md
+        - configuration/nui-settings.md
     - Features:
-        - 'features/ban-list.md'
-        - 'features/reports.md'
-        - 'features/action-history.md'
-        - 'features/admin-notes.md'
-        - 'features/screenshots.md'
-        - 'features/reminders-and-shortcuts.md'
-        - 'features/backups.md'
-        - 'features/allowlist.md'
-        - 'features/player-statistics.md'
-        - 'features/network-monitor.md'
-        - 'features/profiler.md'
-        - 'features/resource-monitor.md'
+        - features/ban-list.md
+        - features/reports.md
+        - features/action-history.md
+        - features/admin-notes.md
+        - features/screenshots.md
+        - features/reminders-and-shortcuts.md
+        - features/backups.md
+        - features/allowlist.md
+        - features/player-statistics.md
+        - features/network-monitor.md
+        - features/profiler.md
+        - features/resource-monitor.md
     - NUI:
-        - 'nui/design-system.md'
-        - 'nui/pages.md'
-        - 'nui/known-issues.md'
+        - nui/design-system.md
+        - nui/pages.md
+        - nui/known-issues.md
     - Plugins:
-        - 'plugins/index.md'
-        - 'plugins/creating-plugins.md'
-        - 'plugins/plugin-api.md'
-        - 'plugins/custom-permissions.md'
-    - i18n:
-        - 'i18n/translating.md'
+        - plugins/index.md
+        - plugins/plugin-api.md
     - Reference:
-        - 'reference/convar-reference.md'
-        - 'reference/permission-reference.md'
-        - 'reference/command-reference.md'
+        - reference/convar-reference.md
+        - reference/permission-reference.md
+        - reference/command-reference.md
     - Updates:
-        - 'updates/updating.md'
-    - 'troubleshooting.md'
+        - updates/updating.md
+    - Troubleshooting: troubleshooting.md

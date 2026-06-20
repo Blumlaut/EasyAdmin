@@ -45,3 +45,9 @@ EasyAdmin uses a React-based NUI. After updating, the NUI files in `nui/dist/` a
 ## Migration Guides
 
 For detailed migration instructions from older versions, see the [GitHub Releases page](https://github.com/Blumlaut/EasyAdmin/releases). Each release notes contain breaking changes and migration steps.
+
+## See Also
+
+- [Troubleshooting](troubleshooting.md) — Issues that may arise after updating
+- [NUI Known Issues](nui/known-issues.md) — CEF rendering limitations
+- [Plugin API](plugins/plugin-api.md) — Plugin compatibility after updates

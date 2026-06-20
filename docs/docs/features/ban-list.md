@@ -129,3 +129,10 @@ When enabled, EasyAdmin triggers these events during ban operations:
 - `ea_data:removeBan` — Triggered when a ban is removed
 
 Listen for these events in a plugin or separate resource to sync with external databases.
+
+## See Also
+
+- [Backups](features/backups.md) — Backup and restore banlists
+- [Configuration](configuration/backups.md) — Banlist backup configuration
+- [Reports](features/reports.md) — Auto-ban on report threshold
+- [Action History](features/action-history.md) — Track moderation history

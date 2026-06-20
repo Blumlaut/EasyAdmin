@@ -180,3 +180,9 @@ Requires `server.network.monitor` permission.
 ### Anonymous Mode
 
 Toggle anonymous mode to hide your username in logs and webhooks. Requires `easyadmin.anon` permission.
+
+## See Also
+
+- [Design System](nui/design-system.md) — Architecture, components, CSS variables
+- [Known Issues](nui/known-issues.md) — OSR rendering quirks, CSS limitations
+- [NUI Settings](configuration/nui-settings.md) — Configuration convars for NUI behavior

@@ -94,6 +94,12 @@ onesync infinity
 
 EasyAdmin requires FiveM server build 12913 or higher. Update your FXServer if you see compatibility errors.
 
+## See Also
+
+- [Updating](updates/updating.md) — How to update EasyAdmin
+- [Configuration](configuration/advanced.md) — Debug logging and advanced options
+- [NUI Known Issues](nui/known-issues.md) — CEF rendering limitations
+
 ## Getting More Help
 
 - [GitHub Issues](https://github.com/Blumlaut/EasyAdmin/issues) — Bug reports and feature requests

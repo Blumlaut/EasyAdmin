@@ -97,8 +97,10 @@ add_principal identifier.steam:1100001018c7433 group.admin
 add_principal identifier.steam:2200002029d8544 group.moderator
 ```
 
-## Next Steps
+## See Also
 
 - [Player Permissions](permissions/player-permissions.md) — Detailed list of player action permissions
 - [Server Permissions](permissions/server-permissions.md) — Detailed list of server management permissions
 - [Bot Permissions](permissions/bot-permissions.md) — Discord bot command permissions
+- [Installation](install.md) — Set up admin access during installation
+- [Discord ACE](discord/discord-ace.md) — Map Discord roles to ACE permissions

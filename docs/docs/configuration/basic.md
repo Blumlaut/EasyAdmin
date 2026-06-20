@@ -86,3 +86,10 @@ set ea_minIdentifierMatches 2
 Increase this value by 1 for each proxy layer between the server and players. For example, if using a proxy that strips one identifier, set this to `3`.
 
 Default: `2`
+
+## See Also
+
+- [Webhooks](configuration/webhooks.md) — Set up Discord notifications
+- [Commands](configuration/commands.md) — Configure report and calladmin commands
+- [Permissions](permissions/index.md) — Set up granular access control
+- [NUI Settings](configuration/nui-settings.md) — Font size, contrast, sidebar layout

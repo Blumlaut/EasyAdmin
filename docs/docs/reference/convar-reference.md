@@ -507,3 +507,10 @@ Action after maximum warnings reached: `kick` or `ban`.
 | **Type** | Integer |
 
 Ban duration in seconds when `ea_warnAction` is `ban`. Default: 604800 (7 days).
+
+## See Also
+
+- [Configuration Overview](configuration/basic.md) — Core configuration guide
+- [Webhooks](configuration/webhooks.md) — Webhook configuration
+- [Advanced](configuration/advanced.md) — Advanced configuration options
+- [NUI Settings](configuration/nui-settings.md) — NUI-specific convars

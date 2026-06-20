@@ -62,10 +62,11 @@ The bot requires specific Discord channel permissions to function:
 
 The invite URL above includes the necessary permissions. If you customize the invite, ensure these permissions are granted.
 
-## Next Steps
+## See Also
 
 - [Bot Commands](discord/bot-commands.md) — List of all available bot commands
 - [Logging](discord/logging.md) — Configure the bot logging channel
 - [Chat Bridge](discord/chat-bridge.md) — Sync chat between Discord and FiveM
 - [Server Status](discord/server-status.md) — Live server status display
 - [Discord ACE Permissions](discord/discord-ace.md) — Map Discord roles to FiveM permissions
+- [Webhooks](configuration/webhooks.md) — Set up moderation notifications
