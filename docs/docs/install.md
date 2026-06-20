@@ -1,135 +1,79 @@
-# Installing EasyAdmin
+# Installation
 
 ## Requirements
 
-EasyAdmin is a standalone resource. It does **not** require any additional libraries or dependencies to work.
+- FiveM server build 12913 or higher
+- OneSync Infinity enabled (`onesync infinity` in server.cfg)
+- `screenshot-basic` resource (optional, required only for screenshot functionality)
 
 ## Installation
 
-Choose one of the following installation methods based on your setup.
+1. Download the latest release from [GitHub](https://github.com/Blumlaut/EasyAdmin/releases/latest).
+2. Extract the folder into your server's `resources` directory.
+3. Rename the extracted folder to `EasyAdmin`.
 
-=== "Manually (FTP)"
+## Starting EasyAdmin
 
-	1. Go to the [latest release page](https://github.com/Blumlaut/EasyAdmin/releases/latest) and download the source code.
-	2. Extract the downloaded folder (it will be named something like `EasyAdmin-*version*`).
-	3. Rename the folder to `EasyAdmin`.
-	4. Upload the folder to your FiveM server's `resources` directory using FTP.
+Add the following line to your `server.cfg`:
 
-	Then continue with the rest of the setup guide.
-
-=== "Manually on Linux (CLI)"
-
-	1. Install the required packages:
-
-	```
-	tar jq curl wget
-	```
-
-	2. Navigate to your FiveM server's `resources` folder using the terminal:
-
-	```bash
-	cd /path/to/your/resources
-	```
-
-	3. Run the following script to download and install EasyAdmin:
-
-	```bash
-	dl=$(curl -sSL https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest | jq -r .tarball_url )
-	mkdir EasyAdmin
-	wget $dl -O easyadmin.tar.gz
-	tar xf easyadmin.tar.gz && rm easyadmin.tar.gz
-	cp -Rfv *Blumlaut-EasyAdmin*/* ./EasyAdmin
-	rm -rf *Blumlaut-EasyAdmin*
-	```
-
-	> This script can also be used to update EasyAdmin. Always check the [changelog](https://github.com/Blumlaut/EasyAdmin/releases) before updating.
-
-=== "Manually on Windows (GUI)"
-
-	1. Go to the [latest release page](https://github.com/Blumlaut/EasyAdmin/releases/latest) and download the source code.
-	2. Extract the folder (named something like `EasyAdmin-*version*`) into your `resources` folder.
-	3. Rename the extracted folder to `EasyAdmin`.
-
-=== "ZAP-Hosting Webinterface"
-
-	> ⚠️ If you're using **txAdmin**, skip this tab and use the "Manually (FTP)" or "Manually on Linux (CLI)" guides.
-
-	1. Log in to your ZAP-Hosting dashboard.
-	2. Go to the **Resources** tab.
-	3. Search for **EasyAdmin** and click the **Install** button.
-
----
-
-## Getting Started
-
-To start using EasyAdmin, add the following to your `server.cfg` file and restart your server:
-
-```cfg
+```
 ensure EasyAdmin
+```
 
+Then add the required ACE permissions:
+
+```
 add_ace group.admin easyadmin allow
 add_ace resource.EasyAdmin command allow
 ```
 
-All available configuration options are in the [Config Guide](config.md).
+The first line grants all EasyAdmin permissions to the `group.admin` group. The second line allows the resource to execute commands.
 
-If you want to set a key to open EasyAdmin in-game, see the [Keybind Guide](keybind.md).
-
----
+Restart your server after adding these lines.
 
 ## Adding an Admin
 
-Choose your method based on your hosting environment.
+After starting the server, connect and find your identifier by running this in the server console:
 
-=== "Manually"
+```lua
+ea_printIdentifiers 1
+```
 
-	1. Use this template to assign admin access:
+Replace `1` with your player ID. This prints all identifiers for the specified player. The output looks like:
 
-	```
-	add_principal identifier.IDENTIFIERNAME:IDENTIFIER group.admin
-	```
+```
+identifier.steam:1100001018c7433
+identifier.discord:123456789012345678
+identifier.license:ABCD1234EFGH5678
+```
 
-	2. Replace `IDENTIFIERNAME` with the type of identifier you're using (e.g., `steam`, `discord`, `license`).
-	3. Replace `IDENTIFIER` with the actual identifier value.
+Add one of these identifiers to the `group.admin` group in your `server.cfg`:
 
-	> To get your identifier:
-	> - Start the server and connect to it.
-	> - In the **server console**, run:
-	>
-	>   ```lua
-	>   ea_printIdentifiers 1
-	>   ```
-	>   (Replace `1` with your in-game ID.)
+```
+add_principal identifier.steam:1100001018c7433 group.admin
+```
 
-	> Example output:
-	>
-	> ```
-	> identifier.steam:1100001018c7433
-	> identifier.discord:123456789012345678
-	> identifier.license:ABCD1234EFGH5678
-	> ```
+Replace `steam` with your preferred identifier type (`discord`, `license`, `xbl`, etc.) and use your actual identifier value.
 
-	> To use **Steam IDs**, you need a **Steam WebAPIKey**. Follow this [guide](steamapikey.md) to get one.
+## Opening the Menu
 
-	You can also use other identifiers like `discord`, `xbl`, `license`, etc.
+### FiveM
 
-	Example (using Steam):
+The menu key is configured through the FiveM settings UI. Press F1 to open FiveM settings, go to Key Bindings, find "Open EasyAdmin", and assign a key.
 
-	```cfg
-	add_principal identifier.steam:1100001018c7433 group.admin
-	```
+Alternatively, type `/easyadmin` or `/ea` in the chat to open the menu.
 
-=== "ZAP-Hosting"
+### RedM
 
-	> 📌 This method **only works** for ZAP-Hosting's FiveM Linux/Windows servers. For txAdmin, use the "Manually" tab.
+Set the menu key in your `server.cfg`:
 
-	1. Go to the **Settings** page in your ZAP-Hosting dashboard.
-	2. Under the **Admins** section, enter your **Steam ID (64-bit, not Hex)**.
-	3. Add a new line for each admin.
+```
+setr ea_defaultKey "F2"
+```
 
-=== "Discord ACE Permissions"
+Use a standard GTA V key name (e.g., `F2`, `K`, `LCTRL`). You can also use the `/easyadmin` chat command as a fallback.
 
-	EasyAdmin includes support for Discord ACE permissions by default.
+## Next Steps
 
-	1. Set up the [Discord Bot](discordbot.md) first.
-	2. Once the bot is running, follow [this guide](https://easyadmin.readthedocs.io/en/latest/discordbot/#discord-ace-permissions) to configure Discord ACE permissions.
+- [Configuration](configuration/basic.md) — Set up webhooks, Discord bot, and other options
+- [Permissions](permissions/index.md) — Set up granular permissions for moderators and admins
