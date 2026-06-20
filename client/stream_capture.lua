@@ -6,11 +6,13 @@
 ------------------------------------
 
 local streaming = false
+local frameSeq = 0
 
 --- Start the stream capture loop in the NUI.
 RegisterNetEvent('EasyAdmin:StartStream', function()
     if streaming then return end
     streaming = true
+    frameSeq = 0
 
     local maxResolution = GetConvarInt('ea_streamMaxResolution', 640)
     local quality = GetConvarFloat('ea_streamQuality', 0.3)
@@ -39,6 +41,8 @@ RegisterNUICallback('streamFrame', function(data, cb)
     cb({ ok = true })
     if not data or not data.frame then return end
 
+    frameSeq = frameSeq + 1
+
     -- Send frame to server for relay to all viewers
-    TriggerLatentServerEvent('EasyAdmin:StreamFrame', 100000, data.frame)
+    TriggerLatentServerEvent('EasyAdmin:StreamFrame', 100000, data.frame, frameSeq)
 end)

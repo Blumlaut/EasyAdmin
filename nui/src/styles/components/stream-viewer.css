@@ -5,7 +5,6 @@
 .ea-stream-viewer {
   position: fixed;
   z-index: 10001;
-  width: 640px;
   max-width: 95vw;
   display: flex;
   flex-direction: column;

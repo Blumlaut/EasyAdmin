@@ -16,6 +16,7 @@
 ---   viewers = { [adminSrc] = true, ... },
 ---   started = timestamp,
 ---   timeout = timer reference (cleared on first frame),
+---   firstFrameReceived = boolean (true once the first frame arrives),
 --- }
 local streamSessions = {}
 
@@ -39,6 +40,7 @@ local function addViewer(targetId, adminSrc)
         session = {
             viewers = {},
             started = os.time(),
+            firstFrameReceived = false,
         }
         streamSessions[targetId] = session
 
@@ -47,16 +49,21 @@ local function addViewer(targetId, adminSrc)
 
         -- 10-second timeout: if no frames arrive, the capture likely failed
         session.timeout = SetTimeout(10000, function()
-            if streamSessions[targetId] == session and next(session.viewers) == nil then
-                -- No viewers and no frames — clean up silently
-                streamSessions[targetId] = nil
-            elseif streamSessions[targetId] == session then
-                PrintDebugMessage("Stream timed out for player " .. getName(targetId, true), 2)
-                for viewer in pairs(session.viewers) do
-                    TriggerClientEvent('EasyAdmin:StreamEnded', viewer, getName(targetId, true), 'Stream failed to start')
-                    session.viewers[viewer] = nil
+            if streamSessions[targetId] == session then
+                if next(session.viewers) == nil then
+                    -- No viewers and no frames — clean up silently
+                    streamSessions[targetId] = nil
+                elseif session.firstFrameReceived then
+                    -- Frames are flowing, just clear the stale timeout reference
+                    session.timeout = nil
+                else
+                    PrintDebugMessage("Stream timed out for player " .. getName(targetId, true), 2)
+                    for viewer in pairs(session.viewers) do
+                        TriggerClientEvent('EasyAdmin:StreamEnded', viewer, getName(targetId, true), 'Stream failed to start')
+                        session.viewers[viewer] = nil
+                    end
+                    streamSessions[targetId] = nil
                 end
-                streamSessions[targetId] = nil
             end
         end)
     end
@@ -106,11 +113,15 @@ end
 --- Relay a frame from the target player to all subscribed viewers.
 --- @param targetId number  Target player server ID.
 --- @param frameData string  WebP data URI of the captured frame.
-local function relayFrame(targetId, frameData)
+--- @param seq number  Monotonic sequence number from the capture side.
+local function relayFrame(targetId, frameData, seq)
     local session = streamSessions[targetId]
     if not session then return end
 
-    -- Clear the startup timeout on first successful frame
+    -- Mark first frame received so the timeout callback knows the stream is alive.
+    -- ClearTimeout may not cancel a callback on the tick it fires, so the flag
+    -- prevents a false "Stream timed out" message even if the callback runs late.
+    session.firstFrameReceived = true
     if session.timeout then
         ClearTimeout(session.timeout)
         session.timeout = nil
@@ -118,14 +129,14 @@ local function relayFrame(targetId, frameData)
 
     local playerName = getName(targetId, true)
     for viewer in pairs(session.viewers) do
-        TriggerClientEvent('EasyAdmin:StreamFrameReceived', viewer, frameData, playerName)
+        TriggerClientEvent('EasyAdmin:StreamFrameReceived', viewer, frameData, playerName, targetId, seq)
     end
 end
 
 --- Admin requests to start watching a player's stream.
 RegisterServerEvent('EasyAdmin:StartStream', function(playerId)
     local src = source
-    if not playerId or not IsPlayerOnline(playerId) then
+    if not playerId or not isPlayerOnline(playerId) then
         TriggerClientEvent('EasyAdmin:showNotification', src, 'Invalid player')
         return
     end
@@ -153,11 +164,11 @@ RegisterServerEvent('EasyAdmin:StopStream', function(playerId)
 end)
 
 --- Frame data from the target player's capture loop.
-RegisterServerEvent('EasyAdmin:StreamFrame', function(frameData)
+RegisterServerEvent('EasyAdmin:StreamFrame', function(frameData, seq)
     local targetId = source
     if not frameData or frameData == 'ERROR' then return end
 
-    relayFrame(targetId, frameData)
+    relayFrame(targetId, frameData, seq or 0)
 end)
 
 --- Handle target player disconnect — notify all viewers and clean up.
