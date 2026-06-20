@@ -19,6 +19,7 @@ type QuickActionId =
   | 'slap'
   | 'spectate'
   | 'screenshot'
+  | 'stream'
   | 'bucket-join'
   | 'bucket-force'
   | 'freeze'
@@ -75,6 +76,7 @@ const ACTION_GROUPS: ActionGroup[] = [
       { id: 'freeze', label: 'Freeze', icon: 'snowflake', permission: 'player.freeze' },
       { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute' },
       { id: 'screenshot', label: 'Screenshot', icon: 'camera', permission: 'player.screenshot' },
+      { id: 'stream', label: 'Stream', icon: 'play', permission: 'player.screenshot' },
     ],
   },
 ]
@@ -139,6 +141,10 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
         case 'screenshot':
           await callLua('screenshotPlayer', { id: player.id, name: player.name })
           // Screenshot opens in a floating viewer window — no toast needed
+          break
+        case 'stream':
+          await callLua('streamPlayer', { id: player.id, name: player.name })
+          // Stream opens in a floating viewer window — no toast needed
           break
         case 'bucket-join':
           await callLua('joinPlayerBucket', { id: player.id, name: player.name })

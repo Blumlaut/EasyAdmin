@@ -490,6 +490,33 @@ WebP encoding quality for screenshots (0.0–1.0). Higher values produce larger 
 
 URL to upload screenshots to. Can be a Discord webhook URL or any endpoint that accepts POST requests with image data.
 
+## ea_streamMaxResolution
+
+| | |
+|---|---|
+| **Default** | `640` |
+| **Type** | Integer |
+
+Maximum length of the longer dimension for streamed frames (in pixels). The shorter dimension is scaled proportionally to preserve aspect ratio. For example, a 1920×1080 screen with a max resolution of 640 produces 640×360 frames.
+
+## ea_streamQuality
+
+| | |
+|---|---|
+| **Default** | `0.3` |
+| **Type** | Float |
+
+WebP encoding quality for streamed frames (0.0–1.0). Lower values produce smaller frames and use less bandwidth.
+
+## ea_streamTargetFps
+
+| | |
+|---|---|
+| **Default** | `8` |
+| **Type** | Integer |
+
+Target frame rate for the stream capture loop. Higher values produce smoother video but increase CPU usage on the target player's client.
+
 ## ea_useTokenIdentifiers
 
 | | |

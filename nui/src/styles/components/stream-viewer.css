@@ -1,0 +1,127 @@
+/**
+ * StreamViewer — floating window for displaying live player streams.
+ */
+
+.ea-stream-viewer {
+  position: fixed;
+  z-index: 10001;
+  width: 640px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  user-select: none;
+}
+
+.ea-stream-viewer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  cursor: grab;
+}
+
+.ea-stream-viewer-header:active {
+  cursor: grabbing;
+}
+
+.ea-stream-viewer-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.ea-stream-viewer-status {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.ea-stream-viewer-fps {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.ea-stream-viewer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  animation: ea-stream-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ea-stream-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.ea-stream-viewer-error {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--accent-red);
+}
+
+.ea-stream-viewer-close {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.ea-stream-viewer-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.ea-stream-viewer-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: var(--bg-primary);
+  min-height: 200px;
+}
+
+.ea-stream-viewer-body img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.ea-stream-viewer-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ea-stream-viewer-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: ea-spin 0.8s linear infinite;
+}
+
+@keyframes ea-spin {
+  to { transform: rotate(360deg); }
+}

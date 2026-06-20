@@ -9,6 +9,8 @@ import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
 import { ScreenshotCapture } from './components/ScreenshotCapture'
 import { ScreenshotViewer } from './components/ScreenshotViewer'
+import { StreamCapture } from './components/StreamCapture'
+import { StreamViewer } from './components/StreamViewer'
 import { ToastContainer } from './components/ToastContainer'
 import { WarningOverlay } from './components/WarningOverlay'
 import { ModalProvider } from './ModalContext'
@@ -439,8 +441,14 @@ function App() {
         {/* Hidden canvas for screenshot capture — must be in visible tree for OSR */}
         <ScreenshotCapture />
 
+        {/* Hidden canvas for stream capture — must be in visible tree for OSR */}
+        <StreamCapture />
+
         {/* Floating screenshot viewer window */}
         <ScreenshotViewer />
+
+        {/* Floating stream viewer window */}
+        <StreamViewer />
 
         <WarningOverlay
           warning={warning}

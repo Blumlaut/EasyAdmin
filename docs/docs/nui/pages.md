@@ -45,6 +45,7 @@ Shows detailed information for a selected player:
   - Teleport (to/from)
   - Spectate
   - Screenshot
+  - Stream (live screen view)
   - Warn
 
 ### Cached Players

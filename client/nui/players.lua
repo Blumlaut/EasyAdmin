@@ -86,6 +86,14 @@ RegisterNUICallback('screenshotPlayer', function(data, cb)
   cb({ ok = true })
 end)
 
+RegisterNUICallback('streamPlayer', function(data, cb)
+  if not permissions['player.screenshot'] then return deny(cb) end
+  local id = tonumber(data and data.id)
+  if not id then return deny(cb, 'Missing player id') end
+  TriggerServerEvent('EasyAdmin:StartStream', id)
+  cb({ ok = true })
+end)
+
 RegisterNUICallback('teleportToPlayer', function(data, cb)
   if not permissions['player.teleport.single'] then return deny(cb) end
   local id = tonumber(data and data.id)

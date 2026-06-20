@@ -4,6 +4,12 @@ This guide provides instructions for updating EasyAdmin between versions.
 
 ---
 
+## Updating to 7.54
+
+TBD
+
+---
+
 ## Updating to 7.53
 
 ### Screenshot capture is now first-party

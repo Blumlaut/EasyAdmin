@@ -29,6 +29,7 @@
 @import './components/timeline-entry.css';
 @import './components/screenshot-capture.css';
 @import './components/screenshot-viewer.css';
+@import './components/stream-viewer.css';
 /* -- Form Controls -- */
 @import './form-controls.css';
 
