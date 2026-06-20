@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { RefObject, useEffect, useRef, useCallback } from 'react'
 
 const MIN_WIDTH = 500
 const MIN_HEIGHT = 400
@@ -18,6 +18,8 @@ export interface UseWindowResizeOptions {
   onPositionChange?: (next: { x: number; y: number }) => void
   /** If provided, styles are applied synchronously during drag for immediate visual feedback. */
   applyStyles?: (width: number, height: number, x?: number, y?: number) => void
+  /** Ref to the resizable element. Defaults to querying `.ea-window`. */
+  elementRef?: RefObject<HTMLElement | null>
 }
 
 type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
@@ -29,7 +31,7 @@ type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
  */
 let listenersAttached = false
 
-export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPositionChange, applyStyles }: UseWindowResizeOptions) {
+export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPositionChange, applyStyles, elementRef }: UseWindowResizeOptions) {
   // Refs for latest values so listeners don't need to be re-bound
   const enabledRef = useRef(enabled)
   const sizeRef = useRef(size)
@@ -37,6 +39,7 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
   const onResizeEndRef = useRef(onResizeEnd)
   const onPositionChangeRef = useRef(onPositionChange)
   const applyStylesRef = useRef(applyStyles)
+  const elementRefLocal = elementRef
 
   enabledRef.current = enabled
   sizeRef.current = size
@@ -46,7 +49,7 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
   applyStylesRef.current = applyStyles
 
   const detectEdge = useCallback((e: MouseEvent): ResizeDir | null => {
-    const el = document.querySelector('.ea-window') as HTMLElement | null
+    const el = elementRefLocal?.current ?? document.querySelector('.ea-window') as HTMLElement | null
     if (!el) return null
     const rect = el.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -63,7 +66,7 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
     const vEdge = y < HANDLE_THRESHOLD ? 'n' : fromBottom < HANDLE_THRESHOLD ? 's' : ''
     if (hEdge || vEdge) return `${vEdge}${hEdge}` as ResizeDir
     return null
-  }, [])
+  }, [elementRefLocal])
 
   const detectEdgeRef = useRef(detectEdge)
   detectEdgeRef.current = detectEdge
@@ -83,6 +86,11 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
       dir: ResizeDir
     }
     let drag: DragState | null = null
+
+    function getWindowElement(): HTMLElement | null {
+      if (elementRefLocal?.current) return elementRefLocal.current
+      return document.querySelector('.ea-window') as HTMLElement | null
+    }
 
     function onMouseMove(e: MouseEvent) {
       if (!enabledRef.current) return
@@ -147,7 +155,7 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
       if (!dir) return
 
       const startPos = (() => {
-        const el = document.querySelector('.ea-window') as HTMLElement | null
+        const el = getWindowElement()
         const cs = el ? getComputedStyle(el) : null
         return {
           x: cs ? parseInt(cs.getPropertyValue('--ea-left') || cs.left || '0') : 0,
@@ -173,5 +181,5 @@ export function useWindowResize({ enabled, size, onSizeChange, onResizeEnd, onPo
     document.addEventListener('mousedown', onMouseDown)
     document.addEventListener('mouseup', onMouseUp)
     // Intentionally no cleanup — listeners are ref-gated
-  }, [])
+  }, [elementRefLocal])
 }

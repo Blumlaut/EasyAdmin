@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { RefObject, useEffect, useRef } from 'react'
 
 export interface WindowPosition {
   x: number
@@ -24,10 +24,14 @@ export interface UseWindowDragOptions {
    * Use this to persist the position (e.g. save to KVP).
    */
   onDragEnd?: (position: WindowPosition) => void
+  /**
+   * Ref to the draggable element. Defaults to querying `.ea-window`.
+   */
+  elementRef?: RefObject<HTMLElement | null>
 }
 
 /**
- * Window-dragging hook for the NUI window.
+ * Window-dragging hook.
  *
  * Listens for `mousedown` on the document and starts a drag when the
  * target is inside an element marked with `data-window-drag-handle`
@@ -39,7 +43,7 @@ export interface UseWindowDragOptions {
  * The position is clamped so the entire window stays on-screen
  * (0px margin). Actual window dimensions are measured dynamically.
  */
-export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd }: UseWindowDragOptions) {
+export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd, elementRef }: UseWindowDragOptions) {
   // Keep the latest position in a ref so the effect below can read it
   // without needing to re-subscribe on every move.
   const positionRef = useRef<WindowPosition>(position)
@@ -55,6 +59,11 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd }
     }
     let drag: DragState | null = null
 
+    function getWindowElement(): HTMLElement | null {
+      if (elementRef?.current) return elementRef.current
+      return document.querySelector('.ea-window') as HTMLElement | null
+    }
+
     function onMouseMove(e: MouseEvent) {
       if (!drag) return
       const dx = e.clientX - drag.startX
@@ -65,7 +74,7 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd }
       // Clamp so the entire window stays on-screen (0px margin).
       // Measure actual dimensions each frame to account for any
       // CSS changes (font scaling, etc.) while dragging.
-      const el = document.querySelector('.ea-window') as HTMLElement | null
+      const el = getWindowElement()
       const vw = window.innerWidth
       const vh = window.innerHeight
       const ww = el ? el.offsetWidth : 1210
@@ -128,5 +137,5 @@ export function useWindowDrag({ enabled, position, onPositionChange, onDragEnd }
       document.removeEventListener('mouseup', onMouseUp)
       drag = null
     }
-  }, [enabled, onPositionChange, onDragEnd])
+  }, [enabled, onPositionChange, onDragEnd, elementRef])
 }

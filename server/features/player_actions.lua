@@ -207,6 +207,7 @@ function isScreenshotInProgress()
 end
 exports('isScreenshotInProgress', isScreenshotInProgress)
 
+
 --- Complete a pending screenshot (called by client/screenshot.lua via TookScreenshot).
 --- Args: targetPlayerId (the player who was captured), result (data URI or 'ERROR').
 local function completeScreenshot(targetPlayerId, result)
@@ -221,26 +222,45 @@ local function completeScreenshot(targetPlayerId, result)
 		return
 	end
 
-	local res = matchURL(tostring(result))
-	if not res then
-		PrintDebugMessage("Screenshot URL extraction failed for player "..getName(targetPlayerId, true), 2)
-		return
+	-- Send data URI to admin's NUI for display in the floating viewer
+	TriggerClientEvent('EasyAdmin:ScreenshotReceived', adminSrc, result, getName(targetPlayerId, true))
+
+	-- Also upload to external host if configured (for webhooks / chat)
+	local uploadUrl = GetConvar('ea_screenshoturl', 'none')
+	if uploadUrl ~= 'none' and uploadUrl ~= '' then
+		local field = GetConvar('ea_screenshotfield', 'files[]')
+		PerformHttpRequest(uploadUrl, function(body, statusCode) 
+			if statusCode and statusCode >= 200 and statusCode < 300 and body and body ~= '' then
+				local res = matchURL(tostring(body)) or body
+				local invokingResource
+				if scrinprogress_invoking then
+					invokingResource = scrinprogress_invoking
+				elseif GetInvokingResource() and GetInvokingResource() ~= GetCurrentResourceName() then
+					invokingResource = "`"..GetInvokingResource().."`"
+				end
+				PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
+				SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), invokingResource or getName(adminSrc), getName(targetPlayerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
+				TriggerClientEvent("chat:addMessage", adminSrc, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
+			end
+		end, 'POST', json.encode({
+			[field] = result,
+		}), {
+			['Content-Type'] = 'application/json',
+		})
+	else
+		-- No external uploader — just log
+		local invokingResource
+		if scrinprogress_invoking then
+			invokingResource = scrinprogress_invoking
+		elseif GetInvokingResource() and GetInvokingResource() ~= GetCurrentResourceName() then
+			invokingResource = "`"..GetInvokingResource().."`"
+		end
+		PrintDebugMessage("Screenshot taken for "..getName(targetPlayerId, true) .." (no external upload)", 4)
+		SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), invokingResource or getName(adminSrc), getName(targetPlayerId, true, true), "(local)"), "screenshot", 16777214, "Screenshot Captured")
 	end
 
-	local invokingResource
-	if scrinprogress_invoking then
-		invokingResource = scrinprogress_invoking
-	elseif GetInvokingResource() and GetInvokingResource() ~= GetCurrentResourceName() then
-		invokingResource = "`"..GetInvokingResource().."`"
-	end
-
-	PrintDebugMessage("Screenshot taken, result:\n "..res, 4)
-	SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("admintookscreenshot"), invokingResource or getName(adminSrc), getName(targetPlayerId, true, true), res), "screenshot", 16777214, "Screenshot Captured", res)
-	TriggerClientEvent('chat:addMessage', adminSrc, { template = '<img src="{0}" style="max-width: 400px;" />', args = { res } })
-	TriggerClientEvent("chat:addMessage", adminSrc, { args = { "EasyAdmin", string.format(GetLocalisedText("screenshotlink"), res) } })
-	PrintDebugMessage("Screenshot for Player "..getName(targetPlayerId, true).." done, "..res.." requested by "..getName(adminSrc, true), 3)
+	PrintDebugMessage("Screenshot for Player "..getName(targetPlayerId, true) .." done, requested by "..getName(adminSrc, true), 3)
 end
-
 --- Global state for tracking the in-progress screenshot.
 local scrinprogress_admin = nil
 local scrinprogress_target = nil

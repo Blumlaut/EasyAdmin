@@ -28,6 +28,7 @@
 @import './components/navigation.css';
 @import './components/timeline-entry.css';
 @import './components/screenshot-capture.css';
+@import './components/screenshot-viewer.css';
 /* -- Form Controls -- */
 @import './form-controls.css';
 

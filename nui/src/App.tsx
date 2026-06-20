@@ -8,6 +8,7 @@ import { on } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
 import { ScreenshotCapture } from './components/ScreenshotCapture'
+import { ScreenshotViewer } from './components/ScreenshotViewer'
 import { ToastContainer } from './components/ToastContainer'
 import { WarningOverlay } from './components/WarningOverlay'
 import { ModalProvider } from './ModalContext'
@@ -437,6 +438,9 @@ function App() {
 
         {/* Hidden canvas for screenshot capture — must be in visible tree for OSR */}
         <ScreenshotCapture />
+
+        {/* Floating screenshot viewer window */}
+        <ScreenshotViewer />
 
         <WarningOverlay
           warning={warning}

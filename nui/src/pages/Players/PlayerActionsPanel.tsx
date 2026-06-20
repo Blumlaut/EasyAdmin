@@ -138,7 +138,7 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
           break
         case 'screenshot':
           await callLua('screenshotPlayer', { id: player.id, name: player.name })
-          onToast('Screenshot taken', 'success')
+          // Screenshot opens in a floating viewer window — no toast needed
           break
         case 'bucket-join':
           await callLua('joinPlayerBucket', { id: player.id, name: player.name })

@@ -6,47 +6,16 @@
 --   1. Server triggers EasyAdmin:CaptureScreenshot on target player
 --   2. Target's NUI captures a frame via Three.js + CfxTexture
 --   3. NUI returns a webp data URI to this script
---   4. This script uploads the data URI to the configured image host
---   5. Result (hosted URL) is sent back to the server
+--   4. Data URI is sent to the server, which relays it to the requesting admin
 ------------------------------------
 
-local pendingScreenshots = {} -- correlationId -> { timer, adminSrc }
+local pendingScreenshots = {} -- correlationId -> { timer }
 local correlationId = 0
 
 --- Generate a unique correlation ID for request/response matching.
 local function nextCorrelationId()
     correlationId = correlationId + 1
     return tostring(correlationId)
-end
-
---- Upload a data URI to the configured image host and return the response body.
----@param dataUri string  The base64 data URI from the NUI.
----@param callback fun(responseBody: string)  Called with the server response or 'ERROR'.
-local function uploadScreenshot(dataUri, callback)
-    local uploadUrl = GetConvar('ea_screenshoturl', 'none')
-    if uploadUrl == 'none' or uploadUrl == '' then
-        -- No external uploader configured — return the data URI as-is.
-        -- The server can still display it in chat via <img src="data:...">
-        callback(dataUri)
-        return
-    end
-
-    local field = GetConvar('ea_screenshotfield', 'files[]')
-
-    -- Convert data URI to a blob-like format for multipart upload.
-    -- FiveM's PerformHttpRequest doesn't support FormData directly,
-    -- so we send the data URI as JSON and let the endpoint handle it.
-    PerformHttpRequest(uploadUrl, function(body, statusCode, headers)
-        if statusCode and statusCode >= 200 and statusCode < 300 and body and body ~= '' then
-            callback(body)
-        else
-            callback('ERROR')
-        end
-    , 'POST', json.encode({
-        [field] = dataUri,
-    }), {
-        ['Content-Type'] = 'application/json',
-    })
 end
 
 --- NUICallback: receives the screenshot data URI from the NUI.
@@ -73,10 +42,8 @@ RegisterNUICallback('screenshotResult', function(data, cb)
         return
     end
 
-    -- Upload the data URI to the external image host
-    uploadScreenshot(result, function(uploadResult)
-        TriggerLatentServerEvent('EasyAdmin:TookScreenshot', 100000, uploadResult)
-    end)
+    -- Send data URI directly to server (relay to admin)
+    TriggerLatentServerEvent('EasyAdmin:TookScreenshot', 100000, result)
 end)
 
 --- Capture a screenshot of this player's screen.
@@ -87,7 +54,7 @@ RegisterNetEvent('EasyAdmin:CaptureScreenshot', function()
 
     local id = nextCorrelationId()
 
-    -- 25-second timeout (covers capture + upload)
+    -- 25-second timeout (covers capture)
     local timer = SetTimeout(25000, function()
         if pendingScreenshots[id] then
             pendingScreenshots[id] = nil
