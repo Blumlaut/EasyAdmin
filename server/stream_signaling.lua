@@ -153,8 +153,7 @@ RegisterServerEvent('EasyAdmin:StopStream', function(playerId)
 end)
 
 --- Frame data from the target player's capture loop.
---- Uses LatentServerEvent for large payload support (data URIs ~8-15KB).
-RegisterLatentServerEvent('EasyAdmin:StreamFrame', 100000, function(frameData)
+RegisterServerEvent('EasyAdmin:StreamFrame', function(frameData)
     local targetId = source
     if not frameData or frameData == 'ERROR' then return end
 
