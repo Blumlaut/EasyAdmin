@@ -84,10 +84,10 @@ Remove any lines mentioning `EasyAdmin`, then restart the client and set the key
 
 ## OneSync required
 
-EasyAdmin requires OneSync Infinity. Ensure your server.cfg contains:
+EasyAdmin requires OneSync Infinity. Add it as a server start parameter:
 
 ```
-onesync infinity
++onesync infinity
 ```
 
 ## Server build requirement

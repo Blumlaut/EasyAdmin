@@ -3,7 +3,7 @@
 ## Requirements
 
 - FiveM server build 12913 or higher
-- OneSync Infinity enabled (`onesync infinity` in server.cfg)
+- OneSync Infinity enabled (`+onesync infinity` as a server start parameter)
 - `screenshot-basic` resource (optional, required only for screenshot functionality)
 
 ## Installation
