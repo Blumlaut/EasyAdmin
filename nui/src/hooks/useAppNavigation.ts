@@ -79,6 +79,16 @@ export function useAppNavigation({
   const [view, setView] = useState<View>('main')
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [selectedBanId, setSelectedBanId] = useState<string | null>(null)
+
+  // Keep selectedPlayer in sync with the players array so that
+  // property changes (frozen, muted, etc.) are reflected immediately
+  useEffect(() => {
+    if (!selectedPlayer) return
+    const updated = players.find((p) => p.id === selectedPlayer.id)
+    if (updated) {
+      setSelectedPlayer(updated)
+    }
+  }, [players, selectedPlayer])
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null)
   const [selectedResource, setSelectedResource] = useState<string | null>(null)
 

@@ -72,7 +72,7 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
   return (
     <div className="card">
       <div className="flex items-center gap-4 mb-3">
-        <Avatar player={player} size="lg" variant="player" />
+        <Avatar key={player.id} player={player} size="lg" variant="player" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="text-xl font-bold truncate">{player.name}</h3>

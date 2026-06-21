@@ -5,6 +5,7 @@ import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Avatar } from '../../components/Avatar'
 import { Icon } from '../../components/icons'
+import { Tooltip } from '../../components/Tooltip'
 import { RoleBadges } from '../../components/RoleBadges'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
@@ -101,7 +102,7 @@ export function PlayerListPage({
 function PlayerRow({ player, onClick }: { player: Player; onClick: () => void }) {
   return (
     <ListItem onClick={onClick}>
-      <Avatar player={player} size="sm" variant="player" />
+      <Avatar key={player.id} player={player} size="sm" variant="player" />
       <div className="list-item-content">
         <div className="list-item-title">
           <span className="list-item-title-text">{player.name}</span>
@@ -113,8 +114,16 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
         </div>
       </div>
       <div className="list-item-meta">
-        {player.frozen && <span className="badge badge-frozen">Frozen</span>}
-        {player.muted && <span className="badge badge-muted">Muted</span>}
+        {player.frozen && (
+          <Tooltip content="This player is frozen">
+            <span className="badge badge-frozen">Frozen</span>
+          </Tooltip>
+        )}
+        {player.muted && (
+          <Tooltip content="This player is muted">
+            <span className="badge badge-muted">Muted</span>
+          </Tooltip>
+        )}
       </div>
       <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
     </ListItem>
