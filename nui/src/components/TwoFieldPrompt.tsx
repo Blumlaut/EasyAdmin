@@ -64,7 +64,7 @@ export function TwoFieldPrompt({
     >
       <div className="two-field-prompt">
         <label className="flex flex-col gap-1">
-          <span className="text-sm text-secondary">{firstLabel}</span>
+          <span className="text-sm text-fg-subtle">{firstLabel}</span>
           <input
             ref={firstRef}
             className="input"
@@ -74,7 +74,7 @@ export function TwoFieldPrompt({
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-sm text-secondary">{secondLabel}</span>
+          <span className="text-sm text-fg-subtle">{secondLabel}</span>
           <input
             className="input"
             placeholder={secondPlaceholder}

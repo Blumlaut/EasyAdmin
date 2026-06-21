@@ -23,7 +23,7 @@ export function ServerCleanup({ permissions }: ServerCleanupProps) {
   return (
     <div className="card card-warning-border">
       <p className="section-label">Cleanup</p>
-      <p className="text-sm text-secondary mb-3">
+      <p className="mb-3 text-sm text-fg-subtle">
         Remove cars, peds, or props from an area around you.
       </p>
       <button

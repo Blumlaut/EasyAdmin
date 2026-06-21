@@ -116,6 +116,7 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
   const isDateInPast = useMemo(() => {
     if (permanent || !date) return false
     const unbanTimestamp = dateToTimestamp(date, time)
+    // eslint-disable-next-line react-hooks/purity -- Date.now() is stable within a single render; recomputes only when deps change
     return unbanTimestamp <= Math.floor(Date.now() / 1000)
   }, [permanent, date, time])
 
@@ -167,7 +168,7 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
       <div className="ban-modal">
         {/* Reason field */}
         <label className="ban-modal-field">
-          <span className="text-sm text-secondary">Reason</span>
+          <span className="text-sm text-fg-subtle">Reason</span>
           <textarea
             className="input ban-modal-reason"
             placeholder="No reason"
@@ -180,7 +181,7 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
 
         {/* Quick-select presets */}
         <div className="ban-modal-section">
-          <span className="text-sm text-secondary">Quick select</span>
+          <span className="text-sm text-fg-subtle">Quick select</span>
           <div className="ban-modal-presets">
             {PRESETS.map((preset) => (
               <button

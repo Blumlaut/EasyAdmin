@@ -39,6 +39,13 @@ canvas.chartjs-chart {
   flex-shrink: 0;
 }
 
+/* Overlay variant: icon absolute top-right */
+.statistics-icon--absolute {
+  position: absolute;
+  top: 0.875rem;
+  right: 1rem;
+}
+
 /* Chart card */
 .statistics-chart-card {
   padding: 1rem;

@@ -32,21 +32,6 @@
   background: var(--bg-hover);
 }
 
-.list-item-active {
-  background: var(--bg-active);
-}
-
-.list-item-active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--brand-gradient);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-}
-
 .list-item-content {
   flex: 1;
   min-width: 0;

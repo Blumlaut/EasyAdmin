@@ -112,7 +112,7 @@ export function DoughnutChart({
         },
       },
     },
-  }), [value, strokeColor])
+  }), [value])
 
   return (
     <div className={`card flex flex-col items-center justify-center ${className}`}>
@@ -120,10 +120,13 @@ export function DoughnutChart({
       <div className="flex items-center justify-center">
         <Doughnut data={data} options={options} plugins={[centerPlugin]} width={size} height={size} />
       </div>
-      <p className="text-sm font-semibold mt-3" style={{ color: strokeColor }}>
+      <p className="mt-3 text-sm font-semibold"
+        // eslint-disable-next-line nui/no-inline-styles -- dynamic color from prop, cannot be pre-styled
+        style={{ color: strokeColor }}
+      >
         {pctText}% full
       </p>
-      {subLabel && <p className="text-xs text-muted mt-1">{subLabel}</p>}
+      {subLabel && <p className="mt-1 text-xs text-fg-muted">{subLabel}</p>}
     </div>
   )
 }

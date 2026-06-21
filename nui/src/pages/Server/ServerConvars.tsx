@@ -9,7 +9,7 @@ export function ServerConvars() {
   return (
     <div className="card">
       <p className="section-label">ConVars</p>
-      <p className="text-sm text-secondary mb-3">
+      <p className="mb-3 text-sm text-fg-subtle">
         Set a convar by name and value.
       </p>
       <button

@@ -65,6 +65,7 @@ export function DatePicker({ value, onChange, disabled, label }: DatePickerProps
   useEffect(() => {
     if (value) {
       const [y, m] = value.split('-').map(Number)
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync internal calendar view when external value prop changes
       setState({ viewYear: y, viewMonth: m - 1 })
     }
   }, [value])
@@ -191,7 +192,7 @@ export function DatePicker({ value, onChange, disabled, label }: DatePickerProps
   if (disabled) {
     return (
       <div className="date-picker date-picker-disabled" ref={ref}>
-        {label && <span className="text-sm text-secondary">{label}</span>}
+        {label && <span className="text-sm text-fg-subtle">{label}</span>}
         <button
           type="button"
           className="date-picker-trigger"
@@ -206,7 +207,7 @@ export function DatePicker({ value, onChange, disabled, label }: DatePickerProps
 
   return (
     <div className={`date-picker${open ? ' date-picker-open' : ''}`} ref={ref}>
-      {label && <span className="text-sm text-secondary">{label}</span>}
+      {label && <span className="text-sm text-fg-subtle">{label}</span>}
       <button
         type="button"
         className="date-picker-trigger"

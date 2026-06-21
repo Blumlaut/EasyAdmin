@@ -44,7 +44,7 @@ export function CleanupModal({ availableTypes, onConfirm, onCancel }: CleanupMod
     >
       <div className="flex flex-col gap-3">
         <label className="flex flex-col gap-1">
-          <span className="text-sm text-secondary">Type</span>
+          <span className="text-sm text-fg-subtle">Type</span>
           <select
             className="input"
             value={type}
@@ -57,7 +57,7 @@ export function CleanupModal({ availableTypes, onConfirm, onCancel }: CleanupMod
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-sm text-secondary">Radius</span>
+          <span className="text-sm text-fg-subtle">Radius</span>
           <select
             className="input"
             value={String(radius)}
@@ -75,7 +75,7 @@ export function CleanupModal({ availableTypes, onConfirm, onCancel }: CleanupMod
         </label>
 
         <div className="toggle-row">
-          <span className="text-sm text-secondary">Deep clean</span>
+          <span className="text-sm text-fg-subtle">Deep clean</span>
           <label className="toggle">
             <input
               type="checkbox"

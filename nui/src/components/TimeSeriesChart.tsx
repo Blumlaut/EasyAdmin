@@ -136,6 +136,7 @@ export function TimeSeriesChart({
 
   const xRange = useMemo(() => {
     if (range) return range
+    // eslint-disable-next-line react-hooks/purity -- default range is "last 24 hours from now", which requires current time
     if (allTimestamps.length === 0) return { start: Date.now() - 86400000, end: Date.now() }
     return {
       start: Math.min(...allTimestamps) - 60000, // 1 min padding
@@ -166,7 +167,7 @@ export function TimeSeriesChart({
   // Custom tooltip callback
   const tooltips = useMemo(
     () => ({
-      ...chartDefaults.plugins!.tooltip,
+      ...(chartDefaults.plugins?.tooltip ?? {}),
       callbacks: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         title: (items: any[]) => {
@@ -190,7 +191,7 @@ export function TimeSeriesChart({
     plugins: {
       ...chartDefaults.plugins,
       legend: {
-        ...chartDefaults.plugins!.legend,
+        ...chartDefaults.plugins?.legend ?? {},
         display: showLegend,
       },
       tooltip: showTooltip ? tooltips : { enabled: false },
@@ -199,9 +200,9 @@ export function TimeSeriesChart({
       ...chartDefaults.scales,
       x: {
         type: 'time' as const,
-        grid: (chartDefaults.scales!.x as any)?.grid || {},
-        ticks: (chartDefaults.scales!.x as any)?.ticks || {},
-        border: (chartDefaults.scales!.x as any)?.border || {},
+        grid: chartDefaults.scales?.x?.grid || {},
+        ticks: chartDefaults.scales?.x?.ticks || {},
+        border: chartDefaults.scales?.x?.border || {},
         min: xRange.start,
         max: xRange.end,
       },
@@ -211,12 +212,15 @@ export function TimeSeriesChart({
   const hasData = lines.some((l) => l.data.length > 0)
 
   return (
-    <div className={`relative ${className}`} style={{ height: height ? `${height}px` : '100%' }}>
+    <div className={`relative ${className}`}
+      // eslint-disable-next-line nui/no-inline-styles -- dynamic chart height from prop
+      style={{ height: height ? `${height}px` : '100%' }}
+    >
       {hasData ? (
         <Line data={data} options={options} />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-xs text-muted">{emptyMessage}</p>
+          <p className="text-xs text-fg-muted">{emptyMessage}</p>
         </div>
       )}
     </div>

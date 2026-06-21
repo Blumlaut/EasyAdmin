@@ -288,7 +288,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
       <p className="section-label">Actions</p>
 
       {!hasAnyPermission && (
-        <p className="text-muted text-sm">No permissions for this player</p>
+        <p className="text-sm text-fg-muted">No permissions for this player</p>
       )}
 
       {/* Discipline buttons (warn / kick / ban) */}
@@ -306,6 +306,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           {canKick && (
             <button
               className="btn btn-warning btn-sm"
+              // eslint-disable-next-line nui/no-inline-styles -- overrides btn-warning to use orange instead of yellow for Kick
               style={{ background: 'var(--accent-orange)', borderColor: 'var(--accent-orange)' }}
               onClick={handleKick}
             >

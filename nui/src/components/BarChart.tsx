@@ -49,14 +49,7 @@ export function BarChart({
   emptyMessage = 'No data',
   className = '',
 }: BarChartProps) {
-  if (items.length === 0) {
-    return (
-      <div className={`flex items-center justify-center ${className}`} style={{ minHeight: 60 }}>
-        <p className="text-xs text-muted">{emptyMessage}</p>
-      </div>
-    )
-  }
-
+  // Hooks must be called before any early returns
   const chartHeight = height ?? Math.max(items.length * (barHeight + 8) + 20, 80)
 
   const labels = useMemo(() => items.map((item) => item.label), [items])
@@ -82,8 +75,7 @@ export function BarChart({
     }],
   }), [labels, values, bgColors, barHeight])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const options: any = useMemo(() => ({
+  const options: Record<string, unknown> = useMemo(() => ({
     animation: false,
     indexAxis: 'y' as const,
     responsive: true,
@@ -121,8 +113,22 @@ export function BarChart({
     },
   }), [showValues])
 
+  if (items.length === 0) {
+    return (
+      <div className={`flex items-center justify-center ${className}`}
+        // eslint-disable-next-line nui/no-inline-styles -- dynamic min-height for empty state container
+        style={{ minHeight: 60 }}
+      >
+        <p className="text-xs text-fg-muted">{emptyMessage}</p>
+      </div>
+    )
+  }
+
   return (
-    <div className={`relative ${className}`} style={{ height: `${chartHeight}px` }}>
+    <div className={`relative ${className}`}
+      // eslint-disable-next-line nui/no-inline-styles -- dynamic chart height computed from item count
+      style={{ height: `${chartHeight}px` }}
+    >
       <Bar data={data} options={options} />
     </div>
   )

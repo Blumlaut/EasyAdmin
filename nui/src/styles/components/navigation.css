@@ -53,6 +53,35 @@
   border-color: rgba(59, 130, 246, 0.2);
 }
 
+/* Dropdown children nav items — must come before :disabled pseudo-selectors */
+.nav-dropdown-children .nav-item {
+  position: relative;
+  margin-left: var(--space-5);
+  margin-right: var(--space-3);
+  padding-left: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.nav-dropdown-children .nav-item::before {
+  content: '';
+  position: absolute;
+  left: var(--space-5);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-subtle);
+  pointer-events: none;
+}
+
+/* Horizontal nav item overrides — must come before :disabled pseudo-selectors */
+.navigation--horizontal .nav-item {
+  width: auto;
+  min-width: max-content;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Higher-specificity :disabled states come after all base .nav-item overrides */
 .nav-item:disabled,
 .nav-item[disabled] {
   color: var(--text-muted);
@@ -128,28 +157,6 @@
   overflow: hidden;
 }
 
-.nav-dropdown-children .nav-item {
-  margin-left: var(--space-5);
-  margin-right: var(--space-3);
-  padding-left: var(--space-3);
-  font-size: var(--text-sm);
-}
-
-.nav-dropdown-children .nav-item::before {
-  content: '';
-  position: absolute;
-  left: var(--space-5);
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--border-subtle);
-  pointer-events: none;
-}
-
-.nav-dropdown-children .nav-item {
-  position: relative;
-}
-
 /* ============================================================
    Navigation separator (horizontal divider)
    ============================================================ */
@@ -174,14 +181,9 @@
   margin: var(--space-1) var(--space-3) 0;
 }
 
-/* -- Horizontal overrides -- */
-
-.navigation--horizontal .nav-item {
-  width: auto;
-  min-width: max-content;
-  margin: 0;
-  padding: var(--space-2) var(--space-3);
-}
+/* ============================================================
+   Horizontal overrides
+   ============================================================ */
 
 .navigation--horizontal .nav-dropdown {
   display: flex;
@@ -269,4 +271,3 @@
   padding: 0 var(--space-2);
   white-space: nowrap;
 }
-

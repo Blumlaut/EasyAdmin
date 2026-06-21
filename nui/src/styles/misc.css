@@ -15,51 +15,12 @@
 }
 
 /* ============================================================
-   Spinner row (used by lists while loading)
-   ============================================================ */
-
-.spinner-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-6);
-  gap: var(--space-2);
-  color: var(--text-muted);
-}
-
-/* ============================================================
-   Banner / card title with action button
-   ============================================================ */
-
-.card-section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-  font-size: var(--text-xl);
-  font-weight: var(--font-semibold);
-  letter-spacing: -0.01em;
-}
-
-/* ============================================================
    Two field prompt (e.g. set convar)
    ============================================================ */
 
 .two-field-prompt {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-}
-
-/* ============================================================
-   Cleanup modal extra
-   ============================================================ */
-
-.cleanup-toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: var(--space-3);
 }
 

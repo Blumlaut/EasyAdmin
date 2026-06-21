@@ -51,10 +51,11 @@ export function SelectMenu({
   // If there isn't enough space above, flip to open downward.
   useEffect(() => {
     if (!open || !triggerRef.current) return
+    const trigger = triggerRef.current
 
     // Use requestAnimationFrame to ensure the dropdown is painted before measuring
     const rafId = requestAnimationFrame(() => {
-      const triggerRect = triggerRef.current!.getBoundingClientRect()
+      const triggerRect = trigger.getBoundingClientRect()
       const spaceAbove = triggerRect.top
       const spaceBelow = window.innerHeight - triggerRect.bottom
       // Need at least 40px to be usable; prefer opening downward if there's more room below

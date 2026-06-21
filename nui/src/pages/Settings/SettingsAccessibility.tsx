@@ -39,7 +39,7 @@ export function SettingsAccessibility({
       <div className="toggle-row">
         <div className="flex flex-col">
           <span className="text-sm">High contrast</span>
-          <span className="text-xs text-muted">
+          <span className="text-xs text-fg-muted">
             Boost color contrast for better readability.
           </span>
         </div>
@@ -55,12 +55,12 @@ export function SettingsAccessibility({
       </div>
 
       {/* Font Size */}
-      <div className="flex flex-col gap-1 mt-3">
+      <div className="mt-3 flex flex-col gap-1">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-secondary">Font size</span>
+          <span className="text-sm text-fg-subtle">Font size</span>
           <span className="text-sm font-medium">{fontSize}px</span>
         </div>
-        <span className="text-xs text-muted">
+        <span className="text-xs text-fg-muted">
           Adjust the base text size across the entire menu.
         </span>
         <input
@@ -80,7 +80,7 @@ export function SettingsAccessibility({
           }}
           aria-label={`Font size, currently ${fontSize}px`}
         />
-        <div className="flex justify-between text-xs text-muted">
+        <div className="flex justify-between text-xs text-fg-muted">
           <span>{FONT_SIZE_MIN}px</span>
           <span>{FONT_SIZE_MAX}px</span>
         </div>

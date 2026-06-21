@@ -22,9 +22,7 @@ interface CfxTextureConstructor {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var THREE: Record<string, unknown>
-  // eslint-disable-next-line no-var
   var CfxTexture: CfxTextureConstructor | undefined
 }
 

@@ -28,9 +28,9 @@ export function ServerInfo() {
             },
           }))}
         >
-          <Icon name="server" size="xs" className="text-muted" />
+          <Icon name="server" size="xs" className="text-fg-muted" />
           <span className="flex-1 text-left">Set gametype</span>
-          <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
+          <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
         </button>
         <button
           className="server-action-btn"
@@ -50,9 +50,9 @@ export function ServerInfo() {
             },
           }))}
         >
-          <Icon name="map-pin" size="xs" className="text-muted" />
+          <Icon name="map-pin" size="xs" className="text-fg-muted" />
           <span className="flex-1 text-left">Set map name</span>
-          <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
+          <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
         </button>
       </div>
     </div>

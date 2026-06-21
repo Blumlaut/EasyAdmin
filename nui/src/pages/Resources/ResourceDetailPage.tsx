@@ -60,6 +60,7 @@ export function ResourceDetailPage({
 
   useEffect(() => {
     fetchResource()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetchMetadata sets loading state as part of data-fetching pattern
     fetchMetadata()
 
     const unsubResources = on<ResourceListResponse>('updateResources', (payload) => {
@@ -133,7 +134,7 @@ export function ResourceDetailPage({
   if (!loading && metadataRows.length === 0) {
     metadataRows.push({
       key: 'metadata',
-      value: <span className="text-muted">No metadata entries found</span>,
+      value: <span className="text-fg-muted">No metadata entries found</span>,
     })
   }
 
@@ -144,9 +145,9 @@ export function ResourceDetailPage({
     return (
       <div className="page-container">
         <div className="card">
-          <div className="flex items-center gap-3 mb-3">
+          <div className="mb-3 flex items-center gap-3">
             <Skeleton width={48} height={48} circle />
-            <div className="flex-1 flex flex-col gap-1">
+            <div className="flex flex-1 flex-col gap-1">
               <Skeleton width="40%" height={18} />
               <Skeleton width="30%" height={14} />
             </div>
@@ -164,22 +165,22 @@ export function ResourceDetailPage({
   return (
     <div className="page-container">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="mb-4 flex items-center gap-3">
         <div
           className={`resource-state-dot resource-state-dot-lg resource-state-dot--${displayState}`}
         />
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-mono">{resourceName}</h3>
+            <h3 className="text-mono text-lg font-semibold">{resourceName}</h3>
             {version && (
               <span
-                className="text-sm font-mono shrink-0"
+                className="shrink-0 font-mono text-sm"
                 style={resource?.outdated ? { color: 'var(--accent-yellow)' } : undefined}
                 title={resource?.outdated && resource?.latestVersion ? `Update available: v${resource.latestVersion}` : undefined}
               >
                 {resource?.outdated && resource?.latestVersion ? (
                   <>
-                    <Icon name="arrow-up-circle" size="xs" className="inline align-middle mr-0.5" />
+                    <Icon name="arrow-up-circle" size="xs" className="mr-0.5 inline align-middle" />
                     v{version}
                   </>
                 ) : (
@@ -192,7 +193,7 @@ export function ResourceDetailPage({
                 href={repository}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted hover:text-foreground shrink-0"
+                className="hover:text-foreground shrink-0 text-fg-muted"
                 title={repository}
               >
                 <Icon name="external-link" size="xs" />
@@ -200,7 +201,7 @@ export function ResourceDetailPage({
             )}
           </div>
           {description && (
-            <p className="text-secondary text-sm mt-0.5">{description}</p>
+            <p className="mt-0.5 text-sm text-fg-subtle">{description}</p>
           )}
         </div>
       </div>
@@ -210,12 +211,12 @@ export function ResourceDetailPage({
         <Alert variant="warning" title="Update available" className="mb-4">
           <div className="flex items-center gap-3 text-sm">
             <span>
-              <span className="text-muted">Current:</span>{' '}
+              <span className="text-fg-muted">Current:</span>{' '}
               <span className="font-mono">v{version ?? '?'}</span>
             </span>
-            <Icon name="arrow-right" size="xs" className="text-muted shrink-0" />
+            <Icon name="arrow-right" size="xs" className="shrink-0 text-fg-muted" />
             <span>
-              <span className="text-muted">Latest:</span>{' '}
+              <span className="text-fg-muted">Latest:</span>{' '}
               <span className="font-mono">v{resource.latestVersion}</span>
             </span>
           </div>
@@ -268,7 +269,7 @@ export function ResourceDetailPage({
         {loading ? (
           <div className="flex flex-col gap-2">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex gap-3 py-2 kv-row-divider">
+              <div key={i} className="kv-row-divider flex gap-3 py-2">
                 <Skeleton width={100} height={14} />
                 <Skeleton width="60%" height={14} />
               </div>

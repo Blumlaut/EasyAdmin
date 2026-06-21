@@ -21,50 +21,51 @@ interface KeyValueTableProps {
  */
 export function KeyValueTable({ rows, ariaLabel }: KeyValueTableProps) {
   return (
-    <div className="flex flex-col" role="table" aria-label={ariaLabel}>
-      {rows.map((row, i) => {
-        const isLast = i === rows.length - 1
+    <div className="flex flex-col gap-1" role="table" aria-label={ariaLabel}>
+      {rows.map((row) => {
         const interactive = !!row.onClick
         return (
           <div
             key={row.key}
-            className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'kv-row-divider'}`}
+            className="identifier-row flex items-center gap-2"
             role="row"
           >
             <span
-              className="text-sm text-muted shrink-0 kv-key"
+              className="kv-key shrink-0 text-sm text-fg-muted"
             >
               {row.key}
             </span>
             {interactive ? (
               <button
-                className="btn btn-ghost btn-sm flex-1 justify-start text-left"
+                className="btn btn-ghost btn-sm flex-1"
                 onClick={row.onClick}
               >
-                <span className={row.mono ? 'text-mono' : ''}>{row.value}</span>
+                <span className={`flex-1 text-right text-sm text-fg ${row.mono ? 'text-mono' : ''}`}>
+                  {row.value}
+                </span>
                 {typeof row.actionLabel === 'string' && (
-                  <span className="text-xs text-muted ml-auto kv-action-badge">
+                  <span className="kv-action-badge ml-2 shrink-0 text-xs text-fg-muted">
                     {row.actionLabel}
                   </span>
                 )}
                 {row.actionLabel && typeof row.actionLabel !== 'string' && (
-                  <span className="ml-auto kv-action-badge">
+                  <span className="kv-action-badge ml-2 shrink-0">
                     {row.actionLabel}
                   </span>
                 )}
               </button>
             ) : row.actionLabel ? (
-              <div className="flex items-center gap-2 flex-1">
-                <span className={`text-sm text-primary truncate ${row.mono ? 'text-mono' : ''}`}>
-                  {row.value || <span className="text-muted">—</span>}
+              <div className="flex flex-1 items-center">
+                <span className={`min-w-0 flex-1 truncate text-right text-sm text-fg ${row.mono ? 'text-mono' : ''}`}>
+                  {row.value || <span className="text-fg-muted">—</span>}
                 </span>
-                <span className="ml-auto shrink-0">
+                <span className="ml-2 shrink-0">
                   {row.actionLabel}
                 </span>
               </div>
             ) : (
-              <span className={`text-sm text-primary flex-1 truncate ${row.mono ? 'text-mono' : ''}`}>
-                {row.value || <span className="text-muted">—</span>}
+              <span className={`flex-1 truncate text-right text-sm text-fg ${row.mono ? 'text-mono' : ''}`}>
+                {row.value || <span className="text-fg-muted">—</span>}
               </span>
             )}
           </div>

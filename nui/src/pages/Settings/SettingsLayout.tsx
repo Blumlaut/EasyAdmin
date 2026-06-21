@@ -72,9 +72,9 @@ export function SettingsLayout({
     <div className="card">
       <p className="section-label">Layout</p>
 
-      <div className="flex flex-col gap-1 mb-3">
+      <div className="mb-3 flex flex-col gap-1">
         <span className="text-sm">Sidebar mode</span>
-        <span className="text-xs text-muted">
+        <span className="text-xs text-fg-muted">
           Choose where the navigation panel sits and how the content area opens.
         </span>
       </div>
@@ -88,7 +88,6 @@ export function SettingsLayout({
             <label
               key={opt.variant}
               className={`layout-grid-option selectable-card${checked ? ' selectable-card--checked' : ''}`}
-              onClick={() => setLayout(opt.mode, opt.direction)}
             >
               <input
                 className="radio-group-input"

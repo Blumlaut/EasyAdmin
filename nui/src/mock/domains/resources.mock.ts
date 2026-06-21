@@ -223,7 +223,9 @@ function getResourceMetadata(name: string, state: string): ResourceMetadata {
   if (!RESOURCE_METADATA_CACHE.has(name)) {
     RESOURCE_METADATA_CACHE.set(name, generateResourceMetadata(name, state))
   }
-  return RESOURCE_METADATA_CACHE.get(name)!
+  const metadata = RESOURCE_METADATA_CACHE.get(name)
+  if (!metadata) throw new Error(`Metadata not found for resource: ${name}`)
+  return metadata
 }
 
 function pushResourcesUpdate() {

@@ -90,7 +90,7 @@ export function ResourceListPage({
       .map((r) => ({
         name: r.name,
         current: r.version ?? '?',
-        latest: r.latestVersion!,
+        latest: r.latestVersion ?? '?',
       }))
   }, [])
 
@@ -121,7 +121,7 @@ export function ResourceListPage({
     return () => {
       unsubResources()
     }
-  }, [fetchResources, fetchBatchMetadata])
+  }, [fetchResources, fetchBatchMetadata, buildOutdatedList])
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const filtered = useMemo(() => {
@@ -217,7 +217,7 @@ export function ResourceListPage({
           return {
             name: u.name,
             current: res?.version ?? '?',
-            latest: u.latest!,
+            latest: u.latest ?? '?',
           }
         })
       setOutdatedResources(outdatedList)
@@ -238,7 +238,7 @@ export function ResourceListPage({
 
   return (
     <div className="page-container">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3 flex items-center justify-between">
         <SearchBar
           value={query}
           onChange={setQuery}
@@ -248,7 +248,7 @@ export function ResourceListPage({
         />
         <div className="flex gap-2">
           {outdatedCount > 0 && (
-            <span className="badge badge-warning text-xs self-center" title={`${outdatedCount} resource(s) have updates`}>
+            <span className="badge badge-warning self-center text-xs" title={`${outdatedCount} resource(s) have updates`}>
               <Icon name="arrow-up-circle" size="xs" />
               {outdatedCount}
             </span>
@@ -274,7 +274,7 @@ export function ResourceListPage({
       </div>
 
       {/* Summary badges */}
-      <div className="flex gap-2 mb-3">
+      <div className="mb-3 flex gap-2">
         <span className="badge badge-started">
           {startedCount} started
         </span>
@@ -300,9 +300,9 @@ export function ResourceListPage({
                 onClick={() => onSelectResource(r.name)}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelectResource(r.name); } }}
               >
-                <span className="font-medium text-mono">{r.name}</span>
+                <span className="text-mono font-medium">{r.name}</span>
                 {' '}
-                <span className="text-muted">v{r.current} → v{r.latest}</span>
+                <span className="text-fg-muted">v{r.current} → v{r.latest}</span>
               </span>
             ))}
           </div>
@@ -323,9 +323,9 @@ export function ResourceListPage({
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
-            <Icon name="layers" size="lg" className="text-muted" />
+            <Icon name="layers" size="lg" className="text-fg-muted" />
           </div>
-          <p className="text-secondary">
+          <p className="text-fg-subtle">
             {resources.length === 0
               ? 'No resources found'
               : 'No resources match your search'}
@@ -404,7 +404,7 @@ function ResourceRow({
               href={resource.repository}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted hover:text-foreground shrink-0"
+              className="hover:text-foreground shrink-0 text-fg-muted"
               title={resource.repository}
               onClick={(e) => e.stopPropagation()}
             >
@@ -423,7 +423,7 @@ function ResourceRow({
       {canToggle && !isSelf && (
         isStarted && canStart && canStop ? (
           <div
-            className="btn-split shrink-0 mr-1"
+            className="btn-split mr-1 shrink-0"
           >
             <button
               className="btn-split-half btn-split-half--restart"
@@ -448,7 +448,7 @@ function ResourceRow({
           </div>
         ) : (
           <button
-            className={`btn btn-sm shrink-0 mr-1 ${isStarted ? 'btn-danger' : 'btn-success'}`}
+            className={`btn btn-sm mr-1 shrink-0 ${isStarted ? 'btn-danger' : 'btn-success'}`}
             onClick={(e) => {
               e.stopPropagation()
               onRequestAction(isStarted ? 'stop' : 'start')
@@ -460,7 +460,7 @@ function ResourceRow({
         )
       )}
 
-      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle shrink-0" />
+      <Icon name="chevron-right" size="xs" className="opacity-subtle shrink-0 text-fg-muted" />
     </ListItem>
   )
 }

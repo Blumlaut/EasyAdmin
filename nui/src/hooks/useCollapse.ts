@@ -1,4 +1,5 @@
-import { useCallback, RefObject } from 'react'
+import { useCallback } from 'react'
+import type { RefObject } from 'react'
 import type { SidebarDirection, SidebarMode } from '../types'
 import { COLLAPSED_SIDEBAR_WIDTH, COLLAPSED_TASKBAR_HEIGHT, getTargetWindowRect } from './collapseLayout'
 

@@ -21,8 +21,10 @@ export function WarningOverlay({ warning, onDismiss }: WarningOverlayProps) {
   const holdStartRef = useRef(0)
   const rafRef = useRef(0)
   const isHoldingRef = useRef(false)
+  const animateRef = useRef<(timestamp: number) => void>(undefined)
 
-  const animate = useCallback(() => {
+  // eslint-disable-next-line react-hooks/use-memo -- requestAnimationFrame callback requires FrameRequestCallback signature; cast is necessary
+  const animate = useCallback(((_timestamp: number) => {
     if (!isHoldingRef.current) return
     const elapsed = performance.now() - holdStartRef.current
     const progress = Math.min(elapsed / HOLD_DURATION_MS, 1)
@@ -34,15 +36,23 @@ export function WarningOverlay({ warning, onDismiss }: WarningOverlayProps) {
       onDismiss()
       return
     }
-    rafRef.current = requestAnimationFrame(animate)
-  }, [onDismiss])
+    if (animateRef.current) {
+      rafRef.current = requestAnimationFrame(animateRef.current)
+    }
+  }) as FrameRequestCallback, [onDismiss])
+
+  useEffect(() => {
+    animateRef.current = animate
+  }, [animate])
 
   const startHold = useCallback(() => {
     if (isHoldingRef.current) return
     isHoldingRef.current = true
     holdStartRef.current = performance.now()
-    rafRef.current = requestAnimationFrame(animate)
-  }, [animate])
+    if (animateRef.current) {
+      rafRef.current = requestAnimationFrame(animateRef.current)
+    }
+  }, [])
 
   const cancelHold = useCallback(() => {
     isHoldingRef.current = false
@@ -115,12 +125,15 @@ export function WarningOverlay({ warning, onDismiss }: WarningOverlayProps) {
             onPointerCancel={cancelHold}
             onMouseLeave={handlePointerLeave}
             onBlur={handleBlur}
-            autoFocus
+
           >
             <span className="warning-dismiss-label">{warning.dismissText}</span>
           </button>
           <div className="warning-progress-track">
-            <div className="warning-progress-fill" style={{ width: `${holdProgress * 100}%` }} />
+            <div className="warning-progress-fill"
+              // eslint-disable-next-line nui/no-inline-styles -- dynamic width driven by hold progress state
+              style={{ width: `${holdProgress * 100}%` }}
+            />
           </div>
         </div>
       </div>

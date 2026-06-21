@@ -17,7 +17,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-// eslint-disable-next-line import/no-unresolved
 import 'chartjs-adapter-date-fns'
 
 Chart.register(
@@ -37,8 +36,8 @@ Chart.register(
 
 // Make TS happy with the extended registry
 declare module 'chart.js' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Register {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface Register extends Record<string, never> {}
 }
 
 export default Chart

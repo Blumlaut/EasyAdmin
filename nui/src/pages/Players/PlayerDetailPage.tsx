@@ -66,7 +66,7 @@ export function PlayerDetailPage({
               size="sm"
             />
             <span>Identifiers</span>
-            <span className="text-sm text-muted identifier-count">{visibleIdentifiers.length}</span>
+            <span className="identifier-count text-sm text-fg-muted">{visibleIdentifiers.length}</span>
           </button>
 
           {identifiersExpanded && (
@@ -76,10 +76,10 @@ export function PlayerDetailPage({
                 return (
                   <li
                     key={id}
-                    className="flex items-center gap-2 text-mono text-sm identifier-row"
+                    className="text-mono identifier-row flex items-center gap-2 text-sm"
                   >
                     <span className="badge badge-default">{kind}</span>
-                    <span className="truncate flex-1">{value ?? id}</span>
+                    <span className="flex-1 truncate">{value ?? id}</span>
                     <CopyButton value={id} ariaLabel={`Copy ${kind}`} />
                   </li>
                 )

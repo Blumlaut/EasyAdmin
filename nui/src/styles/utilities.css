@@ -1,199 +1,30 @@
 /* ============================================================
-   Page container
+   Utility classes that have no Tailwind equivalent
+   (pure layout/spacing/color utilities are handled by Tailwind)
    ============================================================ */
 
+/* -- Page container -- */
 .page-container {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
 }
 
-/* ============================================================
-   Section divider
-   ============================================================ */
-
+/* -- Section divider -- */
 .section-divider {
   height: 1px;
   background: var(--border-subtle);
   margin: var(--space-2) 0;
 }
 
-/* ============================================================
-   Text utilities
-   ============================================================ */
-
-.text-primary { color: var(--text-primary); }
-
-.text-secondary { color: var(--text-secondary); }
-
-.text-muted { color: var(--text-muted); }
-
-.text-xs { font-size: var(--text-xs); }
-
-.text-sm { font-size: var(--text-sm); }
-
-.text-base { font-size: var(--text-base); }
-
-.text-lg { font-size: var(--text-lg); }
-
-.text-xl { font-size: var(--text-xl); }
-
-.text-2xl { font-size: var(--text-2xl); }
-
-.text-mono { font-family: var(--font-mono); }
-
-.font-bold { font-weight: var(--font-bold); }
-
-.font-semibold { font-weight: var(--font-semibold); }
-
-.font-medium { font-weight: var(--font-medium); }
-
-/* ============================================================
-   Layout utilities
-   ============================================================ */
-
-.flex { display: flex; }
-
-.flex-col { flex-direction: column; }
-
-.flex-wrap { flex-wrap: wrap; }
-
-.items-center { align-items: center; }
-
-.items-start { align-items: flex-start; }
-
-.justify-between { justify-content: space-between; }
-
-.justify-end { justify-content: flex-end; }
-
-.justify-center { justify-content: center; }
-
-.gap-1 { gap: var(--space-1); }
-
-.gap-2 { gap: var(--space-2); }
-
-.gap-3 { gap: var(--space-3); }
-
-.gap-4 { gap: var(--space-4); }
-
-.gap-6 { gap: var(--space-6); }
-
-.gap-8 { gap: var(--space-8); }
-
-.flex-1 { flex: 1; }
-
-.shrink-0 { flex-shrink: 0; }
-
-/* -- Grid -- */
-
-.grid { display: grid; }
-
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-
-.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
-
-/* ============================================================
-   Dimension utilities
-   ============================================================ */
-
-.w-full { width: 100%; }
-
-.h-full { height: 100%; }
-
-.max-w-sm { max-width: 380px; }
-
-.max-w-md { max-width: 440px; }
-
-.max-w-lg { max-width: 640px; }
-
-.min-h-sm { min-height: 200px; }
-
-.min-w-0 { min-width: 0; }
-
-/* ============================================================
-   Position utilities
-   ============================================================ */
-
-.absolute { position: absolute; }
-
-.fixed { position: fixed; }
-
-.inset-0 { inset: 0; }
-
-.top-0 { top: 0; }
-
-.left-0 { left: 0; }
-
-/* ============================================================
-   Overflow utilities
-   ============================================================ */
-
-.overflow-hidden { overflow: hidden; }
-
-.overflow-auto { overflow: auto; }
-
-.overflow-y-auto { overflow-y: auto; }
-
-/* ============================================================
-   Misc utilities
-   ============================================================ */
-
-.text-left { text-align: left; }
-
-.text-center { text-align: center; }
-
-.truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.mt-1 { margin-top: var(--space-1); }
-
-.mt-2 { margin-top: var(--space-2); }
-
-.mt-3 { margin-top: var(--space-3); }
-
-.mb-2 { margin-bottom: var(--space-2); }
-
-.mb-3 { margin-bottom: var(--space-3); }
-
-.ml-auto { margin-left: auto; }
-
-.self-center { align-self: center; }
-
-/* ============================================================
-   Loading spinner
-   ============================================================ */
-
+/* -- Loading spinner -- */
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--bg-hover);
-  border-top-color: var(--brand-blue-light);
-  border-radius: var(--radius-full);
-  animation: spin 600ms linear infinite;
-}
-
-.spinner-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Inline spinning icon (e.g. for button loading states) */
 .icon-spin {
   animation: spin 800ms linear infinite;
-}
-
-/* ============================================================
-   Hidden utility
-   ============================================================ */
-
-.hidden {
-  display: none !important;
 }
 
 /* ============================================================
@@ -211,8 +42,10 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-color);
   z-index: var(--z-window);
+
   /* Base font size for rem-based text tokens. Overridden by inline style from settings. */
   font-size: 12px;
+
   /* Width animated by JS (Web Animations API), not CSS transitions. */
 }
 

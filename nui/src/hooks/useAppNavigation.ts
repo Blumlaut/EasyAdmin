@@ -86,6 +86,7 @@ export function useAppNavigation({
     if (!selectedPlayer) return
     const updated = players.find((p) => p.id === selectedPlayer.id)
     if (updated) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync state with external data source when players array updates
       setSelectedPlayer(updated)
     }
   }, [players, selectedPlayer])
@@ -93,12 +94,16 @@ export function useAppNavigation({
   const [selectedResource, setSelectedResource] = useState<string | null>(null)
 
   const viewRef = useRef(view)
-  viewRef.current = view
   const viewHistoryRef = useRef<View[]>([])
   const playersRef = useRef(players)
-  playersRef.current = players
   const banDetailCacheRef = useRef(banDetailCache)
-  banDetailCacheRef.current = banDetailCache
+
+  // Keep refs in sync (must be in effect, not during render)
+  useEffect(() => {
+    viewRef.current = view
+    playersRef.current = players
+    banDetailCacheRef.current = banDetailCache
+  }, [view, players, banDetailCache])
 
   // navigateTo is stable — uses refs for current values
   const navigateTo = useCallback((newView: View) => {
@@ -287,10 +292,12 @@ export function useAppNavigation({
     }
   }, [view])
 
+  // eslint-disable-next-line react-hooks/refs -- return object mixes state with refs; consumers destructure refs out
   return {
     view,
     setView,
     resetHistory,
+    // eslint-disable-next-line react-hooks/refs -- viewHistory is a ref accessed during render; consumers destructure it out
     viewHistory: viewHistoryRef.current,
     activeNavId,
     pageTitle,

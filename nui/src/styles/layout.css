@@ -2,6 +2,7 @@
    App layout
    ============================================================ */
 
+/* -- Sidebar -- */
 .sidebar {
   width: 260px;
   height: 100%;
@@ -33,44 +34,7 @@
   border-top: 1px solid var(--border-subtle);
 }
 
-.ea-window--sidebar-up .sidebar-header {
-  border-right: 1px solid var(--border-subtle);
-}
-
-/* -- Action button (shared by dashboard, teleport, server actions) -- */
-
-.action-btn,
-.server-action-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-secondary);
-  font-size: var(--text-base);
-  font-weight: var(--font-medium);
-  font-family: inherit;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-align: left;
-  width: 100%;
-  letter-spacing: 0.01em;
-}
-
-.action-btn:hover,
-.server-action-btn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border-subtle);
-}
-
-.action-btn:active,
-.server-action-btn:active {
-  opacity: 0.85;
-}
-
+/* -- Sidebar header -- */
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -80,6 +44,10 @@
   border-bottom: 1px solid var(--border-subtle);
   cursor: grab;
   user-select: none;
+}
+
+.ea-window--sidebar-up .sidebar-header {
+  border-right: 1px solid var(--border-subtle);
 }
 
 .ea-window--sidebar-horizontal .sidebar-header {
@@ -117,6 +85,7 @@
   text-transform: uppercase;
 }
 
+/* -- Sidebar nav -- */
 .sidebar-nav {
   flex: 1;
   padding: var(--space-3) 0;
@@ -125,22 +94,12 @@
 
 .ea-window--sidebar-horizontal .sidebar-nav {
   padding: 0 var(--space-2);
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
   display: flex;
   align-items: center;
 }
 
-.ea-window--sidebar-horizontal .topbar {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-.ea-window--sidebar-up .main-content {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
+/* -- Topbar -- */
 .topbar {
   height: 52px;
   display: flex;
@@ -152,11 +111,17 @@
   background: var(--bg-secondary);
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
+
   /* The topbar is the window drag handle. Cursors on buttons are
      restored to `pointer` below so the drag affordance is only shown
      on the empty/title areas. */
   cursor: move;
   user-select: none;
+}
+
+.ea-window--sidebar-horizontal .topbar {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .topbar h2 {
@@ -181,7 +146,7 @@
   margin-left: auto;
 }
 
-
+/* -- Main content -- */
 .main-content {
   flex: 1;
   overflow: auto;
@@ -189,16 +154,47 @@
   background: var(--bg-primary);
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
+
   /* Inset scrollbars so the outer edge always has a gap for window resize. */
   margin-right: 4px;
   margin-bottom: 4px;
 }
 
-.coming-soon {
-  opacity: 0.6;
+.ea-window--sidebar-up .main-content {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.text-accent-blue {
-  color: var(--brand-blue-light);
+/* -- Action button (shared by dashboard, teleport, server actions) -- */
+.action-btn,
+.server-action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  width: 100%;
+  letter-spacing: 0.01em;
+}
+
+.action-btn:hover,
+.server-action-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+.action-btn:active,
+.server-action-btn:active {
+  opacity: 0.85;
 }
 

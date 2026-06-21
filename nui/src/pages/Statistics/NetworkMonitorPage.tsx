@@ -208,7 +208,7 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
     <div className="network-player-detail">
       <div className="network-player-detail-header">
         <span className="network-player-detail-name">
-          <Icon name="users" size="xs" className="text-muted" />
+          <Icon name="users" size="xs" className="text-fg-muted" />
           {playerName}
         </span>
         <button className="btn btn-xs btn-ghost" onClick={onClose} title="Close detail">
@@ -232,7 +232,7 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
       {/* History mini-stats */}
       {historyStats && (
         <div className="network-player-history-stats">
-          <span className="text-xs text-muted">
+          <span className="text-xs text-fg-muted">
             {historyStats.dataPoints} samples · Avg {historyStats.avgRtt} ms · Max {historyStats.maxRtt} ms · Loss {historyStats.avgLoss}%
           </span>
         </div>
@@ -243,7 +243,7 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
         {loading ? (
           <div className="skeleton network-skeleton-player-chart" />
         ) : history.length === 0 ? (
-          <div className="text-center text-muted py-3">No historical data for this player</div>
+          <div className="py-3 text-center text-fg-muted">No historical data for this player</div>
         ) : (
           <TimeSeriesChart
             lines={lines}
@@ -448,7 +448,7 @@ export function NetworkMonitorPage() {
   return (
     <div className="page-container">
       {/* Summary cards */}
-      <div className="grid gap-3 network-summary-grid mb-4">
+      <div className="network-summary-grid mb-4 grid gap-3">
         {statsLoading
           ? skeletonRows.map((i) => (
             <div key={i} className="skeleton network-skeleton-stat" />
@@ -461,7 +461,7 @@ export function NetworkMonitorPage() {
 
       {/* Global network chart */}
       <div className="card network-card mb-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-3 flex items-center justify-between">
           <p className="section-label">Server Network Overview</p>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-0.5">
@@ -497,9 +497,9 @@ export function NetworkMonitorPage() {
 
       {/* Player list with expandable detail */}
       <div className="card network-card">
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-3 flex items-center justify-between">
           <p className="section-label">Player Connections</p>
-          <span className="text-xs text-muted">
+          <span className="text-xs text-fg-muted">
             Click a player to view detailed history
           </span>
         </div>
@@ -536,7 +536,7 @@ export function NetworkMonitorPage() {
               <div key={i} className="skeleton network-skeleton-row" />
             ))
             : playerRows.length === 0
-              ? <div className="text-center text-muted py-4">No players connected</div>
+              ? <div className="py-4 text-center text-fg-muted">No players connected</div>
               : playerRows.map((row) => (
                 <div key={row.id}>
                   <PlayerNetworkRow

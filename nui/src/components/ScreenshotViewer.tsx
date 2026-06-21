@@ -82,6 +82,7 @@ export function ScreenshotViewer() {
     <div
       ref={ref}
       className="ea-floating-window ea-screenshot-viewer"
+      // eslint-disable-next-line nui/no-inline-styles -- dynamic position/size for draggable floating window
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

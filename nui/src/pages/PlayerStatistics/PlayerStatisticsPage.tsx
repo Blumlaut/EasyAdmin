@@ -124,6 +124,7 @@ function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartP
   }, [points, dailyPeaks, granularity, hasPing])
 
   const chartRange = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity -- Date.now() is stable within a single render; fallback only used when no data exists
     if (points.length === 0) return { start: Date.now() - 86400000 * 7, end: Date.now() }
     const timestamps = points.map((p) => p.timestamp * 1000)
     return {
@@ -134,18 +135,18 @@ function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartP
 
   return (
     <div className="card statistics-chart-card">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3 flex items-center justify-between">
         <p className="section-label">{granularity === 'raw' ? 'Player Activity' : 'Daily Player Peaks'}</p>
-        <div className="flex items-center gap-3 text-xs text-muted">
+        <div className="flex items-center gap-3 text-xs text-fg-muted">
           {granularity === 'raw' ? (
             <>
               <span className="flex items-center gap-1.5">
-                <span className="legend-line" style={{ background: 'var(--brand-blue-light)' }} />
+                <span className="legend-line legend-line--blue" />
                 Players
               </span>
               {hasPing && (
                 <span className="flex items-center gap-1.5">
-                  <span className="legend-line legend-line-dotted" style={{ background: 'var(--accent-red)' }} />
+                  <span className="legend-line legend-line-dotted legend-line--red" />
                   Avg Ping
                 </span>
               )}
@@ -153,20 +154,20 @@ function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartP
           ) : (
             <>
               <span className="flex items-center gap-1.5">
-                <span className="legend-line" style={{ background: 'var(--accent-green)' }} />
+                <span className="legend-line legend-line--green" />
                 Max
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="legend-line" style={{ background: 'var(--brand-blue-light)' }} />
+                <span className="legend-line legend-line--blue" />
                 Avg
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="legend-line legend-line-dashed" style={{ background: 'var(--accent-orange)' }} />
+                <span className="legend-line legend-line-dashed legend-line--orange" />
                 Min
               </span>
               {dailyPeaks.some((d) => d.avgPing > 0) && (
                 <span className="flex items-center gap-1.5">
-                  <span className="legend-line legend-line-dotted" style={{ background: 'var(--accent-red)' }} />
+                  <span className="legend-line legend-line-dotted legend-line--red" />
                   Avg Ping
                 </span>
               )}
@@ -279,19 +280,19 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
     {
       key: 'name',
       label: 'Player',
-      render: (p) => <span className="truncate max-w-[160px]" title={p.name}>{p.name}</span>,
+      render: (p) => <span className="max-w-[160px] truncate" title={p.name}>{p.name}</span>,
     },
     {
       key: 'firstSeen',
       label: 'First Seen',
       sortable: true,
-      render: (p) => <span className="text-xs text-muted">{formatDayLabelFull(p.firstSeen / 1000)}</span>,
+      render: (p) => <span className="text-xs text-fg-muted">{formatDayLabelFull(p.firstSeen / 1000)}</span>,
     },
     {
       key: 'lastSeen',
       label: 'Last Seen',
       sortable: true,
-      render: (p) => <span className="text-xs text-muted">{formatDayLabelFull(p.lastSeen / 1000)}</span>,
+      render: (p) => <span className="text-xs text-fg-muted">{formatDayLabelFull(p.lastSeen / 1000)}</span>,
     },
     {
       key: 'sessions',
@@ -317,7 +318,7 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
     <div>
       <div className="card statistics-chart-card">
         <p className="section-label mb-3">Player Registry</p>
-        <div className="flex items-center gap-2 mb-3">
+        <div className="mb-3 flex items-center gap-2">
           <SearchBar
             value={query}
             onChange={setQuery}
@@ -336,16 +337,16 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
         </div>
 
         {loading && players.length === 0 ? (
-          <div className="flex items-center justify-center" style={{ minHeight: '100px' }}>
-            <p className="text-xs text-muted">Loading player data…</p>
+          <div className="flex min-h-100 items-center justify-center">
+            <p className="text-xs text-fg-muted">Loading player data…</p>
           </div>
         ) : players.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-6">
             <div className="empty-state-icon empty-state-icon-blue mb-3">
               <Icon name="users" size="lg" className="text-blue" />
             </div>
-            <p className="text-sm text-muted">{total === 0 ? 'No player data collected yet' : 'No players match your search'}</p>
-            {total === 0 && <p className="text-xs text-muted mt-1">Players will appear here after connecting</p>}
+            <p className="text-sm text-fg-muted">{total === 0 ? 'No player data collected yet' : 'No players match your search'}</p>
+            {total === 0 && <p className="mt-1 text-xs text-fg-muted">Players will appear here after connecting</p>}
           </div>
         ) : (
           <div ref={listRef}>
@@ -380,50 +381,41 @@ function StatisticsSkeleton() {
   return (
     <>
       {/* Summary cards skeleton — matches StatCard overlay variant */}
-      <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
+      <div className="statistics-grid mb-4 grid grid-cols-2 gap-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="card statistics-card" style={{ overflow: 'hidden' }}>
-            <div className="skeleton" style={{ width: '55%', height: '12px' }} />
-            <div className="skeleton mt-1" style={{ width: '40%', height: '24px' }} />
-            <div className="skeleton mt-0.5" style={{ width: '70%', height: '12px' }} />
-            <div
-              className="skeleton"
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
-                position: 'absolute',
-                top: '0.875rem',
-                right: '1rem',
-              }}
-            />
+          <div key={i} className="card statistics-card overflow-hidden">
+            <div className="skeleton skeleton--sm skeleton--w-55" />
+            <div className="skeleton skeleton--xl skeleton--w-40 mt-1" />
+            <div className="skeleton skeleton--sm skeleton--w-70 mt-0.5" />
+            <div className="skeleton skeleton--icon skeleton--absolute-top-right" />
           </div>
         ))}
       </div>
       {/* Daily peaks chart skeleton */}
       <div className="mb-4">
         <div className="card statistics-chart-card">
-          <div className="flex items-center justify-between mb-3">
-            <div className="skeleton" style={{ width: '120px', height: '14px' }} />
+          <div className="mb-3 flex items-center justify-between">
+            <div className="skeleton skeleton--md skeleton--w-120" />
             <div className="flex items-center gap-3">
-              <div className="skeleton" style={{ width: '28px', height: '12px' }} />
-              <div className="skeleton" style={{ width: '24px', height: '12px' }} />
-              <div className="skeleton" style={{ width: '24px', height: '12px' }} />
+              <div className="skeleton skeleton--sm skeleton--w-28" />
+              <div className="skeleton skeleton--sm skeleton--w-24" />
+              <div className="skeleton skeleton--sm skeleton--w-24" />
             </div>
           </div>
-          <div className="skeleton" style={{ width: '100%', height: '160px', borderRadius: '4px' }} />
+          <div className="skeleton skeleton--chart" />
         </div>
       </div>
       {/* Bar charts skeleton */}
-      <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
+      <div className="statistics-grid mb-4 grid grid-cols-2 gap-3">
         {[1, 2].map((i) => (
           <div key={i} className="card statistics-chart-card">
-            <div className="skeleton mb-3" style={{ width: '45%', height: '14px' }} />
+            <div className="skeleton skeleton--md skeleton--w-45 mb-3" />
             <div className="space-y-2.5">
               {[1, 2, 3, 4, 5].map((j) => (
                 <div key={j} className="flex items-center gap-2">
-                  <div className="skeleton" style={{ width: '90px', height: '12px', flexShrink: 0 }} />
-                  <div className="skeleton" style={{ height: '16px', borderRadius: '999px', width: `${60 + Math.random() * 35}%` }} />
+                  <div className="skeleton skeleton--sm skeleton--w-90 shrink-0" />
+                  {/* eslint-disable-next-line nui/no-inline-styles -- random width for visual variety in skeleton loader */}
+                  <div className="skeleton skeleton--lg skeleton--pill" style={{ width: `${60 + Math.random() * 35}%` }} />
                 </div>
               ))}
             </div>
@@ -432,14 +424,18 @@ function StatisticsSkeleton() {
       </div>
       {/* Player registry table skeleton */}
       <div className="card statistics-chart-card">
-        <div className="skeleton mb-3" style={{ width: '25%', height: '14px' }} />
-        <div className="flex items-center gap-2 mb-3">
-          <div className="skeleton" style={{ width: '240px', height: '36px', borderRadius: '8px' }} />
+        {/* eslint-disable-next-line nui/no-inline-styles -- unique skeleton dimension */}
+        <div className="skeleton skeleton--md mb-3" style={{ width: '25%' }} />
+        <div className="mb-3 flex items-center gap-2">
+          {/* eslint-disable-next-line nui/no-inline-styles -- unique skeleton dimension */}
+          <div className="skeleton skeleton--w-240" style={{ height: '36px', borderRadius: '8px' }} />
+          {/* eslint-disable-next-line nui/no-inline-styles -- unique skeleton dimension */}
           <div className="skeleton" style={{ width: '80px', height: '32px', borderRadius: '8px' }} />
         </div>
         <div className="space-y-2">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="skeleton" style={{ width: '100%', height: '28px' }} />
+            // eslint-disable-next-line nui/no-inline-styles -- unique skeleton dimension
+            <div key={i} className="skeleton skeleton--w-full" style={{ height: '28px' }} />
           ))}
         </div>
       </div>
@@ -514,6 +510,7 @@ export function PlayerStatisticsPage() {
   useEffect(() => {
     const ver = ++rangeVer.current
     currentRangeVer.current = ver
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting state before async fetch is the standard data-fetching pattern
     setLoading(true)
     setSummary(null)
     setPeaks(null)
@@ -526,6 +523,7 @@ export function PlayerStatisticsPage() {
   useEffect(() => {
     const ver = ++registryVer.current
     currentRegistryVer.current = ver
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting state before async fetch is the standard data-fetching pattern
     setRegistry([])
     callLua('requestPlayerRegistry', { filterDays: rangeDays }).catch(() => {})
   }, [rangeDays])
@@ -555,10 +553,10 @@ export function PlayerStatisticsPage() {
   return (
     <div className="page-container">
       {/* Header with range selector */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Player Statistics</h3>
-          <p className="text-xs text-muted mt-0.5">Long-term analytics and player insights</p>
+          <p className="mt-0.5 text-xs text-fg-muted">Long-term analytics and player insights</p>
         </div>
         <div className="flex items-center gap-0.5">
           {rangeOptions.map((r) => (
@@ -578,7 +576,7 @@ export function PlayerStatisticsPage() {
       ) : (
         <>
           {/* Summary cards */}
-          <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
+          <div className="statistics-grid mb-4 grid grid-cols-2 gap-3">
         <StatCard variant="overlay"
           label="Unique Players"
           value={summary?.totalUnique ?? '—'}
@@ -643,7 +641,7 @@ export function PlayerStatisticsPage() {
       )}
 
       {/* Player insights row */}
-      <div className="grid grid-cols-2 gap-3 mb-4 statistics-grid">
+      <div className="statistics-grid mb-4 grid grid-cols-2 gap-3">
         {/* Top sessions */}
         <div className="card statistics-chart-card">
           <p className="section-label mb-3">Top by Sessions</p>

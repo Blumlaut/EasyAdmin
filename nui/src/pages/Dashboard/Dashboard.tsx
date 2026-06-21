@@ -49,8 +49,8 @@ function EntityBars({ vehicles, peds, objects }: EntityBarProps) {
       <div className="flex flex-col gap-3">
         {bars.map((bar) => (
           <div key={bar.label}>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-secondary">{bar.label}</span>
+            <div className="mb-1 flex items-center justify-between">
+              <span className="text-xs text-fg-subtle">{bar.label}</span>
               <span className="text-xs font-semibold"
                 // eslint-disable-next-line nui/no-inline-styles
                 style={{ color: bar.color }}
@@ -141,7 +141,7 @@ function PrideGreeting() {
   const text = 'Happy Pride!'
   const stops = prideColors.map((color, i) => `${color} ${(i / (prideColors.length - 1)) * 100}%`)
   return (
-    <h3 className="text-2xl font-bold dashboard-greeting">
+    <h3 className="dashboard-greeting text-2xl font-bold">
       <span
         // eslint-disable-next-line nui/no-inline-styles
         style={{
@@ -276,7 +276,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
   if (loading) {
     return (
       <div className="page-container">
-        <div className="grid grid-cols-2 gap-3 dashboard-grid">
+        <div className="dashboard-grid grid grid-cols-2 gap-3">
           {[1, 2, 3, 4, 5, 6, 7].map((i) => (
             <div key={i} className="card dashboard-card-sm">
               <div className="flex items-center gap-3">
@@ -289,7 +289,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
             </div>
           ))}
         </div>
-        <div className="flex gap-3 dashboard-skeleton-row">
+        <div className="dashboard-skeleton-row flex gap-3">
           <div className="skeleton card dashboard-skeleton-card" />
           <div className="skeleton card dashboard-skeleton-chart" />
         </div>
@@ -302,7 +302,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
       {/* Greeting */}
       <div className="mb-5">
         {showPride ? <PrideGreeting /> : (
-          <h3 className="text-2xl font-bold dashboard-greeting">
+          <h3 className="dashboard-greeting text-2xl font-bold">
             {greeting}
           </h3>
         )}
@@ -343,9 +343,9 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
             <div className="flex flex-col gap-1">
               {resourceUpdates.map((r) => (
                 <span key={r.name} className="text-sm">
-                  <span className="font-medium text-mono">{r.name}</span>
+                  <span className="text-mono font-medium">{r.name}</span>
                   {' '}
-                  <span className="text-muted">v{r.current ?? '?'} → v{r.latest}</span>
+                  <span className="text-fg-muted">v{r.current ?? '?'} → v{r.latest}</span>
                 </span>
               ))}
             </div>
@@ -363,7 +363,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
       )}
 
       {/* Stat cards row */}
-      <div className="grid gap-3 dashboard-grid">
+      <div className="dashboard-grid grid gap-3">
         {statCards.map((card) => (
           <StatCard key={card.label} {...card} />
         ))}
@@ -445,6 +445,7 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
 
   // Build time range for the chart axis
   const chartRange = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity -- Date.now() is stable within a single render; recomputes only when range changes
     const end = Date.now()
     const start = end - (rangeMs[range] || 86400000)
     return { start, end }
@@ -462,7 +463,7 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
 
   return (
     <div className="card dashboard-card flex flex-col">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3 flex items-center justify-between">
         <p className="section-label">Players Over Time</p>
         <div className="flex items-center gap-2">
           {!loading && (

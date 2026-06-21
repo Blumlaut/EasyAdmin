@@ -129,8 +129,8 @@ describe('Dashboard', () => {
       updateInfo={{ currentVersion: '7.52', latestVersion: '7.53', available: true }}
     />)
     await waitFor(() => {
-      expect(screen.queryByText('Copy')).toBeInTheDocument()
+      expect(screen.queryByText('Copy URL')).toBeInTheDocument()
     }, { timeout: 3000 })
-    expect(screen.getByText('Copy')).toBeInTheDocument()
+    expect(screen.getByText('Copy URL')).toBeInTheDocument()
   })
 })

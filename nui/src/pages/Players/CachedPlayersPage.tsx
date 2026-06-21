@@ -29,10 +29,10 @@ export function CachedPlayersPage({
 
   return (
     <div className="page-container">
-      <p className="text-sm text-muted">
+      <p className="text-sm text-fg-muted">
         Recently disconnected players. You can ban them offline.
       </p>
-      <div className="flex items-center gap-2 mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <SearchBar
           value={query}
           onChange={setQuery}
@@ -51,9 +51,9 @@ export function CachedPlayersPage({
       ) : cachedPlayers.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
-            <Icon name="archive" size="lg" className="text-muted" />
+            <Icon name="archive" size="lg" className="text-fg-muted" />
           </div>
-          <p className="text-secondary">No cached players</p>
+          <p className="text-fg-subtle">No cached players</p>
         </div>
       ) : (
         <div ref={listRef} className="list">
@@ -93,7 +93,7 @@ function CachedRow({
   return (
     <ListItem onClick={() => {}}>
       <div className="avatar avatar-sm avatar-offline">
-        <Icon name="archive" size="xs" className="text-muted" />
+        <Icon name="archive" size="xs" className="text-fg-muted" />
       </div>
       <div className="list-item-content">
         <div className="list-item-title">{player.name}</div>

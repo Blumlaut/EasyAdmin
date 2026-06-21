@@ -3,6 +3,7 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import tseslint from 'typescript-eslint'
+import tailwindcss from 'eslint-plugin-tailwindcss'
 import nuiPlugin from './eslint-plugin-nui.mjs'
 
 export default tseslint.config(
@@ -63,6 +64,22 @@ export default tseslint.config(
     },
     rules: {
       'nui/no-inline-styles': 'error',
+    },
+  },
+
+  // Tailwind CSS rules
+  {
+    plugins: {
+      tailwindcss,
+    },
+    settings: {
+      tailwindcss: {
+        cssConfigPath: './src/styles/index.css',
+      },
+    },
+    rules: {
+      'tailwindcss/no-contradicting-classname': 'error',
+      'tailwindcss/classnames-order': 'warn',
     },
   },
 

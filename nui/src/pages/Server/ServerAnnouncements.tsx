@@ -9,7 +9,7 @@ export function ServerAnnouncements() {
   return (
     <div className="card">
       <p className="section-label">Announcements</p>
-      <p className="text-sm text-secondary mb-3">
+      <p className="mb-3 text-sm text-fg-subtle">
         Send a message to all players on the server.
       </p>
       <button

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useWindowChrome } from './hooks/useWindowChrome'
-import type { View } from './types'
+import type { View, Player } from './types'
 import { on } from './fivem'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
@@ -45,7 +45,7 @@ function App() {
   // === Hooks ===
 
   const data = useAppData()
-  const nav = useAppNavigation({
+  const _nav = useAppNavigation({
     permissions: data.permissions,
     players: data.players,
     banDetailCache: data.banDetailCache,
@@ -54,13 +54,17 @@ function App() {
     setLoadingReports: data.setLoadingReports,
     setLoadingCached: data.setLoadingCached,
   })
-  const chrome = useWindowChrome({
+  // Extract ref so the remaining object is plain state (avoids react-hooks/refs false positives)
+  const { titleRef: _titleRef, ...nav } = _nav
+  const _chrome = useWindowChrome({
     visible,
     windowPosData: data.windowPosData,
     windowSizeData: data.windowSizeData,
     sidebarMode: data.settings.sidebarMode,
     sidebarDirection: data.settings.sidebarDirection,
   })
+  // Extract ref so the remaining object is plain state (avoids react-hooks/refs false positives)
+  const { windowRef: _windowRef, ...chrome } = _chrome
 
   // === Menu toggle ===
 
@@ -68,16 +72,16 @@ function App() {
     return on<{ visible: boolean }>('menuToggle', (data) => {
       setVisible(data.visible)
       if (data.visible) {
-        chrome.resetWindowChrome()
-        nav.setView('main')
-        nav.setSelectedPlayer(null)
-        nav.setSelectedBanId(null)
-        nav.setSelectedReportId(null)
-        nav.setSelectedResource(null)
-        nav.resetHistory()
+        _chrome.resetWindowChrome()
+        _nav.setView('main')
+        _nav.setSelectedPlayer(null)
+        _nav.setSelectedBanId(null)
+        _nav.setSelectedReportId(null)
+        _nav.setSelectedResource(null)
+        _nav.resetHistory()
       }
     })
-  }, [chrome, nav])
+  }, [_chrome, _nav])
 
   // === Player warning (full-screen overlay) ===
 
@@ -104,6 +108,7 @@ function App() {
 
   useEffect(() => {
     if (chrome.nuiBackground) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync hint fade state with NUI background visibility; timer-based animation requires effect
       setHintFading(false)
       hintTimerRef.current = setTimeout(() => {
         setHintFading(true)
@@ -125,7 +130,7 @@ function App() {
 
   // Player updates (selected player state pushed from Lua)
   useEffect(() => {
-    return on<any>('playerUpdated', (playerData) => {
+    return on<Player>('playerUpdated', (playerData) => {
       nav.setSelectedPlayer((prev) =>
         prev && prev.id === playerData.id ? { ...prev, ...playerData } : prev,
       )
@@ -214,7 +219,7 @@ function App() {
           onMouseDown={chrome.handleBackdropClick}
         />
 
-        <div ref={chrome.windowRef} className={windowClasses.join(' ')} style={windowStyle}>
+        <div ref={_windowRef} className={windowClasses.join(' ')} style={windowStyle}>
           <a className="skip-link" href="#ea-main-content">
             Skip to main content
           </a>
@@ -223,8 +228,8 @@ function App() {
             <div className="sidebar-header" data-window-drag-handle>
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
               <div>
-                <h1 className="text-xl font-bold sidebar-title text-gradient">EasyAdmin</h1>
-                <p className="text-xs text-muted sidebar-subtitle">Admin Panel</p>
+                <h1 className="sidebar-title text-gradient text-xl font-bold">EasyAdmin</h1>
+                <p className="sidebar-subtitle text-xs text-fg-muted">Admin Panel</p>
               </div>
               <button
                 className="btn btn-ghost btn-icon sidebar-collapse-btn"
@@ -257,7 +262,7 @@ function App() {
             </div>
           </aside>
 
-          <div className="flex flex-col flex-1 h-full overflow-hidden">
+          <div className="flex h-full flex-1 flex-col overflow-hidden">
             <header className="topbar" data-window-drag-handle>
               {nav.view !== 'main' && (
                 <button
@@ -270,7 +275,7 @@ function App() {
                 </button>
               )}
               <h2
-                ref={nav.titleRef}
+                ref={_titleRef}
                 className="text-xl font-semibold"
                 tabIndex={-1}
               >

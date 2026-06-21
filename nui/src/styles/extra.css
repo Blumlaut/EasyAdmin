@@ -1,14 +1,4 @@
 /* ============================================================
-   Spinner row
-   ============================================================ */
-
-.spinner-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-/* ============================================================
    Gradient text utility
    ============================================================ */
 
@@ -17,52 +7,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-/* ============================================================
-   Glow border utility
-   ============================================================ */
-
-.glow-border {
-  border-color: var(--border-glow);
-  box-shadow: var(--shadow-glow);
-}
-
-/* ============================================================
-   Pill / tag
-   ============================================================ */
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: 3px var(--space-3);
-  border-radius: var(--radius-full);
-  font-size: var(--text-xs);
-  font-weight: var(--font-medium);
-  background: var(--bg-hover);
-  color: var(--text-secondary);
-  letter-spacing: 0.02em;
-}
-
-.pill-purple {
-  background: var(--bg-purple);
-  color: var(--brand-blue-light);
-}
-
-.pill-green {
-  background: var(--bg-green);
-  color: var(--accent-green);
-}
-
-.pill-red {
-  background: var(--bg-red);
-  color: var(--accent-red);
-}
-
-.pill-orange {
-  background: var(--bg-orange);
-  color: var(--accent-orange);
 }
 
 .opacity-subtle {
@@ -131,4 +75,3 @@
   background: var(--bg-red);
   color: var(--accent-red);
 }
-

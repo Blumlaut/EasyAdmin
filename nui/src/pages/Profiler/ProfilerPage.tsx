@@ -135,7 +135,7 @@ export function ProfilerPage() {
 
             <div className="profiler-progress-percent">{progress.percent}%</div>
 
-            <p className="profiler-progress-hint text-xs text-muted mt-3">
+            <p className="profiler-progress-hint mt-3 text-xs text-fg-muted">
               This typically takes 4-20 seconds depending on frame count. Profiling adds slight overhead during the capture window.
             </p>
           </div>
@@ -156,7 +156,7 @@ export function ProfilerPage() {
             <div className="card-header">
               <div>
                 <h3 className="card-title">Resource Tick Times</h3>
-                <p className="text-xs text-muted mt-1">
+                <p className="mt-1 text-xs text-fg-muted">
                   Time each resource spends executing per server frame. Higher = more CPU usage.
                 </p>
               </div>
@@ -167,8 +167,8 @@ export function ProfilerPage() {
                 <div className="empty-state-icon empty-state-icon-blue">
                   <Icon name="activity" size="md" className="text-blue" />
                 </div>
-                <p className="text-sm text-muted font-medium">No resource tick data found</p>
-                <p className="text-xs text-muted mt-1">
+                <p className="text-sm font-medium text-fg-muted">No resource tick data found</p>
+                <p className="mt-1 text-xs text-fg-muted">
                   The server may have been idle during profiling.
                 </p>
               </div>

@@ -40,35 +40,43 @@ export function useWindowChrome({
   // Refs for latest values (used inside async callbacks and RAF)
   const windowPosRef = useRef(windowPos)
   const windowSizeRef = useRef(windowSize)
-  windowPosRef.current = windowPos
-  windowSizeRef.current = windowSize
 
-  // === Restore saved window position from KVP ===
+  // Keep refs in sync with state (must be in effect, not during render)
+  useEffect(() => {
+    windowPosRef.current = windowPos
+    windowSizeRef.current = windowSize
+  }, [windowPos, windowSize])
+
+  // === Restore saved window position/size from KVP + center on first open ===
 
   useEffect(() => {
+    let posLoaded = false
+    let sizeLoaded = false
+
     if (windowPosData) {
+      posLoaded = true
       windowPosLoadedRef.current = true
+      windowPosRef.current = windowPosData
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time KVP restore on mount, not a reactive sync
       setWindowPos(windowPosData)
     }
-  }, [windowPosData])
-
-  useEffect(() => {
     if (windowSizeData) {
+      sizeLoaded = true
       windowSizeLoadedRef.current = true
+      windowSizeRef.current = windowSizeData
       setWindowSize(windowSizeData)
     }
-  }, [windowSizeData])
 
-  // Center the window on first open (before KVP data arrives).
-  // KVP restore will override this if a saved position exists.
-  useEffect(() => {
-    if (!visible || windowPosLoadedRef.current) return
-    const size = windowSizeRef.current
-    setWindowPos({
-      x: Math.round(window.innerWidth / 2 - size.width / 2),
-      y: Math.round(window.innerHeight / 2 - size.height / 2),
-    })
-  }, [visible])
+    // Center the window on first open only if no saved position exists.
+    // KVP restore above takes priority if a saved position exists.
+    if (visible && !posLoaded) {
+      const size = sizeLoaded ? windowSizeRef.current : windowSizeRef.current
+      setWindowPos({
+        x: Math.round(window.innerWidth / 2 - size.width / 2),
+        y: Math.round(window.innerHeight / 2 - size.height / 2),
+      })
+    }
+  }, [visible, windowPosData, windowSizeData])
 
   // === Focus sync from Lua (nuiUnhook) ===
 
@@ -230,7 +238,7 @@ export function useWindowChrome({
       el.style.height = `${size.height}px`
     })
     return () => window.cancelAnimationFrame(raf)
-  }, [visible, contentCollapsed, sidebarMode, sidebarDirection])
+  }, [visible, contentCollapsed, sidebarMode])
 
   useEffect(() => {
     return applyWindowChrome()

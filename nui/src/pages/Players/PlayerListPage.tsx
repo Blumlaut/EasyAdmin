@@ -51,7 +51,7 @@ export function PlayerListPage({
 
   return (
     <div className="page-container">
-      <div className="flex items-center gap-2 mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <SearchBar
           value={query}
           onChange={setQuery}
@@ -74,9 +74,9 @@ export function PlayerListPage({
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
-            <Icon name="users" size="lg" className="text-muted" />
+            <Icon name="users" size="lg" className="text-fg-muted" />
           </div>
-          <p className="text-secondary">
+          <p className="text-fg-subtle">
             {players.length === 0 ? 'No players connected' : 'No players match your search'}
           </p>
         </div>
@@ -123,7 +123,7 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
           </Tooltip>
         )}
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
+      <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>
   )
 }

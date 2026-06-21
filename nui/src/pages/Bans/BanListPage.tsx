@@ -92,7 +92,7 @@ export function BanListPage({
 
   return (
     <div className="page-container">
-      <div className="flex items-center gap-2 mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <SearchBar
           value={query}
           onChange={(v) => {
@@ -119,7 +119,7 @@ export function BanListPage({
           <div className="empty-state-icon empty-state-icon-red">
             <Icon name="ban" size="lg" className="text-red" />
           </div>
-          <p className="text-secondary">{total === 0 ? 'No bans on record' : 'No bans match your search'}</p>
+          <p className="text-fg-subtle">{total === 0 ? 'No bans on record' : 'No bans match your search'}</p>
         </div>
       ) : (
         <div ref={listRef} className="list">
@@ -174,7 +174,7 @@ function BanRow({
         )}
         {ban.expire === -1 && <span className="badge badge-danger">Permanent</span>}
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
+      <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>
   )
 }

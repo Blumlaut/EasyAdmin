@@ -22,7 +22,7 @@ export function SearchBar({
   return (
     <div className="flex items-center gap-2">
       <div className="search-wrapper">
-        <Icon name="search" size="sm" className="text-muted shrink-0 search-icon" />
+        <Icon name="search" size="sm" className="search-icon shrink-0 text-fg-muted" />
         <input
           className="input search-input"
           placeholder={placeholder}
@@ -32,7 +32,7 @@ export function SearchBar({
         />
       </div>
       {resultCount && (
-        <span className="text-xs text-muted shrink-0">
+        <span className="shrink-0 text-xs text-fg-muted">
           {resultCount.shown}/{resultCount.total}
         </span>
       )}

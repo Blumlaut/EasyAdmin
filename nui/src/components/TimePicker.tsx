@@ -59,7 +59,7 @@ export function TimePicker({ value, onChange, disabled, label }: TimePickerProps
 
   const handleHourSelect = useCallback((h: number) => {
     setDraftHours(h)
-    const [_, m] = value.split(':').map(Number)
+    const m = value.split(':').map(Number)[1]
     onChange(`${pad(h)}:${pad(m || 0)}`)
   }, [value, onChange])
 
@@ -78,7 +78,7 @@ export function TimePicker({ value, onChange, disabled, label }: TimePickerProps
   if (disabled) {
     return (
       <div className="time-picker time-picker-disabled" ref={ref}>
-        {label && <span className="text-sm text-secondary">{label}</span>}
+        {label && <span className="text-sm text-fg-subtle">{label}</span>}
         <button
           type="button"
           className="time-picker-trigger"
@@ -93,7 +93,7 @@ export function TimePicker({ value, onChange, disabled, label }: TimePickerProps
 
   return (
     <div className={`time-picker${open ? ' time-picker-open' : ''}`} ref={ref}>
-      {label && <span className="text-sm text-secondary">{label}</span>}
+      {label && <span className="text-sm text-fg-subtle">{label}</span>}
       <button
         type="button"
         className="time-picker-trigger"

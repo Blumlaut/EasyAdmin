@@ -122,7 +122,7 @@ export function ModalBuilder({
       case 'text':
         return (
           <label key={field.key} className="flex flex-col gap-1">
-            {field.label && <span className="text-sm text-secondary">{field.label}</span>}
+            {field.label && <span className="text-sm text-fg-subtle">{field.label}</span>}
             <input
               ref={commonRef as RefObject<HTMLInputElement>}
               className="input"
@@ -139,13 +139,13 @@ export function ModalBuilder({
               }}
               aria-label={field.label ?? field.key}
             />
-            {field.description && <span className="text-xs text-muted">{field.description}</span>}
+            {field.description && <span className="text-xs text-fg-muted">{field.description}</span>}
           </label>
         )
       case 'textarea':
         return (
           <label key={field.key} className="flex flex-col gap-1">
-            {field.label && <span className="text-sm text-secondary">{field.label}</span>}
+            {field.label && <span className="text-sm text-fg-subtle">{field.label}</span>}
             <textarea
               ref={commonRef as RefObject<HTMLTextAreaElement>}
               className="input"
@@ -156,13 +156,13 @@ export function ModalBuilder({
               onChange={(e) => setFieldValue(field.key, e.target.value)}
               aria-label={field.label ?? field.key}
             />
-            {field.description && <span className="text-xs text-muted">{field.description}</span>}
+            {field.description && <span className="text-xs text-fg-muted">{field.description}</span>}
           </label>
         )
       case 'number':
         return (
           <label key={field.key} className="flex flex-col gap-1">
-            {field.label && <span className="text-sm text-secondary">{field.label}</span>}
+            {field.label && <span className="text-sm text-fg-subtle">{field.label}</span>}
             <input
               ref={commonRef as RefObject<HTMLInputElement>}
               className="input"
@@ -184,7 +184,7 @@ export function ModalBuilder({
               }}
               aria-label={field.label ?? field.key}
             />
-            {field.description && <span className="text-xs text-muted">{field.description}</span>}
+            {field.description && <span className="text-xs text-fg-muted">{field.description}</span>}
           </label>
         )
       case 'slider':
@@ -200,7 +200,7 @@ export function ModalBuilder({
       case 'select':
         return (
           <div key={field.key} className="flex flex-col gap-1">
-            {field.label && <span className="text-sm text-secondary">{field.label}</span>}
+            {field.label && <span className="text-sm text-fg-subtle">{field.label}</span>}
             <SelectMenu
               items={field.options.map((opt) => ({ value: opt.value, label: opt.label }))}
               placeholder={field.placeholder}
@@ -208,15 +208,15 @@ export function ModalBuilder({
               onChange={(item) => setFieldValue(field.key, item.value)}
               ariaLabel={field.label ?? field.key}
             />
-            {field.description && <span className="text-xs text-muted">{field.description}</span>}
+            {field.description && <span className="text-xs text-fg-muted">{field.description}</span>}
           </div>
         )
       case 'checkbox':
         return (
           <div key={field.key} className="toggle-row">
             <div className="flex flex-col gap-1">
-              {field.label && <span className="text-sm text-secondary">{field.label}</span>}
-              {field.description && <span className="text-xs text-muted">{field.description}</span>}
+              {field.label && <span className="text-sm text-fg-subtle">{field.label}</span>}
+              {field.description && <span className="text-xs text-fg-muted">{field.description}</span>}
             </div>
             <label className="toggle">
               <input
@@ -275,7 +275,7 @@ function SliderField({
 }) {
   return (
     <label className="flex flex-col gap-2">
-      {field.label && <span className="text-sm text-secondary">{field.label}</span>}
+      {field.label && <span className="text-sm text-fg-subtle">{field.label}</span>}
       <span>
         Value: <span className="text-mono font-semibold">{field.formatValue ? field.formatValue(value) : value}</span>
       </span>
@@ -290,7 +290,7 @@ function SliderField({
         onChange={(e) => onChange(Number(e.target.value))}
         aria-label={field.label ?? field.key}
       />
-      {field.description && <span className="text-xs text-muted">{field.description}</span>}
+      {field.description && <span className="text-xs text-fg-muted">{field.description}</span>}
     </label>
   )
 }

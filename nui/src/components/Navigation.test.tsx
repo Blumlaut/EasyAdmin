@@ -124,7 +124,6 @@ describe('Navigation', () => {
 
     it('collapses dropdown on second click', async () => {
       const user = userEvent.setup()
-      const onSelect = vi.fn()
       render(<Navigation items={dropdownItems} activeId="player-statistics" onSelect={() => {}} />)
       // Dropdown should be expanded (auto-expand because child is active)
       const dropdown = screen.getByText('Statistics').closest('.nav-dropdown')

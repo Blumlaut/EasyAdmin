@@ -69,6 +69,7 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
       if (!isNavItem(item) || !item.children) continue
       const childIds = item.children.filter(isNavItem).map((c) => c.id)
       if (activeId === item.id || childIds.includes(activeId)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- auto-expand dropdown to reveal active item when navigation changes externally
         setExpanded((prev) => prev[item.id] ? prev : expandOnly(item.id, prev))
         break
       }
@@ -172,8 +173,8 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
     const hasChildren = !!navItem.children && navItem.children.length > 0
     const isExpanded = expanded[navItem.id]
     const isActive = activeId === navItem.id
-    const isParentActive = hasChildren && navItem.children!.some((c) => isNavItem(c) && c.id === activeId)
-    const isDisabled = navItem.disabled || (hasChildren && navItem.children!.every((c) => !isNavItem(c) || c.disabled))
+    const isParentActive = (hasChildren && navItem.children?.some((c) => isNavItem(c) && c.id === activeId)) ?? false
+    const isDisabled = navItem.disabled || ((hasChildren && navItem.children?.every((c) => !isNavItem(c) || c.disabled)) ?? false)
 
     return (
       <div key={navItem.id} className={`${hasChildren ? 'nav-dropdown' : ''}${hasChildren && (isActive || isParentActive) ? ' nav-dropdown-parent' : ''}`.trimStart()}>
@@ -186,10 +187,10 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
               toggleExpanded(navItem.id)
               // If expanding and no child is active, navigate to first enabled child
               if (!isExpanded) {
-                const firstEnabled = navItem.children!.find((c) => isNavItem(c) && !c.disabled) as NavItemBase | undefined
+                const firstEnabled = navItem.children?.find((c) => isNavItem(c) && !c.disabled) as NavItemBase | undefined
                 if (firstEnabled && !isParentActive) onSelect(firstEnabled.id)
                 else if (isParentActive) {
-                  const activeChild = navItem.children!.find((c) => isNavItem(c) && c.id === activeId) as NavItemBase | undefined
+                  const activeChild = navItem.children?.find((c) => isNavItem(c) && c.id === activeId) as NavItemBase | undefined
                   if (activeChild) onSelect(activeChild.id)
                 }
               }
@@ -222,7 +223,7 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
         {hasChildren && (
           <div className={`nav-dropdown-children${isExpanded ? ' nav-dropdown-children-open' : ''}`}>
             <div className="nav-dropdown-children-inner">
-              {navItem.children!.map((child, idx) => renderItem(child, idx))}
+              {navItem.children?.map((child, idx) => renderItem(child, idx)) ?? []}
             </div>
           </div>
         )}

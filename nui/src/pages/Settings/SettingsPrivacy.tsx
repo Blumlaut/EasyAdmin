@@ -23,7 +23,7 @@ export function SettingsPrivacy({ anonymous, onChange }: SettingsPrivacyProps) {
       <div className="toggle-row">
         <div className="flex flex-col">
           <span className="text-sm">Anonymous mode</span>
-          <span className="text-xs text-muted">
+          <span className="text-xs text-fg-muted">
             Hide your identity in moderation actions and webhooks.
           </span>
         </div>

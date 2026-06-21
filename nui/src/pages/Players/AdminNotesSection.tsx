@@ -29,6 +29,7 @@ export function AdminNotesSection({
   // Fetch admin notes from server
   useEffect(() => {
     let cancelled = false
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting state before async fetch is the standard data-fetching pattern
     setState({ status: 'loading' })
     callLua('getAdminNotes', { id: playerId })
     const unsub = on<{ id: number; entries: AdminNoteEntry[] }>('adminNotes', (data) => {
@@ -84,9 +85,10 @@ export function AdminNotesSection({
   return (
     <div className="card">
       <div className="card-header">
+        {/* eslint-disable-next-line nui/no-inline-styles -- overrides section-label margin for card-header context only */}
         <p className="section-label" style={{ marginBottom: 0 }}>Admin Notes</p>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted">{sortedEntries.length} note{sortedEntries.length === 1 ? '' : 's'}</span>
+          <span className="text-xs text-fg-muted">{sortedEntries.length} note{sortedEntries.length === 1 ? '' : 's'}</span>
           {canAdd && (
             <button
               className="btn btn-sm btn-secondary"
@@ -118,7 +120,7 @@ export function AdminNotesSection({
       </div>
 
       {sortedEntries.length === 0 ? (
-        <p className="text-sm text-muted">No notes for this player</p>
+        <p className="text-sm text-fg-muted">No notes for this player</p>
       ) : (
         <div className="timeline-list">
           {sortedEntries.map((entry) => (

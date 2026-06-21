@@ -59,22 +59,7 @@
   color: var(--text-muted);
 }
 
-/* Connection state — dot color reflects WebRTC connection status */
-.ea-stream-viewer-state--live .ea-stream-viewer-dot {
-  background: var(--accent-green);
-}
-.ea-stream-viewer-state--connecting .ea-stream-viewer-dot,
-.ea-stream-viewer-state--reconnecting .ea-stream-viewer-dot {
-  background: var(--accent-blue);
-}
-.ea-stream-viewer-state--failed .ea-stream-viewer-dot {
-  background: var(--accent-red);
-  animation: none;
-}
-.ea-stream-viewer-state--failed {
-  color: var(--accent-red);
-}
-
+/* Connection state dot */
 .ea-stream-viewer-dot {
   width: 6px;
   height: 6px;
@@ -86,6 +71,25 @@
 @keyframes ea-stream-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
+}
+
+/* Connection state — dot color reflects WebRTC connection status */
+.ea-stream-viewer-state--live .ea-stream-viewer-dot {
+  background: var(--accent-green);
+}
+
+.ea-stream-viewer-state--connecting .ea-stream-viewer-dot,
+.ea-stream-viewer-state--reconnecting .ea-stream-viewer-dot {
+  background: var(--accent-blue);
+}
+
+.ea-stream-viewer-state--failed .ea-stream-viewer-dot {
+  background: var(--accent-red);
+  animation: none;
+}
+
+.ea-stream-viewer-state--failed {
+  color: var(--accent-red);
 }
 
 .ea-stream-viewer-error {

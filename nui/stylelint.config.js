@@ -3,6 +3,9 @@ export default {
   extends: ['stylelint-config-standard'],
   ignoreFiles: ['dist/**/*.css'],
   rules: {
+    // -- Tailwind directives --
+    'at-rule-no-unknown': null, // Tailwind uses @tailwind, @layer, @apply
+
     // -- CEF compatibility: keep vendor prefixes and rgba() --
     'property-no-vendor-prefix': null,
     'color-function-alias-notation': null,
@@ -24,5 +27,8 @@ export default {
 
     // -- Duplicate custom properties (intentional override in .redm) --
     'declaration-block-no-duplicate-custom-properties': null,
+
+    // -- Shorthand property order (Tailwind generates these) --
+    'shorthand-property-no-redundant-values': null,
   },
 };

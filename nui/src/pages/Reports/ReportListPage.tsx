@@ -41,7 +41,7 @@ export function ReportListPage({
 
   return (
     <div className="page-container">
-      <div className="flex items-center gap-2 mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <SearchBar
           value={query}
           onChange={setQuery}
@@ -66,7 +66,7 @@ export function ReportListPage({
           <div className="empty-state-icon empty-state-icon-orange">
             <Icon name="flag" size="lg" className="text-orange" />
           </div>
-          <p className="text-secondary">{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
+          <p className="text-fg-subtle">{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
         </div>
       ) : (
         <div ref={listRef} className="list">
@@ -109,7 +109,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
       </div>
       <div className="list-item-content">
         <div className="list-item-title">
-          <span className="text-muted report-id-prefix">#{report.id}</span>
+          <span className="report-id-prefix text-fg-muted">#{report.id}</span>
           {targetName}
         </div>
         <div className="list-item-subtitle truncate">{report.reason}</div>
@@ -120,7 +120,7 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
         )}
         <span className="badge badge-default">{report.reportTimeFormatted}</span>
       </div>
-      <Icon name="chevron-right" size="xs" className="text-muted opacity-subtle" />
+      <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>
   )
 }

@@ -184,6 +184,7 @@ export function StreamViewer() {
     <div
       ref={windowRef}
       className="ea-floating-window ea-stream-viewer"
+      // eslint-disable-next-line nui/no-inline-styles -- dynamic position/size for draggable floating window
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

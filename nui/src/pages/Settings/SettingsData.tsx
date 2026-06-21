@@ -20,21 +20,21 @@ export function SettingsData() {
           className="server-action-btn"
           onClick={() => refresh('refreshBanList', 'Ban list')}
         >
-          <Icon name="refresh" size="xs" className="text-muted" />
+          <Icon name="refresh" size="xs" className="text-fg-muted" />
           <span className="flex-1 text-left">Refresh ban list</span>
         </button>
         <button
           className="server-action-btn"
           onClick={() => refresh('refreshCachedPlayers', 'Cached players')}
         >
-          <Icon name="refresh" size="xs" className="text-muted" />
+          <Icon name="refresh" size="xs" className="text-fg-muted" />
           <span className="flex-1 text-left">Refresh cached players</span>
         </button>
         <button
           className="server-action-btn"
           onClick={() => refresh('refreshPermissions', 'Permissions')}
         >
-          <Icon name="refresh" size="xs" className="text-muted" />
+          <Icon name="refresh" size="xs" className="text-fg-muted" />
           <span className="flex-1 text-left">Refresh permissions</span>
         </button>
       </div>

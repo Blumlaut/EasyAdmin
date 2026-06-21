@@ -25,11 +25,6 @@
   color: var(--accent-green);
 }
 
-.badge-offline {
-  background: rgba(110, 118, 129, 0.2);
-  color: var(--text-muted);
-}
-
 .badge-frozen {
   background: var(--bg-blue);
   color: var(--accent-blue);

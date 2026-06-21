@@ -72,9 +72,9 @@ export function BanDetailPage({
     return (
       <div className="page-container">
         <div className="card">
-          <div className="flex items-center gap-3 mb-3">
+          <div className="mb-3 flex items-center gap-3">
             <Skeleton width={48} height={48} circle />
-            <div className="flex-1 flex flex-col gap-1">
+            <div className="flex flex-1 flex-col gap-1">
               <Skeleton width="40%" height={18} />
               <Skeleton width="30%" height={14} />
             </div>
@@ -96,7 +96,7 @@ export function BanDetailPage({
           <div className="empty-state-icon empty-state-icon-red">
             <Icon name="ban" size="lg" className="text-red" />
           </div>
-          <p className="text-secondary">Ban not found or failed to load</p>
+          <p className="text-fg-subtle">Ban not found or failed to load</p>
         </div>
       </div>
     )
@@ -206,7 +206,7 @@ export function BanDetailPage({
   return (
     <div className="page-container">
       <div className="card card-ban">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="mb-3 flex items-center gap-3">
           <div className="avatar avatar-md avatar-ban">
             <Icon name="ban" size="sm" className="text-red" />
           </div>
@@ -214,7 +214,7 @@ export function BanDetailPage({
             <h3 className="text-xl font-bold">
               {current.name ?? 'Banned player'}
             </h3>
-            <p className="text-sm text-muted text-mono">ID: {current.banid}</p>
+            <p className="text-mono text-sm text-fg-muted">ID: {current.banid}</p>
           </div>
           {canEdit && (
             <button
@@ -233,10 +233,10 @@ export function BanDetailPage({
       <div className="card">
         <p className="section-label">
           Identifiers
-          <span className="text-sm text-muted identifier-count">{visibleIdentifiers.length}</span>
+          <span className="identifier-count text-sm text-fg-muted">{visibleIdentifiers.length}</span>
         </p>
         {visibleIdentifiers.length === 0 ? (
-          <p className="text-sm text-muted">No identifiers available</p>
+          <p className="text-sm text-fg-muted">No identifiers available</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {visibleIdentifiers.map((id) => {
@@ -244,10 +244,10 @@ export function BanDetailPage({
               return (
                 <li
                   key={id}
-                  className="flex items-center gap-2 text-mono text-sm identifier-row"
+                  className="text-mono identifier-row flex items-center gap-2 text-sm"
                 >
                   <span className="badge badge-default">{kind}</span>
-                  <span className="truncate flex-1">{value ?? id}</span>
+                  <span className="flex-1 truncate">{value ?? id}</span>
                   <CopyButton value={id} ariaLabel={`Copy ${kind}`} />
                 </li>
               )

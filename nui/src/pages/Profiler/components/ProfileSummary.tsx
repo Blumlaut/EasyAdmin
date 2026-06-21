@@ -47,7 +47,7 @@ export function ProfileSummary({ profile, onNewProfile }: ProfileSummaryProps) {
       <div className="card-header">
         <div>
           <h3 className="card-title">Profile Summary</h3>
-          <p className="text-xs text-muted mt-1">
+          <p className="mt-1 text-xs text-fg-muted">
             Captured at {capturedTime}
           </p>
         </div>

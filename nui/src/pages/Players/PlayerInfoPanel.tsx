@@ -16,8 +16,10 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
   const [historyExpanded, setHistoryExpanded] = useState(false)
 
   // Lazy-load name history from server (only if viewer has permission)
+  const canViewNameHistory = permissions['player.namehistory.view']
+
   useEffect(() => {
-    if (!permissions['player.namehistory.view']) return
+    if (!canViewNameHistory) return
     let cancelled = false
     callLua('getPlayerNameHistory', { id: player.id })
     const unsub = on<{
@@ -33,7 +35,7 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
       cancelled = true
       unsub()
     }
-  }, [player.id, permissions['player.namehistory.view']])
+  }, [player.id, canViewNameHistory])
 
   const handleToggleHistory = useCallback(() => {
     setHistoryExpanded((prev) => !prev)
@@ -71,11 +73,11 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
 
   return (
     <div className="card">
-      <div className="flex items-center gap-4 mb-3">
+      <div className="mb-3 flex items-center gap-4">
         <Avatar key={player.id} player={player} size="lg" variant="player" />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-xl font-bold truncate">{player.name}</h3>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="truncate text-xl font-bold">{player.name}</h3>
             {canViewHistory && (
               <button
                 className="name-history-toggle"
@@ -92,9 +94,9 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
             )}
             <RoleBadges player={player} />
           </div>
-          <p className="text-sm text-muted text-mono">ID: {player.id}</p>
+          <p className="text-mono text-sm text-fg-muted">ID: {player.id}</p>
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex shrink-0 gap-2">
           {player.frozen && <span className="badge badge-frozen">Frozen</span>}
           {player.muted && <span className="badge badge-muted">Muted</span>}
         </div>
@@ -119,7 +121,7 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
               })}
             </ul>
           ) : (
-            <p className="text-sm text-muted">No name history available</p>
+            <p className="text-sm text-fg-muted">No name history available</p>
           )}
         </div>
       )}

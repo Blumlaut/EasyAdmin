@@ -96,8 +96,8 @@ export function SortableTable<T>({
 
   if (loading && rows.length === 0) {
     return (
-      <div className={`flex items-center justify-center ${className}`} style={{ minHeight: '100px' }}>
-        <p className="text-xs text-muted">Loading…</p>
+      <div className={`flex min-h-100 items-center justify-center ${className}`}>
+        <p className="text-xs text-fg-muted">Loading…</p>
       </div>
     )
   }
@@ -105,8 +105,8 @@ export function SortableTable<T>({
   if (rows.length === 0) {
     return (
       <div className={`flex flex-col items-center justify-center py-6 ${className}`}>
-        <p className="text-sm text-muted">{emptyMessage}</p>
-        {emptySubMessage && <p className="text-xs text-muted mt-1">{emptySubMessage}</p>}
+        <p className="text-sm text-fg-muted">{emptyMessage}</p>
+        {emptySubMessage && <p className="mt-1 text-xs text-fg-muted">{emptySubMessage}</p>}
       </div>
     )
   }
@@ -114,7 +114,7 @@ export function SortableTable<T>({
   return (
     <div className={`overflow-x-auto ${className}`}>
       {onRefresh && (
-        <div className="flex justify-end mb-2">
+        <div className="mb-2 flex justify-end">
           <button
             className="btn btn-secondary btn-sm"
             onClick={onRefresh}

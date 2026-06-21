@@ -31,15 +31,18 @@ export function StatCard({
   if (variant === 'overlay') {
     return (
       <div className={`card statistics-card ${className}`}>
-        <p className="text-xs text-muted statistics-label">{label}</p>
-        <p className="text-2xl font-bold statistics-value mt-1">{value}</p>
-        {subValue && <p className="text-xs text-muted mt-0.5">{subValue}</p>}
+        <p className="statistics-label text-xs text-fg-muted">{label}</p>
+        <p className="statistics-value mt-1 text-2xl font-bold">{value}</p>
+        {subValue && <p className="mt-0.5 text-xs text-fg-muted">{subValue}</p>}
         <div
-          className="statistics-icon"
-          // eslint-disable-next-line nui/no-inline-styles
-          style={{ background: bgColor, position: 'absolute', top: '0.875rem', right: '1rem' }}
+          className="statistics-icon statistics-icon--absolute"
+          // eslint-disable-next-line nui/no-inline-styles -- dynamic background color from design token prop
+          style={{ background: bgColor }}
         >
-          <Icon name={icon} size="md" style={{ color: iconColor }} />
+          <Icon name={icon} size="md"
+            // eslint-disable-next-line nui/no-inline-styles -- dynamic icon color from design token prop
+            style={{ color: iconColor }}
+          />
         </div>
       </div>
     )
@@ -50,14 +53,17 @@ export function StatCard({
       <div className="flex items-center gap-3">
         <div
           className="dashboard-stat-icon"
-          // eslint-disable-next-line nui/no-inline-styles
+          // eslint-disable-next-line nui/no-inline-styles -- dynamic background color from design token prop
           style={{ background: bgColor }}
         >
-          <Icon name={icon} size="sm" style={{ color: iconColor }} />
+          <Icon name={icon} size="sm"
+            // eslint-disable-next-line nui/no-inline-styles -- dynamic icon color from design token prop
+            style={{ color: iconColor }}
+          />
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-muted dashboard-stat-label">{label}</p>
-          <p className="text-xl font-bold dashboard-stat-value">{value}</p>
+          <p className="dashboard-stat-label text-xs text-fg-muted">{label}</p>
+          <p className="dashboard-stat-value text-xl font-bold">{value}</p>
         </div>
       </div>
     </div>

@@ -120,7 +120,7 @@ export function ReportDetailPage({
     return (
       <div className="page-container">
         <div className="card">
-          <div className="flex items-center gap-3 mb-3">
+          <div className="mb-3 flex items-center gap-3">
             <div className="avatar avatar-md">…</div>
             <div className="flex-1">
               <h3 className="text-xl font-semibold">Loading report…</h3>
@@ -138,7 +138,7 @@ export function ReportDetailPage({
           <div className="empty-state-icon empty-state-icon-orange">
             <Icon name="flag" size="lg" className="text-orange" />
           </div>
-          <p className="text-secondary">Report not found or failed to load</p>
+          <p className="text-fg-subtle">Report not found or failed to load</p>
         </div>
       </div>
     )
@@ -186,7 +186,7 @@ export function ReportDetailPage({
   return (
     <div className="page-container">
       <div className={`card ${report.claimed ? 'card-report-claimed' : report.type === 1 ? 'card-report-emergency' : 'card-report-normal'}`}>
-        <div className="flex items-center gap-3 mb-3">
+        <div className="mb-3 flex items-center gap-3">
           <div className={`avatar avatar-md ${report.claimed ? 'avatar-report-claimed' : report.type === 1 ? 'avatar-report-emergency' : 'avatar-report'}`}>
             <Icon
               name="flag"
@@ -198,7 +198,7 @@ export function ReportDetailPage({
             <h3 className="text-xl font-bold">
               Report #{report.id}
             </h3>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-fg-muted">
               {report.type === 1 ? 'Emergency' : 'Normal'}
             </p>
           </div>
