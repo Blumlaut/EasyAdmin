@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { IconName } from '../../components/icons'
 import type { Notification, Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
+import { Tooltip } from '../../components/Tooltip'
 import { useModalContext } from '../../ModalContext'
 import { SelectMenu } from '../../components/SelectMenu'
 import { callLua, on } from '../../fivem'
@@ -353,7 +354,7 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
                   // tooltip fire while the click guard prevents activation.
                   const isStream = action.id === 'stream'
 
-                  return (
+                  const btn = (
                     <button
                       key={action.id}
                       className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}${isStream ? ' player-action-group-btn-soon' : ''}`}
@@ -361,7 +362,7 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
                       disabled={isLoading || busyAction === action.id}
                       aria-disabled={isStream || undefined}
                       title={isStream
-                        ? 'This feature is still in development, check back later!'
+                        ? undefined
                         : isToggle
                           ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
                           : `${action.label} ${player.name}`
@@ -376,6 +377,14 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
                         {isToggle && isActive ? `Un${action.label}` : action.label}
                       </span>
                     </button>
+                  )
+
+                  return isStream ? (
+                    <Tooltip key={`tooltip-${action.id}`} content="This feature is still in development, check back later!">
+                      {btn}
+                    </Tooltip>
+                  ) : (
+                    btn
                   )
                 })}
               </div>
