@@ -9,6 +9,7 @@
 
 import { useEffect, useRef } from 'react'
 import { createCapture, type ScreenshotCaptureCtx } from '../lib/screenshot'
+import { loadThree } from '../lib/three-loader'
 import { callLua, on } from '../fivem'
 
 interface ScreenshotRequest {
@@ -20,7 +21,12 @@ interface ScreenshotRequest {
 export function ScreenshotCapture() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const captureRef = useRef<ScreenshotCaptureCtx | null>(null)
+  const cleanupRef = useRef<(() => void) | null>(null)
 
+  // Initialize Three.js + WebGL pipeline.
+  // loadThree() is pre-fetched in main.tsx, so this typically resolves immediately.
+  // The screenshot event listener is registered INSIDE this effect so it only fires
+  // after the render loop is running — no race condition.
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) {
@@ -28,51 +34,52 @@ export function ScreenshotCapture() {
       return
     }
 
-    const cap = createCapture(canvas)
-    if (!cap) {
-      // Three.js / CfxTexture not available (browser dev mode)
-      return
-    }
+    let cancelled = false
 
-    captureRef.current = cap
-    cap.startRenderLoop()
+    ;(async () => {
+      await loadThree()
+      if (cancelled) return
 
-    // Handle resize
-    const handleResize = () => cap.resize()
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      cap.destroy()
-      captureRef.current = null
-    }
-  }, [])
-
-  // Listen for screenshot requests from Lua (no dependencies — fires once on mount)
-  useEffect(() => {
-    return on<ScreenshotRequest>('screenshot:request', async (req) => {
-
-      const capture = captureRef.current
-      if (!capture) {
-        console.error('[EA-Screenshot] captureRef is null, cannot capture')
-        await callLua('screenshotResult', {
-          correlationId: req.correlationId,
-          data: 'ERROR',
-        })
+      const cap = createCapture(canvas)
+      if (!cap) {
+        // Three.js / CfxTexture not available (browser dev mode)
         return
       }
+      if (cancelled) { cap.destroy(); return }
 
-      const dataUri = await capture.capture(
-        req.maxResolution ?? 1280,
-        req.quality ?? 0.8,
-      )
+      cap.startRenderLoop()
+      captureRef.current = cap
 
-      // Send result back to Lua via NUICallback
-      await callLua('screenshotResult', {
-        correlationId: req.correlationId,
-        data: dataUri ?? 'ERROR',
+      // Handle resize
+      const handleResize = () => cap.resize()
+      window.addEventListener('resize', handleResize)
+
+      // Only listen for screenshot requests AFTER the render loop is running.
+      // This guarantees CfxTexture has frames to capture.
+      const unsubscribe = on<ScreenshotRequest>('screenshot:request', async (req) => {
+        const dataUri = await cap.capture(
+          req.maxResolution ?? 1280,
+          req.quality ?? 0.8,
+        )
+        await callLua('screenshotResult', {
+          correlationId: req.correlationId,
+          data: dataUri ?? 'ERROR',
+        })
       })
-    })
+
+      cleanupRef.current = () => {
+        window.removeEventListener('resize', handleResize)
+        unsubscribe()
+        cap.destroy()
+      }
+    })()
+
+    return () => {
+      cancelled = true
+      cleanupRef.current?.()
+      cleanupRef.current = null
+      captureRef.current = null
+    }
   }, [])
 
   // 1x1 hidden canvas — must be in the visible tree for OSR rendering

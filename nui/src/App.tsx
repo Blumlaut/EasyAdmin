@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, type SuspenseProps } from 'react'
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useWindowChrome } from './hooks/useWindowChrome'
@@ -11,23 +11,52 @@ import { ScreenshotViewer } from './components/ScreenshotViewer'
 import { StreamCapture } from './components/StreamCapture'
 import { StreamViewer } from './components/StreamViewer'
 import { WarningOverlay } from './components/WarningOverlay'
+import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
 import { notify } from './lib/notify'
-import { Dashboard } from './pages/Dashboard/Dashboard'
-import { PlayerListPage } from './pages/Players/PlayerListPage'
-import { PlayerDetailPage } from './pages/Players/PlayerDetailPage'
-import { CachedPlayersPage } from './pages/Players/CachedPlayersPage'
-import { BanListPage } from './pages/Bans/BanListPage'
-import { BanDetailPage } from './pages/Bans/BanDetailPage'
-import { ReportListPage } from './pages/Reports/ReportListPage'
-import { ReportDetailPage } from './pages/Reports/ReportDetailPage'
-import { PlayerStatisticsPage } from './pages/PlayerStatistics/PlayerStatisticsPage'
-import { ServerPage } from './pages/Server/ServerPage'
-import { ResourceListPage } from './pages/Resources/ResourceListPage'
-import { ResourceDetailPage } from './pages/Resources/ResourceDetailPage'
-import { ProfilerPage } from './pages/Profiler/ProfilerPage'
-import { SettingsPage } from './pages/Settings/SettingsPage'
-import { NetworkMonitorPage } from './pages/Statistics/NetworkMonitorPage'
+
+// --- Lazy-loaded pages (route-based code-splitting) ---
+// Pages use named exports; .then() adapts them to the default export React.lazy expects.
+
+const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard').then(m => ({ default: m.Dashboard })))
+const PlayerListPage = React.lazy(() => import('./pages/Players/PlayerListPage').then(m => ({ default: m.PlayerListPage })))
+const PlayerDetailPage = React.lazy(() => import('./pages/Players/PlayerDetailPage').then(m => ({ default: m.PlayerDetailPage })))
+const CachedPlayersPage = React.lazy(() => import('./pages/Players/CachedPlayersPage').then(m => ({ default: m.CachedPlayersPage })))
+const BanListPage = React.lazy(() => import('./pages/Bans/BanListPage').then(m => ({ default: m.BanListPage })))
+const BanDetailPage = React.lazy(() => import('./pages/Bans/BanDetailPage').then(m => ({ default: m.BanDetailPage })))
+const ReportListPage = React.lazy(() => import('./pages/Reports/ReportListPage').then(m => ({ default: m.ReportListPage })))
+const ReportDetailPage = React.lazy(() => import('./pages/Reports/ReportDetailPage').then(m => ({ default: m.ReportDetailPage })))
+const PlayerStatisticsPage = React.lazy(() => import('./pages/PlayerStatistics/PlayerStatisticsPage').then(m => ({ default: m.PlayerStatisticsPage })))
+const ServerPage = React.lazy(() => import('./pages/Server/ServerPage').then(m => ({ default: m.ServerPage })))
+const ResourceListPage = React.lazy(() => import('./pages/Resources/ResourceListPage').then(m => ({ default: m.ResourceListPage })))
+const ResourceDetailPage = React.lazy(() => import('./pages/Resources/ResourceDetailPage').then(m => ({ default: m.ResourceDetailPage })))
+const ProfilerPage = React.lazy(() => import('./pages/Profiler/ProfilerPage').then(m => ({ default: m.ProfilerPage })))
+const SettingsPage = React.lazy(() => import('./pages/Settings/SettingsPage').then(m => ({ default: m.SettingsPage })))
+const NetworkMonitorPage = React.lazy(() => import('./pages/Statistics/NetworkMonitorPage').then(m => ({ default: m.NetworkMonitorPage })))
+
+// --- Loading placeholder for lazy pages ---
+
+function PageLoader() {
+  return (
+    <div className="flex flex-col gap-3 p-4">
+      <Skeleton height={24} width="60%" />
+      <Skeleton height={16} width="80%" />
+      <Skeleton height={16} width="45%" />
+      <div className="mt-4" />
+      <Skeleton height={48} width="100%" />
+      <Skeleton height={48} width="100%" />
+      <Skeleton height={48} width="100%" />
+    </div>
+  )
+}
+
+function LazyPage(props: SuspenseProps) {
+  return (
+    <React.Suspense fallback={<PageLoader />}>
+      {props.children}
+    </React.Suspense>
+  )
+}
 
 interface WarningData {
   title: string
@@ -305,124 +334,154 @@ function App() {
 
             <main id="ea-main-content" className="glass main-content" role="main">
               {nav.view === 'main' && (
-                <Dashboard
-                  playerCount={data.players.length}
-                  updateInfo={data.updateInfo}
-                  onDismissUpdate={data.dismissUpdate}
-                  onNavigateToResources={() => nav.navigateTo('resources')}
-                />
+                <LazyPage>
+                  <Dashboard
+                    playerCount={data.players.length}
+                    updateInfo={data.updateInfo}
+                    onDismissUpdate={data.dismissUpdate}
+                    onNavigateToResources={() => nav.navigateTo('resources')}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'players' && (
-                <PlayerListPage
-                  players={data.players}
-                  loading={data.loadingPlayers}
-                  permissions={data.permissions}
-                  onSelectPlayer={nav.selectPlayer}
-                  onOpenCached={() => nav.navigateTo('cached-players')}
-                  onRefresh={data.fetchPlayers}
-                />
+                <LazyPage>
+                  <PlayerListPage
+                    players={data.players}
+                    loading={data.loadingPlayers}
+                    permissions={data.permissions}
+                    onSelectPlayer={nav.selectPlayer}
+                    onOpenCached={() => nav.navigateTo('cached-players')}
+                    onRefresh={data.fetchPlayers}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'player-detail' && nav.selectedPlayer && (
-                <PlayerDetailPage
-                  player={nav.selectedPlayer}
-                  permissions={data.permissions}
-                  ipPrivacy={data.ipPrivacy}
-                />
+                <LazyPage>
+                  <PlayerDetailPage
+                    player={nav.selectedPlayer}
+                    permissions={data.permissions}
+                    ipPrivacy={data.ipPrivacy}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'cached-players' && (
-                <CachedPlayersPage
-                  cachedPlayers={data.cachedPlayers}
-                  loading={data.loadingCached}
-                  onRefresh={data.fetchCachedPlayers}
-                />
+                <LazyPage>
+                  <CachedPlayersPage
+                    cachedPlayers={data.cachedPlayers}
+                    loading={data.loadingCached}
+                    onRefresh={data.fetchCachedPlayers}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'bans' && (
-                <BanListPage
-                  ipPrivacy={data.ipPrivacy}
-                  onSelectBan={nav.selectBan}
-                />
+                <LazyPage>
+                  <BanListPage
+                    ipPrivacy={data.ipPrivacy}
+                    onSelectBan={nav.selectBan}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'ban-detail' && nav.selectedBanId && (
-                <BanDetailPage
-                  banId={nav.selectedBanId}
-                  ban={data.banDetailCache[nav.selectedBanId] ?? null}
-                  ipPrivacy={data.ipPrivacy}
-                  permissions={data.permissions}
-                  onBack={handleGoBack}
-                />
+                <LazyPage>
+                  <BanDetailPage
+                    banId={nav.selectedBanId}
+                    ban={data.banDetailCache[nav.selectedBanId] ?? null}
+                    ipPrivacy={data.ipPrivacy}
+                    permissions={data.permissions}
+                    onBack={handleGoBack}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'reports' && (
-                <ReportListPage
-                  reports={data.reports}
-                  loading={data.loadingReports}
-                  onSelectReport={nav.selectReport}
-                  onRefresh={data.fetchReports}
-                />
+                <LazyPage>
+                  <ReportListPage
+                    reports={data.reports}
+                    loading={data.loadingReports}
+                    onSelectReport={nav.selectReport}
+                    onRefresh={data.fetchReports}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'report-detail' && nav.selectedReportId && (
-                <ReportDetailPage
-                  reportId={nav.selectedReportId}
-                  reports={data.reports}
-                  permissions={data.permissions}
-                  players={data.players}
-                  onOpenPlayer={(id) => {
-                    const p = data.players.find((pl) => pl.id === id)
-                    if (p) nav.selectPlayer(p)
-                    else notify('Player not online', 'error')
-                  }}
-                  onClosed={() => {
-                    data.setReports((prev) => prev.filter((r) => r.id !== nav.selectedReportId))
-                    nav.navigateTo('reports')
-                  }}
-                />
+                <LazyPage>
+                  <ReportDetailPage
+                    reportId={nav.selectedReportId}
+                    reports={data.reports}
+                    permissions={data.permissions}
+                    players={data.players}
+                    onOpenPlayer={(id) => {
+                      const p = data.players.find((pl) => pl.id === id)
+                      if (p) nav.selectPlayer(p)
+                      else notify('Player not online', 'error')
+                    }}
+                    onClosed={() => {
+                      data.setReports((prev) => prev.filter((r) => r.id !== nav.selectedReportId))
+                      nav.navigateTo('reports')
+                    }}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'player-statistics' && (
-                <PlayerStatisticsPage />
+                <LazyPage>
+                  <PlayerStatisticsPage />
+                </LazyPage>
               )}
 
               {nav.view === 'network-monitor' && (
-                <NetworkMonitorPage />
+                <LazyPage>
+                  <NetworkMonitorPage />
+                </LazyPage>
               )}
 
               {nav.view === 'server' && (
-                <ServerPage
-                  permissions={data.permissions}
-                  isRedm={data.isRedm}
-                />
+                <LazyPage>
+                  <ServerPage
+                    permissions={data.permissions}
+                    isRedm={data.isRedm}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'resources' && (
-                <ResourceListPage
-                  permissions={data.permissions}
-                  onSelectResource={nav.selectResource}
-                />
+                <LazyPage>
+                  <ResourceListPage
+                    permissions={data.permissions}
+                    onSelectResource={nav.selectResource}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'resource-detail' && nav.selectedResource && (
-                <ResourceDetailPage
-                  resourceName={nav.selectedResource}
-                  permissions={data.permissions}
-                />
+                <LazyPage>
+                  <ResourceDetailPage
+                    resourceName={nav.selectedResource}
+                    permissions={data.permissions}
+                  />
+                </LazyPage>
               )}
 
               {nav.view === 'profiler' && (
-                <ProfilerPage />
+                <LazyPage>
+                  <ProfilerPage />
+                </LazyPage>
               )}
 
               {nav.view === 'settings' && (
-                <SettingsPage
-                  permissions={data.permissions}
-                  settings={data.settings}
-                  onChange={(patch) => data.setSettings((prev) => ({ ...prev, ...patch }))}
-                />
+                <LazyPage>
+                  <SettingsPage
+                    permissions={data.permissions}
+                    settings={data.settings}
+                    onChange={(patch) => data.setSettings((prev) => ({ ...prev, ...patch }))}
+                  />
+                </LazyPage>
               )}
             </main>
           </div>
