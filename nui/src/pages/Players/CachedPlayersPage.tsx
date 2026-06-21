@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
-import type { CachedPlayer, Notification } from '../../types'
+import type { CachedPlayer } from '../../types'
+import { notify } from '../../lib/notify'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
 import { Icon } from '../../components/icons'
@@ -12,14 +13,12 @@ import { createBanModal } from '../../modals/helpers'
 interface CachedPlayersPageProps {
   cachedPlayers: CachedPlayer[]
   loading: boolean
-  onToast: (_text: string, _type?: Notification['type']) => void
   onRefresh: () => void
 }
 
 export function CachedPlayersPage({
   cachedPlayers,
   loading,
-  onToast,
   onRefresh,
 }: CachedPlayersPageProps) {
   const { openModal, closeModal } = useModalContext()
@@ -68,9 +67,9 @@ export function CachedPlayersPage({
                   onSubmit: async (reason, duration) => {
                     try {
                       await callLua('offlineBanPlayer', { id: player.id, name: player.name, reason, duration })
-                      onToast(`Banned ${player.name}`, 'success')
+                      notify(`Banned ${player.name}`, 'success')
                     } catch {
-                      onToast('Failed to ban player', 'error')
+                      notify('Failed to ban player', 'error')
                     }
                     closeModal()
                   },

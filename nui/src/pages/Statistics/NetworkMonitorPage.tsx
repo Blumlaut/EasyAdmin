@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import type { HistoryRange, NetworkSnapshot, NetworkStatsResponse, Notification, PlayerNetworkHistoryPoint, PlayerNetworkStats } from '../../types'
+import type { HistoryRange, NetworkSnapshot, NetworkStatsResponse, PlayerNetworkHistoryPoint, PlayerNetworkStats } from '../../types'
 import { callLua } from '../../fivem'
 import { Icon, type IconName } from '../../components/icons'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
@@ -268,13 +268,7 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
 // - Per-player charts load lazily on expand
 // ============================================================
 
-interface NetworkMonitorPageProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function NetworkMonitorPage({ onToast: _onToast }: NetworkMonitorPageProps) {
-  void _onToast // reserved for future use
-
+export function NetworkMonitorPage() {
   const [stats, setStats] = useState<Record<string, PlayerNetworkStats>>({})
   const [names, setNames] = useState<Record<string, string>>({})
   const [globalHistory, setGlobalHistory] = useState<NetworkSnapshot[]>([])

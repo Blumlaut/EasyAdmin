@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
-import type { AdminNoteEntry, Notification, Permissions } from '../../types'
+import type { AdminNoteEntry, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
 import { TimelineEntry } from '../../components/TimelineEntry'
 import { useModalContext } from '../../ModalContext'
@@ -10,7 +10,6 @@ import { createConfirmModal, createTextAreaModal, getStringValue, runModalAction
 interface AdminNotesSectionProps {
   playerId: number
   permissions: Permissions
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 type NotesState =
@@ -20,7 +19,6 @@ type NotesState =
 export function AdminNotesSection({
   playerId,
   permissions,
-  onToast,
 }: AdminNotesSectionProps) {
   const canAdd = permissions['player.adminnotes.add']
   const canDelete = permissions['player.adminnotes.delete']
@@ -51,14 +49,13 @@ export function AdminNotesSection({
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('deleteAdminNote', { id: noteId, playerId }),
-          onToast,
           closeModal,
           successMessage: 'Note deleted',
           errorMessage: 'Failed to delete note',
         })
       },
     }))
-  }, [playerId, onToast, openModal, closeModal])
+  }, [playerId, openModal, closeModal])
 
   // Sort entries by time descending (newest first).
   // Note: time is a formatted string "DD/MM/YYYY HH:MM" so we sort by id descending as proxy.
@@ -104,7 +101,6 @@ export function AdminNotesSection({
                   const content = getStringValue(values, 'value')
                   await runModalAction({
                     action: () => callLua('addAdminNote', { id: playerId, note: content }),
-                    onToast,
                     closeModal,
                     successMessage: 'Note added',
                     errorMessage: 'Failed to add note',

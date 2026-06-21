@@ -18,7 +18,6 @@ const defaultProps = {
   playerCount: 5,
   updateInfo: null as UpdateInfo | null,
   onDismissUpdate: vi.fn(),
-  onToast: vi.fn(),
 }
 
 beforeEach(() => {

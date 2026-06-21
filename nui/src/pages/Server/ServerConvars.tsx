@@ -1,14 +1,9 @@
-import type { Notification } from '../../types'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
 import { runModalAction } from '../../modals/helpers'
 
-interface ServerConvarsProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function ServerConvars({ onToast }: ServerConvarsProps) {
+export function ServerConvars() {
   const { openModal, closeModal } = useModalContext()
 
   return (
@@ -42,7 +37,6 @@ export function ServerConvars({ onToast }: ServerConvarsProps) {
             const value = typeof values.value === 'string' ? values.value.trim() : ''
             await runModalAction({
               action: () => callLua('setConvar', { name, value }),
-              onToast,
               closeModal,
               successMessage: 'Convar set',
               errorMessage: 'Failed to set convar',

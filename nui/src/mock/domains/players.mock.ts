@@ -6,7 +6,7 @@
 
 import type { CachedPlayer, Notification, Permissions, Player } from '../../types'
 import type { DomainMock } from '../types'
-import { jsonResponse, toastAndReturn } from '../types'
+import { jsonResponse } from '../types'
 
 // ---- Demo Data ----
 
@@ -75,60 +75,60 @@ async function handleRequestPlayers(): Promise<Response> {
 async function handleKickPlayer(body: Record<string, unknown>): Promise<Response> {
   const kickId = Number(body.id || 0)
   mockPlayers = mockPlayers.filter((p) => p.id !== kickId)
-  return toastAndReturn(`Kicked ${body.name || 'player'}`, 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleBanPlayer(body: Record<string, unknown>): Promise<Response> {
   const banId = Number(body.id || 0)
   mockPlayers = mockPlayers.filter((p) => p.id !== banId)
-  return toastAndReturn(`Banned ${body.name || 'player'}`, 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
-async function handleOfflineBanPlayer(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Offline-banned ${body.name || 'player'}`, 'success', {}, mockToasts)
+async function handleOfflineBanPlayer(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
-async function handleWarnPlayer(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Warned ${body.name || 'player'}`, 'info', {}, mockToasts)
+async function handleWarnPlayer(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
-async function handleSlapPlayer(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Slapped ${body.name || 'player'}`, 'info', {}, mockToasts)
+async function handleSlapPlayer(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
-async function handleSpectatePlayer(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Spectating ${body.name || 'player'}`, 'info', {}, mockToasts)
+async function handleSpectatePlayer(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
-async function handleTeleportToPlayer(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Teleported to ${body.name || 'player'}`, 'info', {}, mockToasts)
+async function handleTeleportToPlayer(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
 async function handleTeleportPlayerToMe(body: Record<string, unknown>): Promise<Response> {
   if (body.id === -1) {
-    return toastAndReturn('Teleported everyone to you', 'info', {}, mockToasts)
+    return jsonResponse({ success: true })
   }
-  return toastAndReturn(`Teleported ${body.name || 'player'} to you`, 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleTeleportMeBack(): Promise<Response> {
-  return toastAndReturn('Teleported back', 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleTeleportPlayerBack(): Promise<Response> {
-  return toastAndReturn('Player teleported back', 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleTeleportIntoVehicle(): Promise<Response> {
-  return toastAndReturn('Placed into closest vehicle', 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleJoinPlayerBucket(): Promise<Response> {
-  return toastAndReturn('Joined bucket', 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleForcePlayerBucket(): Promise<Response> {
-  return toastAndReturn('Forced into your bucket', 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleToggleFreeze(body: Record<string, unknown>): Promise<Response> {
@@ -140,12 +140,7 @@ async function handleToggleFreeze(body: Record<string, unknown>): Promise<Respon
   if (updated) {
     window.postMessage({ action: 'playerUpdated', data: updated }, '*')
   }
-  return toastAndReturn(
-    `${updated?.frozen ? 'Frozen' : 'Unfrozen'} ${body.name || 'player'}`,
-    'info',
-    {},
-    mockToasts,
-  )
+  return jsonResponse({ success: true })
 }
 
 async function handleToggleMute(body: Record<string, unknown>): Promise<Response> {
@@ -157,16 +152,11 @@ async function handleToggleMute(body: Record<string, unknown>): Promise<Response
   if (updatedMuted) {
     window.postMessage({ action: 'playerUpdated', data: updatedMuted }, '*')
   }
-  return toastAndReturn(
-    `${updatedMuted?.muted ? 'Muted' : 'Unmuted'} ${body.name || 'player'}`,
-    'info',
-    {},
-    mockToasts,
-  )
+  return jsonResponse({ success: true })
 }
 
-async function handleScreenshotPlayer(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Screenshot of ${body.name || 'player'} saved`, 'success', {}, mockToasts)
+async function handleScreenshotPlayer(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
 async function handleRequestCachedPlayers(): Promise<Response> {

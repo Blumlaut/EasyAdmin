@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import type { Notification, Permissions, Player } from '../../types'
+import type { Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
@@ -17,7 +17,6 @@ interface PlayerListPageProps {
   permissions: Permissions
   onSelectPlayer: (player: Player) => void
   onOpenCached: () => void
-  onToast: (text: string, type?: Notification['type']) => void
   onRefresh: () => void
 }
 
@@ -27,7 +26,6 @@ export function PlayerListPage({
   permissions,
   onSelectPlayer,
   onOpenCached,
-  onToast,
   onRefresh,
 }: PlayerListPageProps) {
   const [query, setQuery] = useState('')
@@ -94,7 +92,7 @@ export function PlayerListPage({
         </div>
       )}
 
-      {canTeleportAll && players.length > 0 && <AllPlayersActions onToast={onToast} />}
+      {canTeleportAll && players.length > 0 && <AllPlayersActions />}
     </div>
   )
 }

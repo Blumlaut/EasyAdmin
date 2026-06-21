@@ -5,8 +5,7 @@
 
 import type { Report } from '../../types'
 import type { DomainMock } from '../types'
-import { jsonResponse, toastAndReturn } from '../types'
-import { mockToasts } from './players.mock'
+import { jsonResponse } from '../types'
 
 // ---- Demo Data ----
 
@@ -100,13 +99,13 @@ async function handleClaimReport(body: Record<string, unknown>): Promise<Respons
     r.id === Number(body.id) ? { ...r, claimed: true, claimedName: 'admin_you' } : r,
   )
   pushReportsUpdate()
-  return toastAndReturn('Report claimed', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleCloseReport(body: Record<string, unknown>): Promise<Response> {
   mockReports = mockReports.filter((r) => r.id !== Number(body.id))
   pushReportsUpdate()
-  return toastAndReturn('Report closed', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleCloseSimilarReports(body: Record<string, unknown>): Promise<Response> {
@@ -117,7 +116,7 @@ async function handleCloseSimilarReports(body: Record<string, unknown>): Promise
     )
   }
   pushReportsUpdate()
-  return toastAndReturn('Similar reports closed', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 export const reportsMock: DomainMock & { getReports: () => Report[] } = {

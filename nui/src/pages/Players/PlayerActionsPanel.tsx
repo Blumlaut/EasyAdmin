@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { IconName } from '../../components/icons'
-import type { Notification, Permissions, Player } from '../../types'
+import type { Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { Tooltip } from '../../components/Tooltip'
 import { useModalContext } from '../../ModalContext'
 import { SelectMenu } from '../../components/SelectMenu'
 import { callLua, on } from '../../fivem'
 import { createBanModal, createTextInputModal } from '../../modals/helpers'
+import { notify } from '../../lib/notify'
 
 interface PlayerActionsPanelProps {
   player: Player
   permissions: Permissions
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 // ---- Quick action types ----
@@ -82,7 +82,7 @@ const ACTION_GROUPS: ActionGroup[] = [
   },
 ]
 
-export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActionsPanelProps) {
+export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelProps) {
   const { openModal, closeModal } = useModalContext()
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
@@ -135,9 +135,9 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
               try {
                 const amount = typeof values.amount === 'number' ? values.amount * 10 : 50
                 await callLua('slapPlayer', { id: player.id, name: player.name, amount })
-                onToast('Slapped', 'success')
+                notify('Slapped', 'success')
               } catch {
-                onToast('Slap failed', 'error')
+                notify('Slap failed', 'error')
               }
               closeModal()
             },
@@ -145,7 +145,7 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
           break
         case 'spectate':
           await callLua('spectatePlayer', { id: player.id, name: player.name })
-          onToast(`Spectating ${player.name}`, 'success')
+          notify(`Spectating ${player.name}`, 'success')
           break
         case 'screenshot':
           setScreenshotLoading(true)
@@ -163,27 +163,27 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
           break
         case 'bucket-join':
           await callLua('joinPlayerBucket', { id: player.id, name: player.name })
-          onToast('Joined bucket', 'success')
+          notify('Joined bucket', 'success')
           break
         case 'bucket-force':
           await callLua('forcePlayerBucket', { id: player.id, name: player.name })
-          onToast('Forced bucket', 'success')
+          notify('Forced bucket', 'success')
           break
         case 'freeze': {
           const newFrozen = !player.frozen
           await callLua('toggleFreeze', { id: player.id, name: player.name, freeze: newFrozen })
-          onToast(`${newFrozen ? 'Frozen' : 'Unfrozen'} ${player.name}`, 'success')
+          notify(`${newFrozen ? 'Frozen' : 'Unfrozen'} ${player.name}`, 'success')
           break
         }
         case 'mute': {
           const newMuted = !player.muted
           await callLua('toggleMute', { id: player.id, name: player.name, mute: newMuted })
-          onToast(`${newMuted ? 'Muted' : 'Unmuted'} ${player.name}`, 'success')
+          notify(`${newMuted ? 'Muted' : 'Unmuted'} ${player.name}`, 'success')
           break
         }
       }
     } catch {
-      onToast('Action failed', 'error')
+      notify('Action failed', 'error')
     } finally {
       setBusyAction(null)
     }
@@ -204,9 +204,9 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
           const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
           try {
             await callLua('warnPlayer', { id: player.id, name: player.name, reason })
-            onToast(`Warned ${player.name}`, 'success')
+            notify(`Warned ${player.name}`, 'success')
           } catch {
-            onToast('Warn failed', 'error')
+            notify('Warn failed', 'error')
           }
           closeModal()
         },
@@ -227,9 +227,9 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
           const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
           try {
             await callLua('kickPlayer', { id: player.id, name: player.name, reason })
-            onToast(`Kicked ${player.name}`, 'success')
+            notify(`Kicked ${player.name}`, 'success')
           } catch {
-            onToast('Kick failed', 'error')
+            notify('Kick failed', 'error')
           }
           closeModal()
         },
@@ -244,9 +244,9 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
         onSubmit: async (reason, duration) => {
           try {
             await callLua('banPlayer', { id: player.id, name: player.name, reason, duration })
-            onToast(`Banned ${player.name}`, 'success')
+            notify(`Banned ${player.name}`, 'success')
           } catch {
-            onToast('Failed to ban player', 'error')
+            notify('Failed to ban player', 'error')
           }
           closeModal()
         },
@@ -260,9 +260,9 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
     setTeleportBusy(opt.id)
     try {
       await callLua(opt.action, { id: player.id, name: player.name })
-      onToast(`${opt.label} executed`, 'success')
+      notify(`${opt.label} executed`, 'success')
     } catch {
-      onToast(`Failed: ${opt.label}`, 'error')
+      notify(`Failed: ${opt.label}`, 'error')
     } finally {
       setTeleportBusy(null)
     }

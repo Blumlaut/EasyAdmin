@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
-import type { ActionHistoryEntry, Notification, Permissions } from '../../types'
+import type { ActionHistoryEntry, Permissions } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
 import { TimelineEntry } from '../../components/TimelineEntry'
@@ -11,7 +11,6 @@ import { createConfirmModal, runModalAction } from '../../modals/helpers'
 interface ActionHistorySectionProps {
   playerId: number
   permissions: Permissions
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 type HistoryState =
@@ -41,7 +40,6 @@ function capitalize(str: string): string {
 export function ActionHistorySection({
   playerId,
   permissions,
-  onToast,
 }: ActionHistorySectionProps) {
   const canDelete = permissions['player.actionhistory.delete']
   const { openModal, closeModal } = useModalContext()
@@ -71,14 +69,13 @@ export function ActionHistorySection({
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('deleteActionHistoryEntry', { id: entryId, playerId }),
-          onToast,
           closeModal,
           successMessage: 'Action entry deleted',
           errorMessage: 'Failed to delete action entry',
         })
       },
     }))
-  }, [playerId, onToast, openModal, closeModal])
+  }, [playerId, openModal, closeModal])
 
   // Sort entries by time descending (newest first)
   const sortedEntries = useMemo(() => {

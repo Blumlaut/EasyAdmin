@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import type { Notification, Report } from '../../types'
+import type { Report } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { SearchBar } from '../../components/SearchBar'
@@ -11,7 +11,6 @@ interface ReportListPageProps {
   reports: Report[]
   loading: boolean
   onSelectReport: (reportId: number) => void
-  onToast: (text: string, type?: Notification['type']) => void
   onRefresh: () => void
 }
 
@@ -19,7 +18,6 @@ export function ReportListPage({
   reports,
   loading,
   onSelectReport,
-  onToast: _onToast,
   onRefresh,
 }: ReportListPageProps) {
   const [query, setQuery] = useState('')

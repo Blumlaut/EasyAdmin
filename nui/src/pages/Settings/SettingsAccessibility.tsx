@@ -1,12 +1,11 @@
 import { useRef } from 'react'
 import { setResourceKvp } from '../../fivem'
-import type { Notification } from '../../types'
+import { notify } from '../../lib/notify'
 
 interface SettingsAccessibilityProps {
   highContrast: boolean
   fontSize: number
   onChange: (patch: { highContrast?: boolean; fontSize?: number }) => void
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 const FONT_SIZE_MIN = 10
@@ -17,20 +16,19 @@ export function SettingsAccessibility({
   highContrast,
   fontSize,
   onChange,
-  onToast,
 }: SettingsAccessibilityProps) {
   const dragStartFontSize = useRef(fontSize)
 
   function toggleHighContrast(value: boolean) {
     onChange({ highContrast: value })
     setResourceKvp('shighContrast', value ? 'true' : 'false')
-    onToast(value ? 'High contrast enabled' : 'High contrast disabled', 'success')
+    notify(value ? 'High contrast enabled' : 'High contrast disabled', 'success')
   }
 
   function setFontSize(value: number) {
     onChange({ fontSize: value })
     setResourceKvp('ifontSize', String(value))
-    onToast(`Font size set to ${value}px`, 'success')
+    notify(`Font size set to ${value}px`, 'success')
   }
 
   return (

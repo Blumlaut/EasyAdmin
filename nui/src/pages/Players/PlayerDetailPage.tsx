@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
-import type { Notification, Permissions, Player } from '../../types'
+import type { Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
@@ -12,14 +12,12 @@ interface PlayerDetailPageProps {
   player: Player
   permissions: Permissions
   ipPrivacy: boolean
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 export function PlayerDetailPage({
   player,
   permissions,
   ipPrivacy,
-  onToast,
 }: PlayerDetailPageProps) {
   const [identifiers, setIdentifiers] = useState<string[] | null>(null)
   const [identifiersExpanded, setIdentifiersExpanded] = useState(false)
@@ -94,7 +92,6 @@ export function PlayerDetailPage({
       <PlayerActionsPanel
         player={player}
         permissions={permissions}
-        onToast={onToast}
       />
 
       {/* Action History — shown when user has view permission */}
@@ -102,7 +99,6 @@ export function PlayerDetailPage({
         <ActionHistorySection
           playerId={player.id}
           permissions={permissions}
-          onToast={onToast}
         />
       )}
 
@@ -111,7 +107,6 @@ export function PlayerDetailPage({
         <AdminNotesSection
           playerId={player.id}
           permissions={permissions}
-          onToast={onToast}
         />
       )}
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import type { Notification, Permissions, ResourceEntry, ResourceMetadata } from '../../types'
+import type { Permissions, ResourceEntry, ResourceMetadata } from '../../types'
 import { callLua, on } from '../../fivem'
 import { useModalContext } from '../../ModalContext'
 import { Alert } from '../../components/Alert'
@@ -11,7 +11,6 @@ import { createConfirmModal, runModalAction } from '../../modals/helpers'
 interface ResourceDetailPageProps {
   resourceName: string
   permissions: Permissions
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 interface ResourceListResponse {
@@ -26,7 +25,6 @@ interface ResourceMetadataResponse {
 export function ResourceDetailPage({
   resourceName,
   permissions,
-  onToast,
 }: ResourceDetailPageProps) {
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
@@ -69,15 +67,10 @@ export function ResourceDetailPage({
       const found = (payload.resources ?? []).find((r) => r.name === resourceName)
       setResource(found ?? null)
     })
-    const unsubToast = on<Notification>('notification', (payload) => {
-      onToast(payload.text, payload.type)
-    })
-
     return () => {
       unsubResources()
-      unsubToast()
     }
-  }, [resourceName, fetchResource, fetchMetadata, onToast])
+  }, [resourceName, fetchResource, fetchMetadata])
 
   // Execute a resource action (called after confirmation)
   const executeAction = useCallback(async (action: 'start' | 'stop' | 'ensure') => {
@@ -116,13 +109,12 @@ export function ResourceDetailPage({
       onSubmit: async () => {
         await runModalAction({
           action: () => executeAction(action),
-          onToast,
           closeModal,
           errorMessage: `Failed to ${action} ${resourceName}`,
         })
       },
     }))
-  }, [canStart, canStop, executeAction, openModal, closeModal, onToast, resourceName])
+  }, [canStart, canStop, executeAction, openModal, closeModal, resourceName])
 
   // Extract key metadata for header display
   const version = metadata?.entries.find((e) => e.key === 'version')?.value

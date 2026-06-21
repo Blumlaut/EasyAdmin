@@ -1,12 +1,12 @@
 import { setResourceKvp } from '../../fivem'
-import type { Notification, SidebarDirection, SidebarMode } from '../../types'
+import { notify } from '../../lib/notify'
+import type { SidebarDirection, SidebarMode } from '../../types'
 import { LayoutWireframe } from './LayoutWireframe'
 
 interface SettingsLayoutProps {
   sidebarMode: SidebarMode
   sidebarDirection: SidebarDirection
   onChange: (patch: { sidebarMode?: SidebarMode; sidebarDirection?: SidebarDirection }) => void
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 type LayoutVariant = 'left-sidebar' | 'right-sidebar' | 'top-taskbar' | 'bottom-taskbar'
@@ -60,13 +60,12 @@ export function SettingsLayout({
   sidebarMode,
   sidebarDirection,
   onChange,
-  onToast,
 }: SettingsLayoutProps) {
   function setLayout(mode: SidebarMode, direction: SidebarDirection) {
     onChange({ sidebarMode: mode, sidebarDirection: direction })
     setResourceKvp('ssidebarMode', mode)
     setResourceKvp('ssidebarDirection', direction)
-    onToast(`Sidebar layout set to ${mode} (${direction})`, 'success')
+    notify(`Sidebar layout set to ${mode} (${direction})`, 'success')
   }
 
   return (

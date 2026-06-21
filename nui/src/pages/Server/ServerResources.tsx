@@ -1,14 +1,9 @@
-import type { Notification } from '../../types'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
 import { createTextInputModal, getStringValue, runModalAction } from '../../modals/helpers'
 
-interface ServerResourcesProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function ServerResources({ onToast }: ServerResourcesProps) {
+export function ServerResources() {
   const { openModal, closeModal } = useModalContext()
 
   return (
@@ -26,7 +21,6 @@ export function ServerResources({ onToast }: ServerResourcesProps) {
               const name = getStringValue(values, 'value')
               await runModalAction({
                 action: () => callLua('startResource', { name }),
-                onToast,
                 closeModal,
                 successMessage: `Starting ${name}`,
                 errorMessage: 'Failed to start resource',
@@ -49,7 +43,6 @@ export function ServerResources({ onToast }: ServerResourcesProps) {
               const name = getStringValue(values, 'value')
               await runModalAction({
                 action: () => callLua('stopResource', { name }),
-                onToast,
                 closeModal,
                 successMessage: `Stopping ${name}`,
                 errorMessage: 'Failed to stop resource',

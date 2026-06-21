@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { Notification, ParsedProfile, ProfilerProgress, ProfilerUIState } from '../../types'
+import type { ParsedProfile, ProfilerProgress, ProfilerUIState } from '../../types'
 import { on, callLua } from '../../fivem'
+import { notify } from '../../lib/notify'
 import { Icon } from '../../components/icons'
 import { ProfilerEmptyState } from './components/ProfilerEmptyState'
 import { ProfileSummary } from './components/ProfileSummary'
 import { ResourceTickBar } from './components/ResourceTickBar'
 import { ProfilerErrorBanner } from './components/ProfilerErrorBanner'
 
-interface ProfilerPageProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
+
 
 // Frame count options for the profiler
 const FRAME_OPTIONS = [
@@ -19,7 +18,7 @@ const FRAME_OPTIONS = [
   { value: '200', label: '200 frames (~10s)' },
 ]
 
-export function ProfilerPage({ onToast }: ProfilerPageProps) {
+export function ProfilerPage() {
   const [uiState, setUiState] = useState<ProfilerUIState>('empty')
   const [profile, setProfile] = useState<ParsedProfile | null>(null)
   const [progress, setProgress] = useState<ProfilerProgress>({
@@ -51,10 +50,10 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
   // Listen for errors from Lua
   useEffect(() => {
     return on<{ message: string }>('profilerError', (data) => {
-      onToast(data.message, 'error')
+      notify(data.message, 'error')
       setUiState('empty')
     })
-  }, [onToast])
+  }, [])
 
   // Listen for endpoint discovery errors
   useEffect(() => {
@@ -76,9 +75,9 @@ export function ProfilerPage({ onToast }: ProfilerPageProps) {
     callLua('startProfiler', { frames: selectedFrames })
       .catch(() => {
         setUiState('empty')
-        onToast('Failed to start profiler', 'error')
+        notify('Failed to start profiler', 'error')
       })
-  }, [selectedFrames, onToast])
+  }, [selectedFrames])
 
   // Handle frame count change
   const handleFrameChange = useCallback((frames: number) => {

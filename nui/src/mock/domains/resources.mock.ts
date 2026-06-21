@@ -5,8 +5,7 @@
 
 import type { ResourceEntry, ResourceMetadata } from '../../types'
 import type { DomainMock } from '../types'
-import { jsonResponse, toastAndReturn } from '../types'
-import { mockToasts } from './players.mock'
+import { jsonResponse } from '../types'
 
 // ---- Resource data pools ----
 
@@ -263,7 +262,7 @@ async function handleStartResource(body: Record<string, unknown>): Promise<Respo
     r.name === startName ? { ...r, state: 'started' as const } : r,
   )
   pushResourcesUpdate()
-  return toastAndReturn(`Started ${startName}`, 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleStopResource(body: Record<string, unknown>): Promise<Response> {
@@ -272,7 +271,7 @@ async function handleStopResource(body: Record<string, unknown>): Promise<Respon
     r.name === stopName ? { ...r, state: 'stopped' as const } : r,
   )
   pushResourcesUpdate()
-  return toastAndReturn(`Stopped ${stopName}`, 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleCheckResourceUpdates(body: Record<string, unknown>): Promise<Response> {

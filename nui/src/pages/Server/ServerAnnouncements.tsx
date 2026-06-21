@@ -1,14 +1,9 @@
-import type { Notification } from '../../types'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
 import { createTextInputModal, getStringValue, runModalAction } from '../../modals/helpers'
 
-interface ServerAnnouncementsProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function ServerAnnouncements({ onToast }: ServerAnnouncementsProps) {
+export function ServerAnnouncements() {
   const { openModal, closeModal } = useModalContext()
 
   return (
@@ -29,7 +24,6 @@ export function ServerAnnouncements({ onToast }: ServerAnnouncementsProps) {
             const message = getStringValue(values, 'value')
             await runModalAction({
               action: () => callLua('announce', { message }),
-              onToast,
               closeModal,
               successMessage: 'Announcement sent',
               errorMessage: 'Failed to send announcement',

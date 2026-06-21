@@ -1,5 +1,5 @@
-import type { Notification } from '../types'
 import type { ModalDefinition, ModalValues } from './types'
+import { notify } from '../lib/notify'
 import { createBanModal as createBanModalImpl } from './BanModal'
 
 // Re-export createBanModal from BanModal (custom modal with date/time picker)
@@ -97,7 +97,6 @@ export function createTextAreaModal(options: {
 
 export async function runModalAction(options: {
   action: () => Promise<void>
-  onToast: (text: string, type?: Notification['type']) => void
   closeModal: () => void
   successMessage?: string
   errorMessage: string
@@ -106,11 +105,11 @@ export async function runModalAction(options: {
   try {
     await options.action()
     if (options.successMessage) {
-      options.onToast(options.successMessage, 'success')
+      notify(options.successMessage, 'success')
     }
     options.onSuccess?.()
   } catch {
-    options.onToast(options.errorMessage, 'error')
+    notify(options.errorMessage, 'error')
   } finally {
     options.closeModal()
   }

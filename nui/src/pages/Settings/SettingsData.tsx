@@ -1,18 +1,14 @@
 import { callLua } from '../../fivem'
-import type { Notification } from '../../types'
+import { notify } from '../../lib/notify'
 import { Icon } from '../../components/icons'
 
-interface SettingsDataProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function SettingsData({ onToast }: SettingsDataProps) {
+export function SettingsData() {
   async function refresh(action: 'refreshBanList' | 'refreshCachedPlayers' | 'refreshPermissions', label: string) {
     try {
       await callLua(action)
-      onToast(`${label} refreshed`, 'success')
+      notify(`${label} refreshed`, 'success')
     } catch {
-      onToast(`Failed to refresh ${label.toLowerCase()}`, 'error')
+      notify(`Failed to refresh ${label.toLowerCase()}`, 'error')
     }
   }
 

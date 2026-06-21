@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ServerStats, UpdateInfo } from '../../types'
 import { callLua } from '../../fivem'
+import { notify } from '../../lib/notify'
 import { type IconName, Icon } from '../../components/icons'
 import { Alert } from '../../components/Alert'
 import { CopyButton } from '../../components/CopyButton'
@@ -164,11 +165,10 @@ interface DashboardProps {
   playerCount: number
   updateInfo: UpdateInfo | null
   onDismissUpdate: () => void
-  onToast: (text: string, type?: 'info' | 'success' | 'error') => void
   onNavigateToResources: () => void
 }
 
-export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, onNavigateToResources }: DashboardProps) {
+export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigateToResources }: DashboardProps) {
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [showPride] = useState(shouldShowPride)
@@ -306,11 +306,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
             {greeting}
           </h3>
         )}
-        <div className="flex gap-2 mt-2">
-          <button className="btn btn-xs btn-ghost" onClick={() => onToast('Info toast test', 'info')}>Test info</button>
-          <button className="btn btn-xs btn-ghost" onClick={() => onToast('Success toast test', 'success')}>Test success</button>
-          <button className="btn btn-xs btn-ghost" onClick={() => onToast('Error toast test', 'error')}>Test error</button>
-        </div>
+
       </div>
 
       {/* Update notification banner */}
@@ -324,7 +320,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onToast, o
               <CopyButton
                 value={`https://github.com/Blumlaut/EasyAdmin/releases/${updateInfo.latestVersion}`}
                 label="Copy URL"
-                onCopy={() => onToast('Release URL copied to clipboard', 'success')}
+                onCopy={() => notify('Release URL copied to clipboard', 'success')}
               />
             }
             onDismiss={onDismissUpdate}

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { DailyPeak, Notification, PaginatedPlayerRegistryResponse, PlayerPeakPoint, PlayerPeaksResponse, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
+import type { DailyPeak, PaginatedPlayerRegistryResponse, PlayerPeakPoint, PlayerPeaksResponse, PlayerRegistryEntry, StatsSummary, StatsRange } from '../../types'
 import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
 import { StatCard } from '../../components/StatCard'
@@ -11,14 +11,6 @@ import { Pagination } from '../../components/Pagination'
 import { SortableTable, type TableColumn, type SortState } from '../../components/SortableTable'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
-
-// ============================================================
-// Types
-// ============================================================
-
-interface PlayerStatisticsPageProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
 
 // ============================================================
 // Helpers
@@ -459,7 +451,7 @@ function StatisticsSkeleton() {
 // StatisticsPage
 // ============================================================
 
-export function PlayerStatisticsPage({ onToast: _onToast }: PlayerStatisticsPageProps) {
+export function PlayerStatisticsPage() {
   const [range, setRange] = useState<StatsRange>('30d')
   const [summary, setSummary] = useState<StatsSummary | null>(null)
   const [peaks, setPeaks] = useState<PlayerPeaksResponse | null>(null)

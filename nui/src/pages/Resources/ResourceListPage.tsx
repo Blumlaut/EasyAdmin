@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
-import type { Notification, Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult } from '../../types'
+import type { Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult } from '../../types'
 import { callLua, on } from '../../fivem'
+import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { useModalContext } from '../../ModalContext'
@@ -13,7 +14,6 @@ import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
 interface ResourceListPageProps {
   permissions: Permissions
-  onToast: (text: string, type?: Notification['type']) => void
   onSelectResource: (name: string) => void
 }
 
@@ -39,7 +39,6 @@ function truncateDesc(text: string, max: number): string {
 
 export function ResourceListPage({
   permissions,
-  onToast,
   onSelectResource,
 }: ResourceListPageProps) {
   const [resources, setResources] = useState<ResourceEntry[]>([])
@@ -105,9 +104,9 @@ export function ResourceListPage({
         // After loading resources, fetch batch metadata
         fetchBatchMetadata(res.resources ?? [])
       })
-      .catch(() => onToast('Failed to fetch resources', 'error'))
+      .catch(() => notify('Failed to fetch resources', 'error'))
       .finally(() => setLoading(false))
-  }, [onToast, fetchBatchMetadata, buildOutdatedList])
+  }, [fetchBatchMetadata, buildOutdatedList])
 
   // Initial fetch + event subscriptions (side effects, not render logic)
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -119,15 +118,10 @@ export function ResourceListPage({
       setOutdatedResources(buildOutdatedList(payload.resources ?? []))
       fetchBatchMetadata(payload.resources ?? [])
     })
-    const unsubToast = on<Notification>('notification', (payload) => {
-      onToast(payload.text, payload.type)
-    })
-
     return () => {
       unsubResources()
-      unsubToast()
     }
-  }, [fetchResources, fetchBatchMetadata, onToast])
+  }, [fetchResources, fetchBatchMetadata])
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const filtered = useMemo(() => {
@@ -183,19 +177,18 @@ export function ResourceListPage({
       onSubmit: async () => {
         await runModalAction({
           action: () => executeAction(name, action),
-          onToast,
           closeModal,
           errorMessage: `Failed to ${action} ${name}`,
         })
       },
     }))
-  }, [canStart, canStop, executeAction, openModal, closeModal, onToast])
+  }, [canStart, canStop, executeAction, openModal, closeModal])
 
   const handleCheckUpdates = async () => {
     if (!canStart && !canStop) return
     const withRepo = resources.filter((r) => r.repository && r.version)
     if (withRepo.length === 0) {
-      onToast('No resources with a repository URL', 'info')
+      notify('No resources with a repository URL', 'info')
       return
     }
     setCheckingUpdates(true)
@@ -231,13 +224,13 @@ export function ResourceListPage({
 
       const outdatedNames = updates.filter((u) => u.outdated).map((u) => u.name)
       if (outdatedNames.length > 0) {
-        onToast(`${outdatedNames.length} resource(s) have updates available`, 'info')
+        notify(`${outdatedNames.length} resource(s) have updates available`, 'info')
       } else {
-        onToast('All resources are up to date', 'success')
+        notify('All resources are up to date', 'success')
         setOutdatedResources([])
       }
     } catch {
-      onToast('Failed to check for updates', 'error')
+      notify('Failed to check for updates', 'error')
     } finally {
       setCheckingUpdates(false)
     }

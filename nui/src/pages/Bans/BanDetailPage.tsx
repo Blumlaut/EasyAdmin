@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { callLua, on } from '../../fivem'
-import type { BanEntry, Notification, Permissions } from '../../types'
+import type { BanEntry, Permissions } from '../../types'
+import { notify } from '../../lib/notify'
 import { useModalContext } from '../../ModalContext'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Skeleton } from '../../components/Skeleton'
@@ -14,7 +15,6 @@ interface BanDetailPageProps {
   ipPrivacy: boolean
   permissions: Permissions
   onBack: () => void
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 type DetailState =
@@ -28,7 +28,6 @@ export function BanDetailPage({
   ipPrivacy,
   permissions,
   onBack,
-  onToast,
 }: BanDetailPageProps) {
   const canEdit = !!permissions['player.ban.edit']
   const canRemove = !!permissions['player.ban.remove']
@@ -135,9 +134,9 @@ export function BanDetailPage({
     setSaving(true)
     try {
       await callLua('editBan', edited)
-      onToast('Ban updated', 'success')
+      notify('Ban updated', 'success')
     } catch {
-      onToast('Failed to save ban', 'error')
+      notify('Failed to save ban', 'error')
     } finally {
       setSaving(false)
     }
@@ -153,7 +152,6 @@ export function BanDetailPage({
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('unbanPlayer', { banid: edited.banid }),
-          onToast,
           closeModal,
           successMessage: 'Player unbanned',
           errorMessage: 'Failed to unban',

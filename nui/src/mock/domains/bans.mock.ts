@@ -5,8 +5,7 @@
 
 import type { BanEntry, BanListEntry } from '../../types'
 import type { DomainMock } from '../types'
-import { jsonResponse, toastAndReturn } from '../types'
-import { mockToasts } from './players.mock'
+import { jsonResponse } from '../types'
 
 // ---- Demo Data ----
 
@@ -299,12 +298,12 @@ async function handleGetBanById(body: Record<string, unknown>): Promise<Response
 
 async function handleEditBan(body: Record<string, unknown>): Promise<Response> {
   mockBans = mockBans.map((b) => (b.banid === body.banid ? { ...b, ...body } : b))
-  return toastAndReturn('Ban updated', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleUnbanPlayer(body: Record<string, unknown>): Promise<Response> {
   mockBans = mockBans.filter((b) => b.banid !== body.banid)
-  return toastAndReturn('Player unbanned', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleRefreshBanList(): Promise<Response> {

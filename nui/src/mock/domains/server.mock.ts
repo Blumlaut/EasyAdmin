@@ -4,29 +4,28 @@
  */
 
 import type { DomainMock } from '../types'
-import { toastAndReturn } from '../types'
-import { mockToasts } from './players.mock'
+import { jsonResponse } from '../types'
 
 // ---- Handlers ----
 
 async function handleAnnounce(): Promise<Response> {
-  return toastAndReturn('Announcement sent', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleSetGameType(): Promise<Response> {
-  return toastAndReturn('Gametype updated', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 async function handleSetMapName(): Promise<Response> {
-  return toastAndReturn('Map name updated', 'success', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
-async function handleSetConvar(body: Record<string, unknown>): Promise<Response> {
-  return toastAndReturn(`Set ${body.name}`, 'success', {}, mockToasts)
+async function handleSetConvar(_body: Record<string, unknown>): Promise<Response> {
+  return jsonResponse({ success: true })
 }
 
 async function handleRequestCleanup(): Promise<Response> {
-  return toastAndReturn('Cleanup requested', 'info', {}, mockToasts)
+  return jsonResponse({ success: true })
 }
 
 export const serverMock: DomainMock = {

@@ -1,16 +1,16 @@
-import type { CleanupRadius, CleanupType, Notification, Permissions } from '../../types'
+import type { CleanupRadius, CleanupType, Permissions } from '../../types'
+import { notify } from '../../lib/notify'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
 
 interface ServerCleanupProps {
   permissions: Permissions
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 const RADII: CleanupRadius[] = [10, 20, 50, 100, 'global']
 
-export function ServerCleanup({ permissions, onToast }: ServerCleanupProps) {
+export function ServerCleanup({ permissions }: ServerCleanupProps) {
   const { openModal, closeModal } = useModalContext()
 
   const availableTypes: CleanupType[] = []
@@ -74,9 +74,9 @@ export function ServerCleanup({ permissions, onToast }: ServerCleanupProps) {
                 radius,
                 deep,
               })
-              onToast('Cleanup executed', 'success')
+              notify('Cleanup executed', 'success')
             } catch {
-              onToast('Cleanup failed', 'error')
+              notify('Cleanup failed', 'error')
             }
             closeModal()
           },

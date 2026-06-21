@@ -1,14 +1,9 @@
-import type { Notification } from '../../types'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
 import { createTextInputModal, getStringValue, runModalAction } from '../../modals/helpers'
 
-interface ServerInfoProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
-export function ServerInfo({ onToast }: ServerInfoProps) {
+export function ServerInfo() {
   const { openModal, closeModal } = useModalContext()
 
   return (
@@ -26,7 +21,6 @@ export function ServerInfo({ onToast }: ServerInfoProps) {
               const value = getStringValue(values, 'value')
               await runModalAction({
                 action: () => callLua('setGametype', { value }),
-                onToast,
                 closeModal,
                 successMessage: 'Gametype updated',
                 errorMessage: 'Failed to set gametype',
@@ -49,7 +43,6 @@ export function ServerInfo({ onToast }: ServerInfoProps) {
               const value = getStringValue(values, 'value')
               await runModalAction({
                 action: () => callLua('setMapName', { value }),
-                onToast,
                 closeModal,
                 successMessage: 'Map name updated',
                 errorMessage: 'Failed to set map name',

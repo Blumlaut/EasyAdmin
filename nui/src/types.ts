@@ -47,15 +47,6 @@ export interface Notification {
   type?: 'info' | 'success' | 'warn' | 'error'
 }
 
-// Individual toast in the queue
-export interface ToastItem {
-  id: string
-  message: string
-  type: 'info' | 'success' | 'warn' | 'error'
-  createdAt: number
-  duration: number
-}
-
 // Lightweight ban entry for list view (no identifiers, fetched from server paginated)
 export interface BanListEntry {
   banid: string

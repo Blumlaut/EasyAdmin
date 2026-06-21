@@ -1,17 +1,12 @@
 import { callLua } from '../../fivem'
-import type { Notification } from '../../types'
 import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
-interface AllPlayersActionsProps {
-  onToast: (text: string, type?: Notification['type']) => void
-}
-
 /**
  * "All Players" actions: teleport everyone to me. Lives on the player list page.
  */
-export function AllPlayersActions({ onToast }: AllPlayersActionsProps) {
+export function AllPlayersActions() {
   const { openModal, closeModal } = useModalContext()
 
   return (
@@ -27,7 +22,6 @@ export function AllPlayersActions({ onToast }: AllPlayersActionsProps) {
             onSubmit: async () => {
               await runModalAction({
                 action: () => callLua('teleportPlayerToMe', { id: -1 }),
-                onToast,
                 closeModal,
                 successMessage: 'All players teleported to you',
                 errorMessage: 'Action failed',

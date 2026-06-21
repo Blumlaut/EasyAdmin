@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { BanListEntry, Notification, PaginatedBanResponse } from '../../types'
+import type { BanListEntry, PaginatedBanResponse } from '../../types'
 import { on, callLua } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
@@ -12,7 +12,6 @@ import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 interface BanListPageProps {
   ipPrivacy: boolean
   onSelectBan: (banId: string) => void
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
 const PAGE_SIZE = 10
@@ -20,7 +19,6 @@ const PAGE_SIZE = 10
 export function BanListPage({
   ipPrivacy,
   onSelectBan,
-  onToast: _onToast,
 }: BanListPageProps) {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 300)

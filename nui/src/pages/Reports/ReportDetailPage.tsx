@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { callLua } from '../../fivem'
-import type { Notification, Permissions, Player, Report } from '../../types'
+import type { Permissions, Player, Report } from '../../types'
+import { notify } from '../../lib/notify'
 import { useModalContext } from '../../ModalContext'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
@@ -12,7 +13,6 @@ interface ReportDetailPageProps {
   permissions: Permissions
   players: Player[]
   onOpenPlayer: (playerId: number) => void
-  onToast: (text: string, type?: Notification['type']) => void
   onClosed?: () => void
 }
 
@@ -27,7 +27,6 @@ export function ReportDetailPage({
   permissions,
   players,
   onOpenPlayer,
-  onToast,
   onClosed,
 }: ReportDetailPageProps) {
   const canClaim = !!permissions['player.reports.claim']
@@ -73,7 +72,7 @@ export function ReportDetailPage({
       await callLua('claimReport', { id: state.report.id })
       // UI updates automatically via the reports prop when updateReports fires
     } catch {
-      onToast('Failed to claim report', 'error')
+      notify('Failed to claim report', 'error')
     } finally {
       setBusy(false)
     }
@@ -89,7 +88,6 @@ export function ReportDetailPage({
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('closeReport', { id: state.report.id }),
-          onToast,
           closeModal,
           successMessage: 'Report closed',
           errorMessage: 'Failed to close report',
@@ -109,7 +107,6 @@ export function ReportDetailPage({
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('closeSimilarReports', { id: state.report.id }),
-          onToast,
           closeModal,
           successMessage: 'Similar reports closed',
           errorMessage: 'Failed to close similar reports',

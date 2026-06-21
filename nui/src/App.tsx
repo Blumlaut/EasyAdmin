@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
-import { useToast } from './hooks/useToast'
 import { useWindowChrome } from './hooks/useWindowChrome'
 import type { View } from './types'
 import { on } from './fivem'
@@ -11,9 +10,9 @@ import { ScreenshotCapture } from './components/ScreenshotCapture'
 import { ScreenshotViewer } from './components/ScreenshotViewer'
 import { StreamCapture } from './components/StreamCapture'
 import { StreamViewer } from './components/StreamViewer'
-import { ToastContainer } from './components/ToastContainer'
 import { WarningOverlay } from './components/WarningOverlay'
 import { ModalProvider } from './ModalContext'
+import { notify } from './lib/notify'
 import { Dashboard } from './pages/Dashboard/Dashboard'
 import { PlayerListPage } from './pages/Players/PlayerListPage'
 import { PlayerDetailPage } from './pages/Players/PlayerDetailPage'
@@ -45,7 +44,6 @@ function App() {
 
   // === Hooks ===
 
-  const { toasts, showToast, dismissToast } = useToast()
   const data = useAppData()
   const nav = useAppNavigation({
     permissions: data.permissions,
@@ -306,7 +304,6 @@ function App() {
                   playerCount={data.players.length}
                   updateInfo={data.updateInfo}
                   onDismissUpdate={data.dismissUpdate}
-                  onToast={showToast}
                   onNavigateToResources={() => nav.navigateTo('resources')}
                 />
               )}
@@ -318,7 +315,6 @@ function App() {
                   permissions={data.permissions}
                   onSelectPlayer={nav.selectPlayer}
                   onOpenCached={() => nav.navigateTo('cached-players')}
-                  onToast={showToast}
                   onRefresh={data.fetchPlayers}
                 />
               )}
@@ -328,7 +324,6 @@ function App() {
                   player={nav.selectedPlayer}
                   permissions={data.permissions}
                   ipPrivacy={data.ipPrivacy}
-                  onToast={showToast}
                 />
               )}
 
@@ -336,7 +331,6 @@ function App() {
                 <CachedPlayersPage
                   cachedPlayers={data.cachedPlayers}
                   loading={data.loadingCached}
-                  onToast={showToast}
                   onRefresh={data.fetchCachedPlayers}
                 />
               )}
@@ -345,7 +339,6 @@ function App() {
                 <BanListPage
                   ipPrivacy={data.ipPrivacy}
                   onSelectBan={nav.selectBan}
-                  onToast={showToast}
                 />
               )}
 
@@ -356,7 +349,6 @@ function App() {
                   ipPrivacy={data.ipPrivacy}
                   permissions={data.permissions}
                   onBack={handleGoBack}
-                  onToast={showToast}
                 />
               )}
 
@@ -365,7 +357,6 @@ function App() {
                   reports={data.reports}
                   loading={data.loadingReports}
                   onSelectReport={nav.selectReport}
-                  onToast={showToast}
                   onRefresh={data.fetchReports}
                 />
               )}
@@ -379,9 +370,8 @@ function App() {
                   onOpenPlayer={(id) => {
                     const p = data.players.find((pl) => pl.id === id)
                     if (p) nav.selectPlayer(p)
-                    else showToast('Player not online', 'error')
+                    else notify('Player not online', 'error')
                   }}
-                  onToast={showToast}
                   onClosed={() => {
                     data.setReports((prev) => prev.filter((r) => r.id !== nav.selectedReportId))
                     nav.navigateTo('reports')
@@ -390,25 +380,23 @@ function App() {
               )}
 
               {nav.view === 'player-statistics' && (
-                <PlayerStatisticsPage onToast={showToast} />
+                <PlayerStatisticsPage />
               )}
 
               {nav.view === 'network-monitor' && (
-                <NetworkMonitorPage onToast={showToast} />
+                <NetworkMonitorPage />
               )}
 
               {nav.view === 'server' && (
                 <ServerPage
                   permissions={data.permissions}
                   isRedm={data.isRedm}
-                  onToast={showToast}
                 />
               )}
 
               {nav.view === 'resources' && (
                 <ResourceListPage
                   permissions={data.permissions}
-                  onToast={showToast}
                   onSelectResource={nav.selectResource}
                 />
               )}
@@ -417,12 +405,11 @@ function App() {
                 <ResourceDetailPage
                   resourceName={nav.selectedResource}
                   permissions={data.permissions}
-                  onToast={showToast}
                 />
               )}
 
               {nav.view === 'profiler' && (
-                <ProfilerPage onToast={showToast} />
+                <ProfilerPage />
               )}
 
               {nav.view === 'settings' && (
@@ -430,7 +417,6 @@ function App() {
                   permissions={data.permissions}
                   settings={data.settings}
                   onChange={(patch) => data.setSettings((prev) => ({ ...prev, ...patch }))}
-                  onToast={showToast}
                 />
               )}
             </main>
@@ -448,8 +434,6 @@ function App() {
           <span>Press ALT to unfold</span>
         </div>
       )}
-
-        <ToastContainer toasts={toasts} onDismiss={dismissToast} />
 
         {/* Hidden canvas for screenshot capture — must be in visible tree for OSR */}
         <ScreenshotCapture />

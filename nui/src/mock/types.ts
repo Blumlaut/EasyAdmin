@@ -48,18 +48,3 @@ export function jsonResponse(data: unknown): Response {
 export function broadcastNotification(notification: Notification) {
   window.postMessage({ action: 'notification', data: notification }, '*')
 }
-
-/**
- * Create a toast notification, push to the toast queue, and return a success JSON response.
- */
-export function toastAndReturn(
-  text: string,
-  type: Notification['type'] = 'success',
-  extra: Record<string, unknown> = {},
-  toasts: Notification[],
-) {
-  const n: Notification = { text, type }
-  toasts.push(n)
-  broadcastNotification(n)
-  return jsonResponse({ success: true, ...extra })
-}

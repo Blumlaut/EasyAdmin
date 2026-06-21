@@ -1,20 +1,19 @@
 import { callLua } from '../../fivem'
-import type { Notification } from '../../types'
+import { notify } from '../../lib/notify'
 
 interface SettingsPrivacyProps {
   anonymous: boolean
   onChange: (anonymous: boolean) => void
-  onToast: (text: string, type?: Notification['type']) => void
 }
 
-export function SettingsPrivacy({ anonymous, onChange, onToast }: SettingsPrivacyProps) {
+export function SettingsPrivacy({ anonymous, onChange }: SettingsPrivacyProps) {
   async function toggle(value: boolean) {
     onChange(value)
     try {
       await callLua('setAnonymous', { value })
-      onToast(value ? 'Anonymous mode on' : 'Anonymous mode off', 'success')
+      notify(value ? 'Anonymous mode on' : 'Anonymous mode off', 'success')
     } catch {
-      onToast('Failed to update privacy', 'error')
+      notify('Failed to update privacy', 'error')
     }
   }
 
