@@ -6,7 +6,7 @@ import './styles/index.css'
 import './components/chart-setup'
 
 // Expose Three.js (CitizenFX build with CfxTexture) as globals for screenshot/stream capture.
-// These are consumed by lib/screenshot.ts and lib/stream_encoder.ts at runtime.
+// These are consumed by lib/screenshot.ts and lib/stream_webrtc.ts at runtime.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ;(window as any).THREE = CfxThree
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

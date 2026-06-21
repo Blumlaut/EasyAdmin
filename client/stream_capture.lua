@@ -1,55 +1,59 @@
 ------------------------------------
--- EasyAdmin Stream Capture (Target Player)
+-- EasyAdmin Stream Capture (Target Player) — WebRTC publisher
 --
--- Runs on the player being streamed. Receives start/stop commands from
--- the server and signals the NUI to begin/end the continuous capture loop.
+-- Runs on the player being streamed. Receives control + signaling events from
+-- the server and forwards them to the NUI, which runs a StreamPublisher that
+-- renders the game frame to a canvas and publishes it peer-to-peer over WebRTC.
 ------------------------------------
 
-local streaming = false
-local frameSeq = 0
-
---- Start the stream capture loop in the NUI.
-RegisterNetEvent('EasyAdmin:StartStream', function()
-    if streaming then return end
-    streaming = true
-    frameSeq = 0
-
-    local maxResolution = GetConvarInt('ea_streamMaxResolution', 640)
-    local quality = GetConvarFloat('ea_streamQuality', 0.3)
-    local targetFps = GetConvarInt('ea_streamTargetFps', 8)
-
+--- Start the publisher on the target's NUI (first viewer).
+--- @param opts table  Stream options (maxResolution, targetFps, stunServers).
+RegisterNetEvent('EasyAdmin:StreamStart', function(opts)
     SendNUIMessage({
         action = 'stream:start',
-        data = {
-            maxResolution = maxResolution,
-            quality = quality,
-            targetFps = targetFps,
-        },
+        data = opts or {},
     })
 end)
 
---- Stop the stream capture loop in the NUI.
-RegisterNetEvent('EasyAdmin:StopStream', function()
-    streaming = false
+--- Stop the publisher on the target's NUI (last viewer left).
+RegisterNetEvent('EasyAdmin:StreamStop', function()
     SendNUIMessage({
-        action = 'stream:stop',
+        action = 'stream:teardown',
     })
 end)
 
---- Receive encoded frames from the NUI and forward to the server.
----
---- Uses a latent server event so large frame payloads do not block the
---- target player's network channel. bps MUST stay above the frame production
---- rate (targetFps * avgFrameBytes), otherwise FiveM's latent-event queue on
---- this client grows without bound — that shows up as a memory leak / freeze
---- on the player being streamed. Default 200000 (~195 KB/s) gives headroom
---- over 8 FPS * ~15 KB; tune via `ea_streamBitrate`.
-RegisterNUICallback('streamFrame', function(data, cb)
+--- A new viewer joined — negotiate a PeerConnection for them.
+--- @param viewerSrc number  Server ID of the admin viewer.
+RegisterNetEvent('EasyAdmin:StreamAddViewer', function(viewerSrc)
+    SendNUIMessage({
+        action = 'stream:addViewer',
+        data = { viewerSrc = viewerSrc },
+    })
+end)
+
+--- A viewer left — close their PeerConnection.
+--- @param viewerSrc number  Server ID of the admin viewer.
+RegisterNetEvent('EasyAdmin:StreamRemoveViewer', function(viewerSrc)
+    SendNUIMessage({
+        action = 'stream:removeViewer',
+        data = { viewerSrc = viewerSrc },
+    })
+end)
+
+--- Inbound signaling (an answer from a viewer) — forward to the NUI.
+--- @param from number  Server ID of the sending viewer.
+--- @param payload table  Signal payload ({ type, sdp }).
+RegisterNetEvent('EasyAdmin:StreamSignal', function(from, payload)
+    SendNUIMessage({
+        action = 'stream:signal',
+        data = { from = from, payload = payload },
+    })
+end)
+
+--- Forward a signaling message from the NUI to the server for relay.
+--- Shared by both target and viewer roles (both call this NUI callback).
+RegisterNUICallback('streamSignal', function(data, cb)
     cb({ ok = true })
-    if not data or not data.frame then return end
-
-    frameSeq = frameSeq + 1
-
-    local bps = GetConvarInt('ea_streamBitrate', 200000)
-    TriggerLatentServerEvent('EasyAdmin:StreamFrame', bps, data.frame, frameSeq)
+    if not data or type(data.to) ~= 'number' or type(data.payload) ~= 'table' then return end
+    TriggerServerEvent('EasyAdmin:StreamSignal', data.to, data.payload)
 end)

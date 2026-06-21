@@ -1,34 +1,34 @@
 ------------------------------------
--- EasyAdmin Stream Viewer (Admin Side)
+-- EasyAdmin Stream Viewer (Admin Side) — WebRTC subscriber
 --
--- Runs on the admin player. Receives stream frames from the server
--- and forwards them to the admin's NUI for display.
+-- Runs on the admin player. Receives control + signaling events from the server
+-- and forwards them to the admin's NUI, which runs a StreamSubscriber that
+-- answers the target's WebRTC offer and displays the incoming video stream.
 ------------------------------------
 
---- Receive a stream frame from the server.
---- @param frameData string  WebP data URI of the captured frame.
---- @param playerName string Name of the player being streamed.
---- @param playerId number Server ID of the target player.
---- @param seq number Monotonic sequence number from the capture side.
-RegisterNetEvent('EasyAdmin:StreamFrameReceived', function(frameData, playerName, playerId, seq)
+--- The stream session is live — open the viewer window.
+--- @param playerId number  Server ID of the streamed player.
+--- @param playerName string  Name of the streamed player.
+--- @param opts table  Stream options (carries stunServers for the subscriber).
+RegisterNetEvent('EasyAdmin:StreamStarted', function(playerId, playerName, opts)
     SendNUIMessage({
-        action = 'stream:frame',
+        action = 'stream:started',
         data = {
-            frame = frameData,
+            playerId = playerId,
             playerName = playerName or 'Unknown',
-            playerId = playerId or 0,
-            seq = seq or 0,
+            stunServers = (opts and opts.stunServers) or 'stun:stun.l.google.com:19302',
         },
     })
 end)
 
---- Admin closes the stream viewer — tell the server to remove us as a viewer.
-RegisterNUICallback('stream:stop', function(data, cb)
-    local id = tonumber(data and data.id)
-    if id then
-        TriggerServerEvent('EasyAdmin:StopStream', id)
-    end
-    cb({ ok = true })
+--- Inbound signaling (an offer from the target's publisher) — forward to NUI.
+--- @param from number  Server ID of the sending target.
+--- @param payload table  Signal payload ({ type, sdp }).
+RegisterNetEvent('EasyAdmin:StreamSignal', function(from, payload)
+    SendNUIMessage({
+        action = 'stream:signal',
+        data = { from = from, payload = payload },
+    })
 end)
 
 --- Stream ended notification from the server.
@@ -42,4 +42,13 @@ RegisterNetEvent('EasyAdmin:StreamEnded', function(playerName, reason)
             reason = reason or 'Stream ended',
         },
     })
+end)
+
+--- Admin closes the stream viewer — tell the server to remove us as a viewer.
+RegisterNUICallback('stream:stop', function(data, cb)
+    local id = tonumber(data and data.id)
+    if id then
+        TriggerServerEvent('EasyAdmin:StopStream', id)
+    end
+    cb({ ok = true })
 end)

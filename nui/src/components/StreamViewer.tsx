@@ -1,8 +1,13 @@
 /**
- * StreamViewer — floating window that displays a live stream of a player's screen.
+ * StreamViewer — floating window that displays a live WebRTC stream of a
+ * player's screen.
  *
- * Receives frame data URIs via `stream:frame` messages from Lua.
- * Shows FPS counter, player name, and connection status.
+ * The video arrives peer-to-peer over WebRTC (no per-frame server events).
+ * The server signals this NUI with:
+ *   stream:started — a stream session is active (opens the window)
+ *   stream:signal  — an SDP offer from the target's publisher
+ *   stream:ended   — the stream ended (target disconnected / stopped)
+ *
  * Draggable via the topbar, closable via the X button.
  */
 
@@ -10,17 +15,20 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { callLua, on } from '../fivem'
 import { useWindowDrag, type WindowPosition } from '../hooks/useWindowDrag'
 import { useWindowResize, type WindowSize } from '../hooks/useWindowResize'
+import { StreamSubscriber, parseStunServers } from '../lib/stream_webrtc'
 import { Icon } from './icons'
 
-interface StreamData {
-  /** The image data URI (webp) */
-  frame: string
-  /** Name of the player being streamed */
+type ConnState = 'connecting' | 'live' | 'reconnecting' | 'failed'
+
+interface StreamStartedData {
+  playerId: number
   playerName: string
-  /** Monotonic sequence number from the capture side (optional for back-compat) */
-  seq?: number
-  /** Server ID of the streamed player (optional for back-compat) */
-  playerId?: number
+  stunServers: string
+}
+
+interface StreamSignalData {
+  from: number
+  payload: { type: 'offer' | 'answer'; sdp: string }
 }
 
 interface StreamEndData {
@@ -34,21 +42,14 @@ const DEFAULT_SIZE: WindowSize = { width: 640, height: 420 }
 export function StreamViewer() {
   const [playerName, setPlayerName] = useState<string | null>(null)
   const [playerId, setPlayerId] = useState<number | null>(null)
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [position, setPosition] = useState<WindowPosition>(DEFAULT_POS)
   const [size, setSize] = useState<WindowSize>(DEFAULT_SIZE)
   const [error, setError] = useState<string | null>(null)
+  const [connState, setConnState] = useState<ConnState>('connecting')
 
-  // FPS tracking
-  const frameCountRef = useRef(0)
-  const fpsRef = useRef(0)
-  const lastFpsUpdateRef = useRef(0)
-  const [displayFps, setDisplayFps] = useState(0)
-
-  // Drop out-of-order frames: only render frames with a seq > last displayed.
-  // Reset counter when the streamed player changes (new stream session).
-  const lastSeqRef = useRef(0)
-  const lastPlayerRef = useRef<string | null>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const subscriberRef = useRef<StreamSubscriber | null>(null)
+  const stunRef = useRef<string[]>([])
 
   // Center on open
   const openRef = useRef(false)
@@ -67,20 +68,25 @@ export function StreamViewer() {
     }
   }, [playerName])
 
+  const teardownSubscriber = useCallback(() => {
+    subscriberRef.current?.close()
+    subscriberRef.current = null
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+  }, [])
+
   const handleClose = useCallback(() => {
     // Tell the server to remove us as a viewer before clearing local state
     const id = playerId
     if (id) callLua('stream:stop', { id }).catch(() => {})
 
+    teardownSubscriber()
     setPlayerName(null)
     setPlayerId(null)
-    setImageUrl(null)
     setError(null)
-    setDisplayFps(0)
-    frameCountRef.current = 0
-    lastSeqRef.current = 0
-    lastPlayerRef.current = null
-  }, [playerId])
+    setConnState('connecting')
+  }, [playerId, teardownSubscriber])
 
   useWindowDrag({
     enabled: !!playerName,
@@ -105,71 +111,74 @@ export function StreamViewer() {
     },
   })
 
-  // Listen for stream frames from Lua
+  // Open the viewer window when the server confirms the stream session is up
   useEffect(() => {
-    return on<StreamData>('stream:frame', (payload) => {
+    return on<StreamStartedData>('stream:started', (payload) => {
+      teardownSubscriber()
+      stunRef.current = parseStunServers(payload.stunServers)
       setPlayerName(payload.playerName)
-      const seq = payload.seq
-      const pid = payload.playerId
-      if (typeof pid === 'number') setPlayerId(pid)
+      setPlayerId(payload.playerId)
       setError(null)
-
-      // Drop out-of-order frames: if this frame's seq is <= the last one we
-      // displayed, it's stale (arrived late due to network latency) — skip it.
-      if (payload.playerName !== lastPlayerRef.current) {
-        // New player — reset sequence counter for the fresh stream session
-        lastSeqRef.current = 0
-        lastPlayerRef.current = payload.playerName
-      }
-      // Treat a large backward jump as a capture-side restart (the target's
-      // NUI reloaded, resetting its seq counter to a small number) and ACCEPT
-      // the frame. This mirrors the server's seq==1 exception in
-      // stream_signaling.lua's relayFrame(). Without it, a mid-stream target
-      // NUI reload would make the viewer discard every restarted frame
-      // (1 <= lastLargeSeq) and freeze on the last pre-reload frame forever.
-      const RESET_THRESHOLD = 1000
-      const isCaptureReset =
-        typeof seq === 'number' &&
-        lastSeqRef.current > RESET_THRESHOLD &&
-        seq <= RESET_THRESHOLD
-      if (typeof seq === 'number' && !isCaptureReset && seq <= lastSeqRef.current) return
-      if (typeof seq === 'number') lastSeqRef.current = seq
-
-      // Track FPS
-      frameCountRef.current += 1
-      const now = performance.now()
-      const elapsed = now - lastFpsUpdateRef.current
-      if (elapsed >= 1000) {
-        fpsRef.current = Math.round((frameCountRef.current * 1000) / elapsed)
-        frameCountRef.current = 0
-        lastFpsUpdateRef.current = now
-        setDisplayFps(fpsRef.current)
-      }
-
-      // Update image — setState triggers re-render for the new frame
-      setImageUrl(payload.frame)
+      setConnState('connecting')
     })
-  }, [])
+  }, [teardownSubscriber])
 
-  // Listen for stream ended from Lua
+  // Handle inbound WebRTC signaling (an offer from the target's publisher)
+  useEffect(() => {
+    return on<StreamSignalData>('stream:signal', (payload) => {
+      if (payload.payload?.type !== 'offer') return
+      // A new offer means a fresh publisher connection — create a subscriber.
+      teardownSubscriber()
+      const sub = new StreamSubscriber(stunRef.current)
+      sub.onStream = (stream) => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+          void videoRef.current.play().catch(() => {})
+        }
+        setConnState('live')
+        setError(null)
+      }
+      sub.onClose = () => {
+        setConnState((prev) => (prev === 'live' ? 'reconnecting' : 'failed'))
+      }
+      subscriberRef.current = sub
+      void sub.handleSignal(payload.from, payload.payload)
+    })
+  }, [teardownSubscriber])
+
+  // Listen for stream ended from Lua (target disconnected, etc.)
   useEffect(() => {
     return on<StreamEndData>('stream:ended', (payload) => {
       if (playerName === payload.playerName) {
+        teardownSubscriber()
         setError(payload.reason)
+        setConnState('failed')
         // Auto-close after 3 seconds
         setTimeout(() => {
           setPlayerName(null)
-          setImageUrl(null)
+          setPlayerId(null)
           setError(null)
-          setDisplayFps(0)
-          lastSeqRef.current = 0
-          lastPlayerRef.current = null
+          setConnState('connecting')
         }, 3000)
       }
     })
-  }, [playerName])
+  }, [playerName, teardownSubscriber])
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => teardownSubscriber()
+  }, [teardownSubscriber])
 
   if (!playerName) return null
+
+  const statusLabel =
+    error != null
+      ? error
+      : connState === 'live'
+        ? 'LIVE'
+        : connState === 'failed'
+          ? 'Disconnected'
+          : 'Connecting…'
 
   return (
     <div
@@ -188,14 +197,10 @@ export function StreamViewer() {
           {playerName}
         </span>
         <div className="ea-stream-viewer-status">
-          {error ? (
-            <span className="ea-stream-viewer-error">{error}</span>
-          ) : (
-            <span className="ea-stream-viewer-fps">
-              <span className="ea-stream-viewer-dot" />
-              {displayFps} FPS
-            </span>
-          )}
+          <span className={`ea-stream-viewer-fps ea-stream-viewer-state--${connState}`}>
+            <span className="ea-stream-viewer-dot" />
+            {statusLabel}
+          </span>
         </div>
         <button
           className="btn btn-ghost btn-icon ea-stream-viewer-close"
@@ -207,12 +212,17 @@ export function StreamViewer() {
         </button>
       </div>
       <div className="ea-stream-viewer-body">
-        {imageUrl ? (
-          <img src={imageUrl} alt={`Stream of ${playerName}`} />
-        ) : (
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          aria-label={`Stream of ${playerName}`}
+        />
+        {connState !== 'live' && (
           <div className="ea-stream-viewer-loading">
             <span className="ea-stream-viewer-spinner" />
-            Connecting...
+            {connState === 'failed' ? (error ?? 'Disconnected') : 'Connecting...'}
           </div>
         )}
       </div>
