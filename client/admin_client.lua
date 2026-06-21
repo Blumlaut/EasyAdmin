@@ -244,15 +244,7 @@ Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(500)
 		local localPlayerPed = PlayerPedId()
-		if drawInfo and not stopSpectateUpdate then
-			local targetPed = GetPlayerPed(drawTarget)
-			local targetGod = GetPlayerInvincible(drawTarget)
-			
-			local tgtCoords = GetEntityCoords(targetPed)
-			if tgtCoords and tgtCoords.x ~= 0 then
-				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-			end
-		else
+		if not stopSpectateUpdate then
 			Citizen.Wait(1000)
 		end
 		cachedInfo = {
@@ -351,7 +343,6 @@ function spectatePlayer(targetPed,target,name)
 		RequestCollisionAtCoord(targetx,targety,targetz)
 		NetworkSetInSpectatorMode(true, targetPed)
 		
-		DrawPlayerInfo(target)
 		TriggerEvent("EasyAdmin:showNotification", string.format(GetLocalisedText("spectatingUser"), name))
 	else
 		if oldCoords then
@@ -360,7 +351,6 @@ function spectatePlayer(targetPed,target,name)
 			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 		end
 		NetworkSetInSpectatorMode(false, targetPed)
-		StopDrawPlayerInfo()
 		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
 		frozen = false
 		FreezeMyself(false)
