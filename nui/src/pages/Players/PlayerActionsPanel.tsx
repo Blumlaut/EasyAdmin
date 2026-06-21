@@ -344,16 +344,27 @@ export function PlayerActionsPanel({ player, permissions, onToast }: PlayerActio
                   const isToggle = action.id === 'freeze' || action.id === 'mute'
                   const isActive = action.id === 'freeze' ? player.frozen : player.muted
                   const isLoading = action.id === 'screenshot' && screenshotLoading
+                  // Live stream is still in development (WebRTC transport needs
+                  // work — vertical flip + connection stability). Render the
+                  // button visually-disabled with a hover tooltip, but NOT
+                  // HTML-disabled: a disabled button gets pointer-events:none
+                  // (see .panel-btn:disabled), which suppresses the native
+                  // title tooltip. Keeping it hoverable lets the "coming soon"
+                  // tooltip fire while the click guard prevents activation.
+                  const isStream = action.id === 'stream'
 
                   return (
                     <button
                       key={action.id}
-                      className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
-                      onClick={() => handleQuickAction(action.id)}
+                      className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}${isStream ? ' player-action-group-btn-soon' : ''}`}
+                      onClick={() => { if (isStream) return; handleQuickAction(action.id) }}
                       disabled={isLoading || busyAction === action.id}
-                      title={isToggle
-                        ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
-                        : `${action.label} ${player.name}`
+                      aria-disabled={isStream || undefined}
+                      title={isStream
+                        ? 'This feature is still in development, check back later!'
+                        : isToggle
+                          ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
+                          : `${action.label} ${player.name}`
                       }
                     >
                       {isLoading ? (

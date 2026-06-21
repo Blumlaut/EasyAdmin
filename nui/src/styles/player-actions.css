@@ -99,6 +99,23 @@
   color: var(--accent-blue);
 }
 
+/* "Coming soon" state — visually disabled (faded, no-hover) but stays
+   hoverable so the native title tooltip ("still in development...") can fire.
+   A truly disabled button gets pointer-events:none which would suppress the
+   tooltip. Declared after inputs.css so these hover rules win the cascade
+   over .panel-btn:hover at equal specificity. */
+.player-action-group-btn-soon {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.player-action-group-btn-soon:hover {
+  /* Match the non-hover .panel-btn look so the button stays inert. */
+  background: rgba(30, 35, 44, 0.95);
+  border-color: rgba(60, 70, 85, 0.8);
+  color: var(--text-primary);
+}
+
 .player-action-group-btn-label {
   line-height: 1;
 }
