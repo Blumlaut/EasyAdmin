@@ -17,6 +17,9 @@
 ---   started = timestamp,
 ---   timeout = timer reference (cleared on first frame),
 ---   firstFrameReceived = boolean (true once the first frame arrives),
+---   lastRelayedSeq = number (highest frame seq relayed to viewers; used
+---                   to drop stale/out-of-order frames BEFORE they hit the
+---                   network, protecting viewers from being flooded),
 --- }
 local streamSessions = {}
 
@@ -41,6 +44,7 @@ local function addViewer(targetId, adminSrc)
             viewers = {},
             started = os.time(),
             firstFrameReceived = false,
+            lastRelayedSeq = 0,
         }
         streamSessions[targetId] = session
 
@@ -111,6 +115,18 @@ local function forceStopStream(targetId)
 end
 
 --- Relay a frame from the target player to all subscribed viewers.
+---
+--- Stale / out-of-order frames are dropped HERE, on the server, before they
+--- are pushed onto any viewer's network channel. Discarding client-side (in
+--- the viewer NUI) is too late — by then the frame has already crossed the
+--- network twice and been enqueued in the viewer's event queue, which is what
+--- floods and eventually freezes the spectating client.
+---
+--- The relay uses TriggerLatentClientEvent so large frame payloads do not
+--- block the viewer's entire network channel (TriggerClientEvent blocks; see
+--- https://docs.fivem.net/docs/scripting-manual/working-with-events/triggering-events/).
+--- bps is per-viewer and configurable via the `ea_streamBitrate` convar.
+---
 --- @param targetId number  Target player server ID.
 --- @param frameData string  WebP data URI of the captured frame.
 --- @param seq number  Monotonic sequence number from the capture side.
@@ -127,9 +143,24 @@ local function relayFrame(targetId, frameData, seq)
         session.timeout = nil
     end
 
+    seq = seq or 0
+
+    -- Drop stale / out-of-order / duplicate frames before relay.
+    -- seq == 1 is always accepted to tolerate a capture-side restart that
+    -- resets the sequence counter mid-session (e.g. target's NUI reloaded);
+    -- otherwise only strictly newer frames are forwarded.
+    if seq ~= 1 and seq <= session.lastRelayedSeq then
+        return
+    end
+    session.lastRelayedSeq = seq
+
+    -- Latent event: bps is per-target. Default 200000 (~195 KB/s) comfortably
+    -- covers 8 FPS * ~15 KB WebP frames with headroom, without blocking the
+    -- viewer's network channel. Tunable via ea_streamBitrate.
+    local bps = GetConvarInt('ea_streamBitrate', 200000)
     local playerName = getName(targetId, true)
     for viewer in pairs(session.viewers) do
-        TriggerClientEvent('EasyAdmin:StreamFrameReceived', viewer, frameData, playerName, targetId, seq)
+        TriggerLatentClientEvent('EasyAdmin:StreamFrameReceived', viewer, bps, frameData, playerName, targetId, seq)
     end
 end
 

@@ -74,6 +74,7 @@ convar_category 'EasyAdmin' {
         { "Stream Max Resolution (px, longer dimension)", "$ea_streamMaxResolution", "CV_INT", "640" },
         { "Stream Quality (0.0-1.0)", "$ea_streamQuality", "CV_FLOAT", "0.3" },
         { "Stream Target FPS", "$ea_streamTargetFps", "CV_INT", "8" },
+        { "Stream Bitrate (bytes/sec, latent event bps — keep above targetFps * ~15KB)", "$ea_streamBitrate", "CV_INT", "200000" },
         { "Webhook Identifier", "$ea_logIdentifier", "CV_STRING", "steam" },
         { "Enable calladmin Command", "$ea_enableCallAdminCommand", "CV_BOOL", "true" },
         { "Enable report Command", "$ea_enableReportCommand", "CV_BOOL", "true" },

@@ -45,6 +45,15 @@ export class StreamEncoder {
   private canvas: HTMLCanvasElement
   private destroyed = false
 
+  // Persistent offscreen canvas + context for downscaled WebP encoding.
+  // Reused across frames to avoid per-frame allocations (the capture loop
+  // runs at targetFps; creating a canvas + ImageBitmap every tick causes heavy
+  // GC pressure that contributes to the spectating client freezing up).
+  private offscreen: HTMLCanvasElement | null = null
+  private offscreenCtx: CanvasRenderingContext2D | null = null
+  private offscreenW = 0
+  private offscreenH = 0
+
   // Streaming state
   private running = false
   private rafId = 0
@@ -192,6 +201,26 @@ export class StreamEncoder {
   }
 
   /**
+   * Lazily create (or resize) the persistent offscreen canvas used for
+   * downscaled WebP encoding. Reusing it across frames avoids per-tick
+   * canvas/context allocations that otherwise drive heavy GC.
+   */
+  private getOffscreen(w: number, h: number): CanvasRenderingContext2D | null {
+    if (!this.offscreen) {
+      this.offscreen = document.createElement('canvas')
+      this.offscreenCtx = this.offscreen.getContext('2d', { willReadFrequently: true })
+      if (!this.offscreenCtx) return null
+    }
+    if (this.offscreenW !== w || this.offscreenH !== h) {
+      this.offscreen!.width = w
+      this.offscreen!.height = h
+      this.offscreenW = w
+      this.offscreenH = h
+    }
+    return this.offscreenCtx
+  }
+
+  /**
    * Capture a single frame and return a data URI.
    */
   private async captureFrame(maxResolution: number, quality: number): Promise<string | null> {
@@ -216,13 +245,9 @@ export class StreamEncoder {
     const read = new Uint8Array(pixelCount)
     this.renderer.readRenderTargetPixels(this.rtTexture, 0, 0, srcWidth, srcHeight, read)
 
-    // Draw to an offscreen canvas at the target resolution
-    const offscreen = document.createElement('canvas')
-    offscreen.width = dstWidth
-    offscreen.height = dstHeight
-
-    const ctx = offscreen.getContext('2d', { willReadFrequently: true })
-    if (!ctx) return null
+    // Draw to the persistent offscreen canvas at the target resolution
+    const ctx = this.getOffscreen(dstWidth, dstHeight)
+    if (!ctx || !this.offscreen) return null
 
     const imageData = new ImageData(
       new Uint8ClampedArray(read.buffer),
@@ -234,7 +259,7 @@ export class StreamEncoder {
     ctx.drawImage(bitmap, 0, 0, dstWidth, dstHeight)
     bitmap.close()
 
-    return offscreen.toDataURL('image/webp', quality)
+    return this.offscreen.toDataURL('image/webp', quality)
   }
 
   destroy(): void {
@@ -248,6 +273,8 @@ export class StreamEncoder {
       this.rtTexture.dispose()
       this.rtTexture = null
     }
+    this.offscreen = null
+    this.offscreenCtx = null
   }
 }
 

@@ -17,6 +17,10 @@ interface StreamData {
   frame: string
   /** Name of the player being streamed */
   playerName: string
+  /** Monotonic sequence number from the capture side (optional for back-compat) */
+  seq?: number
+  /** Server ID of the streamed player (optional for back-compat) */
+  playerId?: number
 }
 
 interface StreamEndData {
@@ -105,8 +109,8 @@ export function StreamViewer() {
   useEffect(() => {
     return on<StreamData>('stream:frame', (payload) => {
       setPlayerName(payload.playerName)
-      const seq = (payload as Record<string, unknown>).seq
-      const pid = (payload as Record<string, unknown>).playerId
+      const seq = payload.seq
+      const pid = payload.playerId
       if (typeof pid === 'number') setPlayerId(pid)
       setError(null)
 
@@ -117,8 +121,19 @@ export function StreamViewer() {
         lastSeqRef.current = 0
         lastPlayerRef.current = payload.playerName
       }
-      if (typeof seq === 'number' && seq <= lastSeqRef.current) return
-      lastSeqRef.current = seq
+      // Treat a large backward jump as a capture-side restart (the target's
+      // NUI reloaded, resetting its seq counter to a small number) and ACCEPT
+      // the frame. This mirrors the server's seq==1 exception in
+      // stream_signaling.lua's relayFrame(). Without it, a mid-stream target
+      // NUI reload would make the viewer discard every restarted frame
+      // (1 <= lastLargeSeq) and freeze on the last pre-reload frame forever.
+      const RESET_THRESHOLD = 1000
+      const isCaptureReset =
+        typeof seq === 'number' &&
+        lastSeqRef.current > RESET_THRESHOLD &&
+        seq <= RESET_THRESHOLD
+      if (typeof seq === 'number' && !isCaptureReset && seq <= lastSeqRef.current) return
+      if (typeof seq === 'number') lastSeqRef.current = seq
 
       // Track FPS
       frameCountRef.current += 1

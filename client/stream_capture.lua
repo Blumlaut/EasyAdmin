@@ -37,12 +37,19 @@ RegisterNetEvent('EasyAdmin:StopStream', function()
 end)
 
 --- Receive encoded frames from the NUI and forward to the server.
+---
+--- Uses a latent server event so large frame payloads do not block the
+--- target player's network channel. bps MUST stay above the frame production
+--- rate (targetFps * avgFrameBytes), otherwise FiveM's latent-event queue on
+--- this client grows without bound — that shows up as a memory leak / freeze
+--- on the player being streamed. Default 200000 (~195 KB/s) gives headroom
+--- over 8 FPS * ~15 KB; tune via `ea_streamBitrate`.
 RegisterNUICallback('streamFrame', function(data, cb)
     cb({ ok = true })
     if not data or not data.frame then return end
 
     frameSeq = frameSeq + 1
 
-    -- Send frame to server for relay to all viewers
-    TriggerLatentServerEvent('EasyAdmin:StreamFrame', 100000, data.frame, frameSeq)
+    local bps = GetConvarInt('ea_streamBitrate', 200000)
+    TriggerLatentServerEvent('EasyAdmin:StreamFrame', bps, data.frame, frameSeq)
 end)
