@@ -8,6 +8,7 @@ import { useModalContext } from '../../ModalContext'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Alert } from '../../components/Alert'
+import { CopyButton } from '../../components/CopyButton'
 import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
@@ -400,16 +401,12 @@ function ResourceRow({
             </span>
           )}
           {resource.repository && (
-            <a
-              href={resource.repository}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground shrink-0 text-fg-muted"
-              title={resource.repository}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Icon name="external-link" size="xs" />
-            </a>
+            <CopyButton
+              value={resource.repository}
+              label="Copy"
+              ariaLabel="Copy repository URL"
+              onCopy={() => notify('Repository URL copied', 'success')}
+            />
           )}
         </div>
         {resource.description && (

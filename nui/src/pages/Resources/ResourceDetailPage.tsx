@@ -3,10 +3,12 @@ import type { Permissions, ResourceEntry, ResourceMetadata } from '../../types'
 import { callLua, on } from '../../fivem'
 import { useModalContext } from '../../ModalContext'
 import { Alert } from '../../components/Alert'
+import { CopyButton } from '../../components/CopyButton'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
+import { notify } from '../../lib/notify'
 
 interface ResourceDetailPageProps {
   resourceName: string
@@ -189,15 +191,12 @@ export function ResourceDetailPage({
               </span>
             )}
             {repository && (
-              <a
-                href={repository}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-foreground shrink-0 text-fg-muted"
-                title={repository}
-              >
-                <Icon name="external-link" size="xs" />
-              </a>
+              <CopyButton
+                value={repository}
+                label="Copy"
+                ariaLabel="Copy repository URL"
+                onCopy={() => notify('Repository URL copied', 'success')}
+              />
             )}
           </div>
           {description && (

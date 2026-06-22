@@ -1,5 +1,6 @@
 import type { AppSettings, Permissions } from '../../types'
 import { SettingsData } from './SettingsData'
+import { SettingsLinks } from './SettingsLinks'
 import { SettingsPrivacy } from './SettingsPrivacy'
 import { SettingsAccessibility } from './SettingsAccessibility'
 import { SettingsLayout } from './SettingsLayout'
@@ -29,6 +30,7 @@ export function SettingsPage({
 
   return (
     <div className="page-container">
+      <SettingsLinks />
       <SettingsData />
       {permissions['anon'] && (
         <SettingsPrivacy
