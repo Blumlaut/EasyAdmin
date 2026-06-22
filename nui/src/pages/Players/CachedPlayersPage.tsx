@@ -1,7 +1,9 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { CachedPlayer } from '../../types'
 import { notify } from '../../lib/notify'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { filterCachedPlayers } from '../../lib/playerSearch'
 import { SearchBar } from '../../components/SearchBar'
 import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
@@ -23,9 +25,14 @@ export function CachedPlayersPage({
 }: CachedPlayersPageProps) {
   const { openModal, closeModal } = useModalContext()
   const [query, setQuery] = useState('')
+  const debouncedQuery = useDebounce(query, 200)
   const listRef = useRef<HTMLDivElement>(null)
 
-  useListKeyboardNav(listRef, cachedPlayers.length)
+  const filtered = useMemo(() => {
+    return filterCachedPlayers(cachedPlayers, debouncedQuery)
+  }, [cachedPlayers, debouncedQuery])
+
+  useListKeyboardNav(listRef, filtered.length)
 
   return (
     <div className="page-container">
@@ -37,7 +44,7 @@ export function CachedPlayersPage({
           value={query}
           onChange={setQuery}
           placeholder="Search by name, ID, or identifier..."
-          resultCount={{ shown: cachedPlayers.length, total: cachedPlayers.length }}
+          resultCount={{ shown: filtered.length, total: cachedPlayers.length }}
           ariaLabel="Search cached players"
         />
         <button className="btn btn-secondary btn-sm" onClick={onRefresh} disabled={loading}>
@@ -48,16 +55,18 @@ export function CachedPlayersPage({
 
       {loading ? (
         <PlayerListSkeleton />
-      ) : cachedPlayers.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
             <Icon name="archive" size="lg" className="text-fg-muted" />
           </div>
-          <p className="text-fg-subtle">No cached players</p>
+          <p className="text-fg-subtle">
+          {cachedPlayers.length === 0 ? 'No cached players' : 'No cached players match your search'}
+        </p>
         </div>
       ) : (
         <div ref={listRef} className="list">
-          {cachedPlayers.map((player) => (
+          {filtered.map((player) => (
             <CachedRow
               key={player.id}
               player={player}

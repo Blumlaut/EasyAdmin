@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import type { Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { filterPlayers } from '../../lib/playerSearch'
 import { SearchBar } from '../../components/SearchBar'
 import { Avatar } from '../../components/Avatar'
 import { Icon } from '../../components/icons'
@@ -32,15 +33,7 @@ export function PlayerListPage({
   const debouncedQuery = useDebounce(query, 200)
 
   const filtered = useMemo(() => {
-    if (!debouncedQuery) return players
-    const q = debouncedQuery.toLowerCase()
-    return players.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        String(p.id).includes(q) ||
-        (p.license ?? '').toLowerCase().includes(q) ||
-        (p.identifier ?? '').toLowerCase().includes(q),
-    )
+    return filterPlayers(players, debouncedQuery)
   }, [players, debouncedQuery])
 
   const listRef = useRef<HTMLDivElement>(null)
@@ -55,7 +48,7 @@ export function PlayerListPage({
         <SearchBar
           value={query}
           onChange={setQuery}
-          placeholder="Search by name, ID, or license..."
+          placeholder="Search by name, ID, or identifier..."
           resultCount={{ shown: filtered.length, total: players.length }}
           ariaLabel="Search players"
         />
