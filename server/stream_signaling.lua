@@ -154,6 +154,7 @@ end)
 --- Admin stops watching a player's stream.
 RegisterServerEvent('EasyAdmin:StopStream', function(playerId)
     local src = source
+    if not DoesPlayerHavePermission(src, 'player.screenshot') then return end
     if not playerId then return end
     removeViewer(playerId, src)
 end)
@@ -161,6 +162,7 @@ end)
 --- Relay a WebRTC signaling message from one peer to another.
 --- `to` is the destination player src; the sender is implicit (source).
 --- Only relayed within an active session (sender must be the target or a viewer).
+--- @ea-audit:exempt Session membership is the guard — target players aren't admins, and viewers are validated against streamSessions.
 RegisterServerEvent('EasyAdmin:StreamSignal', function(to, payload)
     local src = source
     if type(to) ~= 'number' or type(payload) ~= 'table' then return end
