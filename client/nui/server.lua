@@ -44,8 +44,63 @@ RegisterNUICallback('setConvar', function(data, cb)
   if not data or not data.name or data.value == nil then
     return deny(cb, 'Missing name or value')
   end
-  TriggerServerEvent('EasyAdmin:SetConvar', data.name, tostring(data.value))
+  TriggerServerEvent('EasyAdmin:SetConvar', data.name, tostring(data.value), data.setType)
   toast('Set ' .. tostring(data.name))
+  cb({ ok = true })
+end)
+
+-- Request known convars list with current values
+local pendingConvarsCb = nil
+
+RegisterNUICallback('requestConvars', function(_data, cb)
+  if not permissions['server.convars'] then return deny(cb) end
+  if pendingConvarsCb then
+    pendingConvarsCb = cb
+    return
+  end
+  pendingConvarsCb = cb
+  TriggerServerEvent('EasyAdmin:requestConvars')
+end)
+
+RegisterNetEvent('EasyAdmin:convarsResult', function(data)
+  if pendingConvarsCb then
+    local cb = pendingConvarsCb
+    pendingConvarsCb = nil
+    cb(data or {})
+  end
+end)
+
+-- Server info (gametype, mapname, hostname, maxClients, projectName)
+local pendingServerInfoCb = nil
+
+RegisterNUICallback('requestServerInfo', function(_data, cb)
+  if not permissions['server.convars'] then return deny(cb) end
+  if pendingServerInfoCb then
+    pendingServerInfoCb = cb
+    return
+  end
+  pendingServerInfoCb = cb
+  TriggerServerEvent('EasyAdmin:requestServerInfo')
+end)
+
+RegisterNetEvent('EasyAdmin:serverInfoResult', function(data)
+  if pendingServerInfoCb then
+    local cb = pendingServerInfoCb
+    pendingServerInfoCb = nil
+    cb(data or {
+      gametype = '',
+      mapname = 'none',
+      hostname = '',
+      maxClients = '48',
+      projectName = '',
+    })
+  end
+end)
+
+-- Emergency mode (global mute) toggle
+RegisterNUICallback('toggleGlobalMute', function(data, cb)
+  if not permissions['server.mute.global'] then return deny(cb) end
+  TriggerServerEvent('EasyAdmin:ToggleGlobalMute')
   cb({ ok = true })
 end)
 

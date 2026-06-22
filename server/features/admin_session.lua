@@ -69,6 +69,8 @@ RegisterServerEvent("EasyAdmin:getPlayerIdentifiers", function(playerId)
 	TriggerClientEvent("EasyAdmin:playerIdentifiersResult", src, pid, {})
 end)
 
+loadLanguageStrings()
+
 Citizen.CreateThread(function()
 	if not CachedPlayers or GetVersion() == nil then
 		print("^7--------------------------------------------------------------")
@@ -84,8 +86,6 @@ Citizen.CreateThread(function()
 		RedM = false
 		PrintDebugMessage("Starting in gta5 Mode.", 4)
 	end
-
-	loadLanguageStrings()
 
 	moderationNotification = GetConvar("ea_moderationNotification", "false")
 	reportNotification = GetConvar("ea_reportNotification", "false")

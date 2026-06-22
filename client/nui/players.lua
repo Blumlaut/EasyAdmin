@@ -78,12 +78,6 @@ RegisterNUICallback('toggleMute', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('toggleGlobalMute', function(data, cb)
-  if not permissions['server.mute.global'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:ToggleGlobalMute')
-  cb({ ok = true })
-end)
-
 RegisterNUICallback('screenshotPlayer', function(data, cb)
   if not permissions['player.screenshot'] then return deny(cb) end
   local id = tonumber(data and data.id)

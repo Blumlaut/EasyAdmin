@@ -1,26 +1,45 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ServerAnnouncements } from './ServerAnnouncements'
-import { ModalProvider } from '../../ModalContext'
+import type { Permissions } from '../../types'
 
-function wrap(ui: React.ReactElement) {
-  return (
-    <ModalProvider>
-      {ui}
-    </ModalProvider>
-  )
-}
+const wrap = (ui: React.ReactElement) => <>{ui}</>
+
+const renderAnnouncements = (permissions: Permissions) =>
+  render(wrap(<ServerAnnouncements permissions={permissions} />))
 
 describe('ServerAnnouncements', () => {
-  it('renders the section title', () => {
-    render(wrap(<ServerAnnouncements onToast={() => {}} />))
+  it('renders nothing without server.announce permission', () => {
+    renderAnnouncements({})
+    expect(screen.queryByText('Announcements')).not.toBeInTheDocument()
+  })
+
+  it('renders the section title with permission', () => {
+    renderAnnouncements({ 'server.announce': true })
     expect(screen.getByText('Announcements')).toBeInTheDocument()
   })
 
-  it('opens the input prompt when send is clicked', async () => {
+  it('renders a textarea and send button', () => {
+    renderAnnouncements({ 'server.announce': true })
+    expect(screen.getByLabelText('Announcement message')).toBeInTheDocument()
+    expect(screen.getByText('Send')).toBeInTheDocument()
+  })
+
+  it('disables the send button when textarea is empty', () => {
+    renderAnnouncements({ 'server.announce': true })
+    expect(screen.getByText('Send')).toBeDisabled()
+  })
+
+  it('enables the send button when textarea has content', async () => {
     const user = userEvent.setup()
-    render(wrap(<ServerAnnouncements onToast={() => {}} />))
-    await user.click(screen.getByText('Send announcement'))
-    expect(screen.getByText('Server Announcement')).toBeInTheDocument()
+    renderAnnouncements({ 'server.announce': true })
+    const textarea = screen.getByLabelText('Announcement message')
+    await user.type(textarea, 'Hello')
+    expect(screen.getByText('Send')).not.toBeDisabled()
+  })
+
+  it('shows character count', () => {
+    renderAnnouncements({ 'server.announce': true })
+    expect(screen.getByText(/0 \/ 200/)).toBeInTheDocument()
   })
 })

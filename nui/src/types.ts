@@ -156,6 +156,16 @@ export interface ServerStats {
   peakToday: number
 }
 
+// Known convar entry (returned by requestConvars)
+export interface ConvarEntry {
+  key: string
+  label: string
+  category: string
+  value: string | null
+  /** How the convar was set: 'set' (server), 'setr' (replicated), 'sets' (server info) */
+  setType?: 'set' | 'setr' | 'sets'
+}
+
 // Single data point for sparkline charts
 export interface PlayerCountPoint {
   timestamp: number

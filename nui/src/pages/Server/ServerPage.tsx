@@ -1,8 +1,9 @@
 import type { Permissions } from '../../types'
 import { ServerAnnouncements } from './ServerAnnouncements'
-import { ServerInfo } from './ServerInfo'
-import { ServerConvars } from './ServerConvars'
 import { ServerCleanup } from './ServerCleanup'
+import { ServerConvars } from './ServerConvars'
+import { ServerEmergencyMode } from './ServerEmergencyMode'
+import { ServerInfo } from './ServerInfo'
 
 interface ServerPageProps {
   permissions: Permissions
@@ -10,12 +11,22 @@ interface ServerPageProps {
 }
 
 export function ServerPage({ permissions, isRedm }: ServerPageProps) {
+  const hasAnnounce = permissions['server.announce']
+  const hasCleanup = !isRedm
+
   return (
     <div className="page-container">
-      {permissions['server.announce'] && <ServerAnnouncements />}
-      {permissions['server.convars'] && <ServerInfo />}
-      {permissions['server.convars'] && <ServerConvars />}
-      {!isRedm && <ServerCleanup permissions={permissions} />}
+      <ServerEmergencyMode permissions={permissions} />
+      {permissions['server.convars'] && <ServerInfo permissions={permissions} />}
+      {hasAnnounce && hasCleanup && (
+        <div className="grid grid-cols-2 gap-3">
+          <ServerAnnouncements permissions={permissions} />
+          <ServerCleanup permissions={permissions} />
+        </div>
+      )}
+      {hasAnnounce && !hasCleanup && <ServerAnnouncements permissions={permissions} />}
+      {!hasAnnounce && hasCleanup && <ServerCleanup permissions={permissions} />}
+      {permissions['server.convars'] && <ServerConvars permissions={permissions} />}
     </div>
   )
 }

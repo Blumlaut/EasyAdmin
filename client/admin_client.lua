@@ -101,6 +101,13 @@ RegisterNetEvent('EasyAdmin:SetPlayerMuted', function(player,state)
 	MutedPlayers[player] = state
 end)
 
+RegisterNetEvent('EasyAdmin:SetGlobalMuteState', function(enabled)
+	SendNUIMessage({
+		action = 'globalMuteState',
+		data = { enabled = enabled },
+	})
+end)
+
 function FreezeMyself(state)
 
 	if state then
@@ -416,3 +423,7 @@ RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
 		ShowNotification(text)
 	end
 end)
+
+-- Trigger admin handshake on startup so strings/permissions are available
+-- before any notification fires (e.g. ShowNotification uses GetLocalisedText)
+TriggerServerEvent('EasyAdmin:amiadmin')

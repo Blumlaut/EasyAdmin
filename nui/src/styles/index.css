@@ -35,6 +35,7 @@
 @import './pages/network-monitor.css';
 @import './pages/statistics.css';
 @import './pages/reports.css';
+@import './pages/server.css';
 
 /* -- Design System Tokens (Tailwind v4 @theme) -- */
 @theme {

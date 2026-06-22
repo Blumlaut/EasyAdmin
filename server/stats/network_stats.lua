@@ -10,8 +10,8 @@
 
 -- Retention: 120 days in seconds
 local STATS_RETENTION = 120 * 86400
--- Sampling interval: 15 minutes in seconds
-local STATS_INTERVAL = 900
+-- Sampling interval: 5 minutes in seconds
+local STATS_INTERVAL = 300
 -- Minimum gap between duplicate entries: 1 minute
 local DEDUP_WINDOW = 60
 -- ENet packet loss scale factor

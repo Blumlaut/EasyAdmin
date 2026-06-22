@@ -23,18 +23,18 @@ export function ServerCleanup({ permissions }: ServerCleanupProps) {
   if (availableTypes.length === 0) return null
 
   return (
-    <div className="card card-warning-border">
+    <div className="card flex flex-col">
       <p className="section-label">{t("Cleanup")}</p>
-      <p className="mb-3 text-sm text-fg-subtle">
+      <p className="mb-3 text-sm text-fg-subtle flex-1">
         {t("Remove cars, peds, or props from an area around you.")}
       </p>
       <button
-        className="btn btn-warning btn-full"
+        className="btn btn-danger btn-full"
         onClick={() => openModal({
           title: t('Clean Area'),
           description: t('Choose what to clean and how far from your position.'),
           submitLabel: t('Clean'),
-          submitVariant: 'warning',
+          submitVariant: 'danger',
           fields: [
             {
               key: 'type',
@@ -84,7 +84,7 @@ export function ServerCleanup({ permissions }: ServerCleanupProps) {
           },
         })}
       >
-        <Icon name="trash" size="xs" />
+        <Icon name="trash-2" size="xs" />
         {t("Clean area")}
       </button>
     </div>

@@ -117,6 +117,151 @@ RegisterServerEvent("EasyAdmin:SetConvar", function(convarname, convarvalue)
 	end
 end)
 
+-- Known convars the NUI can browse and edit.
+-- setType: 'set' = SetConvar (server-only), 'setr' = SetConvarReplicated (synced to clients),
+--          'sets' = SetConvarServerInfo (appears in server browser / info.json)
+local KNOWN_CONVARS = {
+	-- FiveM: Server Identity (sets — server info)
+	{ key = 'sv_hostname', label = 'Server Hostname', category = 'FiveM: Server', setType = 'set' },
+	{ key = 'sv_projectName', label = 'Project Name', category = 'FiveM: Server', setType = 'sets' },
+	{ key = 'sv_projectDesc', label = 'Project Description', category = 'FiveM: Server', setType = 'sets' },
+	{ key = 'sv_maxClients', label = 'Max Clients', category = 'FiveM: Server', setType = 'set' },
+	{ key = 'gametype', label = 'Gametype', category = 'FiveM: Server', setType = 'set' },
+	{ key = 'mapname', label = 'Map Name', category = 'FiveM: Server', setType = 'set' },
+	{ key = 'sv_appearAllowlisted', label = 'Appear Allowlisted', category = 'FiveM: Server', setType = 'sets' },
+	{ key = 'sv_allowlistInstructions', label = 'Allowlist Instructions', category = 'FiveM: Server', setType = 'sets' },
+	-- FiveM: Network
+	{ key = 'onesync', label = 'OneSync', category = 'FiveM: Network', setType = 'set' },
+	{ key = 'sv_endpointPrivacy', label = 'Endpoint Privacy', category = 'FiveM: Network', setType = 'set' },
+	{ key = 'net_tcpConnLimit', label = 'TCP Connection Limit', category = 'FiveM: Network', setType = 'set' },
+	{ key = 'sv_requestParanoia', label = 'Request Paranoia (0-3)', category = 'FiveM: Network', setType = 'set' },
+	-- FiveM: Security
+	{ key = 'sv_authMaxVariance', label = 'Auth Max Variance (1-5)', category = 'FiveM: Security', setType = 'set' },
+	{ key = 'sv_authMinTrust', label = 'Auth Min Trust (1-5)', category = 'FiveM: Security', setType = 'set' },
+	{ key = 'sv_pureLevel', label = 'Pure Level', category = 'FiveM: Security', setType = 'set' },
+	{ key = 'sv_filterRequestControl', label = 'Filter Request Control', category = 'FiveM: Security', setType = 'set' },
+	{ key = 'sv_enableNetworkedSounds', label = 'Enable Networked Sounds', category = 'FiveM: Security', setType = 'set' },
+	{ key = 'sv_enableNetworkedPhoneExplosions', label = 'Enable Phone Explosions', category = 'FiveM: Security', setType = 'set' },
+	{ key = 'sv_enableNetworkedScriptEntityStates', label = 'Enable Script Entity States', category = 'FiveM: Security', setType = 'set' },
+	-- FiveM: Replicated
+	{ key = 'sv_stateBagStrictMode', label = 'StateBag Strict Mode', category = 'FiveM: Replicated', setType = 'setr' },
+	-- EasyAdmin: General
+	{ key = 'ea_LanguageName', label = 'Language', category = 'EasyAdmin: General', setType = 'set' },
+	{ key = 'ea_defaultKey', label = 'Menu Key', category = 'EasyAdmin: General', setType = 'set' },
+	{ key = 'ea_logLevel', label = 'Log Level', category = 'EasyAdmin: General', setType = 'set' },
+	{ key = 'ea_presentDeferral', label = 'Show Loading Progress', category = 'EasyAdmin: General', setType = 'set' },
+	{ key = 'ea_enableSplash', label = 'Enable Splash Art', category = 'EasyAdmin: General', setType = 'set' },
+	{ key = 'ea_dangerousDevMode', label = 'Dangerous Dev Mode', category = 'EasyAdmin: General', setType = 'set' },
+	-- EasyAdmin: Players
+	{ key = 'ea_minIdentifierMatches', label = 'Min Identifier Matches', category = 'EasyAdmin: Players', setType = 'set' },
+	{ key = 'ea_useTokenIdentifiers', label = 'Use Token Identifiers', category = 'EasyAdmin: Players', setType = 'set' },
+	{ key = 'ea_logIdentifier', label = 'Log Identifier', category = 'EasyAdmin: Players', setType = 'set' },
+	{ key = 'ea_IpPrivacy', label = 'Hide IP in GUI', category = 'EasyAdmin: Players', setType = 'set' },
+	{ key = 'ea_playerCacheExpiryTime', label = 'Player Cache Expiry (s)', category = 'EasyAdmin: Players', setType = 'set' },
+	-- EasyAdmin: Moderation
+	{ key = 'ea_enableChat', label = 'Enable Chat', category = 'EasyAdmin: Moderation', setType = 'set' },
+	{ key = 'ea_maxWarnings', label = 'Max Warnings', category = 'EasyAdmin: Moderation', setType = 'set' },
+	{ key = 'ea_warnAction', label = 'Max Warn Action', category = 'EasyAdmin: Moderation', setType = 'set' },
+	{ key = 'ea_warningBanTime', label = 'Warning Ban Time (s)', category = 'EasyAdmin: Moderation', setType = 'set' },
+	{ key = 'ea_moderationNotification', label = 'Moderation Webhook URL', category = 'EasyAdmin: Moderation', setType = 'set' },
+	-- EasyAdmin: Reports
+	{ key = 'ea_enableReportCommand', label = 'Enable Report Command', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_reportCommandName', label = 'Report Command Name', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_reportNotification', label = 'Report Webhook URL', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_enableReportScreenshots', label = 'Report Screenshots', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_defaultMinReports', label = 'Default Min Reports', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_ReportBanTime', label = 'Report Ban Time (s)', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_MinReportModifierEnabled', label = 'Min Report Modifier Enabled', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_MinReportPlayers', label = 'Min Report Players', category = 'EasyAdmin: Reports', setType = 'set' },
+	{ key = 'ea_MinReportModifier', label = 'Min Report Modifier', category = 'EasyAdmin: Reports', setType = 'set' },
+	-- EasyAdmin: Call Admin
+	{ key = 'ea_enableCallAdminCommand', label = 'Enable Call Admin', category = 'EasyAdmin: Call Admin', setType = 'set' },
+	{ key = 'ea_callAdminCommandName', label = 'Call Admin Command', category = 'EasyAdmin: Call Admin', setType = 'set' },
+	{ key = 'ea_callAdminCooldown', label = 'Call Admin Cooldown (s)', category = 'EasyAdmin: Call Admin', setType = 'set' },
+	-- EasyAdmin: Ban Message
+	{ key = 'ea_banMessageServerName', label = 'Ban Message Server Name', category = 'EasyAdmin: Ban Message', setType = 'set' },
+	{ key = 'ea_banMessageShowStaff', label = 'Ban Message Show Staff', category = 'EasyAdmin: Ban Message', setType = 'set' },
+	{ key = 'ea_banMessageSubHeader', label = 'Ban Message Sub Header', category = 'EasyAdmin: Ban Message', setType = 'set' },
+	{ key = 'ea_banMessageFooter', label = 'Ban Message Footer', category = 'EasyAdmin: Ban Message', setType = 'set' },
+	{ key = 'ea_banMessageTitleColour', label = 'Ban Message Title Colour', category = 'EasyAdmin: Ban Message', setType = 'set' },
+	{ key = 'ea_banMessageWatermark', label = 'Ban Message Watermark', category = 'EasyAdmin: Ban Message', setType = 'set' },
+	-- EasyAdmin: History & Notes
+	{ key = 'ea_enableActionHistory', label = 'Enable Action History', category = 'EasyAdmin: History', setType = 'set' },
+	{ key = 'ea_actionHistoryExpiry', label = 'Action History Expiry (days)', category = 'EasyAdmin: History', setType = 'set' },
+	{ key = 'ea_enableAdminNotes', label = 'Enable Admin Notes', category = 'EasyAdmin: History', setType = 'set' },
+	-- EasyAdmin: Backups
+	{ key = 'ea_custombanlist', label = 'Custom Banlist', category = 'EasyAdmin: Backups', setType = 'set' },
+	{ key = 'ea_backupFrequency', label = 'Backup Frequency (h)', category = 'EasyAdmin: Backups', setType = 'set' },
+	{ key = 'ea_maxBackupCount', label = 'Max Backup Count', category = 'EasyAdmin: Backups', setType = 'set' },
+	-- EasyAdmin: Screenshots & Streams
+	{ key = 'ea_screenshoturl', label = 'Screenshot Uploader URL', category = 'EasyAdmin: Media', setType = 'set' },
+	{ key = 'ea_screenshotfield', label = 'Screenshot Field Name', category = 'EasyAdmin: Media', setType = 'set' },
+	{ key = 'ea_screenshotMaxResolution', label = 'Screenshot Max Resolution', category = 'EasyAdmin: Media', setType = 'set' },
+	{ key = 'ea_screenshotQuality', label = 'Screenshot Quality', category = 'EasyAdmin: Media', setType = 'set' },
+	{ key = 'ea_streamMaxResolution', label = 'Stream Max Resolution', category = 'EasyAdmin: Media', setType = 'set' },
+	{ key = 'ea_streamTargetFps', label = 'Stream Target FPS', category = 'EasyAdmin: Media', setType = 'set' },
+	-- EasyAdmin: Discord Bot
+	{ key = 'ea_botToken', label = 'Bot Token', category = 'EasyAdmin: Discord', setType = 'set' },
+	{ key = 'ea_botLogChannel', label = 'Bot Log Channel', category = 'EasyAdmin: Discord', setType = 'set' },
+	{ key = 'ea_botStatusChannel', label = 'Bot Status Channel', category = 'EasyAdmin: Discord', setType = 'set' },
+	-- EasyAdmin: Allowlist
+	{ key = 'ea_enableAllowlist', label = 'Enable Allowlist', category = 'EasyAdmin: Allowlist', setType = 'set' },
+	{ key = 'ea_routingBucketOptions', label = 'Routing Bucket Options', category = 'EasyAdmin: Allowlist', setType = 'set' },
+}
+
+-- Set a convar using the correct function for its type
+local function setConvarWithType(key, value, setType)
+	if setType == 'setr' then
+		SetConvarReplicated(key, value)
+	elseif setType == 'sets' then
+		SetConvarServerInfo(key, value)
+	else
+		SetConvar(key, value)
+	end
+end
+
+RegisterServerEvent("EasyAdmin:requestConvars", function()
+	local src = source
+	if not DoesPlayerHavePermission(src, "server.convars") then return end
+
+	local convars = {}
+	for _, def in ipairs(KNOWN_CONVARS) do
+		local value = GetConvar(def.key, nil)
+		table.insert(convars, {
+			key = def.key,
+			label = def.label,
+			category = def.category,
+			value = value,
+			setType = def.setType,
+		})
+	end
+
+	TriggerClientEvent("EasyAdmin:convarsResult", src, convars)
+end)
+
+-- Override SetConvar handler to use the correct type when a setType is provided
+RegisterServerEvent("EasyAdmin:SetConvar", function(convarname, convarvalue, setType)
+	if DoesPlayerHavePermission(source, "server.convars") then
+		PrintDebugMessage("Player "..getName(source,true).." set convar "..convarname.. " to "..convarvalue, 3)
+		setConvarWithType(convarname, convarvalue, setType or 'set')
+		local preferredWebhook = getPreferredWebhook()
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** changed convar **{name}** to **{value}**", { by = getName(source, false, true), name = convarname, value = convarvalue }), "settings", 16777214)
+	end
+end)
+
+RegisterServerEvent("EasyAdmin:requestServerInfo", function()
+	local src = source
+	if not DoesPlayerHavePermission(src, "server.convars") then return end
+
+	TriggerClientEvent("EasyAdmin:serverInfoResult", src, {
+		gametype = GetConvar('gametype', ''),
+		mapname = GetConvar('mapname', 'none'),
+		hostname = GetConvar('sv_hostname', ''),
+		maxClients = GetConvar('sv_maxClients', '48'),
+		projectName = GetConvar('sv_projectName', ''),
+	})
+end)
+
 RegisterServerEvent("EasyAdmin:Announce", function(text)
 	if DoesPlayerHavePermission(source, "server.announce") then
 		PrintDebugMessage("Player "..getName(source,true).." sent a announcement: "..text, 3)
