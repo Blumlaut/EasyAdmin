@@ -66,9 +66,9 @@ RegisterServerEvent("EasyAdmin:requestCleanup", function(type, radius, deep)
 		if deep then
 			TriggerClientEvent("EasyAdmin:requestCleanup", source, type, radius)
 		end
-		TriggerClientEvent("EasyAdmin:showNotification", source, string.format(GetLocalisedText("finishedcleaning"), GetLocalisedText(type)))
+		TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Finished cleaning {type}", { type = GetLocalisedText(type) }))
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('admincleanedup'), getName(source, false, true), type, radius), "cleanup", 16777214)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** Cleaned up all **{type}** in a **{radius}** radius.", { by = getName(source, false, true), type = type, radius = radius }), "cleanup", 16777214)
 	end
 end)
 
@@ -77,7 +77,7 @@ RegisterServerEvent("EasyAdmin:SetGameType", function(text)
 		PrintDebugMessage("Player "..getName(source,true).." set Gametype to "..text, 3)
 		SetGameType(text)
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminchangedconvar'), getName(source, false, true), "gametype", text), "settings", 16777214)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** changed convar **{name}** to **{value}**", { by = getName(source, false, true), name = "gametype", value = text }), "settings", 16777214)
 	end
 end)
 
@@ -86,7 +86,7 @@ RegisterServerEvent("EasyAdmin:SetMapName", function(text)
 		PrintDebugMessage("Player "..getName(source,true).." set Map Name to "..text, 3)
 		SetMapName(text)
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminchangedconvar'), getName(source, false, true), "mapname", text), "settings", 16777214)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** changed convar **{name}** to **{value}**", { by = getName(source, false, true), name = "mapname", value = text }), "settings", 16777214)
 	end
 end)
 
@@ -95,7 +95,7 @@ RegisterServerEvent("EasyAdmin:StartResource", function(text)
 		PrintDebugMessage("Player "..getName(source,true).." started Resource "..text, 3)
 		StartResource(text)
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminstartedresource'), getName(source, false, true), text), "settings", 65280)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** started resource **{name}**", { by = getName(source, false, true), name = text }), "settings", 65280)
 	end
 end)
 
@@ -104,7 +104,7 @@ RegisterServerEvent("EasyAdmin:StopResource", function(text)
 		PrintDebugMessage("Player "..getName(source,true).." stopped Resource "..text, 3)
 		StopResource(text)
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminstoppedresource'), getName(source, false, true), text), "settings", 16711680)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** stopped resource **{name}**", { by = getName(source, false, true), name = text }), "settings", 16711680)
 	end
 end)
 
@@ -113,7 +113,7 @@ RegisterServerEvent("EasyAdmin:SetConvar", function(convarname, convarvalue)
 		PrintDebugMessage("Player "..getName(source,true).." set convar "..convarname.. " to "..convarvalue, 3)
 		SetConvar(convarname, convarvalue)
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminchangedconvar'), getName(source, false, true), convarname, convarvalue), "settings", 16777214)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** changed convar **{name}** to **{value}**", { by = getName(source, false, true), name = convarname, value = convarvalue }), "settings", 16777214)
 	end
 end)
 
@@ -122,7 +122,7 @@ RegisterServerEvent("EasyAdmin:Announce", function(text)
 		PrintDebugMessage("Player "..getName(source,true).." sent a announcement: "..text, 3)
 		announce(text)
 		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText('adminannouncement'), getName(source, false, true), text), "settings", 16777214)
+		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** sent an announcement: **{message}**", { by = getName(source, false, true), message = text }), "settings", 16777214)
 	end
 end)
 

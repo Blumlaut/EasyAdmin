@@ -53,7 +53,7 @@ end)
 
 RegisterCommand("spectate", function(source, args, rawCommand)
     if(source == 0) then
-        Citizen.Trace(GetLocalisedText("badidea")) -- Maybe should be it's own string saying something like "only players can do this" or something
+        Citizen.Trace(GetLocalisedText("Don't do that, please.")) -- Maybe should be it's own string saying something like "only players can do this" or something
     end
     
     PrintDebugMessage("Player "..getName(source,true).." Requested Spectate on "..getName(args[1],true), 3)
@@ -62,7 +62,7 @@ RegisterCommand("spectate", function(source, args, rawCommand)
         if getName(args[1]) then
             TriggerClientEvent("EasyAdmin:requestSpectate", source, args[1])
         else
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("playernotfound"))
+            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Player could not be found."))
         end
     end
 end, false)

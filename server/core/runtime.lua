@@ -26,13 +26,13 @@ if chatEventsSupported then
 		if GlobalMute then
 			if not DoesPlayerHavePermission(source, "server.mute.global") then
 				hookRef.cancel()
-				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("globalmute_active"))
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Global Mute is active."))
 			end
 			return
 		end
 		if MutedPlayers[source] then
 			hookRef.cancel()
-			TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("playermute"))
+			TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("You are muted!"))
 		end
 	end)
 else
@@ -40,15 +40,15 @@ else
 		if GlobalMute then
 			if not DoesPlayerHavePermission(source, "server.mute.global") then
 				CancelEvent()
-				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("globalmute_active") } })
-				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("globalmute_active"))
+				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("Global Mute is active.") } })
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Global Mute is active."))
 				return
 			end
 		end
 		if MutedPlayers[source] then
 			CancelEvent()
-			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })
-			TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("playermute"))
+			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("You are muted!") } })
+			TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("You are muted!"))
 		end
 	end)
 end
@@ -199,7 +199,7 @@ Citizen.CreateThread(function()
 
 		deferrals.defer()
 		Wait(0)
-		local deferralText = string.format(GetLocalisedText("deferral"), 0)
+		local deferralText = GetLocalisedText("Checking Banlist, please wait.. ({progress}%%)", { progress = 0 })
 		if showProgress == "false" then
 			deferralText = deferralText:sub(1, -6)
 		end
@@ -266,7 +266,7 @@ Citizen.CreateThread(function()
 		end
 
 		if GetConvar("ea_enableAllowlist", "false") == "true" then
-			deferrals.update(GetLocalisedText("checkingallowlist"))
+			deferrals.update(GetLocalisedText("Checking allowlist.."))
 			local allowlistAttempts = 0
 			local allowlisted = false
 			repeat
@@ -278,7 +278,7 @@ Citizen.CreateThread(function()
 			if DoesPlayerHavePermission(player, "player.allowlist") then
 				deferrals.done()
 			else
-				deferrals.done(GetLocalisedText("allowlist"))
+				deferrals.done(GetLocalisedText("You are not allowlisted on this server"))
 				return
 			end
 		else

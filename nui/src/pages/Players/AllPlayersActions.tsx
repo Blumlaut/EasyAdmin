@@ -3,6 +3,7 @@ import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
 import { useModalContext } from '../../ModalContext'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
+import { useTranslation } from '../../lib/i18n'
 import type { Permissions } from '../../types'
 
 /**
@@ -11,6 +12,7 @@ import type { Permissions } from '../../types'
  */
 export function AllPlayersActions({ permissions }: { permissions: Permissions }) {
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
   const [globalMuteEnabled, setGlobalMuteEnabled] = useState(false)
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export function AllPlayersActions({ permissions }: { permissions: Permissions })
 
   return (
     <div className="card">
-      <p className="section-label">All Players</p>
+      <p className="section-label">{t("All Players")}</p>
 
       {canGlobalMute && (
         <button
@@ -34,30 +36,30 @@ export function AllPlayersActions({ permissions }: { permissions: Permissions })
             openModal(
               globalMuteEnabled
                 ? createConfirmModal({
-                    title: 'Disable Emergency Mode',
+                    title: t('Disable Emergency Mode'),
                     description:
-                      'This will restore chat for all players. Continue?',
+                      t('This will restore chat for all players. Continue?'),
                     submitVariant: 'primary',
                     onSubmit: async () => {
                       await runModalAction({
                         action: () => callLua('toggleGlobalMute'),
                         closeModal,
-                        successMessage: 'Emergency mode disabled',
-                        errorMessage: 'Action failed',
+                        successMessage: t('Emergency mode disabled'),
+                        errorMessage: t('Action failed'),
                       })
                     },
                   })
                 : createConfirmModal({
-                    title: 'Enable Emergency Mode',
+                    title: t('Enable Emergency Mode'),
                     description:
-                      'This will mute ALL player chat server-wide. Only admins will be able to type. Continue?',
+                      t('This will mute ALL player chat server-wide. Only admins will be able to type. Continue?'),
                     submitVariant: 'danger',
                     onSubmit: async () => {
                       await runModalAction({
                         action: () => callLua('toggleGlobalMute'),
                         closeModal,
-                        successMessage: 'Emergency mode enabled — all players muted',
-                        errorMessage: 'Action failed',
+                        successMessage: t('Emergency mode enabled — all players muted'),
+                        errorMessage: t('Action failed'),
                       })
                     },
                   })
@@ -65,7 +67,7 @@ export function AllPlayersActions({ permissions }: { permissions: Permissions })
           }
         >
           <Icon name={globalMuteEnabled ? 'volume-2' : 'volume-x'} size="xs" />
-          {globalMuteEnabled ? 'Disable Emergency Mode' : 'Enable Emergency Mode'}
+          {globalMuteEnabled ? t('Disable Emergency Mode') : t('Enable Emergency Mode')}
         </button>
       )}
 
@@ -74,22 +76,22 @@ export function AllPlayersActions({ permissions }: { permissions: Permissions })
           className="btn btn-secondary btn-full"
           onClick={() =>
             openModal(createConfirmModal({
-              title: 'Teleport everyone',
-              description: 'This will teleport every player on the server to your position. Continue?',
+              title: t('Teleport everyone'),
+              description: t('This will teleport every player on the server to your position. Continue?'),
               submitVariant: 'danger',
               onSubmit: async () => {
                 await runModalAction({
                   action: () => callLua('teleportPlayerToMe', { id: -1 }),
                   closeModal,
-                  successMessage: 'All players teleported to you',
-                  errorMessage: 'Action failed',
+                  successMessage: t('All players teleported to you'),
+                  errorMessage: t('Action failed'),
                 })
               },
             }))
           }
         >
           <Icon name="map-pin" size="xs" />
-          Teleport everyone to me
+          {t("Teleport everyone to me")}
         </button>
       )}
     </div>

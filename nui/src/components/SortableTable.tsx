@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useTranslation } from '../lib/i18n'
 import { Icon } from './icons'
 
 // ============================================================
@@ -68,6 +69,7 @@ export function SortableTable<T>({
 }: SortableTableProps<T>) {
   const [internalSortBy, setInternalSortBy] = useState('')
   const [internalSortDir, setInternalSortDir] = useState<SortDir>('desc')
+  const { t } = useTranslation()
 
   const isActive = sortBy !== undefined
   const activeSortBy = isActive ? sortBy : internalSortBy
@@ -97,7 +99,7 @@ export function SortableTable<T>({
   if (loading && rows.length === 0) {
     return (
       <div className={`flex min-h-100 items-center justify-center ${className}`}>
-        <p className="text-xs text-fg-muted">Loading…</p>
+        <p className="text-xs text-fg-muted">{t("Loading…")}</p>
       </div>
     )
   }
@@ -121,7 +123,7 @@ export function SortableTable<T>({
             disabled={loading}
           >
             <Icon name="refresh" size="xs" />
-            Refresh
+            {t("Refresh")}
           </button>
         </div>
       )}

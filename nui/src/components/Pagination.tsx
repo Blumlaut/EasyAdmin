@@ -1,4 +1,5 @@
 import { Icon } from './icons'
+import { useTranslation } from '../lib/i18n'
 
 interface PaginationProps {
   page: number
@@ -21,32 +22,33 @@ export function Pagination({
   onNext,
   onLast,
 }: PaginationProps) {
+  const { t } = useTranslation()
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-center gap-2" role="navigation" aria-label="Pagination">
+    <div className="flex items-center justify-center gap-2" role="navigation" aria-label={t("Pagination")}>
       {page > 1 && (
-        <button className="btn btn-sm btn-secondary" onClick={onFirst} aria-label="First page">
+        <button className="btn btn-sm btn-secondary" onClick={onFirst} aria-label={t("First page")}>
           <Icon name="chevron-double-left" size="xs" />
         </button>
       )}
       {page > 1 && (
-        <button className="btn btn-sm btn-secondary" onClick={onPrev} aria-label="Previous page">
+        <button className="btn btn-sm btn-secondary" onClick={onPrev} aria-label={t("Previous page")}>
           <Icon name="chevron-left" size="xs" />
-          Prev
+          {t("Prev")}
         </button>
       )}
       <span className="text-mono text-sm text-fg-muted">
         {page} / {totalPages}
       </span>
       {page < totalPages && (
-        <button className="btn btn-sm btn-secondary" onClick={onNext} aria-label="Next page">
-          Next
+        <button className="btn btn-sm btn-secondary" onClick={onNext} aria-label={t("Next page")}>
+          {t("Next")}
           <Icon name="chevron-right" size="xs" />
         </button>
       )}
       {page < totalPages && (
-        <button className="btn btn-sm btn-secondary" onClick={onLast} aria-label="Last page">
+        <button className="btn btn-sm btn-secondary" onClick={onLast} aria-label={t("Last page")}>
           <Icon name="chevron-double-right" size="xs" />
         </button>
       )}

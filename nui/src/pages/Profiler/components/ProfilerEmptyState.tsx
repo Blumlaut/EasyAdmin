@@ -1,5 +1,6 @@
 import { Icon } from '../../../components/icons'
 import { SelectMenu, type SelectMenuItem } from '../../../components/SelectMenu'
+import { useTranslation } from '../../../lib/i18n'
 
 interface ProfilerEmptyStateProps {
   onFrameChange: (frames: number) => void
@@ -14,6 +15,7 @@ export function ProfilerEmptyState({
   frameOptions,
   framesSelected,
 }: ProfilerEmptyStateProps) {
+  const { t } = useTranslation()
   const selectItems: SelectMenuItem[] = frameOptions.map((opt) => ({
     value: opt.value,
     label: opt.label,
@@ -30,16 +32,16 @@ export function ProfilerEmptyState({
           <Icon name="activity" size="lg" className="profiler-empty-icon" />
         </div>
 
-        <h3 className="profiler-empty-title">Profile your server</h3>
+        <h3 className="profiler-empty-title">{t("Profile your server")}</h3>
         <p className="profiler-empty-description">
-          Capture a snapshot of resource tick times to identify which scripts are using the most server CPU.
+          {t("Capture a snapshot of resource tick times to identify which scripts are using the most server CPU.")}
         </p>
 
         <div className="profiler-controls">
           <SelectMenu
             items={selectItems}
             onChange={handleSelect}
-            ariaLabel="Number of frames to record"
+            ariaLabel={t("Number of frames to record")}
           />
 
           <button
@@ -48,12 +50,12 @@ export function ProfilerEmptyState({
             disabled={!framesSelected}
             title={
               framesSelected
-                ? 'Triggers a server-side profiler recording. Results appear below when complete.'
-                : 'Select a frame count to record first'
+                ? t("Triggers a server-side profiler recording. Results appear below when complete.")
+                : t("Select a frame count to record first")
             }
           >
             <Icon name="play" size="sm" />
-            Start Profile
+            {t("Start Profile")}
           </button>
         </div>
       </div>

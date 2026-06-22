@@ -3,6 +3,7 @@ import { callLua } from '../../fivem'
 import type { Permissions, Player, Report } from '../../types'
 import { notify } from '../../lib/notify'
 import { useModalContext } from '../../ModalContext'
+import { useTranslation } from '../../lib/i18n'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Icon } from '../../components/icons'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
@@ -32,6 +33,7 @@ export function ReportDetailPage({
   const canClaim = !!permissions['player.reports.claim']
   const canProcess = !!permissions['player.reports.process']
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   const [state, setState] = useState<DetailState>({ status: 'loading' })
   const [busy, setBusy] = useState(false)
@@ -72,7 +74,7 @@ export function ReportDetailPage({
       await callLua('claimReport', { id: state.report.id })
       // UI updates automatically via the reports prop when updateReports fires
     } catch {
-      notify('Failed to claim report', 'error')
+      notify(t('Failed to claim report'), 'error')
     } finally {
       setBusy(false)
     }
@@ -81,16 +83,16 @@ export function ReportDetailPage({
   function handleCloseReport() {
     if (state.status !== 'success') return
     openModal(createConfirmModal({
-      title: 'Close report',
-      description: `Are you sure you want to close report #${state.report.id}?`,
-      submitLabel: 'Close',
+      title: t('Close report'),
+      description: t("Are you sure you want to close report #{id}?", { id: String(state.report.id) }),
+      submitLabel: t('Close'),
       submitVariant: 'danger',
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('closeReport', { id: state.report.id }),
           closeModal,
-          successMessage: 'Report closed',
-          errorMessage: 'Failed to close report',
+          successMessage: t('Report closed'),
+          errorMessage: t('Failed to close report'),
           onSuccess: onClosed,
         })
       },
@@ -100,16 +102,16 @@ export function ReportDetailPage({
   function handleCloseSimilar() {
     if (state.status !== 'success') return
     openModal(createConfirmModal({
-      title: 'Close similar reports',
-      description: 'This will close all reports with the same reporter, reported player, and reason. Continue?',
-      submitLabel: 'Close similar',
+      title: t('Close similar reports'),
+      description: t("This will close all reports with the same reporter, reported player, and reason. Continue?"),
+      submitLabel: t('Close similar'),
       submitVariant: 'danger',
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('closeSimilarReports', { id: state.report.id }),
           closeModal,
-          successMessage: 'Similar reports closed',
-          errorMessage: 'Failed to close similar reports',
+          successMessage: t('Similar reports closed'),
+          errorMessage: t('Failed to close similar reports'),
           onSuccess: onClosed,
         })
       },
@@ -123,7 +125,7 @@ export function ReportDetailPage({
           <div className="mb-3 flex items-center gap-3">
             <div className="avatar avatar-md">…</div>
             <div className="flex-1">
-              <h3 className="text-xl font-semibold">Loading report…</h3>
+              <h3 className="text-xl font-semibold">{t("Loading report…")}</h3>
             </div>
           </div>
         </div>
@@ -138,7 +140,7 @@ export function ReportDetailPage({
           <div className="empty-state-icon empty-state-icon-orange">
             <Icon name="flag" size="lg" className="text-orange" />
           </div>
-          <p className="text-fg-subtle">Report not found or failed to load</p>
+          <p className="text-fg-subtle">{t("Report not found or failed to load")}</p>
         </div>
       </div>
     )
@@ -148,33 +150,33 @@ export function ReportDetailPage({
   const isPlayerOnline = (id: number) => players.some((p) => p.id === id)
 
   const rows: KeyValueRow[] = [
-    { key: 'ID', value: `#${report.id}`, mono: true },
-    { key: 'Type', value: report.type === 1 ? 'Emergency' : 'Normal' },
-    { key: 'Time', value: report.reportTimeFormatted },
+    { key: t('ID'), value: `#${report.id}`, mono: true },
+    { key: t('Type'), value: report.type === 1 ? t('Emergency') : t('Normal') },
+    { key: t('Time'), value: report.reportTimeFormatted },
     {
-      key: 'Reporter',
+      key: t('Reporter'),
       value: report.reporterName,
       mono: true,
       onClick: isPlayerOnline(report.reporter)
         ? () => onOpenPlayer(report.reporter)
         : undefined,
-      actionLabel: isPlayerOnline(report.reporter) ? 'Open' : 'Offline',
+      actionLabel: isPlayerOnline(report.reporter) ? t('Open') : t('Offline'),
     },
   ]
   if (report.reported !== undefined && report.reportedName) {
     const reportedId = report.reported
     const open = isPlayerOnline(reportedId)
     rows.push({
-      key: 'Reported',
+      key: t('Reported'),
       value: report.reportedName,
       mono: true,
       onClick: open ? () => onOpenPlayer(reportedId) : undefined,
-      actionLabel: open ? 'Open' : 'Offline',
+      actionLabel: open ? t('Open') : t('Offline'),
     })
   }
-  rows.push({ key: 'Reason', value: report.reason })
+  rows.push({ key: t('Reason'), value: report.reason })
   if (report.claimed) {
-    rows.push({ key: 'Claimed by', value: report.claimedName ?? '—' })
+    rows.push({ key: t('Claimed by'), value: report.claimedName ?? '—' })
   }
 
   const iconColor = report.claimed
@@ -207,7 +209,7 @@ export function ReportDetailPage({
       </div>
 
       <div className="card">
-        <p className="section-label">Actions</p>
+        <p className="section-label">{t("Actions")}</p>
         <div className="flex flex-col gap-2">
           {canClaim && !report.claimed && (
             <button
@@ -216,7 +218,7 @@ export function ReportDetailPage({
               disabled={busy}
             >
               <Icon name="check" size="xs" />
-              Claim report
+              {t("Claim report")}
             </button>
           )}
           {canProcess && (
@@ -226,14 +228,14 @@ export function ReportDetailPage({
                 onClick={handleCloseReport}
               >
                 <Icon name="x" size="xs" />
-                Close report
+                {t("Close report")}
               </button>
               <button
                 className="btn btn-warning btn-full"
                 onClick={handleCloseSimilar}
               >
                 <Icon name="trash-2" size="xs" />
-                Close similar reports
+                {t("Close similar reports")}
               </button>
             </>
           )}

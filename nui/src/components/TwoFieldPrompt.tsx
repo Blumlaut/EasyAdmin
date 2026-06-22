@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useEscapeKey } from '../hooks/useEscapeKey'
 import { DialogWrapper } from './DialogWrapper'
+import { useTranslation } from '../lib/i18n'
 
 interface TwoFieldPromptProps {
   title: string
@@ -28,6 +29,7 @@ export function TwoFieldPrompt({
   onConfirm,
   onCancel,
 }: TwoFieldPromptProps) {
+  const { t } = useTranslation()
   const [first, setFirst] = useState(firstInitialValue)
   const [second, setSecond] = useState(secondInitialValue)
   const firstRef = useRef<HTMLInputElement>(null)
@@ -50,14 +52,14 @@ export function TwoFieldPrompt({
       actions={
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={onCancel}>
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className="btn btn-primary"
             onClick={handleSubmit}
             disabled={!first.trim() || !second.trim()}
           >
-            Confirm
+            {t("Confirm")}
           </button>
         </div>
       }

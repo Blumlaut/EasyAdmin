@@ -8,6 +8,7 @@ import { SelectMenu } from '../../components/SelectMenu'
 import { callLua, on } from '../../fivem'
 import { createBanModal, createTextInputModal } from '../../modals/helpers'
 import { notify } from '../../lib/notify'
+import { useTranslation } from '../../lib/i18n'
 
 interface PlayerActionsPanelProps {
   player: Player
@@ -84,6 +85,7 @@ const ACTION_GROUPS: ActionGroup[] = [
 
 export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelProps) {
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
   const [screenshotLoading, setScreenshotLoading] = useState(false)
@@ -135,9 +137,9 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
               try {
                 const amount = typeof values.amount === 'number' ? values.amount * 10 : 50
                 await callLua('slapPlayer', { id: player.id, name: player.name, amount })
-                notify('Slapped', 'success')
+                notify(t('Slapped'), 'success')
               } catch {
-                notify('Slap failed', 'error')
+                notify(t('Slap failed'), 'error')
               }
               closeModal()
             },
@@ -145,7 +147,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           break
         case 'spectate':
           await callLua('spectatePlayer', { id: player.id, name: player.name })
-          notify(`Spectating ${player.name}`, 'success')
+          notify(t("Spectating {name}", { name: player.name }), 'success')
           break
         case 'screenshot':
           setScreenshotLoading(true)
@@ -163,27 +165,27 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           break
         case 'bucket-join':
           await callLua('joinPlayerBucket', { id: player.id, name: player.name })
-          notify('Joined bucket', 'success')
+          notify(t('Joined bucket'), 'success')
           break
         case 'bucket-force':
           await callLua('forcePlayerBucket', { id: player.id, name: player.name })
-          notify('Forced bucket', 'success')
+          notify(t('Forced bucket'), 'success')
           break
         case 'freeze': {
           const newFrozen = !player.frozen
           await callLua('toggleFreeze', { id: player.id, name: player.name, freeze: newFrozen })
-          notify(`${newFrozen ? 'Frozen' : 'Unfrozen'} ${player.name}`, 'success')
+          notify(t(newFrozen ? "Frozen {name}" : "Unfrozen {name}", { name: player.name }), 'success')
           break
         }
         case 'mute': {
           const newMuted = !player.muted
           await callLua('toggleMute', { id: player.id, name: player.name, mute: newMuted })
-          notify(`${newMuted ? 'Muted' : 'Unmuted'} ${player.name}`, 'success')
+          notify(t(newMuted ? "Muted {name}" : "Unmuted {name}", { name: player.name }), 'success')
           break
         }
       }
     } catch {
-      notify('Action failed', 'error')
+      notify(t('Action failed'), 'error')
     } finally {
       setBusyAction(null)
     }
@@ -194,19 +196,19 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
   function handleWarn() {
     openModal(
       createTextInputModal({
-        title: `Warn ${player.name}`,
-        label: 'Reason',
-        placeholder: 'No reason',
+        title: t("Warn {name}", { name: player.name }),
+        label: t('Reason'),
+        placeholder: t('No reason'),
         required: true,
-        submitLabel: 'Warn',
+        submitLabel: t('Warn'),
         submitVariant: 'warning',
         onSubmit: async (values) => {
           const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
           try {
             await callLua('warnPlayer', { id: player.id, name: player.name, reason })
-            notify(`Warned ${player.name}`, 'success')
+            notify(t("Warned {name}", { name: player.name }), 'success')
           } catch {
-            notify('Warn failed', 'error')
+            notify(t('Warn failed'), 'error')
           }
           closeModal()
         },
@@ -217,19 +219,19 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
   function handleKick() {
     openModal(
       createTextInputModal({
-        title: `Kick ${player.name}`,
-        label: 'Reason',
-        placeholder: 'No reason',
+        title: t("Kick {name}", { name: player.name }),
+        label: t('Reason'),
+        placeholder: t('No reason'),
         required: true,
-        submitLabel: 'Kick',
+        submitLabel: t('Kick'),
         submitVariant: 'warning',
         onSubmit: async (values) => {
           const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
           try {
             await callLua('kickPlayer', { id: player.id, name: player.name, reason })
-            notify(`Kicked ${player.name}`, 'success')
+            notify(t("Kicked {name}", { name: player.name }), 'success')
           } catch {
-            notify('Kick failed', 'error')
+            notify(t('Kick failed'), 'error')
           }
           closeModal()
         },
@@ -240,13 +242,13 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
   function handleBan() {
     openModal(
       createBanModal({
-        title: `Ban ${player.name}`,
+        title: t("Ban {name}", { name: player.name }),
         onSubmit: async (reason, duration) => {
           try {
             await callLua('banPlayer', { id: player.id, name: player.name, reason, duration })
-            notify(`Banned ${player.name}`, 'success')
+            notify(t("Banned {name}", { name: player.name }), 'success')
           } catch {
-            notify('Failed to ban player', 'error')
+            notify(t('Failed to ban player'), 'error')
           }
           closeModal()
         },
@@ -260,9 +262,9 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
     setTeleportBusy(opt.id)
     try {
       await callLua(opt.action, { id: player.id, name: player.name })
-      notify(`${opt.label} executed`, 'success')
+      notify(t("{label} executed", { label: opt.label }), 'success')
     } catch {
-      notify(`Failed: ${opt.label}`, 'error')
+      notify(t("Failed: {label}", { label: opt.label }), 'error')
     } finally {
       setTeleportBusy(null)
     }
@@ -285,10 +287,10 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
 
   return (
     <div className="card">
-      <p className="section-label">Actions</p>
+      <p className="section-label">{t("Actions")}</p>
 
       {!hasAnyPermission && (
-        <p className="text-sm text-fg-muted">No permissions for this player</p>
+        <p className="text-sm text-fg-muted">{t("No permissions for this player")}</p>
       )}
 
       {/* Discipline buttons (warn / kick / ban) */}
@@ -300,7 +302,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
               onClick={handleWarn}
             >
               <Icon name="alert-triangle" size="xs" />
-              Warn
+              {t("Warn")}
             </button>
           )}
           {canKick && (
@@ -311,7 +313,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
               onClick={handleKick}
             >
               <Icon name="log-out" size="xs" />
-              Kick
+              {t("Kick")}
             </button>
           )}
           {canBan && (
@@ -320,7 +322,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
               onClick={handleBan}
             >
               <Icon name="ban" size="xs" />
-              Ban
+              {t("Ban")}
             </button>
           )}
         </div>
@@ -402,10 +404,10 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
               <div className="player-action-group-grid">
                 <SelectMenu
                   items={teleportSelectItems}
-                  placeholder="Select action..."
+                  placeholder={t("Select action...")}
                   onChange={handleTeleportSelect}
                   disabled={teleportBusy !== null}
-                  ariaLabel="Teleport option"
+                  ariaLabel={t("Teleport option")}
                 />
               </div>
             </div>

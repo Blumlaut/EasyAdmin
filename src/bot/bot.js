@@ -25,6 +25,13 @@ const { Client, EmbedBuilder, Collection, Intents, Partials, ButtonStyle, Action
 const { SlashCommandBuilder } = require('@discordjs/builders')
 global.SlashCommandBuilder = SlashCommandBuilder
 
+// --- i18n ---
+const { loadTranslations, t: _t } = require('./i18n')
+global.i18nStrings = loadTranslations(GetConvar('ea_LanguageName', 'en'))
+global.t = function(key, params) {
+	return _t(global.i18nStrings, key, params)
+}
+
 global.client = new Client({
 	partials: [Partials.GuildMember, Partials.User, Partials.Message, Partials.Channel, Partials.Reaction],
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent]

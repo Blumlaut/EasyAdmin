@@ -4,6 +4,7 @@ import { useAppNavigation } from './hooks/useAppNavigation'
 import { useWindowChrome } from './hooks/useWindowChrome'
 import type { View, Player } from './types'
 import { on } from './fivem'
+import { useTranslation } from './lib/i18n'
 import { Icon } from './components/icons'
 import { Navigation } from './components/Navigation'
 import { ScreenshotCapture } from './components/ScreenshotCapture'
@@ -14,6 +15,7 @@ import { WarningOverlay } from './components/WarningOverlay'
 import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
 import { notify } from './lib/notify'
+import { I18nProvider } from './lib/i18n'
 
 // --- Lazy-loaded pages (route-based code-splitting) ---
 // Pages use named exports; .then() adapts them to the default export React.lazy expects.
@@ -66,6 +68,7 @@ interface WarningData {
 }
 
 function App() {
+  const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const [hintFading, setHintFading] = useState(false)
   const [warning, setWarning] = useState<WarningData | null>(null)
@@ -242,6 +245,7 @@ function App() {
     <>
       {visible && (
       <>
+        <I18nProvider>
         <ModalProvider>
         <div
           className="ea-backdrop"
@@ -258,7 +262,7 @@ function App() {
               <img src="./logo.png" alt="EasyAdmin" className="sidebar-logo" />
               <div>
                 <h1 className="sidebar-title text-gradient text-xl font-bold">EasyAdmin</h1>
-                <p className="sidebar-subtitle text-xs text-fg-muted">Admin Panel</p>
+                <p className="sidebar-subtitle text-xs text-fg-muted">{t("Admin Panel")}</p>
               </div>
               <button
                 className="btn btn-ghost btn-icon sidebar-collapse-btn"
@@ -297,7 +301,7 @@ function App() {
                 <button
                   className="btn btn-ghost btn-sm"
                   onClick={handleGoBack}
-                  aria-label="Go back"
+                  aria-label={t("Go back")}
                 >
                   <Icon name="chevron-left" size="xs" />
                   Back
@@ -323,8 +327,8 @@ function App() {
                 <button
                   className="btn btn-ghost btn-icon btn-close"
                   onClick={handleFoldIn}
-                  aria-label="Fold in"
-                  title="Fold in (press ALT to unfold)"
+                  aria-label={t("Fold in")}
+                  title={t("Fold in (press ALT to unfold)")}
                   disabled={chrome.nuiBackground}
                 >
                   <Icon name="x" size="xs" />
@@ -495,7 +499,7 @@ function App() {
           aria-live="polite"
         >
           <kbd>ALT</kbd>
-          <span>Press ALT to unfold</span>
+          <span>{t("Press ALT to unfold")}</span>
         </div>
       )}
 
@@ -515,6 +519,7 @@ function App() {
           warning={warning}
           onDismiss={() => setWarning(null)}
         />
+        </I18nProvider>
       </>
     )}
     </>

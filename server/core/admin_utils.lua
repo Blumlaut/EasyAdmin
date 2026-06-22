@@ -49,7 +49,7 @@ function CanTargetPlayerForModeration(src, target, immuneMessage)
 
 	if isPlayerImmune(target) then
 		if src and tonumber(src) and tonumber(src) > 0 then
-			TriggerClientEvent("EasyAdmin:showNotification", src, immuneMessage or GetLocalisedText("adminimmune"))
+			TriggerClientEvent("EasyAdmin:showNotification", src, immuneMessage or GetLocalisedText("You do not have permission to perform this action, target player is immune."))
 		end
 		return false
 	end
@@ -66,7 +66,7 @@ function CheckAdminCooldown(src, action)
 	if not numSrc then return true end
 	if AdminCooldowns[numSrc] then
 		if AdminCooldowns[numSrc][action] then
-			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("waitbeforeusingagain"))
+			TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("You must wait before using this again!"))
 			return false
 		end
 	end
@@ -143,7 +143,7 @@ exports('IsPlayerAdmin', IsPlayerAdmin)
 ---@return boolean
 function announce(reason)
 	if reason then
-		TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("announcement") .. "] " .. reason)
+		TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("Announcement") .. "] " .. reason)
 		return true
 	else
 		return false
@@ -175,7 +175,7 @@ function getName(src,anonymousdisabled,identifierenabled)
 		local playerName
 
 		if AnonymousAdmins[playerId] and not anonymousdisabled then
-			return GetLocalisedText("anonymous")
+			return GetLocalisedText("Anonymous Admin")
 		elseif cachedPlayer and cachedPlayer.name then
 			playerName = cachedPlayer.name
 

@@ -3,6 +3,7 @@ import { callLua, on } from '../../fivem'
 import type { BanEntry, Permissions } from '../../types'
 import { notify } from '../../lib/notify'
 import { useModalContext } from '../../ModalContext'
+import { useTranslation } from '../../lib/i18n'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
@@ -32,6 +33,7 @@ export function BanDetailPage({
   const canEdit = !!permissions['player.ban.edit']
   const canRemove = !!permissions['player.ban.remove']
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   const [state, setState] = useState<DetailState>(
     initialBan ? { status: 'success', ban: initialBan } : { status: 'loading' },
@@ -96,7 +98,7 @@ export function BanDetailPage({
           <div className="empty-state-icon empty-state-icon-red">
             <Icon name="ban" size="lg" className="text-red" />
           </div>
-          <p className="text-fg-subtle">Ban not found or failed to load</p>
+          <p className="text-fg-subtle">{t("Ban not found or failed to load")}</p>
         </div>
       </div>
     )
@@ -107,10 +109,10 @@ export function BanDetailPage({
   function handleEditField(field: 'reason' | 'name' | 'banner' | 'expire') {
     const currentValue = field === 'expire' ? String(current.expire ?? '') : String(current[field] ?? '')
     const fieldLabels: Record<string, { title: string; label: string; placeholder: string }> = {
-      reason: { title: 'Edit reason', label: 'Ban reason', placeholder: 'Enter ban reason...' },
-      name: { title: 'Edit name', label: 'Banned player name', placeholder: 'Enter player name...' },
-      banner: { title: 'Edit banner', label: 'Admin name to display', placeholder: 'Enter admin name...' },
-      expire: { title: 'Edit expire', label: 'Unix timestamp (-1 for permanent)', placeholder: '-1' },
+      reason: { title: t('Edit reason'), label: t('Ban reason'), placeholder: t('Enter ban reason...') },
+      name: { title: t('Edit name'), label: t('Banned player name'), placeholder: t('Enter player name...') },
+      banner: { title: t('Edit banner'), label: t('Admin name to display'), placeholder: t('Enter admin name...') },
+      expire: { title: t('Edit expire'), label: t('Unix timestamp (-1 for permanent)'), placeholder: '-1' },
     }
     const config = fieldLabels[field]
     openModal(createTextInputModal({
@@ -134,9 +136,9 @@ export function BanDetailPage({
     setSaving(true)
     try {
       await callLua('editBan', edited)
-      notify('Ban updated', 'success')
+      notify(t('Ban updated'), 'success')
     } catch {
-      notify('Failed to save ban', 'error')
+      notify(t('Failed to save ban'), 'error')
     } finally {
       setSaving(false)
     }
@@ -145,16 +147,16 @@ export function BanDetailPage({
   function handleUnban() {
     if (!edited) return
     openModal(createConfirmModal({
-      title: 'Unban player',
-      description: `Are you sure you want to unban ${edited.name ?? 'this player'}?`,
-      submitLabel: 'Unban',
+      title: t('Unban player'),
+      description: t("Are you sure you want to unban {name}?", { name: edited.name ?? t('this player') }),
+      submitLabel: t('Unban'),
       submitVariant: 'danger',
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('unbanPlayer', { banid: edited.banid }),
           closeModal,
-          successMessage: 'Player unbanned',
-          errorMessage: 'Failed to unban',
+          successMessage: t('Player unbanned'),
+          errorMessage: t('Failed to unban'),
           onSuccess: onBack,
         })
       },
@@ -163,42 +165,42 @@ export function BanDetailPage({
 
   const rows: KeyValueRow[] = [
     {
-      key: 'Ban ID',
+      key: t('Ban ID'),
       value: current.banid || '—',
       mono: true,
       ...(current.banid
-        ? { actionLabel: <CopyButton value={current.banid} ariaLabel="Copy ban ID" /> }
+        ? { actionLabel: <CopyButton value={current.banid} ariaLabel={t("Copy ban ID")} /> }
         : {}),
     },
     {
-      key: 'Reason',
+      key: t('Reason'),
       value: current.reason || '—',
       ...(canEdit
-        ? { onClick: () => handleEditField('reason'), actionLabel: 'Edit' }
+        ? { onClick: () => handleEditField('reason'), actionLabel: t('Edit') }
         : {}),
     },
     {
-      key: 'Name',
+      key: t('Name'),
       value: current.name ?? '—',
       ...(canEdit
         ? {
             onClick: () => handleEditField('name'),
-            actionLabel: 'Edit',
+            actionLabel: t('Edit'),
           }
         : {}),
     },
     {
-      key: 'Banner',
+      key: t('Banner'),
       value: current.banner ?? '—',
       ...(canEdit
-        ? { onClick: () => handleEditField('banner'), actionLabel: 'Edit' }
+        ? { onClick: () => handleEditField('banner'), actionLabel: t('Edit') }
         : {}),
     },
     {
-      key: 'Expires',
+      key: t('Expires'),
       value: current.expireString ?? '—',
       ...(canEdit
-        ? { onClick: () => handleEditField('expire'), actionLabel: 'Edit' }
+        ? { onClick: () => handleEditField('expire'), actionLabel: t('Edit') }
         : {}),
     },
   ]
@@ -212,7 +214,7 @@ export function BanDetailPage({
           </div>
           <div className="flex-1">
             <h3 className="text-xl font-bold">
-              {current.name ?? 'Banned player'}
+              {current.name ?? t('Banned player')}
             </h3>
             <p className="text-mono text-sm text-fg-muted">ID: {current.banid}</p>
           </div>
@@ -223,7 +225,7 @@ export function BanDetailPage({
               disabled={saving}
             >
               <Icon name="check" size="xs" />
-              {saving ? 'Saving...' : 'Save changes'}
+              {saving ? t('Saving...') : t('Save changes')}
             </button>
           )}
         </div>
@@ -232,11 +234,11 @@ export function BanDetailPage({
 
       <div className="card">
         <p className="section-label">
-          Identifiers
+          {t("Identifiers")}
           <span className="identifier-count text-sm text-fg-muted">{visibleIdentifiers.length}</span>
         </p>
         {visibleIdentifiers.length === 0 ? (
-          <p className="text-sm text-fg-muted">No identifiers available</p>
+          <p className="text-sm text-fg-muted">{t("No identifiers available")}</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {visibleIdentifiers.map((id) => {
@@ -258,13 +260,13 @@ export function BanDetailPage({
 
       {canRemove && (
         <div className="card card-danger-border">
-          <p className="section-label section-label-danger">Danger zone</p>
+          <p className="section-label section-label-danger">{t("Danger zone")}</p>
           <button
             className="btn btn-danger btn-full"
             onClick={handleUnban}
           >
             <Icon name="trash" size="xs" />
-            Unban player
+            {t("Unban player")}
           </button>
         </div>
       )}

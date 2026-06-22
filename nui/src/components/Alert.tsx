@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react'
+import { useTranslation } from '../lib/i18n'
 import { Icon, type IconName } from './icons'
 
 // ============================================================
@@ -34,6 +35,7 @@ export function Alert({
   onDismiss,
   className = '',
 }: AlertProps) {
+  const { t } = useTranslation()
   const displayIcon = icon || DEFAULT_ICONS[variant]
 
   return (
@@ -56,7 +58,7 @@ export function Alert({
           <button
             className="btn btn-ghost btn-icon btn-sm alert-dismiss-btn"
             onClick={onDismiss}
-            aria-label="Dismiss"
+            aria-label={t("Dismiss")}
           >
             <Icon name="x" size="xs" />
           </button>

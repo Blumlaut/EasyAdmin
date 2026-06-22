@@ -1,0 +1,1 @@
+import{j as s}from"./index-_Ezr-T-K.js";function o({className:r="",onClick:e,children:n}){return s.jsx("div",{className:`list-item ${r}`.trim(),role:"button",tabIndex:0,onClick:e,onKeyDown:t=>{(t.key==="Enter"||t.key===" ")&&(t.preventDefault(),e())},children:n})}export{o as L};

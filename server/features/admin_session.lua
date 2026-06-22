@@ -133,5 +133,7 @@ Citizen.CreateThread(function()
 
 		TriggerLatentClientEvent("EasyAdmin:fillShortcuts", source, 10000, MessageShortcuts)
 		TriggerLatentClientEvent("EasyAdmin:SetLanguage", source, 10000, strings)
+		-- Push translations to NUI
+		TriggerClientEvent("EasyAdmin:PushTranslations", source, strings, GetConvar("ea_LanguageName", "en"))
 	end)
 end)

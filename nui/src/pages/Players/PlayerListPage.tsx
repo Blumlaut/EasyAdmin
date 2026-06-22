@@ -11,6 +11,7 @@ import { RoleBadges } from '../../components/RoleBadges'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { AllPlayersActions } from './AllPlayersActions'
+import { useTranslation } from '../../lib/i18n'
 
 interface PlayerListPageProps {
   players: Player[]
@@ -29,6 +30,7 @@ export function PlayerListPage({
   onOpenCached,
   onRefresh,
 }: PlayerListPageProps) {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
 
@@ -48,17 +50,17 @@ export function PlayerListPage({
         <SearchBar
           value={query}
           onChange={setQuery}
-          placeholder="Search by name, ID, or identifier..."
+          placeholder={t("Search by name, ID, or identifier...")}
           resultCount={{ shown: filtered.length, total: players.length }}
           ariaLabel="Search players"
         />
         <button className="btn btn-secondary btn-sm" onClick={onOpenCached}>
           <Icon name="archive" size="xs" />
-          Cached players
+          {t("Cached players")}
         </button>
         <button className="btn btn-secondary btn-sm" onClick={onRefresh} disabled={loading}>
           <Icon name="refresh" size="xs" />
-          Refresh
+          {t("Refresh")}
         </button>
       </div>
 
@@ -70,7 +72,7 @@ export function PlayerListPage({
             <Icon name="users" size="lg" className="text-fg-muted" />
           </div>
           <p className="text-fg-subtle">
-            {players.length === 0 ? 'No players connected' : 'No players match your search'}
+            {players.length === 0 ? t("No players connected") : t("No players match your search")}
           </p>
         </div>
       ) : (
@@ -93,6 +95,7 @@ export function PlayerListPage({
 }
 
 function PlayerRow({ player, onClick }: { player: Player; onClick: () => void }) {
+  const { t } = useTranslation()
   return (
     <ListItem onClick={onClick}>
       <Avatar key={player.id} player={player} size="sm" variant="player" />
@@ -108,13 +111,13 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
       </div>
       <div className="list-item-meta">
         {player.frozen && (
-          <Tooltip content="This player is frozen">
-            <span className="badge badge-frozen">Frozen</span>
+          <Tooltip content={t("This player is frozen")}>
+            <span className="badge badge-frozen">{t("Frozen")}</span>
           </Tooltip>
         )}
         {player.muted && (
-          <Tooltip content="This player is muted">
-            <span className="badge badge-muted">Muted</span>
+          <Tooltip content={t("This player is muted")}>
+            <span className="badge badge-muted">{t("Muted")}</span>
           </Tooltip>
         )}
       </div>

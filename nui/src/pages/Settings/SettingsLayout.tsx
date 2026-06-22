@@ -1,5 +1,6 @@
 import { setResourceKvp } from '../../fivem'
 import { notify } from '../../lib/notify'
+import { useTranslation } from '../../lib/i18n'
 import type { SidebarDirection, SidebarMode } from '../../types'
 import { LayoutWireframe } from './LayoutWireframe'
 
@@ -15,36 +16,36 @@ const OPTIONS: {
   variant: LayoutVariant
   mode: SidebarMode
   direction: SidebarDirection
-  label: string
-  description: string
+  labelKey: string
+  descriptionKey: string
 }[] = [
   {
     variant: 'left-sidebar',
     mode: 'vertical',
     direction: 'right',
-    label: 'Left sidebar',
-    description: 'Sidebar on the left, content opens to the right',
+    labelKey: 'Left sidebar',
+    descriptionKey: 'Sidebar on the left, content opens to the right',
   },
   {
     variant: 'right-sidebar',
     mode: 'vertical',
     direction: 'left',
-    label: 'Right sidebar',
-    description: 'Sidebar on the right, content opens to the left',
+    labelKey: 'Right sidebar',
+    descriptionKey: 'Sidebar on the right, content opens to the left',
   },
   {
     variant: 'top-taskbar',
     mode: 'horizontal',
     direction: 'down',
-    label: 'Top taskbar',
-    description: 'Taskbar on top, content opens downward',
+    labelKey: 'Top taskbar',
+    descriptionKey: 'Taskbar on top, content opens downward',
   },
   {
     variant: 'bottom-taskbar',
     mode: 'horizontal',
     direction: 'up',
-    label: 'Bottom taskbar',
-    description: 'Taskbar on the bottom, content opens upward',
+    labelKey: 'Bottom taskbar',
+    descriptionKey: 'Taskbar on the bottom, content opens upward',
   },
 ]
 
@@ -61,26 +62,27 @@ export function SettingsLayout({
   sidebarDirection,
   onChange,
 }: SettingsLayoutProps) {
+  const { t } = useTranslation()
   function setLayout(mode: SidebarMode, direction: SidebarDirection) {
     onChange({ sidebarMode: mode, sidebarDirection: direction })
     setResourceKvp('ssidebarMode', mode)
     setResourceKvp('ssidebarDirection', direction)
-    notify(`Sidebar layout set to ${mode} (${direction})`, 'success')
+    notify(t("Sidebar layout set to {mode} ({direction})", { mode, direction }), 'success')
   }
 
   return (
     <div className="card">
-      <p className="section-label">Layout</p>
+      <p className="section-label">{t("Layout")}</p>
 
       <div className="mb-3 flex flex-col gap-1">
-        <span className="text-sm">Sidebar mode</span>
+        <span className="text-sm">{t("Sidebar mode")}</span>
         <span className="text-xs text-fg-muted">
-          Choose where the navigation panel sits and how the content area opens.
+          {t("Choose where the navigation panel sits and how the content area opens.")}
         </span>
       </div>
 
       <fieldset className="layout-grid">
-        <legend className="sr-only">Sidebar layout options</legend>
+        <legend className="sr-only">{t("Sidebar layout options")}</legend>
 
         {OPTIONS.map((opt) => {
           const checked = matchOption(opt, sidebarMode, sidebarDirection)
@@ -100,8 +102,8 @@ export function SettingsLayout({
                 <LayoutWireframe variant={opt.variant} checked={checked} />
               </div>
               <div className="layout-grid-content">
-                <span className="layout-grid-label">{opt.label}</span>
-                <span className="layout-grid-description">{opt.description}</span>
+                <span className="layout-grid-label">{t(opt.labelKey)}</span>
+                <span className="layout-grid-description">{t(opt.descriptionKey)}</span>
               </div>
             </label>
           )

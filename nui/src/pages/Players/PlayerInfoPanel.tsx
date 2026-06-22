@@ -5,6 +5,7 @@ import { Avatar } from '../../components/Avatar'
 import { Icon } from '../../components/icons'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
 import { RoleBadges } from '../../components/RoleBadges'
+import { useTranslation } from '../../lib/i18n'
 
 interface PlayerInfoPanelProps {
   player: Player
@@ -12,6 +13,7 @@ interface PlayerInfoPanelProps {
 }
 
 export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
+  const { t } = useTranslation()
   const [nameHistory, setNameHistory] = useState<NameHistoryEntry[] | null>(null)
   const [historyExpanded, setHistoryExpanded] = useState(false)
 
@@ -52,23 +54,23 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
   const rows: KeyValueRow[] = []
 
   if (player.license) {
-    rows.push({ key: 'License', value: player.license, mono: true })
+    rows.push({ key: t('License'), value: player.license, mono: true })
   }
   if (player.xbl) {
-    rows.push({ key: 'XBL', value: player.xbl, mono: true })
+    rows.push({ key: t('XBL'), value: player.xbl, mono: true })
   }
   if (player.ip) {
-    rows.push({ key: 'IP', value: player.ip, mono: true })
+    rows.push({ key: t('IP'), value: player.ip, mono: true })
   }
   if (player.coords) {
     rows.push({
-      key: 'Coords',
+      key: t('Coords'),
       value: `${player.coords.x.toFixed(1)}, ${player.coords.y.toFixed(1)}, ${player.coords.z.toFixed(1)}`,
       mono: true,
     })
   }
   if (player.selfbucket !== undefined) {
-    rows.push({ key: 'Bucket', value: player.selfbucket, mono: true })
+    rows.push({ key: t('Bucket'), value: player.selfbucket, mono: true })
   }
 
   return (
@@ -83,8 +85,8 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
                 className="name-history-toggle"
                 onClick={handleToggleHistory}
                 aria-expanded={historyExpanded}
-                aria-label="Toggle name history"
-                title="Name history"
+                aria-label={t("Toggle name history")}
+                title={t("Name history")}
               >
                 <Icon
                   name={historyExpanded ? 'chevron-down' : 'chevron-right'}
@@ -97,15 +99,15 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
           <p className="text-mono text-sm text-fg-muted">ID: {player.id}</p>
         </div>
         <div className="flex shrink-0 gap-2">
-          {player.frozen && <span className="badge badge-frozen">Frozen</span>}
-          {player.muted && <span className="badge badge-muted">Muted</span>}
+          {player.frozen && <span className="badge badge-frozen">{t("Frozen")}</span>}
+          {player.muted && <span className="badge badge-muted">{t("Muted")}</span>}
         </div>
       </div>
 
       {/* Name history dropdown — full-width below header row so avatar doesn't shift */}
       {canViewHistory && historyExpanded && (
         <div className="name-history-dropdown mb-3">
-          <p className="name-history-label">This user has also played as:</p>
+          <p className="name-history-label">{t("This user has also played as:")}</p>
           {allNames.length > 0 ? (
             <ul className="name-history-names">
               {allNames.map((entry, idx) => {
@@ -114,14 +116,14 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
                   <li key={idx} className="name-history-name">
                     {entry.name}
                     {isCurrent && (
-                      <span className="badge badge-current">Current</span>
+                      <span className="badge badge-current">{t("Current")}</span>
                     )}
                   </li>
                 )
               })}
             </ul>
           ) : (
-            <p className="text-sm text-fg-muted">No name history available</p>
+            <p className="text-sm text-fg-muted">{t("No name history available")}</p>
           )}
         </div>
       )}

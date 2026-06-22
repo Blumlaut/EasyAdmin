@@ -5,6 +5,7 @@ import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { useModalContext } from '../../ModalContext'
+import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Alert } from '../../components/Alert'
@@ -56,6 +57,7 @@ export function ResourceListPage({
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   // Fetch metadata for all resources (batch) to populate version/description/repository
   const fetchBatchMetadata = useCallback(async (resList: ResourceEntry[]) => {
@@ -105,9 +107,9 @@ export function ResourceListPage({
         // After loading resources, fetch batch metadata
         fetchBatchMetadata(res.resources ?? [])
       })
-      .catch(() => notify('Failed to fetch resources', 'error'))
+      .catch(() => notify(t('Failed to fetch resources'), 'error'))
       .finally(() => setLoading(false))
-  }, [fetchBatchMetadata, buildOutdatedList])
+  }, [fetchBatchMetadata, buildOutdatedList, t])
 
   // Initial fetch + event subscriptions (side effects, not render logic)
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -155,9 +157,9 @@ export function ResourceListPage({
       }
       // List is refreshed via server push
     } catch {
-      throw new Error(`Failed to ${action} ${name}`)
+      throw new Error(t("Failed to {action} {name}", { action, name }))
     }
-  }, [])
+  }, [t])
 
   // Show confirmation dialog then execute
   const requestAction = useCallback((name: string, action: 'start' | 'stop' | 'ensure') => {
@@ -165,9 +167,9 @@ export function ResourceListPage({
     if ((action === 'stop' || action === 'ensure') && !canStop) return
 
     const labels: Record<string, { title: string; message: string; confirm: string; variant: 'primary' | 'danger' }> = {
-      start: { title: `Start ${name}`, message: `Are you sure you want to start ${name}?`, confirm: 'Start', variant: 'primary' },
-      stop: { title: `Stop ${name}`, message: `Are you sure you want to stop ${name}?`, confirm: 'Stop', variant: 'danger' },
-      ensure: { title: `Restart ${name}`, message: `Are you sure you want to restart ${name}?`, confirm: 'Restart', variant: 'danger' },
+      start: { title: t("Start {name}", { name }), message: t("Are you sure you want to start {name}?", { name }), confirm: t("Start"), variant: 'primary' },
+      stop: { title: t("Stop {name}", { name }), message: t("Are you sure you want to stop {name}?", { name }), confirm: t("Stop"), variant: 'danger' },
+      ensure: { title: t("Restart {name}", { name }), message: t("Are you sure you want to restart {name}?", { name }), confirm: t("Restart"), variant: 'danger' },
     }
     const label = labels[action]
     openModal(createConfirmModal({
@@ -179,17 +181,17 @@ export function ResourceListPage({
         await runModalAction({
           action: () => executeAction(name, action),
           closeModal,
-          errorMessage: `Failed to ${action} ${name}`,
+          errorMessage: t("Failed to {action} {name}", { action, name }),
         })
       },
     }))
-  }, [canStart, canStop, executeAction, openModal, closeModal])
+  }, [canStart, canStop, executeAction, openModal, closeModal, t])
 
   const handleCheckUpdates = async () => {
     if (!canStart && !canStop) return
     const withRepo = resources.filter((r) => r.repository && r.version)
     if (withRepo.length === 0) {
-      notify('No resources with a repository URL', 'info')
+      notify(t('No resources with a repository URL'), 'info')
       return
     }
     setCheckingUpdates(true)
@@ -225,13 +227,13 @@ export function ResourceListPage({
 
       const outdatedNames = updates.filter((u) => u.outdated).map((u) => u.name)
       if (outdatedNames.length > 0) {
-        notify(`${outdatedNames.length} resource(s) have updates available`, 'info')
+        notify(t("{count} resource(s) have updates", { count: String(outdatedNames.length) }), 'info')
       } else {
-        notify('All resources are up to date', 'success')
+        notify(t('All resources are up to date'), 'success')
         setOutdatedResources([])
       }
     } catch {
-      notify('Failed to check for updates', 'error')
+      notify(t('Failed to check for updates'), 'error')
     } finally {
       setCheckingUpdates(false)
     }
@@ -243,13 +245,13 @@ export function ResourceListPage({
         <SearchBar
           value={query}
           onChange={setQuery}
-          placeholder="Search resources..."
+          placeholder={t("Search resources...")}
           resultCount={{ shown: filtered.length, total: resources.length }}
-          ariaLabel="Search resources"
+          ariaLabel={t("Search resources")}
         />
         <div className="flex gap-2">
           {outdatedCount > 0 && (
-            <span className="badge badge-warning self-center text-xs" title={`${outdatedCount} resource(s) have updates`}>
+            <span className="badge badge-warning self-center text-xs" title={t("{count} resource(s) have updates", { count: String(outdatedCount) })}>
               <Icon name="arrow-up-circle" size="xs" />
               {outdatedCount}
             </span>
@@ -258,10 +260,10 @@ export function ResourceListPage({
             className="btn btn-secondary btn-sm"
             onClick={handleCheckUpdates}
             disabled={checkingUpdates || (!canStart && !canStop)}
-            title="Check GitHub for latest releases"
+            title={t("Check GitHub for latest releases")}
           >
             <Icon name="arrow-up-circle" size="xs" />
-            {checkingUpdates ? 'Checking...' : 'Updates'}
+            {checkingUpdates ? t("Checking...") : t("Updates")}
           </button>
           <button
             className="btn btn-secondary btn-sm"
@@ -269,7 +271,7 @@ export function ResourceListPage({
             disabled={loading}
           >
             <Icon name="refresh" size="xs" />
-            Refresh
+            {t("Refresh")}
           </button>
         </div>
       </div>
@@ -277,10 +279,10 @@ export function ResourceListPage({
       {/* Summary badges */}
       <div className="mb-3 flex gap-2">
         <span className="badge badge-started">
-          {startedCount} started
+          {t("{count} started", { count: String(startedCount) })}
         </span>
         <span className="badge badge-stopped">
-          {stoppedCount} stopped
+          {t("{count} stopped", { count: String(stoppedCount) })}
         </span>
       </div>
 
@@ -288,7 +290,7 @@ export function ResourceListPage({
       {outdatedResources.length > 0 && (
         <Alert
           variant="warning"
-          title={`${outdatedResources.length} resource(s) have updates available`}
+          title={t("{count} resource(s) have updates", { count: String(outdatedResources.length) })}
           onDismiss={() => setOutdatedResources([])}
         >
           <div className="flex flex-col gap-1">
@@ -328,8 +330,8 @@ export function ResourceListPage({
           </div>
           <p className="text-fg-subtle">
             {resources.length === 0
-              ? 'No resources found'
-              : 'No resources match your search'}
+              ? t("No resources found")
+              : t("No resources match your search")}
           </p>
         </div>
       ) : (
@@ -365,6 +367,7 @@ function ResourceRow({
   onRequestAction: (action: 'start' | 'stop' | 'ensure') => void
   onClick: () => void
 }) {
+  const { t } = useTranslation()
   const isStarted = resource.state === 'started'
   const canToggle = isStarted ? canStop : canStart
   const isSelf = resource.isProtected
@@ -374,7 +377,7 @@ function ResourceRow({
       {/* State indicator */}
       <div
         className={`resource-state-dot resource-state-dot--${resource.state}`}
-        aria-label={`State: ${resource.state}`}
+        aria-label={t("State: {state}", { state: resource.state })}
       />
 
       {/* Content */}
@@ -386,7 +389,7 @@ function ResourceRow({
               className={`badge shrink-0 ${resource.outdated ? 'badge-warning' : ''}`}
               title={
                 resource.outdated && resource.latestVersion
-                  ? `Update available: v${resource.latestVersion}`
+                  ? t("Update available: v{version}", { version: resource.latestVersion })
                   : `v${resource.version}`
               }
             >
@@ -403,9 +406,9 @@ function ResourceRow({
           {resource.repository && (
             <CopyButton
               value={resource.repository}
-              label="Copy"
-              ariaLabel="Copy repository URL"
-              onCopy={() => notify('Repository URL copied', 'success')}
+              label={t("Copy")}
+              ariaLabel={t("Copy repository URL")}
+              onCopy={() => notify(t('Repository URL copied'), 'success')}
             />
           )}
         </div>
@@ -428,7 +431,7 @@ function ResourceRow({
                 e.stopPropagation()
                 onRequestAction('ensure')
               }}
-              title={`Restart ${resource.name}`}
+              title={t("Restart {name}", { name: resource.name })}
             >
               <Icon name="refresh" size="xs" />
             </button>
@@ -438,7 +441,7 @@ function ResourceRow({
                 e.stopPropagation()
                 onRequestAction('stop')
               }}
-              title={`Stop ${resource.name}`}
+              title={t("Stop {name}", { name: resource.name })}
             >
               <Icon name="square" size="xs" />
             </button>

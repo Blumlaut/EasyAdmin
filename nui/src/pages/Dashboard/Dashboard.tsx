@@ -8,6 +8,7 @@ import { CopyButton } from '../../components/CopyButton'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
+import { useTranslation } from '../../lib/i18n'
 
 // ============================================================
 // Resource update summary types
@@ -35,17 +36,18 @@ interface EntityBarProps {
 }
 
 function EntityBars({ vehicles, peds, objects }: EntityBarProps) {
+  const { t } = useTranslation()
   const max = Math.max(vehicles, peds, objects, 1)
 
   const bars = [
-    { label: 'Vehicles', value: vehicles, color: 'var(--accent-blue)', icon: 'zap' as IconName },
-    { label: 'Peds', value: peds, color: 'var(--accent-orange)', icon: 'users' as IconName },
-    { label: 'Objects', value: objects, color: 'var(--accent-green)', icon: 'box' as IconName },
+    { label: t('Vehicles'), value: vehicles, color: 'var(--accent-blue)', icon: 'zap' as IconName },
+    { label: t('Peds'), value: peds, color: 'var(--accent-orange)', icon: 'users' as IconName },
+    { label: t('Objects'), value: objects, color: 'var(--accent-green)', icon: 'box' as IconName },
   ]
 
   return (
     <div className="card dashboard-card">
-      <p className="section-label mb-3">World Entities</p>
+      <p className="section-label mb-3">{t("World Entities")}</p>
       <div className="flex flex-col gap-3">
         {bars.map((bar) => (
           <div key={bar.label}>
@@ -169,6 +171,7 @@ interface DashboardProps {
 }
 
 export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigateToResources }: DashboardProps) {
+  const { t } = useTranslation()
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [showPride] = useState(shouldShowPride)
@@ -222,49 +225,49 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
   // Build stat cards
   const statCards: StatCardProps[] = [
     {
-      label: 'Players Online',
+      label: t('Players Online'),
       value: playerCount,
       icon: 'users',
       iconColor: 'var(--accent-green)',
       bgColor: 'var(--bg-green)',
     },
     {
-      label: 'Peak Today',
+      label: t('Peak Today'),
       value: stats?.peakToday ?? '—',
       icon: 'arrow-up-circle',
       iconColor: 'var(--accent-blue)',
       bgColor: 'var(--bg-blue)',
     },
     {
-      label: 'Average Ping',
+      label: t('Average Ping'),
       value: stats ? (stats.avgPing > 0 ? `${stats.avgPing} ms` : '—') : '—',
       icon: 'activity',
       iconColor: 'var(--accent-red)',
       bgColor: 'var(--bg-red)',
     },
     {
-      label: 'Resources',
+      label: t('Resources'),
       value: stats ? `${stats.resources.started}/${stats.resources.total}` : '—',
       icon: 'layers',
       iconColor: 'var(--accent-orange)',
       bgColor: 'var(--bg-orange)',
     },
     {
-      label: 'Admins Online',
+      label: t('Admins Online'),
       value: stats?.adminsOnline ?? '—',
       icon: 'shield',
       iconColor: 'var(--accent-purple)',
       bgColor: 'var(--bg-purple)',
     },
     {
-      label: 'Server Uptime',
+      label: t('Server Uptime'),
       value: stats ? formatUptime(stats.uptime) : '—',
       icon: 'clock',
       iconColor: 'var(--accent-green)',
       bgColor: 'var(--bg-green)',
     },
     {
-      label: 'Pending Reports',
+      label: t('Pending Reports'),
       value: stats?.pendingReports ?? '—',
       icon: 'flag',
       iconColor: 'var(--accent-purple)',
@@ -314,13 +317,13 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
         <div className="mb-4">
           <Alert
             variant="info"
-            title="Update available"
+            title={t("Update available")}
             icon="download"
             action={
               <CopyButton
                 value={`https://github.com/Blumlaut/EasyAdmin/releases/${updateInfo.latestVersion}`}
-                label="Copy URL"
-                onCopy={() => notify('Release URL copied to clipboard', 'success')}
+                label={t("Copy URL")}
+                onCopy={() => notify(t('Release URL copied to clipboard'), 'success')}
               />
             }
             onDismiss={onDismissUpdate}
@@ -337,7 +340,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
         <div className="mb-4">
           <Alert
             variant="warning"
-            title={`${resourceUpdates.length} resource(s) have updates available`}
+            title={t("{count} resource(s) have updates", { count: String(resourceUpdates.length) })}
             onDismiss={() => setResourceUpdates([])}
           >
             <div className="flex flex-col gap-1">
@@ -355,7 +358,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
                 onClick={onNavigateToResources}
               >
                 <Icon name="layers" size="xs" />
-                View resources
+                {t("View resources")}
               </button>
             </div>
           </Alert>
@@ -420,6 +423,7 @@ interface PlayerSparklineProps {
 }
 
 function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
+  const { t } = useTranslation()
   const [data, setData] = useState<Array<{ timestamp: number; count: number }>>([])
   const [range, setRange] = useState<'1h' | '6h' | '24h' | '7d'>('24h')
   const [loading, setLoading] = useState(true)
@@ -464,10 +468,10 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
   return (
     <div className="card dashboard-card flex flex-col">
       <div className="mb-3 flex items-center justify-between">
-        <p className="section-label">Players Over Time</p>
+        <p className="section-label">{t("Players Over Time")}</p>
         <div className="flex items-center gap-2">
           {!loading && (
-            <span className="badge badge-online">{playerCount} online</span>
+            <span className="badge badge-online">{t("{count} online", { count: String(playerCount) })}</span>
           )}
           <div className="flex items-center gap-0.5">
             {historyRanges.map((r) => (
@@ -486,7 +490,7 @@ function PlayerSparkline({ playerCount }: PlayerSparklineProps) {
         lines={lines}
         range={chartRange}
         unit="players"
-        emptyMessage="No data for this time range"
+        emptyMessage={t("No data for this time range")}
       />
     </div>
   )

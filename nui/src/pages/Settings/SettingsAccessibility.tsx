@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { setResourceKvp } from '../../fivem'
 import { notify } from '../../lib/notify'
+import { useTranslation } from '../../lib/i18n'
 
 interface SettingsAccessibilityProps {
   highContrast: boolean
@@ -17,30 +18,31 @@ export function SettingsAccessibility({
   fontSize,
   onChange,
 }: SettingsAccessibilityProps) {
+  const { t } = useTranslation()
   const dragStartFontSize = useRef(fontSize)
 
   function toggleHighContrast(value: boolean) {
     onChange({ highContrast: value })
     setResourceKvp('shighContrast', value ? 'true' : 'false')
-    notify(value ? 'High contrast enabled' : 'High contrast disabled', 'success')
+    notify(value ? t('High contrast enabled') : t('High contrast disabled'), 'success')
   }
 
   function setFontSize(value: number) {
     onChange({ fontSize: value })
     setResourceKvp('ifontSize', String(value))
-    notify(`Font size set to ${value}px`, 'success')
+    notify(t("Font size set to {value}px", { value: String(value) }), 'success')
   }
 
   return (
     <div className="card">
-      <p className="section-label">Accessibility</p>
+      <p className="section-label">{t("Accessibility")}</p>
 
       {/* High Contrast */}
       <div className="toggle-row">
         <div className="flex flex-col">
-          <span className="text-sm">High contrast</span>
+          <span className="text-sm">{t("High contrast")}</span>
           <span className="text-xs text-fg-muted">
-            Boost color contrast for better readability.
+            {t("Boost color contrast for better readability.")}
           </span>
         </div>
         <label className="toggle">
@@ -48,7 +50,7 @@ export function SettingsAccessibility({
             type="checkbox"
             checked={highContrast}
             onChange={(e) => toggleHighContrast(e.target.checked)}
-            aria-label="Enable high contrast mode"
+            aria-label={t("Enable high contrast mode")}
           />
           <span className="toggle-slider" />
         </label>
@@ -57,11 +59,11 @@ export function SettingsAccessibility({
       {/* Font Size */}
       <div className="mt-3 flex flex-col gap-1">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-fg-subtle">Font size</span>
+          <span className="text-sm text-fg-subtle">{t("Font size")}</span>
           <span className="text-sm font-medium">{fontSize}px</span>
         </div>
         <span className="text-xs text-fg-muted">
-          Adjust the base text size across the entire menu.
+          {t("Adjust the base text size across the entire menu.")}
         </span>
         <input
           type="range"
@@ -78,7 +80,7 @@ export function SettingsAccessibility({
               setFontSize(value)
             }
           }}
-          aria-label={`Font size, currently ${fontSize}px`}
+          aria-label={t("Font size, currently {value}px", { value: String(fontSize) })}
         />
         <div className="flex justify-between text-xs text-fg-muted">
           <span>{FONT_SIZE_MIN}px</span>

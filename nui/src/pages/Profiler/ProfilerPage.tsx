@@ -7,6 +7,7 @@ import { ProfilerEmptyState } from './components/ProfilerEmptyState'
 import { ProfileSummary } from './components/ProfileSummary'
 import { ResourceTickBar } from './components/ResourceTickBar'
 import { ProfilerErrorBanner } from './components/ProfilerErrorBanner'
+import { useTranslation } from '../../lib/i18n'
 
 
 
@@ -19,6 +20,7 @@ const FRAME_OPTIONS = [
 ]
 
 export function ProfilerPage() {
+  const { t } = useTranslation()
   const [uiState, setUiState] = useState<ProfilerUIState>('empty')
   const [profile, setProfile] = useState<ParsedProfile | null>(null)
   const [progress, setProgress] = useState<ProfilerProgress>({
@@ -68,16 +70,16 @@ export function ProfilerPage() {
     if (selectedFrames == null) return
 
     setUiState('recording')
-    setProgress({ phase: 'recording', message: 'Starting...', percent: 0 })
+    setProgress({ phase: 'recording', message: t('Starting...'), percent: 0 })
     setProfile(null)
     setEndpointError(null)
 
     callLua('startProfiler', { frames: selectedFrames })
       .catch(() => {
         setUiState('empty')
-        notify('Failed to start profiler', 'error')
+        notify(t('Failed to start profiler'), 'error')
       })
-  }, [selectedFrames])
+  }, [selectedFrames, t])
 
   // Handle frame count change
   const handleFrameChange = useCallback((frames: number) => {
@@ -118,7 +120,7 @@ export function ProfilerPage() {
           <div className="profiler-progress-container">
             <div className="profiler-progress-header">
               <Icon name="activity" size="md" className="profiler-progress-icon" />
-              <span className="profiler-progress-title">Profiling in progress...</span>
+              <span className="profiler-progress-title">{t("Profiling in progress...")}</span>
             </div>
 
             <div className="profiler-progress-info">
@@ -136,7 +138,7 @@ export function ProfilerPage() {
             <div className="profiler-progress-percent">{progress.percent}%</div>
 
             <p className="profiler-progress-hint mt-3 text-xs text-fg-muted">
-              This typically takes 4-20 seconds depending on frame count. Profiling adds slight overhead during the capture window.
+              {t("This typically takes 4-20 seconds depending on frame count. Profiling adds slight overhead during the capture window.")}
             </p>
           </div>
         </div>
@@ -155,9 +157,9 @@ export function ProfilerPage() {
           <div className="card profiler-card">
             <div className="card-header">
               <div>
-                <h3 className="card-title">Resource Tick Times</h3>
+                <h3 className="card-title">{t("Resource Tick Times")}</h3>
                 <p className="mt-1 text-xs text-fg-muted">
-                  Time each resource spends executing per server frame. Higher = more CPU usage.
+                  {t("Time each resource spends executing per server frame. Higher = more CPU usage.")}
                 </p>
               </div>
             </div>
@@ -167,9 +169,9 @@ export function ProfilerPage() {
                 <div className="empty-state-icon empty-state-icon-blue">
                   <Icon name="activity" size="md" className="text-blue" />
                 </div>
-                <p className="text-sm font-medium text-fg-muted">No resource tick data found</p>
+                <p className="text-sm font-medium text-fg-muted">{t("No resource tick data found")}</p>
                 <p className="mt-1 text-xs text-fg-muted">
-                  The server may have been idle during profiling.
+                  {t("The server may have been idle during profiling.")}
                 </p>
               </div>
             ) : (

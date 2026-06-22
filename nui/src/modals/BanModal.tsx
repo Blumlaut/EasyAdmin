@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import type { IconName } from '../components/icons'
 import { Icon } from '../components/icons'
 import { useModalContext } from '../ModalContext'
+import { useTranslation } from '../lib/i18n'
 import { Alert } from '../components/Alert'
 import { DialogWrapper } from '../components/DialogWrapper'
 import { DatePicker } from '../components/DatePicker'
@@ -16,7 +17,8 @@ interface BanModalProps {
 
 interface PresetOption {
   id: string
-  label: string
+  label?: string
+  labelKey?: string
   icon: IconName
   seconds: number
 }
@@ -31,7 +33,7 @@ const PRESETS: PresetOption[] = [
   { id: '3d', label: '3d', icon: 'calendar', seconds: 259200 },
   { id: '1w', label: '1w', icon: 'calendar', seconds: 604800 },
   { id: '1mo', label: '1mo', icon: 'calendar', seconds: 2592000 },
-  { id: 'permanent', label: 'Permanent', icon: 'ban', seconds: 10444633200 },
+  { id: 'permanent', labelKey: 'Permanent', icon: 'ban', seconds: 10444633200 },
 ]
 
 const PERMANENT_SECONDS = 10444633200
@@ -77,6 +79,7 @@ function dateToTimestamp(date: string, time: string): number {
 
 function BanModalInner({ title, onSubmit }: BanModalProps) {
   const { closeModal } = useModalContext()
+  const { t } = useTranslation()
   const [reason, setReason] = useState('')
   const [selectedPreset, setSelectedPreset] = useState<string>('')
   const [permanent, setPermanent] = useState(false)
@@ -152,7 +155,7 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
             onClick={closeModal}
             disabled={submitting}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             type="button"
@@ -160,7 +163,7 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
             onClick={handleSubmit}
             disabled={!isValid || isDateInPast || submitting}
           >
-            {submitting ? 'Working...' : 'Ban'}
+            {submitting ? t("Working...") : t("Ban")}
           </button>
         </div>
       }
@@ -168,20 +171,20 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
       <div className="ban-modal">
         {/* Reason field */}
         <label className="ban-modal-field">
-          <span className="text-sm text-fg-subtle">Reason</span>
+          <span className="text-sm text-fg-subtle">{t("Reason")}</span>
           <textarea
             className="input ban-modal-reason"
-            placeholder="No reason"
+            placeholder={t("No reason")}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             rows={2}
-            aria-label="Ban reason"
+            aria-label={t("Ban reason")}
           />
         </label>
 
         {/* Quick-select presets */}
         <div className="ban-modal-section">
-          <span className="text-sm text-fg-subtle">Quick select</span>
+          <span className="text-sm text-fg-subtle">{t("Quick select")}</span>
           <div className="ban-modal-presets">
             {PRESETS.map((preset) => (
               <button
@@ -191,7 +194,7 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
                 onClick={() => handlePreset(preset)}
               >
                 <Icon name={preset.icon} size="xs" />
-                {preset.label}
+                {preset.labelKey ? t(preset.labelKey) : preset.label}
               </button>
             ))}
           </div>
@@ -199,8 +202,8 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
 
         {/* Past-date warning */}
         {isDateInPast && (
-          <Alert variant="warning" title="Unban time is in the past">
-            Select a future date and time, or use a quick-select preset.
+          <Alert variant="warning" title={t("Unban time is in the past")}>
+            {t("Select a future date and time, or use a quick-select preset.")}
           </Alert>
         )}
 
@@ -211,12 +214,12 @@ function BanModalInner({ title, onSubmit }: BanModalProps) {
               <DatePicker
                 value={date}
                 onChange={handleDateChange}
-                label="Unban date"
+                label={t("Unban date")}
               />
               <TimePicker
                 value={time}
                 onChange={handleTimeChange}
-                label="Unban time"
+                label={t("Unban time")}
               />
             </div>
           </div>

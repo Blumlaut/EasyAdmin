@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Icon } from './icons'
+import { useTranslation } from '../lib/i18n'
 
 interface TimePickerProps {
   value: string // HH:MM format
@@ -25,6 +26,7 @@ function parseTime(value: string): { hours: number; minutes: number } {
 }
 
 export function TimePicker({ value, onChange, disabled, label }: TimePickerProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   // Draft state — only used while picker is open
   const [draftHours, setDraftHours] = useState(0)
@@ -69,7 +71,7 @@ export function TimePicker({ value, onChange, disabled, label }: TimePickerProps
     onChange(`${pad(h || 0)}:${pad(m)}`)
   }, [value, onChange])
 
-  const displayTime = value ? formatTimeDisplay(hours, minutes) : 'Select time'
+  const displayTime = value ? formatTimeDisplay(hours, minutes) : t('Select time')
 
   // Build options
   const hourOptions = Array.from({ length: 24 }, (_, i) => i)

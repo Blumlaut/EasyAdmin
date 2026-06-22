@@ -13,6 +13,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { callLua, on } from '../fivem'
+import { useTranslation } from '../lib/i18n'
 import { useWindowDrag, type WindowPosition } from '../hooks/useWindowDrag'
 import { useWindowResize, type WindowSize } from '../hooks/useWindowResize'
 import { StreamSubscriber, parseStunServers } from '../lib/stream_webrtc'
@@ -40,6 +41,7 @@ const DEFAULT_POS: WindowPosition = { x: 0, y: 0 }
 const DEFAULT_SIZE: WindowSize = { width: 640, height: 420 }
 
 export function StreamViewer() {
+  const { t } = useTranslation()
   const [playerName, setPlayerName] = useState<string | null>(null)
   const [playerId, setPlayerId] = useState<number | null>(null)
   const [position, setPosition] = useState<WindowPosition>(DEFAULT_POS)
@@ -206,8 +208,8 @@ export function StreamViewer() {
         <button
           className="btn btn-ghost btn-icon ea-stream-viewer-close"
           onClick={handleClose}
-          aria-label="Close stream"
-          title="Close stream"
+          aria-label={t("Close stream")}
+          title={t("Close stream")}
         >
           <Icon name="x" size="xs" />
         </button>

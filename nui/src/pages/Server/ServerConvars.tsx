@@ -2,33 +2,35 @@ import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
 import { runModalAction } from '../../modals/helpers'
+import { useTranslation } from '../../lib/i18n'
 
 export function ServerConvars() {
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   return (
     <div className="card">
-      <p className="section-label">ConVars</p>
+      <p className="section-label">{t("ConVars")}</p>
       <p className="mb-3 text-sm text-fg-subtle">
-        Set a convar by name and value.
+        {t("Set a convar by name and value.")}
       </p>
       <button
         className="btn btn-secondary btn-full"
         onClick={() => openModal({
-          title: 'Set Convar',
+          title: t('Set Convar'),
           fields: [
             {
               key: 'name',
               type: 'text',
-              label: 'Convar name',
-              placeholder: 'sv_hostname',
+              label: t('Convar name'),
+              placeholder: t('sv_hostname'),
               required: true,
             },
             {
               key: 'value',
               type: 'text',
-              label: 'Value',
-              placeholder: 'My Server',
+              label: t('Value'),
+              placeholder: t('My Server'),
               required: true,
             },
           ],
@@ -38,14 +40,14 @@ export function ServerConvars() {
             await runModalAction({
               action: () => callLua('setConvar', { name, value }),
               closeModal,
-              successMessage: 'Convar set',
-              errorMessage: 'Failed to set convar',
+              successMessage: t('Convar set'),
+              errorMessage: t('Failed to set convar'),
             })
           },
         })}
       >
         <Icon name="settings" size="xs" />
-        Set convar
+        {t("Set convar")}
       </button>
     </div>
   )

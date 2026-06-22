@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import type { Report } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
@@ -36,6 +37,7 @@ export function ReportListPage({
   }, [reports, debouncedQuery])
 
   const listRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   useListKeyboardNav(listRef, filtered.length)
 
@@ -45,9 +47,9 @@ export function ReportListPage({
         <SearchBar
           value={query}
           onChange={setQuery}
-          placeholder="Search by ID, name, or reason..."
+          placeholder={t("Search by ID, name, or reason...")}
           resultCount={{ shown: filtered.length, total: reports.length }}
-          ariaLabel="Search reports"
+          ariaLabel={t("Search reports")}
         />
         <button
           className="btn btn-secondary btn-sm"
@@ -55,7 +57,7 @@ export function ReportListPage({
           disabled={loading}
         >
           <Icon name="refresh" size="xs" />
-          Refresh
+          {t("Refresh")}
         </button>
       </div>
 
@@ -66,7 +68,7 @@ export function ReportListPage({
           <div className="empty-state-icon empty-state-icon-orange">
             <Icon name="flag" size="lg" className="text-orange" />
           </div>
-          <p className="text-fg-subtle">{reports.length === 0 ? 'No open reports' : 'No reports match your search'}</p>
+          <p className="text-fg-subtle">{reports.length === 0 ? t("No open reports") : t("No reports match your search")}</p>
         </div>
       ) : (
         <div ref={listRef} className="list">

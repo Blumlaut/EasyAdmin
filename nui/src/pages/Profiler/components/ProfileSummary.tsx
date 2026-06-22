@@ -1,5 +1,6 @@
 import type { ParsedProfile } from '../../../types'
 import { Icon } from '../../../components/icons'
+import { useTranslation } from '../../../lib/i18n'
 
 interface ProfileSummaryProps {
   profile: ParsedProfile
@@ -7,34 +8,35 @@ interface ProfileSummaryProps {
 }
 
 export function ProfileSummary({ profile, onNewProfile }: ProfileSummaryProps) {
+  const { t } = useTranslation()
   const { summary } = profile
   const capturedDate = new Date(profile.capturedAt)
   const capturedTime = capturedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
   const stats = [
     {
-      label: 'Frames',
+      label: t('Frames'),
       value: summary.framesCaptured.toString(),
       icon: 'layers' as const,
       iconColor: 'var(--accent-blue)',
       bgColor: 'var(--bg-blue)',
     },
     {
-      label: 'Avg Frame',
+      label: t('Avg Frame'),
       value: `${summary.frameTimes.avgMs.toFixed(1)}ms`,
       icon: 'clock' as const,
       iconColor: 'var(--accent-green)',
       bgColor: 'var(--bg-green)',
     },
     {
-      label: 'FPS',
+      label: t('FPS'),
       value: summary.frameTimes.fps.toFixed(1),
       icon: 'activity' as const,
       iconColor: 'var(--accent-purple)',
       bgColor: 'var(--bg-purple)',
     },
     {
-      label: 'Total Tick',
+      label: t('Total Tick'),
       value: `${summary.totalTickTime.avgUs.toFixed(0)}μs`,
       icon: 'gauge' as const,
       iconColor: 'var(--accent-orange)',
@@ -46,18 +48,18 @@ export function ProfileSummary({ profile, onNewProfile }: ProfileSummaryProps) {
     <div className="card profiler-card">
       <div className="card-header">
         <div>
-          <h3 className="card-title">Profile Summary</h3>
+          <h3 className="card-title">{t("Profile Summary")}</h3>
           <p className="mt-1 text-xs text-fg-muted">
-            Captured at {capturedTime}
+            {t("Captured at {time}", { time: capturedTime })}
           </p>
         </div>
         <button
           className="btn btn-sm btn-secondary"
           onClick={onNewProfile}
-          title="Capture a new profile"
+          title={t("Capture a new profile")}
         >
           <Icon name="refresh" size="xs" />
-          New Profile
+          {t("New Profile")}
         </button>
       </div>
 

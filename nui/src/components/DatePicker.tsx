@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Icon } from './icons'
+import { useTranslation } from '../lib/i18n'
 
 interface DatePickerProps {
   value: string // ISO date string (YYYY-MM-DD)
@@ -48,6 +49,7 @@ interface CalendarState {
 }
 
 export function DatePicker({ value, onChange, disabled, label }: DatePickerProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [state, setState] = useState<CalendarState>(() => {
     if (value) {
@@ -123,8 +125,8 @@ export function DatePicker({ value, onChange, disabled, label }: DatePickerProps
         year: 'numeric',
       })
     }
-    return 'Select date'
-  }, [value])
+    return t('Select date')
+  }, [value, t])
 
   // Build day grid
   const days = useMemo(() => {
@@ -227,7 +229,7 @@ export function DatePicker({ value, onChange, disabled, label }: DatePickerProps
               onClick={viewMode === 'days' ? handlePrevMonth
                 : viewMode === 'months' ? () => setState((p) => ({ ...p, viewYear: p.viewYear - 1 }))
                 : () => setYearPage((p) => p - 12)}
-              aria-label="Previous"
+              aria-label={t("Previous")}
             >
               <Icon name="chevron-left" size="xs" />
             </button>
@@ -250,7 +252,7 @@ export function DatePicker({ value, onChange, disabled, label }: DatePickerProps
               onClick={viewMode === 'days' ? handleNextMonth
                 : viewMode === 'months' ? () => setState((p) => ({ ...p, viewYear: p.viewYear + 1 }))
                 : () => setYearPage((p) => p + 12)}
-              aria-label="Next"
+              aria-label={t("Next")}
             >
               <Icon name="chevron-right" size="xs" />
             </button>

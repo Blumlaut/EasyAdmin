@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import type { CodeSnippet } from '../../../types'
 import { tokenizeLine } from '../luaHighlight'
 import { KNOWN_PATTERNS, type SnippetHint } from '../snippetHints'
+import { useTranslation } from '../../../lib/i18n'
 
 interface CodeSnippetProps {
   snippet: CodeSnippet
@@ -12,6 +13,7 @@ interface CodeSnippetProps {
 }
 
 export function CodeSnippet({ snippet, filePath, resource, onClose }: CodeSnippetProps) {
+  const { t } = useTranslation()
   const [hoveredHint, setHoveredHint] = useState<{ x: number; y: number; hint: SnippetHint } | null>(null)
   const lineRef = useRef<HTMLDivElement>(null)
 
@@ -46,10 +48,10 @@ export function CodeSnippet({ snippet, filePath, resource, onClose }: CodeSnippe
             {resource}/{filePath}
           </span>
           <span className="profiler-code-range">
-            lines {snippet.windowStart}-{snippet.windowEnd}
-            <span className="profiler-code-range-target"> (hot: {snippet.targetRange})</span>
+            {t("lines {start}-{end}", { start: snippet.windowStart, end: snippet.windowEnd })}
+            <span className="profiler-code-range-target"> {t("(hot: {range})", { range: snippet.targetRange })}</span>
           </span>
-          <button className="profiler-code-close" onClick={onClose} aria-label="Close snippet">
+          <button className="profiler-code-close" onClick={onClose} aria-label={t("Close snippet")}>
             &times;
           </button>
         </div>

@@ -4,6 +4,7 @@ import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
 import { filterCachedPlayers } from '../../lib/playerSearch'
+import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Icon } from '../../components/icons'
 import { ListItem } from '../../components/ListItem'
@@ -27,6 +28,7 @@ export function CachedPlayersPage({
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
   const listRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   const filtered = useMemo(() => {
     return filterCachedPlayers(cachedPlayers, debouncedQuery)
@@ -37,19 +39,19 @@ export function CachedPlayersPage({
   return (
     <div className="page-container">
       <p className="text-sm text-fg-muted">
-        Recently disconnected players. You can ban them offline.
+        {t("Recently disconnected players. You can ban them offline.")}
       </p>
       <div className="mb-3 flex items-center gap-2">
         <SearchBar
           value={query}
           onChange={setQuery}
-          placeholder="Search by name, ID, or identifier..."
+          placeholder={t("Search by name, ID, or identifier...")}
           resultCount={{ shown: filtered.length, total: cachedPlayers.length }}
-          ariaLabel="Search cached players"
+          ariaLabel={t("Search cached players")}
         />
         <button className="btn btn-secondary btn-sm" onClick={onRefresh} disabled={loading}>
           <Icon name="refresh" size="xs" />
-          Refresh
+          {t("Refresh")}
         </button>
       </div>
 
@@ -61,7 +63,7 @@ export function CachedPlayersPage({
             <Icon name="archive" size="lg" className="text-fg-muted" />
           </div>
           <p className="text-fg-subtle">
-          {cachedPlayers.length === 0 ? 'No cached players' : 'No cached players match your search'}
+          {cachedPlayers.length === 0 ? t("No cached players") : t("No cached players match your search")}
         </p>
         </div>
       ) : (
@@ -72,13 +74,13 @@ export function CachedPlayersPage({
               player={player}
               onBan={() => openModal(
                 createBanModal({
-                  title: `Ban ${player.name}`,
+                  title: t("Ban {name}", { name: player.name }),
                   onSubmit: async (reason, duration) => {
                     try {
                       await callLua('offlineBanPlayer', { id: player.id, name: player.name, reason, duration })
-                      notify(`Banned ${player.name}`, 'success')
+                      notify(t("Banned {name}", { name: player.name }), 'success')
                     } catch {
-                      notify('Failed to ban player', 'error')
+                      notify(t('Failed to ban player'), 'error')
                     }
                     closeModal()
                   },
@@ -99,6 +101,7 @@ function CachedRow({
   player: CachedPlayer
   onBan: () => void
 }) {
+  const { t } = useTranslation()
   return (
     <ListItem onClick={() => {}}>
       <div className="avatar avatar-sm avatar-offline">
@@ -117,7 +120,7 @@ function CachedRow({
           }}
         >
           <Icon name="ban" size="xs" />
-          Ban
+          {t("Ban")}
         </button>
       </div>
     </ListItem>

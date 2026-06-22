@@ -7,6 +7,7 @@ import { TimelineEntry } from '../../components/TimelineEntry'
 import { useModalContext } from '../../ModalContext'
 import { Skeleton } from '../../components/Skeleton'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
+import { useTranslation } from '../../lib/i18n'
 
 interface ActionHistorySectionProps {
   playerId: number
@@ -43,6 +44,7 @@ export function ActionHistorySection({
 }: ActionHistorySectionProps) {
   const canDelete = permissions['player.actionhistory.delete']
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   const [state, setState] = useState<HistoryState>({ status: 'loading' })
 
@@ -64,19 +66,19 @@ export function ActionHistorySection({
 
   const handleDelete = useCallback((entryId: number) => {
     openModal(createConfirmModal({
-      title: 'Delete action entry',
-      description: 'Are you sure you want to delete this action history entry? This cannot be undone.',
+      title: t('Delete action entry'),
+      description: t('Are you sure you want to delete this action history entry? This cannot be undone.'),
       submitVariant: 'danger',
       onSubmit: async () => {
         await runModalAction({
           action: () => callLua('deleteActionHistoryEntry', { id: entryId, playerId }),
           closeModal,
-          successMessage: 'Action entry deleted',
-          errorMessage: 'Failed to delete action entry',
+          successMessage: t('Action entry deleted'),
+          errorMessage: t('Failed to delete action entry'),
         })
       },
     }))
-  }, [playerId, openModal, closeModal])
+  }, [playerId, openModal, closeModal, t])
 
   // Sort entries by time descending (newest first)
   const sortedEntries = useMemo(() => {
@@ -89,7 +91,7 @@ export function ActionHistorySection({
   if (state.status === 'loading') {
     return (
       <div className="card">
-        <p className="section-label">Action History</p>
+        <p className="section-label">{t("Action History")}</p>
         <div className="flex flex-col gap-2">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} width="100%" height={48} />
@@ -105,12 +107,12 @@ export function ActionHistorySection({
     <div className="card">
       <div className="card-header">
         {/* eslint-disable-next-line nui/no-inline-styles -- overrides section-label margin for card-header context only */}
-        <p className="section-label" style={{ marginBottom: 0 }}>Action History</p>
+        <p className="section-label" style={{ marginBottom: 0 }}>{t("Action History")}</p>
         <span className="text-xs text-fg-muted">{sortedEntries.length} entr{sortedEntries.length === 1 ? 'y' : 'ies'}</span>
       </div>
 
       {sortedEntries.length === 0 ? (
-        <p className="text-sm text-fg-muted">No actions recorded for this player</p>
+        <p className="text-sm text-fg-muted">{t("No actions recorded for this player")}</p>
       ) : (
         <div className="timeline-list">
           {sortedEntries.map((entry) => {
@@ -150,8 +152,8 @@ export function ActionHistorySection({
                     <button
                       className="timeline-entry-delete"
                       onClick={() => handleDelete(entry.id)}
-                      title="Delete this entry"
-                      aria-label="Delete action entry"
+                      title={t("Delete this entry")}
+                      aria-label={t("Delete action entry")}
                     >
                       <Icon name="trash-2" size="xs" />
                     </button>

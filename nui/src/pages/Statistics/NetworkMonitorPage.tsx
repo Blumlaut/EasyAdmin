@@ -4,6 +4,7 @@ import { callLua } from '../../fivem'
 import { Icon, type IconName } from '../../components/icons'
 import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
+import { useTranslation } from '../../lib/i18n'
 
 // ============================================================
 // Thresholds for color-coding
@@ -78,6 +79,7 @@ interface PlayerNetworkRowProps {
 }
 
 function PlayerNetworkRow({ name, stats, isSelected, onSelect }: PlayerNetworkRowProps) {
+  const { t } = useTranslation()
   const pingVariant = getPingVariant(stats.rtt)
   const lossVariant = getLossVariant(stats.packetLoss)
 
@@ -85,10 +87,10 @@ function PlayerNetworkRow({ name, stats, isSelected, onSelect }: PlayerNetworkRo
     <button
       className={`network-row${isSelected ? ' network-row--selected' : ''}`}
       onClick={onSelect}
-      title={`Click to view ${name}'s detailed stats`}
+      title={t("Click to view {name}'s detailed stats", { name })}
     >
       <span className="network-row-name" title={name}>{name}</span>
-      <span className="network-row-cell" title="Mean RTT">
+      <span className="network-row-cell" title={t("Mean RTT")}>
         <span
           className="network-value"
           // eslint-disable-next-line nui/no-inline-styles
@@ -97,13 +99,13 @@ function PlayerNetworkRow({ name, stats, isSelected, onSelect }: PlayerNetworkRo
           {stats.rtt} ms
         </span>
       </span>
-      <span className="network-row-cell" title="RTT Variance (jitter)">
+      <span className="network-row-cell" title={t("RTT Variance (jitter)")}>
         {stats.rttVariance} ms
       </span>
-      <span className="network-row-cell" title="Last RTT">
+      <span className="network-row-cell" title={t("Last RTT")}>
         {stats.lastRtt} ms
       </span>
-      <span className="network-row-cell" title="Packet Loss">
+      <span className="network-row-cell" title={t("Packet Loss")}>
         <span
           className="network-value"
           // eslint-disable-next-line nui/no-inline-styles
@@ -137,6 +139,7 @@ interface PlayerDetailPanelProps {
 }
 
 function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: PlayerDetailPanelProps) {
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [history, setHistory] = useState<PlayerNetworkHistoryPoint[]>([])
 
@@ -211,7 +214,7 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
           <Icon name="users" size="xs" className="text-fg-muted" />
           {playerName}
         </span>
-        <button className="btn btn-xs btn-ghost" onClick={onClose} title="Close detail">
+        <button className="btn btn-xs btn-ghost" onClick={onClose} title={t("Close detail")}>
           <Icon name="x" size="xs" />
         </button>
       </div>
@@ -243,12 +246,12 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
         {loading ? (
           <div className="skeleton network-skeleton-player-chart" />
         ) : history.length === 0 ? (
-          <div className="py-3 text-center text-fg-muted">No historical data for this player</div>
+          <div className="py-3 text-center text-fg-muted">{t("No historical data for this player")}</div>
         ) : (
           <TimeSeriesChart
             lines={lines}
             range={chartRange}
-            emptyMessage="No data for this time range"
+            emptyMessage={t("No data for this time range")}
           />
         )}
       </div>
@@ -269,6 +272,7 @@ function PlayerDetailPanel({ playerId, playerName, stats, range, onClose }: Play
 // ============================================================
 
 export function NetworkMonitorPage() {
+  const { t } = useTranslation()
   const [stats, setStats] = useState<Record<string, PlayerNetworkStats>>({})
   const [names, setNames] = useState<Record<string, string>>({})
   const [globalHistory, setGlobalHistory] = useState<NetworkSnapshot[]>([])
@@ -361,61 +365,61 @@ export function NetworkMonitorPage() {
   }, [range])
 
   const globalLines: TimeSeriesLine[] = useMemo(() => [
-    {
-      label: 'Avg Ping',
-      data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.avgPing })),
-      color: '#3b82f6',
-      fillColor: 'rgba(59, 130, 246, 0.12)',
-      unit: 'ms',
-    },
-    {
-      label: 'Worst Ping',
-      data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.worstPing })),
-      color: '#ef4444',
-      fillColor: 'rgba(239, 68, 68, 0.08)',
-      unit: 'ms',
-    },
-    {
-      label: 'Avg Jitter',
-      data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.avgJitter })),
-      color: '#f59e0b',
-      fillColor: 'rgba(245, 158, 11, 0.1)',
-      unit: 'ms',
-    },
-    {
-      label: 'Avg Loss',
-      data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.avgLoss })),
-      color: '#a855f7',
-      fillColor: 'rgba(168, 85, 247, 0.08)',
-      unit: '%',
-    },
-  ], [globalHistory])
+      {
+        label: t('Avg Ping'),
+        data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.avgPing })),
+        color: '#3b82f6',
+        fillColor: 'rgba(59, 130, 246, 0.12)',
+        unit: 'ms',
+      },
+      {
+        label: t('Worst Ping'),
+        data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.worstPing })),
+        color: '#ef4444',
+        fillColor: 'rgba(239, 68, 68, 0.08)',
+        unit: 'ms',
+      },
+      {
+        label: t('Avg Jitter'),
+        data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.avgJitter })),
+        color: '#f59e0b',
+        fillColor: 'rgba(245, 158, 11, 0.1)',
+        unit: 'ms',
+      },
+      {
+        label: t('Avg Packet Loss'),
+        data: globalHistory.map((d) => ({ timestamp: d.timestamp * 1000, value: d.avgLoss })),
+        color: '#a855f7',
+        fillColor: 'rgba(168, 85, 247, 0.08)',
+        unit: '%',
+      },
+    ], [globalHistory, t])
 
   // Stat cards
   const statCards: StatCardProps[] = [
     {
-      label: 'Players Tracked',
+      label: t('Players Tracked'),
       value: summary.playerCount,
       icon: 'users',
       iconColor: 'var(--accent-blue)',
       bgColor: 'var(--bg-blue)',
     },
     {
-      label: 'Avg Ping',
+      label: t('Avg Ping'),
       value: `${summary.avgPing} ms`,
       icon: 'activity',
       iconColor: getVariantColor(getPingVariant(summary.avgPing)),
       bgColor: getVariantBg(getPingVariant(summary.avgPing)),
     },
     {
-      label: 'Worst Ping',
+      label: t('Worst Ping'),
       value: `${summary.worstPing} ms`,
       icon: 'alert-triangle',
       iconColor: getVariantColor(getPingVariant(summary.worstPing)),
       bgColor: getVariantBg(getPingVariant(summary.worstPing)),
     },
     {
-      label: 'Avg Packet Loss',
+      label: t('Avg Packet Loss'),
       value: `${summary.avgLoss}%`,
       icon: 'activity',
       iconColor: getVariantColor(getLossVariant(summary.avgLoss)),
@@ -462,7 +466,7 @@ export function NetworkMonitorPage() {
       {/* Global network chart */}
       <div className="card network-card mb-4">
         <div className="mb-3 flex items-center justify-between">
-          <p className="section-label">Server Network Overview</p>
+          <p className="section-label">{t("Server Network Overview")}</p>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-0.5">
               {historyRanges.map((r) => (
@@ -478,7 +482,7 @@ export function NetworkMonitorPage() {
             <button
               className="btn btn-xs btn-ghost network-refresh-btn"
               onClick={fetchData}
-              title="Refresh now"
+              title={t("Refresh now")}
             >
               <Icon name="refresh" size="xs" />
             </button>
@@ -490,7 +494,7 @@ export function NetworkMonitorPage() {
           <TimeSeriesChart
             lines={globalLines}
             range={globalChartRange}
-            emptyMessage="No network data for this time range"
+            emptyMessage={t("No network data for this time range")}
           />
         )}
       </div>
@@ -498,9 +502,9 @@ export function NetworkMonitorPage() {
       {/* Player list with expandable detail */}
       <div className="card network-card">
         <div className="mb-3 flex items-center justify-between">
-          <p className="section-label">Player Connections</p>
+          <p className="section-label">{t("Player Connections")}</p>
           <span className="text-xs text-fg-muted">
-            Click a player to view detailed history
+            {t("Click a player to view detailed history")}
           </span>
         </div>
 
@@ -508,21 +512,21 @@ export function NetworkMonitorPage() {
         <div className="network-table-header">
           <span className="network-col-name">
             <button className="network-sort-btn" onClick={() => handleSort('name')}>
-              Player
+              {t("Player")}
               <Icon name={sortIcon('name')} size="xs" className="network-sort-icon" />
             </button>
           </span>
           <span className="network-col-ping">
             <button className="network-sort-btn" onClick={() => handleSort('rtt')}>
-              Ping
+              {t("Ping")}
               <Icon name={sortIcon('rtt')} size="xs" className="network-sort-icon" />
             </button>
           </span>
-          <span className="network-col-jitter">Jitter</span>
-          <span className="network-col-last">Last RTT</span>
+          <span className="network-col-jitter">{t("Jitter")}</span>
+          <span className="network-col-last">{t("Last RTT")}</span>
           <span className="network-col-loss">
             <button className="network-sort-btn" onClick={() => handleSort('packetLoss')}>
-              Loss
+              {t("Loss")}
               <Icon name={sortIcon('packetLoss')} size="xs" className="network-sort-icon" />
             </button>
           </span>
@@ -536,7 +540,7 @@ export function NetworkMonitorPage() {
               <div key={i} className="skeleton network-skeleton-row" />
             ))
             : playerRows.length === 0
-              ? <div className="py-4 text-center text-fg-muted">No players connected</div>
+              ? <div className="py-4 text-center text-fg-muted">{t("No players connected")}</div>
               : playerRows.map((row) => (
                 <div key={row.id}>
                   <PlayerNetworkRow

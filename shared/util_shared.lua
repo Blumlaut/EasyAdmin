@@ -87,7 +87,7 @@ end
 
 function copyToClipboard(text)
 	SendNUIMessage({action= "clip", text=text})
-	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("copiedtoclipboard"))
+	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Text copied to Clipboard!"))
 end
 
 function DoesPlayerHavePermission(player, object)
@@ -146,14 +146,19 @@ function loadLanguageStrings()
 	end
 end
 
-function GetLocalisedText(string)
+function GetLocalisedText(key, params)
 	if not strings then return "Strings not Loaded yet!" end
-	if not string then return "No String!" end
-	if strings[string] then
-		return strings[string]
-	else
-		return "String "..string.." not found in "..strings.language
+	if not key then return "No String!" end
+	local template = strings[key]
+	if not template then
+		return "String "..key.." not found in "..(strings.language or "unknown")
 	end
+	if params and type(params) == "table" then
+		for param, value in pairs(params) do
+			template = template:gsub('{' .. param .. '}', tostring(value))
+		end
+	end
+	return template
 end
 exports('GetLocalisedText', GetLocalisedText)
 

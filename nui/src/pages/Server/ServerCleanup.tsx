@@ -3,6 +3,7 @@ import { notify } from '../../lib/notify'
 import { useModalContext } from '../../ModalContext'
 import { Icon } from '../../components/icons'
 import { callLua } from '../../fivem'
+import { useTranslation } from '../../lib/i18n'
 
 interface ServerCleanupProps {
   permissions: Permissions
@@ -12,6 +13,7 @@ const RADII: CleanupRadius[] = [10, 20, 50, 100, 'global']
 
 export function ServerCleanup({ permissions }: ServerCleanupProps) {
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   const availableTypes: CleanupType[] = []
   if (permissions['server.cleanup.cars']) availableTypes.push('cars')
@@ -22,44 +24,44 @@ export function ServerCleanup({ permissions }: ServerCleanupProps) {
 
   return (
     <div className="card card-warning-border">
-      <p className="section-label">Cleanup</p>
+      <p className="section-label">{t("Cleanup")}</p>
       <p className="mb-3 text-sm text-fg-subtle">
-        Remove cars, peds, or props from an area around you.
+        {t("Remove cars, peds, or props from an area around you.")}
       </p>
       <button
         className="btn btn-warning btn-full"
         onClick={() => openModal({
-          title: 'Clean Area',
-          description: 'Choose what to clean and how far from your position.',
-          submitLabel: 'Clean',
+          title: t('Clean Area'),
+          description: t('Choose what to clean and how far from your position.'),
+          submitLabel: t('Clean'),
           submitVariant: 'warning',
           fields: [
             {
               key: 'type',
               type: 'select',
-              label: 'Type',
+              label: t('Type'),
               initialValue: availableTypes[0],
               options: availableTypes.map((type) => ({
                 value: type,
-                label: type === 'cars' ? 'Cars' : type === 'peds' ? 'Peds' : 'Props',
+                label: type === 'cars' ? t('Cars') : type === 'peds' ? t('Peds') : t('Props'),
               })),
               required: true,
             },
             {
               key: 'radius',
               type: 'select',
-              label: 'Radius',
+              label: t('Radius'),
               initialValue: '20',
               options: RADII.map((radius) => ({
                 value: String(radius),
-                label: radius === 'global' ? 'Global' : `${radius}m`,
+                label: radius === 'global' ? t('Global') : `${radius}m`,
               })),
               required: true,
             },
             {
               key: 'deep',
               type: 'checkbox',
-              label: 'Deep clean',
+              label: t('Deep clean'),
               initialValue: true,
             },
           ],
@@ -74,16 +76,16 @@ export function ServerCleanup({ permissions }: ServerCleanupProps) {
                 radius,
                 deep,
               })
-              notify('Cleanup executed', 'success')
+              notify(t('Cleanup executed'), 'success')
             } catch {
-              notify('Cleanup failed', 'error')
+              notify(t('Cleanup failed'), 'error')
             }
             closeModal()
           },
         })}
       >
         <Icon name="trash" size="xs" />
-        Clean area
+        {t("Clean area")}
       </button>
     </div>
   )

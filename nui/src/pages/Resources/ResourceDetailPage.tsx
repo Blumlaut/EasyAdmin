@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import type { Permissions, ResourceEntry, ResourceMetadata } from '../../types'
 import { callLua, on } from '../../fivem'
 import { useModalContext } from '../../ModalContext'
+import { useTranslation } from '../../lib/i18n'
 import { Alert } from '../../components/Alert'
 import { CopyButton } from '../../components/CopyButton'
 import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
@@ -31,6 +32,7 @@ export function ResourceDetailPage({
   const canStart = !!permissions['server.resources.start']
   const canStop = !!permissions['server.resources.stop']
   const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
 
   // Find the resource entry from the server list
   const [resource, setResource] = useState<ResourceEntry | null>(null)
@@ -90,18 +92,18 @@ export function ResourceDetailPage({
       fetchResource()
       fetchMetadata()
     } catch {
-      throw new Error(`Failed to ${action} ${resourceName}`)
+      throw new Error(t("Failed to {action} {name}", { action, name: resourceName }))
     }
-  }, [resourceName, fetchResource, fetchMetadata])
+  }, [resourceName, fetchResource, fetchMetadata, t])
 
   const requestAction = useCallback((action: 'start' | 'stop' | 'ensure') => {
     if (action === 'start' && !canStart) return
     if ((action === 'stop' || action === 'ensure') && !canStop) return
 
     const labels: Record<string, { title: string; message: string; confirm: string; variant: 'primary' | 'danger' }> = {
-      start: { title: `Start ${resourceName}`, message: `Are you sure you want to start ${resourceName}?`, confirm: 'Start', variant: 'primary' },
-      stop: { title: `Stop ${resourceName}`, message: `Are you sure you want to stop ${resourceName}?`, confirm: 'Stop', variant: 'danger' },
-      ensure: { title: `Restart ${resourceName}`, message: `Are you sure you want to restart ${resourceName}?`, confirm: 'Restart', variant: 'danger' },
+      start: { title: t("Start {name}", { name: resourceName }), message: t("Are you sure you want to start {name}?", { name: resourceName }), confirm: t("Start"), variant: 'primary' },
+      stop: { title: t("Stop {name}", { name: resourceName }), message: t("Are you sure you want to stop {name}?", { name: resourceName }), confirm: t("Stop"), variant: 'danger' },
+      ensure: { title: t("Restart {name}", { name: resourceName }), message: t("Are you sure you want to restart {name}?", { name: resourceName }), confirm: t("Restart"), variant: 'danger' },
     }
     const label = labels[action]
     openModal(createConfirmModal({
@@ -113,11 +115,11 @@ export function ResourceDetailPage({
         await runModalAction({
           action: () => executeAction(action),
           closeModal,
-          errorMessage: `Failed to ${action} ${resourceName}`,
+          errorMessage: t("Failed to {action} {name}", { action, name: resourceName }),
         })
       },
     }))
-  }, [canStart, canStop, executeAction, openModal, closeModal, resourceName])
+  }, [canStart, canStop, executeAction, openModal, closeModal, resourceName, t])
 
   // Extract key metadata for header display
   const version = metadata?.entries.find((e) => e.key === 'version')?.value
@@ -136,7 +138,7 @@ export function ResourceDetailPage({
   if (!loading && metadataRows.length === 0) {
     metadataRows.push({
       key: 'metadata',
-      value: <span className="text-fg-muted">No metadata entries found</span>,
+      value: <span className="text-fg-muted">{t("No metadata entries found")}</span>,
     })
   }
 
@@ -178,7 +180,7 @@ export function ResourceDetailPage({
               <span
                 className="shrink-0 font-mono text-sm"
                 style={resource?.outdated ? { color: 'var(--accent-yellow)' } : undefined}
-                title={resource?.outdated && resource?.latestVersion ? `Update available: v${resource.latestVersion}` : undefined}
+                title={resource?.outdated && resource?.latestVersion ? t("Update available: v{version}", { version: resource.latestVersion }) : undefined}
               >
                 {resource?.outdated && resource?.latestVersion ? (
                   <>
@@ -193,9 +195,9 @@ export function ResourceDetailPage({
             {repository && (
               <CopyButton
                 value={repository}
-                label="Copy"
-                ariaLabel="Copy repository URL"
-                onCopy={() => notify('Repository URL copied', 'success')}
+                label={t("Copy")}
+                ariaLabel={t("Copy repository URL")}
+                onCopy={() => notify(t('Repository URL copied'), 'success')}
               />
             )}
           </div>
@@ -207,15 +209,15 @@ export function ResourceDetailPage({
 
       {/* Update available alert */}
       {resource?.outdated && resource?.latestVersion && (
-        <Alert variant="warning" title="Update available" className="mb-4">
+        <Alert variant="warning" title={t("Update available")} className="mb-4">
           <div className="flex items-center gap-3 text-sm">
             <span>
-              <span className="text-fg-muted">Current:</span>{' '}
+              <span className="text-fg-muted">{t("Current:")}</span>{' '}
               <span className="font-mono">v{version ?? '?'}</span>
             </span>
             <Icon name="arrow-right" size="xs" className="shrink-0 text-fg-muted" />
             <span>
-              <span className="text-fg-muted">Latest:</span>{' '}
+              <span className="text-fg-muted">{t("Latest:")}</span>{' '}
               <span className="font-mono">v{resource.latestVersion}</span>
             </span>
           </div>
@@ -224,17 +226,17 @@ export function ResourceDetailPage({
 
       {/* Actions */}
       <div className="card mb-4">
-        <p className="section-label mb-3">Actions</p>
+        <p className="section-label mb-3">{t("Actions")}</p>
         <div className="flex flex-wrap gap-2">
           {canStart && !isStarted && (
             <button
               className="btn btn-success btn-sm"
               onClick={() => requestAction('start')}
               disabled={isSelf || isTransitioning}
-              title={isSelf ? 'Cannot start self' : 'Start resource'}
+              title={isSelf ? t("Cannot start self") : t("Start resource")}
             >
               <Icon name="play" size="xs" />
-              Start
+              {t("Start")}
             </button>
           )}
           {canStop && isStarted && (
@@ -242,10 +244,10 @@ export function ResourceDetailPage({
               className="btn btn-danger btn-sm"
               onClick={() => requestAction('stop')}
               disabled={isSelf || isTransitioning}
-              title={isSelf ? 'Cannot stop self' : 'Stop resource'}
+              title={isSelf ? t("Cannot stop self") : t("Stop resource")}
             >
               <Icon name="square" size="xs" />
-              Stop
+              {t("Stop")}
             </button>
           )}
           {canStart && canStop && (
@@ -253,10 +255,10 @@ export function ResourceDetailPage({
               className="btn btn-secondary btn-sm"
               onClick={() => requestAction('ensure')}
               disabled={isSelf || isTransitioning}
-              title={isSelf ? 'Cannot ensure self' : 'Refresh + Stop + Start'}
+              title={isSelf ? t("Cannot ensure self") : t("Refresh + Stop + Start")}
             >
               <Icon name="refresh" size="xs" />
-              Ensure
+              {t("Ensure")}
             </button>
           )}
         </div>
@@ -264,7 +266,7 @@ export function ResourceDetailPage({
 
       {/* Metadata */}
       <div className="card">
-        <p className="section-label mb-3">Metadata</p>
+        <p className="section-label mb-3">{t("Metadata")}</p>
         {loading ? (
           <div className="flex flex-col gap-2">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -275,7 +277,7 @@ export function ResourceDetailPage({
             ))}
           </div>
         ) : (
-          <KeyValueTable rows={metadataRows} ariaLabel="Resource metadata" />
+          <KeyValueTable rows={metadataRows} ariaLabel={t("Resource metadata")} />
         )}
       </div>
     </div>

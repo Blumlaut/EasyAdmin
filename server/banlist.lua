@@ -40,7 +40,7 @@ end
 
 local function canModerateBanTarget(src, playerId)
     if IsSelfBan(src, playerId) and not IsDangerousDevModeEnabled() then
-        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("cantbanself"))
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("You cannot ban yourself."))
         return false
     end
 
@@ -55,7 +55,7 @@ end
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     local src = source
     if not playerId or not isPlayerOnline(playerId) then
-        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("invalidplayer"))
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("Invalid player."))
         return
     end
     if playerId ~= nil and CheckAdminCooldown(src, "ban") then
@@ -72,7 +72,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(src) )
+            reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getCachedPlayerName(playerId), banner = getName(src) })
             local banId = GetFreshBanId()
             local moderatorIdentifiers = {}
             if source and source ~= 0 then
@@ -81,8 +81,8 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time())
             Storage.addAction("BAN", getAllPlayerIdentifiers(playerId), reason, getName(src), moderatorIdentifiers, banId)
             PrintDebugMessage("Player "..getName(src,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
-            DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** banned **{target}**, Reason: {reason}, Ban Expires: {expires}, ID: {id}", { by = getName(src, false, true), target = getCachedPlayerName(playerId), reason = reason, expires = formatDateString(expires), id = tostring(banId) }), "ban", 16711680)
+            DropPlayer(playerId, GetLocalisedText("You have been banned from this Server, Reason: {reason}, Ban Expires: {expires}", { reason = reason, expires = formatDateString(expires) }) )
         end
     end
 end)
@@ -108,12 +108,12 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
+            reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getCachedPlayerName(playerId), banner = getName(source) })
             local banId = GetFreshBanId()
             Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
             Storage.addAction("OFFLINE BAN", bannedIdentifiers, reason, getName(source), getAllPlayerIdentifiers(src), banId)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** offline banned **{target}**, Reason: {reason}, Ban Expires: {expires}", { by = getName(source, false, true), target = getCachedPlayerName(playerId), reason = reason, expires = formatDateString(expires) }), "ban", 16711680)
         end
     end
 end)
@@ -154,7 +154,7 @@ function addBanExport(playerId,reason,expires,banner)
     elseif not expires then
         expires = 10444633200
     end
-    reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
+    reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getName(tostring(playerId) or "?"), banner = banner or "Unknown" })
     local banId = GetFreshBanId()
     Storage.addBan(banId, bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
     Storage.addAction("BAN", bannedIdentifiers, reason, banner or "Unknown", getAllPlayerIdentifiers(source), banId)
@@ -163,9 +163,9 @@ function addBanExport(playerId,reason,expires,banner)
     end
 
     local ban = Storage.getBan(banId)
-    SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), banner or "Unknown", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
+    SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** banned **{target}**, Reason: {reason}, Ban Expires: {expires}, ID: {id}", { by = banner or "Unknown", target = getName(tostring(playerId) or "?", false, true), reason = reason, expires = formatDateString(expires), id = tostring(banId) }), "ban", 16711680)
     if not offline then
-        DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
+        DropPlayer(playerId, GetLocalisedText("You have been banned from this Server, Reason: {reason}, Ban Expires: {expires}", { reason = reason, expires = formatDateString(expires) }) )
     end
     return ban
 end
@@ -280,11 +280,11 @@ RegisterCommand("unban", function(source, args, rawCommand)
             UnbanIdentifier(args[1])
         end
         if (source ~= 0) then
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("done"))
+            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Done!"))
         else
-            Citizen.Trace(GetLocalisedText("done"))
+            Citizen.Trace(GetLocalisedText("Done!"))
         end
-        SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), args[1], "Unbanned via Command"), "ban", 16711680)
+        SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** unbanned **{target}** [ {reason} ]", { by = getName(source, false, true), target = args[1], reason = "Unbanned via Command" }), "ban", 16711680)
     end
 end, false)
 	
@@ -318,7 +318,7 @@ RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
         local ret = unbanPlayer(banId)
         if ret then
             PrintDebugMessage("Player "..getName(src,true).." unbanned "..banId, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(src, false, true), banId, thisBan.reason), "ban", 16711680)
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** unbanned **{target}** [ {reason} ]", { by = getName(src, false, true), target = banId, reason = thisBan.reason }), "ban", 16711680)
         end
     end
 end)

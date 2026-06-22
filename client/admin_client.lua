@@ -49,6 +49,14 @@ RegisterNetEvent('EasyAdmin:SetLanguage', function(newstrings)
 	strings = newstrings
 end)
 
+RegisterNetEvent('EasyAdmin:PushTranslations', function(translations, lang)
+	strings = translations
+	SendNUIMessage({
+		action = 'setLanguage',
+		data = { strings = translations, lang = lang }
+	})
+end)
+
 RegisterNetEvent("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
 end)
@@ -183,13 +191,13 @@ Citizen.CreateThread(function()
 		local deletionText = ""
 		if type == "cars" then
 			toDelete = GetGamePool("CVehicle")
-			deletionText = GetLocalisedText("cleaningcar")
+			deletionText = "Deleting Vehicle {entity}"
 		elseif type == "peds" then
 			toDelete = GetGamePool("CPed")
-			deletionText = GetLocalisedText("cleaningped")
+			deletionText = "Deleting Ped {entity}"
 		elseif type == "props" then
 			toDelete = mergeTables(GetGamePool("CObject"), GetGamePool("CPickup"))
-			deletionText = GetLocalisedText("cleaningprop")
+			deletionText = "Deleting Object {entity}"
 		end
 
 		for _,entity in pairs(toDelete) do
@@ -215,7 +223,7 @@ Citizen.CreateThread(function()
 					SetTextDropShadow()
 					SetTextOutline()
 					SetTextEntry("STRING")
-					AddTextComponentString(string.format(deletionText, entity))
+					AddTextComponentString(GetLocalisedText(deletionText, { entity = tostring(entity) }))
 					EndTextCommandDisplayText(0.45, 0.95)
 
 					-- delete entity
@@ -343,7 +351,7 @@ function spectatePlayer(targetPed,target,name)
 		RequestCollisionAtCoord(targetx,targety,targetz)
 		NetworkSetInSpectatorMode(true, targetPed)
 		
-		TriggerEvent("EasyAdmin:showNotification", string.format(GetLocalisedText("spectatingUser"), name))
+		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Spectating {name}", { name = name }))
 	else
 		if oldCoords then
 			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
@@ -351,7 +359,7 @@ function spectatePlayer(targetPed,target,name)
 			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 		end
 		NetworkSetInSpectatorMode(false, targetPed)
-		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
+		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Stopped Spectating."))
 		frozen = false
 		FreezeMyself(false)
 		Wait(200) -- to prevent staying invisible
@@ -365,10 +373,10 @@ function spectatePlayer(targetPed,target,name)
 				if IsVehicleSeatFree(vehicle, vehicleInfo.seat) then
 					SetPedIntoVehicle(playerPed, vehicle, vehicleInfo.seat)
 				else
-					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("spectatevehicleseatoccupied"))
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle seat you were in is now occupied."))
 				end
 			else
-				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("spectatenovehiclefound"))
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle you were in can no longer be found."))
 			end
 
 			vehicleInfo.netId = nil
@@ -387,7 +395,7 @@ function ShowNotification(text)
 		AddTextComponentSubstringPlayerName(text)
 
 		local title = "~bold~EasyAdmin"
-		local subtitle = GetLocalisedText("notification")
+		local subtitle = GetLocalisedText("Notification")
 		local iconType = 0
 		local flash = false
 

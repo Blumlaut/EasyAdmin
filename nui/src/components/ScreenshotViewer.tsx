@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { on } from '../fivem'
 import { useWindowDrag, type WindowPosition } from '../hooks/useWindowDrag'
 import { useWindowResize, type WindowSize } from '../hooks/useWindowResize'
+import { useTranslation } from '../lib/i18n'
 import { Icon } from './icons'
 
 interface ScreenshotData {
@@ -22,6 +23,7 @@ const DEFAULT_POS: WindowPosition = { x: 0, y: 0 }
 const DEFAULT_SIZE: WindowSize = { width: 800, height: 560 }
 
 export function ScreenshotViewer() {
+  const { t } = useTranslation()
   const [data, setData] = useState<ScreenshotData | null>(null)
   const [position, setPosition] = useState<WindowPosition>(DEFAULT_POS)
   const [size, setSize] = useState<WindowSize>(DEFAULT_SIZE)
@@ -98,8 +100,8 @@ export function ScreenshotViewer() {
         <button
           className="btn btn-ghost btn-icon ea-screenshot-viewer-close"
           onClick={handleClose}
-          aria-label="Close"
-          title="Close"
+          aria-label={t("Close")}
+          title={t("Close")}
         >
           <Icon name="x" size="xs" />
         </button>

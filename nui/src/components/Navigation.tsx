@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Icon } from './icons'
+import { useTranslation } from '../lib/i18n'
 
 export type NavItemType = 'item' | 'separator' | 'header'
 
@@ -59,6 +60,7 @@ interface NavigationProps {
 }
 
 export function Navigation({ items, activeId, onSelect, orientation = 'vertical' }: NavigationProps) {
+  const { t } = useTranslation()
   const navRef = useRef<HTMLButtonElement[]>([])
   // Track which dropdown groups are expanded (keyed by parent id)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
@@ -235,7 +237,7 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
     <nav
       className={`navigation navigation--${orientation}`}
       role="navigation"
-      aria-label="Main navigation"
+      aria-label={t("Main navigation")}
       onKeyDown={handleKeyDown}
     >
       {items.map((item, idx) => renderItem(item, idx))}

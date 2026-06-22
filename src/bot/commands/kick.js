@@ -10,7 +10,7 @@ module.exports = {
 				.setRequired(true))
 		.addStringOption(option =>
 			option.setName('reason')
-				.setDescription('Reason Text')
+				.setDescription('Reason for the kick')
 				.setRequired(true)),
 	async execute(interaction, exports) {
 		const userOrId = interaction.options.getString('user')
@@ -20,14 +20,14 @@ module.exports = {
 		const user = await findPlayerFromUserInput(userOrId)
 
 		if (!user || user.dropped) {
-			interaction.reply({ content: 'Sorry, i couldn\'t find any user with the infos you provided.', ephemeral: true})
+			interaction.reply({ content: t("Sorry, I couldn't find any user with the info you provided."), ephemeral: true})
 			return
 		}
 
 
-		DropPlayer(user.id, sprintf(exports[EasyAdmin].GetLocalisedText('kicked'), interaction.user.tag, reason ))
+		DropPlayer(user.id, t("Kicked by {by}, Reason: {reason}", { by: interaction.user.tag, reason: reason }))
 
-		var embed = await prepareGenericEmbed(`Successfully kicked **${user.name}** for **${reason}**`)
+		var embed = await prepareGenericEmbed(t("Successfully kicked **{name}** for **{reason}**", { name: user.name, reason: reason }))
 
 		await interaction.reply({ embeds: [embed]})
 	},

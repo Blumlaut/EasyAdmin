@@ -14,7 +14,7 @@ module.exports = {
 		const user = await findPlayerFromUserInput(userOrId)
 
 		if (!user || user.dropped) {
-			interaction.reply({ content: 'Sorry, i couldn\'t find any user with the infos you provided.', ephemeral: true})
+			interaction.reply({ content: t("Sorry, I couldn't find any user with the info you provided."), ephemeral: true})
 			return
 		}
 

@@ -4,6 +4,7 @@ import { callLua, on } from '../../fivem'
 import { Icon } from '../../components/icons'
 import { StatCard } from '../../components/StatCard'
 import { SearchBar } from '../../components/SearchBar'
+import { useTranslation } from '../../lib/i18n'
 
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { BarChart } from '../../components/BarChart'
@@ -57,6 +58,7 @@ interface PlayerPeaksChartProps {
 }
 
 function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartProps) {
+  const { t } = useTranslation()
   const hasPing = useMemo(() => points.some((p) => p.avgPing > 0), [points])
 
   const lines: TimeSeriesLine[] = useMemo(() => {
@@ -136,18 +138,18 @@ function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartP
   return (
     <div className="card statistics-chart-card">
       <div className="mb-3 flex items-center justify-between">
-        <p className="section-label">{granularity === 'raw' ? 'Player Activity' : 'Daily Player Peaks'}</p>
+        <p className="section-label">{t(granularity === 'raw' ? 'Player Activity' : 'Daily Player Peaks')}</p>
         <div className="flex items-center gap-3 text-xs text-fg-muted">
           {granularity === 'raw' ? (
             <>
               <span className="flex items-center gap-1.5">
                 <span className="legend-line legend-line--blue" />
-                Players
+                {t("Players")}
               </span>
               {hasPing && (
                 <span className="flex items-center gap-1.5">
                   <span className="legend-line legend-line-dotted legend-line--red" />
-                  Avg Ping
+                  {t("Avg Ping")}
                 </span>
               )}
             </>
@@ -155,20 +157,20 @@ function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartP
             <>
               <span className="flex items-center gap-1.5">
                 <span className="legend-line legend-line--green" />
-                Max
+                {t("Max")}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="legend-line legend-line--blue" />
-                Avg
+                {t("Avg")}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="legend-line legend-line-dashed legend-line--orange" />
-                Min
+                {t("Min")}
               </span>
               {dailyPeaks.some((d) => d.avgPing > 0) && (
                 <span className="flex items-center gap-1.5">
                   <span className="legend-line legend-line-dotted legend-line--red" />
-                  Avg Ping
+                  {t("Avg Ping")}
                 </span>
               )}
             </>
@@ -181,7 +183,7 @@ function PlayerPeaksChart({ points, dailyPeaks, granularity }: PlayerPeaksChartP
         height={200}
         showLegend={false}
         unit="players"
-        emptyMessage="No data for this time range"
+        emptyMessage={t("No data for this time range")}
       />
     </div>
   )
@@ -198,6 +200,7 @@ const REGISTRY_PAGE_SIZE = 20
 type RegistrySortBy = 'sessions' | 'playtime' | 'lastSeen' | 'firstSeen' | 'avgSession'
 
 function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState<RegistrySortBy>('lastSeen')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -279,52 +282,52 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   const columns = useMemo<TableColumn<PlayerRegistryEntry>[]>(() => [
     {
       key: 'name',
-      label: 'Player',
+      label: t('Player'),
       render: (p) => <span className="max-w-[160px] truncate" title={p.name}>{p.name}</span>,
     },
     {
       key: 'firstSeen',
-      label: 'First Seen',
+      label: t('First Seen'),
       sortable: true,
       render: (p) => <span className="text-xs text-fg-muted">{formatDayLabelFull(p.firstSeen / 1000)}</span>,
     },
     {
       key: 'lastSeen',
-      label: 'Last Seen',
+      label: t('Last Seen'),
       sortable: true,
       render: (p) => <span className="text-xs text-fg-muted">{formatDayLabelFull(p.lastSeen / 1000)}</span>,
     },
     {
       key: 'sessions',
-      label: 'Sessions',
+      label: t('Sessions'),
       sortable: true,
       render: (p) => <span className="text-xs font-semibold">{p.sessions}</span>,
     },
     {
       key: 'playtime',
-      label: 'Total Playtime',
+      label: t('Total Playtime'),
       sortable: true,
       render: (p) => <span className="text-xs">{formatDuration(p.playtime)}</span>,
     },
     {
       key: 'avgSession',
-      label: 'Avg Session',
+      label: t('Avg Session'),
       sortable: true,
       render: (p) => <span className="text-xs">{p.sessions > 0 ? formatDuration(p.playtime / p.sessions) : '—'}</span>,
     },
-  ], [])
+  ], [t])
 
   return (
     <div>
       <div className="card statistics-chart-card">
-        <p className="section-label mb-3">Player Registry</p>
+        <p className="section-label mb-3">{t("Player Registry")}</p>
         <div className="mb-3 flex items-center gap-2">
           <SearchBar
             value={query}
             onChange={setQuery}
-            placeholder="Search by name…"
+            placeholder={t("Search by name...")}
             resultCount={players.length > 0 ? { shown: players.length, total: total } : undefined}
-            ariaLabel="Search player registry"
+            ariaLabel={t("Search player registry")}
           />
           <button
             className="btn btn-secondary btn-sm"
@@ -332,21 +335,21 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
             disabled={loading}
           >
             <Icon name="refresh" size="xs" />
-            Refresh
+            {t("Refresh")}
           </button>
         </div>
 
         {loading && players.length === 0 ? (
           <div className="flex min-h-100 items-center justify-center">
-            <p className="text-xs text-fg-muted">Loading player data…</p>
+            <p className="text-xs text-fg-muted">{t("Loading player data…")}</p>
           </div>
         ) : players.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-6">
             <div className="empty-state-icon empty-state-icon-blue mb-3">
               <Icon name="users" size="lg" className="text-blue" />
             </div>
-            <p className="text-sm text-fg-muted">{total === 0 ? 'No player data collected yet' : 'No players match your search'}</p>
-            {total === 0 && <p className="mt-1 text-xs text-fg-muted">Players will appear here after connecting</p>}
+            <p className="text-sm text-fg-muted">{total === 0 ? t("No player data collected yet") : t("No players match your search")}</p>
+            {total === 0 && <p className="mt-1 text-xs text-fg-muted">{t("Players will appear here after connecting")}</p>}
           </div>
         ) : (
           <div ref={listRef}>
@@ -448,6 +451,7 @@ function StatisticsSkeleton() {
 // ============================================================
 
 export function PlayerStatisticsPage() {
+  const { t } = useTranslation()
   const [range, setRange] = useState<StatsRange>('30d')
   const [summary, setSummary] = useState<StatsSummary | null>(null)
   const [peaks, setPeaks] = useState<PlayerPeaksResponse | null>(null)
@@ -555,8 +559,8 @@ export function PlayerStatisticsPage() {
       {/* Header with range selector */}
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Player Statistics</h3>
-          <p className="mt-0.5 text-xs text-fg-muted">Long-term analytics and player insights</p>
+          <h3 className="text-lg font-semibold">{t("Player Statistics")}</h3>
+          <p className="mt-0.5 text-xs text-fg-muted">{t("Long-term analytics and player insights")}</p>
         </div>
         <div className="flex items-center gap-0.5">
           {rangeOptions.map((r) => (
@@ -578,51 +582,51 @@ export function PlayerStatisticsPage() {
           {/* Summary cards */}
           <div className="statistics-grid mb-4 grid grid-cols-2 gap-3">
         <StatCard variant="overlay"
-          label="Unique Players"
+          label={t("Unique Players")}
           value={summary?.totalUnique ?? '—'}
-          subValue={`All time tracked`}
+          subValue={t("All time tracked")}
           icon="users"
           iconColor="var(--accent-blue)"
           bgColor="var(--bg-blue)"
         />
         <StatCard variant="overlay"
-          label="New Players"
+          label={t("New Players")}
           value={summary?.newPlayers ?? '—'}
-          subValue={`Joined in last ${range}`}
+          subValue={t("Joined in last {range}", { range })}
           icon="plus"
           iconColor="var(--accent-green)"
           bgColor="var(--bg-green)"
         />
         <StatCard variant="overlay"
-          label="Returning Players"
+          label={t("Returning Players")}
           value={summary?.returningPlayers ?? '—'}
-          subValue={`${summary?.retentionRate ?? 0}% retention rate`}
+          subValue={t("{rate}% retention rate", { rate: String(summary?.retentionRate ?? 0) })}
           icon="refresh"
           iconColor="var(--accent-purple)"
           bgColor="var(--bg-purple)"
         />
         <StatCard variant="overlay"
-          label="Avg Session"
+          label={t("Avg Session")}
           value={summary ? formatDuration(summary.avgSessionLength) : '—'}
           subValue={summary && summary.totalSessions > 0
-            ? `Median: ${formatDuration(summary.medianSessionLength)} · Range: ${formatDuration(summary.shortestSession)} – ${formatDuration(summary.longestSession)}`
+            ? t("Median: {median} · Range: {shortest} – {longest}", { median: formatDuration(summary.medianSessionLength), shortest: formatDuration(summary.shortestSession), longest: formatDuration(summary.longestSession) })
             : '—'}
           icon="clock"
           iconColor="var(--accent-orange)"
           bgColor="var(--bg-orange)"
         />
         <StatCard variant="overlay"
-          label="Total Sessions"
+          label={t("Total Sessions")}
           value={summary?.totalSessions?.toLocaleString() ?? '—'}
-          subValue={`All tracked players`}
+          subValue={t("All tracked players")}
           icon="activity"
           iconColor="var(--accent-pink)"
           bgColor="var(--bg-pink)"
         />
         <StatCard variant="overlay"
-          label="Total Playtime"
+          label={t("Total Playtime")}
           value={summary ? formatDuration(summary.totalPlaytime) : '—'}
-          subValue={`All time accumulated`}
+          subValue={t("All time accumulated")}
           icon="gauge"
           iconColor="var(--accent-green)"
           bgColor="var(--bg-green)"
@@ -644,21 +648,21 @@ export function PlayerStatisticsPage() {
       <div className="statistics-grid mb-4 grid grid-cols-2 gap-3">
         {/* Top sessions */}
         <div className="card statistics-chart-card">
-          <p className="section-label mb-3">Top by Sessions</p>
+          <p className="section-label mb-3">{t("Top by Sessions")}</p>
           <BarChart
             items={topSessions}
             height={120}
-            emptyMessage="No data yet"
+            emptyMessage={t("No data yet")}
           />
         </div>
 
         {/* Top playtime */}
         <div className="card statistics-chart-card">
-          <p className="section-label mb-3">Top by Playtime (min)</p>
+          <p className="section-label mb-3">{t("Top by Playtime (min)")}</p>
           <BarChart
             items={topPlaytime}
             height={120}
-            emptyMessage="No data yet"
+            emptyMessage={t("No data yet")}
           />
         </div>
       </div>

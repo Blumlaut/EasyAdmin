@@ -3,6 +3,7 @@ import type { BanListEntry, PaginatedBanResponse } from '../../types'
 import { on, callLua } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
 import { Icon } from '../../components/icons'
@@ -85,6 +86,8 @@ export function BanListPage({
   const handleNextPage = useCallback(() => handlePageChange(Math.min(page + 1, totalPages)), [handlePageChange, page, totalPages])
   const handlePrevPage = useCallback(() => handlePageChange(Math.max(page - 1, 1)), [handlePageChange, page])
 
+  const { t } = useTranslation()
+
   const handleRefresh = useCallback(() => {
     fetchPage(page, debouncedQuery)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,9 +101,9 @@ export function BanListPage({
           onChange={(v) => {
             setQuery(v)
           }}
-          placeholder="Search by ID, name, or identifier..."
+          placeholder={t("Search by name, ID, or identifier...")}
           resultCount={{ shown: bans.length, total: total }}
-          ariaLabel="Search bans"
+          ariaLabel={t("Search bans")}
         />
         <button
           className="btn btn-secondary btn-sm"
@@ -108,7 +111,7 @@ export function BanListPage({
           disabled={loading}
         >
           <Icon name="refresh" size="xs" />
-          Refresh
+          {t("Refresh")}
         </button>
       </div>
 
@@ -119,7 +122,7 @@ export function BanListPage({
           <div className="empty-state-icon empty-state-icon-red">
             <Icon name="ban" size="lg" className="text-red" />
           </div>
-          <p className="text-fg-subtle">{total === 0 ? 'No bans on record' : 'No bans match your search'}</p>
+          <p className="text-fg-subtle">{total === 0 ? t("No bans on record") : t("No bans match your search")}</p>
         </div>
       ) : (
         <div ref={listRef} className="list">
@@ -155,9 +158,10 @@ function BanRow({
   ipPrivacy: boolean
   onClick: () => void
 }) {
+  const { t } = useTranslation()
   // List entries don't include identifiers (fetched on-demand for detail view).
   // Show reason as secondary text.
-  const secondary = ban.reason || 'No reason'
+  const secondary = ban.reason || t('No reason')
 
   return (
     <ListItem onClick={onClick}>
@@ -165,14 +169,14 @@ function BanRow({
         <Icon name="ban" size="xs" className="text-red" />
       </div>
       <div className="list-item-content">
-        <div className="list-item-title">{ban.name ?? 'Unknown'}</div>
+        <div className="list-item-title">{ban.name ?? t('Unknown')}</div>
         <div className="list-item-subtitle text-mono truncate">{secondary}</div>
       </div>
       <div className="list-item-meta">
         {ban.expireString && ban.expire !== -1 && (
           <span className="badge badge-default">{ban.expireString}</span>
         )}
-        {ban.expire === -1 && <span className="badge badge-danger">Permanent</span>}
+        {ban.expire === -1 && <span className="badge badge-danger">{t("Permanent")}</span>}
       </div>
       <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>
