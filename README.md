@@ -45,10 +45,10 @@ Visit our Documentation [here](https://easyadmin.readthedocs.io/) for detailed i
 
 ## Support
 
-Join our Discord community: [https://discord.gg/qq82ZU36XZ](https://discord.gg/qq82ZU36XZ)
+Join our Discord community: [https://discord.gg/snaily](https://discord.gg/snaily)
 
-**Graphic Design:** Team Snaily (https://teamsnaily.com)
-<a href="https://teamsnaily.com/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
+**Graphic Design:** Snaily Games (https://snaily.games)
+<a href="https://snaily.games/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
 
 **Supported by:**
 
