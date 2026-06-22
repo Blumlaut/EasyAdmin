@@ -23,6 +23,13 @@ end)
 
 if chatEventsSupported then
 	exports.chat:registerMessageHook(function(source, outMessage, hookRef)
+		if GlobalMute then
+			if not DoesPlayerHavePermission(source, "server.mute.global") then
+				hookRef.cancel()
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("globalmute_active"))
+			end
+			return
+		end
 		if MutedPlayers[source] then
 			hookRef.cancel()
 			TriggerClientEvent("EasyAdmin:showNotification", source, getName(source) .. ", " .. GetLocalisedText("playermute"))
@@ -30,6 +37,14 @@ if chatEventsSupported then
 	end)
 else
 	AddEventHandler('chatMessage', function(source, name, msg)
+		if GlobalMute then
+			if not DoesPlayerHavePermission(source, "server.mute.global") then
+				CancelEvent()
+				TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("globalmute_active") } })
+				TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("globalmute_active"))
+				return
+			end
+		end
 		if MutedPlayers[source] then
 			CancelEvent()
 			TriggerClientEvent("chat:addMessage", source, { args = { "EasyAdmin", GetLocalisedText("playermute") } })

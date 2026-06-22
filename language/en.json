@@ -42,6 +42,8 @@
     "playermuted": "has been muted!",
     "playerunmuted": "has been un-muted!",
     "playermute": "You are muted!",
+    "globalmute_active": "Emergency mode is active. All player chat is muted.",
+    "globalmute_toggled": "%s toggled Emergency Mode: %s",
     "spectateplayer": "Spectate Player",
     "teleportplayer": "Teleport",
     "teleporttoplayer": "Me to Player",

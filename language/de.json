@@ -43,6 +43,8 @@
     "playermuted": "wurde stummgeschaltet!",
     "playerunmuted": "wurde entstummt!",
     "playermute": "Du bist stummgeschaltet!",
+    "globalmute_active": "Notfallmodus ist aktiv. Alle Spielerchats sind stummgeschaltet.",
+    "globalmute_toggled": "%s hat Notfallmodus umgeschaltet: %s",
     "spectateplayer": "Spieler zuschauen",
     "teleportplayer": "Teleportieren",
     "teleporttoplayer": "Zum Spieler",

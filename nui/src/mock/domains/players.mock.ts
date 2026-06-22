@@ -51,6 +51,7 @@ export const DEMO_PERMISSIONS: Permissions = {
   'server.cleanup.cars': true,
   'server.cleanup.peds': true,
   'server.cleanup.props': true,
+  'server.mute.global': true,
   'anon': true,
 }
 
@@ -155,6 +156,14 @@ async function handleToggleMute(body: Record<string, unknown>): Promise<Response
   return jsonResponse({ success: true })
 }
 
+let mockGlobalMute = false
+
+async function handleToggleGlobalMute(): Promise<Response> {
+  mockGlobalMute = !mockGlobalMute
+  window.postMessage({ action: 'globalMuteState', data: { enabled: mockGlobalMute } }, '*')
+  return jsonResponse({ success: true })
+}
+
 async function handleScreenshotPlayer(_body: Record<string, unknown>): Promise<Response> {
   return jsonResponse({ success: true })
 }
@@ -210,6 +219,7 @@ export const playersMock: DomainMock & { toasts: Notification[]; getPlayers: () 
     forcePlayerBucket: handleForcePlayerBucket,
     toggleFreeze: handleToggleFreeze,
     toggleMute: handleToggleMute,
+    toggleGlobalMute: handleToggleGlobalMute,
     screenshotPlayer: handleScreenshotPlayer,
     requestCachedPlayers: handleRequestCachedPlayers,
     getPlayerIdentifiers: handleGetPlayerIdentifiers,

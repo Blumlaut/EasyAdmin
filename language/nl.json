@@ -38,6 +38,8 @@
     "playermuted": "is gedempt!",
     "playerunmuted": "is niet-gedempt!",
     "playermute": "Je bent gedempt!",
+    "globalmute_active": "Noodmodus is actief. Alle spelerschat is gedempt.",
+    "globalmute_toggled": "%s heeft Noodmodus ingeschakeld/uitgeschakeld: %s",
     "banreasonguide": "Voeg een reden toe aan de ban.",
     "banlength": "Ban Lengte",
     "banlengthguide": "Hoelang moet de Speler verbannen worden? Selecteer om een aangepaste tijd te definiëren.",

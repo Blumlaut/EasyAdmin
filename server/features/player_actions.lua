@@ -376,6 +376,29 @@ function mutePlayer(playerId, toggle, source)
 end
 exports('mutePlayer', mutePlayer)
 
+-- Global Mute (Emergency Mode): toggle server-wide chat mute
+RegisterServerEvent("EasyAdmin:ToggleGlobalMute", function()
+	local src = source
+	if not DoesPlayerHavePermission(src, "server.mute.global") then return end
+
+	GlobalMute = not GlobalMute
+
+	-- Push state to all online admin clients
+	for adminId, _ in pairs(OnlineAdmins) do
+		TriggerLatentClientEvent("EasyAdmin:SetGlobalMuteState", adminId, 1000, GlobalMute)
+	end
+
+	if GlobalMute then
+		SendWebhookMessage(moderationNotification,
+			string.format(GetLocalisedText("globalmute_toggled"), getName(src, false, true), "ENABLED"),
+			"mute", 16711680)
+	else
+		SendWebhookMessage(moderationNotification,
+			string.format(GetLocalisedText("globalmute_toggled"), getName(src, false, true), "DISABLED"),
+			"mute", 65280)
+	end
+end)
+
 RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 	local src = source
 	if not id or not isPlayerOnline(id) then

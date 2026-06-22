@@ -42,6 +42,8 @@
     "playermuted": "è stato mutato!",
     "playerunmuted": "è stato smutato!",
     "playermute": "Sei mutato!",
+    "globalmute_active": "La modalità emergenza è attiva. Tutte le chat dei giocatori sono mute.",
+    "globalmute_toggled": "%s ha attivato/disattivato la Modalità Emergenza: %s",
     "spectateplayer": "Spetta Giocatore",
     "teleportplayer": "Teletrasporta",
     "teleporttoplayer": "Te dal Giocatore",

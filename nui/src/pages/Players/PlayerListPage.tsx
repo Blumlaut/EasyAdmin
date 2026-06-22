@@ -85,7 +85,9 @@ export function PlayerListPage({
         </div>
       )}
 
-      {canTeleportAll && players.length > 0 && <AllPlayersActions />}
+      {(canTeleportAll || !!permissions['server.mute.global']) && players.length > 0 && (
+        <AllPlayersActions permissions={permissions} />
+      )}
     </div>
   )
 }

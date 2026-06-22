@@ -42,6 +42,8 @@
     "playermuted": "został wyciszony!",
     "playerunmuted": "został bez wyciszenia!",
     "playermute": "Jesteś wyciszony!",
+    "globalmute_active": "Tryb awaryjny jest aktywny. Wszystkie czaty graczy są wyciszone.",
+    "globalmute_toggled": "%s przełączył Tryb Awaryjny: %s",
     "spectateplayer": "Obserwuj gracza",
     "teleportplayer": "Teleport",
     "teleporttoplayer": "do gracza",

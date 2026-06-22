@@ -57,6 +57,7 @@ permissions = {
 	["server.resources.monitor"] = false,
 	["server.network.monitor"] = false,
 	["server.chat"] = false,
+	["server.mute.global"] = false,
 
 	["immune"] = false,
 	["anon"] = false,

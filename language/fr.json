@@ -42,6 +42,8 @@
     "playermuted": "a été mis en sourdine!",
     "playerunmuted": "a été mis en sans sourdine!",
     "playermute": "Vous êtes muet!",
+    "globalmute_active": "Le mode d'urgence est actif. Tout le chat des joueurs est muet.",
+    "globalmute_toggled": "%s a basculé le Mode d'Urgence : %s",
     "confirmbanguide": "~r~~h~NOTE:~h~~w~ Appuyer sur confirmer va ~r~~h~bannir~h~~w~ le joueur avec les paramètres specifiés.",
     "spectateplayer": "Regarder le joueur",
     "teleportplayer": "Téléportation",
