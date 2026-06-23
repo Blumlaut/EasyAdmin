@@ -8,7 +8,7 @@
 -- This handler is called when a button with `server = true` is clicked.
 -- It MUST be permission-guarded because it exposes server state.
 
-RegisterEasyAdminPluginServerHandler('ea-plugin-demo', 'getServerData', function(source, data)
+exports['easyadmin']:RegisterPluginServerHandler('ea-plugin-demo', 'getServerData', function(source, data)
   -- Always check permissions on server handlers
   if not DoesPlayerHavePermission(source, 'plugin.demo.advanced') then
     return {
@@ -39,7 +39,7 @@ end)
 -- Another example server handler that demonstrates logging and state
 -- modification.
 
-RegisterEasyAdminPluginServerHandler('ea-plugin-demo', 'demoServerAction', function(source, data)
+exports['easyadmin']:RegisterPluginServerHandler('ea-plugin-demo', 'demoServerAction', function(source, data)
   if not DoesPlayerHavePermission(source, 'plugin.demo.advanced') then
     return {
       ok = false,

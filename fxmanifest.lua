@@ -19,6 +19,8 @@ shared_script 'shared/i18n.lua'
 shared_script 'shared/util_shared.lua'
 shared_script 'shared/kvp.lua'
 shared_script 'shared/plugin_api.lua'
+client_script 'client/plugin_api.lua'
+server_script 'server/plugin_api.lua'
 
 server_scripts {
     "server/lib/*.lua",

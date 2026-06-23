@@ -61,7 +61,7 @@ exports['easyadmin']:RegisterPlugin({
 -- ---------------------------------------------------------------------------
 
 -- Main page: exercises every schema component type
-RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderMainPage', function(data)
+exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderMainPage', function(data)
   local players = GetActivePlayers()
   local playerCount = #players
   local fps = math.floor(1.0 / GetFrameTime())
@@ -349,7 +349,7 @@ RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderMainPage', function(data
 end)
 
 -- Stats page: demonstrates bar chart
-RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderStatsPage', function(data)
+exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderStatsPage', function(data)
   return {
     {
       type = 'heading',
@@ -406,7 +406,7 @@ RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderStatsPage', function(dat
 end)
 
 -- Actions page: demonstrates nested layout with col/row
-RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderActionsPage', function(data)
+exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderActionsPage', function(data)
   return {
     {
       type = 'heading',
@@ -480,7 +480,7 @@ RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderActionsPage', function(d
 end)
 
 -- Player detail tab: shows player-specific info
-RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderPlayerTab', function(data)
+exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderPlayerTab', function(data)
   local playerId = data.context.playerId
 
   -- Get player info
@@ -537,7 +537,7 @@ RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderPlayerTab', function(dat
 end)
 
 -- Advanced player tab: requires permission
-RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderPlayerAdvancedTab', function(data)
+exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderPlayerAdvancedTab', function(data)
   local playerId = data.context.playerId
   local state = GetPlayerState(playerId)
   local ping = GetPlayerPing(playerId)
@@ -572,7 +572,7 @@ RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderPlayerAdvancedTab', func
 end)
 
 -- Dashboard widget
-RegisterEasyAdminPluginHandler('ea-plugin-demo', 'renderWidget', function(data)
+exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderWidget', function(data)
   return {
     {
       type = 'card',
