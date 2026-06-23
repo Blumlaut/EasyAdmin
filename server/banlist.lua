@@ -15,6 +15,9 @@ blacklist = {}
 -- Ban index for O(1) lookups
 banIndex = {}
 
+-- Next ban ID counter (avoids O(n) scan of the full banlist on every ban)
+local nextBanId = 1
+
 local function rebuildBanIndex()
     banIndex = {}
     for _, ban in ipairs(blacklist) do
@@ -31,6 +34,15 @@ end
 function RebuildBanlistView()
     blacklist = Storage.getBanList()
     rebuildBanIndex()
+
+    -- Reset nextBanId to max existing ID + 1 (avoids gaps when list is replaced, e.g. backup restore)
+    local maxId = 0
+    for _, ban in ipairs(blacklist) do
+        if ban.banid and ban.banid > maxId then
+            maxId = ban.banid
+        end
+    end
+    nextBanId = maxId + 1
 end
 
 function IsSelfBan(banner, target)
@@ -323,17 +335,12 @@ RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
     end
 end)
 	
----Generates a new unique ban ID
+---Generates a new unique ban ID (O(1) via counter, initialized from max at load)
 ---@return number @The next available ban ID
 function GetFreshBanId()
-    local blacklist = Storage.getBanList()
-    local maxId = 0
-    for _, ban in ipairs(blacklist) do
-        if ban.banid and ban.banid > maxId then
-            maxId = ban.banid
-        end
-    end
-    return maxId + 1
+    local id = nextBanId
+    nextBanId = nextBanId + 1
+    return id
 end
 exports('GetFreshBanId', GetFreshBanId)
 
@@ -393,6 +400,9 @@ function updateBlacklist(data, remove, forceChange)
                 theBan.banid = GetFreshBanId()
                 PrintDebugMessage("Ban did not have an ID, assigned "..theBan.banid..".", 4)
                 change = true
+            elseif theBan.banid >= nextBanId then
+                -- Keep counter ahead of any ID we encounter
+                nextBanId = theBan.banid + 1
             end
             if not theBan.expire then
                 PrintDebugMessage("Ban "..tostring(theBan.banid).." did not have an expiry time, removing..", 4)

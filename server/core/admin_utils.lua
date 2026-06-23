@@ -114,14 +114,12 @@ exports('getAllPlayerIdentifiers', getAllPlayerIdentifiers)
 
 function checkForChangedIdentifiers(playerIds, bannedIds)
 	local unbannedIds = {}
-	for _,playerId in pairs(playerIds) do
-		local thisIdBanned = false
-		for _,bannedId in pairs(bannedIds) do
-			if playerId == bannedId then
-				thisIdBanned = true
-			end
-		end
-		if not thisIdBanned then
+	local bannedSet = {}
+	for _, bannedId in ipairs(bannedIds) do
+		bannedSet[bannedId] = true
+	end
+	for _, playerId in ipairs(playerIds) do
+		if not bannedSet[playerId] then
 			table.insert(unbannedIds, playerId)
 		end
 	end

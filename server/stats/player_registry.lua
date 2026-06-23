@@ -18,6 +18,9 @@ local nextAliasId = 1
 -- Reverse index: any identifier string → player registry entry ID
 local playerIndex = {}
 
+-- Direct index: entry ID → entry reference (avoids O(n) scan of playerRegistry)
+local playerById = {}
+
 -- Temporary: track connect times per source for session length calculation
 local sessionStarts = {}
 
@@ -76,9 +79,7 @@ local function findPlayerByIdentifiers(identifiers)
 		local entryId = playerIndex[id]
 		if entryId and not seen[entryId] then
 			seen[entryId] = true
-			for _, entry in ipairs(playerRegistry) do
-				if entry.id == entryId then return entry end
-			end
+			return playerById[entryId]
 		end
 	end
 	return nil
@@ -96,6 +97,8 @@ local function mergePlayerEntries(primary, secondary)
 
 	unindexPlayerIdentifiers(primary)
 	unindexPlayerIdentifiers(secondary)
+	playerById[primary.id] = nil
+	playerById[secondary.id] = nil
 
 	primary.identifiers = mergedIds
 	if secondary.firstSeen and secondary.firstSeen < primary.firstSeen then
@@ -115,7 +118,9 @@ local function mergePlayerEntries(primary, secondary)
 	end
 
 	indexPlayerIdentifiers(primary)
+	playerById[primary.id] = primary
 
+	playerById[secondary.id] = nil
 	for i = #playerRegistry, 1, -1 do
 		if playerRegistry[i].id == secondary.id then
 			table.remove(playerRegistry, i)
@@ -136,8 +141,10 @@ local function load()
 	nextAliasId = data.nextAliasId or 1
 	playerIndex = {}
 
+	playerById = {}
 	for _, entry in ipairs(playerRegistry) do
 		indexPlayerIdentifiers(entry)
+		playerById[entry.id] = entry
 		if entry.id >= nextPlayerId then
 			nextPlayerId = entry.id + 1
 		end
@@ -254,6 +261,7 @@ RegisterServerEvent('EasyAdmin:sessionStart', function()
 		nextPlayerId = nextPlayerId + 1
 		table.insert(playerRegistry, entry)
 		indexPlayerIdentifiers(entry)
+		playerById[entry.id] = entry
 	end
 end)
 
@@ -274,14 +282,7 @@ AddEventHandler('playerDropped', function(reason) -- luacheck: ignore 212
 	local entryId = playerIndex[trackedBestId]
 	if not entryId then return end
 
-	local entry = nil
-	for _, e in ipairs(playerRegistry) do
-		if e.id == entryId then
-			entry = e
-			break
-		end
-	end
-
+	local entry = playerById[entryId]
 	if entry then
 		entry.playtime = (entry.playtime or 0) + sessionLength
 		entry.lastSeen = os.time()

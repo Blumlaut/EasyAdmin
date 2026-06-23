@@ -184,16 +184,21 @@ Citizen.CreateThread(function()
                 local diff = time - report.reportTime
                 local minutes = math.floor(diff / 60)
 
+                local newFormatted
                 if minutes < 1 then
-                    report.reportTimeFormatted = "1m ago"
+                    newFormatted = "1m ago"
                 elseif minutes < 120 then
-                    report.reportTimeFormatted = string.format("%dm ago", minutes)
+                    newFormatted = string.format("%dm ago", minutes)
                 else
-                    report.reportTimeFormatted = string.format("%dh ago", math.floor(minutes / 60))
+                    newFormatted = string.format("%dh ago", math.floor(minutes / 60))
                 end
 
-                for i,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, report)
+                -- Only broadcast if the formatted string actually changed
+                if newFormatted ~= report.reportTimeFormatted then
+                    report.reportTimeFormatted = newFormatted
+                    for i,_ in pairs(OnlineAdmins) do
+                        TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, report)
+                    end
                 end
             end
         end
