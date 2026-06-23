@@ -91,6 +91,39 @@ exports('getLatestVersion', getLatestVersion)
 local curVersion, isMaster = GetVersion()
 local resourceName = "EasyAdmin ("..GetCurrentResourceName()..")"
 
+-- Check that build artifacts exist before proceeding
+local missingArtifacts = {}
+
+if not LoadResourceFile(GetCurrentResourceName(), 'bot/dist/bot.js') then
+    table.insert(missingArtifacts, 'bot/dist/bot.js')
+end
+
+if not LoadResourceFile(GetCurrentResourceName(), 'nui/dist/index.html') then
+    table.insert(missingArtifacts, 'nui/dist/index.html')
+end
+
+if #missingArtifacts > 0 then
+    print('^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7')
+    print('')
+    print('^1EasyAdmin: Build artifacts are missing!^7')
+    print('')
+    print('^1Missing files:^7')
+    for _, file in ipairs(missingArtifacts) do
+        print('  ^1-^7 ' .. file)
+    end
+    print('')
+    print('^1EasyAdmin cannot function without its build artifacts.^7')
+    print('^1Please run the build before starting the server:^7')
+    print('')
+    print('  ^6npm run build^7')
+    print('')
+    print('^1Or build individually:^7')
+    print('  ^6npm run build:bot^7   -- build the Discord bot')
+    print('  ^6npm run build:nui^7   -- build the NUI frontend')
+    print('')
+    print('^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^4-^5-^6-^8-^9-^1-^2-^3-^3!^1FATAL ERROR^3!^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^1-^9-^8-^6-^5-^4-^3-^2-^7')
+end
+
 -- Update info state: populated by checkVersion(), consumed by NUI
 local updateInfo = {
   currentVersion = curVersion,
