@@ -14,9 +14,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.62.0",
+    "@typescript-eslint/parser": "^8.62.0",
     "esbuild": "^0.28.1",
     "eslint": "^10.5.0",
-    "globals": "^17.6.0"
+    "globals": "^17.6.0",
+    "typescript": "^5.8.2"
   },
   "engines": {
     "node": "^22.0.0"
@@ -25,7 +28,8 @@
     "ws": "^8.21.0"
   },
   "scripts": {
-    "build": "rm -rf ./dist; npm i; node build.js",
-    "update-deps": "npx npm-check-updates -u --enginesNode"
+    "build": "rm -rf ./dist && node build.js",
+    "lint": "eslint bot/",
+    "typecheck": "tsc --noEmit"
   }
 }

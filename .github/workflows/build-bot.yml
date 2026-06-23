@@ -2,7 +2,7 @@ name: Build Bot & NUI
 
 on:
   push:
-    branches: [ node-22, master ] # or the branch where changes are being pushed
+    branches: [ node-22, master ]
   workflow_dispatch:
 
 jobs:
@@ -21,6 +21,11 @@ jobs:
         run: |
           cd bot/
           npm ci
+
+      - name: Typecheck bot
+        run: |
+          cd bot/
+          npm run typecheck
 
       - name: Build bot
         run: |

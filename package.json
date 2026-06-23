@@ -10,6 +10,8 @@
     "lint:all": "npm --prefix bot run lint && npm --prefix nui run check",
     "lint:bot": "npm --prefix bot run lint",
     "lint:nui": "npm --prefix nui run check",
+    "typecheck": "npm run typecheck:bot && npm run typecheck:nui",
+    "typecheck:bot": "npm --prefix bot run typecheck",
     "typecheck:nui": "npm --prefix nui run typecheck",
     "test:nui": "npm --prefix nui run test"
   },
