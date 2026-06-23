@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './styles/index.css'
 import './components/chart-setup'
-// Register all installed NUI plugins (side-effect import).
-import './plugins/manifest'
+// Plugin system is runtime — no build-time imports needed.
+// External resources register via exports['easyadmin']:RegisterPlugin().
+import './plugins/store' // side-effect: wires NUI message listeners
 
 // Three.js (@citizenfx/three) is in a separate chunk (dynamic import).
 // Pre-load it in the background so the screenshot/stream render loop

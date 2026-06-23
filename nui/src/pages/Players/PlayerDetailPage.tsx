@@ -3,7 +3,7 @@ import { callLua, on } from '../../fivem'
 import type { Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
-import type { PlayerDetailTab } from '../../plugins'
+import { PluginTabHost, type PluginPlayerTab } from '../../plugins'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
 import { PlayerActionsPanel } from './PlayerActionsPanel'
 import { ActionHistorySection } from './ActionHistorySection'
@@ -13,8 +13,8 @@ interface PlayerDetailPageProps {
   player: Player
   permissions: Permissions
   ipPrivacy: boolean
-  /** Plugin-contributed tabs. */
-  pluginTabs?: PlayerDetailTab[]
+  /** Plugin-contributed tabs (runtime, schema-rendered). */
+  pluginTabs?: Array<PluginPlayerTab & { _pluginId: string }>
 }
 
 export function PlayerDetailPage({
@@ -115,17 +115,18 @@ export function PlayerDetailPage({
         />
       )}
 
-      {/* Plugin-contributed tabs */}
+      {/* Plugin-contributed tabs (schema-rendered) */}
       {pluginTabs.length > 0 && (
         <div className="card player-detail-plugin-tabs">
           <div className="player-detail-plugin-tab-headers flex items-center gap-1">
             {pluginTabs.map((tab) => {
-              const isActive = activePluginTab === tab.id
+              const tabKey = `${tab._pluginId}:${tab.id}`
+              const isActive = activePluginTab === tabKey
               return (
                 <button
-                  key={tab.id}
+                  key={tabKey}
                   className={`btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}`}
-                  onClick={() => setActivePluginTab(isActive ? null : tab.id)}
+                  onClick={() => setActivePluginTab(isActive ? null : tabKey)}
                 >
                   {tab.icon && <Icon name={tab.icon as 'book-open'} size="xs" />}
                   {tab.label}
@@ -134,12 +135,11 @@ export function PlayerDetailPage({
             })}
           </div>
           {activePluginTab && (() => {
-            const tab = pluginTabs.find((t) => t.id === activePluginTab)
+            const tab = pluginTabs.find((t) => `${t._pluginId}:${t.id}` === activePluginTab)
             if (!tab) return null
-            const TabComponent = tab.component
             return (
               <div className="player-detail-plugin-tab-content">
-                <TabComponent player={player} permissions={permissions} />
+                <PluginTabHost pluginId={tab._pluginId} renderAction={tab.renderAction} playerId={player.id} />
               </div>
             )
           })()}

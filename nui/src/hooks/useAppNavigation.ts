@@ -182,7 +182,7 @@ export function useAppNavigation({
   })()
 
   // Permission gating for nav items. Plugin items are already permission-
-  // filtered by usePluginContributions, so they pass through unchanged.
+  // filtered by usePlugins, so they pass through unchanged.
   const visibleNavItems: NavItem[] = allNavItems.map((item) => {
     // Pass through separators and headers unchanged
     if ('type' in item && (item.type === 'separator' || item.type === 'header')) {

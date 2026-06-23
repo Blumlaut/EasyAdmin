@@ -25,6 +25,11 @@ function RegisterEasyAdminPluginServerHandler(pluginId, action, fn)
   serverPluginHandlers[pluginId .. ':' .. action] = fn
 end
 
+-- Export for external resources
+exports('RegisterPluginServerHandler', function(pluginId, action, fn)
+  RegisterEasyAdminPluginServerHandler(pluginId, action, fn)
+end)
+
 RegisterNetEvent('EasyAdmin:Plugin:serverCall')
 AddEventHandler('EasyAdmin:Plugin:serverCall', function(pluginId, action, payload, requestId)
   local src = source

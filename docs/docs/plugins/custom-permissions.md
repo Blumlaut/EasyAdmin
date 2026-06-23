@@ -1,19 +1,69 @@
 # Custom Permissions
 
-Custom permissions for plugins are currently not available. The plugin system is disabled pending a rewrite.
+Plugins can define custom permissions and use them to gate their UI
+contributions.
 
-## Previous System (v1)
+## Registering a permission
 
-The v1 plugin system allowed plugins to define custom permissions in their `_shared.lua` file:
+In your resource's shared script (runs on both client and server):
 
 ```lua
 Citizen.CreateThread(function()
-    permissions["plugin.example"] = false
+  permissions["plugin.my-plugin"] = false
 end)
 ```
 
-This would register `easyadmin.plugin.example` as a checkable permission.
+This adds `plugin.my-plugin` to EasyAdmin's permissions table. The
+`easyadmin.` prefix is added automatically by `DoesPlayerHavePermission()`.
 
-## Current Status
+Grant the `easyadmin.plugin.my-plugin` ACE to admins who should have access:
 
-Custom permissions must use the standard EasyAdmin permission system defined in `shared/permissions.lua`. New permissions can be added there and assigned via ACE in `server.cfg`.
+```cfg
+add_ace group.admin easyadmin.plugin.my-plugin allow
+```
+
+## Gating contributions
+
+### Entire plugin
+
+```lua
+exports['easyadmin']:RegisterPlugin({
+  id = 'my-plugin',
+  permission = 'plugin.my-plugin',
+  -- All contributions hidden if admin lacks this
+})
+```
+
+### Individual player tab
+
+```lua
+playerDetailTabs = {
+  { id = 'public', label = 'Info', renderAction = 'renderInfo' },
+  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.admin', renderAction = 'renderAdmin' },
+},
+```
+
+### Server handlers
+
+Always permission-guard server handlers manually:
+
+```lua
+exports['easyadmin']:RegisterPluginServerHandler('my-plugin', 'doAction', function(source, data)
+  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
+    return { ok = false, error = 'permission denied' }
+  end
+  -- ...
+end)
+```
+
+## Checking permissions in client handlers
+
+```lua
+exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(data)
+  if not DoesPlayerHavePermission(-1, 'plugin.my-plugin.admin') then
+    -- Return a limited schema
+    return { { type = 'text', text = 'No access', variant = 'muted' } }
+  end
+  -- Return full schema
+end)
+```

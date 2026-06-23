@@ -9,7 +9,7 @@ import { StatCard, type StatCardProps } from '../../components/StatCard'
 import { TimeSeriesChart, type TimeSeriesLine } from '../../components/TimeSeriesChart'
 import { DoughnutChart } from '../../components/DoughnutChart'
 import { useTranslation } from '../../lib/i18n'
-import type { DashboardWidget } from '../../plugins'
+import { PluginWidgetHost, type PluginDashboardWidget } from '../../plugins'
 
 // ============================================================
 // Resource update summary types
@@ -169,8 +169,8 @@ interface DashboardProps {
   updateInfo: UpdateInfo | null
   onDismissUpdate: () => void
   onNavigateToResources: () => void
-  /** Plugin-contributed dashboard widgets. */
-  pluginWidgets?: DashboardWidget[]
+  /** Plugin-contributed dashboard widgets (runtime, schema-rendered). */
+  pluginWidgets?: Array<PluginDashboardWidget & { _pluginId: string }>
 }
 
 export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigateToResources, pluginWidgets }: DashboardProps) {
@@ -396,13 +396,12 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
         />
       )}
 
-      {/* Plugin-contributed widgets */}
+      {/* Plugin-contributed widgets (schema-rendered) */}
       {pluginWidgets && pluginWidgets.length > 0 && (
         <div className="dashboard-grid grid gap-3">
-          {pluginWidgets.map((widget) => {
-            const WidgetComponent = widget.component
-            return <WidgetComponent key={widget.id} pluginId={widget.id.split(':')[0]} />
-          })}
+          {pluginWidgets.map((widget) => (
+            <PluginWidgetHost key={widget.id} pluginId={widget._pluginId} renderAction={widget.renderAction} />
+          ))}
         </div>
       )}
 

@@ -93,7 +93,7 @@ You want to extend EasyAdmin with custom plugins, integrations, or exports.
 <a class="card" href="plugins/plugin-api">
 <div class="card-icon">&#x1F527;</div>
 <div class="card-title">Plugin API</div>
-<div class="card-desc">Available exports and events for custom integrations.</div>
+<div class="card-desc">Build runtime plugins that extend the NUI with schema-driven UI.</div>
 </a>
 
 <a class="card" href="nui/design-system">
@@ -151,7 +151,7 @@ Find what you need by task:
 | **Configuration** | Webhooks, commands, action history, backups, shortcuts, advanced options |
 | **Features** | Ban list, reports, screenshots, reminders, statistics, monitoring tools |
 | **NUI** | Design system, page descriptions, known issues |
-| **Plugins** | Plugin API, available exports and events |
+| **Plugins** | Runtime plugin system — schema-driven UI extensions |
 | **Reference** | Complete convar, permission, and command listings |
 | **Updates** | How to update EasyAdmin and handle breaking changes |
 | **Troubleshooting** | Common issues and solutions |

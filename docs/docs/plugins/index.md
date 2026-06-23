@@ -1,30 +1,50 @@
 # Plugins
 
-The EasyAdmin plugin system is currently disabled. It will be re-implemented in a future release.
+EasyAdmin's plugin system lets **external FiveM resources** extend the UI at
+runtime — no code is compiled into EasyAdmin.
 
-## Current Status
+## How It Works
 
-The previous plugin system (v1) was removed in EasyAdmin 7.3. A new plugin API is under development.
+1. Your resource calls `exports['easyadmin']:RegisterPlugin(config)` from Lua
+2. EasyAdmin stores the registration and syncs it to the NUI (React frontend)
+3. When an admin opens your plugin's page/tab/widget, the NUI calls the
+   `renderAction` you registered
+4. Your Lua handler returns a **schema tree** — a declarative description of
+   the UI using EasyAdmin's built-in components
+5. EasyAdmin renders the schema. When a button is clicked, the NUI calls the
+   button's `action` handler, which can return a new schema to re-render
 
-## What to Expect
+Plugins **never ship React components or TypeScript**. They compose UI from
+EasyAdmin's existing component palette (cards, stat cards, buttons, tables,
+charts, alerts, badges, icons, etc.).
 
-When the new plugin system is released, it will support:
+## Where to Start
 
-- Custom permissions
-- Server-side event handlers
-- Client-side UI extensions
-- Data storage hooks
-- Export overrides
+- [Creating a Plugin](creating-plugins.md) — Step-by-step guide with a full example
+- [Plugin API](plugin-api.md) — Lua exports, handlers, and events
+- [NUI Plugins (advanced)](../../nui-plugins.md) — Schema component reference and internals
 
-## Alternative Approaches
+## What You Can Build
 
-While the plugin system is unavailable, you can extend EasyAdmin using:
+| Contribution | Where it appears |
+|---|---|
+| **Nav items** | Sidebar entries that open a plugin page |
+| **Pages** | Full-page views in the main content area |
+| **Player tabs** | Tabs injected into the player detail page |
+| **Dashboard widgets** | Cards on the dashboard |
 
-- **Server events** — Listen to events like `EasyAdmin:reportAdded`, `EasyAdmin:addBan`, `EasyAdmin:LogAction`
-- **Exports** — Use `EasyAdmin:addBan`, `EasyAdmin:unbanPlayer`, `EasyAdmin:getActionHistory`, etc.
-- **Custom convars** — Configure existing features via convars
-- **Discord bot** — Extend moderation via the Discord bot and its events
+## Permissions
 
-## Tracking Progress
+Plugins can define custom permissions and gate their contributions:
 
-Follow the [GitHub repository](https://github.com/Blumlaut/EasyAdmin) for updates on the new plugin system.
+```lua
+-- Register a permission in your resource's shared script
+Citizen.CreateThread(function()
+  permissions["plugin.my-plugin"] = false
+end)
+```
+
+Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see it.
+Gate individual tabs or the entire plugin via the `permission` field.
+
+See [Creating a Plugin](creating-plugins.md) for the full permission pattern.

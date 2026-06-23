@@ -62,6 +62,7 @@ permissions = {
 	["immune"] = false,
 	["anon"] = false,
 
-	-- Plugins may also register permissions at runtime (see plugins/easyinfo/).
-	-- "plugin.easyinfo" is registered by the EasyInfo example plugin.
+	-- External plugin resources may register permissions at runtime
+	-- via their *_shared.lua scripts (loaded by fxmanifest.lua).
+	-- See docs/nui-plugins.md for the plugin permission pattern.
 }

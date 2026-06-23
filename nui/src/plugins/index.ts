@@ -1,27 +1,35 @@
 /**
- * EasyAdmin NUI Plugin SDK — public barrel export.
+ * EasyAdmin NUI Plugin System — runtime, schema-driven.
  *
- * Plugin authors import everything they need from here:
+ * Plugins are external FiveM resources that register via Lua exports.
+ * The NUI renders their UI from declarative schema trees using only
+ * built-in EasyAdmin components. No plugin code is compiled into the NUI.
  *
- * ```ts
- * import type { EasyAdminPlugin, PluginPageProps } from '../../plugins'
- * import { usePluginApi } from '../../plugins'
- * ```
+ * @see docs/nui-plugins.md
  */
 
+// Store + hooks
+export { setPlugins, getPlugins, subscribePlugins } from './store'
+export { usePlugins, type PluginContributions } from './usePlugins'
+export { usePluginSchema } from './usePluginSchema'
+
+// Renderer
+export { SchemaRenderer, type SchemaRendererProps } from './SchemaRenderer'
+
+// Host components
+export { PluginPageHost, PluginWidgetHost, PluginTabHost } from './hosts'
+
+// Lua bridge
+export { pluginCall, type PluginCallResult } from './bridge'
+
+// Types
 export type {
-  EasyAdminPlugin,
-  EasyAdminPluginContext,
+  RuntimePlugin,
   PluginNavItem,
   PluginPage,
-  PluginPageProps,
-  PlayerDetailTab,
-  PlayerDetailTabProps,
-  DashboardWidget,
-  DashboardWidgetProps,
+  PluginPlayerTab,
+  PluginDashboardWidget,
+  PluginRenderContext,
+  RenderResponse,
 } from './types'
-
-export { registerPlugin, getRegisteredPlugins, getPluginErrors } from './registry'
-export { PluginApiProvider, usePluginApi, callLuaPlugin } from './api'
-export { usePluginContributions } from './usePluginContributions'
-export type { PluginContributions } from './usePluginContributions'
+export type { ComponentSchema } from './schema'

@@ -1,18 +1,15 @@
 ------------------------------------
 -- EasyAdmin NUI: Plugin bridge
 --
--- Routes NUI `pluginCall` requests to Lua handlers registered by plugins.
---
--- This is the Lua half of the NUI plugin system. The NUI side calls
--- `api.callLua(action, data)` (see nui/src/plugins/api.tsx) which POSTs
--- to the `pluginCall` NUI callback; this file dispatches to the matching
--- handler.
+-- Routes NUI `pluginCall` requests to Lua handlers registered by external
+-- plugin resources. The NUI side calls `pluginCall(pluginId, action, data)`
+-- (see nui/src/plugins/bridge.ts) which POSTs to the `pluginCall` NUI
+-- callback; this file dispatches to the matching handler.
 --
 -- Two handler registries exist:
 --   • Client handlers  — RegisterEasyAdminPluginHandler(pluginId, action, fn)
---   • Server handlers  — registered via the server-side bridge
---     (server/_plugin_bridge.lua) and reached by passing `server = true`
---     in the NUI request payload.
+--   • Server handlers  — RegisterEasyAdminPluginServerHandler(pluginId, action, fn)
+--     (server/_plugin_bridge.lua) reached by passing server = true.
 --
 -- @see docs/nui-plugins.md
 ------------------------------------
@@ -21,8 +18,8 @@
 local pluginHandlers = {}
 
 ---Register a client-side Lua handler for a plugin action.
----@param pluginId string @The plugin id (kebab-case, matches the NUI plugin)
----@param action string @The action name (matches the `action` arg passed to `api.callLua`)
+---@param pluginId string @The plugin id (matches the NUI plugin)
+---@param action string @The action name (matches the `action` arg passed to pluginCall)
 ---@param fn function @`function(data) -> any` — return value is sent back to the NUI
 function RegisterEasyAdminPluginHandler(pluginId, action, fn)
   if type(pluginId) ~= 'string' or type(action) ~= 'string' or type(fn) ~= 'function' then
@@ -39,10 +36,12 @@ function HasEasyAdminPluginHandler(pluginId, action)
   return pluginHandlers[pluginId .. ':' .. action] ~= nil
 end
 
+-- Export for external resources
+exports('RegisterPluginHandler', function(pluginId, action, fn)
+  RegisterEasyAdminPluginHandler(pluginId, action, fn)
+end)
+
 -- ── Server-side forwarding ────────────────────────────────────
--- When a plugin needs server-side data it passes `server = true` in the
--- callLua payload. The client forwards to the `EasyAdmin:Plugin:serverCall`
--- event (handled by server/_plugin_bridge.lua) and relays the response.
 
 local pendingServerRequests = {}
 local requestCounter = 0
@@ -65,7 +64,6 @@ end
 
 -- ── NUI callback: pluginCall ──────────────────────────────────
 -- Payload: { pluginId = string, action = string, data = table, server = boolean }
--- Response: whatever the handler returns, or { ok = false, error = string }
 RegisterNUICallback('pluginCall', function(data, cb)
   if type(data) ~= 'table' then
     cb({ ok = false, error = 'invalid payload' })

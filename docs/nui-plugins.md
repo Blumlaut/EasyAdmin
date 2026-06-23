@@ -1,398 +1,280 @@
-# EasyAdmin NUI Plugins
+# NUI Plugin System — Schema Reference
 
-Extend the EasyAdmin UI with your own sidebar items, pages, player tabs, and
-dashboard widgets — backed by Lua handlers on the client or server.
+This is the technical reference for the runtime plugin system. For a
+step-by-step guide, see [Creating a Plugin](docs/plugins/creating-plugins.md).
 
-> The old NativeUI plugin system (`addPlugin`) is deprecated and a no-op.
+## Architecture
+
+Plugins are **external FiveM resources**. They register at runtime via Lua
+exports and provide declarative schema trees that EasyAdmin renders using
+its built-in React components. No plugin code is ever compiled into EasyAdmin.
+
+```
+External resource
+  │  exports['easyadmin']:RegisterPlugin(config)
+  ▼
+EasyAdmin (shared/plugin_api.lua)
+  │  stores registration, networks to clients
+  ▼
+NUI (React)
+  │  receives registration via SendNUIMessage
+  │  renders nav items, dashboard widgets, player tabs
+  │
+  │  user opens a plugin page:
+  │  pluginCall(pluginId, renderAction) → schema tree
+  ▼
+SchemaRenderer
+  │  maps schema nodes to built-in components
+  │  button click → pluginCall(pluginId, action, data)
+```
+
+## NUI source files
+
+| File | Purpose |
+|---|---|
+| `nui/src/plugins/schema.ts` | Schema node type definitions |
+| `nui/src/plugins/types.ts` | Runtime plugin registration types |
+| `nui/src/plugins/store.ts` | Plugin registry + NUI message listeners |
+| `nui/src/plugins/usePlugins.ts` | Hook: collects & permission-filters contributions |
+| `nui/src/plugins/usePluginSchema.ts` | Hook: fetches & manages schema from Lua |
+| `nui/src/plugins/SchemaRenderer.tsx` | Maps schema nodes → built-in components |
+| `nui/src/plugins/hosts.tsx` | Page/widget/tab host components |
+| `nui/src/plugins/bridge.ts` | `pluginCall` Lua bridge |
+
+## Lua source files
+
+| File | Purpose |
+|---|---|
+| `shared/plugin_api.lua` | `RegisterPlugin` export, NUI sync, client networking |
+| `client/nui/plugins.lua` | `pluginCall` NUI callback, client handler dispatch |
+| `server/_plugin_bridge.lua` | Server handler dispatch |
 
 ---
 
-## Installing a plugin
+## Schema components
 
-1. Put your plugin package in `nui/src/plugins/<your-plugin>/`
-2. Register it in `nui/src/plugins/manifest.ts`:
+Every render handler returns an array of schema nodes. Each node has a
+`type` field that determines which built-in component is rendered.
 
-```ts
-import { registerPlugin } from './registry'
-import myPlugin from './my-plugin'
+### Layout
 
-registerPlugin(myPlugin)
+#### `card`
+
+A styled card container.
+
+```json
+{ "type": "card", "children": [ ... ] }
 ```
 
-3. Rebuild the NUI (`npm run build`).
+#### `row`
 
-Lua handlers go in `plugins/<your-plugin>/` and are loaded automatically by
-`fxmanifest.lua` (`*_shared.lua`, `*_client.lua`, `*_server.lua`).
+Horizontal flex layout.
 
----
-
-## Plugin definition
-
-The default export of your plugin's `index.ts`:
-
-```ts
-import './my-plugin.css'
-import type { EasyAdminPlugin } from '../index'
-import { MyPage } from './MyPage'
-import { MyTab } from './MyTab'
-import { MyWidget } from './MyWidget'
-
-const VIEW = 'plugin:my-plugin'
-
-const myPlugin: EasyAdminPlugin = {
-  id: 'my-plugin',          // kebab-case, must be unique
-  name: 'My Plugin',
-  version: '1.0.0',
-  author: 'Your Name',
-  description: 'What it does.',
-
-  navItems: [
-    { id: VIEW, view: VIEW, label: 'My Plugin', icon: 'box' },
-  ],
-  pages: [
-    { view: VIEW, component: MyPage },
-  ],
-  playerDetailTabs: [
-    { id: 'info', label: 'My Tab', icon: 'info', component: MyTab },
-  ],
-  dashboardWidgets: [
-    { id: 'status', component: MyWidget, order: 150 },
-  ],
-
-  onActivate(ctx) {
-    const unsub = ctx.on<{ msg: string }>('my-plugin:event', (d) => ctx.notify(d.msg))
-    return unsub
-  },
-}
-
-export default myPlugin
+```json
+{ "type": "row", "gap": 3, "wrap": true, "children": [ ... ] }
 ```
 
-`id` must be kebab-case. `name` and `version` are required. Everything else is optional.
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `gap` | `0\|1\|2\|3\|4` | — | Spacing between children |
+| `wrap` | `boolean` | `false` | Allow wrapping |
 
----
+#### `col`
 
-## The plugin API
+Vertical flex layout.
 
-Inside any plugin component, call `usePluginApi(pluginId)`:
-
-```tsx
-import { usePluginApi } from '../index'
-import type { PluginPageProps } from '../index'
-
-function MyPage({ pluginId }: PluginPageProps) {
-  const api = usePluginApi(pluginId)
-
-  const [info, setInfo] = useState(null)
-
-  useEffect(() => {
-    api.callLua('getInfo').then(setInfo)
-  }, [api])
-
-  return (
-    <div className="page-container">
-      <h3>{api.t('My Plugin')}</h3>
-      <button onClick={() => api.notify('Done!', 'success')}>
-        {api.t('Notify')}
-      </button>
-    </div>
-  )
-}
+```json
+{ "type": "col", "gap": 2, "children": [ ... ] }
 ```
 
-### `callLua(action, data?, server?)`
+#### `divider`
 
-Calls a Lua handler. Returns a promise with whatever the handler returns.
+Horizontal rule.
 
-```ts
-// Client handler
-const info = await api.callLua<ServerInfo>('getServerInfo')
-
-// Client handler with data
-const notes = await api.callLua<Note[]>('getPlayerNotes', { playerId: 42 })
-
-// Server handler — pass true as the third arg
-const count = await api.callLua<{ count: number }>('getPlayerCount', undefined, true)
+```json
+{ "type": "divider" }
 ```
 
-### `on(action, handler)`
+### Text
 
-Subscribes to a message pushed from Lua via `SendNUIMessage`. Returns an unsubscribe function.
+#### `heading`
 
-```ts
-const unsub = api.on<{ message: string }>('my-plugin:broadcast', (data) => {
-  api.notify(data.message, 'info')
-})
-// later: unsub()
+```json
+{ "type": "heading", "text": "My Page", "level": 2 }
 ```
 
-Push from Lua:
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `text` | `string` | — | Heading text |
+| `level` | `1\|2\|3\|4` | `3` | Heading size |
 
-```lua
-SendNUIMessage({ action = 'my-plugin:broadcast', data = { message = 'Hello!' } })
+#### `text`
+
+```json
+{ "type": "text", "text": "Some text", "variant": "muted" }
 ```
 
-### `hasPermission(perm)`
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `text` | `string` | — | Text content |
+| `variant` | `string` | `default` | `default`, `muted`, `small`, `large`, `mono` |
 
-Checks the current admin's permissions (no `easyadmin.` prefix):
+### Interactive
 
-```ts
-if (api.hasPermission('plugin.my-plugin.admin')) {
-  // show admin-only UI
+#### `button`
+
+Calls a Lua handler when clicked. If the handler returns a schema, the view
+re-renders with it. Otherwise the original `renderAction` is re-fetched.
+
+```json
+{ "type": "button", "label": "Refresh", "action": "refresh", "icon": "refresh", "variant": "ghost", "size": "sm" }
+```
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `label` | `string` | — | Button text |
+| `action` | `string` | — | Handler action name |
+| `data` | `any` | — | Payload sent to handler |
+| `server` | `boolean` | `false` | Route to server-side handler |
+| `icon` | `string` | — | Icon name |
+| `variant` | `string` | `ghost` | `primary`, `secondary`, `ghost`, `danger` |
+| `size` | `string` | `md` | `xs`, `sm`, `md` |
+| `disabled` | `boolean` | `false` | Disabled state |
+
+#### `copy-button`
+
+Copy-to-clipboard button.
+
+```json
+{ "type": "copy-button", "value": "hello", "label": "Copy" }
+```
+
+### Data display
+
+#### `stat-card`
+
+Metric card with icon.
+
+```json
+{ "type": "stat-card", "label": "Players", "value": "8", "icon": "users", "iconColor": "var(--accent-green)", "bgColor": "var(--bg-green)" }
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `label` | `string` | Metric label |
+| `value` | `string\|number` | Metric value |
+| `subValue` | `string?` | Optional sub-text |
+| `icon` | `string` | Icon name |
+| `iconColor` | `string` | CSS color (use `var(--...)`) |
+| `bgColor` | `string` | CSS color (use `var(--...)`) |
+
+#### `key-value-table`
+
+Key-value pairs table. Rows with an `action` are clickable.
+
+```json
+{
+  "type": "key-value-table",
+  "rows": [
+    { "key": "Name", "value": "John" },
+    { "key": "License", "value": "abc123", "mono": true, "action": "revoke", "actionLabel": "Revoke" }
+  ]
 }
 ```
 
-### `t(key, params?)`
+#### `alert`
 
-Translates a string. Falls back to the key if no translation exists.
+Alert banner.
 
-```ts
-api.t('Hello')                              // → "Hello"
-api.t('Welcome, {name}', { name: 'Alice' }) // → "Welcome, Alice"
+```json
+{ "type": "alert", "variant": "warning", "title": "Heads up", "children": [ ... ] }
 ```
 
-### `notify(message, type?)`
+`variant`: `info`, `warning`, `success`, `error`.
 
-Shows a native in-game notification.
+#### `badge`
 
-```ts
-api.notify('Saved!', 'success')
-api.notify('Something went wrong', 'error')
+Small status badge.
+
+```json
+{ "type": "badge", "text": "Online", "variant": "online", "icon": "check-circle" }
 ```
 
----
+`variant`: `default`, `online`, `offline`, `admin`, `warning`.
 
-## Lua handlers
+#### `icon`
 
-### Client handlers
+Standalone icon.
 
-Register with `RegisterEasyAdminPluginHandler(pluginId, action, fn)`.
-The handler receives the data payload; its return value goes back to the NUI.
-
-```lua
--- plugins/my-plugin/my-plugin_client.lua
-
-RegisterEasyAdminPluginHandler("my-plugin", "getInfo", function(data)
-  return {
-    ok = true,
-    name = GetPlayerName(PlayerId()),
-    ping = GetPlayerPing(PlayerId()),
-  }
-end)
-
-RegisterEasyAdminPluginHandler("my-plugin", "getPlayerNotes", function(data)
-  return {
-    ok = true,
-    { text = "Note for player " .. tostring(data.playerId), author = "Me", timestamp = os.time() },
-  }
-end)
+```json
+{ "type": "icon", "name": "users", "size": "md" }
 ```
 
-### Server handlers
+`size`: `xs`, `sm`, `md`, `lg`.
 
-Register with `RegisterEasyAdminPluginServerHandler(pluginId, action, fn)`.
-The handler receives `(source, data)` — `source` is the requesting player's
-server ID. Reach it from the NUI with `api.callLua(action, data, true)`.
+#### `tooltip`
 
-```lua
--- plugins/my-plugin/my-plugin_server.lua
+Wraps children with a hover tooltip.
 
-RegisterEasyAdminPluginServerHandler("my-plugin", "getPlayerCount", function(source, data)
-  -- Always permission-guard server handlers!
-  if not DoesPlayerHavePermission(source, "plugin.my-plugin.view") then
-    return { ok = false, error = "permission denied" }
-  end
-
-  return { ok = true, count = #GetPlayers(), requestedBy = source }
-end)
+```json
+{ "type": "tooltip", "content": "Help text", "children": [ ... ] }
 ```
 
----
+#### `timeline-entry`
 
-## Permissions
+Timeline-style entry with title, time, body, and footer.
 
-Register a plugin permission in your `*_shared.lua`:
-
-```lua
-Citizen.CreateThread(function()
-  permissions["plugin.my-plugin"] = false
-end)
+```json
+{ "type": "timeline-entry", "title": "Warning", "time": "2h ago", "footer": "Admin", "children": [ ... ] }
 ```
 
-Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see it.
+### Charts
 
-Gate the entire plugin:
+#### `bar-chart`
 
-```ts
-const myPlugin: EasyAdminPlugin = {
-  id: 'my-plugin',
-  name: 'My Plugin',
-  version: '1.0.0',
-  permission: 'plugin.my-plugin',  // hides everything if admin lacks this
-  // ...
+Horizontal bar chart.
+
+```json
+{
+  "type": "bar-chart",
+  "items": [
+    { "label": "Mon", "value": 12 },
+    { "label": "Tue", "value": 8, "color": "var(--accent-orange)" }
+  ]
 }
 ```
 
-Gate a single player tab:
+### Loading
 
-```ts
-playerDetailTabs: [
-  { id: 'public', label: 'Info', component: InfoTab },
-  { id: 'admin', label: 'Admin', permission: 'plugin.my-plugin.admin', component: AdminTab },
-],
-```
+#### `skeleton`
 
----
+Loading placeholder.
 
-## Contribution examples
-
-### Nav item with a dropdown
-
-```ts
-navItems: [
-  {
-    id: 'plugin:my-plugin',
-    label: 'My Plugin',
-    icon: 'box',
-    children: [
-      { id: 'plugin:my-plugin:page1', label: 'Page 1', icon: 'file' },
-      { id: 'plugin:my-plugin:page2', label: 'Page 2', icon: 'settings' },
-    ],
-  },
-],
-```
-
-### Multi-page plugin
-
-Each page's `view` must match a nav item's `id` (or `view`):
-
-```ts
-navItems: [
-  { id: 'plugin:my-plugin:main', label: 'Main', icon: 'box' },
-  { id: 'plugin:my-plugin:settings', label: 'Settings', icon: 'settings' },
-],
-pages: [
-  { view: 'plugin:my-plugin:main', component: MainPage },
-  { view: 'plugin:my-plugin:settings', component: SettingsPage },
-],
-```
-
-### Player-detail tab
-
-```tsx
-import { usePluginApi } from '../index'
-import type { PlayerDetailTabProps } from '../index'
-
-function MyTab({ player, permissions }: PlayerDetailTabProps) {
-  const api = usePluginApi('my-plugin')
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    api.callLua('getPlayerData', { playerId: player.id }).then(setData)
-  }, [api, player.id])
-
-  return <div className="card p-3">{JSON.stringify(data)}</div>
-}
-
-// In your plugin definition:
-playerDetailTabs: [
-  { id: 'info', label: 'My Tab', icon: 'info', component: MyTab },
-],
-```
-
-### Dashboard widget
-
-```tsx
-import { usePluginApi } from '../index'
-import type { DashboardWidgetProps } from '../index'
-
-function MyWidget({ pluginId }: DashboardWidgetProps) {
-  const api = usePluginApi(pluginId)
-  const [status, setStatus] = useState(null)
-
-  useEffect(() => {
-    api.callLua('getStatus').then(setStatus)
-  }, [api])
-
-  return (
-    <div className="card dashboard-card-sm p-3">
-      <span className="badge badge-online">Online</span>
-    </div>
-  )
-}
-
-// In your plugin definition (lower order = renders first, default 100):
-dashboardWidgets: [
-  { id: 'status', component: MyWidget, order: 150 },
-],
-```
-
-### Lifecycle hook
-
-Runs once when the menu first opens. Return a cleanup function if needed.
-
-```ts
-onActivate(ctx) {
-  const unsub = ctx.on<{ count: number }>('my-plugin:update', (data) => {
-    ctx.notify(`Count: ${data.count}`, 'info')
-  })
-  return unsub
-},
+```json
+{ "type": "skeleton", "height": 48, "width": "100%" }
 ```
 
 ---
 
-## Styling
+## Available icons
 
-Import a CSS file in your plugin's `index.ts` and use design tokens
-(`var(--...)`) from `tokens.css` — no raw hex/px values. Prefix classes with
-your plugin id to avoid collisions.
-
-```css
-/* plugins/my-plugin/my-plugin.css */
-.myplugin-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
-}
-```
-
-Use existing EasyAdmin components (`Icon`, `Skeleton`, `CopyButton`, etc.)
-from `../../components/`. Available icon names are in `../../components/icons.tsx`.
+`users` `shield` `settings` `server` `alert-triangle` `x` `search`
+`chevron-left` `chevron-right` `chevron-down` `chevron-up`
+`chevron-double-left` `chevron-double-right` `chevron-double-up`
+`chevron-double-down` `arrow-left` `arrow-right` `zap` `eye` `map-pin`
+`snowflake` `volume-x` `volume-2` `camera` `ban` `log-out` `clock`
+`calendar` `star` `menu` `home` `archive` `plus` `edit` `trash` `trash-2`
+`check` `refresh` `message-square` `globe` `flag` `flag-triangle`
+`activity` `gauge` `layers` `box` `user-minus` `external-link`
+`arrow-up-circle` `play` `square` `code` `git-branch` `layout-grid`
+`compass` `sliders` `mouse-pointer-click` `grip-vertical` `chart-bar`
+`maximize` `minimize` `history` `book-open` `info` `check-circle`
+`alert-circle` `download` `trending-up` `arrow-down-circle` `hard-drive`
+`database` `loader-2` `discord` `github`
 
 ---
 
 ## Browser dev mode
 
-`npm run dev:browser` runs outside FiveM. Add mock responses for your plugin
-in `nui/src/mock/domains/plugins.mock.ts`:
-
-```ts
-if (pluginId === 'my-plugin' && action === 'getInfo') {
-  return Promise.resolve(jsonResponse({ ok: true, name: 'Mock' }))
-}
-```
-
----
-
-## ESLint rule
-
-The `nui/no-plugin-internals` rule blocks plugin packages from importing
-private EasyAdmin internals (`App`, `useAppData`, `useAppNavigation`,
-`ModalContext`, etc.). Use the SDK (`../index`) and public shared modules
-(`../../components/*`, `../../lib/*`, `../../types`, `../../fivem`) instead.
-
----
-
-## Example plugin
-
-The **EasyInfo** plugin (`nui/src/plugins/example/` + `plugins/easyinfo/`)
-demonstrates everything above:
-
-- **Server Info page** — sidebar item + page calling client and server Lua handlers
-- **Plugin Notes tab** — injected into the player detail page
-- **Status widget** — dashboard card
-- **`onActivate`** — subscribes to a broadcast event
-- **Permission registration** — `plugin.easyinfo` in `easyinfo_shared.lua`
-
-Try it: `npm run dev:browser` (mock data) or build and run in-game (real Lua handlers).
+`npm run dev:browser` runs the NUI outside FiveM. Mock plugin registrations
+and schema responses are in `nui/src/mock/domains/plugins.mock.ts`.

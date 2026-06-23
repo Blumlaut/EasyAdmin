@@ -16,7 +16,7 @@ import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
 import { notify } from './lib/notify'
 import { I18nProvider } from './lib/i18n'
-import { usePluginContributions, PluginApiProvider } from './plugins'
+import { usePlugins, PluginPageHost } from './plugins'
 
 // --- Lazy-loaded pages (route-based code-splitting) ---
 // Pages use named exports; .then() adapts them to the default export React.lazy expects.
@@ -78,7 +78,7 @@ function App() {
   // === Hooks ===
 
   const data = useAppData()
-  const pluginContrib = usePluginContributions(data.permissions)
+  const pluginContrib = usePlugins(data.permissions)
   const _nav = useAppNavigation({
     permissions: data.permissions,
     players: data.players,
@@ -258,7 +258,6 @@ function App() {
       {visible && (
       <>
         <I18nProvider>
-        <PluginApiProvider permissions={data.permissions}>
         <ModalProvider>
         <div
           className="ea-backdrop"
@@ -503,17 +502,14 @@ function App() {
                 </LazyPage>
               )}
 
-                           {/* Plugin-contributed pages */}
+                           {/* Plugin-contributed pages (schema-rendered) */}
               {typeof nav.view === 'string' && nav.view.startsWith('plugin:') &&
                 (() => {
                   const page = pluginContrib.pages.get(nav.view)
                   if (!page) return null
-                  const PluginPageComponent = page.component
                   const pluginId = nav.view.split(':')[1] ?? ''
                   return (
-                    <LazyPage>
-                      <PluginPageComponent pluginId={pluginId} />
-                    </LazyPage>
+                    <PluginPageHost pluginId={pluginId} renderAction={page.renderAction} />
                   )
                 })()
               }
@@ -521,7 +517,6 @@ function App() {
           </div>
         </div>
       </ModalProvider>
-      </PluginApiProvider>
 
       {chrome.nuiBackground && (
         <div

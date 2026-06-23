@@ -18,6 +18,7 @@ shared_script 'shared/permissions.lua'
 shared_script 'shared/i18n.lua'
 shared_script 'shared/util_shared.lua'
 shared_script 'shared/kvp.lua'
+shared_script 'shared/plugin_api.lua'
 
 server_scripts {
     "server/lib/*.lua",
@@ -27,9 +28,7 @@ server_scripts {
     "server/stats/*.lua",
     "server/features/*.lua",
     "server/*.lua",
-    "bot/dist/bot.js",
-    "plugins/**/*_shared.lua",
-    "plugins/**/*_server.lua"
+    "bot/dist/bot.js"
 }
 
 client_scripts {
@@ -37,9 +36,7 @@ client_scripts {
     "client/gui_client.lua",
     "client/nui/*.lua",
     "client/gui_nui.lua",
-    "client/*.lua",
-    "plugins/**/*_shared.lua",
-    "plugins/**/*_client.lua"
+    "client/*.lua"
 }
 
 ui_page "nui/dist/index.html"

@@ -63,6 +63,8 @@ function NuiToggle()
     SetNuiFocused(true)
     -- Send current settings to NUI
     NuiSendSettings()
+    -- Sync registered plugins to NUI
+    TriggerEvent('EasyAdmin:syncPluginsToNUI')
     if DoesPlayerHavePermissionForCategory(-1, 'player') then
       TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
     end
