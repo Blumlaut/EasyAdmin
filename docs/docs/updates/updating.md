@@ -4,8 +4,9 @@
 
 1. Stop your server.
 2. Download the latest release from [GitHub](https://github.com/Blumlaut/EasyAdmin/releases/latest).
-3. Replace the EasyAdmin folder in your `resources/` directory with the new version.
-4. Start your server.
+3. Delete any files/folders listed below for your target version.
+4. Replace the EasyAdmin folder in your `resources/` directory with the new version.
+5. Start your server.
 
 ## Breaking Changes
 
@@ -22,6 +23,24 @@ The Discord bot is bundled with EasyAdmin. After updating, restart your server t
 EasyAdmin uses a React-based NUI. After updating, the NUI files in `nui/dist/` are replaced automatically with the release. No manual rebuild is needed.
 
 ## Previous Version Notes
+
+### Version 7.53
+
+**This is a major structural refactor.** Many files have been reorganised into subdirectories and the bot has been converted from JavaScript to TypeScript.
+
+Before updating, **delete the following folders entirely** from your EasyAdmin installation:
+
+```
+src/
+dist/
+client/
+server/
+nui/src/
+dependencies/
+language/
+```
+
+> **Do NOT delete** `banlist.json`, `data/`, or `plugins/` — these contain your ban list, server data (actions, notes, statistics), and custom plugins.
 
 ### Version 7.52
 
