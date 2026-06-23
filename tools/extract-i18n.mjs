@@ -18,8 +18,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const root = path.resolve(__dirname, '..')
-const languageDir = path.resolve(root, '..', 'language')
+const root = path.resolve(__dirname, '..')  // resource root (EasyAdmin/)
+const languageDir = path.resolve(root, 'language')
 
 /**
  * Extract string keys from t("...") calls.
@@ -90,7 +90,7 @@ function collectAllKeys() {
   const allKeys = new Set()
 
   // NUI: TypeScript/TSX files (only if they import from i18n)
-  const nuiSrc = path.resolve(root, 'src')
+  const nuiSrc = path.resolve(root, 'nui', 'src')
   for (const file of readFiles(nuiSrc, ['.ts', '.tsx'])) {
     if (file.includes('node_modules') || file.includes('.test.')) continue
     try {
@@ -103,9 +103,9 @@ function collectAllKeys() {
     } catch { /* skip */ }
   }
 
-  // Lua: client, server, shared
-  for (const dir of ['client', 'server', 'shared']) {
-    const dirPath = path.resolve(root, '..', dir)
+  // Lua: client, server, shared, plugins
+  for (const dir of ['client', 'server', 'shared', 'plugins']) {
+    const dirPath = path.resolve(root, dir)
     for (const file of readFiles(dirPath, ['.lua'])) {
       for (const key of extractKeysFromFile(file, [LUA_PATTERN])) {
         allKeys.add(key)
@@ -114,7 +114,7 @@ function collectAllKeys() {
   }
 
   // Bot: JavaScript files (uses global t() and GetLocalisedText)
-  const botDir = path.resolve(root, '..', 'src', 'bot')
+  const botDir = path.resolve(root, 'src', 'bot')
   for (const file of readFiles(botDir, ['.js'])) {
     if (file.includes('node_modules')) continue
     for (const key of extractKeysFromFile(file, [TS_PATTERN, LUA_PATTERN])) {

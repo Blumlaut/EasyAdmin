@@ -69,8 +69,6 @@ RegisterServerEvent("EasyAdmin:getPlayerIdentifiers", function(playerId)
 	TriggerClientEvent("EasyAdmin:playerIdentifiersResult", src, pid, {})
 end)
 
-loadLanguageStrings()
-
 Citizen.CreateThread(function()
 	if not CachedPlayers or GetVersion() == nil then
 		print("^7--------------------------------------------------------------")
@@ -132,8 +130,5 @@ Citizen.CreateThread(function()
 		end
 
 		TriggerLatentClientEvent("EasyAdmin:fillShortcuts", source, 10000, MessageShortcuts)
-		TriggerLatentClientEvent("EasyAdmin:SetLanguage", source, 10000, strings)
-		-- Push translations to NUI
-		TriggerClientEvent("EasyAdmin:PushTranslations", source, strings, GetConvar("ea_LanguageName", "en"))
 	end)
 end)

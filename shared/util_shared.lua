@@ -137,30 +137,7 @@ end
 exports('GetVersion', GetVersion)
 
 
-function loadLanguageStrings()
-	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
-	if strfile then
-		strings = json.decode(strfile)[1]
-	else
-		strings = {language=GetConvar("ea_LanguageName", "en")}
-	end
-end
-
-function GetLocalisedText(key, params)
-	if not strings then return "Strings not Loaded yet!" end
-	if not key then return "No String!" end
-	local template = strings[key]
-	if not template then
-		return "String "..key.." not found in "..(strings.language or "unknown")
-	end
-	if params and type(params) == "table" then
-		for param, value in pairs(params) do
-			template = template:gsub('{' .. param .. '}', tostring(value))
-		end
-	end
-	return template
-end
-exports('GetLocalisedText', GetLocalisedText)
+-- i18n functions (GetLocalisedText, I18nLoad, I18nSet, I18nT) are now in shared/i18n.lua
 
 function formatDateString(string)
 	local dateFormat = GetConvar("ea_dateFormat", '%d/%m/%Y 	%H:%M:%S')

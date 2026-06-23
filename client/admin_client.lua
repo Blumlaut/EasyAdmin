@@ -45,18 +45,6 @@ RegisterNetEvent('EasyAdmin:setInfinity', function(state)
 	infinity = state == true
 end)
 
-RegisterNetEvent('EasyAdmin:SetLanguage', function(newstrings)
-	strings = newstrings
-end)
-
-RegisterNetEvent('EasyAdmin:PushTranslations', function(translations, lang)
-	strings = translations
-	SendNUIMessage({
-		action = 'setLanguage',
-		data = { strings = translations, lang = lang }
-	})
-end)
-
 RegisterNetEvent("EasyAdmin:fillBanlist", function(thebanlist)
 	banlist = thebanlist
 end)
@@ -423,7 +411,3 @@ RegisterNetEvent("EasyAdmin:showNotification", function(text, important)
 		ShowNotification(text)
 	end
 end)
-
--- Trigger admin handshake on startup so strings/permissions are available
--- before any notification fires (e.g. ShowNotification uses GetLocalisedText)
-TriggerServerEvent('EasyAdmin:amiadmin')

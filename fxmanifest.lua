@@ -15,6 +15,7 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 node_version '22'
 
 shared_script 'shared/permissions.lua'
+shared_script 'shared/i18n.lua'
 shared_script 'shared/util_shared.lua'
 shared_script 'shared/kvp.lua'
 
@@ -32,6 +33,7 @@ server_scripts {
 }
 
 client_scripts {
+    "client/init/i18n.lua",
     "client/gui_client.lua",
     "client/nui/*.lua",
     "client/gui_nui.lua",

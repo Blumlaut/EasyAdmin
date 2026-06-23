@@ -15,7 +15,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run lint && npm run lint:css && npm run typecheck && npm run test",
-    "extract:i18n": "node scripts/extract-i18n.mjs",
+    "extract:i18n": "node ../tools/extract-i18n.mjs",
+    "find:untranslated": "node ../tools/find-untranslated.mjs",
     "duplication": "jscpd src/"
   },
   "dependencies": {
