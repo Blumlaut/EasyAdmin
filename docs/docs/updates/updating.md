@@ -29,7 +29,7 @@ EasyAdmin uses a React-based NUI. After updating, the NUI files in `nui/dist/` a
 
 ### Version 7.5
 
-- The Permission Editor was removed due to a FiveM security change. If upgrading from before 7.5, delete the `src/` and `dist/` folders before installing the new version.
+- The Permission Editor was removed due to a FiveM security change. If upgrading from before 7.5, delete the `bot/` folder before installing the new version.
 
 ### Version 7.4
 

@@ -6,7 +6,7 @@
  * Scans:
  *   - nui/src/ for t("...") calls (only in files importing from i18n)
  *   - client/ server/ shared/ for GetLocalisedText("...") calls
- *   - src/bot/ for t("...") and GetLocalisedText("...") calls
+ *   - bot/ for t("...") and GetLocalisedText("...") calls
  *
  * Outputs:
  *   - language/en.json (master, identity map)
@@ -114,7 +114,7 @@ function collectAllKeys() {
   }
 
   // Bot: JavaScript files (uses global t() and GetLocalisedText)
-  const botDir = path.resolve(root, 'src', 'bot')
+  const botDir = path.resolve(root, 'bot')
   for (const file of readFiles(botDir, ['.js'])) {
     if (file.includes('node_modules')) continue
     for (const key of extractKeysFromFile(file, [TS_PATTERN, LUA_PATTERN])) {

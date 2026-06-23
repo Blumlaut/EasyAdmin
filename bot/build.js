@@ -6,7 +6,7 @@ esbuild.build({
 	minify: false,
 	platform: 'node',
 	target: 'node22', 
-	outdir: '../dist',
+	outdir: './dist',
 	treeShaking: true,
 	ignoreAnnotations: true,
 	define: { 'process.env.NODE_ENV': '"production"' },

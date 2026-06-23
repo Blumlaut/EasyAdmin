@@ -45,11 +45,11 @@ async function RegisterClientCommands(clientId) {
 	const fs = require('fs')
 	
 	const commands = []
-	const commandFiles = fs.readdirSync(`${resourcePath}/dist/commands`).filter(file => file.endsWith('.js'))
+	const commandFiles = fs.readdirSync(`${resourcePath}/bot/dist/commands`).filter(file => file.endsWith('.js'))
 	
 	
 	for (const file of commandFiles) {
-		const command = require(`${resourcePath}/dist/commands/${file}`)
+		const command = require(`${resourcePath}/bot/dist/commands/${file}`)
 		commands.push(command.data.toJSON())
 		client.commands.set(command.data.name, command)
 	}

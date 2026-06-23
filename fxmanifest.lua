@@ -27,7 +27,7 @@ server_scripts {
     "server/stats/*.lua",
     "server/features/*.lua",
     "server/*.lua",
-    "dist/*.js",
+    "bot/dist/*.js",
     "plugins/**/*_shared.lua",
     "plugins/**/*_server.lua"
 }

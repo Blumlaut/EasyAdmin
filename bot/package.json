@@ -25,7 +25,7 @@
     "ws": "^8.21.0"
   },
   "scripts": {
-    "build": "rm -rf ../dist; npm i; node build.js",
+    "build": "rm -rf ./dist; npm i; node build.js",
     "update-deps": "npx npm-check-updates -u --enginesNode"
   }
 }

@@ -19,12 +19,12 @@ jobs:
 
       - name: Install bot dependencies
         run: |
-          cd src/
+          cd bot/
           npm ci
 
       - name: Build bot
         run: |
-          cd src/
+          cd bot/
           npm run build
 
       - name: Install NUI dependencies

@@ -111,7 +111,7 @@ function checkVersion()
 			'server/bot/commands/mute.js', 'server/bot/commands/playerinfo.js', 'server/bot/commands/playerlist.js', 'server/bot/commands/refreshperms.js',
 			'server/bot/commands/remove_ace.js', 'server/bot/commands/remove_group.js', 'server/bot/commands/screenshot.js', 'server/bot/commands/slap.js',
 			'server/bot/commands/unban.js', 'server/bot/commands/unfreeze.js', 'server/bot/commands/unmute.js', 'server/bot/commands/warn.js',
-			'dist/commands/configure.js'
+			'bot/dist/commands/configure.js'
 		}
 
 		for i,file in pairs(legacyFiles) do

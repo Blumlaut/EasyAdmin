@@ -6,7 +6,7 @@
  * Scans:
  *   - nui/src/ (.tsx) — aria-label, title, placeholder, bare text children, notify("...")
  *   - client/ server/ shared/ (.lua) — hardcoded strings in user-facing contexts
- *   - src/bot/ (.js) — hardcoded strings in user-facing contexts
+ *   - bot/ (.js) — hardcoded strings in user-facing contexts
  *
  * This is a heuristic scanner — it will produce false positives for things like
  * CSS class names, variable references, or intentionally hardcoded strings.
@@ -175,7 +175,7 @@ for (const dir of ['client', 'server', 'shared', 'plugins']) {
 }
 
 // ============================================================
-// Bot patterns (src/bot/)
+// Bot patterns (bot/)
 // ============================================================
 
 /**
@@ -203,7 +203,7 @@ const botPatterns = [
   { regex: /addFields\(\s*\{[^}]*value\s*:\s*'([^']+)'/g, label: ".addField value(')" },
 ]
 
-for (const file of readFiles(path.resolve(root, 'src', 'bot'), ['.js'])) {
+for (const file of readFiles(path.resolve(root, 'bot'), ['.js'])) {
   const content = fs.readFileSync(file, 'utf-8')
   const lines = content.split('\n')
 

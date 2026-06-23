@@ -64,7 +64,7 @@ Familiarize yourself with the repo layout before contributing:
 | `shared/` | Code shared between client and server |
 | `nui/` | Frontend UI (Next.js/TypeScript, runs in CEF) |
 | `language/` | Internationalization (i18n) files |
-| `src/` | Discord bot code (Node.js) |
+| `bot/` | Discord bot code (Node.js) |
 | `docs/` | EasyAdmin documentation |
 | `plugins/` | Plugin system files |
 

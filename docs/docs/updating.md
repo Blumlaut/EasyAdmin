@@ -39,8 +39,7 @@ TBD
 To update you must delete the following folders before updating EasyAdmin:
 
 ```
-src/
-dist/
+bot/
 ```
 
 This ensures that the Discord Commands are properly updated.

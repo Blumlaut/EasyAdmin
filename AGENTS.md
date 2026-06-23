@@ -71,7 +71,7 @@ Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It cov
 | `shared/permissions.lua` | Permission definitions — new permissions MUST be added here before EasyAdmin recognises them. |
 | `nui/` | Frontend UI built with React/TypeScript, runs inside FiveM's CEF browser. |
 | `language/` | Internationalization (i18n) translation files. |
-| `src/` | Discord bot code (Node.js), bundled into `dist/`. |
+| `bot/` | Discord bot code (Node.js), bundled into `bot/dist/`. |
 | `docs/` | EasyAdmin user and developer documentation. |
 | `plugins/` | Plugin system — `*_shared.lua`, `*_client.lua`, `*_server.lua` naming conventions. |
 | `tests/` | Lua unit tests (busted). See [Testing](#testing) below. |
@@ -79,6 +79,18 @@ Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It cov
 ## Handy Commands
 
 Run from the respective subdirectories after installing dependencies (`npm install`).
+
+### Root (`/`)
+
+Run from the repository root after `npm run install:all`.
+
+| Command | Description |
+|---|---|
+| `npm run install:all` | Install deps for both bot + NUI (with `--include=dev --legacy-peer-deps`) |
+| `npm run build` | Build both bot + NUI |
+| `npm run build:bot` | Build only the Discord bot |
+| `npm run build:nui` | Build only the NUI |
+| `npm run lint:all` | Lint both bot + NUI |
 
 ### NUI (`nui/`)
 
@@ -93,11 +105,11 @@ Run from the respective subdirectories after installing dependencies (`npm insta
 | `npm run test` | Run Vitest test suite |
 | `npm run check` | Run all checks (lint, CSS lint, typecheck, tests) |
 
-### Discord Bot (`src/`)
+### Discord Bot (`bot/`)
 
 | Command | Description |
 |---|---|
-| `npm run build` | Install deps + bundle with esbuild into `dist/` |
+| `npm run build` | Install deps + bundle with esbuild into `bot/dist/` |
 
 ### Lua Tests (`tests/`)
 
