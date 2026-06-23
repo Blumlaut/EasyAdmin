@@ -29,6 +29,7 @@
   },
   "scripts": {
     "build": "rm -rf ./dist && node build.js",
+    "watch": "node build.js --watch",
     "lint": "eslint bot/",
     "typecheck": "tsc --noEmit"
   }

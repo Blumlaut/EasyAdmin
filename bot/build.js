@@ -1,6 +1,8 @@
 const esbuild = require('esbuild')
 
-esbuild.build({
+const isWatch = process.argv.includes('--watch')
+
+const ctx = esbuild.context({
 	entryPoints: ['bot/bot.ts'],
 	bundle: true,
 	minify: false,
@@ -11,4 +13,12 @@ esbuild.build({
 	ignoreAnnotations: true,
 	define: { 'process.env.NODE_ENV': '"production"' },
 	external: ['zlib-sync'],
-}).catch(() => process.exit(1))
+})
+
+if (isWatch) {
+	ctx.watch().then(() => {
+		console.log('[bot] Watching for changes...')
+	}).catch(() => process.exit(1))
+} else {
+	ctx.rebuild().catch(() => process.exit(1)).finally(() => ctx.dispose())
+}
