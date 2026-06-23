@@ -106,6 +106,7 @@ nav:
         - nui/design-system.md
         - nui/pages.md
         - nui/known-issues.md
+        - nui-plugins.md
     - Plugins:
         - plugins/index.md
         - plugins/plugin-api.md
