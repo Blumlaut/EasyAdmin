@@ -3,6 +3,7 @@ import { callLua, on } from '../../fivem'
 import type { Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
 import { CopyButton } from '../../components/CopyButton'
+import type { PlayerDetailTab } from '../../plugins'
 import { PlayerInfoPanel } from './PlayerInfoPanel'
 import { PlayerActionsPanel } from './PlayerActionsPanel'
 import { ActionHistorySection } from './ActionHistorySection'
@@ -12,15 +13,19 @@ interface PlayerDetailPageProps {
   player: Player
   permissions: Permissions
   ipPrivacy: boolean
+  /** Plugin-contributed tabs. */
+  pluginTabs?: PlayerDetailTab[]
 }
 
 export function PlayerDetailPage({
   player,
   permissions,
   ipPrivacy,
+  pluginTabs = [],
 }: PlayerDetailPageProps) {
   const [identifiers, setIdentifiers] = useState<string[] | null>(null)
   const [identifiersExpanded, setIdentifiersExpanded] = useState(false)
+  const [activePluginTab, setActivePluginTab] = useState<string | null>(null)
 
   // Lazy-load full identifiers from server
   useEffect(() => {
@@ -108,6 +113,37 @@ export function PlayerDetailPage({
           playerId={player.id}
           permissions={permissions}
         />
+      )}
+
+      {/* Plugin-contributed tabs */}
+      {pluginTabs.length > 0 && (
+        <div className="card player-detail-plugin-tabs">
+          <div className="player-detail-plugin-tab-headers flex items-center gap-1">
+            {pluginTabs.map((tab) => {
+              const isActive = activePluginTab === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  className={`btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}`}
+                  onClick={() => setActivePluginTab(isActive ? null : tab.id)}
+                >
+                  {tab.icon && <Icon name={tab.icon as 'book-open'} size="xs" />}
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
+          {activePluginTab && (() => {
+            const tab = pluginTabs.find((t) => t.id === activePluginTab)
+            if (!tab) return null
+            const TabComponent = tab.component
+            return (
+              <div className="player-detail-plugin-tab-content">
+                <TabComponent player={player} permissions={permissions} />
+              </div>
+            )
+          })()}
+        </div>
       )}
     </div>
   )

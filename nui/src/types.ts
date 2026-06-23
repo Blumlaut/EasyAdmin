@@ -116,6 +116,9 @@ export interface AppSettings {
 export const DEFAULT_WINDOW_SIZE = { width: 1210, height: 750 }
 
 // Navigation views
+// Plugin views use the `plugin:<pluginId>` (or `plugin:<pluginId>:<pageId>`)
+// convention and are matched by the `(string & {})` fallback, which keeps
+// autocomplete for built-in views while allowing arbitrary plugin strings.
 export type View =
   | 'main'
   | 'players'
@@ -132,6 +135,7 @@ export type View =
   | 'player-statistics'
   | 'network-monitor'
   | 'settings'
+  | (string & {})
 
 // Ban duration preset indices
 export type BanDurationPreset = 'permanent' | 'custom' | number

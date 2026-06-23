@@ -16,6 +16,7 @@ import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
 import { notify } from './lib/notify'
 import { I18nProvider } from './lib/i18n'
+import { usePluginContributions, PluginApiProvider } from './plugins'
 
 // --- Lazy-loaded pages (route-based code-splitting) ---
 // Pages use named exports; .then() adapts them to the default export React.lazy expects.
@@ -77,6 +78,7 @@ function App() {
   // === Hooks ===
 
   const data = useAppData()
+  const pluginContrib = usePluginContributions(data.permissions)
   const _nav = useAppNavigation({
     permissions: data.permissions,
     players: data.players,
@@ -85,6 +87,7 @@ function App() {
     fetchCachedPlayers: data.fetchCachedPlayers,
     setLoadingReports: data.setLoadingReports,
     setLoadingCached: data.setLoadingCached,
+    pluginNavItems: pluginContrib.navItems,
   })
   // Extract ref so the remaining object is plain state (avoids react-hooks/refs false positives)
   const { titleRef: _titleRef, ...nav } = _nav
@@ -214,6 +217,14 @@ function App() {
 
   // === Navigation select handler ===
 
+  // Build a map from plugin nav-item id → view (defaults to the id itself).
+  const pluginViewMap: Record<string, string> = {}
+  for (const item of pluginContrib.navItems) {
+    if ('id' in item && !('type' in item && item.type !== 'item')) {
+      pluginViewMap[item.id] = (item as { view?: string }).view ?? item.id
+    }
+  }
+
   const handleNavSelect = (id: string) => {
     const viewMap: Record<string, View> = {
       'main': 'main',
@@ -227,7 +238,8 @@ function App() {
       'profiler': 'profiler',
       'settings': 'settings',
     }
-    const targetView = viewMap[id]
+    // Built-in lookup, then plugin lookup.
+    const targetView = (viewMap[id] ?? pluginViewMap[id]) as View | undefined
     if (!targetView) return
 
     // Auto-unfold when clicking a sidebar item while collapsed
@@ -246,6 +258,7 @@ function App() {
       {visible && (
       <>
         <I18nProvider>
+        <PluginApiProvider permissions={data.permissions}>
         <ModalProvider>
         <div
           className="ea-backdrop"
@@ -344,6 +357,7 @@ function App() {
                     updateInfo={data.updateInfo}
                     onDismissUpdate={data.dismissUpdate}
                     onNavigateToResources={() => nav.navigateTo('resources')}
+                    pluginWidgets={pluginContrib.dashboardWidgets}
                   />
                 </LazyPage>
               )}
@@ -367,6 +381,7 @@ function App() {
                     player={nav.selectedPlayer}
                     permissions={data.permissions}
                     ipPrivacy={data.ipPrivacy}
+                    pluginTabs={pluginContrib.playerDetailTabs}
                   />
                 </LazyPage>
               )}
@@ -487,10 +502,26 @@ function App() {
                   />
                 </LazyPage>
               )}
+
+                           {/* Plugin-contributed pages */}
+              {typeof nav.view === 'string' && nav.view.startsWith('plugin:') &&
+                (() => {
+                  const page = pluginContrib.pages.get(nav.view)
+                  if (!page) return null
+                  const PluginPageComponent = page.component
+                  const pluginId = nav.view.split(':')[1] ?? ''
+                  return (
+                    <LazyPage>
+                      <PluginPageComponent pluginId={pluginId} />
+                    </LazyPage>
+                  )
+                })()
+              }
             </main>
           </div>
         </div>
       </ModalProvider>
+      </PluginApiProvider>
 
       {chrome.nuiBackground && (
         <div

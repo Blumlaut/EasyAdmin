@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { View, Permissions, Player, BanEntry } from '../types'
 import type { NavItem } from '../components/Navigation'
 import { callLua } from '../fivem'
@@ -11,6 +11,8 @@ export interface UseAppNavigationOptions {
   fetchCachedPlayers: () => void
   setLoadingReports: (v: boolean) => void
   setLoadingCached: (v: boolean) => void
+  /** Plugin-contributed nav items (already permission-filtered). */
+  pluginNavItems?: NavItem[]
 }
 
 export interface UseAppNavigationResult {
@@ -39,7 +41,9 @@ export interface UseAppNavigationResult {
   titleRef: React.RefObject<HTMLHeadingElement | null>
 }
 
-const NAV_ITEMS: NavItem[] = [
+// Built-in nav items. Plugin nav items are inserted between these and
+// the trailing separator + Settings entry (see `allNavItems` below).
+const BASE_NAV_ITEMS: NavItem[] = [
   { id: 'main', label: 'Dashboard', icon: 'home' },
   { id: 'players', label: 'Players', icon: 'users' },
   { id: 'bans', label: 'Ban List', icon: 'ban' },
@@ -63,9 +67,9 @@ const NAV_ITEMS: NavItem[] = [
       { id: 'profiler', label: 'Profiler', icon: 'activity' },
     ],
   },
-  { type: 'separator' as const },
-  { id: 'settings', label: 'Settings', icon: 'settings' },
 ]
+
+const SETTINGS_NAV_ITEM: NavItem = { id: 'settings', label: 'Settings', icon: 'settings' }
 
 export function useAppNavigation({
   permissions,
@@ -75,6 +79,7 @@ export function useAppNavigation({
   fetchCachedPlayers,
   setLoadingReports,
   setLoadingCached,
+  pluginNavItems = [],
 }: UseAppNavigationOptions): UseAppNavigationResult {
   const [view, setView] = useState<View>('main')
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
@@ -130,6 +135,13 @@ export function useAppNavigation({
     viewHistoryRef.current = []
   }, [])
 
+  // Merge built-in nav items with plugin-contributed items.
+  // Plugin items appear after the built-in set, before the separator + Settings.
+  const allNavItems: NavItem[] = useMemo(
+    () => [...BASE_NAV_ITEMS, ...pluginNavItems, { type: 'separator' as const }, SETTINGS_NAV_ITEM],
+    [pluginNavItems],
+  )
+
   // activeNavId: maps detail views to their parent nav section
   const activeNavId = (() => {
     if (view === 'player-detail' || view === 'cached-players') return 'players'
@@ -158,11 +170,20 @@ export function useAppNavigation({
     if (view === 'resource-detail') return 'Resource Details'
     if (view === 'profiler') return 'Profiler'
     if (view === 'settings') return 'Settings'
+    // Plugin views: look up the label from the contributed nav item.
+    if (typeof view === 'string' && view.startsWith('plugin:')) {
+      const found = allNavItems.find(
+        (item) => 'id' in item && !('type' in item && item.type !== 'item') && item.id === view,
+      )
+      if (found && 'label' in found) return found.label
+      return 'Plugin'
+    }
     return 'EasyAdmin'
   })()
 
-  // Permission gating for nav items
-  const visibleNavItems: NavItem[] = NAV_ITEMS.map((item) => {
+  // Permission gating for nav items. Plugin items are already permission-
+  // filtered by usePluginContributions, so they pass through unchanged.
+  const visibleNavItems: NavItem[] = allNavItems.map((item) => {
     // Pass through separators and headers unchanged
     if ('type' in item && (item.type === 'separator' || item.type === 'header')) {
       return item
@@ -228,6 +249,13 @@ export function useAppNavigation({
     availableViews.push('profiler')
   }
   availableViews.push('settings', 'cached-players')
+
+  // Plugin views — each contributed nav item's view (or id) is an available view.
+  for (const item of pluginNavItems) {
+    if ('id' in item && !('type' in item && item.type !== 'item')) {
+      availableViews.push((item as { view?: string }).view ?? item.id)
+    }
+  }
 
   // Selection handlers — stable because navigateTo is stable
   const selectPlayer = useCallback((player: Player) => {

@@ -61,4 +61,7 @@ permissions = {
 
 	["immune"] = false,
 	["anon"] = false,
+
+	-- Plugins may also register permissions at runtime (see plugins/easyinfo/).
+	-- "plugin.easyinfo" is registered by the EasyInfo example plugin.
 }

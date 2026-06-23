@@ -64,6 +64,7 @@ export default tseslint.config(
     },
     rules: {
       'nui/no-inline-styles': 'error',
+      'nui/no-plugin-internals': 'error',
     },
   },
 

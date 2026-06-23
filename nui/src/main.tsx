@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './styles/index.css'
 import './components/chart-setup'
+// Register all installed NUI plugins (side-effect import).
+import './plugins/manifest'
 
 // Three.js (@citizenfx/three) is in a separate chunk (dynamic import).
 // Pre-load it in the background so the screenshot/stream render loop
