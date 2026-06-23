@@ -14,12 +14,9 @@
     "typecheck:bot": "npm --prefix bot run typecheck",
     "typecheck:nui": "npm --prefix nui run typecheck",
     "test:nui": "npm --prefix nui run test",
-    "watch:all": "concurrently --names bot,nui -c blue,cyan 'npm run watch:bot' 'npm run watch:nui'"
+    "watch:all": "node scripts/watch-all.mjs"
   },
   "engines": {
     "node": "^22.0.0"
-  },
-  "devDependencies": {
-    "concurrently": "^10.0.3"
   }
 }

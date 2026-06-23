@@ -2,25 +2,25 @@
 -- EasyAdmin NUI: Plugin bridge
 --
 -- Routes NUI `pluginCall` requests to Lua handlers registered by external
--- plugin resources. The NUI side calls `pluginCall(pluginId, action, data)`
--- (see nui/src/plugins/bridge.ts) which POSTs to the `pluginCall` NUI
--- callback; this file dispatches to the matching handler.
+-- plugin resources.
 --
--- Two handler registries exist:
---   • Client handlers  — RegisterEasyAdminPluginHandler(pluginId, action, fn)
---   • Server handlers  — RegisterEasyAdminPluginServerHandler(pluginId, action, fn)
---     (server/_plugin_bridge.lua) reached by passing server = true.
+-- Because FiveM exports cannot pass functions between resources,
+-- plugins register handlers by listening for events:
+--   AddEventHandler('EasyAdmin:Plugin:action:<pluginId>:<action>',
+--     function(data, cb) cb(result) end)
 --
 -- @see docs/nui-plugins.md
 ------------------------------------
 
 -- Client handler registry: keyed by "pluginId:action"
+-- Internal handlers registered via Lua (same-resource) still use this.
 local pluginHandlers = {}
 
 ---Register a client-side Lua handler for a plugin action.
----@param pluginId string @The plugin id (matches the NUI plugin)
----@param action string @The action name (matches the `action` arg passed to pluginCall)
----@param fn function @`function(data) -> any` — return value is sent back to the NUI
+-- Only works when called from within the EasyAdmin resource itself.
+---@param pluginId string
+---@param action string
+---@param fn function @`function(data) -> any`
 function RegisterEasyAdminPluginHandler(pluginId, action, fn)
   if type(pluginId) ~= 'string' or type(action) ~= 'string' or type(fn) ~= 'function' then
     error('RegisterEasyAdminPluginHandler(pluginId, action, fn) — all arguments required')
@@ -36,31 +36,30 @@ function HasEasyAdminPluginHandler(pluginId, action)
   return pluginHandlers[pluginId .. ':' .. action] ~= nil
 end
 
--- Export for external resources
-exports('RegisterPluginHandler', function(pluginId, action, fn)
-  RegisterEasyAdminPluginHandler(pluginId, action, fn)
+-- ── NUI callback: sync plugins on mount ──────────────────────
+-- Called by the NUI on mount to get the current plugin list.
+-- Avoids race conditions where SendNUIMessage fires before NUI is ready.
+RegisterNUICallback('syncPlugins', function()
+  local dict = GetRegisteredPlugins()
+  local list = {}
+  for _, plugin in pairs(dict) do
+    list[#list + 1] = plugin
+  end
+  return { plugins = list }
 end)
 
 -- ── Server-side forwarding ────────────────────────────────────
-
-local pendingServerRequests = {}
-local requestCounter = 0
+-- For actions with `server = true`: ask the server via net event,
+-- then the server triggers an event for the plugin and relays the
+-- response back via EasyAdmin:Plugin:serverResponse net event.
 
 RegisterNetEvent('EasyAdmin:Plugin:serverResponse')
-AddEventHandler('EasyAdmin:Plugin:serverResponse', function(requestId, result)
-  local entry = pendingServerRequests[requestId]
-  if entry then
-    pendingServerRequests[requestId] = nil
-    entry(result or { ok = true })
-  end
+AddEventHandler('EasyAdmin:Plugin:serverResponse', function(pluginId, action, result)
+  SendNUIMessage({
+    action = 'pluginResponse',
+    data = { pluginId = pluginId, action = action, response = result or { ok = true } },
+  })
 end)
-
-local function forwardToServer(pluginId, action, payload, cb)
-  requestCounter = requestCounter + 1
-  local requestId = ('%d:%d'):format(GetPlayerServerId(PlayerId()), requestCounter)
-  pendingServerRequests[requestId] = cb
-  TriggerServerEvent('EasyAdmin:Plugin:serverCall', pluginId, action, payload, requestId)
-end
 
 -- ── NUI callback: pluginCall ──────────────────────────────────
 -- Payload: { pluginId = string, action = string, data = table, server = boolean }
@@ -81,23 +80,36 @@ RegisterNUICallback('pluginCall', function(data, cb)
 
   -- Server-side handler?
   if data.server == true then
-    forwardToServer(pluginId, action, payload, cb)
+    TriggerServerEvent('EasyAdmin:Plugin:serverCall', pluginId, action, payload)
+    cb({ ok = true, deferred = true })
     return
   end
 
   -- Client-side handler lookup
   local key = pluginId .. ':' .. action
   local handler = pluginHandlers[key]
-  if not handler then
-    cb({ ok = false, error = 'no handler registered for ' .. key })
+  if handler then
+    local ok, result = pcall(handler, payload)
+    cb(ok and (result or { ok = true }) or { ok = false, error = tostring(result) })
     return
   end
 
-  local ok, result = pcall(handler, payload)
-  if ok then
-    cb(result or { ok = true })
-  else
-    print(('[EasyAdmin Plugin] handler %s failed: %s'):format(key, tostring(result)))
-    cb({ ok = false, error = tostring(result) })
+  -- Trigger event for external resource handlers
+  local responded = false
+  local function respond(result)
+    if not responded then
+      responded = true
+      cb(result or { ok = true })
+    end
   end
+
+  TriggerEvent('EasyAdmin:Plugin:action:' .. key, payload, respond)
+
+  -- Fallback if no plugin listens
+  SetTimeout(500, function()
+    if not responded then
+      responded = true
+      cb({ ok = false, error = 'no handler registered for ' .. key })
+    end
+  end)
 end)

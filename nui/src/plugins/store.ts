@@ -37,6 +37,10 @@ on<{ plugins: RuntimePlugin[] }>('pluginsRegistered', (data) => {
   for (const fn of listeners) fn()
 })
 
+// ── Request plugin list on mount (avoids race with push) ───
+import { callLua } from '../fivem'
+callLua('syncPlugins').catch(() => {})
+
 /** Replace the full plugin list (called when Lua sends registrations). */
 export function setPlugins(next: RuntimePlugin[]): void {
   plugins = next

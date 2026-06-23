@@ -7,18 +7,29 @@ EasyAdmin runtime plugin system.
 
 | Feature | Where |
 |---|---|
-| Plugin registration | `client.lua` — `exports['easyadmin']:RegisterPlugin()` |
+| Plugin registration | `client.lua` — `exports.EasyAdmin:RegisterPlugin()` |
 | Nav items (multi-page) | `client.lua` — three pages, three nav entries |
 | Pages with render actions | `client.lua` — `renderMainPage`, `renderStatsPage`, `renderActionsPage` |
 | Player detail tabs | `client.lua` — public + permission-gated tab |
 | Dashboard widgets | `client.lua` — `renderWidget` |
-| Client handlers (render) | `client.lua` — all `render*` handlers |
-| Client handlers (actions) | `client.lua` — `refresh`, `toggle`, `pushUpdate` |
-| Server handlers | `server.lua` — `getServerData`, `demoServerAction` |
+| Client handlers (event-based) | `client.lua` — `AddEventHandler('EasyAdmin:Plugin:action:...')` |
+| Server handlers (event-based) | `server.lua` — `AddEventHandler('EasyAdmin:Plugin:serverAction:...')` |
 | Permission guarding | `server.lua` — `DoesPlayerHavePermission` checks |
 | Permissions | `shared.lua` — `plugin.demo`, `plugin.demo.advanced` |
 | Live updates | `client.lua` — `pushUpdate` calls `SendNUIMessage` |
 | Every schema component | `client.lua` `renderMainPage` — all 18 types |
+
+## Why event-based handlers?
+
+FiveM exports **cannot pass functions between resources**. When you call
+`exports['resource'].someExport(fn)`, the function `fn` becomes `nil` on
+the receiving end. This is a fundamental FiveM limitation.
+
+The plugin system works around this by using **events** for handler registration:
+
+1. **Plugin registration** (`RegisterPlugin`) passes only a config **table** — this works fine through exports
+2. **Handler registration** uses `AddEventHandler` — the handler function stays in the plugin's own script environment
+3. **Dispatch** — EasyAdmin triggers an event, the plugin's handler fires, and responds via a callback
 
 ## Schema components exercised
 
@@ -34,7 +45,7 @@ The main page (`renderMainPage`) demonstrates **every** available component:
 ## Installation
 
 1. Copy the `ea-plugin-demo` folder into your FiveM server's `resources/` directory
-2. Add `ensure ea-plugin-demo` to your `server.cfg` **after** `ensure easyadmin`
+2. Add `ensure ea-plugin-demo` to your `server.cfg` **after** `ensure EasyAdmin`
 3. Grant the permission to your admin group:
 
 ```cfg
@@ -75,15 +86,15 @@ Open EasyAdmin and verify:
 1. **Rename** the folder and all occurrences of `ea-plugin-demo` to your plugin ID
 2. **Edit `fxmanifest.lua`** — change `dependencies`, `author`, `description`
 3. **Edit `shared.lua`** — change permission names
-4. **Edit `client.lua`** — change `RegisterPlugin()` config, handler names, and schema content
-5. **Edit `server.lua`** — change server handler names and logic
+4. **Edit `client.lua`** — change `RegisterPlugin()` config and event handler names
+5. **Edit `server.lua`** — change server event handler names and logic
 
 ## Key patterns
 
 ### Registering a plugin
 
 ```lua
-exports['easyadmin']:RegisterPlugin({
+exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   name = 'My Plugin',
   version = '1.0.0',
@@ -104,44 +115,56 @@ Citizen.CreateThread(function()
 end)
 ```
 
-### Client render handler
+### Client render handler (event-based)
 
 ```lua
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(data)
-  return {
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
+  cb({
     { type = 'heading', text = 'Hello', level = 2 },
     { type = 'text', text = 'World', variant = 'muted' },
-  }
+  })
 end)
 ```
+
+The event name format is: `EasyAdmin:Plugin:action:<pluginId>:<actionName>`
+
+- `data` — the payload from the NUI (may contain `context` with player info, etc.)
+- `cb` — callback function. Call `cb(result)` to return a schema or response
 
 ### Client action handler (returns new schema)
 
 ```lua
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'refresh', function(data)
-  return { { type = 'badge', text = 'Refreshed!', variant = 'online' } }
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
+  cb({ { type = 'badge', text = 'Refreshed!', variant = 'online' } })
 end)
 ```
 
 ### Client action handler (side effect only)
 
 ```lua
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'notify', function(data)
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:notify', function(data, cb)
   SendNUIMessage({ action = 'plugin:my-plugin:update' })
-  return { ok = true }
+  cb({ ok = true })
 end)
 ```
 
-### Server handler (permission-guarded)
+### Server handler (permission-guarded, event-based)
 
 ```lua
-exports['easyadmin']:RegisterPluginServerHandler('my-plugin', 'doAction', function(source, data)
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(data, cb)
+  local source = source -- FiveM sets this globally in event handlers
   if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
-    return { ok = false, error = 'permission denied' }
+    return cb({ ok = false, error = 'permission denied' })
   end
-  return { ok = true, result = 'done' }
+  cb({ ok = true, result = 'done' })
 end)
 ```
+
+The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>`
+
+- `source` — the player source (set globally by FiveM in event handlers)
+- `data` — the payload from the NUI
+- `cb` — callback function. Call `cb(result)` to send the response back to the client
 
 ### Button with server action
 

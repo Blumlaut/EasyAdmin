@@ -41,7 +41,24 @@ EasyAdmin is a feature-rich administration suite designed specifically for FiveM
 
 ### Installation
 
-Visit our Documentation [here](https://easyadmin.readthedocs.io/) for detailed installation and configuration instructions.
+Visit our Documentation [https://easyadmin.readthedocs.io/](https://easyadmin.readthedocs.io/) for detailed installation and configuration instructions.
+
+### Building Locally
+
+For developers and contributors:
+
+```bash
+git clone <repo>
+cd EasyAdmin
+npm run install:all
+npm run build
+```
+
+- `npm run install:all` — Install dependencies for the Discord bot and NUI
+- `npm run build` — Bundle both the bot and NUI
+- `npm run build:bot` / `npm run build:nui` — Build individually
+- `npm run lint:all` / `npm run lint:nui` — Run linting and type checks
+
 
 ## Support
 

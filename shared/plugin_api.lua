@@ -3,7 +3,7 @@
 --
 -- External resources register plugins at runtime via:
 --
---   exports['easyadmin']:RegisterPlugin(config)
+--   exports.EasyAdmin:RegisterPlugin(config)
 --
 -- This file runs on both client and server (shared/). On the server,
 -- registrations are networked to all clients. On the client, registrations

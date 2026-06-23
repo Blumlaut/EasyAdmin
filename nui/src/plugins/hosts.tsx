@@ -6,6 +6,7 @@
  * nodes call back to Lua via `dispatch`.
  */
 
+import { useMemo } from 'react'
 import { usePluginSchema } from './usePluginSchema'
 import { SchemaRenderer } from './SchemaRenderer'
 import { Skeleton } from '../components/Skeleton'
@@ -38,7 +39,7 @@ function PluginError({ message }: { message: string }) {
 // ---------------------------------------------------------------------------
 
 export function PluginPageHost({ pluginId, renderAction }: { pluginId: string; renderAction: string }) {
-  const context: PluginRenderContext = { target: 'page' }
+  const context = useMemo<PluginRenderContext>(() => ({ target: 'page' }), [])
   const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context)
 
   if (loading) return <PluginLoading />
@@ -56,7 +57,7 @@ export function PluginPageHost({ pluginId, renderAction }: { pluginId: string; r
 // ---------------------------------------------------------------------------
 
 export function PluginWidgetHost({ pluginId, renderAction }: { pluginId: string; renderAction: string }) {
-  const context: PluginRenderContext = { target: 'widget' }
+  const context = useMemo<PluginRenderContext>(() => ({ target: 'widget' }), [])
   const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context)
 
   if (loading) return <Skeleton height={80} width="100%" />
@@ -78,7 +79,7 @@ export function PluginTabHost({
   renderAction: string
   playerId: number
 }) {
-  const context: PluginRenderContext = { target: 'player-tab', playerId }
+  const context = useMemo<PluginRenderContext>(() => ({ target: 'player-tab', playerId }), [playerId])
   const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context)
 
   if (loading) return <PluginLoading />

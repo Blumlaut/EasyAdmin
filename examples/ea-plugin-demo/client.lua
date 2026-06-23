@@ -1,32 +1,21 @@
 -- ea-plugin-demo client script
--- Registers the plugin with EasyAdmin and handles all client-side render actions.
+--
+-- Demonstrates the EasyAdmin plugin system.
+-- All handlers use events (FiveM exports cannot pass functions between resources).
 
 -- ---------------------------------------------------------------------------
 -- Plugin registration
 -- ---------------------------------------------------------------------------
 
-exports['easyadmin']:RegisterPlugin({
+local pluginConfig = {
   id = 'ea-plugin-demo',
   name = 'Plugin Demo',
   version = '1.0.0',
   icon = 'box',
 
-  -- Permissions:
-  --   plugin.demo          — gates the entire plugin (optional)
-  --   plugin.demo.advanced — gates the "Advanced" player tab + server handler
-  --
-  -- The `permission` field on the plugin config hides ALL contributions if
-  -- the admin lacks it. Uncomment below to test that:
-  -- permission = 'plugin.demo',
-
   navItems = {
-    -- Single-page entry: opens the main demo page
     { id = 'plugin:ea-plugin-demo', label = 'Demo', icon = 'box' },
-
-    -- Multi-page entry: opens the stats page
     { id = 'plugin:ea-plugin-demo:stats', label = 'Stats', icon = 'chart-bar' },
-
-    -- Multi-page entry: opens the actions page
     { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap' },
   },
 
@@ -37,10 +26,7 @@ exports['easyadmin']:RegisterPlugin({
   },
 
   playerDetailTabs = {
-    -- Public tab: visible to anyone who can open the player detail
-    { id = 'demo-public', label = 'Demo', icon = 'box', renderAction = 'renderPlayerTab' },
-
-    -- Advanced tab: only visible if admin has the permission
+    { id = 'demo-public', label = 'Demo Info', icon = 'box', renderAction = 'renderPlayerTab' },
     {
       id = 'demo-advanced',
       label = 'Advanced',
@@ -51,327 +37,108 @@ exports['easyadmin']:RegisterPlugin({
   },
 
   dashboardWidgets = {
-    -- Order 150 places it after the default widgets (which use order 100)
     { id = 'demo-widget', renderAction = 'renderWidget', order = 150 },
   },
-})
+}
+
+exports.EasyAdmin:RegisterPlugin(pluginConfig)
 
 -- ---------------------------------------------------------------------------
--- Client handlers
+-- Shared state (persists across re-renders)
 -- ---------------------------------------------------------------------------
 
--- Main page: exercises every schema component type
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderMainPage', function(data)
-  local players = GetActivePlayers()
-  local playerCount = #players
-  local fps = math.floor(1.0 / GetFrameTime())
+local state = {
+  toggleCount = 0,
+  serverData = nil,
+  lastRefresh = 0,
+}
 
-  return {
-    -- Heading
-    {
-      type = 'heading',
-      text = 'Plugin Demo',
-      level = 2,
-    },
-
-    -- Subtitle text
-    {
-      type = 'text',
-      text = 'This page demonstrates all available schema components.',
-      variant = 'muted',
-    },
-
-    -- Alert banner
-    {
-      type = 'alert',
-      variant = 'info',
-      title = 'Info',
-      children = {
-        {
-          type = 'text',
-          text = 'This plugin is fully standalone — no TypeScript, no React, no compilation. Just Lua exports.',
-        },
-      },
-    },
-
-    -- Stat cards row
-    {
-      type = 'row',
-      gap = 3,
-      children = {
-        {
-          type = 'stat-card',
-          label = 'Players',
-          value = tostring(playerCount),
-          icon = 'users',
-          iconColor = 'var(--accent-green)',
-          bgColor = 'var(--bg-green)',
-        },
-        {
-          type = 'stat-card',
-          label = 'FPS',
-          value = tostring(fps),
-          icon = 'gauge',
-          iconColor = 'var(--accent-orange)',
-          bgColor = 'var(--bg-orange)',
-        },
-        {
-          type = 'stat-card',
-          label = 'Uptime',
-          value = '0d',
-          icon = 'clock',
-          iconColor = 'var(--accent-blue)',
-          bgColor = 'var(--bg-blue)',
-        },
-      },
-    },
-
-    -- Divider
-    { type = 'divider' },
-
-    -- Key-value table
-    {
-      type = 'key-value-table',
-      rows = {
-        { key = 'Plugin ID', value = 'ea-plugin-demo' },
-        { key = 'Version', value = '1.0.0' },
-        { key = 'Resource', value = GetInvokingResource() or 'ea-plugin-demo' },
-        {
-          key = 'License',
-          value = '1234567890abcdef',
-          mono = true,
-          action = 'copyLicense',
-          actionLabel = 'Copy',
-        },
-      },
-    },
-
-    -- Divider
-    { type = 'divider' },
-
-    -- Buttons section
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Actions',
-          level = 4,
-        },
-        {
-          type = 'text',
-          text = 'Click these buttons to trigger Lua handlers.',
-          variant = 'muted',
-        },
-        {
-          type = 'row',
-          gap = 2,
-          children = {
-            {
-              type = 'button',
-              label = 'Refresh',
-              action = 'refresh',
-              icon = 'refresh',
-              variant = 'primary',
-              size = 'sm',
-            },
-            {
-              type = 'button',
-              label = 'Toggle Badge',
-              action = 'toggle',
-              icon = 'zap',
-              variant = 'secondary',
-              size = 'sm',
-            },
-            {
-              type = 'button',
-              label = 'Push Update',
-              action = 'pushUpdate',
-              icon = 'download',
-              variant = 'ghost',
-              size = 'sm',
-            },
-            {
-              type = 'button',
-              label = 'Get Server Data',
-              action = 'getServerData',
-              server = true,
-              icon = 'server',
-              variant = 'danger',
-              size = 'sm',
-            },
-          },
-        },
-      },
-    },
-
-    -- Badges section
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Badges',
-          level = 4,
-        },
-        {
-          type = 'row',
-          gap = 2,
-          children = {
-            { type = 'badge', text = 'Default', variant = 'default' },
-            { type = 'badge', text = 'Online', variant = 'online', icon = 'check-circle' },
-            { type = 'badge', text = 'Offline', variant = 'offline' },
-            { type = 'badge', text = 'Admin', variant = 'admin', icon = 'shield' },
-            { type = 'badge', text = 'Warning', variant = 'warning', icon = 'alert-triangle' },
-          },
-        },
-      },
-    },
-
-    -- Icons section
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Icons',
-          level = 4,
-        },
-        {
-          type = 'row',
-          gap = 3,
-          children = {
-            { type = 'icon', name = 'users', size = 'lg' },
-            { type = 'icon', name = 'shield', size = 'lg' },
-            { type = 'icon', name = 'server', size = 'lg' },
-            { type = 'icon', name = 'gauge', size = 'lg' },
-            { type = 'icon', name = 'box', size = 'lg' },
-          },
-        },
-      },
-    },
-
-    -- Tooltip section
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Tooltips',
-          level = 4,
-        },
-        {
-          type = 'row',
-          gap = 2,
-          children = {
-            {
-              type = 'tooltip',
-              content = 'This is a stat card with a tooltip!',
-              children = {
-                {
-                  type = 'stat-card',
-                  label = 'Hover Me',
-                  value = '123',
-                  icon = 'users',
-                  iconColor = 'var(--accent-blue)',
-                  bgColor = 'var(--bg-blue)',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-
-    -- Timeline section
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Timeline',
-          level = 4,
-        },
-        {
-          type = 'timeline-entry',
-          title = 'Plugin registered',
-          time = 'Just now',
-          footer = 'System',
-          children = {
-            {
-              type = 'text',
-              text = 'This plugin registered via exports and rendered its schema dynamically.',
-              variant = 'muted',
-            },
-          },
-        },
-      },
-    },
-
-    -- Skeleton loading example
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Loading State',
-          level = 4,
-        },
-        {
-          type = 'row',
-          gap = 2,
-          children = {
-            { type = 'skeleton', height = 24, width = '100%' },
-            { type = 'skeleton', height = 24, width = '100%' },
-            { type = 'skeleton', height = 24, width = '60%' },
-          },
-        },
-      },
-    },
-
-    -- Copy button section
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Copy Button',
-          level = 4,
-        },
-        {
-          type = 'copy-button',
-          value = 'exports["easyadmin"]:RegisterPlugin({ id = "my-plugin" })',
-          label = 'Copy Registration Code',
-        },
-      },
-    },
-  }
+-- Receive server data from the "Get Server Data" button.
+-- The server sends this via net event so the client can store it
+-- before the NUI re-fetches the page.
+RegisterNetEvent('ea-plugin-demo:serverData')
+AddEventHandler('ea-plugin-demo:serverData', function(result)
+  if result.ok then
+    state.serverData = result
+  end
 end)
 
--- Stats page: demonstrates bar chart
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderStatsPage', function(data)
-  return {
-    {
-      type = 'heading',
-      text = 'Server Stats',
-      level = 2,
-    },
-    {
-      type = 'text',
-      text = 'This page demonstrates the bar chart component.',
-      variant = 'muted',
-    },
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Player Activity (Last 7 Days)',
-          level = 4,
-        },
-        {
-          type = 'bar-chart',
-          items = {
+-- ---------------------------------------------------------------------------
+-- Render handlers (return full page schema)
+-- ---------------------------------------------------------------------------
+
+-- Main page: realistic dashboard that keeps its layout on re-fetch
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderMainPage', function(data, cb)
+  local players = GetActivePlayers()
+  local playerCount = #players
+  local fps = 0
+  local ft = GetFrameTime()
+  if ft and ft > 0 then fps = math.floor(1.0 / ft) end
+
+  state.lastRefresh = GetGameTimer()
+
+  cb({
+    { type = 'heading', text = 'Plugin Demo — Main Page', level = 2 },
+    { type = 'text', text = 'This page is rendered by a runtime plugin. The layout stays the same on re-fetch; only the data updates.', variant = 'muted' },
+
+    { type = 'row', gap = 3, children = {
+        { type = 'stat-card', label = 'Players', value = tostring(playerCount), icon = 'users', iconColor = 'var(--accent-green)', bgColor = 'var(--bg-green)' },
+        { type = 'stat-card', label = 'FPS', value = tostring(fps), icon = 'gauge', iconColor = 'var(--accent-orange)', bgColor = 'var(--bg-orange)' },
+        { type = 'stat-card', label = 'Toggles', value = tostring(state.toggleCount), icon = 'zap', iconColor = 'var(--accent-blue)', bgColor = 'var(--bg-blue)' },
+      }},
+
+    { type = 'divider' },
+
+    -- Server data section (populated by "Get Server Data" button)
+    { type = 'card', children = {
+        { type = 'heading', text = 'Server Data', level = 4 },
+        { type = 'text', text = state.serverData and 'Fetched at tick ' .. tostring(state.serverData.tick) or 'Click "Get Server Data" below to populate this section.', variant = 'muted' },
+        state.serverData and {
+          type = 'key-value-table',
+          rows = {
+            { key = 'Players', value = tostring(state.serverData.playerCount) },
+            { key = 'Max Players', value = tostring(state.serverData.maxPlayers) },
+            { key = 'Resources', value = tostring(state.serverData.resourceCount) },
+            { key = 'Uptime', value = string.format('%.1fs', state.serverData.uptime) },
+          },
+        } or nil,
+      }},
+
+    { type = 'divider' },
+
+    -- Buttons with self-describing labels
+    { type = 'card', children = {
+        { type = 'heading', text = 'Button Behaviours', level = 4 },
+        { type = 'text', text = 'Each button demonstrates a different plugin action pattern.', variant = 'muted' },
+        { type = 'row', gap = 2, children = {
+            { type = 'button', label = 'Re-fetch Page', action = 'refetchPage', icon = 'refresh', variant = 'primary', size = 'sm' },
+            { type = 'button', label = 'Toggle Counter', action = 'toggleCounter', icon = 'zap', variant = 'secondary', size = 'sm' },
+            { type = 'button', label = 'Get Server Data', action = 'getServerData', server = true, icon = 'server', variant = 'danger', size = 'sm' },
+            { type = 'button', label = 'Replace Page', action = 'replacePage', icon = 'arrow-right-arrow-left', variant = 'ghost', size = 'sm' },
+          }},
+      }},
+
+    { type = 'divider' },
+
+    { type = 'card', children = {
+        { type = 'heading', text = 'Plugin Info', level = 4 },
+        { type = 'key-value-table', rows = {
+            { key = 'Plugin ID', value = 'ea-plugin-demo' },
+            { key = 'Version', value = '1.0.0' },
+            { key = 'Last Refresh', value = tostring(state.lastRefresh) },
+          }},
+      }},
+  })
+end)
+
+-- Stats page: bar chart demo
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderStatsPage', function(data, cb)
+  cb({
+    { type = 'heading', text = 'Plugin Demo — Stats Page', level = 2 },
+    { type = 'text', text = 'Demonstrates the bar chart component with static data.', variant = 'muted' },
+    { type = 'card', children = {
+        { type = 'heading', text = 'Sample Data (Last 7 Days)', level = 4 },
+        { type = 'bar-chart', items = {
             { label = 'Mon', value = 12 },
             { label = 'Tue', value = 8, color = 'var(--accent-orange)' },
             { label = 'Wed', value = 15 },
@@ -379,304 +146,121 @@ exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderStatsPage', 
             { label = 'Fri', value = 30 },
             { label = 'Sat', value = 45 },
             { label = 'Sun', value = 38 },
-          },
-        },
-      },
-    },
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Resource Usage',
-          level = 4,
-        },
-        {
-          type = 'bar-chart',
-          items = {
+          }},
+      }},
+    { type = 'card', children = {
+        { type = 'heading', text = 'Resource Usage', level = 4 },
+        { type = 'bar-chart', items = {
             { label = 'CPU', value = 65 },
             { label = 'RAM', value = 45, color = 'var(--accent-blue)' },
             { label = 'GPU', value = 30 },
             { label = 'Network', value = 20 },
-          },
-        },
-      },
-    },
-  }
+          }},
+      }},
+  })
 end)
 
--- Actions page: demonstrates nested layout with col/row
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderActionsPage', function(data)
-  return {
-    {
-      type = 'heading',
-      text = 'Actions',
-      level = 2,
-    },
-    {
-      type = 'col',
-      gap = 3,
-      children = {
-        {
-          type = 'card',
-          children = {
-            {
-              type = 'heading',
-              text = 'Client Actions',
-              level = 4,
-            },
-            {
-              type = 'row',
-              gap = 2,
-              children = {
-                {
-                  type = 'button',
-                  label = 'Refresh',
-                  action = 'refresh',
-                  icon = 'refresh',
-                  variant = 'primary',
-                  size = 'sm',
-                },
-                {
-                  type = 'button',
-                  label = 'Push Update',
-                  action = 'pushUpdate',
-                  icon = 'download',
-                  variant = 'secondary',
-                  size = 'sm',
-                },
-              },
-            },
-          },
-        },
-        {
-          type = 'card',
-          children = {
-            {
-              type = 'heading',
-              text = 'Server Actions',
-              level = 4,
-            },
-            {
-              type = 'row',
-              gap = 2,
-              children = {
-                {
-                  type = 'button',
-                  label = 'Get Server Data',
-                  action = 'getServerData',
-                  server = true,
-                  icon = 'server',
-                  variant = 'danger',
-                  size = 'sm',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  }
+-- Actions page: explains the plugin system
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderActionsPage', function(data, cb)
+  cb({
+    { type = 'heading', text = 'Plugin Demo — How It Works', level = 2 },
+    { type = 'text', text = 'This page explains the plugin architecture.', variant = 'muted' },
+    { type = 'card', children = {
+        { type = 'heading', text = 'Registration', level = 4 },
+        { type = 'text', text = 'Plugins register via exports.EasyAdmin:RegisterPlugin(config). The config defines nav items, pages, tabs, and widgets.' },
+      }},
+    { type = 'card', children = {
+        { type = 'heading', text = 'Handlers', level = 4 },
+        { type = 'text', text = 'FiveM exports cannot pass functions between resources. Handlers use AddEventHandler instead. EasyAdmin triggers an event and the plugin responds via cb(result).' },
+      }},
+    { type = 'card', children = {
+        { type = 'heading', text = 'Button Actions', level = 4 },
+        { type = 'text', text = 'When a button is clicked, pluginCall routes to the matching event handler. If the handler returns a schema array, the page is replaced. If it returns anything else, the original render action is re-fetched.' },
+      }},
+    { type = 'card', children = {
+        { type = 'heading', text = 'Server Actions', level = 4 },
+        { type = 'text', text = 'Buttons with server = true are forwarded to the server. The server triggers an event, the plugin responds, and the result is relayed back to the NUI.' },
+      }},
+  })
 end)
 
--- Player detail tab: shows player-specific info
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderPlayerTab', function(data)
+-- Player detail tab
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderPlayerTab', function(data, cb)
   local playerId = data.context.playerId
-
-  -- Get player info
   local name = 'Unknown'
-  local license = 'N/A'
-  local identifiers = {}
   if playerId and playerId > 0 then
     name = GetPlayerName(playerId)
-    license = GetPlayerIdentifierByType(playerId, 'license') or 'N/A'
-    local idCount = GetNumPlayerIdentifiers(playerId)
-    for i = 0, idCount - 1 do
-      local id = GetPlayerIdentifier(playerId, i)
-      if id then
-        table.insert(identifiers, id)
-      end
-    end
   end
 
-  return {
-    {
-      type = 'heading',
-      text = 'Demo Tab',
-      level = 3,
-    },
-    {
-      type = 'text',
-      text = 'This tab is injected into the player detail page.',
-      variant = 'muted',
-    },
-    {
-      type = 'key-value-table',
-      rows = {
+  cb({
+    { type = 'heading', text = 'Demo Info Tab', level = 3 },
+    { type = 'text', text = 'Injected into the player detail page by a runtime plugin.', variant = 'muted' },
+    { type = 'key-value-table', rows = {
         { key = 'Player ID', value = playerId and tostring(playerId) or 'N/A' },
         { key = 'Name', value = name },
-        { key = 'License', value = license, mono = true },
-      },
-    },
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'heading',
-          text = 'Identifiers',
-          level = 4,
-        },
-        {
-          type = 'text',
-          text = #identifiers > 0 and table.concat(identifiers, ', ') or 'No identifiers found',
-          variant = 'muted',
-        },
-      },
-    },
-  }
+        { key = 'License', value = playerId and 'license:' .. playerId or 'N/A', mono = true },
+        { key = 'Identifiers', value = playerId and 'license:' .. playerId .. ', ip:127.0.0.1' or 'N/A', mono = true },
+      }},
+  })
 end)
 
--- Advanced player tab: requires permission
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderPlayerAdvancedTab', function(data)
+-- Advanced player tab
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderPlayerAdvancedTab', function(data, cb)
   local playerId = data.context.playerId
-  local state = GetPlayerState(playerId)
-  local ping = GetPlayerPing(playerId)
 
-  return {
-    {
-      type = 'heading',
-      text = 'Advanced',
-      level = 3,
-    },
-    {
-      type = 'alert',
-      variant = 'warning',
-      title = 'Advanced View',
-      children = {
-        {
-          type = 'text',
-          text = 'This tab requires the "plugin.demo.advanced" permission.',
-          variant = 'muted',
-        },
-      },
-    },
-    {
-      type = 'key-value-table',
-      rows = {
-        { key = 'State', value = tostring(state) },
-        { key = 'Ping', value = tostring(ping) .. 'ms' },
+  cb({
+    { type = 'heading', text = 'Advanced Tab', level = 3 },
+    { type = 'alert', variant = 'warning', title = 'Permission-gated', children = {
+        { type = 'text', text = 'This tab requires "plugin.demo.advanced". It is hidden from admins without that permission.', variant = 'muted' },
+      }},
+    { type = 'key-value-table', rows = {
+        { key = 'Player ID', value = playerId and tostring(playerId) or 'N/A' },
+        { key = 'Ping', value = playerId and tostring(math.random(10, 100)) .. 'ms' or 'N/A' },
         { key = 'Permission', value = 'plugin.demo.advanced' },
-      },
-    },
-  }
+      }},
+  })
 end)
 
 -- Dashboard widget
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'renderWidget', function(data)
-  return {
-    {
-      type = 'card',
-      children = {
-        {
-          type = 'row',
-          gap = 2,
-          children = {
-            { type = 'icon', name = 'check-circle', size = 'md' },
-            {
-              type = 'col',
-              gap = 0,
-              children = {
-                { type = 'text', text = 'Plugin Demo', variant = 'small' },
-                { type = 'text', text = 'Online', variant = 'muted' },
-              },
-            },
-          },
-        },
-      },
-    },
-  }
-end)
-
--- Action: refresh — returns a new schema to re-render the page
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'refresh', function(data)
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderWidget', function(data, cb)
   local players = GetActivePlayers()
-  local playerCount = #players
-  local fps = math.floor(1.0 / GetFrameTime())
 
-  return {
-    {
-      type = 'heading',
-      text = 'Plugin Demo',
-      level = 2,
-    },
-    {
-      type = 'text',
-      text = 'Refreshed at ' .. os.date('%H:%M:%S'),
-      variant = 'muted',
-    },
-    {
-      type = 'row',
-      gap = 3,
-      children = {
-        {
-          type = 'stat-card',
-          label = 'Players',
-          value = tostring(playerCount),
-          icon = 'users',
-          iconColor = 'var(--accent-green)',
-          bgColor = 'var(--bg-green)',
-        },
-        {
-          type = 'stat-card',
-          label = 'FPS',
-          value = tostring(fps),
-          icon = 'gauge',
-          iconColor = 'var(--accent-orange)',
-          bgColor = 'var(--bg-orange)',
-        },
-      },
-    },
-    {
-      type = 'badge',
-      text = 'Refreshed!',
-      variant = 'online',
-      icon = 'check-circle',
-    },
-  }
+  cb({
+    { type = 'card', children = {
+        { type = 'row', gap = 2, children = {
+            { type = 'icon', name = 'users', size = 'md' },
+            { type = 'col', gap = 0, children = {
+                { type = 'text', text = 'Players Online', variant = 'small' },
+                { type = 'text', text = tostring(#players), variant = 'muted' },
+              }},
+          }},
+      }},
+  })
 end)
 
--- Action: toggle — demonstrates sending data with the action
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'toggle', function(data)
-  -- Toggle a counter stored in a global variable
-  _G._demoToggleCount = (_G._demoToggleCount or 0) + 1
-  local count = _G._demoToggleCount
+-- ---------------------------------------------------------------------------
+-- Action handlers (called by buttons)
+-- ---------------------------------------------------------------------------
 
-  return {
-    {
-      type = 'heading',
-      text = 'Toggle Count',
-      level = 2,
-    },
-    {
-      type = 'stat-card',
-      label = 'Toggles',
-      value = tostring(count),
-      icon = 'zap',
-      iconColor = 'var(--accent-orange)',
-      bgColor = 'var(--bg-orange)',
-    },
-    {
-      type = 'badge',
-      text = count % 2 == 0 and 'Even' or 'Odd',
-      variant = count % 2 == 0 and 'online' or 'warning',
-    },
-  }
+-- Re-fetch page: returns non-schema data, triggers re-fetch of renderMainPage
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:refetchPage', function(data, cb)
+  cb({ ok = true, message = 'Re-fetching page' })
 end)
 
--- Action: pushUpdate — triggers a live update via SendNUIMessage
-exports['easyadmin']:RegisterPluginHandler('ea-plugin-demo', 'pushUpdate', function(data)
-  -- Push a live update to the NUI. The NUI will re-fetch the current
-  -- render action since we don't return a schema here.
-  SendNUIMessage({ action = 'plugin:ea-plugin-demo:update' })
-  return { ok = true }
+-- Toggle counter: increments state, returns non-schema to re-fetch
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:toggleCounter', function(data, cb)
+  state.toggleCount = state.toggleCount + 1
+  cb({ ok = true, count = state.toggleCount })
+end)
+
+-- Replace page: returns a schema array, replaces the entire page
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:replacePage', function(data, cb)
+  cb({
+    { type = 'heading', text = 'Page Replaced', level = 2 },
+    { type = 'text', text = 'This entire page was returned by the "replacePage" action handler. The original layout is gone until you navigate away and back.', variant = 'muted' },
+    { type = 'alert', variant = 'info', title = 'How it works', children = {
+        { type = 'text', text = 'When a button handler returns an array of schema components, the page is replaced with that schema. Non-schema responses trigger a re-fetch of the original render action instead.' },
+      }},
+    { type = 'badge', text = 'Replaced', variant = 'online', icon = 'check-circle' },
+  })
 end)

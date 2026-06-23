@@ -3,7 +3,7 @@ game 'gta5'
 
 -- This example must start AFTER EasyAdmin.
 -- Adding it as a dependency ensures correct load order.
-dependencies { 'easyadmin' }
+dependencies { 'EasyAdmin' }
 
 author 'EasyAdmin Team'
 description 'Example plugin demonstrating the EasyAdmin NUI runtime plugin system'

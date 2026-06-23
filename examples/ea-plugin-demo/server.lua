@@ -1,61 +1,30 @@
 -- ea-plugin-demo server script
--- Registers server-side handlers for plugin actions that require server
--- access. These are reached by buttons with `server = true` in the schema.
+--
+-- Server-side handlers for plugin actions with `server = true`.
+-- Uses events (FiveM exports cannot pass functions between resources).
 
--- ---------------------------------------------------------------------------
 -- Server handler: getServerData
--- ---------------------------------------------------------------------------
--- This handler is called when a button with `server = true` is clicked.
--- It MUST be permission-guarded because it exposes server state.
+-- Called by the "Get Server Data" button on the main page.
+-- Returns server state that the client stores and displays on re-fetch.
 
-exports['easyadmin']:RegisterPluginServerHandler('ea-plugin-demo', 'getServerData', function(source, data)
-  -- Always check permissions on server handlers
+AddEventHandler('EasyAdmin:Plugin:serverAction:ea-plugin-demo:getServerData', function(source, data, cb)
   if not DoesPlayerHavePermission(source, 'plugin.demo.advanced') then
-    return {
-      ok = false,
-      error = 'permission denied',
-    }
+    return cb({ ok = false, error = 'Requires permission: plugin.demo.advanced' })
   end
 
-  -- Gather some server state
   local playerCount = #GetPlayers()
   local maxPlayers = GetConvarInt('sv_maxclients', 32)
 
-  return {
+  local result = {
     ok = true,
-    timestamp = os.time(),
-    serverInfo = {
-      playerCount = playerCount,
-      maxPlayers = maxPlayers,
-      resourceCount = #GetResources() - 1, -- subtract this resource
-      serverUptime = GetGameTimer() / 1000,
-    },
+    tick = GetGameTimer(),
+    playerCount = playerCount,
+    maxPlayers = maxPlayers,
+    resourceCount = #GetResources() - 1,
+    uptime = GetGameTimer() / 1000,
   }
-end)
 
--- ---------------------------------------------------------------------------
--- Server handler: demoServerAction
--- ---------------------------------------------------------------------------
--- Another example server handler that demonstrates logging and state
--- modification.
-
-exports['easyadmin']:RegisterPluginServerHandler('ea-plugin-demo', 'demoServerAction', function(source, data)
-  if not DoesPlayerHavePermission(source, 'plugin.demo.advanced') then
-    return {
-      ok = false,
-      error = 'permission denied',
-    }
-  end
-
-  -- Log the action
-  print(('[Demo] Server action triggered by player %d (%s)'):format(
-    source,
-    GetPlayerName(source)
-  ))
-
-  return {
-    ok = true,
-    message = 'Server action completed successfully',
-    triggeredBy = source,
-  }
+  -- Send to client so it can store the data before NUI re-fetches
+  TriggerClientEvent('ea-plugin-demo:serverData', source, result)
+  cb(result)
 end)

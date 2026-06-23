@@ -7,4 +7,6 @@
 ------------------------------------
 
 -- Export for external resources
-exports('RegisterPlugin', RegisterEasyAdminPlugin)
+exports('RegisterPlugin', function(config)
+  return RegisterEasyAdminPlugin(config)
+end)
