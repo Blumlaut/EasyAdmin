@@ -7,6 +7,7 @@ import { filterCachedPlayers } from '../../lib/playerSearch'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Icon } from '../../components/icons'
+import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { useModalContext } from '../../ModalContext'
@@ -67,7 +68,7 @@ export function CachedPlayersPage({
         </p>
         </div>
       ) : (
-        <div ref={listRef} className="list">
+        <List ref={listRef}>
           {filtered.map((player) => (
             <CachedRow
               key={player.id}
@@ -88,7 +89,7 @@ export function CachedPlayersPage({
               )}
             />
           ))}
-        </div>
+        </List>
       )}
     </div>
   )
@@ -103,7 +104,7 @@ function CachedRow({
 }) {
   const { t } = useTranslation()
   return (
-    <ListItem onClick={() => {}}>
+    <ListItem>
       <div className="avatar avatar-sm avatar-offline">
         <Icon name="archive" size="xs" className="text-fg-muted" />
       </div>

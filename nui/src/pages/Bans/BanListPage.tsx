@@ -7,6 +7,7 @@ import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
 import { Icon } from '../../components/icons'
+import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 
@@ -125,7 +126,7 @@ export function BanListPage({
           <p className="text-fg-subtle">{total === 0 ? t("No bans on record") : t("No bans match your search")}</p>
         </div>
       ) : (
-        <div ref={listRef} className="list">
+        <List ref={listRef}>
           {bans.map((ban, i) => (
             <BanRow
               key={`${ban.banid}-${i}`}
@@ -134,7 +135,7 @@ export function BanListPage({
               onClick={() => onSelectBan(ban.banid)}
             />
           ))}
-        </div>
+        </List>
       )}
 
       <Pagination

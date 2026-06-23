@@ -18,8 +18,6 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  cursor: pointer;
-  transition: background var(--transition-fast);
   border-bottom: 1px solid var(--border-subtle);
   position: relative;
 }
@@ -28,7 +26,13 @@
   border-bottom: none;
 }
 
-.list-item:hover {
+/* Interactive (clickable) list items */
+.list-item-interactive {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.list-item-interactive:hover {
   background: var(--bg-hover);
 }
 

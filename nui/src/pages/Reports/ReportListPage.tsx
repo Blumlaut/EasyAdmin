@@ -6,6 +6,7 @@ import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
 import { Icon } from '../../components/icons'
+import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 
 interface ReportListPageProps {
@@ -71,7 +72,7 @@ export function ReportListPage({
           <p className="text-fg-subtle">{reports.length === 0 ? t("No open reports") : t("No reports match your search")}</p>
         </div>
       ) : (
-        <div ref={listRef} className="list">
+        <List ref={listRef}>
           {filtered.map((report) => (
             <ReportRow
               key={report.id}
@@ -79,7 +80,7 @@ export function ReportListPage({
               onClick={() => onSelectReport(report.id)}
             />
           ))}
-        </div>
+        </List>
       )}
     </div>
   )
@@ -129,16 +130,16 @@ function ReportRow({ report, onClick }: { report: Report; onClick: () => void })
 
 function ReportListSkeleton() {
   return (
-    <div className="list">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="list-item">
+    <List>
+      {Array.from({ length: 4 }).map(() => (
+        <ListItem>
           <Skeleton width={32} height={32} circle />
           <div className="list-item-content flex flex-col gap-1">
             <Skeleton width="50%" height={14} />
             <Skeleton width="80%" height={12} />
           </div>
-        </div>
+        </ListItem>
       ))}
-    </div>
+    </List>
   )
 }

@@ -8,6 +8,7 @@ import { Avatar } from '../../components/Avatar'
 import { Icon } from '../../components/icons'
 import { Tooltip } from '../../components/Tooltip'
 import { RoleBadges } from '../../components/RoleBadges'
+import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
 import { AllPlayersActions } from './AllPlayersActions'
@@ -76,7 +77,7 @@ export function PlayerListPage({
           </p>
         </div>
       ) : (
-        <div ref={listRef} className="list">
+        <List ref={listRef}>
           {filtered.map((player) => (
             <PlayerRow
               key={player.id}
@@ -84,7 +85,7 @@ export function PlayerListPage({
               onClick={() => onSelectPlayer(player)}
             />
           ))}
-        </div>
+        </List>
       )}
 
       {(canTeleportAll || !!permissions['server.mute.global']) && players.length > 0 && (

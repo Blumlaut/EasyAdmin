@@ -11,6 +11,7 @@ import { Skeleton } from '../../components/Skeleton'
 import { Alert } from '../../components/Alert'
 import { CopyButton } from '../../components/CopyButton'
 import { Icon } from '../../components/icons'
+import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
@@ -313,16 +314,16 @@ export function ResourceListPage({
       )}
 
       {loading ? (
-        <div className="list">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="list-item">
+        <List>
+          {Array.from({ length: 6 }).map(() => (
+            <ListItem>
               <div className="list-item-content flex flex-col gap-1">
                 <Skeleton width="40%" height={14} />
                 <Skeleton width="20%" height={12} />
               </div>
-            </div>
+            </ListItem>
           ))}
-        </div>
+        </List>
       ) : filtered.length === 0 ? (
         <div className="card empty-state">
           <div className="empty-state-icon">
@@ -335,7 +336,7 @@ export function ResourceListPage({
           </p>
         </div>
       ) : (
-        <div ref={listRef} className="list">
+        <List ref={listRef}>
           {filtered.map((resource) => (
             <ResourceRow
               key={resource.name}
@@ -346,7 +347,7 @@ export function ResourceListPage({
               onClick={() => onSelectResource(resource.name)}
             />
           ))}
-        </div>
+        </List>
       )}
     </div>
   )
