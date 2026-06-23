@@ -1,0 +1,14 @@
+# Busted configuration
+# https://lunarmodules.github.io/busted/
+
+# Show progress dots
+output: tap
+
+# Fail on warnings
+warn: true
+
+# Lua path includes project root for relative dofile paths
+lua_path: "./?.lua;./?/init.lua"
+
+# Note: bootstrap is loaded via --helper flag in the test runner script,
+# not via busted.yml helpers (incompatible with busted 2.3 + lua 5.4)

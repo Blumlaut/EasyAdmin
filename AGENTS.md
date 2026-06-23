@@ -74,6 +74,7 @@ Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It cov
 | `src/` | Discord bot code (Node.js), bundled into `dist/`. |
 | `docs/` | EasyAdmin user and developer documentation. |
 | `plugins/` | Plugin system — `*_shared.lua`, `*_client.lua`, `*_server.lua` naming conventions. |
+| `tests/` | Lua unit tests (busted). See [Testing](#testing) below. |
 
 ## Handy Commands
 
@@ -97,6 +98,27 @@ Run from the respective subdirectories after installing dependencies (`npm insta
 | Command | Description |
 |---|---|
 | `npm run build` | Install deps + bundle with esbuild into `dist/` |
+
+### Lua Tests (`tests/`)
+
+| Command | Description |
+|---|---|
+| `./tests/run.sh tests/` | Run the full Lua test suite |
+| `./tests/run.sh tests/ --tap` | Run tests with TAP output |
+| `./tests/run.sh tests/<file>_spec.lua` | Run a single test file |
+
+## Testing
+
+EasyAdmin has a Lua test suite using **[busted](https://lunarmodules.github.io/busted/)**. Tests run outside of FiveM using a mock layer that stubs all FXServer-specific globals.
+
+**Always read [`tests/WRITING_TESTS.md`](tests/WRITING_TESTS.md) before writing new tests.** It covers what makes a good test vs a bad test, how to use the mock layer, and the project's test philosophy.
+
+### Key Principles
+
+- **Test LOGIC, not identity.** Verify that a function makes the right *decision* given certain inputs — not just that it returns something.
+- **Test edge cases.** Empty tables, nil values, type mismatches, boundary values — these are where bugs hide.
+- **Test invariants.** Properties that should always hold after an operation (e.g. "after merging, only the primary entry remains indexed").
+- **One assertion per concept.** Each `it()` block should test one logical behavior.
 
 ## FiveM Documentation
 
