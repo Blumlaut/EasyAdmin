@@ -41,16 +41,34 @@ end
 -- ============================================================
 -- Citizen / CfxLua runtime
 -- ============================================================
+-- Queued timeouts: callbacks are stored and executed via _MockAdvanceTime()
+local _queuedTimeouts = {}
+
 Citizen = {
     CreateThread = function(fn)
         -- Don't actually run threads in tests
     end,
     Wait = function(ms) end,
     SetTimeout = function(ms, fn)
-        fn()  -- Execute immediately in tests
+        table.insert(_queuedTimeouts, { delay = ms, fn = fn })
     end,
     Trace = function(...) end,
 }
+
+--- Execute all queued timeouts whose delay <= elapsedMs
+--- Call this to simulate time passing in tests
+function _MockAdvanceTime(elapsedMs)
+    for i = #_queuedTimeouts, 1, -1 do
+        if _queuedTimeouts[i].delay <= elapsedMs then
+            _queuedTimeouts[i].fn()
+            table.remove(_queuedTimeouts, i)
+        end
+    end
+end
+
+function _MockClearTimeouts()
+    _queuedTimeouts = {}
+end
 
 -- ============================================================
 -- JSON (FiveM uses a custom json module)
@@ -248,6 +266,12 @@ end
 -- Exports (FiveM export system)
 -- ============================================================
 function exports(name, fn) end  -- No-op in tests
+
+-- ============================================================
+-- Player cache / immunity (used by admin_utils)
+-- ============================================================
+function getCachedPlayer(playerId) end  -- Returns nil by default
+function isPlayerImmune(playerId) return false end  -- No immunity by default
 
 -- ============================================================
 -- KVP (Key-Value Pair) storage

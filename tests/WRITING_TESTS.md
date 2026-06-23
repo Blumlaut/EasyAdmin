@@ -144,7 +144,49 @@ _MockSetFile("banlist.json", json.encode({ { banid = 1 } }))
 | `_MockSetFile(path, content)` | Set content for `LoadResourceFile` |
 | `_MockClearFiles()` | Clear all mock files |
 | `_MockClearKvp()` | Clear mock KVP store |
+| `_MockAdvanceTime(ms)` | Execute queued `Citizen.SetTimeout` callbacks whose delay ≤ ms |
+| `_MockClearTimeouts()` | Clear all queued timeouts |
 | `_resetGlobals()` | Reset all shared global state (call in `before_each`) |
+
+### Shared State and Busted Scoping
+
+Busted 2.x loads helper files and spec files in separate `_ENV` scopes. Functions loaded via `dofile()` in the bootstrap capture the bootstrap's `_ENV`, while test code runs in the spec's `_ENV`.
+
+**Always access shared tables via `_G`** to ensure the test and the function under test reference the same table:
+
+```lua
+-- ✅ Correct: both test and function see _G.AdminCooldowns
+_G.AdminCooldowns[5] = { kick = true }
+assert.is_true(CheckAdminCooldown(5, "kick"))
+
+-- ❌ Wrong: test writes to spec's _ENV, function reads bootstrap's _ENV
+AdminCooldowns[5] = { kick = true }  -- Different table!
+```
+
+Similarly, when overriding mock functions that loaded functions depend on:
+
+```lua
+-- ✅ Correct: override in _G so loaded functions see the change
+local original = _G.isPlayerImmune
+_G.isPlayerImmune = function(pid) return pid == 99 end
+-- ... test ...
+_G.isPlayerImmune = original
+
+-- ❌ Wrong: overrides spec's _ENV, loaded function uses bootstrap's _ENV
+isPlayerImmune = function(pid) return pid == 99 end
+```
+
+### Timeouts
+
+`Citizen.SetTimeout` queues callbacks instead of executing them immediately. Use `_MockAdvanceTime(ms)` to simulate time passing:
+
+```lua
+SetAdminCooldown(5, "kick")  -- Sets 30s timeout
+assert.is_true(_G.AdminCooldowns[5].kick)  -- Still active
+
+_MockAdvanceTime(31000)  -- Advance 31 seconds
+assert.is_nil(_G.AdminCooldowns[5].kick)  -- Cleared
+```
 
 ## Writing a New Spec
 
