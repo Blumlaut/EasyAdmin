@@ -35,7 +35,7 @@ server_scripts {
 
 client_scripts {
     "client/init/i18n.lua",
-    "client/gui_client.lua",
+    "client/init/globals.lua",
     "client/nui/*.lua",
     "client/gui_nui.lua",
     "client/*.lua"

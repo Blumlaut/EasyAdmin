@@ -306,7 +306,7 @@ end, false)
 
 -- Only register the key mapping on FiveM. We can't rely on the
 -- global `RedM` flag yet because it is set inside a CreateThread in
--- client/gui_client.lua, which is loaded before us but whose body may
+-- client/init/globals.lua, which is loaded before us but whose body may
 -- not have executed by the time we reach this point. We use the same
 -- `CompendiumHorseObserved` existence check the original code uses
 -- for the `easyadmin` keybind.
