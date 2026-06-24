@@ -22,7 +22,7 @@ charts, alerts, badges, icons, etc.).
 
 - [Creating a Plugin](creating-plugins) — Step-by-step guide with a full example
 - [Plugin API](plugin-api) — Lua exports, handlers, and events
-- [NUI Plugins (advanced)](../../nui-plugins) — Schema component reference and internals
+- [NUI Plugins (advanced)](../nui-plugins) — Schema component reference and internals
 
 ## What You Can Build
 
