@@ -1,7 +1,7 @@
 # NUI Plugin System — Schema Reference
 
 This is the technical reference for the runtime plugin system. For a
-step-by-step guide, see [Creating a Plugin](docs/plugins/creating-plugins.md).
+step-by-step guide, see [Creating a Plugin](docs/plugins/creating-plugins).
 
 ## Architecture
 

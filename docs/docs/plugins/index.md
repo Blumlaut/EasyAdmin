@@ -20,9 +20,9 @@ charts, alerts, badges, icons, etc.).
 
 ## Where to Start
 
-- [Creating a Plugin](creating-plugins.md) — Step-by-step guide with a full example
-- [Plugin API](plugin-api.md) — Lua exports, handlers, and events
-- [NUI Plugins (advanced)](../../nui-plugins.md) — Schema component reference and internals
+- [Creating a Plugin](creating-plugins) — Step-by-step guide with a full example
+- [Plugin API](plugin-api) — Lua exports, handlers, and events
+- [NUI Plugins (advanced)](../../nui-plugins) — Schema component reference and internals
 
 ## What You Can Build
 
@@ -47,4 +47,4 @@ end)
 Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see it.
 Gate individual tabs or the entire plugin via the `permission` field.
 
-See [Creating a Plugin](creating-plugins.md) for the full permission pattern.
+See [Creating a Plugin](creating-plugins) for the full permission pattern.

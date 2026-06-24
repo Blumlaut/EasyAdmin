@@ -132,7 +132,7 @@ Listen for these events in a plugin or separate resource to sync with external d
 
 ## See Also
 
-- [Backups](features/backups.md) — Backup and restore banlists
-- [Configuration](configuration/backups.md) — Banlist backup configuration
-- [Reports](features/reports.md) — Auto-ban on report threshold
-- [Action History](features/action-history.md) — Track moderation history
+- [Backups](features/backups) — Backup and restore banlists
+- [Configuration](configuration/backups) — Banlist backup configuration
+- [Reports](features/reports) — Auto-ban on report threshold
+- [Action History](features/action-history) — Track moderation history

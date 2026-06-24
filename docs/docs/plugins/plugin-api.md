@@ -23,7 +23,7 @@ exports['easyadmin']:RegisterPlugin({
 })
 ```
 
-See [Creating a Plugin](creating-plugins.md) for the full config shape.
+See [Creating a Plugin](creating-plugins) for the full config shape.
 
 ## Handlers
 

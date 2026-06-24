@@ -74,7 +74,7 @@ Use a standard GTA V key name (e.g., `F2`, `K`, `LCTRL`). You can also use the `
 
 ## See Also
 
-- [Configuration](configuration/basic.md) — Set up webhooks, Discord bot, and other options
-- [Permissions](permissions/index.md) — Set up granular permissions for moderators and admins
-- [Troubleshooting](troubleshooting.md) — Common issues and solutions
-- [Updating](updates/updating.md) — How to update EasyAdmin
+- [Configuration](configuration/basic) — Set up webhooks, Discord bot, and other options
+- [Permissions](permissions/index) — Set up granular permissions for moderators and admins
+- [Troubleshooting](troubleshooting) — Common issues and solutions
+- [Updating](updates/updating) — How to update EasyAdmin

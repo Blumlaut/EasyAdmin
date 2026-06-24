@@ -214,7 +214,7 @@ Generate a support file for troubleshooting.
 
 ## See Also
 
-- [Permissions Overview](permissions/index.md) — Permission requirements for commands
-- [Configuration](configuration/commands.md) — Command configuration options
-- [Reports](features/reports.md) — Report and calladmin commands
-- [Shortcuts & Reminders](features/reminders-and-shortcuts.md) — Shortcut and reminder commands
+- [Permissions Overview](permissions/index) — Permission requirements for commands
+- [Configuration](configuration/commands) — Command configuration options
+- [Reports](features/reports) — Report and calladmin commands
+- [Shortcuts & Reminders](features/reminders-and-shortcuts) — Shortcut and reminder commands

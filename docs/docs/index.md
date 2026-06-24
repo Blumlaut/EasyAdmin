@@ -8,11 +8,11 @@ EasyAdmin is an administration system for FiveM and RedM servers. It provides a 
 
 If you are setting up EasyAdmin for the first time, follow these steps in order:
 
-1. [Install EasyAdmin](install.md) -- Download, extract, and start the resource
-2. [Add yourself as an admin](install.md#adding-an-admin) -- Grant your identifier admin access
-3. [Set your keybind](configuration/basic.md#menu-keybind) -- Choose a key to open the menu
-4. [Configure webhooks](configuration/webhooks.md) -- Set up Discord notifications
-5. [Set up the Discord bot](discord/bot-setup.md) -- Optional, for remote management
+1. [Install EasyAdmin](install) -- Download, extract, and start the resource
+2. [Add yourself as an admin](install#adding-an-admin) -- Grant your identifier admin access
+3. [Set your keybind](configuration/basic#menu-keybind) -- Choose a key to open the menu
+4. [Configure webhooks](configuration/webhooks) -- Set up Discord notifications
+5. [Set up the Discord bot](discord/bot-setup) -- Optional, for remote management
 
 Each step links to a detailed guide.
 
@@ -124,21 +124,21 @@ Find what you need by task:
 
 | Task | Guide |
 |------|-------|
-| Ban a player | [Ban List](features/ban-list.md) |
-| Set up Discord notifications | [Webhooks](configuration/webhooks.md) |
-| Add a Discord bot | [Bot Setup](discord/bot-setup.md) |
-| Configure permissions | [Permissions Overview](permissions/index.md) |
-| Edit a ban | [Editing Bans](features/ban-list.md#editing-bans) |
-| Unban a player | [Unbanning](features/ban-list.md#unbanning) |
-| Handle player reports | [Reports](features/reports.md) |
-| Set up chat reminders | [Reminders](features/reminders-and-shortcuts.md#chat-reminders) |
-| Add reason shortcuts | [Shortcuts](features/reminders-and-shortcuts.md#reason-shortcuts) |
-| Enable the allowlist | [Allowlist](features/allowlist.md) |
-| Change the menu key | [Keybind](configuration/basic.md#menu-keybind) |
-| Monitor server resources | [Resource Monitor](features/resource-monitor.md) |
-| View player statistics | [Player Statistics](features/player-statistics.md) |
-| Check network stats | [Network Monitor](features/network-monitor.md) |
-| Update EasyAdmin | [Updating](updates/updating.md) |
+| Ban a player | [Ban List](features/ban-list) |
+| Set up Discord notifications | [Webhooks](configuration/webhooks) |
+| Add a Discord bot | [Bot Setup](discord/bot-setup) |
+| Configure permissions | [Permissions Overview](permissions/index) |
+| Edit a ban | [Editing Bans](features/ban-list#editing-bans) |
+| Unban a player | [Unbanning](features/ban-list#unbanning) |
+| Handle player reports | [Reports](features/reports) |
+| Set up chat reminders | [Reminders](features/reminders-and-shortcuts#chat-reminders) |
+| Add reason shortcuts | [Shortcuts](features/reminders-and-shortcuts#reason-shortcuts) |
+| Enable the allowlist | [Allowlist](features/allowlist) |
+| Change the menu key | [Keybind](configuration/basic#menu-keybind) |
+| Monitor server resources | [Resource Monitor](features/resource-monitor) |
+| View player statistics | [Player Statistics](features/player-statistics) |
+| Check network stats | [Network Monitor](features/network-monitor) |
+| Update EasyAdmin | [Updating](updates/updating) |
 
 ---
 
@@ -161,5 +161,5 @@ Find what you need by task:
 ## Need Help?
 
 - [GitHub Issues](https://github.com/Blumlaut/EasyAdmin/issues) -- Report bugs or request features
-- [Troubleshooting](troubleshooting.md) -- Common problems and solutions
+- [Troubleshooting](troubleshooting) -- Common problems and solutions
 - [Discord Community](https://discord.gg/easyadmin) -- Get help from the community
