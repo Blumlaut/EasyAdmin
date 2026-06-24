@@ -209,8 +209,9 @@ function App() {
   if (chrome.contentCollapsed) windowClasses.push('ea-window--collapsed')
   if (chrome.nuiBackground) windowClasses.push('ea-window--background')
 
-  const windowStyle: React.CSSProperties = {
+  const windowStyle: React.CSSProperties & Record<string, unknown> = {
     fontSize: `${data.settings.fontSize}px`,
+    '--ea-fold-opacity': `${data.settings.foldOpacity / 100}`,
   }
 
   const handleFoldIn = chrome.foldIn

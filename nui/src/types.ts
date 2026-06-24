@@ -110,6 +110,8 @@ export interface AppSettings {
   // Layout
   sidebarMode: SidebarMode
   sidebarDirection: SidebarDirection
+  // Fold transparency (0 = fully transparent, 100 = fully opaque), default 85
+  foldOpacity: number
 }
 
 // Default window dimensions (used when no KVP saved size exists)

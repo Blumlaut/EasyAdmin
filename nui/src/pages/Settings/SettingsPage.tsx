@@ -20,7 +20,7 @@ export function SettingsPage({
     onChange(patch)
   }
 
-  function patchLayout(patch: Partial<Pick<AppSettings, 'sidebarMode' | 'sidebarDirection'>>) {
+  function patchLayout(patch: Partial<Pick<AppSettings, 'sidebarMode' | 'sidebarDirection' | 'foldOpacity'>>) {
     onChange(patch)
   }
 
@@ -46,6 +46,7 @@ export function SettingsPage({
       <SettingsLayout
         sidebarMode={settings.sidebarMode}
         sidebarDirection={settings.sidebarDirection}
+        foldOpacity={settings.foldOpacity}
         onChange={patchLayout}
       />
     </div>

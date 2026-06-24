@@ -59,6 +59,8 @@ function NuiToggle()
   })
 
   if nuiVisible then
+    -- Notify server that the UI is now in the foreground
+    TriggerServerEvent('EasyAdmin:UiStateChanged', true)
     -- Opening the menu: always start with focus.
     SetNuiFocused(true)
     -- Send current settings to NUI
@@ -78,6 +80,8 @@ function NuiToggle()
       NuiSendPlayerData()
     end)
   else
+    -- Notify server that the UI is no longer in the foreground
+    TriggerServerEvent('EasyAdmin:UiStateChanged', false)
     SetNuiFocused(false)
   end
 end
@@ -193,6 +197,7 @@ function NuiSendSettings()
       fontSize = KvpGet('ifontSize') or 12,
       sidebarMode = sidebarMode,
       sidebarDirection = sidebarDirection,
+      foldOpacity = KvpGet('ifoldOpacity') or 85,
     },
   })
 
@@ -217,6 +222,7 @@ end
 
 function NuiCloseMenu()
   nuiVisible = false
+  TriggerServerEvent('EasyAdmin:UiStateChanged', false)
   SetNuiFocused(false)
   SendNUIMessage({
     action = 'menuToggle',

@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { setResourceKvp } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { useTranslation } from '../../lib/i18n'
@@ -7,7 +8,8 @@ import { LayoutWireframe } from './LayoutWireframe'
 interface SettingsLayoutProps {
   sidebarMode: SidebarMode
   sidebarDirection: SidebarDirection
-  onChange: (patch: { sidebarMode?: SidebarMode; sidebarDirection?: SidebarDirection }) => void
+  foldOpacity: number
+  onChange: (patch: { sidebarMode?: SidebarMode; sidebarDirection?: SidebarDirection; foldOpacity?: number }) => void
 }
 
 type LayoutVariant = 'left-sidebar' | 'right-sidebar' | 'top-taskbar' | 'bottom-taskbar'
@@ -57,17 +59,30 @@ function matchOption(
   return opt.mode === mode && opt.direction === direction
 }
 
+const FOLD_OPACITY_MIN = 10
+const FOLD_OPACITY_MAX = 100
+const FOLD_OPACITY_STEP = 5
+
 export function SettingsLayout({
   sidebarMode,
   sidebarDirection,
+  foldOpacity,
   onChange,
 }: SettingsLayoutProps) {
   const { t } = useTranslation()
+  const dragStartFoldOpacity = useRef(foldOpacity)
+
   function setLayout(mode: SidebarMode, direction: SidebarDirection) {
     onChange({ sidebarMode: mode, sidebarDirection: direction })
     setResourceKvp('ssidebarMode', mode)
     setResourceKvp('ssidebarDirection', direction)
     notify(t("Sidebar layout set to {mode} ({direction})", { mode, direction }), 'success')
+  }
+
+  function setFoldOpacity(value: number) {
+    onChange({ foldOpacity: value })
+    setResourceKvp('ifoldOpacity', String(value))
+    notify(t("Fold opacity set to {value}%", { value: String(value) }), 'success')
   }
 
   return (
@@ -109,6 +124,38 @@ export function SettingsLayout({
           )
         })}
       </fieldset>
+
+      {/* Fold Opacity */}
+      <div className="mt-4 flex flex-col gap-1">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-fg-subtle">{t("Fold opacity")}</span>
+          <span className="text-sm font-medium">{foldOpacity}%</span>
+        </div>
+        <span className="text-xs text-fg-muted">
+          {t("How transparent the window appears when folded in.")}
+        </span>
+        <input
+          type="range"
+          className="slider"
+          min={FOLD_OPACITY_MIN}
+          max={FOLD_OPACITY_MAX}
+          step={FOLD_OPACITY_STEP}
+          value={foldOpacity}
+          onPointerDown={() => { dragStartFoldOpacity.current = foldOpacity }}
+          onChange={(e) => onChange({ foldOpacity: Number(e.target.value) })}
+          onPointerUp={(e) => {
+            const value = Number((e.target as HTMLInputElement).value)
+            if (value !== dragStartFoldOpacity.current) {
+              setFoldOpacity(value)
+            }
+          }}
+          aria-label={t("Fold opacity, currently {value}%", { value: String(foldOpacity) })}
+        />
+        <div className="flex justify-between text-xs text-fg-muted">
+          <span>{FOLD_OPACITY_MIN}%</span>
+          <span>{FOLD_OPACITY_MAX}%</span>
+        </div>
+      </div>
     </div>
   )
 }

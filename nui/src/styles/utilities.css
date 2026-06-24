@@ -70,7 +70,7 @@
 /* -- Menu: NUI in background mode (visible, but no focus) -- */
 .ea-window--background {
   cursor: default;
-  opacity: 0.85;
+  opacity: var(--ea-fold-opacity, 0.85);
   filter: saturate(0.6);
 }
 
@@ -84,7 +84,7 @@
 /* -- Floating windows: same translucent/disabled treatment when NUI is backgrounded -- */
 .ea-nui-background .ea-floating-window {
   cursor: default;
-  opacity: 0.85;
+  opacity: var(--ea-fold-opacity, 0.85);
   filter: saturate(0.6);
 }
 
