@@ -48,7 +48,6 @@ export function RadioGroup<T = string>({
                 )}
               </span>
             </label>
-            {children && i < options.length - 1 ? null : null}
           </React.Fragment>
         ))}
         {children}
