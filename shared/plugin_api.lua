@@ -20,6 +20,9 @@
 local registeredPlugins = {}
 
 ---Register a plugin from an external resource.
+-- Called on the server (via export or client-to-server event) and
+-- on the client (via server-to-client event). The server is the
+-- source of truth; clients mirror the server's registry.
 ---@param config table @Plugin definition: { id, name, version, navItems, pages, ... }
 function RegisterEasyAdminPlugin(config)
   if type(config) ~= 'table' then
@@ -27,6 +30,17 @@ function RegisterEasyAdminPlugin(config)
   end
   if type(config.id) ~= 'string' or config.id == '' then
     error('RegisterEasyAdminPlugin: config.id must be a non-empty string')
+  end
+
+  -- Track the invoking resource so we can clean up on resource stop.
+  -- On the server (export call): GetInvokingResource() returns the caller.
+  -- On the server (client net event): nil — use resourceName passed by client.
+  -- On the client (server net event): already set by the server.
+  if not config.resourceName then
+    local invoking = GetInvokingResource()
+    if invoking then
+      config.resourceName = invoking
+    end
   end
 
   registeredPlugins[config.id] = config
@@ -37,6 +51,23 @@ function RegisterEasyAdminPlugin(config)
   else
     -- Client: push to NUI immediately
     SendNUIMessage({ action = 'pluginRegistered', data = config })
+  end
+end
+
+---Unregister a plugin (called internally when a plugin resource stops).
+---@param pluginId string @The plugin id to remove
+function UnregisterEasyAdminPlugin(pluginId)
+  if type(pluginId) ~= 'string' then return end
+  if not registeredPlugins[pluginId] then return end
+
+  registeredPlugins[pluginId] = nil
+
+  if IsDuplicityVersion() then
+    -- Server: network unregistration to all clients
+    TriggerClientEvent('EasyAdmin:Plugin:unregistered', -1, pluginId)
+  else
+    -- Client: notify NUI
+    SendNUIMessage({ action = 'pluginUnregistered', data = { pluginId = pluginId } })
   end
 end
 

@@ -59,6 +59,8 @@ export interface RuntimePlugin {
   icon?: string
   /** Hides all contributions if the admin lacks this permission. */
   permission?: string
+  /** The FiveM resource name that registered this plugin (for cleanup on resource stop). */
+  resourceName?: string
   navItems?: PluginNavItem[]
   pages?: PluginPage[]
   playerDetailTabs?: PluginPlayerTab[]

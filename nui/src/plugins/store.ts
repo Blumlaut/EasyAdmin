@@ -37,6 +37,15 @@ on<{ plugins: RuntimePlugin[] }>('pluginsRegistered', (data) => {
   for (const fn of listeners) fn()
 })
 
+// Plugin unregistered (resource stopped)
+on<{ pluginId: string }>('pluginUnregistered', (data) => {
+  const idx = plugins.findIndex((p) => p.id === data.pluginId)
+  if (idx >= 0) {
+    plugins = [...plugins.slice(0, idx), ...plugins.slice(idx + 1)]
+    for (const fn of listeners) fn()
+  }
+})
+
 // ── Request plugin list on mount (avoids race with push) ───
 import { callLua } from '../fivem'
 callLua('syncPlugins').catch(() => {})
