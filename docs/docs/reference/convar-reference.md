@@ -546,7 +546,7 @@ Ban duration in seconds when `ea_warnAction` is `ban`. Default: 604800 (7 days).
 
 ## See Also
 
-- [Configuration Overview](configuration/basic) — Core configuration guide
-- [Webhooks](configuration/webhooks) — Webhook configuration
-- [Advanced](configuration/advanced) — Advanced configuration options
-- [NUI Settings](configuration/nui-settings) — NUI-specific convars
+- [Configuration Overview](../configuration/basic) — Core configuration guide
+- [Webhooks](../configuration/webhooks) — Webhook configuration
+- [Advanced](../configuration/advanced) — Advanced configuration options
+- [NUI Settings](../configuration/nui-settings) — NUI-specific convars

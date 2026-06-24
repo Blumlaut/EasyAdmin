@@ -64,9 +64,9 @@ The invite URL above includes the necessary permissions. If you customize the in
 
 ## See Also
 
-- [Bot Commands](discord/bot-commands) — List of all available bot commands
-- [Logging](discord/logging) — Configure the bot logging channel
-- [Chat Bridge](discord/chat-bridge) — Sync chat between Discord and FiveM
-- [Server Status](discord/server-status) — Live server status display
-- [Discord ACE Permissions](discord/discord-ace) — Map Discord roles to FiveM permissions
-- [Webhooks](configuration/webhooks) — Set up moderation notifications
+- [Bot Commands](bot-commands) — List of all available bot commands
+- [Logging](logging) — Configure the bot logging channel
+- [Chat Bridge](chat-bridge) — Sync chat between Discord and FiveM
+- [Server Status](server-status) — Live server status display
+- [Discord ACE Permissions](discord-ace) — Map Discord roles to FiveM permissions
+- [Webhooks](../configuration/webhooks) — Set up moderation notifications
