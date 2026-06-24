@@ -9,7 +9,7 @@
 //
 // Exit 0 = clean, exit 1 = violations found.
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -302,6 +302,7 @@ function scanFile(filePath) {
 
 function scanPath(path) {
   let violations = [];
+  if (!existsSync(path)) return violations;
   const stat = statSync(path);
 
   if (stat.isFile() && path.endsWith(".lua")) {
