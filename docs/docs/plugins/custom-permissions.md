@@ -1,40 +1,45 @@
 # Custom Permissions
 
-Plugins can define custom permissions and use them to gate their UI
-contributions.
+Plugins can gate their UI contributions behind custom permissions so only
+authorized admins see them.
 
-## Registering a Permission
+## Declaring permissions
 
-In your resource's shared script (runs on both client and server):
+Add a `permissions` array to your plugin config. EasyAdmin registers each
+entry and makes it available to `exports.EasyAdmin:DoesPlayerHavePermission()`:
 
 ```lua
-Citizen.CreateThread(function()
-  -- Wait for EasyAdmin's permissions table to be available
-  while permissions == nil do
-    Citizen.Wait(50)
-  end
-  permissions['plugin.my-plugin'] = false
-end)
+exports.EasyAdmin:RegisterPlugin({
+  id = 'my-plugin',
+  name = 'My Plugin',
+  version = '1.0.0',
+  permissions = {
+    'plugin.my-plugin',          -- basic access
+    'plugin.my-plugin.advanced', -- elevated access
+  },
+  -- ...
+})
 ```
 
-This adds `plugin.my-plugin` to EasyAdmin's permissions table. The
-`easyadmin.` prefix is added automatically by `DoesPlayerHavePermission()`.
-
-Grant the `easyadmin.plugin.my-plugin` ACE to admins who should have access:
+Grant ACEs in your `server.cfg` or via Discord:
 
 ```cfg
 add_ace group.admin easyadmin.plugin.my-plugin allow
+add_ace group.admin easyadmin.plugin.my-plugin.advanced allow
 ```
 
-## Gating Contributions
+## Gating contributions
 
 ### Entire plugin
+
+The top-level `permission` field hides all contributions when the admin
+lacks that permission:
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   permission = 'plugin.my-plugin',
-  -- All contributions hidden if admin lacks this
+  -- navItems, pages, etc. — all hidden without this perm
 })
 ```
 
@@ -43,33 +48,33 @@ exports.EasyAdmin:RegisterPlugin({
 ```lua
 playerDetailTabs = {
   { id = 'public', label = 'Info', renderAction = 'renderInfo' },
-  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.admin', renderAction = 'renderAdmin' },
+  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.advanced', renderAction = 'renderAdmin' },
 },
 ```
 
-### Server handlers
+## Guarding server handlers
 
-Always permission-guard server handlers manually:
+Check permissions inside server handlers before performing actions:
 
 ```lua
 AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(source, data, cb)
-  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
     return cb({ ok = false, error = 'permission denied' })
   end
-  -- ...
   cb({ ok = true })
 end)
 ```
 
-## Checking Permissions in Client Handlers
+## Guarding client handlers
+
+Use the client-side permission check (`player = -1`) to return a limited
+schema when the admin lacks a permission:
 
 ```lua
 AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
-  if not DoesPlayerHavePermission(-1, 'plugin.my-plugin.admin') then
-    -- Return a limited schema
-    return cb({ { type = 'text', text = 'No access', variant = 'muted' } })
+  if not exports.EasyAdmin:DoesPlayerHavePermission(-1, 'plugin.my-plugin.advanced') then
+    return cb({ { type = 'text', text = 'Limited view', variant = 'muted' } })
   end
-  -- Return full schema
-  cb({ { type = 'heading', text = 'Full Access', level = 2 } })
+  cb({ { type = 'heading', text = 'Full access', level = 2 } })
 end)
 ```

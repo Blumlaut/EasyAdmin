@@ -72,7 +72,7 @@ Register a **server-side** handler. Reached by buttons with `server = true`:
 
 ```lua
 AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(source, data, cb)
-  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
     return cb({ ok = false, error = 'permission denied' })
   end
   cb({ ok = true, result = 'done' })

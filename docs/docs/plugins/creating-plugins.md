@@ -156,7 +156,7 @@ Add `server = true` to a button to route it to a server handler:
 
 -- Server handler:
 AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getCount', function(source, data, cb)
-  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.view') then
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.view') then
     return cb({ ok = false, error = 'permission denied' })
   end
   cb({ ok = true, count = #GetPlayers() })
@@ -308,7 +308,7 @@ end)
 ```lua
 -- Server-side handler (reached by button with server = true)
 AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getServerData', function(source, data, cb)
-  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
     return cb({ ok = false, error = 'Requires permission: plugin.my-plugin.advanced' })
   end
 
