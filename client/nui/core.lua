@@ -189,12 +189,18 @@ function NuiSendSettings()
     end
   end
 
+  -- Validate UI density setting
+  local validDensities = { cramped = true, cozy = true, _default = true, spacious = true, airy = true }
+  local uiDensity = KvpGet('suiDensity') or 'default'
+  if not validDensities[uiDensity] then uiDensity = 'default' end
+
   SendNUIMessage({
     action = 'initSettings',
     data = {
       anonymous = false, -- anonymous is per-session, not persisted
       highContrast = KvpGet('shighContrast') == 'true',
       fontSize = KvpGet('ifontSize') or 12,
+      uiDensity = uiDensity,
       sidebarMode = sidebarMode,
       sidebarDirection = sidebarDirection,
       foldOpacity = KvpGet('ifoldOpacity') or 85,

@@ -204,6 +204,7 @@ function App() {
     'ea-window',
     `ea-window--sidebar-${data.settings.sidebarMode}`,
     `ea-window--sidebar-${data.settings.sidebarDirection}`,
+    `ea-density-${data.settings.uiDensity}`,
   ]
   if (data.settings.highContrast) windowClasses.push('high-contrast')
   if (chrome.contentCollapsed) windowClasses.push('ea-window--collapsed')

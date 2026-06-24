@@ -76,6 +76,7 @@ export function useAppData(): AppDataResult {
     anonymous: false,
     highContrast: false,
     fontSize: 12,
+    uiDensity: 'default',
     sidebarMode: 'vertical',
     sidebarDirection: 'right',
     foldOpacity: 85,

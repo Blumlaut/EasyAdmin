@@ -54,7 +54,7 @@
   --bg-purple: rgba(59, 130, 246, 0.15);
   --bg-blue: rgba(88, 166, 255, 0.15);
 
-  /* -- Spacing (4px base) -- */
+  /* -- Spacing (4px base, overridden per-density below) -- */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -152,6 +152,72 @@
   --accent-green: #56d364;
   --accent-red: #ff6b6b;
   --accent-orange: #ffb347;
+}
+
+/* -- UI Density (spacing overrides) -- */
+
+/* Cramped: tighter spacing for compact screens (0.6x) */
+.ea-density-cramped {
+  --space-1: 2px;
+  --space-2: 5px;
+  --space-3: 7px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-8: 19px;
+  --space-10: 24px;
+  --space-12: 29px;
+  --space-16: 38px;
+  --space-24: 58px;
+  --space-32: 77px;
+}
+
+/* Cozy: slightly tighter than default (0.8x) */
+.ea-density-cozy {
+  --space-1: 3px;
+  --space-2: 6px;
+  --space-3: 10px;
+  --space-4: 13px;
+  --space-5: 16px;
+  --space-6: 19px;
+  --space-8: 26px;
+  --space-10: 32px;
+  --space-12: 38px;
+  --space-16: 51px;
+  --space-24: 77px;
+  --space-32: 102px;
+}
+
+/* Spacious: more breathing room (1.25x) */
+.ea-density-spacious {
+  --space-1: 5px;
+  --space-2: 10px;
+  --space-3: 15px;
+  --space-4: 20px;
+  --space-5: 25px;
+  --space-6: 30px;
+  --space-8: 40px;
+  --space-10: 50px;
+  --space-12: 60px;
+  --space-16: 80px;
+  --space-24: 120px;
+  --space-32: 160px;
+}
+
+/* Airy: maximum spacing for relaxed reading (1.5x) */
+.ea-density-airy {
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 18px;
+  --space-4: 24px;
+  --space-5: 30px;
+  --space-6: 36px;
+  --space-8: 48px;
+  --space-10: 60px;
+  --space-12: 72px;
+  --space-16: 96px;
+  --space-24: 144px;
+  --space-32: 192px;
 }
 
 /* -- Font size scaling -- */

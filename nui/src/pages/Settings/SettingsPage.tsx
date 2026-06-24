@@ -16,7 +16,7 @@ export function SettingsPage({
   settings,
   onChange,
 }: SettingsPageProps) {
-  function patchAccessibility(patch: Partial<Pick<AppSettings, 'highContrast' | 'fontSize'>>) {
+  function patchAccessibility(patch: Partial<Pick<AppSettings, 'highContrast' | 'fontSize' | 'uiDensity'>>) {
     onChange(patch)
   }
 
@@ -41,6 +41,7 @@ export function SettingsPage({
       <SettingsAccessibility
         highContrast={settings.highContrast}
         fontSize={settings.fontSize}
+        uiDensity={settings.uiDensity}
         onChange={patchAccessibility}
       />
       <SettingsLayout

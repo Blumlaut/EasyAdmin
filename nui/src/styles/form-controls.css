@@ -274,3 +274,54 @@
   color: #fff;
 }
 
+/* ============================================================
+   Density Options (segmented radio pill for UI density selector)
+   ============================================================ */
+
+.density-options {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.density-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  position: relative;
+}
+
+.density-option:hover {
+  background: var(--bg-hover);
+}
+
+.density-option--active {
+  background: var(--bg-active);
+  box-shadow: 0 0 0 1px var(--brand-blue-light);
+}
+
+.density-option-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.density-option--active .density-option-label {
+  color: #fff;
+}
+
+.density-option-indicator {
+  display: none; /* reserved for future icon/visual indicator */
+}
+

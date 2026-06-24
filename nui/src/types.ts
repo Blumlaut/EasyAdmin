@@ -101,12 +101,14 @@ export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
 // App settings (mirrors ea_* kvp entries)
 export type SidebarMode = 'vertical' | 'horizontal'
 export type SidebarDirection = 'right' | 'left' | 'down' | 'up'
+export type UiDensity = 'cramped' | 'cozy' | 'default' | 'spacious' | 'airy'
 
 export interface AppSettings {
   anonymous: boolean
   // Accessibility
   highContrast: boolean
   fontSize: number // base font size in px: 10–20, default 12
+  uiDensity: UiDensity // UI density (spacing scale), default 'default'
   // Layout
   sidebarMode: SidebarMode
   sidebarDirection: SidebarDirection
