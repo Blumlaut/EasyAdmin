@@ -119,7 +119,7 @@ Return either:
 - An array of schema nodes (the schema tree)
 - `{ schema = [...] }` (alternative format)
 
-See the [schema component reference](../nui-plugins#schema-components) for all available components.
+See the [schema component reference](../../nui-plugins#schema-components) for all available components.
 
 ## Button actions
 

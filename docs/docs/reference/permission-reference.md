@@ -72,8 +72,8 @@ Complete reference of all EasyAdmin permissions, sorted alphabetically. The `eas
 
 ## See Also
 
-- [Permissions Overview](../permissions/index) — How permissions work, group structure
-- [Player Permissions](../permissions/player-permissions) — Detailed player action permissions
-- [Server Permissions](../permissions/server-permissions) — Detailed server management permissions
-- [Bot Permissions](../permissions/bot-permissions) — Discord bot command permissions
-- [Discord ACE](../discord/discord-ace) — Map Discord roles to ACE permissions
+- [Permissions Overview](../../permissions/index) — How permissions work, group structure
+- [Player Permissions](../../permissions/player-permissions) — Detailed player action permissions
+- [Server Permissions](../../permissions/server-permissions) — Detailed server management permissions
+- [Bot Permissions](../../permissions/bot-permissions) — Discord bot command permissions
+- [Discord ACE](../../discord/discord-ace) — Map Discord roles to ACE permissions

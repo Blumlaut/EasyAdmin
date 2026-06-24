@@ -43,4 +43,4 @@ Run the command with a log type and channel ID to forward that type. Run without
 
 ## Webhook Fallback
 
-When bot logging is not configured (`ea_botLogChannel` is empty), EasyAdmin falls back to webhook notifications as described in the [Webhooks](../configuration/webhooks) guide.
+When bot logging is not configured (`ea_botLogChannel` is empty), EasyAdmin falls back to webhook notifications as described in the [Webhooks](../../configuration/webhooks) guide.

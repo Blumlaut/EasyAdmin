@@ -184,6 +184,6 @@ Toggle anonymous mode to hide your username in logs and webhooks. Requires `easy
 
 ## See Also
 
-- [Design System](design-system) — Architecture, components, CSS variables
-- [Known Issues](known-issues) — OSR rendering quirks, CSS limitations
-- [NUI Settings](../configuration/nui-settings) — Configuration convars for NUI behavior
+- [Design System](../design-system) — Architecture, components, CSS variables
+- [Known Issues](../known-issues) — OSR rendering quirks, CSS limitations
+- [NUI Settings](../../configuration/nui-settings) — Configuration convars for NUI behavior
