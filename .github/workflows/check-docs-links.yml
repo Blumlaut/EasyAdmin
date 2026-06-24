@@ -1,0 +1,35 @@
+name: Check Docs Links
+
+on:
+  push:
+    paths:
+      - "docs/**"
+  pull_request:
+    paths:
+      - "docs/**"
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-link-check:
+    name: Check for broken links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+
+      - name: Run lychee
+        uses: lychee-action/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --verbose
+            --exclude-private
+            --exclude-loopback
+            --exclude-mail
+            --max-concurrency 8
+            docs/docs/
+            docs/nui-plugins.md
+          fail: true
