@@ -7,7 +7,6 @@
   "**{by}** claimed Report #**{id}**": "**{by}** hat Report #**{id}** übernommen",
   "**{by}** closed Report #**{id}**": "**{by}** hat Report #**{id}** geschlossen",
   "**{by}** deleted Action History entry #**{id}**": "**{by}** hat Action-History-Eintrag #**{id}** gelöscht",
-  "**{by}** edited the server's permissions.": "**{by}** hat die Server-Berechtigungen bearbeitet.",
   "**{by}** froze **{target}**.": "**{by}** hat **{target}** eingefroren.",
   "**{by}** has Spectated **{target}**": "**{by}** beobachtet nun **{target}**",
   "**{by}** has Teleported to **{target}**": "**{by}** hat sich zu **{target}** teleportiert",

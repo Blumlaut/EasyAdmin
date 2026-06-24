@@ -42,15 +42,6 @@ RegisterCommand("ea_printIdentifiers", function(source,args,rawCommand)
 	end
 end,false)
 
-Citizen.CreateThread(function()
-	RegisterCommand("ea_generateSupportFile", function(source, args, rawCommand)
-		if DoesPlayerHavePermission(source, "server") then
-			print("SupportFile is no longer supported, please use eaDiag instead.")
-		end
-	end, false)
-	
-end)
-
 RegisterCommand("spectate", function(source, args, rawCommand)
     if(source == 0) then
         Citizen.Trace(GetLocalisedText("Don't do that, please.")) -- Maybe should be it's own string saying something like "only players can do this" or something

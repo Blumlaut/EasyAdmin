@@ -7,7 +7,6 @@
   "**{by}** claimed Report #**{id}**": "**{by}** heeft Report #**{id}** opgeëist",
   "**{by}** closed Report #**{id}**": "**{by}** heeft Report #**{id}** gesloten",
   "**{by}** deleted Action History entry #**{id}**": "**{by}** heeft Action History-vermelding #**{id}** verwijderd",
-  "**{by}** edited the server's permissions.": "**{by}** heeft de serverrechten bewerkt.",
   "**{by}** froze **{target}**.": "**{by}** heeft **{target}** bevroren.",
   "**{by}** has Spectated **{target}**": "**{by}** spectate nu **{target}**",
   "**{by}** has Teleported to **{target}**": "**{by}** is geteleporteerd naar **{target}**",

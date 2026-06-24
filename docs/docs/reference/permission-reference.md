@@ -54,8 +54,6 @@ Complete reference of all EasyAdmin permissions, sorted alphabetically. The `eas
 | `easyadmin.server.cleanup.props` | Clean up props |
 | `easyadmin.server.convars` | Edit server convars |
 | `easyadmin.server.network.monitor` | Access the Network Monitor page |
-| `easyadmin.server.permissions.read` | View ACE permissions |
-| `easyadmin.server.permissions.write` | Edit ACE permissions |
 | `easyadmin.server.reminder.add` | Add reminders (non-persistent) |
 | `easyadmin.server.resources.monitor` | Access the Profiler page |
 | `easyadmin.server.resources.start` | Start server resources |

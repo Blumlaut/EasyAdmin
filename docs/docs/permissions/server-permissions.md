@@ -35,13 +35,6 @@ Cleanup removes spawned entities from the world. Use with caution on populated s
 | `easyadmin.server.shortcut.add` | Use the `ea_addShortcut` command (non-persistent) |
 | `easyadmin.server.reminder.add` | Use the `ea_addReminder` command (non-persistent) |
 
-## Permission Editor Permissions
-
-| Permission | Description |
-|------------|-------------|
-| `easyadmin.server.permissions.read` | View all ACE and principal permissions |
-| `easyadmin.server.permissions.write` | Edit and delete ACE and principal permissions |
-
 ## Statistics Permissions
 
 | Permission | Description |

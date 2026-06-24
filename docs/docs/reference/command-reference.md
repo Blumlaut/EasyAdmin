@@ -206,12 +206,6 @@ Run without arguments to reset exclusions.
 
 Test the configured webhook URL.
 
-## Support
-
-### /ea_generateSupportFile
-
-Generate a support file for troubleshooting.
-
 ## See Also
 
 - [Permissions Overview](../../permissions/index) — Permission requirements for commands

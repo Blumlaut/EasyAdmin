@@ -7,7 +7,6 @@
   "**{by}** claimed Report #**{id}**": "**{by}** claimed Report #**{id}**",
   "**{by}** closed Report #**{id}**": "**{by}** closed Report #**{id}**",
   "**{by}** deleted Action History entry #**{id}**": "**{by}** deleted Action History entry #**{id}**",
-  "**{by}** edited the server's permissions.": "**{by}** edited the server's permissions.",
   "**{by}** froze **{target}**.": "**{by}** froze **{target}**.",
   "**{by}** has Spectated **{target}**": "**{by}** has Spectated **{target}**",
   "**{by}** has Teleported to **{target}**": "**{by}** has Teleported to **{target}**",
