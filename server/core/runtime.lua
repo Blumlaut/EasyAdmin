@@ -70,20 +70,39 @@ end
 
 function getLatestVersion()
 	local latestVersion,latestURL
+	local requestDone = false
+
 	PerformHttpRequest("https://api.github.com/repos/Blumlaut/EasyAdmin/releases/latest", function(err,response,headers)
 		if err == 200 then
-			local data = json.decode(response)
-			latestVersion = data.tag_name
-			latestURL = data.html_url
+			local success, data = pcall(json.decode, response)
+			if success and data and data.tag_name then
+				latestVersion = data.tag_name
+				latestURL = data.html_url or "https://github.com/Blumlaut/EasyAdmin"
+			else
+				latestVersion = GetVersion()
+				latestURL = "https://github.com/Blumlaut/EasyAdmin"
+				PrintDebugMessage("Version check returned invalid JSON", 4)
+			end
 		else
 			latestVersion = GetVersion()
 			latestURL = "https://github.com/Blumlaut/EasyAdmin"
 		end
 		PrintDebugMessage("Version check returned "..err..", Local Version: "..GetVersion()..", Remote Version: "..latestVersion, 4)
+		requestDone = true
 	end, "GET")
+
+	local attempts = 0
 	repeat
 		Wait(50)
-	until (latestVersion and latestURL)
+		attempts = attempts + 1
+	until (requestDone or attempts >= 100) -- 5 second timeout (100 * 50ms)
+
+	if not requestDone then
+		PrintDebugMessage("Version check timed out after 5 seconds", 2)
+		latestVersion = latestVersion or GetVersion()
+		latestURL = latestURL or "https://github.com/Blumlaut/EasyAdmin"
+	end
+
 	return latestVersion, latestURL
 end
 exports('getLatestVersion', getLatestVersion)
@@ -198,14 +217,25 @@ function initEnvironmentChecks()
 end
 
 function HTTPRequest(url, ...)
-	local err,response,headers
+	local err,response,headers,requestDone
+
 	PerformHttpRequest(url, function(e,r,h)
 		err,response,headers = e,r,h
+		requestDone = true
 	end, ...)
+
+	local attempts = 0
 	repeat
 		Wait(10)
-	until (response)
-	return response
+		attempts = attempts + 1
+	until (requestDone or attempts >= 500) -- 5 second timeout (500 * 10ms)
+
+	if not requestDone then
+		PrintDebugMessage("HTTPRequest to "..url.." timed out after 5 seconds", 2)
+		return nil, "timeout"
+	end
+
+	return response, err
 end
 exports('HTTPRequest', HTTPRequest)
 

@@ -32,7 +32,12 @@ function GetPlayerAvatar(playerId)
 	end
 
 	-- Fetch from Cfx.re policy API
-	local response = HTTPRequest(string.format('https://policy-live.fivem.net/api/getUserInfo/%s', fivemAccount))
+	local response, requestErr = HTTPRequest(string.format('https://policy-live.fivem.net/api/getUserInfo/%s', fivemAccount))
+	if not response then
+		avatarCache[fivemAccount] = false
+		return nil
+	end
+
 	local success, parsed = pcall(json.decode, response)
 	if success and parsed and parsed.avatar_template then
 		local avatarURL = string.gsub(parsed.avatar_template, '{size}', '96')
