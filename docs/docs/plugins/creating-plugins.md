@@ -22,9 +22,10 @@ server_scripts { 'server.lua' }
 
 ## Registration
 
-From your resource's client or server script, call:
+From your resource's **server script**, call:
 
 ```lua
+-- server.lua
 exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   name = 'My Plugin',
@@ -227,10 +228,12 @@ Citizen.CreateThread(function()
 end)
 ```
 
-### `client.lua`
+### `server.lua`
+
+Register the plugin (server-side only — the server is the source of truth
+and broadcasts to all clients):
 
 ```lua
--- Register the plugin
 exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   name = 'My Plugin',
@@ -248,6 +251,27 @@ exports.EasyAdmin:RegisterPlugin({
   },
 })
 
+-- Server-side handler (reached by button with server = true)
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getServerData', function(source, data, cb)
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
+    return cb({ ok = false, error = 'Requires permission: plugin.my-plugin.advanced' })
+  end
+
+  cb({
+    ok = true,
+    playerCount = #GetPlayers(),
+    maxPlayers = GetConvarInt('sv_maxclients', 32),
+  })
+end)
+```
+
+### `client.lua`
+
+Client scripts only register event handlers for render actions and button
+clicks. The plugin config is already known to the client via the server
+broadcast:
+
+```lua
 -- Page render handler
 AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
   local players = GetActivePlayers()
@@ -303,19 +327,4 @@ AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refetchPage', function(data, 
 end)
 ```
 
-### `server.lua`
 
-```lua
--- Server-side handler (reached by button with server = true)
-AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getServerData', function(source, data, cb)
-  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
-    return cb({ ok = false, error = 'Requires permission: plugin.my-plugin.advanced' })
-  end
-
-  cb({
-    ok = true,
-    playerCount = #GetPlayers(),
-    maxPlayers = GetConvarInt('sv_maxclients', 32),
-  })
-end)
-```

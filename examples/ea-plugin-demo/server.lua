@@ -1,8 +1,50 @@
 -- ea-plugin-demo server script
 --
--- Server-side handlers for plugin actions with `server = true`.
+-- Plugin registration and server-side handlers.
 -- Uses events (FiveM exports cannot pass functions between resources).
+--
+-- Plugin registration MUST happen server-side. The server is the source
+-- of truth — it stores the plugin config and broadcasts to all clients.
 
+-- ---------------------------------------------------------------------------
+-- Plugin registration
+-- ---------------------------------------------------------------------------
+
+exports.EasyAdmin:RegisterPlugin({
+  id = 'ea-plugin-demo',
+  name = 'Plugin Demo',
+  version = '1.0.0',
+  icon = 'box',
+
+  navItems = {
+    { id = 'plugin:ea-plugin-demo', label = 'Demo', icon = 'box' },
+    { id = 'plugin:ea-plugin-demo:stats', label = 'Stats', icon = 'chart-bar' },
+    { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap' },
+  },
+
+  pages = {
+    { view = 'plugin:ea-plugin-demo', renderAction = 'renderMainPage' },
+    { view = 'plugin:ea-plugin-demo:stats', renderAction = 'renderStatsPage' },
+    { view = 'plugin:ea-plugin-demo:actions', renderAction = 'renderActionsPage' },
+  },
+
+  playerDetailTabs = {
+    { id = 'demo-public', label = 'Demo Info', icon = 'box', renderAction = 'renderPlayerTab' },
+    {
+      id = 'demo-advanced',
+      label = 'Advanced',
+      icon = 'shield',
+      permission = 'plugin.demo.advanced',
+      renderAction = 'renderPlayerAdvancedTab',
+    },
+  },
+
+  dashboardWidgets = {
+    { id = 'demo-widget', renderAction = 'renderWidget', order = 150 },
+  },
+})
+
+-- ---------------------------------------------------------------------------
 -- Server handler: getServerData
 -- Called by the "Get Server Data" button on the main page.
 -- Returns server state that the client stores and displays on re-fetch.

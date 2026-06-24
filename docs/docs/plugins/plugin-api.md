@@ -21,8 +21,8 @@ registration:
 
 ### `exports.EasyAdmin:RegisterPlugin(config)`
 
-Register a plugin from your resource. Can be called on the client or server.
-Server registrations are networked to all clients automatically.
+Register a plugin from your resource's **server script**. The server is the
+source of truth — it stores the plugin and broadcasts to all clients.
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({

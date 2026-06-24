@@ -2,46 +2,9 @@
 --
 -- Demonstrates the EasyAdmin plugin system.
 -- All handlers use events (FiveM exports cannot pass functions between resources).
-
--- ---------------------------------------------------------------------------
--- Plugin registration
--- ---------------------------------------------------------------------------
-
-local pluginConfig = {
-  id = 'ea-plugin-demo',
-  name = 'Plugin Demo',
-  version = '1.0.0',
-  icon = 'box',
-
-  navItems = {
-    { id = 'plugin:ea-plugin-demo', label = 'Demo', icon = 'box' },
-    { id = 'plugin:ea-plugin-demo:stats', label = 'Stats', icon = 'chart-bar' },
-    { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap' },
-  },
-
-  pages = {
-    { view = 'plugin:ea-plugin-demo', renderAction = 'renderMainPage' },
-    { view = 'plugin:ea-plugin-demo:stats', renderAction = 'renderStatsPage' },
-    { view = 'plugin:ea-plugin-demo:actions', renderAction = 'renderActionsPage' },
-  },
-
-  playerDetailTabs = {
-    { id = 'demo-public', label = 'Demo Info', icon = 'box', renderAction = 'renderPlayerTab' },
-    {
-      id = 'demo-advanced',
-      label = 'Advanced',
-      icon = 'shield',
-      permission = 'plugin.demo.advanced',
-      renderAction = 'renderPlayerAdvancedTab',
-    },
-  },
-
-  dashboardWidgets = {
-    { id = 'demo-widget', renderAction = 'renderWidget', order = 150 },
-  },
-}
-
-exports.EasyAdmin:RegisterPlugin(pluginConfig)
+--
+-- Note: Plugin registration (RegisterPlugin) is done in server.lua.
+-- The client script only registers event handlers for actions/re-renders.
 
 -- ---------------------------------------------------------------------------
 -- Shared state (persists across re-renders)

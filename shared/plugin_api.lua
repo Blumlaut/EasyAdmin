@@ -5,9 +5,13 @@
 --
 --   exports.EasyAdmin:RegisterPlugin(config)
 --
--- This file runs on both client and server (shared/). On the server,
--- registrations are networked to all clients. On the client, registrations
--- are stored locally and pushed to the NUI when the menu opens.
+-- This file runs on both client and server (shared/). Plugins MUST
+-- register via the server export only — the server is the source of
+-- truth and broadcasts registrations to all clients.
+--
+-- On the server: registrations are stored and networked to all clients.
+-- On the client: registrations are received from the server broadcast,
+-- stored locally, and pushed to the NUI by client/plugin_api.lua.
 --
 -- Plugins are NEVER compiled into EasyAdmin. They live in their own
 -- resources and communicate exclusively through this API + the pluginCall
@@ -20,9 +24,9 @@
 local registeredPlugins = {}
 
 ---Register a plugin from an external resource.
--- Called on the server (via export or client-to-server event) and
--- on the client (via server-to-client event). The server is the
--- source of truth; clients mirror the server's registry.
+-- Called on the server (via export) and on the client (via server
+-- broadcast event). The server is the source of truth; clients
+-- mirror the server's registry.
 ---@param config table @Plugin definition: { id, name, version, navItems, pages, ... }
 function RegisterEasyAdminPlugin(config)
   if type(config) ~= 'table' then
@@ -34,8 +38,7 @@ function RegisterEasyAdminPlugin(config)
 
   -- Track the invoking resource so we can clean up on resource stop.
   -- On the server (export call): GetInvokingResource() returns the caller.
-  -- On the server (client net event): nil — use resourceName passed by client.
-  -- On the client (server net event): already set by the server.
+  -- On the client (server broadcast event): already set by the server.
   if not config.resourceName then
     local invoking = GetInvokingResource()
     if invoking then
@@ -48,10 +51,8 @@ function RegisterEasyAdminPlugin(config)
   if IsDuplicityVersion() then
     -- Server: network to all clients
     TriggerClientEvent('EasyAdmin:Plugin:registered', -1, config)
-  else
-    -- Client: push to NUI immediately
-    SendNUIMessage({ action = 'pluginRegistered', data = config })
   end
+  -- Client: NUI push is handled by the event handler in client/plugin_api.lua
 end
 
 ---Unregister a plugin (called internally when a plugin resource stops).
@@ -65,10 +66,8 @@ function UnregisterEasyAdminPlugin(pluginId)
   if IsDuplicityVersion() then
     -- Server: network unregistration to all clients
     TriggerClientEvent('EasyAdmin:Plugin:unregistered', -1, pluginId)
-  else
-    -- Client: notify NUI
-    SendNUIMessage({ action = 'pluginUnregistered', data = { pluginId = pluginId } })
   end
+  -- Client: NUI push is handled by the event handler in client/plugin_api.lua
 end
 
 ---Get all registered plugins (client-side, for NUI sync).
