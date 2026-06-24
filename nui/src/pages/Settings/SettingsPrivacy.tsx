@@ -15,6 +15,7 @@ export function SettingsPrivacy({ anonymous, onChange }: SettingsPrivacyProps) {
       await callLua('setAnonymous', { value })
       notify(value ? t('Anonymous mode on') : t('Anonymous mode off'), 'success')
     } catch {
+      onChange(!value)
       notify(t('Failed to update privacy'), 'error')
     }
   }
