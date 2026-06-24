@@ -13,16 +13,6 @@ RegisterNUICallback('setAnonymous', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('refreshBanList', function(data, cb)
-  if not permissions['player.ban.view'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:updateBanlist')
-  -- Wait for the latent event to fill banlist, then send to NUI
-  local waitTime = 0
-  repeat Wait(50) waitTime = waitTime + 1
-  until waitTime > 60
-  cb({ ok = true })
-end)
-
 RegisterNUICallback('refreshCachedPlayers', function(data, cb)
   TriggerServerEvent('EasyAdmin:requestCachedPlayers')
   -- Wait for the latent event to fill cachedplayers, then send to NUI
