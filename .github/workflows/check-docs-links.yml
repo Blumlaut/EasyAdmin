@@ -4,32 +4,28 @@ on:
   push:
     paths:
       - "docs/**"
+      - "scripts/check-docs-links.py"
   pull_request:
     paths:
       - "docs/**"
+      - "scripts/check-docs-links.py"
 
 permissions:
   contents: read
 
 jobs:
-  markdown-link-check:
-    name: Check for broken links
+  check-links:
+    name: Check for broken internal links
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v6
 
-      - name: Run lychee
-        uses: lychee-action/lychee-action@v2
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          args: >-
-            --no-progress
-            --verbose
-            --exclude-private
-            --exclude-loopback
-            --exclude-mail
-            --max-concurrency 8
-            docs/docs/
-            docs/nui-plugins.md
-          fail: true
+          python-version: "3.x"
+
+      - name: Run link checker
+        run: python3 scripts/check-docs-links.py
