@@ -47,11 +47,8 @@ Visit our Documentation [here](https://easyadmin.readthedocs.io/) for detailed i
 
 Join our Discord community: [https://discord.gg/snaily](https://discord.gg/snaily)
 
-**Graphic Design:** Snaily Games (https://snaily.games)
-<a href="https://snaily.games/"><img src="https://user-images.githubusercontent.com/13604413/129143703-b3dd96b1-8e27-407a-8792-8e612a82eeba.png"/></a>
-
 **Supported by:**
 
 ZAP-Hosting (https://zap-hosting.com/easyadmin)
 <a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
-Get 20% off your Zap-Hosting subscription with code: EasyAdmin
+Get 20% off your ZAP-Hosting subscription with code: EasyAdmin
