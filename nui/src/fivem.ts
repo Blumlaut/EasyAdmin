@@ -1,14 +1,27 @@
 import type { NUIPayload } from './types'
 
+// Error thrown when a Lua NUI callback returns { error: "..." }
+export class LuaError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'LuaError'
+  }
+}
+
 // Fetch from the Lua backend (NUI callback)
 // FiveM automatically parses JSON request/response
+// Throws LuaError when the Lua side returns { error: "..." }
 export async function callLua<TResponse>(action: string, data?: unknown): Promise<TResponse> {
   const response = await fetch(`https://${GetParentResourceName()}/${action}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     body: JSON.stringify(data ?? {}),
   })
-  return response.json() as Promise<TResponse>
+  const result = await response.json()
+  if (result && typeof result === 'object' && 'error' in result) {
+    throw new LuaError(typeof result.error === 'string' ? result.error : String(result.error))
+  }
+  return result as TResponse
 }
 
 // Get the parent resource name (always "EasyAdmin" in production)
