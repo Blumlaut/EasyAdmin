@@ -203,6 +203,12 @@ RegisterServerEvent('EasyAdmin:sessionStart', function()
 	sessionStarts[src] = now
 	sourceBestId[src] = bestId
 
+	-- Push translations so GetLocalisedText() works before the menu opens
+	local strings, lang = I18nGetTranslations()
+	if strings then
+		TriggerClientEvent('EasyAdmin:SetLanguage', src, strings, lang)
+	end
+
 	local existingEntry = findPlayerByIdentifiers(identifiers)
 
 	if existingEntry then
