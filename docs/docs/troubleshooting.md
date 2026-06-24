@@ -97,9 +97,9 @@ EasyAdmin requires FiveM server build 12913 or higher. Update your FXServer if y
 
 ## See Also
 
-- [Updating](../updates/updating) — How to update EasyAdmin
-- [Configuration](../configuration/advanced) — Debug logging and advanced options
-- [NUI Known Issues](../nui/known-issues) — CEF rendering limitations
+- [Updating](updates/updating) — How to update EasyAdmin
+- [Configuration](configuration/advanced) — Debug logging and advanced options
+- [NUI Known Issues](nui/known-issues) — CEF rendering limitations
 
 ## Getting More Help
 
