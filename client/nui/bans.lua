@@ -3,17 +3,6 @@
 -- Ban list viewing, editing, unbanning
 ------------------------------------
 
-local function toast(text, kind)
-  SendNUIMessage({
-    action = 'notification',
-    data = { text = text, type = kind or 'success' },
-  })
-end
-
-local function deny(cb, msg)
-  cb({ error = msg or 'Permission denied' })
-end
-
 RegisterNUICallback('requestBanList', function(_data, cb)
   if not permissions['player.ban.view'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:requestBanlist')

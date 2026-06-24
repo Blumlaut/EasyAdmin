@@ -3,17 +3,6 @@
 -- Player actions exposed to the NUI frontend
 ------------------------------------
 
-local function toast(text, kind)
-  SendNUIMessage({
-    action = 'notification',
-    data = { text = text, type = kind or 'success' },
-  })
-end
-
-local function deny(cb, msg)
-  cb({ error = msg or 'Permission denied' })
-end
-
 RegisterNUICallback('kickPlayer', function(data, cb)
   if not permissions['player.kick'] then return deny(cb) end
   local id = tonumber(data and data.id)

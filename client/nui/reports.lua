@@ -15,17 +15,6 @@ local function sendReportsToNui()
   })
 end
 
-local function toast(text, kind)
-  SendNUIMessage({
-    action = 'notification',
-    data = { text = text, type = kind or 'success' },
-  })
-end
-
-local function deny(cb, msg)
-  cb({ error = msg or 'Permission denied' })
-end
-
 RegisterNUICallback('requestReports', function(_data, cb)
   if not permissions['player.reports.view'] then return deny(cb) end
   reports = {} -- reset before request

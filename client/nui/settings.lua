@@ -3,10 +3,6 @@
 -- Kvp persistence, anonymous, refresh actions
 ------------------------------------
 
-local function deny(cb, msg)
-  cb({ error = msg or 'Permission denied' })
-end
-
 RegisterNUICallback('setAnonymous', function(data, cb)
   if not permissions['anon'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:SetAnonymous', data and data.value == true)

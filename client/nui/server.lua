@@ -3,17 +3,6 @@
 -- Announcements, resources, convars, cleanup
 ------------------------------------
 
-local function toast(text, kind)
-  SendNUIMessage({
-    action = 'notification',
-    data = { text = text, type = kind or 'success' },
-  })
-end
-
-local function deny(cb, msg)
-  cb({ error = msg or 'Permission denied' })
-end
-
 RegisterNUICallback('announce', function(data, cb)
   if not permissions['server.announce'] then return deny(cb) end
   local message = data and data.message
