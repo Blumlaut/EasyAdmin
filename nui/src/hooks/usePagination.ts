@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 /**
  * Manages pagination state for a list.
@@ -12,10 +12,11 @@ export function usePagination<T>(items: T[], pageSize = 10) {
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize))
 
   // If items shrink below current page, fall back to the last page
-  if (page > totalPages && totalPages > 0) {
-    // Schedule reset for the next render to avoid setState in render
-    queueMicrotask(() => setPage(totalPages))
-  }
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages)
+    }
+  }, [page, totalPages])
 
   const pageItems = useMemo(() => {
     const start = (page - 1) * pageSize
