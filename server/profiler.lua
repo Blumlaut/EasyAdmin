@@ -19,23 +19,12 @@ end
 -- Cached successful port (set after first successful fetch)
 local cachedPort = nil
 
--- Common FiveM ports to probe (fallback chain)
-local COMMON_PORTS = { 30120, 30121, 30122, 30110, 30111, 30130, 30140 }
-
 -- Resolve the profiler HTTP endpoint.
 -- clientPort: port extracted from GetCurrentServerEndpoint() on the client (may be nil)
 -- Returns: { port, url, method } or nil on failure
 local function resolveEndpoint(clientPort)
   -- Method 1: Use client-provided port from GetCurrentServerEndpoint()
   if clientPort and type(clientPort) == 'number' then
-    local url = 'http://127.0.0.1:' .. clientPort .. '/info.json'
-    local success = nil
-    PerformHttpRequest(url, function(errorCode)
-      success = (errorCode == 200)
-    end, 'GET')
-    -- Wait a brief moment for the async callback (PerformHttpRequest is fire-and-forget)
-    -- We use a synchronous probe pattern: try the URL and trust the client value
-    -- since GetCurrentServerEndpoint is reliable in normal operation
     return { port = clientPort, url = 'http://127.0.0.1:' .. clientPort .. '/profileData.json', method = 'GetCurrentServerEndpoint' }
   end
 
