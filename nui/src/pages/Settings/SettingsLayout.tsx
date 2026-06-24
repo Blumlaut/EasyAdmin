@@ -126,7 +126,7 @@ export function SettingsLayout({
       </fieldset>
 
       {/* Fold Opacity */}
-      <div className="mt-4 flex flex-col gap-1">
+      <div className="mt-5 flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <span className="text-sm text-fg-subtle">{t("Fold opacity")}</span>
           <span className="text-sm font-medium">{foldOpacity}%</span>

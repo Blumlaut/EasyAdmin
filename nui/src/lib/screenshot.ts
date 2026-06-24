@@ -60,15 +60,10 @@ export class ScreenshotCaptureCtx {
       console.warn('[EA-Screenshot] startRenderLoop: prerequisites not met')
       return
     }
-    let frameCount = 0
     const tick = () => {
       if (this.destroyed || !this.renderer || !this.scene || !this.camera || !this.rtTexture) return
       this.renderer.clear()
       this.renderer.render(this.scene, this.camera, this.rtTexture, true)
-      frameCount++
-      if (frameCount <= 3) {
-        console.log('[EA-Screenshot] Render loop tick #' + frameCount)
-      }
       this.rafId = requestAnimationFrame(tick)
     }
     this.rafId = requestAnimationFrame(tick)

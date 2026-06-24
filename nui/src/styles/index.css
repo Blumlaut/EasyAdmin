@@ -3,10 +3,14 @@
    Tailwind CSS v4 utilities + component styles
    ============================================================ */
 
-/* -- Tailwind v4 + all component imports (must be first) -- */
+/* -- Tailwind v4 (includes preflight, theme, utilities) -- */
 @import "tailwindcss";
+
+/* -- Base resets & tokens -- */
 @import './base.css';
 @import './tokens.css';
+
+/* -- Component styles -- */
 @import './layout.css';
 @import './collapse.css';
 @import './form-controls.css';

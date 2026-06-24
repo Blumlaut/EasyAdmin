@@ -57,7 +57,7 @@ export function SettingsAccessibility({
       </div>
 
       {/* Font Size */}
-      <div className="mt-3 flex flex-col gap-1">
+      <div className="mt-4 flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <span className="text-sm text-fg-subtle">{t("Font size")}</span>
           <span className="text-sm font-medium">{fontSize}px</span>
