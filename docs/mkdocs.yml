@@ -109,7 +109,9 @@ nav:
         - nui-plugins.md
     - Plugins:
         - plugins/index.md
+        - plugins/creating-plugins.md
         - plugins/plugin-api.md
+        - plugins/custom-permissions.md
     - Reference:
         - reference/convar-reference.md
         - reference/permission-reference.md

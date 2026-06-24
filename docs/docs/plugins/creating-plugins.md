@@ -13,7 +13,7 @@ renders using its built-in components.
 fx_version 'cerulean'
 game 'gta5'
 
-dependencies { 'easyadmin' }
+dependencies { 'EasyAdmin' }
 
 shared_scripts { 'shared.lua' }
 client_scripts { 'client.lua' }
@@ -25,7 +25,7 @@ server_scripts { 'server.lua' }
 From your resource's client or server script, call:
 
 ```lua
-exports['easyadmin']:RegisterPlugin({
+exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   name = 'My Plugin',
   version = '1.0.0',
@@ -94,19 +94,22 @@ dashboardWidgets = {
 
 `order` controls sort position (lower = first, default 100).
 
-## Render handlers
+## Render Handlers
 
-Each `renderAction` needs a Lua handler that returns a schema tree:
+FiveM exports **cannot pass functions between resources**, so handlers are
+registered via events. Each `renderAction` maps to an event:
 
 ```lua
--- Client handler
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(data)
-  return {
+-- Client handler for renderPage action
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
+  cb({
     { type = 'heading', text = 'My Plugin', level = 2 },
     { type = 'text', text = 'Hello from Lua!', variant = 'muted' },
-  }
+  })
 end)
 ```
+
+The event name format is: `EasyAdmin:Plugin:action:<pluginId>:<actionName>`
 
 The handler receives `data.context`:
 
@@ -115,34 +118,35 @@ The handler receives `data.context`:
 | `target` | `'page'`, `'widget'`, or `'player-tab'` |
 | `playerId` | Player server ID (only for player tabs) |
 
-Return either:
-- An array of schema nodes (the schema tree)
-- `{ schema = [...] }` (alternative format)
-
 See the [schema component reference](../../nui-plugins#schema-components) for all available components.
 
-## Button actions
+## Button Actions
 
-Buttons in the schema have an `action` field. When clicked, the NUI calls
-that action's handler:
+Buttons in the schema have an `action` field. When clicked, the NUI routes
+to the matching event handler:
 
 ```lua
 -- In your schema:
 -- { type = 'button', label = 'Refresh', action = 'refresh', icon = 'refresh' }
 
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'refresh', function(data)
-  -- Return a new schema to re-render the view:
-  return {
+-- Handler:
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
+  -- Return a schema array → replaces the page:
+  cb({
     { type = 'heading', text = 'My Plugin', level = 2 },
     { type = 'badge', text = 'Refreshed!', variant = 'online' },
-  }
+  })
 end)
 ```
 
-If the handler returns no schema (e.g. `{ ok = true }`), the NUI re-fetches
-the original `renderAction`.
+**Two return patterns:**
 
-### Server-side actions
+| `cb(...)` returns | NUI behaviour |
+|---|---|
+| Schema array (`{ { type = ... } }`) | Replaces the current page with the new schema |
+| Non-schema (`{ ok = true }`) | Re-fetches the original `renderAction` |
+
+### Server-side Actions
 
 Add `server = true` to a button to route it to a server handler:
 
@@ -151,13 +155,15 @@ Add `server = true` to a button to route it to a server handler:
 -- { type = 'button', label = 'Get Count', action = 'getCount', server = true }
 
 -- Server handler:
-exports['easyadmin']:RegisterPluginServerHandler('my-plugin', 'getCount', function(source, data)
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getCount', function(source, data, cb)
   if not DoesPlayerHavePermission(source, 'plugin.my-plugin.view') then
-    return { ok = false, error = 'permission denied' }
+    return cb({ ok = false, error = 'permission denied' })
   end
-  return { ok = true, count = #GetPlayers() }
+  cb({ ok = true, count = #GetPlayers() })
 end)
 ```
+
+The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>`
 
 > **Always permission-guard server handlers.** The bridge does not check
 > permissions automatically.
@@ -168,7 +174,11 @@ Register a permission in your resource's shared script:
 
 ```lua
 Citizen.CreateThread(function()
-  permissions["plugin.my-plugin"] = false
+  -- Wait for EasyAdmin's permissions table to be available
+  while permissions == nil do
+    Citizen.Wait(50)
+  end
+  permissions['plugin.my-plugin'] = false
 end)
 ```
 
@@ -177,7 +187,7 @@ Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see the plugin.
 Gate the entire plugin:
 
 ```lua
-exports['easyadmin']:RegisterPlugin({
+exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   permission = 'plugin.my-plugin',
   -- ...
@@ -192,7 +202,7 @@ playerDetailTabs = {
 },
 ```
 
-## Live updates
+## Live Updates
 
 Push a schema refresh from Lua at any time:
 
@@ -202,14 +212,18 @@ SendNUIMessage({ action = 'plugin:my-plugin:update' })
 
 The NUI re-fetches the current view's schema.
 
-## Full example
+## Full Example
 
 ### `shared.lua`
 
 ```lua
--- Register a custom permission
+-- Register custom permissions
 Citizen.CreateThread(function()
-  permissions["plugin.my-plugin"] = false
+  while permissions == nil do
+    Citizen.Wait(50)
+  end
+  permissions['plugin.my-plugin'] = false
+  permissions['plugin.my-plugin.advanced'] = false
 end)
 ```
 
@@ -217,7 +231,7 @@ end)
 
 ```lua
 -- Register the plugin
-exports['easyadmin']:RegisterPlugin({
+exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   name = 'My Plugin',
   version = '1.0.0',
@@ -235,15 +249,19 @@ exports['easyadmin']:RegisterPlugin({
 })
 
 -- Page render handler
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(data)
-  local players = GetActivePlayers and #GetActivePlayers() or 0
-  return {
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
+  local players = GetActivePlayers()
+  local fps = 0
+  local ft = GetFrameTime()
+  if ft and ft > 0 then fps = math.floor(1.0 / ft) end
+
+  cb({
     { type = 'heading', text = 'My Plugin', level = 2 },
     {
       type = 'row', gap = 3, children = {
-        { type = 'stat-card', label = 'Players', value = tostring(players),
+        { type = 'stat-card', label = 'Players', value = tostring(#players),
           icon = 'users', iconColor = 'var(--accent-green)', bgColor = 'var(--bg-green)' },
-        { type = 'stat-card', label = 'FPS', value = tostring(math.floor(1.0 / GetFrameTime())),
+        { type = 'stat-card', label = 'FPS', value = tostring(fps),
           icon = 'gauge', iconColor = 'var(--accent-orange)', bgColor = 'var(--bg-orange)' },
       },
     },
@@ -252,42 +270,36 @@ exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(d
         { type = 'heading', text = 'Actions', level = 4 },
         {
           type = 'row', gap = 2, children = {
-            { type = 'button', label = 'Refresh', action = 'refresh',
-              icon = 'refresh', variant = 'ghost', size = 'sm' },
-            { type = 'button', label = 'Get Count', action = 'getCount',
-              server = true, variant = 'secondary', size = 'sm' },
+            { type = 'button', label = 'Re-fetch', action = 'refetchPage',
+              icon = 'refresh', variant = 'primary', size = 'sm' },
+            { type = 'button', label = 'Get Server Data', action = 'getServerData',
+              server = true, icon = 'server', variant = 'danger', size = 'sm' },
           },
         },
       },
     },
-  }
+  })
 end)
 
 -- Dashboard widget
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderWidget', function(data)
-  return {
-    {
-      type = 'card', children = {
-        {
-          type = 'row', gap = 2, children = {
-            { type = 'icon', name = 'check-circle', size = 'md' },
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderWidget', function(data, cb)
+  local players = GetActivePlayers()
+  cb({
+    { type = 'card', children = {
+        { type = 'row', gap = 2, children = {
+            { type = 'icon', name = 'users', size = 'md' },
             { type = 'col', gap = 0, children = {
-              { type = 'text', text = 'My Plugin', variant = 'small' },
-              { type = 'text', text = 'Online', variant = 'muted' },
-            }},
-          },
-        },
-      },
-    },
-  }
+                { type = 'text', text = 'Players Online', variant = 'small' },
+                { type = 'text', text = tostring(#players), variant = 'muted' },
+              }},
+          }},
+      }},
+  })
 end)
 
--- Button action — returns new schema
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'refresh', function(data)
-  return {
-    { type = 'heading', text = 'My Plugin', level = 2 },
-    { type = 'badge', text = 'Refreshed!', variant = 'online' },
-  }
+-- Re-fetch action (returns non-schema → re-fetches renderPage)
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refetchPage', function(data, cb)
+  cb({ ok = true })
 end)
 ```
 
@@ -295,10 +307,15 @@ end)
 
 ```lua
 -- Server-side handler (reached by button with server = true)
-exports['easyadmin']:RegisterPluginServerHandler('my-plugin', 'getCount', function(source, data)
-  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.view') then
-    return { ok = false, error = 'permission denied' }
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getServerData', function(source, data, cb)
+  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
+    return cb({ ok = false, error = 'Requires permission: plugin.my-plugin.advanced' })
   end
-  return { ok = true, count = #GetPlayers() }
+
+  cb({
+    ok = true,
+    playerCount = #GetPlayers(),
+    maxPlayers = GetConvarInt('sv_maxclients', 32),
+  })
 end)
 ```

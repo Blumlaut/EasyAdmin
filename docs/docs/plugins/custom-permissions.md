@@ -3,13 +3,17 @@
 Plugins can define custom permissions and use them to gate their UI
 contributions.
 
-## Registering a permission
+## Registering a Permission
 
 In your resource's shared script (runs on both client and server):
 
 ```lua
 Citizen.CreateThread(function()
-  permissions["plugin.my-plugin"] = false
+  -- Wait for EasyAdmin's permissions table to be available
+  while permissions == nil do
+    Citizen.Wait(50)
+  end
+  permissions['plugin.my-plugin'] = false
 end)
 ```
 
@@ -22,12 +26,12 @@ Grant the `easyadmin.plugin.my-plugin` ACE to admins who should have access:
 add_ace group.admin easyadmin.plugin.my-plugin allow
 ```
 
-## Gating contributions
+## Gating Contributions
 
 ### Entire plugin
 
 ```lua
-exports['easyadmin']:RegisterPlugin({
+exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   permission = 'plugin.my-plugin',
   -- All contributions hidden if admin lacks this
@@ -48,22 +52,24 @@ playerDetailTabs = {
 Always permission-guard server handlers manually:
 
 ```lua
-exports['easyadmin']:RegisterPluginServerHandler('my-plugin', 'doAction', function(source, data)
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(source, data, cb)
   if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
-    return { ok = false, error = 'permission denied' }
+    return cb({ ok = false, error = 'permission denied' })
   end
   -- ...
+  cb({ ok = true })
 end)
 ```
 
-## Checking permissions in client handlers
+## Checking Permissions in Client Handlers
 
 ```lua
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(data)
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
   if not DoesPlayerHavePermission(-1, 'plugin.my-plugin.admin') then
     -- Return a limited schema
-    return { { type = 'text', text = 'No access', variant = 'muted' } }
+    return cb({ { type = 'text', text = 'No access', variant = 'muted' } })
   end
   -- Return full schema
+  cb({ { type = 'heading', text = 'Full Access', level = 2 } })
 end)
 ```

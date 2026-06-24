@@ -4,18 +4,32 @@ The plugin API lets external FiveM resources extend EasyAdmin's UI at runtime.
 Plugins register via exports and provide schema trees that EasyAdmin renders
 using its built-in components.
 
+## Why Events, Not Exports?
+
+FiveM exports **cannot pass functions between resources**. When you call
+`exports['resource'].someExport(fn)`, the function `fn` becomes `nil` on
+the receiving end.
+
+The plugin system works around this by using **events** for handler
+registration:
+
+1. **Plugin registration** (`RegisterPlugin`) passes only a config **table** — this works fine through exports
+2. **Handler registration** uses `AddEventHandler` — the handler function stays in the plugin's own script environment
+3. **Dispatch** — EasyAdmin triggers an event, the plugin's handler fires, and responds via a callback
+
 ## Registration
 
-### `exports['easyadmin']:RegisterPlugin(config)`
+### `exports.EasyAdmin:RegisterPlugin(config)`
 
 Register a plugin from your resource. Can be called on the client or server.
 Server registrations are networked to all clients automatically.
 
 ```lua
-exports['easyadmin']:RegisterPlugin({
+exports.EasyAdmin:RegisterPlugin({
   id = 'my-plugin',
   name = 'My Plugin',
   version = '1.0.0',
+  icon = 'box',
   navItems = { ... },
   pages = { ... },
   playerDetailTabs = { ... },
@@ -25,53 +39,56 @@ exports['easyadmin']:RegisterPlugin({
 
 See [Creating a Plugin](../creating-plugins) for the full config shape.
 
-## Handlers
+## Client Handlers
 
-### `exports['easyadmin']:RegisterPluginHandler(pluginId, action, fn)`
+### `EasyAdmin:Plugin:action:<pluginId>:<actionName>`
 
-Register a **client-side** handler. Called when the NUI requests a schema
-render or dispatches a button action.
+Register a **client-side** handler for render actions and button clicks:
 
 ```lua
-exports['easyadmin']:RegisterPluginHandler('my-plugin', 'renderPage', function(data)
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
   -- data.context = { target = 'page'|'widget'|'player-tab', playerId? = number }
-  return { { type = 'heading', text = 'Hello' } }
+  cb({
+    { type = 'heading', text = 'Hello', level = 2 },
+    { type = 'text', text = 'World', variant = 'muted' },
+  })
 end)
 ```
 
 | Parameter | Type | Description |
 |---|---|---|
-| `pluginId` | `string` | Must match the registered plugin id |
-| `action` | `string` | Action name (matches `renderAction` or button `action`) |
-| `fn` | `function(data)` | Receives data payload; returns a schema tree or `{ ok = true }` |
+| `data` | `table` | Payload from the NUI (may contain `context`) |
+| `cb` | `function(result)` | Callback — call with a schema array or response table |
 
-### `exports['easyadmin']:RegisterPluginServerHandler(pluginId, action, fn)`
+**Return behaviour:**
+- Call `cb({ schema array })` → replaces the current page with the new schema
+- Call `cb({ ok = true, ... })` → triggers a re-fetch of the original `renderAction`
 
-Register a **server-side** handler. Reached by buttons with `server = true`.
+## Server Handlers
+
+### `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>`
+
+Register a **server-side** handler. Reached by buttons with `server = true`:
 
 ```lua
-exports['easyadmin']:RegisterPluginServerHandler('my-plugin', 'doAction', function(source, data)
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(source, data, cb)
   if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
-    return { ok = false, error = 'permission denied' }
+    return cb({ ok = false, error = 'permission denied' })
   end
-  return { ok = true, result = 'done' }
+  cb({ ok = true, result = 'done' })
 end)
 ```
 
 | Parameter | Type | Description |
 |---|---|---|
-| `pluginId` | `string` | Must match the registered plugin id |
-| `action` | `string` | Action name |
-| `fn` | `function(source, data)` | `source` = player server ID; return value relayed to NUI |
+| `source` | `number` | Player server ID (set globally by FiveM) |
+| `data` | `table` | Payload from the NUI |
+| `cb` | `function(result)` | Callback — call with response table |
 
 > **Server handlers must always be permission-guarded.** The bridge does
 > not perform automatic permission checks.
 
-### `HasEasyAdminPluginHandler(pluginId, action)`
-
-Check if a client handler is registered. Returns `boolean`.
-
-## NUI messages
+## NUI Messages
 
 ### `plugin:<id>:update`
 
@@ -83,7 +100,7 @@ SendNUIMessage({ action = 'plugin:my-plugin:update' })
 
 The NUI re-fetches the current view's `renderAction`.
 
-## Other EasyAdmin exports
+## Other EasyAdmin Exports
 
 These exports exist independently of the plugin system and can be used by
 any external resource:
