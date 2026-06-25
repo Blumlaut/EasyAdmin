@@ -74,6 +74,29 @@ export interface TextNode extends BaseNode {
 // Interactive
 // ---------------------------------------------------------------------------
 
+/** A single field inside a form-modal button. Mirrors ModalFieldDefinition. */
+export type ModalFieldNode =
+  | { type: 'text'; key: string; label?: string; placeholder?: string; initialValue?: string; maxLength?: number; required?: boolean; description?: string }
+  | { type: 'textarea'; key: string; label?: string; placeholder?: string; initialValue?: string; maxLength?: number; rows?: number; required?: boolean; description?: string }
+  | { type: 'number'; key: string; label?: string; placeholder?: string; initialValue?: number; min?: number; max?: number; step?: number; required?: boolean; description?: string }
+  | { type: 'slider'; key: string; label?: string; min: number; max: number; initialValue?: number; step?: number; required?: boolean; description?: string }
+  | { type: 'select'; key: string; label?: string; placeholder?: string; initialValue?: string; options: Array<{ value: string; label: string }>; required?: boolean; description?: string }
+  | { type: 'checkbox'; key: string; label?: string; initialValue?: boolean; required?: boolean; description?: string }
+
+/** Optional modal configuration for a button. When present, clicking opens a form modal. */
+export interface ModalButtonConfig {
+  /** Modal title shown in the dialog header. */
+  title: string
+  /** Optional description shown below the title. */
+  description?: string
+  /** Form fields rendered inside the modal. */
+  fields: ModalFieldNode[]
+  /** Label for the submit button (default: "Submit"). */
+  submitLabel?: string
+  /** Visual variant for the submit button. */
+  submitVariant?: 'primary' | 'danger' | 'warning' | 'success' | 'secondary'
+}
+
 export interface ButtonNode extends BaseNode {
   type: 'button'
   label: string
@@ -83,6 +106,8 @@ export interface ButtonNode extends BaseNode {
   data?: unknown
   /** Route the action to a server-side handler. */
   server?: boolean
+  /** When present, clicking opens a form modal. On submit, the action is called with form values. */
+  modal?: ModalButtonConfig
   icon?: string
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
   size?: 'xs' | 'sm' | 'md'
@@ -93,6 +118,13 @@ export interface CopyButtonNode extends BaseNode {
   type: 'copy-button'
   value: string
   label?: string
+}
+
+/** Triggers a FiveM native notification when rendered. */
+export interface NotificationNode extends BaseNode {
+  type: 'notification'
+  /** The message text shown in the notification. */
+  text: string
 }
 
 // ---------------------------------------------------------------------------
@@ -197,6 +229,7 @@ export type ComponentSchema =
   | TextNode
   | ButtonNode
   | CopyButtonNode
+  | NotificationNode
   | StatCardNode
   | KeyValueTableNode
   | AlertNode

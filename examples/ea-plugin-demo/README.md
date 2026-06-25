@@ -17,7 +17,9 @@ EasyAdmin runtime plugin system.
 | Permission guarding | `server.lua` — `DoesPlayerHavePermission` checks |
 | Permissions | `shared.lua` — `plugin.demo`, `plugin.demo.advanced` |
 | Live updates | `client.lua` — `pushUpdate` calls `SendNUIMessage` |
-| Every schema component | `client.lua` `renderMainPage` — all 18 types |
+| Every schema component | `client.lua` `renderMainPage` — all schema types |
+| Form modals | `client.lua` — `Open Form Modal` button with 6 field types |
+| Notifications | `client.lua` — `submitModal` handler returns `notification` component |
 
 ## Why event-based handlers?
 
@@ -76,10 +78,11 @@ Open EasyAdmin and verify:
 5. **Player detail** — Open any player, see "Demo" and "Advanced" tabs
 6. **Dashboard** — "Plugin Demo — Online" widget appears
 7. **Buttons**:
-   - "Refresh" — re-renders with a fresh timestamp and "Refreshed!" badge
-   - "Toggle Badge" — increments a counter, shows even/odd badge
-   - "Push Update" — triggers a live `SendNUIMessage` refresh
+   - "Re-fetch Page" — re-fetches the main page schema
+   - "Toggle Counter" — increments a counter, re-fetches page
    - "Get Server Data" — calls the server handler (requires `plugin.demo.advanced` perm)
+   - "Replace Page" — returns a full schema array, replaces the page
+   - "Open Form Modal" — opens a modal with 6 field types (text, slider, select, number, checkbox, textarea). Submitting sends a native notification and shows the form values on the page
 
 ## Adapting for your plugin
 
@@ -177,3 +180,49 @@ The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>
 ```lua
 SendNUIMessage({ action = 'plugin:my-plugin:update' })
 ```
+
+### Button that opens a form modal
+
+```lua
+{ type = 'button', label = 'Open Form', action = 'submitForm', icon = 'clipboard', variant = 'secondary',
+  modal = {
+    title = 'My Form',
+    description = 'Fill in the fields below.',
+    submitLabel = 'Submit',
+    fields = {
+      { type = 'text', key = 'name', label = 'Name', required = true },
+      { type = 'slider', key = 'volume', label = 'Volume', min = 0, max = 100, initialValue = 50 },
+      { type = 'select', key = 'role', label = 'Role', options = {
+          { value = 'admin', label = 'Admin' },
+          { value = 'user', label = 'User' },
+        }},
+      { type = 'checkbox', key = 'enabled', label = 'Enabled', initialValue = true },
+    },
+  },
+}
+```
+
+The handler receives the form values as `data`:
+
+```lua
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:submitForm', function(data, cb)
+  -- data = { name = '...', volume = 50, role = 'admin', enabled = true }
+  cb({
+    { type = 'notification', text = ('Form submitted by %s'):format(data.name) },
+    { type = 'alert', variant = 'success', title = 'Done!', children = {
+        { type = 'text', text = ('Name: %s, Volume: %s'):format(data.name, data.volume) },
+      }},
+  })
+end)
+```
+
+### Available modal field types
+
+| Type | Keys | Description |
+|---|---|---|
+| `text` | `key`, `label`, `placeholder`, `initialValue`, `maxLength`, `required` | Single-line text input |
+| `textarea` | `key`, `label`, `placeholder`, `initialValue`, `maxLength`, `rows`, `required` | Multi-line text area |
+| `number` | `key`, `label`, `placeholder`, `initialValue`, `min`, `max`, `step`, `required` | Numeric input |
+| `slider` | `key`, `label`, `min`, `max`, `initialValue`, `step`, `required` | Range slider |
+| `select` | `key`, `label`, `placeholder`, `initialValue`, `options`, `required` | Dropdown select |
+| `checkbox` | `key`, `label`, `initialValue`, `required` | Toggle checkbox |

@@ -9,8 +9,9 @@
  * Interactive nodes (buttons) call back to Lua via `onAction`.
  */
 
-import { type ReactNode, type CSSProperties } from 'react'
-import type { ComponentSchema } from './schema'
+import { type ReactNode, type CSSProperties, useEffect } from 'react'
+import type { ButtonNode, ComponentSchema } from './schema'
+import type { ModalFieldDefinition } from '../modals/types'
 import { Icon, type IconName } from '../components/icons'
 import { StatCard } from '../components/StatCard'
 import { Alert } from '../components/Alert'
@@ -20,6 +21,8 @@ import { TimelineEntry } from '../components/TimelineEntry'
 import { BarChart } from '../components/BarChart'
 import { Skeleton } from '../components/Skeleton'
 import { KeyValueTable, type KeyValueRow } from '../components/KeyValueTable'
+import { useModalContext } from '../ModalContext'
+import { notify } from '../lib/notify'
 
 // ---------------------------------------------------------------------------
 // Action handler type
@@ -57,6 +60,78 @@ const GAP_CLASS: Record<number, string> = {
   2: 'gap-2',
   3: 'gap-3',
   4: 'gap-4',
+}
+
+// ---------------------------------------------------------------------------
+// Modal button component
+// ---------------------------------------------------------------------------
+
+function ModalButton({ node, onAction }: { node: ButtonNode; onAction: SchemaRendererProps['onAction'] }) {
+  const { openModal } = useModalContext()
+  const modal = node.modal
+  if (!modal) return null
+
+  const sizeCls = SIZE_MAP[node.size ?? 'md']
+  const variantCls = VARIANT_MAP[node.variant ?? 'ghost']
+
+  // Map schema field nodes to ModalFieldDefinition instances
+  const modalFields: ModalFieldDefinition[] = modal.fields.map((f) => {
+    const base = {
+      key: f.key,
+      type: f.type,
+      label: f.label,
+      description: f.description,
+      required: f.required,
+    }
+    switch (f.type) {
+      case 'text':
+        return { ...base, type: 'text' as const, placeholder: f.placeholder, initialValue: f.initialValue, maxLength: f.maxLength }
+      case 'textarea':
+        return { ...base, type: 'textarea' as const, placeholder: f.placeholder, initialValue: f.initialValue, maxLength: f.maxLength, rows: f.rows }
+      case 'number':
+        return { ...base, type: 'number' as const, placeholder: f.placeholder, initialValue: f.initialValue, min: f.min, max: f.max, step: f.step }
+      case 'slider':
+        return { ...base, type: 'slider' as const, min: f.min, max: f.max, initialValue: f.initialValue, step: f.step }
+      case 'select':
+        return { ...base, type: 'select' as const, placeholder: f.placeholder, initialValue: f.initialValue, options: f.options }
+      case 'checkbox':
+        return { ...base, type: 'checkbox' as const, initialValue: f.initialValue }
+    }
+  })
+
+  return (
+    <button
+      key={node.key}
+      className={`btn ${variantCls} ${sizeCls}`.trim()}
+      disabled={node.disabled}
+      onClick={() => {
+        openModal({
+          title: modal.title,
+          description: modal.description,
+          submitLabel: modal.submitLabel,
+          submitVariant: modal.submitVariant,
+          fields: modalFields,
+          onSubmit: (values) => {
+            onAction(node.action, values, node.server ?? false)
+          },
+        })
+      }}
+    >
+      {node.icon && <Icon name={node.icon as IconName} size={node.size === 'xs' ? 'xs' : 'sm'} />}
+      {node.label}
+    </button>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Notification component (triggers a native FiveM notification)
+// ---------------------------------------------------------------------------
+
+function NotificationNode({ text }: { text: string }) {
+  useEffect(() => {
+    notify(text)
+  }, [text])
+  return null
 }
 
 // ---------------------------------------------------------------------------
@@ -122,6 +197,9 @@ function SchemaNode({
 
     // ── Interactive ─────────────────────────────────────────
     case 'button': {
+      if (node.modal) {
+        return <ModalButton key={node.key} node={node} onAction={onAction} />
+      }
       const sizeCls = SIZE_MAP[node.size ?? 'md']
       const variantCls = VARIANT_MAP[node.variant ?? 'ghost']
       return (
@@ -139,6 +217,9 @@ function SchemaNode({
 
     case 'copy-button':
       return <CopyButton key={node.key} value={node.value} label={node.label} />
+
+    case 'notification':
+      return <NotificationNode key={node.key} text={node.text} />
 
     // ── Data display ────────────────────────────────────────
     case 'stat-card':

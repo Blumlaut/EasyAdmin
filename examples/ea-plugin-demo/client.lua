@@ -78,6 +78,30 @@ AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderMainPage', functio
             { type = 'button', label = 'Toggle Counter', action = 'toggleCounter', icon = 'zap', variant = 'secondary', size = 'sm' },
             { type = 'button', label = 'Get Server Data', action = 'getServerData', server = true, icon = 'server', variant = 'danger', size = 'sm' },
             { type = 'button', label = 'Replace Page', action = 'replacePage', icon = 'arrow-right-arrow-left', variant = 'ghost', size = 'sm' },
+            { type = 'button', label = 'Open Form Modal', action = 'submitModal', icon = 'clipboard', variant = 'secondary', size = 'sm',
+              modal = {
+                title = 'Form Modal Demo',
+                description = 'This modal is defined entirely in Lua. Fill in the fields and submit to see the result.',
+                submitLabel = 'Submit',
+                submitVariant = 'primary',
+                fields = {
+                  { type = 'text', key = 'name', label = 'Your Name', placeholder = 'Enter your name...', initialValue = 'Admin', required = true, description = 'A simple text input field.' },
+                  { type = 'slider', key = 'volume', label = 'Volume', min = 0, max = 100, initialValue = 50, step = 5, description = 'A range slider (0–100).' },
+                  { type = 'select', key = 'weapon', label = 'Preferred Weapon', placeholder = 'Choose one...', initialValue = 'pistol',
+                    options = {
+                      { value = 'pistol', label = 'Pistol' },
+                      { value = 'shotgun', label = 'Shotgun' },
+                      { value = 'rifle', label = 'Assault Rifle' },
+                      { value = 'smg', label = 'SMG' },
+                    },
+                    description = 'A dropdown select.'
+                  },
+                  { type = 'number', key = 'quantity', label = 'Quantity', initialValue = 1, min = 1, max = 99, step = 1, description = 'A numeric input with bounds.' },
+                  { type = 'checkbox', key = 'notifications', label = 'Enable Notifications', initialValue = true, description = 'A toggle checkbox.' },
+                  { type = 'textarea', key = 'notes', label = 'Notes', placeholder = 'Any additional notes...', rows = 3, description = 'A multi-line text area.' },
+                },
+              },
+            },
           }},
       }},
 
@@ -225,5 +249,41 @@ AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:replacePage', function(d
         { type = 'text', text = 'When a button handler returns an array of schema components, the page is replaced with that schema. Non-schema responses trigger a re-fetch of the original render action instead.' },
       }},
     { type = 'badge', text = 'Replaced', variant = 'online', icon = 'check-circle' },
+  })
+end)
+
+-- Modal submit: receives form values and returns a notification + result display
+AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:submitModal', function(data, cb)
+  -- `data` contains the modal form values keyed by field key
+  local name = data.name or 'Anonymous'
+  local volume = tostring(data.volume or 0)
+  local weapon = data.weapon or 'None'
+  local quantity = tostring(data.quantity or 0)
+  local notifications = data.notifications == true and 'Yes' or 'No'
+  local notes = data.notes or '(none)'
+
+  cb({
+    -- Triggers a native FiveM notification
+    { type = 'notification', text = ('Form submitted by %s (Volume: %s%%, Weapon: %s)'):format(name, volume, weapon) },
+
+    { type = 'heading', text = 'Form Submitted!', level = 2 },
+    { type = 'alert', variant = 'success', title = 'Modal values received', children = {
+        { type = 'text', text = ('The modal form data was passed to the Lua handler and is displayed below.'):format() },
+      }},
+    { type = 'card', children = {
+        { type = 'heading', text = 'Your Selections', level = 4 },
+        { type = 'key-value-table', rows = {
+            { key = 'Name', value = name },
+            { key = 'Volume', value = volume .. '%' },
+            { key = 'Weapon', value = weapon },
+            { key = 'Quantity', value = quantity },
+            { key = 'Notifications', value = notifications },
+            { key = 'Notes', value = notes, mono = true },
+          }},
+      }},
+    { type = 'row', gap = 2, children = {
+        { type = 'button', label = 'Back to Main Page', action = 'refetchPage', icon = 'refresh', variant = 'primary', size = 'sm' },
+        { type = 'badge', text = 'Modal Works!', variant = 'online', icon = 'check-circle' },
+      }},
   })
 end)
