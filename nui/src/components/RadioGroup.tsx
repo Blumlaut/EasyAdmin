@@ -26,7 +26,7 @@ export function RadioGroup<T = string>({
     <fieldset className="radio-group">
       <legend className="sr-only">{name}</legend>
       <div className="radio-group-options">
-        {options.map((option, i) => (
+        {options.map((option) => (
           <React.Fragment key={String(option.value)}>
             <label
               className={`radio-group-option selectable-card${value === option.value ? ' selectable-card--checked' : ''}`}
