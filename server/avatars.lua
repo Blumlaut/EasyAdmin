@@ -57,7 +57,7 @@ exports('GetPlayerAvatar', GetPlayerAvatar)
 ---Called by the client when the player list is displayed.
 RegisterServerEvent('EasyAdmin:fetchPlayerAvatars', function()
 	local src = source
-	if not IsPlayerAdmin(src) then return end
+	if not DoesPlayerHavePermissionForCategory(src, 'player') then return end
 
 	for _, player in pairs(GetPlayers()) do
 		local playerId = tonumber(player)

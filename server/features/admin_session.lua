@@ -33,7 +33,7 @@ end)
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()
 	local src = source
 	PrintDebugMessage(getName(src, true).." requested Playerlist.", 4)
-	if IsPlayerAdmin(src) then
+	if DoesPlayerHavePermissionForCategory(src, 'player') then
 		local l = {}
 		local players = GetPlayers()
 
@@ -50,7 +50,7 @@ end)
 
 RegisterServerEvent("EasyAdmin:getPlayerIdentifiers", function(playerId)
 	local src = source
-	if not IsPlayerAdmin(src) then return end
+	if not DoesPlayerHavePermissionForCategory(src, 'player') then return end
 	local pid = tonumber(playerId)
 	if not pid then return end
 

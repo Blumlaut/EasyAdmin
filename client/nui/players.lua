@@ -110,7 +110,7 @@ RegisterNUICallback('teleportPlayerToMe', function(data, cb)
 end)
 
 RegisterNUICallback('teleportAllPlayersToMe', function(data, cb)
-  if not permissions['player.teleport.single'] then return deny(cb) end
+  if not permissions['player.teleport.everyone'] then return deny(cb) end
   -- Trigger server event with target = -1, meaning teleport everyone
   for i = 0, 256 do
     if NetworkIsPlayerActive(i) then

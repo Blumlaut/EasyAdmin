@@ -11,13 +11,13 @@
 ------------------------------------
 
 RegisterServerEvent("EasyAdmin:JoinPlayerRoutingBucket", function(playerId)
-	if DoesPlayerHavePermission(source, "player.bucket") then
+	if DoesPlayerHavePermission(source, "player.bucket.join") then
 		SetPlayerRoutingBucket(source, GetPlayerRoutingBucket(playerId))
 	end
 end)
 
 RegisterServerEvent("EasyAdmin:ForcePlayerRoutingBucket", function(playerId)
-	if DoesPlayerHavePermission(source, "player.bucket") and CanTargetPlayerForModeration(source, playerId) then
+	if DoesPlayerHavePermission(source, "player.bucket.force") and CanTargetPlayerForModeration(source, playerId) then
 		SetPlayerRoutingBucket(playerId, GetPlayerRoutingBucket(source))
 	end
 end)
