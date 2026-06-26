@@ -261,7 +261,7 @@ Storage = {
 
 -- Removes actions older than ea_actionHistoryExpiry days. Safe to call repeatedly.
 local function pruneExpiredActions()
-    local expirySeconds = GetConvarInt("ea_actionHistoryExpiry", 30) * 24 * 60 * 60
+    local expirySeconds = GetConvarInt("ea_actionHistoryExpiry", 120) * 24 * 60 * 60
     local pruned = false
     for i = #actions, 1, -1 do
         local action = actions[i]

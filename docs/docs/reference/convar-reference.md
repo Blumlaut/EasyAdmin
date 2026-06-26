@@ -62,7 +62,7 @@ Duration of the auto-ban triggered by report threshold, in seconds. Default: 864
 
 | | |
 |---|---|
-| **Default** | `30` |
+| **Default** | `120` |
 | **Type** | Integer |
 
 Number of days to keep action history entries before automatic cleanup.

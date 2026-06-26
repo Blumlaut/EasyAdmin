@@ -9,7 +9,7 @@ Action history records moderation actions (bans, kicks, warnings, mutes, etc.) a
 | Convar | Default | Description |
 |--------|---------|-------------|
 | `ea_enableActionHistory` | `true` | Enable or disable action history tracking |
-| `ea_actionHistoryExpiry` | `30` | Number of days to keep action history entries before automatic cleanup |
+| `ea_actionHistoryExpiry` | `120` | Number of days to keep action history entries before automatic cleanup |
 
 Actions are logged for:
 - Bans (permanent and temporary)

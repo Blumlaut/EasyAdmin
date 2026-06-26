@@ -104,7 +104,7 @@ convar_category 'EasyAdmin' {
         { "Routing Bucket Options", "$ea_routingBucketOptions", "CV_BOOL", "false" },
         { "Dangerous Dev Mode", "$ea_dangerousDevMode", "CV_BOOL", "false" },
         { "Enable Action History", "$ea_enableActionHistory", "CV_BOOL", "true" },
-        { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "30" }, -- Recommended time is 30 days,
+        { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "120" },
         { "Enable Admin Notes", "$ea_enableAdminNotes", "CV_BOOL", "true" },
         { "Profiler Endpoint Override", "$ea_profilerEndpoint", "CV_STRING", "" },
     }

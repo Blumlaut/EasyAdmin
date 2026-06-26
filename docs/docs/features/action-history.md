@@ -30,10 +30,10 @@ Default: `true`
 Set the number of days to retain action history entries:
 
 ```
-set ea_actionHistoryExpiry 30
+set ea_actionHistoryExpiry 120
 ```
 
-Default: `30` days. Expired entries are automatically cleaned up.
+Default: `120` days. Expired entries are automatically cleaned up.
 
 ## Viewing History
 
