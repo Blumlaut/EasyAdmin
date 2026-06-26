@@ -43,12 +43,8 @@ RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 end)
 
 
-RegisterNetEvent("EasyAdmin:SetSetting", function(setting,state)
-	settings[setting] = state
-end)
-
-RegisterNetEvent('EasyAdmin:SetLanguage', function(newstrings)
-	strings = newstrings
+RegisterNetEvent('EasyAdmin:setInfinity', function(state)
+	infinity = state == true
 end)
 
 RegisterNetEvent("EasyAdmin:fillBanlist", function(thebanlist)
@@ -70,18 +66,12 @@ RegisterNetEvent("EasyAdmin:NewReport", function(reportData)
 	reports[reportData.id] = reportData
 end)
 
+RegisterNetEvent("EasyAdmin:fillReports", function(theReports)
+	reports = theReports
+end)
+
 RegisterNetEvent("EasyAdmin:ClaimedReport", function(reportData)
 	reports[reportData.id] = reportData
-	if _menuPool and _menuPool:IsAnyMenuOpen() then
-		for i, menu in pairs(reportMenus) do
-			for o,item in pairs(menu.Items) do 
-				if getMenuItemTitle(item) == GetLocalisedText("claimreport") then
-					setMenuItemTitle(item, GetLocalisedText("claimedby"))
-					item:RightLabel(reportData.claimedName)
-				end
-			end
-		end
-	end
 end)
 
 RegisterNetEvent("EasyAdmin:RemoveReport", function(reportData)
@@ -95,28 +85,17 @@ end)
 
 RegisterNetEvent('EasyAdmin:SetPlayerFrozen', function(player,state)
 	FrozenPlayers[player] = state
-	if _menuPool and _menuPool:IsAnyMenuOpen() then
-		if playerMenus[tostring(player)].menu then
-			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
-				if getMenuItemTitle(item) == GetLocalisedText("setplayerfrozen") then
-					item.Checked = state
-				end
-			end
-		end
-	end
 end)
 
 RegisterNetEvent('EasyAdmin:SetPlayerMuted', function(player,state)
 	MutedPlayers[player] = state
-	if _menuPool and _menuPool:IsAnyMenuOpen() then
-		if playerMenus[tostring(player)].menu then
-			for o,item in pairs(playerMenus[tostring(player)].menu.Items) do 
-				if getMenuItemTitle(item) == GetLocalisedText("mute") then
-					item.Checked = state
-				end
-			end
-		end
-	end
+end)
+
+RegisterNetEvent('EasyAdmin:SetGlobalMuteState', function(enabled)
+	SendNUIMessage({
+		action = 'globalMuteState',
+		data = { enabled = enabled },
+	})
 end)
 
 function FreezeMyself(state)
@@ -211,13 +190,13 @@ Citizen.CreateThread(function()
 		local deletionText = ""
 		if type == "cars" then
 			toDelete = GetGamePool("CVehicle")
-			deletionText = GetLocalisedText("cleaningcar")
+			deletionText = "Deleting Vehicle {entity}"
 		elseif type == "peds" then
 			toDelete = GetGamePool("CPed")
-			deletionText = GetLocalisedText("cleaningped")
+			deletionText = "Deleting Ped {entity}"
 		elseif type == "props" then
 			toDelete = mergeTables(GetGamePool("CObject"), GetGamePool("CPickup"))
-			deletionText = GetLocalisedText("cleaningprop")
+			deletionText = "Deleting Object {entity}"
 		end
 
 		for _,entity in pairs(toDelete) do
@@ -243,7 +222,7 @@ Citizen.CreateThread(function()
 					SetTextDropShadow()
 					SetTextOutline()
 					SetTextEntry("STRING")
-					AddTextComponentString(string.format(deletionText, entity))
+					AddTextComponentString(GetLocalisedText(deletionText, { entity = tostring(entity) }))
 					EndTextCommandDisplayText(0.45, 0.95)
 
 					-- delete entity
@@ -272,15 +251,7 @@ Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(500)
 		local localPlayerPed = PlayerPedId()
-		if drawInfo and not stopSpectateUpdate then
-			local targetPed = GetPlayerPed(drawTarget)
-			local targetGod = GetPlayerInvincible(drawTarget)
-			
-			local tgtCoords = GetEntityCoords(targetPed)
-			if tgtCoords and tgtCoords.x ~= 0 then
-				SetEntityCoords(localPlayerPed, tgtCoords.x, tgtCoords.y, tgtCoords.z - 10.0, 0, 0, 0, false)
-			end
-		else
+		if not stopSpectateUpdate then
 			Citizen.Wait(1000)
 		end
 		cachedInfo = {
@@ -356,11 +327,7 @@ RegisterNetEvent("EasyAdmin:FreezePlayer", function(toggle)
 end)
 
 
-RegisterNetEvent("EasyAdmin:CaptureScreenshot", function(toggle, url, field)
-	exports['screenshot-basic']:requestScreenshotUpload(GetConvar("ea_screenshoturl", 'https://wew.wtf/upload.php'), GetConvar("ea_screenshotfield", 'files[]'), function(data)
-		TriggerLatentServerEvent("EasyAdmin:TookScreenshot", 100000, data)
-	end)
-end)
+-- Screenshot capture is now handled by client/screenshot.lua
 
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
@@ -383,8 +350,7 @@ function spectatePlayer(targetPed,target,name)
 		RequestCollisionAtCoord(targetx,targety,targetz)
 		NetworkSetInSpectatorMode(true, targetPed)
 		
-		DrawPlayerInfo(target)
-		TriggerEvent("EasyAdmin:showNotification", string.format(GetLocalisedText("spectatingUser"), name))
+		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Spectating {name}", { name = name }))
 	else
 		if oldCoords then
 			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
@@ -392,8 +358,7 @@ function spectatePlayer(targetPed,target,name)
 			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
 		end
 		NetworkSetInSpectatorMode(false, targetPed)
-		StopDrawPlayerInfo()
-		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("stoppedSpectating"))
+		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Stopped Spectating."))
 		frozen = false
 		FreezeMyself(false)
 		Wait(200) -- to prevent staying invisible
@@ -407,10 +372,10 @@ function spectatePlayer(targetPed,target,name)
 				if IsVehicleSeatFree(vehicle, vehicleInfo.seat) then
 					SetPedIntoVehicle(playerPed, vehicle, vehicleInfo.seat)
 				else
-					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("spectatevehicleseatoccupied"))
+					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle seat you were in is now occupied."))
 				end
 			else
-				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("spectatenovehiclefound"))
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle you were in can no longer be found."))
 			end
 
 			vehicleInfo.netId = nil
@@ -429,7 +394,7 @@ function ShowNotification(text)
 		AddTextComponentSubstringPlayerName(text)
 
 		local title = "~bold~EasyAdmin"
-		local subtitle = GetLocalisedText("notification")
+		local subtitle = GetLocalisedText("Notification")
 		local iconType = 0
 		local flash = false
 

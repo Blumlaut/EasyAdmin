@@ -1,0 +1,2 @@
+# This file keeps the data/statistics/ directory in git.
+# Runtime JSON files (players.json, world.json) are gitignored and created here.

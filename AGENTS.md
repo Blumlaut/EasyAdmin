@@ -7,8 +7,172 @@ Every change requires manual testing. AI agents cannot verify that changes work 
 2. Explain what functionality is affected
 3. Provide specific testing steps for the developer to verify the changes
 
+## Server-Side Permission Guarding
+
+**All server-side functions and events that perform administrative actions MUST be permission-guarded.** There is no implicit trust — every handler must verify the caller has the appropriate permission before proceeding.
+
+### Permission System Overview
+
+EasyAdmin uses a single permission check function that works on both client and server:
+
+| Context | Check Method | What Decides |
+|---|---|---|
+| **Server** | `DoesPlayerHavePermission(src, "perm.name")` | FiveM ACL (`IsPlayerAceAllowed` with `easyadmin.` prefix) |
+| **Client** | `DoesPlayerHavePermission(-1, "perm.name")` | Local permissions state (populated by server handshake) |
+
+The `permissions` table is defined in [`shared/permissions.lua`](shared/permissions.lua). **New permissions MUST be added to this table** before EasyAdmin will recognise them — the admin session handshake (`EasyAdmin:amiadmin`) iterates `pairs(permissions)` to build the permission set sent to each client.
+
+### Adding New Permissions
+
+1. Add the entry to the `permissions` table in [`shared/permissions.lua`](shared/permissions.lua)
+2. Follow the naming convention: `"category.action.detail"` (e.g. `"player.ban.temporary"`, `"server.resources.start"`)
+3. The `"easyadmin."` prefix is added automatically by `DoesPlayerHavePermission()` — **do not include it in the table key**
+
+### Guarding Patterns
+
+Server: 
+```lua
+RegisterServerEvent("EasyAdmin:doAction", function(targetId)
+    local src = source
+    if not DoesPlayerHavePermission(src, "category.action") then return end
+    -- do the thing
+end)
+```
+
+Client: 
+```lua
+RegisterNUICallback('doAction', function(data, cb)
+    if not DoesPlayerHavePermission(-1, 'category.action') then return cb({ error = 'Permission denied' }) end
+    TriggerServerEvent('EasyAdmin:doAction', data)
+    cb({ ok = true })
+end)
+```
+
+### Quick Reference
+
+| Function | Where | Purpose |
+|---|---|---|
+| `DoesPlayerHavePermission(player, object)` | Server & Client | Server: checks FiveM ACL. Client: use `player = -1`. |
+| `DoesPlayerHavePermissionForCategory(player, object)` | Server & Client | Check if player has any perm starting with `object` |
+| `CanTargetPlayerForModeration(src, target)` | Server | Check immunity/targeting rules (use alongside perm checks) |
+
+## Contributing Guidelines
+
+Always read [CONTRIBUTING.md](CONTRIBUTING.md) before suggesting changes. It covers issue templates, code organization, PR requirements, AI disclosure rules, and documentation expectations.
+
+## Repository Layout
+
+| Path | Description |
+|---|---|
+| `fxmanifest.lua` | Resource manifest — defines scripts, dependencies, convars, and entry points |
+| `client/` | Client-side FiveM logic (Lua). Only runs on connected clients. |
+| `server/` | Server-side FiveM logic (Lua). Only runs on the server. |
+| `shared/` | Code shared between client and server. Functions and variables defined here are available across all Lua files. |
+| `shared/permissions.lua` | Permission definitions — new permissions MUST be added here before EasyAdmin recognises them. |
+| `nui/` | Frontend UI built with React/TypeScript, runs inside FiveM's CEF browser. |
+| `language/` | Internationalization (i18n) translation files. |
+| `bot/` | Discord bot code (Node.js), bundled into `bot/dist/`. |
+| `docs/` | EasyAdmin user and developer documentation. |
+| `plugins/` | Plugin system — `*_shared.lua`, `*_client.lua`, `*_server.lua` naming conventions. |
+| `tests/` | Lua unit tests (busted). See [Testing](#testing) below. |
+
+## Handy Commands
+
+Run from the respective subdirectories after installing dependencies (`npm install`).
+
+### Root (`/`)
+
+Run from the repository root after `npm run install:all`.
+
+| Command | Description |
+|---|---|
+| `npm run install:all` | Install deps for both bot + NUI (with `--include=dev --legacy-peer-deps`) |
+| `npm run build` | Build both bot + NUI |
+| `npm run build:bot` | Build only the Discord bot |
+| `npm run build:nui` | Build only the NUI |
+| `npm run lint:all` | Lint both bot + NUI |
+
+### NUI (`nui/`)
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Vite dev server |
+| `npm run dev:browser` | Start dev server and open in browser |
+| `npm run build` | TypeScript check + Vite production build |
+| `npm run lint` | ESLint on `src/` |
+| `npm run lint:css` | Stylelint on CSS files |
+| `npm run typecheck` | TypeScript type checking (`tsc --noEmit`) |
+| `npm run test` | Run Vitest test suite |
+| `npm run check` | Run all checks (lint, CSS lint, typecheck, tests) |
+
+### Discord Bot (`bot/`)
+
+| Command | Description |
+|---|---|
+| `npm run build` | Install deps + bundle with esbuild into `bot/dist/` |
+
+### Lua Tests (`tests/`)
+
+| Command | Description |
+|---|---|
+| `./tests/run.sh tests/` | Run the full Lua test suite |
+| `./tests/run.sh tests/ --tap` | Run tests with TAP output |
+| `./tests/run.sh tests/<file>_spec.lua` | Run a single test file |
+
+## Testing
+
+EasyAdmin has a Lua test suite using **[busted](https://lunarmodules.github.io/busted/)**. Tests run outside of FiveM using a mock layer that stubs all FXServer-specific globals.
+
+**Always read [`tests/WRITING_TESTS.md`](tests/WRITING_TESTS.md) before writing new tests.** It covers what makes a good test vs a bad test, how to use the mock layer, and the project's test philosophy.
+
+### Key Principles
+
+- **Test LOGIC, not identity.** Verify that a function makes the right *decision* given certain inputs — not just that it returns something.
+- **Test edge cases.** Empty tables, nil values, type mismatches, boundary values — these are where bugs hide.
+- **Test invariants.** Properties that should always hold after an operation (e.g. "after merging, only the primary entry remains indexed").
+- **One assertion per concept.** Each `it()` block should test one logical behavior.
+
+## FiveM Documentation
+
+When working on any code related to FiveM, always consult the official documentation:
+
+- **FiveM Docs**: https://docs.fivem.net/docs/ — Server framework, client/server API, resources, events, etc.
+- **Natives (GTA V & CFX)**: Use the **fivem-natives** skill to look up native function signatures, parameters, return types, and examples. 6,400+ GTA V natives and 800+ FiveM-specific CFX natives are indexed locally.
+
+Never guess at API behavior or native signatures. Always verify against the official docs before suggesting changes.
+
 ## Merge Requests
 
 **AI usage must ALWAYS be clearly indicated.** When creating merge requests.
 
 Remember: AI is a tool to assist developers, not replace human judgment and responsibility.
+
+## FiveM NUI / CEF UI Known Issues
+
+The NUI runs inside FiveM's Chromium Embedded Framework (CEF) in Off-Screen Rendering (OSR) mode. **All changes to NUI CSS require in-game testing** — they cannot be verified by reading code alone.
+
+### Unsupported Features
+
+**`backdrop-filter` / `-webkit-backdrop-filter` is not supported.** The blur effect is not applied in FiveM's CEF build. **Do not use `backdrop-filter` in NUI styles.**
+
+### OSR Rendering
+
+**Overlay components must render inside the visible tree.** Elements rendered outside the `{visible && ...}` conditional in App.tsx may not paint correctly when the NUI window is folded or backgrounded. `ToastContainer` and `WarningOverlay` are inside the visible block for this reason.
+
+### Modal/Dialog CSS Rules
+
+- Modals render via `ModalProvider` as siblings of `.ea-window` inside `#root` (not nested children)
+- `.dialog-overlay` uses `position: fixed; inset: 0; z-index: 9999`
+- `.dialog` uses hardcoded solid background `#1e293b` (CSS variable backgrounds may not resolve reliably)
+- `box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4)` on `.dialog`
+
+### Viewport Coordinates — No Hardcoded Pixels
+
+**Never use hardcoded `px` values for the main window or layout dimensions.** The NUI must scale across different screen resolutions. Use:
+
+- `min(92vw, 1210px)` for width (scales with viewport, caps at 1210px)
+- `min(85vh, 750px)` for height (scales with viewport, caps at 750px)
+- CSS custom properties for spacing and sizing where possible
+- Relative units (`rem`, `em`, `%`, `vw`, `vh`) over absolute `px`
+
+This ensures the UI works on everything from 720p ultrawide to 4K displays.

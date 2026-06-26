@@ -1,0 +1,194 @@
+/* ============================================================
+   EasyAdmin NUI -- Styles Entry Point
+   Tailwind CSS v4 utilities + component styles
+   ============================================================ */
+
+/* -- Tailwind v4 (includes preflight, theme, utilities) -- */
+@import "tailwindcss";
+
+/* -- Base resets & tokens -- */
+@import './base.css';
+@import './tokens.css';
+
+/* -- Component styles -- */
+@import './layout.css';
+@import './collapse.css';
+@import './form-controls.css';
+@import './player-actions.css';
+@import './misc.css';
+@import './extra.css';
+@import './utilities.css';
+@import './components/buttons.css';
+@import './components/cards.css';
+@import './components/inputs.css';
+@import './components/modals.css';
+@import './components/navigation.css';
+@import './components/alerts.css';
+@import './components/avatars.css';
+@import './components/badges.css';
+@import './components/lists.css';
+@import './components/skeletons.css';
+@import './components/warning-overlay.css';
+@import './components/screenshot-viewer.css';
+@import './components/screenshot-capture.css';
+@import './components/stream-viewer.css';
+@import './components/timeline-entry.css';
+@import './pages/resources.css';
+@import './pages/profiler.css';
+@import './pages/player-detail.css';
+@import './pages/network-monitor.css';
+@import './pages/statistics.css';
+@import './pages/reports.css';
+@import './pages/server.css';
+
+/* -- Design System Tokens (Tailwind v4 @theme) -- */
+@theme {
+  /* -- Brand colors -- */
+  --color-brand-dark: #0a0e14;
+  --color-brand-blue: #1e56d0;
+  --color-brand-blue-light: #3b82f6;
+  --color-brand-teal: #4a8db7;
+  --color-brand-glow: rgba(59, 130, 246, 0.3);
+  --color-brand-glow-strong: rgba(59, 130, 246, 0.5);
+
+  /* -- Panel backgrounds -- */
+  --color-bg-primary: rgba(10, 14, 20, 0.92);
+  --color-bg-secondary: rgba(13, 17, 24, 0.88);
+  --color-bg-tertiary: rgba(22, 27, 34, 0.75);
+  --color-bg-hover: rgba(48, 54, 61, 0.5);
+  --color-bg-active: rgba(59, 130, 246, 0.15);
+  --color-bg-card: rgba(22, 27, 34, 0.6);
+  --color-bg-card-hover: rgba(30, 35, 44, 0.7);
+  --color-bg-input: rgba(22, 27, 34, 0.8);
+  --color-bg-elevated: rgba(15, 19, 26, 0.95);
+
+  /* -- Semantic backgrounds -- */
+  --color-bg-green: rgba(63, 185, 80, 0.15);
+  --color-bg-red: rgba(248, 81, 73, 0.15);
+  --color-bg-orange: rgba(210, 153, 34, 0.15);
+  --color-bg-purple: rgba(59, 130, 246, 0.15);
+  --color-bg-blue: rgba(88, 166, 255, 0.15);
+
+  /* -- Borders -- */
+  --color-border-default: rgba(48, 54, 61, 0.6);
+  --color-border-subtle: rgba(48, 54, 61, 0.4);
+  --color-border-hover: rgba(59, 130, 246, 0.3);
+  --color-border-glow: rgba(59, 130, 246, 0.4);
+
+  /* -- Text -- */
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #c9d1d9;
+  --color-text-muted: #8b949e;
+  --color-text-heading: #f0f6fc;
+
+  /* -- Tailwind color aliases (map to existing design tokens) -- */
+  --color-fg: #f0f6fc;
+  --color-fg-muted: #8b949e;
+  --color-fg-subtle: #c9d1d9;
+  --color-surface: #0a0e14;
+  --color-surface-muted: #161b22;
+  --color-surface-hover: #30363d;
+  --color-ring: #3b82f6;
+  --color-input-bg: #161b22;
+
+  /* -- Semantic accents -- */
+  --color-accent-purple: #3b82f6;
+  --color-accent-green: #3fb950;
+  --color-accent-red: #f85149;
+  --color-accent-orange: #d29922;
+  --color-accent-yellow: #e3b341;
+  --color-accent-blue: #58a6ff;
+  --color-accent-magenta: #4a8db7;
+
+  /* -- Spacing (4px base) -- */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+
+  /* -- Typography -- */
+  --font-family-sans: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, sans-serif;
+  --font-family-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --text-xs: 0.917em;
+  --text-sm: 1em;
+  --text-base: 1.083em;
+  --text-lg: 1.167em;
+  --text-xl: 1.333em;
+  --text-2xl: 1.667em;
+  --text-3xl: 2em;
+  --text-heading: 2.333em;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* -- Radius -- */
+  --radius-sm: 8px;
+  --radius: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 999px;
+
+  /* -- Shadows -- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+  --shadow-glow-strong: 0 0 30px rgba(59, 130, 246, 0.5);
+
+  /* -- Z-index -- */
+  --z-topbar: 5;
+  --z-sidebar: 10;
+  --z-window: 100;
+  --z-overlay: 150;
+  --z-toast: 200;
+  --z-9999: 9999;
+  --z-10000: 10000;
+
+  /* -- Transitions -- */
+  --duration-fast: 120ms;
+  --duration: 180ms;
+  --duration-slow: 280ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* -- Blur -- */
+  --blur-sm: 8px;
+  --blur: 16px;
+  --blur-lg: 24px;
+
+  /* -- Letter spacing -- */
+  --letter-spacing-section: 0.08em;
+
+  /* -- Keyframes -- */
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+  --animate-stream-pulse: stream-pulse 1.5s ease-in-out infinite;
+  --animate-slide-down: slide-down 0.15s ease-out;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes stream-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

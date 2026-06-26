@@ -1,0 +1,132 @@
+/* ============================================================
+   Collapsible identifiers card
+   ============================================================ */
+
+.card-identifiers {
+  padding: 0;
+  overflow: hidden;
+}
+
+.card-identifiers-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-section);
+  font-weight: var(--font-semibold);
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-section);
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.card-identifiers-toggle:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.card-identifiers-toggle:active {
+  opacity: 0.85;
+}
+
+.card-identifiers-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--space-4) var(--space-4);
+  list-style: none;
+  margin: 0;
+}
+
+/* ============================================================
+   Player actions — grouped layout
+   ============================================================ */
+
+.player-actions-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+/* ---- Action group container ---- */
+
+.player-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---- Group label ---- */
+
+.player-action-group-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-section);
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Group grid ---- */
+
+.player-action-group-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+/* ---- Group action button ---- */
+
+/* Uses .panel-btn base (see inputs.css). Adds justify-content and line-height. */
+
+.player-action-group-btn {
+  justify-content: flex-start;
+  line-height: 1;
+}
+
+.player-action-group-btn-active {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: var(--accent-blue);
+}
+
+/* "Coming soon" state — visually disabled (faded, no-hover) but stays
+   hoverable so the native title tooltip ("still in development...") can fire.
+   A truly disabled button gets pointer-events:none which would suppress the
+   tooltip. Declared after inputs.css so these hover rules win the cascade
+   over .panel-btn:hover at equal specificity. */
+.player-action-group-btn-soon {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.player-action-group-btn-soon:hover {
+  /* Match the non-hover .panel-btn look so the button stays inert. */
+  background: rgba(30, 35, 44, 0.95);
+  border-color: rgba(60, 70, 85, 0.8);
+  color: var(--text-primary);
+}
+
+.player-action-group-btn-label {
+  line-height: 1;
+}
+
+/* ============================================================
+   Player discipline buttons (warn / kick / ban)
+   ============================================================ */
+
+.player-discipline-buttons {
+  display: flex;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}

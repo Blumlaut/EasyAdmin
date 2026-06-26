@@ -1,69 +1,165 @@
 # EasyAdmin Documentation
 
-![EasyAdmin Logo](https://user-images.githubusercontent.com/13604413/129143671-3ab6a643-faf0-479d-8b97-af71ffb5193c.png)
-
-## 👋 Welcome
-
-Welcome to the **EasyAdmin** documentation!  
-EasyAdmin is a powerful and highly customizable administration system for **FiveM** and **RedM** servers.  
-
-These docs will guide you through **configuration**, **usage**, **customization**, and **expanding** EasyAdmin with new features.
+EasyAdmin is an administration system for FiveM and RedM servers. It provides a graphical interface for managing players, bans, reports, server resources, and more.
 
 ---
 
-## 🖥️ Features
+## Quick Start
 
-EasyAdmin is packed with features that help server admins manage their communities efficiently. Here's a list of some core features:
+If you are setting up EasyAdmin for the first time, follow these steps in order:
 
-- **Basic Admin Tools**: Kick, Temp/Perm Ban, Mute, Teleport, Slap, Freeze Player, and Issue Warnings.
-- **Player Screenshots**: Take screenshots of other players' games (requires `screenshot-basic`).
-- **Banlist System**: A robust system to prevent ban evasion.
-- **Server Settings GUI**: Modify server settings through a graphical interface.
-- **Report/Admin Call System**: View and handle reports or admin calls via a GUI.
-- **Action History**: Keeps an audit trail of moderation actions taken against each player.
-- **Admin Notes**: Leave persistent notes on players for other admins to see.
-- **Permission System**: Uses FiveM's built-in ACE system for granular control.
-- **Permission Editor**: Edit permissions in real-time and save to config.
-- **Server Tools**: Clean up spawned vehicles, peds, and objects.
-- **Developer API**: Communicate with EasyAdmin through a developer API.
-- **Multi-language Support**: Translations in 7 languages, community-driven.
-- **Active Development**: Actively supported and updated since 2017.
-- **Plugin Support**: Add new functionality via plugins.
-- **Discord Integration**: Includes Discord ACE permissions, chat bridge, commands, and logs.
+1. [Install EasyAdmin](install) -- Download, extract, and start the resource
+2. [Add yourself as an admin](install#adding-an-admin) -- Grant your identifier admin access
+3. [Set your keybind](configuration/basic#menu-keybind) -- Choose a key to open the menu
+4. [Configure webhooks](configuration/webhooks) -- Set up Discord notifications
+5. [Set up the Discord bot](discord/bot-setup) -- Optional, for remote management
 
-![EasyAdmin Interface](https://user-images.githubusercontent.com/13604413/126916981-1680e5ac-e024-467b-aad3-a5a9658449e0.png)
+Each step links to a detailed guide.
 
 ---
 
-## 🔧 Installation
+## I Am a...
 
-For step-by-step installation instructions, see our [Installation Guide](install.md).
+### Server Owner
 
----
+You want full control over your server, including moderation tools, Discord integration, and server management.
 
-## 🤷‍♂️ Support
+<div class="card-grid">
 
-- **Discord Support**: Join our [Support Discord](https://discord.gg/qq82ZU36XZ) for help and updates.
-- **Issue Tracker**: Report bugs or feature requests on our [GitHub Issues page](https://github.com/Blumlaut/EasyAdmin/issues/new).
-
----
-
-## ✨ Contributing
-
-EasyAdmin and its documentation are **open source**.
-
-- Found a typo or want to improve a page?  
-  Click the **"Edit"** button at the top right and create a **Pull Request**.
-- All contributions are welcome! ![contribution emoji](https://cdn.discordapp.com/emojis/652536385500086284.png?size=20)
-
----
-
-## ⚡ Host with ZAP-Hosting
-
-You can rent your own **FiveM server** with **EasyAdmin pre-installed** from [ZAP-Hosting](https://zap-hosting.com/easyadmin).  
-
-**Use the code `EasyAdmin` for 20% off your next order!**
-
-<a href='https://zap-hosting.com/easyadmin'>
-  <img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting">
+<a class="card" href="install">
+<div class="card-icon">&#x1F4E5;</div>
+<div class="card-title">Installation</div>
+<div class="card-desc">Set up EasyAdmin on your server in minutes.</div>
 </a>
+
+<a class="card" href="permissions">
+<div class="card-icon">&#x1F512;</div>
+<div class="card-title">Permissions</div>
+<div class="card-desc">Configure admin roles and access levels.</div>
+</a>
+
+<a class="card" href="configuration/basic">
+<div class="card-icon">&#x2699;</div>
+<div class="card-title">Configuration</div>
+<div class="card-desc">Set up webhooks, ban screens, and core options.</div>
+</a>
+
+<a class="card" href="discord/bot-setup">
+<div class="card-icon">&#x1F4E6;</div>
+<div class="card-title">Discord Bot</div>
+<div class="card-desc">Manage your server from Discord.</div>
+</a>
+
+</div>
+
+### Moderator
+
+You need to manage players, handle reports, and monitor server activity.
+
+<div class="card-grid">
+
+<a class="card" href="nui/pages">
+<div class="card-icon">&#x1F465;</div>
+<div class="card-title">Player Management</div>
+<div class="card-desc">Kick, ban, mute, freeze, and spectate players.</div>
+</a>
+
+<a class="card" href="features/ban-list">
+<div class="card-icon">&#x1F6AB;</div>
+<div class="card-title">Ban List</div>
+<div class="card-desc">Search, edit, and manage bans.</div>
+</a>
+
+<a class="card" href="features/reports">
+<div class="card-icon">&#x1F6A9;</div>
+<div class="card-title">Reports</div>
+<div class="card-desc">Review and process player reports.</div>
+</a>
+
+<a class="card" href="features/action-history">
+<div class="card-icon">&#x23F2;</div>
+<div class="card-title">Action History</div>
+<div class="card-desc">View moderation history for any player.</div>
+</a>
+
+</div>
+
+### Developer
+
+You want to extend EasyAdmin with custom plugins, integrations, or exports.
+
+<div class="card-grid">
+
+<a class="card" href="plugins/plugin-api">
+<div class="card-icon">&#x1F527;</div>
+<div class="card-title">Plugin API</div>
+<div class="card-desc">Build runtime plugins that extend the NUI with schema-driven UI.</div>
+</a>
+
+<a class="card" href="nui/design-system">
+<div class="card-icon">&#x1F4BB;</div>
+<div class="card-title">NUI Architecture</div>
+<div class="card-desc">React/TypeScript SPA, communication with Lua, design system.</div>
+</a>
+
+<a class="card" href="reference/convar-reference">
+<div class="card-icon">&#x1F4DD;</div>
+<div class="card-title">Convar Reference</div>
+<div class="card-desc">All configuration variables with defaults and types.</div>
+</a>
+
+<a class="card" href="i18n/translating">
+<div class="card-icon">&#x1F310;</div>
+<div class="card-title">Translating</div>
+<div class="card-desc">Add or update language files.</div>
+</a>
+
+</div>
+
+---
+
+## Common Tasks
+
+Find what you need by task:
+
+| Task | Guide |
+|------|-------|
+| Ban a player | [Ban List](features/ban-list) |
+| Set up Discord notifications | [Webhooks](configuration/webhooks) |
+| Add a Discord bot | [Bot Setup](discord/bot-setup) |
+| Configure permissions | [Permissions Overview](permissions/index) |
+| Edit a ban | [Editing Bans](features/ban-list#editing-bans) |
+| Unban a player | [Unbanning](features/ban-list#unbanning) |
+| Handle player reports | [Reports](features/reports) |
+| Set up chat reminders | [Reminders](features/reminders-and-shortcuts#chat-reminders) |
+| Add reason shortcuts | [Shortcuts](features/reminders-and-shortcuts#reason-shortcuts) |
+| Enable the allowlist | [Allowlist](features/allowlist) |
+| Change the menu key | [Keybind](configuration/basic#menu-keybind) |
+| Monitor server resources | [Resource Monitor](features/resource-monitor) |
+| View player statistics | [Player Statistics](features/player-statistics) |
+| Check network stats | [Network Monitor](features/network-monitor) |
+| Update EasyAdmin | [Updating](updates/updating) |
+
+---
+
+## Documentation Structure
+
+| Section | Contents |
+|---------|----------|
+| **Getting Started** | Installation, basic configuration, permissions setup |
+| **Discord Integration** | Bot setup, commands, logging, chat bridge, server status |
+| **Configuration** | Webhooks, commands, action history, backups, shortcuts, advanced options |
+| **Features** | Ban list, reports, screenshots, reminders, statistics, monitoring tools |
+| **NUI** | Design system, page descriptions, known issues |
+| **Plugins** | Runtime plugin system — schema-driven UI extensions |
+| **Reference** | Complete convar, permission, and command listings |
+| **Updates** | How to update EasyAdmin and handle breaking changes |
+| **Troubleshooting** | Common issues and solutions |
+
+---
+
+## Need Help?
+
+- [GitHub Issues](https://github.com/Blumlaut/EasyAdmin/issues) -- Report bugs or request features
+- [Troubleshooting](troubleshooting) -- Common problems and solutions
+- [Discord Community](https://discord.gg/easyadmin) -- Get help from the community

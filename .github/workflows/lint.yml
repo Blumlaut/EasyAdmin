@@ -24,12 +24,15 @@ jobs:
           node-version: 22
 
       - name: Install Node.js dependencies
-        run: cd src && npm ci
+        run: cd bot && npm ci
 
       - name: Configure Git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Typecheck bot
+        run: cd bot && npm run typecheck
 
       - name: Run linters
         uses: rkuykendall/lint-action@master
@@ -37,4 +40,4 @@ jobs:
           auto_fix: false
           commit_message: "style: Fix code style issues with ${linter}"
           eslint: true
-          eslint_dir: "src/"
+          eslint_dir: "bot/"

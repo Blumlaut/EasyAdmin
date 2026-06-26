@@ -1,0 +1,22 @@
+{
+  "name": "easyadmin",
+  "private": true,
+  "version": "7.52",
+  "scripts": {
+    "build": "npm run build:bot && npm run build:nui",
+    "build:bot": "npm --prefix bot run build",
+    "build:nui": "npm --prefix nui run build",
+    "install:all": "npm --prefix bot i --include=dev --legacy-peer-deps && npm --prefix nui i --include=dev --legacy-peer-deps",
+    "lint:all": "npm --prefix bot run lint && npm --prefix nui run check",
+    "lint:bot": "npm --prefix bot run lint",
+    "lint:nui": "npm --prefix nui run check",
+    "typecheck": "npm run typecheck:bot && npm run typecheck:nui",
+    "typecheck:bot": "npm --prefix bot run typecheck",
+    "typecheck:nui": "npm --prefix nui run typecheck",
+    "test:nui": "npm --prefix nui run test",
+    "watch:all": "node scripts/watch-all.mjs"
+  },
+  "engines": {
+    "node": "^22.0.0"
+  }
+}

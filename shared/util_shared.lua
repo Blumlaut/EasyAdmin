@@ -1,49 +1,3 @@
-permissions = {
-	["player.ban.temporary"] = false,
-	["player.ban.permanent"] = false,
-	["player.ban.view"] = false,
-	["player.ban.edit"] = false,
-	["player.ban.remove"] = false,
-	["player.kick"] = false,
-	["player.spectate"] = false,
-	["player.teleport.single"] = false,
-	["player.slap"] = false,
-	["player.freeze"] = false,
-	["player.bucket.join"] = false,
-	["player.bucket.force"] = false,
-	["player.screenshot"] = false,
-	["player.mute"] = false,
-	["player.warn"] = false,
-	["player.actionhistory.view"] = false,
-	["player.actionhistory.add"] = false,
-	["player.actionhistory.delete"] = false,
-	["player.adminnotes.view"] = false,
-	["player.adminnotes.add"] = false,
-	["player.adminnotes.delete"] = false,
-	["player.teleport.everyone"] = false,
-	["player.reports.view"] = false,
-	["player.reports.claim"] = false,
-	["player.reports.process"] = false,
-
-	["bot.history"] = false,
-	["bot.notes"] = false,
-	
-	["server.cleanup.cars"] = false,
-	["server.cleanup.props"] = false,
-	["server.cleanup.peds"] = false,
-	["server.shortcut.add"] = false,
-	["server.reminder.add"] = false,
-	["server.announce"] = false,
-	["server.convars"] = false,
-	["server.resources.start"] = false,
-	["server.resources.stop"] = false,
-	["server.chat"] = false,
-	
-	["immune"] = false,
-	["anon"] = false,
-}
-
-
 function PrintDebugMessage(msg,level)
 	loglevel = (GetConvarInt("ea_logLevel", 1))
 	if not level or not tonumber(level) then level = 3 end
@@ -90,34 +44,7 @@ if not IsDuplicityVersion() then
 		cb('ok')
 	end)
 
-	function ttsSpeechItem(item)
-		local ttsText = ""
-		if not item or GetResourceKvpInt('ea_tts') == 0 then return end
-		if type(item.Text) == "table" then
-			if item.Text._Text then
-				ttsText = item.Text._Text
-				if item.Label then
-					ttsText = ttsText .. ", " .. item.Label.Text._Text
-				end
-			end
-		elseif type(item.Text) == "function" then
-			ttsText = item.Base.Text._Text
-			if item.Checked == true then
-				ttsText = ttsText .. ", Checked"
-			elseif item.Checked == false then
-				ttsText = ttsText .. ", Unchecked"
-			end
-			if item.ItemText then 
-				ttsText = ttsText .. ", " .. item.ItemText._Text
-			end
-		end
-		SendNUIMessage({action= "speak", text=ttsText})
-	end
-	
-	function ttsSpeechText(text)
-		if not text or GetResourceKvpInt('ea_tts') == 0 then return end
-		SendNUIMessage({action= "speak", text=text})
-	end	
+
 end
 
 
@@ -160,7 +87,7 @@ end
 
 function copyToClipboard(text)
 	SendNUIMessage({action= "clip", text=text})
-	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("copiedtoclipboard"))
+	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Text copied to Clipboard!"))
 end
 
 function DoesPlayerHavePermission(player, object)
@@ -210,25 +137,7 @@ end
 exports('GetVersion', GetVersion)
 
 
-function loadLanguageStrings()
-	local strfile = LoadResourceFile(GetCurrentResourceName(), "language/"..GetConvar("ea_LanguageName", "en")..".json")
-	if strfile then
-		strings = json.decode(strfile)[1]
-	else
-		strings = {language=GetConvar("ea_LanguageName", "en")}
-	end
-end
-
-function GetLocalisedText(string)
-	if not strings then return "Strings not Loaded yet!" end
-	if not string then return "No String!" end
-	if strings[string] then
-		return strings[string]
-	else
-		return "String "..string.." not found in "..strings.language
-	end
-end
-exports('GetLocalisedText', GetLocalisedText)
+-- i18n functions (GetLocalisedText, I18nLoad, I18nSet, I18nT) are now in shared/i18n.lua
 
 function formatDateString(string)
 	local dateFormat = GetConvar("ea_dateFormat", '%d/%m/%Y 	%H:%M:%S')
@@ -256,24 +165,6 @@ function formatRightString(thisstring, customWidth)
 	end
 
 	return thisstring
-end
-
-
--- some util funcs so i dont have to mess with NativeUI Source Code.
-function getMenuItemTitle(item)
-	if (item.Base and type(item.Base.Text) == "table" and item.Base.Text._Text) then
-		return item.Base.Text._Text
-	elseif (item.Text and type(item.Text) == "table" and item.Text._Text) then
-		return item.Text._Text
-	end
-end
-
-function setMenuItemTitle(item,text)
-	if (item.Base and type(item.Base.Text) == "table" and item.Base.Text._Text) then
-		item.Base.Text._Text = text
-	elseif (item.Text and type(item.Text) == "table" and item.Text._Text) then
-		item.Text._Text = text
-	end
 end
 
 

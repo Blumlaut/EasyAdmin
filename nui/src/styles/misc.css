@@ -1,0 +1,76 @@
+/* ============================================================
+   Report color coding
+   ============================================================ */
+
+.report-normal {
+  border-left: 3px solid var(--accent-yellow);
+}
+
+.report-emergency {
+  border-left: 3px solid var(--accent-red);
+}
+
+.report-claimed {
+  border-left: 3px solid var(--accent-green);
+}
+
+/* ============================================================
+   Two field prompt (e.g. set convar)
+   ============================================================ */
+
+.two-field-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ============================================================
+   Empty state
+   ============================================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.empty-state-icon-orange {
+  background: var(--bg-orange);
+}
+
+.empty-state-icon-red {
+  background: var(--bg-red);
+}
+
+.avatar-report {
+  background: var(--bg-orange);
+}
+
+.avatar-report-claimed {
+  background: var(--bg-green);
+}
+
+.avatar-report-emergency {
+  background: var(--bg-red);
+}
+
+.report-id-prefix {
+  margin-right: var(--space-1);
+}
+

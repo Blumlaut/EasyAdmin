@@ -14,30 +14,39 @@ lua54 'yes'
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 node_version '22'
 
+shared_script 'shared/permissions.lua'
+shared_script 'shared/i18n.lua'
 shared_script 'shared/util_shared.lua'
+shared_script 'shared/kvp.lua'
+shared_script 'shared/plugin_api.lua'
+client_script 'client/plugin_api.lua'
+server_script 'server/plugin_api.lua'
 
 server_scripts {
+    "server/lib/*.lua",
+    "server/init/*.lua",
+    "server/core/*.lua",
     "server/storage.lua",
+    "server/stats/*.lua",
+    "server/features/*.lua",
     "server/*.lua",
-    "dist/*.js",
-    "plugins/**/*_shared.lua",
-    "plugins/**/*_server.lua"
+    "bot/dist/bot.js"
 }
 
 client_scripts {
-    "dependencies/NativeUI.lua",
-    "dependencies/NativeUI-rdr3.lua",
-    "dependencies/Controls.lua",
-    "client/*.lua",
-    "plugins/**/*_shared.lua",
-    "plugins/**/*_client.lua"
+    "client/init/i18n.lua",
+    "client/init/globals.lua",
+    "client/nui/*.lua",
+    "client/gui_nui.lua",
+    "client/*.lua"
 }
 
-ui_page "dependencies/nui/index.html"
+ui_page "nui/dist/index.html"
 
 files {
     "dependencies/images/*.png",
-    "dependencies/nui/**/*"
+    "dependencies/nui/**/*",
+    "nui/dist/**/*",
 }
 
 dependencies {
@@ -60,8 +69,12 @@ convar_category 'EasyAdmin' {
         { "Set a custom DateTime format", "$ea_dateFormat", "CV_STRING", "%d/%m/%Y     %H:%M:%S" },
         { "Image Uploader", "$ea_screenshoturl", "CV_STRING", "none" },
         { "Screenshot Field Name", "$ea_screenshotfield", "CV_STRING", "files[]" },
-        { "JSON String arguments", "$ea_screenshotOptions", "CV_STRING", "{}" },
         { "Screenshot on Report", "$ea_enableReportScreenshots", "CV_BOOL", "true" },
+        { "Screenshot Max Resolution (px, longer dimension)", "$ea_screenshotMaxResolution", "CV_INT", "1280" },
+        { "Screenshot Quality (0.0-1.0)", "$ea_screenshotQuality", "CV_FLOAT", "0.8" },
+        { "Stream Max Resolution (px, longer dimension)", "$ea_streamMaxResolution", "CV_INT", "640" },
+        { "Stream Target FPS", "$ea_streamTargetFps", "CV_INT", "8" },
+        { "Stream STUN/TURN Servers (comma-separated)", "$ea_streamStunServers", "CV_STRING", "stun:stun.l.google.com:19302" },
         { "Webhook Identifier", "$ea_logIdentifier", "CV_STRING", "steam" },
         { "Enable calladmin Command", "$ea_enableCallAdminCommand", "CV_BOOL", "true" },
         { "Enable report Command", "$ea_enableReportCommand", "CV_BOOL", "true" },
@@ -92,6 +105,7 @@ convar_category 'EasyAdmin' {
         { "Dangerous Dev Mode", "$ea_dangerousDevMode", "CV_BOOL", "false" },
         { "Enable Action History", "$ea_enableActionHistory", "CV_BOOL", "true" },
         { "Action History Expiry", "$ea_actionHistoryExpiry", "CV_INT", "30" }, -- Recommended time is 30 days,
-        { "Enable Admin Notes", "$ea_enableAdminNotes", "CV_BOOL", "true" }
+        { "Enable Admin Notes", "$ea_enableAdminNotes", "CV_BOOL", "true" },
+        { "Profiler Endpoint Override", "$ea_profilerEndpoint", "CV_STRING", "" },
     }
 }

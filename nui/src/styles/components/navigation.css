@@ -1,0 +1,273 @@
+/* ============================================================
+   Navigation container
+   ============================================================ */
+
+.navigation {
+  display: flex;
+}
+
+.navigation--vertical {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navigation--horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: max-content;
+}
+
+/* ============================================================
+   Navigation item
+   ============================================================ */
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  margin: var(--space-1) var(--space-3);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: inherit;
+  width: calc(100% - var(--space-3) * 2);
+  text-align: left;
+  letter-spacing: 0.01em;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.nav-item-active {
+  background: var(--bg-active);
+  color: var(--brand-blue-light);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* Dropdown children nav items — must come before :disabled pseudo-selectors */
+.nav-dropdown-children .nav-item {
+  position: relative;
+  margin-left: var(--space-5);
+  margin-right: var(--space-3);
+  padding-left: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.nav-dropdown-children .nav-item::before {
+  content: '';
+  position: absolute;
+  left: var(--space-5);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-subtle);
+  pointer-events: none;
+}
+
+/* Horizontal nav item overrides — must come before :disabled pseudo-selectors */
+.navigation--horizontal .nav-item {
+  width: auto;
+  min-width: max-content;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Higher-specificity :disabled states come after all base .nav-item overrides */
+.nav-item:disabled,
+.nav-item[disabled] {
+  color: var(--text-muted);
+  cursor: default;
+  opacity: 0.5;
+}
+
+.nav-item:disabled:hover,
+.nav-item[disabled]:hover {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.nav-item-label {
+  flex: 1;
+}
+
+.nav-item-badge {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: var(--font-normal);
+}
+
+/* ============================================================
+   Navigation dropdown
+   ============================================================ */
+
+.nav-dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-dropdown-toggle {
+  /* No extra padding — inherits from .nav-item */
+}
+
+.nav-dropdown-chevron {
+  transition: transform 200ms ease-out;
+  flex-shrink: 0;
+}
+
+.nav-dropdown-chevron-open {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-parent-active {
+  background: var(--bg-active);
+  color: var(--brand-blue-light);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* Horizontal mode: dropdown parent buttons never highlight —
+   the border wrapper handles grouping, only the active child highlights */
+.navigation--horizontal .nav-dropdown-parent-active {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Animated expand/collapse using grid-template-rows trick.
+   Transitions from 0fr to 1fr for smooth height animation
+   without needing JS measurement. */
+.nav-dropdown-children {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease-out;
+}
+
+.nav-dropdown-children-open {
+  grid-template-rows: 1fr;
+}
+
+.nav-dropdown-children-inner {
+  overflow: hidden;
+}
+
+/* ============================================================
+   Navigation separator (horizontal divider)
+   ============================================================ */
+
+.nav-separator {
+  height: 0;
+  margin: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ============================================================
+   Navigation section header
+   ============================================================ */
+
+.nav-header {
+  font-size: var(--text-section);
+  font-weight: var(--font-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-section);
+  padding: var(--space-3) var(--space-4) var(--space-1);
+  margin: var(--space-1) var(--space-3) 0;
+}
+
+/* ============================================================
+   Horizontal overrides
+   ============================================================ */
+
+.navigation--horizontal .nav-dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navigation--horizontal .nav-dropdown-children {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 200ms ease-out;
+  min-width: 0;
+  margin-left: 0;
+}
+
+.navigation--horizontal .nav-dropdown-children-open {
+  grid-template-columns: 1fr;
+}
+
+/* Border wrapper around parent + children */
+.navigation--horizontal .nav-dropdown-parent {
+  padding: 1px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius);
+}
+
+/* In horizontal mode, parent buttons never get a background highlight —
+   the border wrapper handles grouping, only the active child highlights */
+.navigation--horizontal .nav-dropdown-parent .nav-dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.navigation--horizontal .nav-dropdown-children-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.navigation--horizontal .nav-dropdown-children .nav-item {
+  width: auto;
+  min-width: max-content;
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.navigation--horizontal .nav-dropdown-children .nav-item::before {
+  display: none;
+}
+
+.navigation--horizontal .nav-dropdown-children .nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.navigation--horizontal .nav-dropdown-children .nav-item-active {
+  background: var(--bg-active);
+  color: var(--brand-blue-light);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.navigation--horizontal .nav-dropdown-children .nav-dropdown-chevron {
+  transform: rotate(-90deg);
+}
+
+.navigation--horizontal .nav-dropdown-children .nav-dropdown-chevron-open {
+  transform: rotate(0deg);
+}
+
+.navigation--horizontal .nav-separator {
+  width: 1px;
+  height: 28px;
+  margin: 0 var(--space-2);
+  border-top: none;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.navigation--horizontal .nav-header {
+  margin: 0 var(--space-2) 0 0;
+  padding: 0 var(--space-2);
+  white-space: nowrap;
+}

@@ -15,6 +15,12 @@ local banlist = {}
 local actions = {}
 local notes = {}
 
+local BANLIST_FILE = "banlist.json"
+local ACTIONS_FILE = "data/actions.json"
+local LEGACY_ACTIONS_FILE = "actions.json"
+local NOTES_FILE = "data/notes.json"
+local LEGACY_NOTES_FILE = "notes.json"
+
 -- local function updateList(filename)
 --     return
 -- end
@@ -34,19 +40,39 @@ local function awaitReady()
     end
 end
 
-local function loadJsonFile(filename, currentVersion)
-    local content = LoadResourceFile(GetCurrentResourceName(), filename)
-    if not content then
-        PrintDebugMessage(filename .. " file was missing, we created a new one.", 2)
-        content = json.encode({})
+local function loadJsonFileOrNil(filename)
+    return LoadJsonResourceFile(filename, nil)
+end
+
+local function loadJsonFileOrDefault(filename)
+    local data = loadJsonFileOrNil(filename)
+    if data ~= nil then
+        return data
     end
 
-    return content
+    PrintDebugMessage(filename .. " file was missing, we created a new one.", 2)
+    return {}
+end
+
+local function loadJsonWithLegacyFallback(primaryFilename, legacyFilename)
+    local primary = loadJsonFileOrNil(primaryFilename)
+    if primary ~= nil then
+        return primary
+    end
+
+    local legacy = loadJsonFileOrNil(legacyFilename)
+    if legacy ~= nil then
+        PrintDebugMessage(string.format("Migrating %s to %s on next save.", legacyFilename, primaryFilename), 2)
+        SaveJsonResourceFile(primaryFilename, legacy)
+        return legacy
+    end
+
+    PrintDebugMessage(primaryFilename .. " file was missing, we created a new one.", 2)
+    return {}
 end
 
 local function saveJsonFile(filename, data)
-    local saved = SaveResourceFile(GetCurrentResourceName(), filename, json.encode(data, {indent = true}), -1)
-    if not saved then
+    if not SaveJsonResourceFile(filename, data) then
         PrintDebugMessage("^1Saving " .. filename .. " failed! Please check if EasyAdmin has Permission to write in its owner folder!^7", 1)
     end
 end
@@ -62,18 +88,13 @@ local function nextId(list)
     return max_id + 1
 end
 
--- Returns all entries from `list` whose .idents table shares at least one value with `idents`
+-- Returns all entries from `list` whose .idents table shares identifiers with `idents`
+-- Uses DoIdentifiersMatch with minMatches=1 (any overlap means the entry belongs to this player)
 local function findByIdentifiers(list, idents)
-    local playerHasIdent = {}
-    for _, id in ipairs(idents) do playerHasIdent[id] = true end
-
     local results = {}
     for _, entry in ipairs(list) do
-        for _, ident in ipairs(entry.idents) do
-            if playerHasIdent[ident] then
-                results[#results + 1] = entry
-                break
-            end
+        if DoIdentifiersMatch(entry.idents, idents, 1) then
+            results[#results + 1] = entry
         end
     end
     return results
@@ -89,7 +110,7 @@ Storage = {
     getBan = function(banId)
         awaitReady()
         for i, ban in ipairs(banlist) do
-            if ban.banid == banId then
+            if tostring(ban.banid) == tostring(banId) then
                 return ban
             end
         end
@@ -120,15 +141,15 @@ Storage = {
             expiryString = expiryString,
             type = type,
         })
-        saveJsonFile("banlist.json", banlist)
+        saveJsonFile(BANLIST_FILE, banlist)
         syncBanlistView()
     end,
     updateBan = function(id, newData)
         if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
             for i, ban in pairs(banlist) do
-                if ban.banid == newData.banid then
+                if tostring(ban.banid) == tostring(newData.banid) then
                     banlist[i] = newData
-                    saveJsonFile("banlist.json", banlist)
+                    saveJsonFile(BANLIST_FILE, banlist)
                     syncBanlistView()
                     break
                 end
@@ -137,15 +158,15 @@ Storage = {
     end,
     updateBanlist = function(newList)
         banlist = newList
-        saveJsonFile("banlist.json", banlist)
+        saveJsonFile(BANLIST_FILE, banlist)
         syncBanlistView()
     end,
     removeBan = function(banId)
         awaitReady()
         for i, ban in ipairs(banlist) do
-            if ban.banid == banId then
+            if tostring(ban.banid) == tostring(banId) then
                 table.remove(banlist, i)
-                saveJsonFile("banlist.json", banlist)
+                saveJsonFile(BANLIST_FILE, banlist)
                 syncBanlistView()
                 return true
             end
@@ -159,7 +180,7 @@ Storage = {
                 for index, id in pairs(ban.identifiers) do
                     if identifier == id then
                         table.remove(banlist, i)
-                        saveJsonFile("banlist.json", banlist)
+                        saveJsonFile(BANLIST_FILE, banlist)
                         syncBanlistView()
                         PrintDebugMessage("removed ban as per unbanidentifier func", 4)
                         return
@@ -188,14 +209,14 @@ Storage = {
             moderatorIdents = moderatorIdentifiers,
             banid = banId,
         })
-        saveJsonFile("actions.json", actions)
+        saveJsonFile(ACTIONS_FILE, actions)
     end,
     removeAction = function(actionId)
         awaitReady()
         for i, act in ipairs(actions) do
             if act.id == actionId then
                 table.remove(actions, i)
-                saveJsonFile("actions.json", actions)
+                saveJsonFile(ACTIONS_FILE, actions)
                 return true
             end
         end
@@ -211,14 +232,14 @@ Storage = {
             moderator = moderatorName,
             moderatorIdents = moderatorIdentifiers
         })
-        saveJsonFile("notes.json", notes)
+        saveJsonFile(NOTES_FILE, notes)
     end,
     removeNote = function(noteId)
         awaitReady()
         for i, note in ipairs(notes) do
             if note.id == noteId then
                 table.remove(notes, i)
-                saveJsonFile("notes.json", notes)
+                saveJsonFile(NOTES_FILE, notes)
                 return true
             end
         end
@@ -251,7 +272,7 @@ local function pruneExpiredActions()
         end
     end
     if pruned then
-        saveJsonFile("actions.json", actions)
+        saveJsonFile(ACTIONS_FILE, actions)
     end
 end
 
@@ -259,10 +280,9 @@ Citizen.CreateThread(function()
     -- Load all lists inside pcall: a decode/IO failure must never leave listsReady false,
     -- otherwise awaitReady() (and thus every Storage call) would block indefinitely.
     local ok, err = pcall(function()
-        local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'storage_api_version', 1)
-        banlist = json.decode(loadJsonFile("banlist.json", currentVersion)) or {}
-        actions = json.decode(loadJsonFile("actions.json", currentVersion)) or {}
-        notes = json.decode(loadJsonFile("notes.json", currentVersion)) or {}
+        banlist = loadJsonFileOrDefault(BANLIST_FILE)
+        actions = loadJsonWithLegacyFallback(ACTIONS_FILE, LEGACY_ACTIONS_FILE)
+        notes = loadJsonWithLegacyFallback(NOTES_FILE, LEGACY_NOTES_FILE)
         PrintDebugMessage("Clearing expired actions from action history", 4)
         pruneExpiredActions()
     end)

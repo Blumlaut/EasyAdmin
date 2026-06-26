@@ -1,0 +1,258 @@
+/* ============================================================
+   Network Monitor Page
+   ============================================================ */
+
+.network-card {
+  overflow: hidden;
+}
+
+/* Ensure card headers are always interactive (above skeleton/chart layers) */
+.network-card > .flex {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* Summary grid */
+.network-summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(22vw, 180px), 1fr));
+}
+
+/* Skeleton loaders */
+.network-skeleton-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(22vw, 180px), 1fr));
+}
+
+.network-skeleton-stat {
+  height: 5em;
+}
+
+.network-skeleton-chart {
+  height: 16em;
+}
+
+.network-skeleton-player-chart {
+  height: 10em;
+}
+
+/* Skeleton row (player table) */
+.network-skeleton-row {
+  grid-template-columns: 1.5fr 1fr 0.8fr 0.8fr 0.8fr auto;
+  align-items: center;
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Refresh button */
+.network-refresh-btn {
+  transition: transform var(--transition-fast);
+}
+
+.network-refresh-btn:hover {
+  transform: rotate(90deg);
+}
+
+/* Range filter buttons */
+.network-range-btn {
+  min-width: 2.5em;
+}
+
+/* Table header */
+.network-table-header {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr 0.8fr 0.8fr auto;
+  align-items: center;
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.network-col-name {
+  overflow: hidden;
+}
+
+.network-col-ping,
+.network-col-jitter,
+.network-col-last,
+.network-col-loss {
+  text-align: right;
+}
+
+.network-col-expand {
+  width: 1.5em;
+}
+
+/* Sort buttons */
+.network-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.network-sort-btn:hover {
+  color: var(--text-primary);
+}
+
+.network-sort-icon {
+  opacity: 0.5;
+}
+
+/* Table body */
+.network-table-body {
+  max-height: 24em;
+  overflow-y: auto;
+}
+
+/* Player row */
+.network-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr 0.8fr 0.8fr auto;
+  align-items: center;
+  padding: 0.5em 0.75em;
+  font-size: 0.875em;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  color: inherit;
+  transition: background-color var(--transition-fast);
+}
+
+.network-row:last-child {
+  border-bottom: none;
+}
+
+.network-row:hover {
+  background-color: var(--bg-hover);
+}
+
+.network-row--selected {
+  background-color: var(--bg-active);
+}
+
+.network-row-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.network-row-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Value with color */
+.network-value {
+  font-weight: 600;
+}
+
+/* Expand icon */
+.network-row-expand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+}
+
+.network-expand-icon {
+  transition: transform var(--transition-fast);
+}
+
+.network-expand-icon--open {
+  transform: rotate(90deg);
+}
+
+/* Player detail panel */
+.network-player-detail {
+  padding: 0.75em 1em 0.75em 2.25em;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  animation: networkSlideDown 0.15s ease-out;
+}
+
+@keyframes networkSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.network-player-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5em;
+}
+
+.network-player-detail-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 600;
+  font-size: 0.875em;
+}
+
+/* Badges */
+.network-player-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-bottom: 0.5em;
+}
+
+.badge-network {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15em 0.5em;
+  border-radius: var(--radius-sm);
+  font-size: 0.75em;
+  font-weight: 500;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.badge-network--good {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+}
+
+.badge-network--warn {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+}
+
+.badge-network--bad {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+/* History mini-stats */
+.network-player-history-stats {
+  margin-bottom: 0.5em;
+}
+
+/* Player chart container */
+.network-player-chart {
+  max-height: 18em;
+  overflow: hidden;
+}

@@ -1,28 +1,238 @@
+/* ============================================================
+   EasyAdmin Documentation -- Custom Styles
+   ============================================================ */
+
+/* ---- Layout ---- */
 .md-grid {
-	max-width: 85%;
+	max-width: 90rem;
 }
 
+.md-typeset {
+	font-size: .7rem;
+}
+
+.md-typeset h1 {
+	font-size: 2.2rem;
+	margin-bottom: .4em;
+}
+
+.md-typeset h2 {
+	font-size: 1.6rem;
+	margin-top: 1.6em;
+	margin-bottom: .8em;
+}
+
+.md-typeset h3 {
+	font-size: 1.3rem;
+	margin-top: 1.4em;
+	margin-bottom: .6em;
+}
+
+.md-typeset h4 {
+	font-size: 1.1rem;
+}
+
+/* ---- Horizontal rule as section divider ---- */
+.md-typeset hr {
+	margin: 2.5em 0;
+	border-top: 2px solid var(--md-default-fg-color--lightest);
+}
+
+/* ---- Card Grid ---- */
+.card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1rem;
+	margin: 1.5em 0 2em;
+}
+
+.card {
+	background: var(--md-code-bg-color);
+	border: 1px solid var(--md-default-fg-color--lightest);
+	border-radius: .5rem;
+	padding: 1.25rem;
+	transition: border-color .2s ease, box-shadow .2s ease;
+	display: flex;
+	flex-direction: column;
+	gap: .5rem;
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.card:hover {
+	border-color: var(--md-primary-fg-color);
+	box-shadow: 0 0 .5rem rgba(0,0,0,.1);
+}
+
+.card-icon {
+	font-size: 1.6rem;
+	line-height: 1;
+}
+
+.card-title {
+	font-weight: 700;
+	font-size: .85rem;
+	color: var(--md-default-fg-color);
+}
+
+.card-desc {
+	font-size: .75rem;
+	color: var(--md-default-fg-color--medium);
+	line-height: 1.4;
+	flex-grow: 1;
+}
+
+/* ---- Tables ---- */
+.md-typeset table:not([class]) {
+	font-size: .75rem;
+	border-radius: .4rem;
+	overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+	background: var(--md-primary-fg-color);
+	color: var(--md-primary-bg-color);
+	font-weight: 700;
+	padding: .8em 1em;
+}
+
+.md-typeset table:not([class]) td {
+	padding: .6em 1em;
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) {
+	background: var(--md-code-bg-color);
+}
+
+/* ---- Admonitions ---- */
+.md-typeset .admonition,
+.md-typeset details {
+	font-size: .8rem;
+	border-width: 2px;
+}
+
+.md-typeset .admonition-title,
+.md-typeset details > summary {
+	font-weight: 700;
+	font-size: .85rem;
+}
+
+/* ---- Code blocks ---- */
+.md-typeset code {
+	font-size: .8em;
+	padding: .15em .4em;
+	border-radius: .3em;
+}
+
+.md-typeset pre code {
+	font-size: .85em;
+}
+
+/* ---- Navigation ---- */
 .md-nav {
 	font-size: .73rem;
 	line-height: 1.35;
 }
 
+.md-nav__item .md-nav__item {
+	padding-left: .8rem;
+}
+
+.md-nav--expansion .md-nav__link--active {
+	font-weight: 700;
+}
+
+.md-nav--expansion .md-nav__item--active > .md-nav__link {
+	font-weight: 700;
+}
+
+/* ---- Navigation top ---- */
+.md-nav--primary .md-nav__item {
+	padding: .2rem 0;
+}
+
+.md-nav__link {
+	margin-top: .3em;
+}
+
+/* ---- Search ---- */
+.md-search__input {
+	border-radius: .4rem;
+	font-size: .85rem;
+}
+
+.md-search__form {
+	border-radius: .4rem;
+}
+
+/* ---- Header ---- */
 .md-header__button.md-logo {
 	padding: .15rem;
 }
 
-.md-header__button.md-logo img, .md-header__button.md-logo svg {
-    height: 2rem;
-    width: 2rem;
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+	height: 2rem;
+	width: 2rem;
 }
+
 .md-sidebar {
-	padding-top: 0.4rem;
+	padding-top: .4rem;
 }
 
-.md-nav--integrated > .md-nav__list > .md-nav__item--active .md-nav--secondary {
-	border-left: .05rem solid #575757;
+/* ---- Breadcrumbs ---- */
+.md-crumbs {
+	font-size: .7rem;
 }
 
-.md-nav__link {
-	margin-top: .4em;
+/* ---- Footer ---- */
+.md-footer {
+	background: var(--md-primary-bg-color);
+}
+
+/* ---- Wide table wrapper ---- */
+.md-typeset__scrollwrap {
+	margin-right: -1.5rem;
+}
+
+.md-typeset__table table {
+	min-width: 100%;
+}
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 76.2344em) {
+	.md-nav--primary .md-nav__item {
+		padding: .15rem 0;
+	}
+}
+
+@media screen and (max-width: 59.9375em) {
+	.card-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (max-width: 35em) {
+	.card-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ---- Print ---- */
+@media print {
+	.md-header,
+	.md-footer,
+	.md-nav,
+	.md-sidebar {
+		display: none;
+	}
+
+	.md-typeset .card-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.card {
+		break-inside: avoid;
+	}
 }

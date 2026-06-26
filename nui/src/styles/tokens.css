@@ -1,0 +1,253 @@
+/* ============================================================
+   EasyAdmin NUI -- Design System Tokens
+   All styling must reference these tokens. No raw values.
+   ============================================================ */
+
+/* Tailwind preflight handles margin/padding/box-sizing resets. */
+
+:root {
+  /* -- Brand colors (EasyAdmin blue/teal gradient) -- */
+  --brand-dark: #0a0e14;
+  --brand-blue: #1e56d0;
+  --brand-blue-light: #3b82f6;
+  --brand-teal: #4a8db7;
+  --brand-gradient: linear-gradient(135deg, #1e56d0 0%, #4a8db7 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #1a48b0 0%, #3d7ea8 100%);
+  --brand-glow: rgba(59, 130, 246, 0.3);
+  --brand-glow-strong: rgba(59, 130, 246, 0.5);
+
+  /* -- Panel backgrounds -- */
+  --bg-primary: rgba(10, 14, 20, 0.92);
+  --bg-secondary: rgba(13, 17, 24, 0.88);
+  --bg-tertiary: rgba(22, 27, 34, 0.75);
+  --bg-hover: rgba(48, 54, 61, 0.5);
+  --bg-active: rgba(59, 130, 246, 0.15);
+  --bg-card: rgba(22, 27, 34, 0.6);
+  --bg-card-hover: rgba(30, 35, 44, 0.7);
+  --bg-input: rgba(22, 27, 34, 0.8);
+
+  /* -- Borders -- */
+  --border-color: rgba(48, 54, 61, 0.6);
+  --border-subtle: rgba(48, 54, 61, 0.4);
+  --border-hover: rgba(59, 130, 246, 0.3);
+  --border-glow: rgba(59, 130, 246, 0.4);
+
+  /* -- Text (high contrast) -- */
+  --text-primary: #f0f6fc;
+  --text-secondary: #c9d1d9;
+  --text-muted: #8b949e;
+  --text-heading: #f0f6fc;
+
+  /* -- Semantic accents -- */
+  --accent-purple: var(--brand-blue-light);
+  --accent-green: #3fb950;
+  --accent-red: #f85149;
+  --accent-orange: #d29922;
+  --accent-yellow: #e3b341;
+  --accent-blue: #58a6ff;
+  --accent-magenta: var(--brand-teal);
+
+  /* -- Semantic backgrounds -- */
+  --bg-green: rgba(63, 185, 80, 0.15);
+  --bg-red: rgba(248, 81, 73, 0.15);
+  --bg-orange: rgba(210, 153, 34, 0.15);
+  --bg-purple: rgba(59, 130, 246, 0.15);
+  --bg-blue: rgba(88, 166, 255, 0.15);
+
+  /* -- Spacing (4px base, overridden per-density below) -- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* -- Typography -- */
+  --font-sans: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+
+  /* Text sizes in em — scale with inherited font-size from .ea-window (default 12px) */
+  --text-xs: 0.917em;    /* 11px at 12px base */
+  --text-sm: 1em;        /* 12px */
+  --text-base: 1.083em;  /* 13px */
+  --text-lg: 1.167em;    /* 14px */
+  --text-xl: 1.333em;    /* 16px */
+  --text-2xl: 1.667em;   /* 20px */
+  --text-3xl: 2em;       /* 24px */
+  --text-heading: 2.333em; /* 28px */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* -- Font weights -- */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* -- Radius -- */
+  --radius-sm: 8px;
+  --radius: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 999px;
+
+  /* -- Shadows -- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 20px var(--brand-glow);
+  --shadow-glow-strong: 0 0 30px var(--brand-glow-strong);
+
+  /* -- Z-index -- */
+  --z-topbar: 5;
+  --z-sidebar: 10;
+  --z-window: 100;
+  --z-overlay: 150;
+  --z-toast: 200;
+
+  /* -- Transitions -- */
+  --transition-fast: 120ms ease;
+  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* -- Blur -- */
+  --blur-sm: blur(8px);
+  --blur: blur(16px);
+  --blur-lg: blur(24px);
+
+  /* -- Section header (uppercase, muted) -- */
+  --text-section: 0.917em; /* 11px at 12px base */
+  --letter-section: 0.08em;
+}
+
+/* -- High contrast mode -- */
+
+.high-contrast {
+  --bg-primary: rgba(0, 0, 0, 0.97);
+  --bg-secondary: rgba(0, 0, 0, 0.95);
+  --bg-tertiary: rgba(5, 5, 10, 0.95);
+  --bg-hover: rgba(60, 60, 60, 0.8);
+  --bg-active: rgba(59, 130, 246, 0.3);
+  --bg-card: rgba(10, 10, 15, 0.9);
+  --bg-card-hover: rgba(20, 20, 30, 0.95);
+  --bg-input: rgba(10, 10, 15, 0.95);
+  --border-color: rgba(100, 100, 120, 0.9);
+  --border-subtle: rgba(80, 80, 100, 0.7);
+  --border-hover: rgba(59, 130, 246, 0.6);
+  --border-glow: rgba(59, 130, 246, 0.7);
+  --text-primary: #fff;
+  --text-secondary: #e8ecf0;
+  --text-muted: #b0b8c0;
+  --text-heading: #fff;
+  --accent-blue: #79b8ff;
+  --accent-green: #56d364;
+  --accent-red: #ff6b6b;
+  --accent-orange: #ffb347;
+}
+
+/* -- UI Density (spacing overrides) -- */
+
+/* Cramped: tighter spacing for compact screens (0.6x) */
+.ea-density-cramped {
+  --space-1: 2px;
+  --space-2: 5px;
+  --space-3: 7px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-8: 19px;
+  --space-10: 24px;
+  --space-12: 29px;
+  --space-16: 38px;
+  --space-24: 58px;
+  --space-32: 77px;
+}
+
+/* Cozy: slightly tighter than default (0.8x) */
+.ea-density-cozy {
+  --space-1: 3px;
+  --space-2: 6px;
+  --space-3: 10px;
+  --space-4: 13px;
+  --space-5: 16px;
+  --space-6: 19px;
+  --space-8: 26px;
+  --space-10: 32px;
+  --space-12: 38px;
+  --space-16: 51px;
+  --space-24: 77px;
+  --space-32: 102px;
+}
+
+/* Spacious: more breathing room (1.25x) */
+.ea-density-spacious {
+  --space-1: 5px;
+  --space-2: 10px;
+  --space-3: 15px;
+  --space-4: 20px;
+  --space-5: 25px;
+  --space-6: 30px;
+  --space-8: 40px;
+  --space-10: 50px;
+  --space-12: 60px;
+  --space-16: 80px;
+  --space-24: 120px;
+  --space-32: 160px;
+}
+
+/* Airy: maximum spacing for relaxed reading (1.5x) */
+.ea-density-airy {
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 18px;
+  --space-4: 24px;
+  --space-5: 30px;
+  --space-6: 36px;
+  --space-8: 48px;
+  --space-10: 60px;
+  --space-12: 72px;
+  --space-16: 96px;
+  --space-24: 144px;
+  --space-32: 192px;
+}
+
+/* -- Font size scaling -- */
+
+/* .ea-window sets font-size (default 12px). All text tokens use em and scale automatically. */
+
+
+/* -- Dashboard charts grid -- */
+
+.dashboard-charts-grid {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.dashboard-charts-grid > :first-child {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.dashboard-charts-grid > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  .dashboard-charts-grid {
+    flex-direction: column;
+  }
+
+  .dashboard-charts-grid > :first-child {
+    width: 100%;
+  }
+}

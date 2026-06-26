@@ -1,0 +1,166 @@
+/* ============================================================
+   Input
+   ============================================================ */
+
+.input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  height: 38px;
+  letter-spacing: 0.01em;
+}
+
+.input:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px var(--bg-active);
+  background: var(--bg-tertiary);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* -- Search wrapper -- */
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+
+.search-input {
+  padding-left: 38px;
+}
+
+/* -- Select styling -- */
+
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* ============================================================
+   Panel button (shared base for select-menu-trigger,
+   player-action-group-btn, and similar interactive surfaces)
+   ============================================================ */
+
+.panel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgba(60, 70, 85, 0.8);
+  border-radius: var(--radius);
+  background: rgba(30, 35, 44, 0.95);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+  min-height: 34px;
+}
+
+.panel-btn:hover {
+  background: rgba(45, 55, 72, 0.95);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: var(--text-primary);
+}
+
+.panel-btn:active {
+  opacity: 0.85;
+}
+
+.panel-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* -- SelectMenu (custom dropdown, CEF-safe) -- */
+
+.select-menu-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-menu-trigger {
+  width: 100%;
+  padding-right: var(--space-3);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select-menu-trigger:focus-visible {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px var(--bg-active);
+}
+
+.select-menu-trigger-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select-menu-chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.select-menu-list {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: var(--space-1) 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.7), 0 0 1px var(--brand-glow);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+/* Flip: open downward when there isn't enough space above */
+.select-menu-list-flip {
+  bottom: auto;
+  top: calc(100% + 4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 1px var(--brand-glow);
+}
+
+.select-menu-item {
+  /* Inherits from .menu-item */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select-menu-item-selected {
+  color: var(--brand-blue-light);
+}
+

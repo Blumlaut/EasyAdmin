@@ -15,6 +15,9 @@ blacklist = {}
 -- Ban index for O(1) lookups
 banIndex = {}
 
+-- Next ban ID counter (avoids O(n) scan of the full banlist on every ban)
+local nextBanId = 1
+
 local function rebuildBanIndex()
     banIndex = {}
     for _, ban in ipairs(blacklist) do
@@ -31,11 +34,29 @@ end
 function RebuildBanlistView()
     blacklist = Storage.getBanList()
     rebuildBanIndex()
+
+    -- Reset nextBanId to max existing ID + 1 (avoids gaps when list is replaced, e.g. backup restore)
+    local maxId = 0
+    for _, ban in ipairs(blacklist) do
+        if ban.banid and ban.banid > maxId then
+            maxId = ban.banid
+        end
+    end
+    nextBanId = maxId + 1
 end
 
 function IsSelfBan(banner, target)
     if banner == nil or target == nil then return false end
     return tonumber(banner) == tonumber(target)
+end
+
+local function canModerateBanTarget(src, playerId)
+    if IsSelfBan(src, playerId) and not IsDangerousDevModeEnabled() then
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("You cannot ban yourself."))
+        return false
+    end
+
+    return CanTargetPlayerForModeration(src, playerId)
 end
 
 ---Handles the banning of a player
@@ -46,16 +67,11 @@ end
 RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
     local src = source
     if not playerId or not isPlayerOnline(playerId) then
-        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("invalidplayer"))
+        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("Invalid player."))
         return
     end
-    if IsSelfBan(src, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
-        TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("cantbanself"))
-        return
-    end
-
     if playerId ~= nil and CheckAdminCooldown(src, "ban") then
-        if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and not isPlayerImmune(playerId) then
+        if (DoesPlayerHavePermission(src, "player.ban.temporary") or DoesPlayerHavePermission(src, "player.ban.permanent")) and canModerateBanTarget(src, playerId) then
             SetAdminCooldown(src, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
             local username = getCachedPlayerName(playerId) or getName(playerId, true)
@@ -68,7 +84,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(src) )
+            reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getCachedPlayerName(playerId), banner = getName(src) })
             local banId = GetFreshBanId()
             local moderatorIdentifiers = {}
             if source and source ~= 0 then
@@ -77,10 +93,8 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time())
             Storage.addAction("BAN", getAllPlayerIdentifiers(playerId), reason, getName(src), moderatorIdentifiers, banId)
             PrintDebugMessage("Player "..getName(src,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), getName(src, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
-            DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
-        elseif isPlayerImmune(playerId) then
-            TriggerClientEvent("EasyAdmin:showNotification", src, GetLocalisedText("adminimmune"))
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** banned **{target}**, Reason: {reason}, Ban Expires: {expires}, ID: {id}", { by = getName(src, false, true), target = getCachedPlayerName(playerId), reason = reason, expires = formatDateString(expires), id = tostring(banId) }), "ban", 16711680)
+            DropPlayer(playerId, GetLocalisedText("You have been banned from this Server, Reason: {reason}, Ban Expires: {expires}", { reason = reason, expires = formatDateString(expires) }) )
         end
     end
 end)
@@ -92,12 +106,8 @@ end)
 ---@return nil
 RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expires)
     local src = source
-    if playerId ~= nil and not isPlayerImmune(playerId) and CheckAdminCooldown(source, "ban") then
-        if IsSelfBan(source, playerId) and GetConvar("ea_dangerousDevMode", "false") ~= "true" then
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("cantbanself"))
-            return
-        end
-        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and not isPlayerImmune(playerId) then
+    if playerId ~= nil and CheckAdminCooldown(source, "ban") then
+        if (DoesPlayerHavePermission(source, "player.ban.temporary") or DoesPlayerHavePermission(source, "player.ban.permanent")) and canModerateBanTarget(source, playerId) then
             SetAdminCooldown(source, "ban")
             local bannedIdentifiers = getCachedPlayerIdentifiers(playerId) or getAllPlayerIdentifiers(playerId)
             local username = getCachedPlayerName(playerId) or getName(playerId, true)
@@ -110,15 +120,13 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
                 return false
             end
             
-            reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getCachedPlayerName(playerId), getName(source) )
+            reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getCachedPlayerName(playerId), banner = getName(source) })
             local banId = GetFreshBanId()
             Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
             Storage.addAction("OFFLINE BAN", bannedIdentifiers, reason, getName(source), getAllPlayerIdentifiers(src), banId)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminofflinebannedplayer"), getName(source, false, true), getCachedPlayerName(playerId), reason, formatDateString( expires ) ), "ban", 16711680)
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** offline banned **{target}**, Reason: {reason}, Ban Expires: {expires}", { by = getName(source, false, true), target = getCachedPlayerName(playerId), reason = reason, expires = formatDateString(expires) }), "ban", 16711680)
         end
-    elseif isPlayerImmune(playerId) then
-        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("adminimmune"))
     end
 end)
 
@@ -143,7 +151,7 @@ function addBanExport(playerId,reason,expires,banner)
         if hasPlayerDropped(playerId) then
             offline = true
         end
-        if isPlayerImmune(playerId) then
+        if not CanTargetPlayerForModeration(source, playerId) then
             return false
         end
         bannedIdentifiers = getCachedPlayerIdentifiers(playerId)
@@ -158,7 +166,7 @@ function addBanExport(playerId,reason,expires,banner)
     elseif not expires then
         expires = 10444633200
     end
-    reason = formatShortcuts(reason).. string.format(GetLocalisedText("reasonadd"), getName(tostring(playerId) or "?"), banner or "Unknown" )
+    reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getName(tostring(playerId) or "?"), banner = banner or "Unknown" })
     local banId = GetFreshBanId()
     Storage.addBan(banId, bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
     Storage.addAction("BAN", bannedIdentifiers, reason, banner or "Unknown", getAllPlayerIdentifiers(source), banId)
@@ -167,9 +175,9 @@ function addBanExport(playerId,reason,expires,banner)
     end
 
     local ban = Storage.getBan(banId)
-    SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminbannedplayer"), banner or "Unknown", getName(tostring(playerId) or "?", false, true), reason, formatDateString( expires ), tostring(banId) ), "ban", 16711680)
+    SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** banned **{target}**, Reason: {reason}, Ban Expires: {expires}, ID: {id}", { by = banner or "Unknown", target = getName(tostring(playerId) or "?", false, true), reason = reason, expires = formatDateString(expires), id = tostring(banId) }), "ban", 16711680)
     if not offline then
-        DropPlayer(playerId, string.format(GetLocalisedText("banned"), reason, formatDateString( expires ) ) )
+        DropPlayer(playerId, GetLocalisedText("You have been banned from this Server, Reason: {reason}, Ban Expires: {expires}", { reason = reason, expires = formatDateString(expires) }) )
     end
     return ban
 end
@@ -194,6 +202,86 @@ RegisterServerEvent("EasyAdmin:requestBanlist", function()
     end
 end)
 
+---Paginated ban list request (server-side pagination for large ban lists)
+---Returns lightweight entries without identifiers to minimise payload size.
+---Full ban details are fetched via EasyAdmin:getBanById when a row is clicked.
+RegisterServerEvent("EasyAdmin:requestBanPage", function(data)
+    local src = source
+    if not DoesPlayerHavePermission(src, "player.ban.view") then return end
+
+    local page = tonumber(data and data.page) or 1
+    local pageSize = tonumber(data and data.pageSize) or 10
+    local query = (data and data.query) and tostring(data.query):lower() or nil
+
+    if page < 1 then page = 1 end
+    if pageSize < 1 or pageSize > 100 then pageSize = 10 end
+
+    -- Build filtered list (server-side search)
+    local filtered = {}
+    for _, ban in ipairs(blacklist) do
+        if query then
+            local match = false
+            if tostring(ban.banid or '') == query then match = true end
+            if not match and ban.name and tostring(ban.name):lower():find(query, 1, true) then match = true end
+            if not match and ban.identifiers then
+                for _, id in ipairs(ban.identifiers) do
+                    local fullId = tostring(id):lower()
+                    -- match full identifier (e.g. "discord:123456789") or just the ID portion after the colon
+                    local _, _, idPart = fullId:find(':([^:]+)$')
+                    if fullId == query or (idPart and idPart == query) then match = true; break end
+                end
+            end
+            if not match then goto continue end
+        end
+        table.insert(filtered, ban)
+        ::continue::
+    end
+
+    local total = #filtered
+    local totalPages = math.max(1, math.ceil(total / pageSize))
+    if page > totalPages then page = totalPages end
+
+    local startIdx = (page - 1) * pageSize + 1
+    local endIdx = math.min(startIdx + pageSize - 1, total)
+
+    -- Lightweight entries for list view (no identifiers)
+    local entries = {}
+    for i = startIdx, endIdx do
+        local ban = filtered[i]
+        table.insert(entries, {
+            banid = ban.banid,
+            name = ban.name,
+            reason = ban.reason,
+            expire = ban.expire,
+            expireString = ban.expireString,
+        })
+    end
+
+    TriggerClientEvent("EasyAdmin:banPageResult", src, {
+        bans = entries,
+        total = total,
+        page = page,
+        pageSize = pageSize,
+        totalPages = totalPages,
+    })
+end)
+
+---Fetch full ban details by ID (used by BanDetailPage)
+RegisterServerEvent("EasyAdmin:getBanById", function(banId)
+    local src = source
+    if not DoesPlayerHavePermission(src, "player.ban.view") then return end
+
+    local result = nil
+    for _, ban in ipairs(blacklist) do
+        if tostring(ban.banid) == tostring(banId) then
+            result = ban
+            break
+        end
+    end
+
+    TriggerClientEvent("EasyAdmin:banDetailResult", src, result)
+end)
+
 RegisterCommand("unban", function(source, args, rawCommand)
     if args[1] and DoesPlayerHavePermission(source, "player.ban.remove") and CheckAdminCooldown(source, "unban") then
         SetAdminCooldown(source, "unban")
@@ -204,11 +292,11 @@ RegisterCommand("unban", function(source, args, rawCommand)
             UnbanIdentifier(args[1])
         end
         if (source ~= 0) then
-            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("done"))
+            TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Done!"))
         else
-            Citizen.Trace(GetLocalisedText("done"))
+            Citizen.Trace(GetLocalisedText("Done!"))
         end
-        SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(source, false, true), args[1], "Unbanned via Command"), "ban", 16711680)
+        SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** unbanned **{target}** [ {reason} ]", { by = getName(source, false, true), target = args[1], reason = "Unbanned via Command" }), "ban", 16711680)
     end
 end, false)
 	
@@ -242,22 +330,17 @@ RegisterServerEvent("EasyAdmin:unbanPlayer", function(banId)
         local ret = unbanPlayer(banId)
         if ret then
             PrintDebugMessage("Player "..getName(src,true).." unbanned "..banId, 3)
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminunbannedplayer"), getName(src, false, true), banId, thisBan.reason), "ban", 16711680)
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** unbanned **{target}** [ {reason} ]", { by = getName(src, false, true), target = banId, reason = thisBan.reason }), "ban", 16711680)
         end
     end
 end)
 	
----Generates a new unique ban ID
+---Generates a new unique ban ID (O(1) via counter, initialized from max at load)
 ---@return number @The next available ban ID
 function GetFreshBanId()
-    local blacklist = Storage.getBanList()
-    local maxId = 0
-    for _, ban in ipairs(blacklist) do
-        if ban.banid and ban.banid > maxId then
-            maxId = ban.banid
-        end
-    end
-    return maxId + 1
+    local id = nextBanId
+    nextBanId = nextBanId + 1
+    return id
 end
 exports('GetFreshBanId', GetFreshBanId)
 
@@ -267,7 +350,7 @@ exports('GetFreshBanId', GetFreshBanId)
 ---@return nil
 function updateBan(id,newData)
     if id and newData and newData.identifiers and newData.banid and newData.reason and newData.expire then
-        Storage.updateBan(newData.banid, newData) -- persists to banlist.json + refreshes the enforcement view
+        Storage.updateBan(tostring(newData.banid), newData) -- persists to banlist.json + refreshes the enforcement view
         if GetConvar("ea_custombanlist", "false") == "true" then
             TriggerEvent("ea_data:updateBan", newData)
         end
@@ -317,6 +400,9 @@ function updateBlacklist(data, remove, forceChange)
                 theBan.banid = GetFreshBanId()
                 PrintDebugMessage("Ban did not have an ID, assigned "..theBan.banid..".", 4)
                 change = true
+            elseif theBan.banid >= nextBanId then
+                -- Keep counter ahead of any ID we encounter
+                nextBanId = theBan.banid + 1
             end
             if not theBan.expire then
                 PrintDebugMessage("Ban "..tostring(theBan.banid).." did not have an expiry time, removing..", 4)

@@ -1,0 +1,285 @@
+import { useEffect, useState, useCallback } from 'react'
+import type { Permissions, ResourceEntry, ResourceMetadata } from '../../types'
+import { callLua, on } from '../../fivem'
+import { useModalContext } from '../../ModalContext'
+import { useTranslation } from '../../lib/i18n'
+import { Alert } from '../../components/Alert'
+import { CopyButton } from '../../components/CopyButton'
+import { KeyValueTable, type KeyValueRow } from '../../components/KeyValueTable'
+import { Skeleton } from '../../components/Skeleton'
+import { Icon } from '../../components/icons'
+import { createConfirmModal, runModalAction } from '../../modals/helpers'
+import { notify } from '../../lib/notify'
+
+interface ResourceDetailPageProps {
+  resourceName: string
+  permissions: Permissions
+}
+
+interface ResourceListResponse {
+  resources: ResourceEntry[]
+  protected: string
+}
+
+interface ResourceMetadataResponse {
+  metadata: ResourceMetadata | null
+}
+
+export function ResourceDetailPage({
+  resourceName,
+  permissions,
+}: ResourceDetailPageProps) {
+  const canStart = !!permissions['server.resources.start']
+  const canStop = !!permissions['server.resources.stop']
+  const { openModal, closeModal } = useModalContext()
+  const { t } = useTranslation()
+
+  // Find the resource entry from the server list
+  const [resource, setResource] = useState<ResourceEntry | null>(null)
+  const [metadata, setMetadata] = useState<ResourceMetadata | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  const isSelf = resource?.isProtected ?? false
+  const isStarted = resource?.state === 'started'
+  const isTransitioning = resource?.state === 'starting' || resource?.state === 'stopping'
+
+  // Fetch resource list to find this resource's current state
+  const fetchResource = useCallback(() => {
+    callLua<ResourceListResponse>('requestResources')
+      .then((res) => {
+        const found = (res.resources ?? []).find((r) => r.name === resourceName)
+        setResource(found ?? null)
+      })
+      .catch(() => setResource(null))
+  }, [resourceName])
+
+  // Fetch metadata
+  const fetchMetadata = useCallback(() => {
+    setLoading(true)
+    callLua<ResourceMetadataResponse>('requestResourceMetadata', { name: resourceName })
+      .then((res) => setMetadata(res.metadata ?? null))
+      .catch(() => setMetadata(null))
+      .finally(() => setLoading(false))
+  }, [resourceName])
+
+  useEffect(() => {
+    fetchResource()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetchMetadata sets loading state as part of data-fetching pattern
+    fetchMetadata()
+
+    const unsubResources = on<ResourceListResponse>('updateResources', (payload) => {
+      // Update from event payload directly — no extra Lua round-trip
+      const found = (payload.resources ?? []).find((r) => r.name === resourceName)
+      setResource(found ?? null)
+    })
+    return () => {
+      unsubResources()
+    }
+  }, [resourceName, fetchResource, fetchMetadata])
+
+  // Execute a resource action (called after confirmation)
+  const executeAction = useCallback(async (action: 'start' | 'stop' | 'ensure') => {
+    try {
+      if (action === 'ensure') {
+        await callLua('stopResource', { name: resourceName })
+        await callLua('startResource', { name: resourceName })
+      } else if (action === 'start') {
+        await callLua('startResource', { name: resourceName })
+      } else {
+        await callLua('stopResource', { name: resourceName })
+      }
+      // Refresh both resource state and metadata after action
+      fetchResource()
+      fetchMetadata()
+    } catch {
+      throw new Error(t("Failed to {action} {name}", { action, name: resourceName }))
+    }
+  }, [resourceName, fetchResource, fetchMetadata, t])
+
+  const requestAction = useCallback((action: 'start' | 'stop' | 'ensure') => {
+    if (action === 'start' && !canStart) return
+    if ((action === 'stop' || action === 'ensure') && !canStop) return
+
+    const labels: Record<string, { title: string; message: string; confirm: string; variant: 'primary' | 'danger' }> = {
+      start: { title: t("Start {name}", { name: resourceName }), message: t("Are you sure you want to start {name}?", { name: resourceName }), confirm: t("Start"), variant: 'primary' },
+      stop: { title: t("Stop {name}", { name: resourceName }), message: t("Are you sure you want to stop {name}?", { name: resourceName }), confirm: t("Stop"), variant: 'danger' },
+      ensure: { title: t("Restart {name}", { name: resourceName }), message: t("Are you sure you want to restart {name}?", { name: resourceName }), confirm: t("Restart"), variant: 'danger' },
+    }
+    const label = labels[action]
+    openModal(createConfirmModal({
+      title: label.title,
+      description: label.message,
+      submitLabel: label.confirm,
+      submitVariant: label.variant,
+      onSubmit: async () => {
+        await runModalAction({
+          action: () => executeAction(action),
+          closeModal,
+          errorMessage: t("Failed to {action} {name}", { action, name: resourceName }),
+        })
+      },
+    }))
+  }, [canStart, canStop, executeAction, openModal, closeModal, resourceName, t])
+
+  // Extract key metadata for header display
+  const version = metadata?.entries.find((e) => e.key === 'version')?.value
+  const description = metadata?.entries.find((e) => e.key === 'description')?.value
+  const repository = metadata?.entries.find((e) => e.key === 'repository')?.value
+
+  const metadataRows: KeyValueRow[] = loading
+    ? []
+    : (metadata?.entries ?? []).map((entry) => ({
+        key: entry.key,
+        value: entry.value,
+        mono: true,
+      }))
+
+  // If no metadata entries found, show a message
+  if (!loading && metadataRows.length === 0) {
+    metadataRows.push({
+      key: 'metadata',
+      value: <span className="text-fg-muted">{t("No metadata entries found")}</span>,
+    })
+  }
+
+  // Determine display state
+  const displayState = metadata?.state ?? resource?.state ?? 'unknown'
+
+  if (!resource && loading) {
+    return (
+      <div className="page-container">
+        <div className="card">
+          <div className="mb-3 flex items-center gap-3">
+            <Skeleton width={48} height={48} circle />
+            <div className="flex flex-1 flex-col gap-1">
+              <Skeleton width="40%" height={18} />
+              <Skeleton width="30%" height={14} />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} width="100%" height={20} />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="page-container">
+      {/* Header */}
+      <div className="mb-4 flex items-center gap-3">
+        <div
+          className={`resource-state-dot resource-state-dot-lg resource-state-dot--${displayState}`}
+        />
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="text-mono text-lg font-semibold">{resourceName}</h3>
+            {version && (
+              <span
+                className="shrink-0 font-mono text-sm"
+                style={resource?.outdated ? { color: 'var(--accent-yellow)' } : undefined}
+                title={resource?.outdated && resource?.latestVersion ? t("Update available: v{version}", { version: resource.latestVersion }) : undefined}
+              >
+                {resource?.outdated && resource?.latestVersion ? (
+                  <>
+                    <Icon name="arrow-up-circle" size="xs" className="mr-0.5 inline align-middle" />
+                    v{version}
+                  </>
+                ) : (
+                  `v${version}`
+                )}
+              </span>
+            )}
+            {repository && (
+              <CopyButton
+                value={repository}
+                label={t("Copy")}
+                ariaLabel={t("Copy repository URL")}
+                onCopy={() => notify(t('Repository URL copied'), 'success')}
+              />
+            )}
+          </div>
+          {description && (
+            <p className="mt-0.5 text-sm text-fg-subtle">{description}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Update available alert */}
+      {resource?.outdated && resource?.latestVersion && (
+        <Alert variant="warning" title={t("Update available")} className="mb-4">
+          <div className="flex items-center gap-3 text-sm">
+            <span>
+              <span className="text-fg-muted">{t("Current:")}</span>{' '}
+              <span className="font-mono">v{version ?? '?'}</span>
+            </span>
+            <Icon name="arrow-right" size="xs" className="shrink-0 text-fg-muted" />
+            <span>
+              <span className="text-fg-muted">{t("Latest:")}</span>{' '}
+              <span className="font-mono">v{resource.latestVersion}</span>
+            </span>
+          </div>
+        </Alert>
+      )}
+
+      {/* Actions */}
+      <div className="card mb-4">
+        <p className="section-label mb-3">{t("Actions")}</p>
+        <div className="flex flex-wrap gap-2">
+          {canStart && !isStarted && (
+            <button
+              className="btn btn-success btn-sm"
+              onClick={() => requestAction('start')}
+              disabled={isSelf || isTransitioning}
+              title={isSelf ? t("Cannot start self") : t("Start resource")}
+            >
+              <Icon name="play" size="xs" />
+              {t("Start")}
+            </button>
+          )}
+          {canStop && isStarted && (
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={() => requestAction('stop')}
+              disabled={isSelf || isTransitioning}
+              title={isSelf ? t("Cannot stop self") : t("Stop resource")}
+            >
+              <Icon name="square" size="xs" />
+              {t("Stop")}
+            </button>
+          )}
+          {canStart && canStop && (
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => requestAction('ensure')}
+              disabled={isSelf || isTransitioning}
+              title={isSelf ? t("Cannot ensure self") : t("Refresh + Stop + Start")}
+            >
+              <Icon name="refresh" size="xs" />
+              {t("Ensure")}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Metadata */}
+      <div className="card">
+        <p className="section-label mb-3">{t("Metadata")}</p>
+        {loading ? (
+          <div className="flex flex-col gap-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="kv-row-divider flex gap-3 py-2">
+                <Skeleton width={100} height={14} />
+                <Skeleton width="60%" height={14} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <KeyValueTable rows={metadataRows} ariaLabel={t("Resource metadata")} />
+        )}
+      </div>
+    </div>
+  )
+}

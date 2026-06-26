@@ -1,0 +1,57 @@
+/* ============================================================
+   Resource update link (clickable resource name in alert)
+   ============================================================ */
+
+.resource-link {
+  display: inline;
+  cursor: pointer;
+  color: var(--brand-blue-light);
+  text-decoration: none;
+  transition: color var(--transition-fast), text-decoration var(--transition-fast);
+}
+
+.resource-link:hover {
+  color: var(--accent-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.resource-link:focus-visible {
+  outline: 1px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Resource state indicator dot
+   ============================================================ */
+
+.resource-state-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.resource-state-dot-lg {
+  width: 12px;
+  height: 12px;
+}
+
+.resource-state-dot--started {
+  background-color: var(--accent-green);
+}
+
+.resource-state-dot--stopped {
+  background-color: var(--accent-red);
+}
+
+.resource-state-dot--starting,
+.resource-state-dot--stopping {
+  background-color: var(--accent-orange);
+}
+
+.resource-state-dot--missing,
+.resource-state-dot--unknown {
+  background-color: var(--text-muted);
+}

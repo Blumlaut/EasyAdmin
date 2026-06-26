@@ -1,4 +1,3 @@
-
 name: Prepare Release
 on:
   workflow_dispatch:
@@ -12,11 +11,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+
+    - name: Set up Node.js 22
+      uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+
+    - name: Install dependencies
+      run: npm run install:all
+
+    - name: Typecheck bot
+      run: cd bot && npm run typecheck
+
+    - name: Build bot + NUI
+      run: npm run build
+
     - name: Get previous tag
       id: previous_tag
       run: |
         PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
         echo "previous_tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
+
     - name: Generate changelog
       id: generate_changelog
       run: |
@@ -28,6 +43,21 @@ jobs:
         echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
         echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
         echo "EOF" >> "$GITHUB_OUTPUT"
+
+    - name: Package release
+      run: |
+        zip -r "EasyAdmin-${{ github.event.inputs.version }}.zip" . \
+          -x ".git" \
+          -x ".git/*" \
+          -x ".github/*" \
+          -x ".agents/*" \
+          -x "*node_modules/*" \
+          -x "*data/*" \
+          -x "*tests/*" \
+          -x "*tools/*" \
+          -x "*PLANS/*" \
+          -x "*package-lock.json"
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       env:
@@ -48,8 +78,10 @@ jobs:
           **Full Changelog**: https://github.com/Blumlaut/EasyAdmin/compare/${{ steps.previous_tag.outputs.previous_tag }}...${{ github.event.inputs.version }}
         draft: false
         prerelease: false
+        files: EasyAdmin-${{ github.event.inputs.version }}.zip
+
     - name: Push Tag
-      run: | 
+      run: |
             echo "version is ${{ github.event.inputs.version }}"
             git config user.name "GitHub Actions Bot"
             git config user.email "<>"

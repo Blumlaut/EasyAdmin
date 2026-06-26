@@ -3,6 +3,10 @@ support.json
 banlist.txt
 settings.json
 backups/*.json
+data/**/*.json
 plugins/dev/**/*.*
 *yarn*
 node_modules/
+bot/dist/
+nui/dist/
+.agents/skills/fivem-natives/cfx-natives/

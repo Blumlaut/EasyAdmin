@@ -1,0 +1,153 @@
+/* ============================================================
+   Alert
+   Generic inline alert card matching the existing card aesthetic.
+   ============================================================ */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  font-size: var(--text-sm);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.alert:hover {
+  border-color: var(--border-color);
+  background: var(--bg-card-hover);
+}
+
+/* -- Severity background tints -- */
+
+.alert--info {
+  background: rgba(88, 166, 255, 0.05);
+}
+
+.alert--warning {
+  background: rgba(210, 153, 34, 0.05);
+}
+
+.alert--success {
+  background: rgba(63, 185, 80, 0.05);
+}
+
+.alert--error {
+  background: rgba(248, 81, 73, 0.05);
+}
+
+[data-theme="light"] .alert--info,
+.alert--info[data-theme="light"] {
+  background: rgba(121, 184, 255, 0.08);
+}
+
+[data-theme="light"] .alert--warning,
+.alert--warning[data-theme="light"] {
+  background: rgba(255, 179, 71, 0.08);
+}
+
+[data-theme="light"] .alert--success,
+.alert--success[data-theme="light"] {
+  background: rgba(86, 211, 100, 0.08);
+}
+
+[data-theme="light"] .alert--error,
+.alert--error[data-theme="light"] {
+  background: rgba(255, 107, 107, 0.08);
+}
+
+/* -- Icon -- */
+
+.alert-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius);
+}
+
+.alert--info .alert-icon {
+  color: var(--accent-blue);
+}
+
+.alert--warning .alert-icon {
+  color: var(--accent-orange);
+}
+
+.alert--success .alert-icon {
+  color: var(--accent-green);
+}
+
+.alert--error .alert-icon {
+  color: var(--accent-red);
+}
+
+/* -- Content -- */
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.alert-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.alert-message {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.alert-message a {
+  color: var(--brand-blue-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.alert-message a:hover {
+  color: var(--accent-blue);
+}
+
+/* -- Actions -- */
+
+.alert-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.alert-dismiss-btn {
+  color: var(--text-muted);
+}
+
+.alert-dismiss-btn:hover {
+  color: var(--text-primary);
+}
+
+/* -- Responsive: stack on very narrow viewports -- */
+
+@media (max-width: 500px) {
+  .alert {
+    flex-wrap: wrap;
+  }
+
+  .alert-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: var(--space-1);
+  }
+}

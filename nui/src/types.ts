@@ -1,0 +1,480 @@
+// Player data shape sent from Lua to NUI
+export interface Player {
+  id: number
+  name: string
+  identifier?: string
+  ip?: string
+  discord?: string
+  license?: string
+  xbl?: string
+  ipprivacy?: boolean
+  frozen?: boolean
+  muted?: boolean
+  admin?: boolean
+  developer?: boolean
+  contributor?: boolean
+  coords?: { x: number; y: number; z: number }
+  selfbucket?: number
+  avatar?: string
+}
+
+// Permission checks sent from Lua to NUI (mirrors the Lua permissions table)
+export type Permissions = Record<string, boolean>
+
+// Initial state sent from Lua when menu opens
+export interface MenuState {
+  players: Player[]
+  permissions: Permissions
+  redm: boolean
+  menuOpen: boolean
+}
+
+// NUI message from Lua to frontend
+export interface NUIPayload<T = unknown> {
+  action: string
+  data: T
+}
+
+// Ban duration options
+export interface BanDuration {
+  label: string
+  time: number
+}
+
+// Notification from Lua
+export interface Notification {
+  text: string
+  type?: 'info' | 'success' | 'warn' | 'error'
+}
+
+// Lightweight ban entry for list view (no identifiers, fetched from server paginated)
+export interface BanListEntry {
+  banid: string
+  reason: string
+  name?: string
+  expire?: number
+  expireString?: string
+}
+
+// Full ban entry with identifiers (fetched on-demand for detail/edit views)
+export interface BanEntry extends BanListEntry {
+  banner?: string
+  identifiers: string[]
+}
+
+// Server-side paginated ban response
+export interface PaginatedBanResponse {
+  bans: BanListEntry[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+}
+
+// Cached (offline) player entry
+export interface CachedPlayer {
+  id: number
+  name: string
+  identifier?: string
+  droppedTime?: number
+  immune?: boolean
+}
+
+// Report entry from server
+export interface Report {
+  id: number
+  type: 0 | 1
+  reporter: number
+  reporterName: string
+  reported?: number
+  reportedName?: string
+  reason: string
+  reportTimeFormatted: string
+  claimed?: boolean
+  claimedName?: string
+}
+
+// Cleanup options
+export type CleanupType = 'cars' | 'peds' | 'props'
+export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
+
+// App settings (mirrors ea_* kvp entries)
+export type SidebarMode = 'vertical' | 'horizontal'
+export type SidebarDirection = 'right' | 'left' | 'down' | 'up'
+export type UiDensity = 'cramped' | 'cozy' | 'default' | 'spacious' | 'airy'
+
+export interface AppSettings {
+  anonymous: boolean
+  // Accessibility
+  highContrast: boolean
+  fontSize: number // base font size in px: 10–20, default 12
+  uiDensity: UiDensity // UI density (spacing scale), default 'default'
+  // Layout
+  sidebarMode: SidebarMode
+  sidebarDirection: SidebarDirection
+  // Fold transparency (0 = fully transparent, 100 = fully opaque), default 85
+  foldOpacity: number
+}
+
+// Default window dimensions (used when no KVP saved size exists)
+export const DEFAULT_WINDOW_SIZE = { width: 1210, height: 750 }
+
+// Navigation views
+// Plugin views use the `plugin:<pluginId>` (or `plugin:<pluginId>:<pageId>`)
+// convention and are matched by the `(string & {})` fallback, which keeps
+// autocomplete for built-in views while allowing arbitrary plugin strings.
+export type View =
+  | 'main'
+  | 'players'
+  | 'player-detail'
+  | 'bans'
+  | 'ban-detail'
+  | 'reports'
+  | 'report-detail'
+  | 'cached-players'
+  | 'server'
+  | 'resources'
+  | 'resource-detail'
+  | 'profiler'
+  | 'player-statistics'
+  | 'network-monitor'
+  | 'settings'
+  | (string & {})
+
+// Ban duration preset indices
+export type BanDurationPreset = 'permanent' | 'custom' | number
+
+// Server stats for dashboard
+export interface ServerStats {
+  maxPlayers: number
+  avgPing: number           // current server-wide average ping (ms), 0 if no players
+  resources: {
+    total: number
+    started: number
+    stopped: number
+  }
+  entities: {
+    vehicles: number
+    peds: number
+    objects: number
+  }
+  adminsOnline: number
+  pendingReports: number
+  uptime: number            // seconds since server start
+  peakToday: number
+}
+
+// Known convar entry (returned by requestConvars)
+export interface ConvarEntry {
+  key: string
+  label: string
+  category: string
+  value: string | null
+  /** How the convar was set: 'set' (server), 'setr' (replicated), 'sets' (server info) */
+  setType?: 'set' | 'setr' | 'sets'
+}
+
+// Single data point for sparkline charts
+export interface PlayerCountPoint {
+  timestamp: number
+  count: number
+}
+
+// Time range filter for player history
+export type HistoryRange = '1h' | '6h' | '24h' | '7d' | '30d' | '90d' | '120d'
+
+// Statistics time range presets
+export type StatsRange = '7d' | '30d' | '90d' | '120d'
+
+// Player registry entry (from statistics module)
+export interface PlayerRegistryEntry {
+  name: string         // player username (latest known)
+  identifier: string   // primary (most stable) identifier
+  identifiers?: string[] // all identifiers for this player (omitted in paginated responses)
+  firstSeen: number    // unix ms (paginated: unix seconds, converted on receive)
+  lastSeen: number     // unix ms (paginated: unix seconds, converted on receive)
+  sessions: number
+  playtime: number     // seconds
+}
+
+// Server-side paginated player registry response
+export interface PaginatedPlayerRegistryResponse {
+  players: PlayerRegistryEntry[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+}
+
+// Daily aggregated player count stats
+export interface DailyPeak {
+  day: number          // unix epoch day (start of day, seconds)
+  max: number
+  avg: number
+  min: number
+  entries: number      // number of data points that day
+  avgPing: number      // average ping across all snapshots that day (ms), 0 if no players
+  pingMin: number      // lowest avgPing snapshot that day (ms)
+  pingMax: number      // highest avgPing snapshot that day (ms)
+}
+
+// Single time-series data point (raw snapshot or daily aggregate)
+export interface PlayerPeakPoint {
+  timestamp: number    // unix seconds
+  count: number
+  avgPing: number      // ms, 0 if no players
+}
+
+// Combined response from requestDailyPeaks
+export interface PlayerPeaksResponse {
+  granularity: 'raw' | 'daily'  // 'raw' = 15-min snapshots, 'daily' = daily aggregates
+  points: PlayerPeakPoint[]     // chart data (matches granularity)
+  dailyPeaks: DailyPeak[]       // always daily (for summary cards, ping stats)
+}
+
+// Summary statistics returned by server
+export interface StatsSummary {
+  totalUnique: number
+  newPlayers: number       // firstSeen within range
+  returningPlayers: number // sessions > 1 within range
+  retentionRate: number    // returning / total unique (0-100)
+  avgSessionLength: number // seconds (true mean of individual sessions)
+  medianSessionLength: number // seconds (true median of individual sessions)
+  shortestSession: number  // seconds
+  longestSession: number   // seconds
+  totalSessions: number
+  totalPlaytime: number    // seconds
+}
+
+// Reason shortcut (from ea_addShortcut)
+export interface ReasonShortcut {
+  key: string
+  value: string
+}
+
+// Resource entry from server (includes metadata summary)
+export interface ResourceEntry {
+  name: string
+  state: 'started' | 'stopped' | 'starting' | 'stopping' | 'missing' | 'unknown'
+  isProtected?: boolean
+  version?: string
+  description?: string
+  repository?: string
+  latestVersion?: string | null
+  outdated?: boolean
+}
+
+// Resource metadata fetched via GET_RESOURCE_METADATA
+export interface ResourceMetadata {
+  name: string
+  state: string
+  entries: { key: string; value: string }[]
+}
+
+// Update check result for a single resource
+export interface ResourceUpdateResult {
+  name: string
+  latest: string | null
+  outdated: boolean
+}
+
+// ============================================================
+// Profiler types
+// ============================================================
+
+// Per-thread execution data
+export interface ThreadTickData {
+  label: string                  // Full label: "thread @resource/file.lua[10..25]"
+  resource: string               // Extracted resource name
+  filePath: string               // Extracted file path (e.g. "server/admin_server.lua")
+  lineRange: string              // Extracted line range (e.g. "10..25")
+  durationUs: number             // This thread's execution time in μs
+}
+
+// Per-resource tick data
+export interface ResourceTickData {
+  name: string                   // Resource name (e.g. "EasyAdmin")
+  tickCount: number              // Number of ticks across all frames
+  totalUs: number                // Total time spent in ticks (μs)
+  avgUs: number                  // Average tick time (μs)
+  maxUs: number                  // Worst single tick (μs)
+  minUs: number                  // Best single tick (μs)
+  pctOfTotal: number             // Percentage of total tick time (0-100)
+  threads: ThreadTickData[]      // Thread-level breakdown
+}
+
+// Profile summary statistics
+export interface ProfileSummary {
+  framesCaptured: number         // Total frames recorded
+  frameTimes: {                  // Frame-to-frame timing
+    avgMs: number                // Average frame time in ms
+    minMs: number
+    maxMs: number
+    fps: number                  // Derived: 1000 / avgMs
+  }
+  totalTickTime: {               // Sum of all resource ticks per frame (avg)
+    avgUs: number                // Average total tick time per frame in microseconds
+    maxUs: number
+  }
+}
+
+// Complete parsed profile
+export interface ParsedProfile {
+  summary: ProfileSummary
+  resources: ResourceTickData[]  // Sorted by totalUs descending
+  capturedAt: number             // Unix timestamp (ms) when profile was captured
+}
+
+// Endpoint detection info sent with results
+export interface ProfilerDetection {
+  method: string                 // "GetCurrentServerEndpoint" | "cached" | "convar"
+  port: number
+}
+
+// Profiler progress state
+export interface ProfilerProgress {
+  phase: 'recording' | 'generating' | 'fetching' | 'parsing' | 'retrying' | 'complete'
+  message: string
+  percent: number
+}
+
+// Profiler error payload
+export interface ProfilerError {
+  message: string
+}
+
+// Profiler result payload (from server)
+export interface ProfilerResult {
+  profile: ParsedProfile
+  detection: ProfilerDetection
+}
+
+// Profiler UI state
+export type ProfilerUIState = 'empty' | 'recording' | 'results' | 'error' | 'endpoint-error'
+
+// Code snippet line (from server)
+export interface CodeSnippetLine {
+  number: number             // Line number in the file
+  content: string            // Line content
+  highlighted: boolean       // Within the hot line range
+}
+
+// Code snippet payload (from server)
+export interface CodeSnippet {
+  lines: CodeSnippetLine[]
+  windowStart: number        // First line number shown
+  windowEnd: number          // Last line number shown
+  targetRange: string        // Original hot range (e.g. "10..25")
+}
+
+// Code snippet error payload
+export interface ProfilerSnippetError {
+  threadId: string
+  message: string
+}
+
+// Code snippet result payload
+export interface ProfilerSnippetResult {
+  threadId: string
+  snippet: CodeSnippet
+  filePath: string
+  resource: string
+}
+
+// ============================================================
+// Action History
+// ============================================================
+
+// Single action history entry (from Storage.addAction)
+export interface ActionHistoryEntry {
+  id: number               // Sequential ID
+  time: number             // Unix timestamp (seconds)
+  action: string           // Action type (e.g. "Ban", "Kick", "Warn")
+  reason: string           // Reason text
+  moderator: string        // Moderator name
+  banid?: string | number  // Optional ban ID linkage
+}
+
+// ============================================================
+// Admin Notes
+// ============================================================
+
+// Single admin note entry (from Storage.addNote)
+export interface AdminNoteEntry {
+  id: number               // Sequential ID
+  time: string             // Formatted date string ("DD/MM/YYYY HH:MM")
+  content: string          // Note content
+  moderator: string        // Moderator name
+}
+
+// ============================================================
+// Name History & Aliases
+// ============================================================
+
+// Single name history entry (automatic, from telemetry)
+export interface NameHistoryEntry {
+  name: string
+  firstSeen: number        // Unix seconds
+  lastSeen: number | null  // null = current name
+}
+
+// AKA alias entry (admin-added)
+export interface PlayerAliasEntry {
+  id: number
+  alias: string
+  addedBy: string
+  addedAt: number          // Unix seconds
+  note?: string
+}
+
+// ============================================================
+// Update Info
+// ============================================================
+
+// Update availability info pushed from server
+export interface UpdateInfo {
+  currentVersion: string
+  latestVersion: string
+  available: boolean
+}
+
+// ============================================================
+// Network Statistics
+// ============================================================
+
+// Per-player peer statistics (from GetPlayerPeerStatistics)
+export interface PlayerNetworkStats {
+  rtt: number              // Mean round-trip time (ping) in ms
+  rttVariance: number      // RTT variance (jitter) in ms
+  lastRtt: number          // Last recorded RTT in ms
+  packetLoss: number       // Packet loss percentage (1 decimal)
+}
+
+// Single historical network snapshot (summary only)
+export interface NetworkSnapshot {
+  timestamp: number        // Unix seconds
+  avgPing: number          // Average ping across all players (ms)
+  worstPing: number        // Worst ping among all players (ms)
+  avgJitter: number        // Average jitter across all players (ms)
+  avgLoss: number          // Average packet loss across all players (%)
+}
+
+// Per-player historical data point
+export interface PlayerNetworkHistoryPoint {
+  timestamp: number        // Unix seconds
+  rtt: number              // Mean RTT (ms)
+  rttVariance: number      // RTT variance (ms)
+  lastRtt: number          // Last RTT (ms)
+  packetLoss: number       // Packet loss (%)
+}
+
+// Live network stats response from server
+export interface NetworkStatsResponse {
+  players: Record<string, PlayerNetworkStats>  // keyed by serverId
+  names: Record<string, string>                // serverId -> player name
+  snapshotTimestamp?: number                   // unix seconds — when the snapshot was taken
+  history?: NetworkSnapshot[]                   // optional, when range is requested
+  playerHistory?: PlayerNetworkHistoryPoint[]   // optional, when playerId is requested
+}
+
+

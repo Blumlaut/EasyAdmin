@@ -1,0 +1,140 @@
+/* ============================================================
+   Statistics Page Styles
+   ============================================================ */
+
+/* Chart.js canvas — ensure it respects container sizing */
+canvas.chartjs-chart {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* Summary stat cards grid */
+.statistics-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Stat card */
+.statistics-card {
+  position: relative;
+  padding: 0.875rem 1rem;
+}
+
+.statistics-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.statistics-value {
+  line-height: 1.2;
+}
+
+.statistics-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Overlay variant: icon absolute top-right */
+.statistics-icon--absolute {
+  position: absolute;
+  top: 0.875rem;
+  right: 1rem;
+}
+
+/* Chart card */
+.statistics-chart-card {
+  padding: 1rem;
+}
+
+/* Legend line indicators (solid / dashed / dotted) */
+.legend-line {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.legend-line-dashed {
+  background: none !important;
+  border-top: 2px dashed;
+  height: 0;
+}
+
+.legend-line-dotted {
+  background: none !important;
+  border-top: 2px dotted;
+  height: 0;
+}
+
+/* Player registry table */
+.statistics-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.statistics-table th {
+  text-align: left;
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.statistics-table th.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: color 150ms ease;
+}
+
+.statistics-table th.sortable-header:hover {
+  color: var(--text-primary);
+}
+
+.statistics-table .sort-header-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statistics-table .sort-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.statistics-table .sort-icon-inactive {
+  opacity: 0.3;
+}
+
+.statistics-table td {
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.statistics-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.statistics-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive: single column on small screens */
+@media (max-width: 640px) {
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+}

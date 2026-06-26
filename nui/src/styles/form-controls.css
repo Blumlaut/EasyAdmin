@@ -1,0 +1,327 @@
+/* ============================================================
+   Slider
+   ============================================================ */
+
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border-color);
+  height: 6px;
+  border-radius: var(--radius-full);
+  outline: none;
+  margin: var(--space-4) 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  cursor: pointer;
+  border: 2px solid var(--brand-blue);
+  box-shadow: var(--shadow-sm);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  cursor: pointer;
+  border: 2px solid var(--brand-blue);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   Toggle (settings)
+   ============================================================ */
+
+.toggle {
+  --toggle-width: 40px;
+  --toggle-height: 22px;
+
+  position: relative;
+  display: inline-block;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--text-muted);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition), background var(--transition);
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--brand-gradient);
+  border-color: var(--brand-blue);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(18px) translateY(-50%);
+  background: #fff;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+/* ============================================================
+   Shared selectable card (used by radio group, layout grid, etc.)
+   ============================================================ */
+
+.selectable-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.selectable-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.selectable-card--checked {
+  background: var(--bg-active);
+  border-color: var(--border-glow);
+  box-shadow: 0 0 0 1px var(--brand-blue-light);
+}
+
+/* ============================================================
+   Radio Group
+   ============================================================ */
+
+.radio-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.radio-group-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.radio-group-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+/* Hidden native input */
+.radio-group-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Custom radio circle */
+.radio-group-radio {
+  --radio-size: 18px;
+
+  flex-shrink: 0;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border: 2px solid var(--text-muted);
+  border-radius: var(--radius-full);
+  position: relative;
+  margin-top: 1px;
+  transition: border-color var(--transition);
+}
+
+.radio-group-radio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--brand-blue-light);
+  transition: transform var(--transition);
+}
+
+.selectable-card--checked .radio-group-radio {
+  border-color: var(--brand-blue-light);
+}
+
+.selectable-card--checked .radio-group-radio::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Content (label + description) */
+.radio-group-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.radio-group-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.radio-group-description {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.selectable-card--checked .radio-group-label {
+  color: #fff;
+}
+
+/* ============================================================
+   Layout Picker Grid (2×2 wireframe cards)
+   ============================================================ */
+
+.layout-grid {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.layout-grid-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+/* Wireframe container */
+.layout-wireframe-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.layout-wireframe {
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  display: block;
+}
+
+/* Label + description */
+.layout-grid-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+}
+
+.layout-grid-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.layout-grid-description {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.selectable-card--checked .layout-grid-label {
+  color: #fff;
+}
+
+/* ============================================================
+   Density Options (segmented radio pill for UI density selector)
+   ============================================================ */
+
+.density-options {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.density-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  position: relative;
+}
+
+.density-option:hover {
+  background: var(--bg-hover);
+}
+
+.density-option--active {
+  background: var(--bg-active);
+  box-shadow: 0 0 0 1px var(--brand-blue-light);
+}
+
+.density-option-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.density-option--active .density-option-label {
+  color: #fff;
+}
+
+.density-option-indicator {
+  display: none; /* reserved for future icon/visual indicator */
+}
+

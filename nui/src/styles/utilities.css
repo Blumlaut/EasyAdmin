@@ -1,0 +1,156 @@
+/* ============================================================
+   Utility classes that have no Tailwind equivalent
+   (pure layout/spacing/color utilities are handled by Tailwind)
+   ============================================================ */
+
+/* -- Page container -- */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* -- Section divider -- */
+.section-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: var(--space-2) 0;
+}
+
+/* -- Loading spinner -- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Inline spinning icon (e.g. for button loading states) */
+.icon-spin {
+  animation: spin 800ms linear infinite;
+}
+
+/* ============================================================
+   App window — dimensions set via inline style (JS-managed)
+   ============================================================ */
+
+.ea-window {
+  position: fixed;
+  top: var(--ea-top, 50%);
+  left: var(--ea-left, 50%);
+  display: flex;
+  flex-direction: row;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+  z-index: var(--z-window);
+
+  /* Base font size for rem-based text tokens. Overridden by inline style from settings. */
+  font-size: 12px;
+
+  /* Width animated by JS (Web Animations API), not CSS transitions. */
+}
+
+.ea-window--sidebar-left {
+  flex-direction: row-reverse;
+}
+
+.ea-window--sidebar-down {
+  flex-direction: column;
+}
+
+.ea-window--sidebar-up {
+  flex-direction: column-reverse;
+}
+
+/* Content wrapper — slide animated by JS */
+.ea-window > div:not(.sidebar) {
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* -- Menu: NUI in background mode (visible, but no focus) -- */
+.ea-window--background {
+  cursor: default;
+  opacity: var(--ea-fold-opacity, 0.85);
+  filter: saturate(0.6);
+}
+
+.ea-window--background,
+.ea-window--background * {
+  /* Don't capture mouse events while the game has focus. The Lua
+     re-engages NUI focus on ALT hold. */
+  pointer-events: none;
+}
+
+/* -- Floating windows: same translucent/disabled treatment when NUI is backgrounded -- */
+.ea-nui-background .ea-floating-window {
+  cursor: default;
+  opacity: var(--ea-fold-opacity, 0.85);
+  filter: saturate(0.6);
+}
+
+.ea-nui-background .ea-floating-window,
+.ea-nui-background .ea-floating-window * {
+  pointer-events: none;
+}
+
+/* The backdrop that sits behind the window and intercepts clicks to
+   release focus. Hidden when the menu is already in background mode
+   (nothing useful to click on). */
+.ea-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-window) - 1);
+  background: transparent;
+  cursor: pointer;
+  display: block;
+}
+
+.ea-backdrop[hidden],
+.ea-backdrop[aria-hidden='true'] {
+  display: none;
+}
+
+/* "Hold ALT to interact" hint, shown when the menu is in background
+   mode. Floats above everything and doesn't capture pointer events. */
+.ea-background-hint {
+  position: fixed;
+  bottom: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(10, 14, 20, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  z-index: calc(var(--z-window) + 1);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.ea-background-hint--fading {
+  opacity: 0;
+}
+
+.ea-background-hint kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 var(--space-2);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+}

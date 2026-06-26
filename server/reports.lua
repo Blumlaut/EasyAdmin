@@ -37,7 +37,7 @@ Citizen.CreateThread(function()
                 local time = os.time()
                 local cooldowntime = GetConvarInt("ea_callAdminCooldown", 60)
                 if cooldowns[source] and cooldowns[source] > (time - cooldowntime) then
-                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("waitbeforeusingagain"))
+                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("You must wait before using this again!"))
                     return
                 end
                 local reportTime = os.time()
@@ -45,22 +45,19 @@ Citizen.CreateThread(function()
                 local reportid = addNewReport(0, source, _, reason, reportTime)
 
                 for i,_ in pairs(OnlineAdmins) do 
-                    local notificationText = string.format(
-                        string.gsub(GetLocalisedText("playercalledforadmin"), "```", ""),
-                        getName(source, true, false), reason, reportid, reportTime
-                    )
+                    local notificationText = GetLocalisedText("User {name} calls for an admin!\nReason: {reason}\nID: {id}\n", { name = getName(source, true, false), reason = reason, id = reportid })
                     TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
                 end
 
                 local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-                SendWebhookMessage(preferredWebhook,string.format(GetLocalisedText("playercalledforadmin"), getName(source, true, true), reason, reportid, reportTime), "calladmin", 16776960)
-                --TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("admincalled"))
-                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("admincalled"))
+                SendWebhookMessage(preferredWebhook, GetLocalisedText("User {name} calls for an admin!\nReason: {reason}\nID: {id}\n", { name = getName(source, true, true), reason = reason, id = reportid }), "calladmin", 16776960)
+                --TriggerClientEvent('chatMessage', source, "^3EasyAdmin^7", {255,255,255}, GetLocalisedText("Successfully called an Admin!"))
+                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Successfully called an Admin!"))
 
                 time = os.time()
                 cooldowns[source] = time
             else
-                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
+                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("You need to specify a reason!"))
             end
         end, false)
     end
@@ -112,36 +109,30 @@ Citizen.CreateThread(function()
                         local reportid = addNewReport(1, source, id, reason, reportTime)
 
                         local preferredWebhook = (reportNotification ~= "false") and reportNotification or moderationNotification
-                        SendWebhookMessage(preferredWebhook, string.format(
-                            GetLocalisedText("playerreportedplayer"),
-                            getName(source, false, true), getName(id, true, true), reason, #PlayerReports[id], minimumreports, reportid, reportTime
-                        ), "report", 16776960)
+                        SendWebhookMessage(preferredWebhook, GetLocalisedText("User {reporter} reported a player!\n{reported}, Reason: {reason}\nReport {count}/{min}\nID: {id}\n", { reporter = getName(source, false, true), reported = getName(id, true, true), reason = reason, count = #PlayerReports[id], min = minimumreports, id = reportid }), "report", 16776960)
 
                         if GetConvar("ea_enableReportScreenshots", "true") == "true" then
                             TriggerEvent("EasyAdmin:TakeScreenshot", id)
                         end
 
                         for i,_ in pairs(OnlineAdmins) do 
-                            local notificationText = string.format(
-                                string.gsub(GetLocalisedText("playerreportedplayer"), "```", ""),
-                                getName(source, false, false), getName(id, true, false), reason, #PlayerReports[id], minimumreports, reportid, reportTime
-                            )
+                            local notificationText = GetLocalisedText("User {reporter} reported a player!\n{reported}, Reason: {reason}\nReport {count}/{min}\nID: {id}\n", { reporter = getName(source, false, false), reported = getName(id, true, false), reason = reason, count = #PlayerReports[id], min = minimumreports, id = reportid })
                             TriggerClientEvent("EasyAdmin:showNotification", i, notificationText)
                         end
 
-                        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("successfullyreported"))
+                        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Successfully reported the player!"))
 
                         if #PlayerReports[id] >= minimumreports then
-                            TriggerEvent("EasyAdmin:addBan", id, string.format(GetLocalisedText("reportbantext"), minimumreports), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
+                            TriggerEvent("EasyAdmin:addBan", id, GetLocalisedText("Reported by {count} Players in short time.", { count = minimumreports }), os.time()+GetConvarInt("ea_ReportBanTime", 86400))
                         end
                     else
-                        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("alreadyreported"))
+                        TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("You already reported this player!"))
                     end
                 else
-                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportedusageerror"))
+                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("Error! Usage: /report name reason"))
                 end
             else
-                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
+                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("You need to specify a reason!"))
             end
         end, false)
     end
@@ -193,16 +184,21 @@ Citizen.CreateThread(function()
                 local diff = time - report.reportTime
                 local minutes = math.floor(diff / 60)
 
+                local newFormatted
                 if minutes < 1 then
-                    report.reportTimeFormatted = "1m ago"
+                    newFormatted = "1m ago"
                 elseif minutes < 120 then
-                    report.reportTimeFormatted = string.format("%dm ago", minutes)
+                    newFormatted = string.format("%dm ago", minutes)
                 else
-                    report.reportTimeFormatted = string.format("%dh ago", math.floor(minutes / 60))
+                    newFormatted = string.format("%dh ago", math.floor(minutes / 60))
                 end
 
-                for i,_ in pairs(OnlineAdmins) do 
-                    TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, report)
+                -- Only broadcast if the formatted string actually changed
+                if newFormatted ~= report.reportTimeFormatted then
+                    report.reportTimeFormatted = newFormatted
+                    for i,_ in pairs(OnlineAdmins) do
+                        TriggerLatentClientEvent("EasyAdmin:NewReport", i, 10000, report)
+                    end
                 end
             end
         end
@@ -251,14 +247,14 @@ Citizen.CreateThread(function()
 
     RegisterServerEvent("EasyAdmin:RemoveReport", function(report)
         if DoesPlayerHavePermission(source, "player.reports.process") then
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclosedreport"), getName(source, false, true), report.id), "reports", 16777214)
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** closed Report #**{id}**", { by = getName(source, false, true), id = report.id }), "reports", 16777214)
             removeReport(report.id)
         end
     end)
 
     RegisterServerEvent("EasyAdmin:RemoveSimilarReports", function(report)
         if DoesPlayerHavePermission(source, "player.reports.process") then
-            SendWebhookMessage(moderationNotification,string.format(GetLocalisedText("adminclosedreport"), getName(source, false, true), report.id), "reports", 16777214)
+            SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** closed Report #**{id}**", { by = getName(source, false, true), id = report.id }), "reports", 16777214)
             removeSimilarReports(report)
         end
     end)
@@ -271,20 +267,38 @@ Citizen.CreateThread(function()
                     report.claimed = true
                     report.claimedBy = source
                     report.claimedName = getName(source, true)
-                    
-                    SendWebhookMessage(moderationNotification, string.format(GetLocalisedText("adminclaimedreport"), getName(source, false, true), report.id), "reports", 16776960)
-                    
-                    for i,_ in pairs(OnlineAdmins) do 
+
+                    SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** claimed Report #**{id}**", { by = getName(source, false, true), id = report.id }), "reports", 16776960)
+
+                    for i,_ in pairs(OnlineAdmins) do
                         TriggerLatentClientEvent("EasyAdmin:ClaimedReport", i, 10000, report)
                     end
-                    
+
                     TriggerEvent("EasyAdmin:reportClaimed", report)
                 else
-                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("reportalreadyclaimed"))
+                    TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("This report has already been claimed!"))
                 end
             else
-                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("invalidreport"))
+                TriggerClientEvent("EasyAdmin:showNotification", source, GetLocalisedText("You need to specify a reason!"))
             end
+        end
+    end)
+
+    -- New NUI request event: pushes the full report list to the requesting admin.
+    RegisterServerEvent("EasyAdmin:requestReports", function()
+        if DoesPlayerHavePermission(source, "player.reports.view") then
+            -- Refresh timestamps before sending
+            for _, r in pairs(reports) do
+                local minutes = math.floor((os.time() - r.reportTime) / 60)
+                if minutes < 1 then
+                    r.reportTimeFormatted = "1m ago"
+                elseif minutes < 120 then
+                    r.reportTimeFormatted = string.format("%dm ago", minutes)
+                else
+                    r.reportTimeFormatted = string.format("%dh ago", math.floor(minutes / 60))
+                end
+            end
+            TriggerLatentClientEvent("EasyAdmin:fillReports", source, 10000, reports)
         end
     end)
 end)

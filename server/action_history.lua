@@ -69,7 +69,7 @@ RegisterNetEvent("EasyAdmin:DeleteAction", function(actionId)
         PrintDebugMessage("Action deleted successfully.", 2)
 
         local preferredWebhook = getPreferredWebhook()
-        SendWebhookMessage(preferredWebhook, string.format(GetLocalisedText("actionhistorydeleted"), getName(src, false, true), actionId), "", 16777214)
+        SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** deleted Action History entry #**{id}**", { by = getName(src, false, true), id = actionId }), "", 16777214)
     else
         PrintDebugMessage("Player does not have permission to delete actions.", 2)
     end

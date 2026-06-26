@@ -1,0 +1,55 @@
+name: i18n Tools
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  extract-i18n:
+    name: Extract i18n strings
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Run extract-i18n
+        run: node tools/extract-i18n.mjs
+
+      - name: Check for new untranslated keys
+        run: |
+          # Count untranslated entries per language (excluding en.json)
+          for f in language/*.json; do
+            lang=$(basename "$f" .json)
+            [ "$lang" = "en" ] && continue
+            total=$(node --input-type=module -e "import fs from 'fs'; const d=JSON.parse(fs.readFileSync('$f')); console.log(Object.keys(d).length)")
+            untranslated=$(node --input-type=module -e "import fs from 'fs'; const d=JSON.parse(fs.readFileSync('$f')); console.log(Object.values(d).filter(v=>v==='<< untranslated >>').length)")
+            echo "$lang: $untranslated / $total untranslated"
+          done
+
+  find-untranslated:
+    name: Find untranslated hardcoded strings
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Run find-untranslated
+        run: node tools/find-untranslated.mjs
