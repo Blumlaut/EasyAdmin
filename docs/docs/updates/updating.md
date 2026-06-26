@@ -22,11 +22,50 @@ The Discord bot is bundled with EasyAdmin. After updating, restart your server t
 
 EasyAdmin uses a React-based NUI. After updating, the NUI files in `nui/dist/` are replaced automatically with the release. No manual rebuild is needed.
 
-## Previous Version Notes
+## Version History
+
+### Version 8.0
+
+**This is a major release with extensive changes over 7.53.** Before updating, **delete the following folders entirely** from your EasyAdmin installation:
+
+```
+client/
+dependencies/
+dist/
+docs/
+plugins/
+server/
+shared/
+src/
+```
+
+> **Do NOT delete** `banlist.json` — your ban list will be preserved.
+
+#### New Permissions (8.0)
+
+After updating, you may need to grant the following new permissions to your admin groups via ACL:
+
+| Permission | Description |
+|---|---|
+| `player.actionhistory.view` | View player action history |
+| `player.actionhistory.add` | Add entries to action history |
+| `player.actionhistory.delete` | Delete action history entries |
+| `player.adminnotes.view` | View admin notes on players |
+| `player.adminnotes.add` | Add admin notes to players |
+| `player.adminnotes.delete` | Delete admin notes |
+| `player.namehistory.view` | View player name history |
+| `player.aliases.add` | Add aliases to a player |
+| `player.aliases.delete` | Delete player aliases |
+| `bot.history` | View Discord bot action history |
+| `bot.notes` | Manage notes via Discord bot |
+| `server.statistics.view` | View server statistics |
+| `server.resources.monitor` | Monitor resource status |
+| `server.network.monitor` | Monitor network state |
+| `server.mute.global` | Mute the global chat |
 
 ### Version 7.53
 
-**This is a major structural refactor.** Many files have been reorganised into subdirectories and the bot has been converted from JavaScript to TypeScript.
+**Major structural refactor.** Many files were reorganised into subdirectories and the bot was converted from JavaScript to TypeScript.
 
 Before updating, **delete the following folders entirely** from your EasyAdmin installation:
 
@@ -41,8 +80,6 @@ language/
 ```
 
 > **Do NOT delete** `banlist.json` or `data/` — these contain your ban list and server data (actions, notes, statistics).
-
-### Version 7.53
 
 - The old NativeUI plugin system (`addPlugin`, `plugins/` directory) has been **removed**. The `plugins/` folder is no longer loaded.
 - A new **runtime NUI plugin system** has been added. External resources register via `exports['easyadmin']:RegisterPlugin(config)` and provide schema trees rendered by EasyAdmin's built-in components. See [Plugins](../../plugins/index).
