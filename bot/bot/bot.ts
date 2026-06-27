@@ -1,15 +1,11 @@
 import fs from 'fs'
-import {
-	Client,
-	Collection,
-	GatewayIntentBits,
-	InteractionType,
-	Partials,
-} from 'discord.js'
+import type { Client } from 'discord.js'
+import { Collection, InteractionType } from 'discord.js'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
 
 import { loadTranslations } from './i18n'
+import { client } from './client'
 import * as shared from './shared'
 
 // Import all bot modules so they are included in the bundle and their top-level code runs
@@ -23,16 +19,6 @@ import './chat_bridge'
 // --- i18n ---
 shared.config.i18nStrings = loadTranslations(GetConvar('ea_LanguageName', 'en'))
 
-// --- Discord client ---
-export const client = new Client({
-	partials: [Partials.GuildMember, Partials.User, Partials.Message, Partials.Channel, Partials.Reaction],
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.GuildMembers,
-		GatewayIntentBits.MessageContent,
-	],
-})
 ;(client as any).commands = new Collection()
 
 // --- Command registration ---

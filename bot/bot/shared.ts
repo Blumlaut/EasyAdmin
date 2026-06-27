@@ -7,7 +7,7 @@ import {
 	User,
 } from 'discord.js'
 
-import { client as discordClient } from './bot'
+import { client as discordClient } from './client'
 export { discordClient as client }
 
 // --- Mutable config object (imports are immutable bindings, so we use a single object) ---
