@@ -1,4 +1,5 @@
 import * as shared from './shared'
+import { fivemExports } from './fivem'
 
 async function syncDiscordRoles(player: number): Promise<void> {
 	if (!shared.config.EasyAdmin) { return } // bot is down
@@ -33,7 +34,7 @@ async function syncDiscordRoles(player: number): Promise<void> {
 	shared.refreshRolesForUser(user, roles)
 }
 
-globalThis.exports('syncDiscordRoles', syncDiscordRoles)
+fivemExports('syncDiscordRoles', syncDiscordRoles)
 
 if (GetConvar('ea_botToken', '') !== '') {
 	shared.client.on('guildMemberUpdate', async function (oldMember: any, newMember: any) {

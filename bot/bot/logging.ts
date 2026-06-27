@@ -1,4 +1,5 @@
 import * as shared from './shared'
+import { fivemExports } from './fivem'
 
 const addBotLogForwarding = async function (source: number, args: string[]): Promise<boolean> {
 	const player = source
@@ -41,5 +42,5 @@ export const logDiscordMessage = async function (text: string, feature?: string,
 	}
 }
 
-globalThis.exports('addBotLogForwarding', addBotLogForwarding)
-globalThis.exports('LogDiscordMessage', logDiscordMessage)
+fivemExports('addBotLogForwarding', addBotLogForwarding)
+fivemExports('LogDiscordMessage', logDiscordMessage)

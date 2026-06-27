@@ -8,6 +8,7 @@ import { client } from './client'
 import * as shared from './shared'
 import { commands } from './commands'
 import { logDiscordMessage } from './logging'
+import { fivemExports } from './fivem'
 
 // Import all bot modules so they are included in the bundle and their top-level code runs
 import './logging'
@@ -57,7 +58,7 @@ async function registerClientCommands(clientId: string): Promise<void> {
 		}
 
 		try {
-			await command.execute(interaction, globalThis.exports)
+			await command.execute(interaction, fivemExports)
 		} catch (error) {
 			console.error(error)
 			const errorContent = {

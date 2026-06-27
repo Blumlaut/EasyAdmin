@@ -8,6 +8,7 @@ import {
 } from 'discord.js'
 
 import { client as discordClient } from './client'
+import { fivemExports } from './fivem'
 export { discordClient as client }
 
 // --- Mutable config object (imports are immutable bindings, so we use a single object) ---
@@ -22,7 +23,7 @@ export const config = {
 
 // --- Typed EasyAdmin exports accessor ---
 export function ea(): CitizenExports['EasyAdmin'] {
-	return globalThis.exports.EasyAdmin
+	return fivemExports.EasyAdmin
 }
 
 // --- Persistent state ---

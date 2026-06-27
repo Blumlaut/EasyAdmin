@@ -96,6 +96,9 @@ interface CitizenExports {
 
 declare const exports: CitizenExports
 
+// --- Files ---
+declare function LoadResourceFile(resourceName: string, fileName: string): string
+
 // --- Missing package types ---
 declare module 'ascii-table' {
 	function factory(options: { heading: string[]; rows: any[][] }): string
