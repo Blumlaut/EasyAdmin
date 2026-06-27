@@ -115,3 +115,32 @@ Use the `ea_testWebhook` command to send test messages to all configured webhook
 ```
 ea_testWebhook
 ```
+
+## Using Webhooks from Plugins
+
+External resources can send webhook messages through EasyAdmin's exports.
+This is useful for logging moderation actions from framework plugins (ESX,
+QB-Core, etc.) to the same Discord channels as built-in EasyAdmin actions.
+
+```lua
+-- Simple usage (uses ea_moderationNotification by default):
+exports.EasyAdmin:sendWebhook(
+  string.format("**%s** gave **%s** $%s.", adminName, targetName, amount),
+  { feature = "esx" }
+)
+
+-- Use a different webhook channel:
+exports.EasyAdmin:sendWebhook("Action logged", {
+  webhook = "detail",   -- "moderation", "detail", "report", or a direct URL
+  feature = "qb",       -- feature tag for exclusion filtering
+  colour = 65280,        -- embed colour (default: 16777214 / red)
+  title = "QB-Core",     -- embed title (default: "EasyAdmin")
+})
+```
+
+The `feature` option lets admins filter plugin messages independently via
+`ea_excludeWebhookFeature`. For example, `ea_excludeWebhookFeature esx`
+silences all webhook messages tagged with `feature = "esx"`.
+
+See [Plugin API — Webhooks](../plugins/plugin-api#webhooks) for the full
+export reference.

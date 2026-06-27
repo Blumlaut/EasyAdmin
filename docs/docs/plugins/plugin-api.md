@@ -133,6 +133,45 @@ any external resource:
 |--------|-----------|-------------|
 | `EasyAdmin:getAllReports` | (none) | Get all active reports |
 
+### Webhooks
+
+| Export | Parameters | Description |
+|--------|-----------|-------------|
+| `EasyAdmin:sendWebhook` | `message, options?` | Send a Discord webhook message (see below) |
+| `EasyAdmin:SendWebhookMessage` | `webhook, message, feature?, colour?, title?, image?` | Direct access to internal webhook function |
+| `EasyAdmin:isWebhookFeatureExcluded` | `feature` | Check if a feature is excluded from webhooks |
+
+#### `sendWebhook(message, options)`
+
+The recommended entry-point for logging moderation actions from plugins.
+Resolves a named webhook convar to its URL and posts a formatted Discord
+embed. When `ea_botLogChannel` is configured, messages are routed through
+the Discord bot automatically.
+
+```lua
+-- Simple usage (uses ea_moderationNotification by default):
+exports.EasyAdmin:sendWebhook(
+  string.format("**%s** gave **%s** $%s.", adminName, targetName, amount),
+  { feature = "esx" }
+)
+
+-- Full control:
+exports.EasyAdmin:sendWebhook("Action logged", {
+  webhook = "detail",   -- "moderation" (default), "detail", "report", or a direct URL
+  feature = "qb",       -- feature tag for exclusion filtering
+  colour = 65280,        -- embed colour as decimal (default: 16777214 / red)
+  title = "QB-Core",     -- embed title (default: "EasyAdmin")
+})
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `webhook` | `string` | `"moderation"` | Named convar (`"moderation"`, `"detail"`, `"report"`) or a direct webhook URL |
+| `feature` | `string` | `nil` | Feature tag for `ea_excludeWebhookFeature` filtering |
+| `colour` | `number` | `16777214` | Embed colour as decimal |
+| `title` | `string` | `"EasyAdmin"` | Embed title |
+| `image` | `string` | `nil` | Image URL for the embed |
+
 ## Events
 
 Listen for these events in your resource:
