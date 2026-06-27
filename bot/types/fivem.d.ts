@@ -80,6 +80,14 @@ interface CitizenExports {
 		HTTPRequest(url: string): Promise<string>
 		matchURL(result: string): Promise<string>
 		isScreenshotInProgress(): Promise<boolean>
+		SendWebhookMessage(webhook: string, message: string, feature?: string, colour?: number, title?: string, image?: string): void
+		sendWebhook(message: string, options?: {
+			webhook?: "moderation" | "detail" | "report" | string
+			feature?: string
+			colour?: number
+			title?: string
+			image?: string
+		}): void
 	}
 
 	// --- Chat exports ---
