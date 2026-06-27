@@ -58,8 +58,7 @@ end
 function KvpEnsureDefaults()
   local defaults = {
     { key = 'shighContrast', value = 'false' },
-    { key = 'ifontSize',     value = 100 },
-    { key = 'smenuSize',     value = 'default' },
+    { key = 'ifontSize',     value = 12 },
     { key = 'ixWindowPos',   value = 1 },
     { key = 'iyWindowPos',   value = 1 },
   }
@@ -68,6 +67,22 @@ function KvpEnsureDefaults()
     local current = KvpGet(d.key)
     if current == nil or current == '' then
       KvpSet(d.key, d.value)
+    end
+  end
+
+  -- Clamp persisted values to their valid ranges (slider bounds from NUI).
+  -- Fixes corrupted/out-of-range KVP values without losing user intent.
+  local fontSize = KvpGet('ifontSize')
+  if fontSize then
+    if fontSize < 10 or fontSize > 20 then
+      KvpSet('ifontSize', 12)
+    end
+  end
+
+  local foldOpacity = KvpGet('ifoldOpacity')
+  if foldOpacity then
+    if foldOpacity < 10 or foldOpacity > 100 then
+      KvpSet('ifoldOpacity', 85)
     end
   end
 end
@@ -99,13 +114,6 @@ function KvpMigrate()
     end
   end
   DeleteResourceKvp('ea_fontSize')
-
-  -- smenuSize: string, straightforward migration
-  local oldMenuSize = GetResourceKvpString('ea_menuSize')
-  if oldMenuSize and KvpGet('smenuSize') == nil then
-    KvpSet('smenuSize', oldMenuSize)
-  end
-  DeleteResourceKvp('ea_menuSize')
 
   -- ea_overrideEgg: dropping entirely
   DeleteResourceKvp('ea_overrideEgg')
