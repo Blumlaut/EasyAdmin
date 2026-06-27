@@ -82,7 +82,7 @@ jobs:
           -x ".git/*" \
           -x ".github/*" \
           -x ".agents/*" \
-          -x "*node_modules/*" \
+          -x "*node_modules*" \
           -x "*data/*" \
           -x "*tests/*" \
           -x "*tools/*" \
