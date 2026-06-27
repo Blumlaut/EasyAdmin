@@ -77,11 +77,12 @@ jobs:
 
     - name: Package release
       run: |
+        ZIP_PATH="$RUNNER_TEMP/EasyAdmin-${{ github.event.inputs.version }}.zip"
         find . -type d -name node_modules -exec rm -rf {} +
         if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
           sed -i "/is_master/d" fxmanifest.lua
         fi
-        zip -r "EasyAdmin-${{ github.event.inputs.version }}.zip" . \
+        zip -r "$ZIP_PATH" . \
           -x ".git" \
           -x ".git/*" \
           -x ".github/*" \
@@ -94,6 +95,7 @@ jobs:
         if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
           sed -i "/^version/ais_master 'yes'" fxmanifest.lua
         fi
+        echo "zip_path=$ZIP_PATH" >> "$GITHUB_ENV"
 
     - name: Create Release
       uses: softprops/action-gh-release@v3
@@ -119,7 +121,7 @@ jobs:
           **Full Changelog**: https://github.com/Blumlaut/EasyAdmin/compare/${{ steps.previous_tag.outputs.previous_tag }}...${{ github.event.inputs.version }}
         draft: false
         prerelease: ${{ github.event.inputs.release_type == 'beta' }}
-        files: EasyAdmin-${{ github.event.inputs.version }}.zip
+        files: ${{ env.zip_path }}
 
     - name: Push Tag
       run: |
