@@ -220,10 +220,16 @@ function App() {
   // === Navigation select handler ===
 
   // Build a map from plugin nav-item id → view (defaults to the id itself).
+  // Includes both top-level items and nested children.
   const pluginViewMap: Record<string, string> = {}
   for (const item of pluginContrib.navItems) {
     if ('id' in item && !('type' in item && item.type !== 'item')) {
       pluginViewMap[item.id] = (item as { view?: string }).view ?? item.id
+      for (const child of (item as { children?: Array<{ id: string; view?: string }> }).children ?? []) {
+        if ('id' in child) {
+          pluginViewMap[child.id] = child.view ?? child.id
+        }
+      }
     }
   }
 

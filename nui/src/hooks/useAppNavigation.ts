@@ -170,12 +170,20 @@ export function useAppNavigation({
     if (view === 'resource-detail') return 'Resource Details'
     if (view === 'profiler') return 'Profiler'
     if (view === 'settings') return 'Settings'
-    // Plugin views: look up the label from the contributed nav item.
+    // Plugin views: look up the label from the contributed nav item (including nested children).
     if (typeof view === 'string' && view.startsWith('plugin:')) {
       const found = allNavItems.find(
         (item) => 'id' in item && !('type' in item && item.type !== 'item') && item.id === view,
       )
       if (found && 'label' in found) return found.label
+      // Search nested children
+      for (const item of allNavItems) {
+        if (!('id' in item) || 'type' in item && item.type !== 'item') continue
+        const child = (item as { children?: Array<{ id: string; label: string }> }).children?.find(
+          (c) => 'id' in c && c.id === view,
+        )
+        if (child) return child.label
+      }
       return 'Plugin'
     }
     return 'EasyAdmin'
@@ -252,9 +260,13 @@ export function useAppNavigation({
     views.push('settings', 'cached-players')
 
     // Plugin views — each contributed nav item's view (or id) is an available view.
+    // Includes nested children.
     for (const item of pluginNavItems) {
       if ('id' in item && !('type' in item && item.type !== 'item')) {
         views.push((item as { view?: string }).view ?? item.id)
+        for (const child of (item as { children?: Array<{ id: string; view?: string }> }).children ?? []) {
+          views.push(child.view ?? child.id)
+        }
       }
     }
 
