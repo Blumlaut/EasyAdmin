@@ -78,17 +78,22 @@ jobs:
     - name: Package release
       run: |
         find . -type d -name node_modules -exec rm -rf {} +
+        if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
+          sed -i "/is_master/d" fxmanifest.lua
+        fi
         zip -r "EasyAdmin-${{ github.event.inputs.version }}.zip" . \
           -x ".git" \
           -x ".git/*" \
           -x ".github/*" \
           -x ".agents/*" \
           -x "*data/*" \
-          -x "*data/*" \
           -x "*tests/*" \
           -x "*tools/*" \
           -x "*PLANS/*" \
           -x "*package-lock.json"
+        if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
+          sed -i "/^version/ais_master 'yes'" fxmanifest.lua
+        fi
 
     - name: Create Release
       uses: softprops/action-gh-release@v3
@@ -99,6 +104,10 @@ jobs:
         name: EasyAdmin ${{ github.event.inputs.version }}${{ github.event.inputs.release_type == 'beta' && ' (Beta)' || '' }}
         body: |
           # EasyAdmin ${{ github.event.inputs.version }}
+
+          ## Download
+
+          [EasyAdmin-${{ github.event.inputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.version }}/EasyAdmin-${{ github.event.inputs.version }}.zip)
 
           ## What's Changed
           ${{ steps.generate_changelog.outputs.changelog }}

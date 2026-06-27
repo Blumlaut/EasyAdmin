@@ -3,7 +3,10 @@
 ## General Update Process
 
 1. Stop your server.
-2. Download the latest release from [GitHub](https://github.com/Blumlaut/EasyAdmin/releases/latest).
+2. Download the release zip:
+   - **Latest**: [GitHub Releases](https://github.com/Blumlaut/EasyAdmin/releases/latest)
+   - **Specific version**: `https://github.com/Blumlaut/EasyAdmin/releases/download/{version}/EasyAdmin-{version}.zip`
+     (e.g. `https://github.com/Blumlaut/EasyAdmin/releases/download/8.0a1/EasyAdmin-8.0a1.zip`)
 3. Delete any files/folders listed below for your target version.
 4. Replace the EasyAdmin folder in your `resources/` directory with the new version.
 5. Start your server.
