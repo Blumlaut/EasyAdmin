@@ -54,7 +54,6 @@ theme:
     - navigation.prune
     - search.suggest
     - search.highlight
-    - toc.integrate
   icon:
     repo: fontawesome/brands/github
 
