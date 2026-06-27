@@ -82,7 +82,7 @@ language/
 > **Do NOT delete** `banlist.json` or `data/` — these contain your ban list and server data (actions, notes, statistics).
 
 - The old NativeUI plugin system (`addPlugin`, `plugins/` directory) has been **removed**. The `plugins/` folder is no longer loaded.
-- A new **runtime NUI plugin system** has been added. External resources register via `exports['easyadmin']:RegisterPlugin(config)` and provide schema trees rendered by EasyAdmin's built-in components. See [Plugins](../../plugins/index).
+- A new **runtime NUI plugin system** has been added. External resources register via `exports['easyadmin']:RegisterPlugin(config)` and provide schema trees rendered by EasyAdmin's built-in components. See [Plugins](../../plugins).
 
 ### Version 7.52
 

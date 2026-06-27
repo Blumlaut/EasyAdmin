@@ -208,7 +208,7 @@ Test the configured webhook URL.
 
 ## See Also
 
-- [Permissions Overview](../../permissions/index) — Permission requirements for commands
+- [Permissions Overview](../../permissions) — Permission requirements for commands
 - [Configuration](../../configuration/commands) — Command configuration options
 - [Reports](../../features/reports) — Report and calladmin commands
 - [Shortcuts & Reminders](../../features/reminders-and-shortcuts) — Shortcut and reminder commands

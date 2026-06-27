@@ -91,5 +91,5 @@ Default: `2`
 
 - [Webhooks](../webhooks) — Set up Discord notifications
 - [Commands](../commands) — Configure report and calladmin commands
-- [Permissions](../../permissions/index) — Set up granular access control
+- [Permissions](../../permissions) — Set up granular access control
 - [NUI Settings](../nui-settings) — Font size, contrast, sidebar layout

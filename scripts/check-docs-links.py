@@ -38,6 +38,9 @@ def file_to_url(rel_path: str) -> str:
     # index.md at root becomes ""
     if url == "index":
         return ""
+    # sub/index.md becomes sub/ (MkDocs convention)
+    if url.endswith("/index"):
+        return url[:-6]
     return url
 
 

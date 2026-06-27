@@ -44,10 +44,10 @@ You want full control over your server, including moderation tools, Discord inte
 <div class="card-desc">Set up webhooks, ban screens, and core options.</div>
 </a>
 
-<a class="card" href="discord/bot-setup">
-<div class="card-icon">&#x1F4E6;</div>
-<div class="card-title">Discord Bot</div>
-<div class="card-desc">Manage your server from Discord.</div>
+<a class="card" href="updates/updating">
+<div class="card-icon">&#x1F504;</div>
+<div class="card-title">Updating</div>
+<div class="card-desc">Update EasyAdmin to the latest version.</div>
 </a>
 
 </div>
@@ -127,7 +127,7 @@ Find what you need by task:
 | Ban a player | [Ban List](features/ban-list) |
 | Set up Discord notifications | [Webhooks](configuration/webhooks) |
 | Add a Discord bot | [Bot Setup](discord/bot-setup) |
-| Configure permissions | [Permissions Overview](permissions/index) |
+| Configure permissions | [Permissions Overview](permissions) |
 | Edit a ban | [Editing Bans](features/ban-list#editing-bans) |
 | Unban a player | [Unbanning](features/ban-list#unbanning) |
 | Handle player reports | [Reports](features/reports) |
