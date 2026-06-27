@@ -1,4 +1,3 @@
-import fs from 'fs'
 import type { Client } from 'discord.js'
 import { Collection, InteractionType } from 'discord.js'
 import { REST } from '@discordjs/rest'
@@ -7,6 +6,8 @@ import { Routes } from 'discord-api-types/v10'
 import { loadTranslations } from './i18n'
 import { client } from './client'
 import * as shared from './shared'
+import { commands } from './commands'
+import { logDiscordMessage } from './logging'
 
 // Import all bot modules so they are included in the bundle and their top-level code runs
 import './logging'
@@ -23,13 +24,7 @@ shared.config.i18nStrings = loadTranslations(GetConvar('ea_LanguageName', 'en'))
 
 // --- Command registration ---
 async function registerClientCommands(clientId: string): Promise<void> {
-	const commands: { data: any }[] = []
-	const commandFiles = fs.readdirSync(`${shared.config.resourcePath}/bot/dist/commands`).filter(file => file.endsWith('.js'))
-
-	for (const file of commandFiles) {
-		 
-		const command: any = require(`${shared.config.resourcePath}/bot/dist/commands/${file}`)
-		commands.push(command.data.toJSON())
+	for (const command of commands) {
 		;(client as any).commands.set(command.data.name, command)
 	}
 
@@ -41,7 +36,7 @@ async function registerClientCommands(clientId: string): Promise<void> {
 	}
 	await rest.put(
 		Routes.applicationCommands(clientId),
-		{ body: commands },
+		{ body: commands.map(c => c.data.toJSON()) },
 	)
 
 	client.on('interactionCreate', async interaction => {
@@ -62,7 +57,7 @@ async function registerClientCommands(clientId: string): Promise<void> {
 		}
 
 		try {
-			await command.execute(interaction, exports)
+			await command.execute(interaction, globalThis.exports)
 		} catch (error) {
 			console.error(error)
 			const errorContent = {
@@ -80,7 +75,7 @@ async function registerClientCommands(clientId: string): Promise<void> {
 
 // --- Startup ---
 if (GetConvar('ea_botToken', '') !== '') {
-	client.once('ready', async () => {
+	client.once('clientReady', async () => {
 		const readyClient = client as Client & { user: { tag: string; id: string } }
 		console.log(`Logged in as ${readyClient.user.tag}!`)
 		readyClient.user.setPresence({
@@ -101,8 +96,6 @@ if (GetConvar('ea_botToken', '') !== '') {
 		if (currentVersion !== latestVersionInfo[0]) {
 			startupMessage += `\nVersion ${latestVersionInfo[0]} is Available!\n Download it from ${latestVersionInfo[1]}`
 		}
-		// LogDiscordMessage is exported via exports() in logging.ts
-		const logDiscordMessage = exports.LogDiscordMessage
 		logDiscordMessage(startupMessage, 'startup')
 	})
 

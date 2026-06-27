@@ -3,7 +3,7 @@ import * as shared from './shared'
 try {
 	const knownAvatarsLocal: Record<number, string | false> = {}
 
-	exports.chat.registerMessageHook(async function (source: number, outMessage: any) {
+	globalThis.exports.chat.registerMessageHook(async function (source: number, outMessage: any) {
 		if (GetConvar('ea_botChatBridge', '') === '') { return }
 
 		const user = await shared.ea().getCachedPlayer(source)
@@ -69,7 +69,7 @@ shared.client.on('messageCreate', async (msg: any) => {
 	if (msg.author.id === shared.config.userID) { return }
 	if (!msg.channel) { return }
 	if (msg.channel.id === GetConvar('ea_botChatBridge', '')) {
-		exports.chat.addMessage(-1, { args: [msg.member.user.username, msg.cleanContent] })
+		globalThis.exports.chat.addMessage(-1, { args: [msg.member.user.username, msg.cleanContent] })
 	}
 })
 

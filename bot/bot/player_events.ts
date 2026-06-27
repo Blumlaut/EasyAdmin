@@ -1,4 +1,5 @@
 import * as shared from './shared'
+import { logDiscordMessage } from './logging'
 
 if (GetConvar('ea_botToken', '') !== '') {
 	on('playerJoining', function () {
@@ -6,7 +7,6 @@ if (GetConvar('ea_botToken', '') !== '') {
 
 		if (GetConvar('ea_botToken', '') !== '' && GetConvar('ea_botLogChannel', '') !== '') {
 			const msg = `Player **${shared.ea().getName(player, true, true)}** with id **${player}** joined the Server!`
-			const logDiscordMessage = exports.LogDiscordMessage
 			logDiscordMessage(msg, 'joinleave')
 		}
 	})
@@ -27,7 +27,6 @@ if (GetConvar('ea_botToken', '') !== '') {
 
 		if (GetConvar('ea_botLogChannel', '') !== '') {
 			const msg = `Player **${shared.ea().getName(player, true, true)}** left the server!`
-			const logDiscordMessage = exports.LogDiscordMessage
 			logDiscordMessage(msg, 'joinleave')
 		}
 	})

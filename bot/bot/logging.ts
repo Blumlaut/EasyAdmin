@@ -21,7 +21,7 @@ const addBotLogForwarding = async function (source: number, args: string[]): Pro
 
 RegisterCommand('ea_addBotLogForwarding', addBotLogForwarding)
 
-const logDiscordMessage = async function (text: string, feature?: string, colour?: number): Promise<void> {
+export const logDiscordMessage = async function (text: string, feature?: string, colour?: number): Promise<void> {
 	if (!shared.config.EasyAdmin) { return } // bot isn't running
 	if (GetConvar('ea_botLogChannel', '') === '') { return }
 	if (feature === 'report' || feature === 'calladmin') { return } // handled in reports.ts
@@ -41,5 +41,5 @@ const logDiscordMessage = async function (text: string, feature?: string, colour
 	}
 }
 
-exports('addBotLogForwarding', addBotLogForwarding)
-exports('LogDiscordMessage', logDiscordMessage)
+globalThis.exports('addBotLogForwarding', addBotLogForwarding)
+globalThis.exports('LogDiscordMessage', logDiscordMessage)

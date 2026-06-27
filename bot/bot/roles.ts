@@ -33,7 +33,7 @@ async function syncDiscordRoles(player: number): Promise<void> {
 	shared.refreshRolesForUser(user, roles)
 }
 
-exports('syncDiscordRoles', syncDiscordRoles)
+globalThis.exports('syncDiscordRoles', syncDiscordRoles)
 
 if (GetConvar('ea_botToken', '') !== '') {
 	shared.client.on('guildMemberUpdate', async function (oldMember: any, newMember: any) {

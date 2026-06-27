@@ -22,7 +22,7 @@ export const config = {
 
 // --- Typed EasyAdmin exports accessor ---
 export function ea(): CitizenExports['EasyAdmin'] {
-	return exports.EasyAdmin
+	return globalThis.exports.EasyAdmin
 }
 
 // --- Persistent state ---
