@@ -16,10 +16,18 @@ exports.EasyAdmin:RegisterPlugin({
   version = '1.0.0',
   icon = 'box',
 
+  -- Permissions this plugin uses. EasyAdmin registers them server-side
+  -- so they're recognised by DoesPlayerHavePermission() and the admin
+  -- session handshake.
+  permissions = {
+    'plugin.demo',
+    'plugin.demo.advanced',
+  },
+
   navItems = {
     { id = 'plugin:ea-plugin-demo', label = 'Demo', icon = 'box' },
     { id = 'plugin:ea-plugin-demo:stats', label = 'Stats', icon = 'chart-bar' },
-    { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap' },
+    { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap', permission = 'plugin.demo.advanced' },
   },
 
   pages = {

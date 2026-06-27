@@ -5,10 +5,12 @@
 -- Convention: "category.action.detail" (e.g. "player.ban.temporary")
 -- The "easyadmin." prefix is added automatically by DoesPlayerHavePermission().
 --
--- Plugins add their own permissions via:
---   Citizen.CreateThread(function()
---       permissions["plugin.name"] = false
---   end)
+-- Plugins declare their permissions in the RegisterPlugin config:
+--   exports.EasyAdmin:RegisterPlugin({
+--     id = 'my-plugin',
+--     permissions = { 'myplugin.action', 'myplugin.action.advanced' },
+--     ...
+--   })
 
 permissions = {
 	["player.ban.temporary"] = false,
@@ -59,8 +61,4 @@ permissions = {
 
 	["immune"] = false,
 	["anon"] = false,
-
-	-- External plugin resources may register permissions at runtime
-	-- via their *_shared.lua scripts (loaded by fxmanifest.lua).
-	-- See docs/nui-plugins.md for the plugin permission pattern.
 }

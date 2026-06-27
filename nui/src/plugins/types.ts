@@ -19,6 +19,8 @@ export interface PluginNavItem {
   icon?: string
   /** View to navigate to (defaults to `id`). Plugin views use `plugin:<pluginId>`. */
   view?: string
+  /** Permission key required to see this nav item (gated by EasyAdmin). */
+  permission?: string
   badge?: string | number
   disabled?: boolean
 }
@@ -59,6 +61,8 @@ export interface RuntimePlugin {
   icon?: string
   /** Hides all contributions if the admin lacks this permission. */
   permission?: string
+  /** Permission keys this plugin uses. Registered server-side so EasyAdmin recognises them. */
+  permissions?: string[]
   /** The FiveM resource name that registered this plugin (for cleanup on resource stop). */
   resourceName?: string
   navItems?: PluginNavItem[]

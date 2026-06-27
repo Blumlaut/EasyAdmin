@@ -42,6 +42,8 @@ export function usePlugins(permissions: Permissions): PluginContributions {
       if (plugin.permission && !permissions[plugin.permission]) continue
 
       for (const item of plugin.navItems ?? []) {
+        // Permission-gate individual nav items
+        if (item.permission && !permissions[item.permission]) continue
         navItems.push({
           type: 'item' as const,
           id: item.id,

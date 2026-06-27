@@ -9,6 +9,5 @@ author 'EasyAdmin Team'
 description 'Example plugin demonstrating the EasyAdmin NUI runtime plugin system'
 version '1.0.0'
 
-shared_scripts { 'shared.lua' }
 client_scripts { 'client.lua' }
 server_scripts { 'server.lua' }
