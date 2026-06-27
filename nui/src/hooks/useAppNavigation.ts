@@ -183,7 +183,7 @@ export function useAppNavigation({
 
   // Permission gating for nav items. Plugin items are already permission-
   // filtered by usePlugins, so they pass through unchanged.
-  const visibleNavItems: NavItem[] = allNavItems.map((item) => {
+  const visibleNavItems: NavItem[] = useMemo(() => allNavItems.map((item) => {
     // Pass through separators and headers unchanged
     if ('type' in item && (item.type === 'separator' || item.type === 'header')) {
       return item
@@ -225,37 +225,41 @@ export function useAppNavigation({
       return { ...item, disabled, children: children?.length ? children : undefined }
     }
     return { ...item, disabled }
-  })
+  }), [allNavItems, permissions])
 
-  const availableViews: View[] = ['main', 'players']
-  if (permissions['player.ban.view']) availableViews.push('bans')
-  if (permissions['player.reports.view']) availableViews.push('reports')
-  if (permissions['server.statistics.view']) availableViews.push('player-statistics')
-  if (permissions['server.network.monitor']) availableViews.push('network-monitor')
-  if (
-    permissions['server.announce'] ||
-    permissions['server.convars'] ||
-    permissions['player.ban.view']
-  ) {
-    availableViews.push('server')
-  }
-  if (
-    permissions['server.resources.start'] ||
-    permissions['server.resources.stop']
-  ) {
-    availableViews.push('resources', 'resource-detail')
-  }
-  if (permissions['server.resources.monitor']) {
-    availableViews.push('profiler')
-  }
-  availableViews.push('settings', 'cached-players')
-
-  // Plugin views — each contributed nav item's view (or id) is an available view.
-  for (const item of pluginNavItems) {
-    if ('id' in item && !('type' in item && item.type !== 'item')) {
-      availableViews.push((item as { view?: string }).view ?? item.id)
+  const availableViews: View[] = useMemo(() => {
+    const views: View[] = ['main', 'players']
+    if (permissions['player.ban.view']) views.push('bans')
+    if (permissions['player.reports.view']) views.push('reports')
+    if (permissions['server.statistics.view']) views.push('player-statistics')
+    if (permissions['server.network.monitor']) views.push('network-monitor')
+    if (
+      permissions['server.announce'] ||
+      permissions['server.convars'] ||
+      permissions['player.ban.view']
+    ) {
+      views.push('server')
     }
-  }
+    if (
+      permissions['server.resources.start'] ||
+      permissions['server.resources.stop']
+    ) {
+      views.push('resources', 'resource-detail')
+    }
+    if (permissions['server.resources.monitor']) {
+      views.push('profiler')
+    }
+    views.push('settings', 'cached-players')
+
+    // Plugin views — each contributed nav item's view (or id) is an available view.
+    for (const item of pluginNavItems) {
+      if ('id' in item && !('type' in item && item.type !== 'item')) {
+        views.push((item as { view?: string }).view ?? item.id)
+      }
+    }
+
+    return views
+  }, [permissions, pluginNavItems])
 
   // Selection handlers — stable because navigateTo is stable
   const selectPlayer = useCallback((player: Player) => {

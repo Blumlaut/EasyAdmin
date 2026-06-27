@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Icon } from './icons'
 import { useTranslation } from '../lib/i18n'
 
@@ -61,7 +61,8 @@ interface NavigationProps {
 
 export function Navigation({ items, activeId, onSelect, orientation = 'vertical' }: NavigationProps) {
   const { t } = useTranslation()
-  const navRef = useRef<HTMLButtonElement[]>([])
+  // Map<navId, buttonElement> — cleaned up when items unmount (callback ref receives null)
+  const navRef = useRef<Map<string, HTMLButtonElement>>(new Map())
   // Track which dropdown groups are expanded (keyed by parent id)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
@@ -84,9 +85,38 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
 
   const initItemRefs = useCallback((el: HTMLButtonElement | null) => {
     if (el) {
-      navRef.current.push(el)
+      const navId = el.getAttribute('data-nav-id')
+      if (navId) {
+        navRef.current.set(navId, el)
+      }
+    } else {
+      // React calls this with null when the element unmounts.
+      // We can't determine the navId here, so cleanup is handled by the
+      // useEffect below that prunes entries not present in the current items.
     }
   }, [])
+
+  // Collect all nav IDs currently rendered so we can prune stale map entries
+  const allNavIds = useMemo(() => {
+    const ids = new Set<string>()
+    for (const item of items) {
+      if (!isNavItem(item)) continue
+      ids.add(item.id)
+      for (const child of item.children ?? []) {
+        if (isNavItem(child)) ids.add(child.id)
+      }
+    }
+    return ids
+  }, [items])
+
+  // Prune stale DOM references from the map when nav items change
+  useEffect(() => {
+    for (const [id] of navRef.current) {
+      if (!allNavIds.has(id)) {
+        navRef.current.delete(id)
+      }
+    }
+  }, [allNavIds])
 
   // Collect all leaf (non-dropdown) items for keyboard navigation
   const leafItems = useCallback((): NavItemBase[] => {
@@ -148,9 +178,7 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
         }
       }
       // Find the DOM element for the target and focus it
-      const targetEl = navRef.current.find(
-        (el) => el && el.getAttribute('data-nav-id') === target.id,
-      )
+      const targetEl = navRef.current.get(target.id)
       targetEl?.focus()
     }
   }, [items, activeId, onSelect, leafItems, orientation])
@@ -181,8 +209,9 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
     return (
       <div key={navItem.id} className={`${hasChildren ? 'nav-dropdown' : ''}${hasChildren && (isActive || isParentActive) ? ' nav-dropdown-parent' : ''}`.trimStart()}>
         <button
-          ref={initItemRefs}
+          key={navItem.id}
           data-nav-id={navItem.id}
+          ref={initItemRefs}
           className={`nav-item${hasChildren && (isActive || isParentActive) ? ' nav-dropdown-parent-active' : ''}${!hasChildren && isActive ? ' nav-item-active' : ''}${hasChildren ? ' nav-dropdown-toggle' : ''}`}
           onClick={() => {
             if (hasChildren) {
