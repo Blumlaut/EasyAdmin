@@ -1,17 +1,17 @@
 # Permission Reference
 
-Complete reference of all EasyAdmin permissions, sorted alphabetically. The `easyadmin.` prefix is added automatically.
+Complete alphabetical listing of all EasyAdmin permissions. For guidance on setting up roles, see [Setting Up Admin Roles](../../permissions).
 
-## Bot Permissions
+## Bot
 
-| Permission | Description |
+| Permission | What It Does |
 |------------|-------------|
 | `easyadmin.bot.history` | Use the `/history` bot command |
 | `easyadmin.bot.notes` | Use the `/notes` bot command |
 
-## Player Permissions
+## Player
 
-| Permission | Description |
+| Permission | What It Does |
 |------------|-------------|
 | `easyadmin.player.actionhistory.add` | Add entries to a player's action history |
 | `easyadmin.player.actionhistory.delete` | Delete entries from a player's action history |
@@ -36,16 +36,16 @@ Complete reference of all EasyAdmin permissions, sorted alphabetically. The `eas
 | `easyadmin.player.reports.claim` | Claim unclaimed reports |
 | `easyadmin.player.reports.process` | Delete/close reports |
 | `easyadmin.player.reports.view` | View player reports |
+| `easyadmin.player.screenshot` | Take screenshots of players |
 | `easyadmin.player.slap` | Slap players |
 | `easyadmin.player.spectate` | Spectate players |
-| `easyadmin.player.screenshot` | Take screenshots of players |
 | `easyadmin.player.teleport.everyone` | Teleport all players |
 | `easyadmin.player.teleport.single` | Teleport to/from a single player |
 | `easyadmin.player.warn` | Issue warnings to players |
 
-## Server Permissions
+## Server
 
-| Permission | Description |
+| Permission | What It Does |
 |------------|-------------|
 | `easyadmin.server.announce` | Send announcements to all players |
 | `easyadmin.server.chat` | Use the admin-only chat channel |
@@ -61,17 +61,9 @@ Complete reference of all EasyAdmin permissions, sorted alphabetically. The `eas
 | `easyadmin.server.shortcut.add` | Add shortcuts (non-persistent) |
 | `easyadmin.server.statistics.view` | Access the Player Statistics page |
 
-## Special Permissions
+## Special
 
-| Permission | Description |
+| Permission | What It Does |
 |------------|-------------|
 | `easyadmin.anon` | Hide admin username in logs and actions |
 | `easyadmin.immune` | Prevent being kicked or banned by other admins |
-
-## See Also
-
-- [Permissions Overview](../../permissions) — How permissions work, group structure
-- [Player Permissions](../../permissions/player-permissions) — Detailed player action permissions
-- [Server Permissions](../../permissions/server-permissions) — Detailed server management permissions
-- [Bot Permissions](../../permissions/bot-permissions) — Discord bot command permissions
-- [Discord ACE](../../discord/discord-ace) — Map Discord roles to ACE permissions
