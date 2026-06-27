@@ -5,9 +5,8 @@ games {"rdr3","gta5"}
 author 'Blumlaut <blue@furfag.de>'
 description 'EasyAdmin - Admin Menu for FiveM & RedM'
 repository 'https://github.com/Blumlaut/EasyAdmin'
-version '7.52'
+version '8.0a1'
 storage_api_version '2'
-is_master 'yes'
 
 
 lua54 'yes'
