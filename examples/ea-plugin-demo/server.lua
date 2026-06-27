@@ -26,8 +26,15 @@ exports.EasyAdmin:RegisterPlugin({
 
   navItems = {
     { id = 'plugin:ea-plugin-demo', label = 'Demo', icon = 'box' },
-    { id = 'plugin:ea-plugin-demo:stats', label = 'Stats', icon = 'chart-bar' },
-    { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap', permission = 'plugin.demo.advanced' },
+    {
+      id = 'plugin:ea-plugin-demo:category',
+      label = 'Plugin Tools',
+      icon = 'layers',
+      children = {
+        { id = 'plugin:ea-plugin-demo:stats', label = 'Stats', icon = 'chart-bar' },
+        { id = 'plugin:ea-plugin-demo:actions', label = 'Actions', icon = 'zap', permission = 'plugin.demo.advanced' },
+      },
+    },
   },
 
   pages = {

@@ -21,6 +21,8 @@ export interface PluginNavItem {
   view?: string
   /** Permission key required to see this nav item (gated by EasyAdmin). */
   permission?: string
+  /** Nested children — renders as a dropdown category. */
+  children?: PluginNavItem[]
   badge?: string | number
   disabled?: boolean
 }

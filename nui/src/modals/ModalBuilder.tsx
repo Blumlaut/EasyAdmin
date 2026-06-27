@@ -108,6 +108,7 @@ export function ModalBuilder({
     } finally {
       setSubmitting(false)
     }
+    onCancel()
   }
 
   function setFieldValue(key: string, value: ModalValue) {

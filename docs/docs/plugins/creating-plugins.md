@@ -69,6 +69,26 @@ Each `id` must match a page's `view`.
 
 The `permission` field hides the nav item from admins without that permission.
 
+### Categories (dropdown nav items)
+
+Use `children` to nest pages under a category:
+
+```lua
+navItems = {
+  {
+    id = 'plugin:my-plugin:tools',
+    label = 'Tools',
+    icon = 'layers',
+    children = {
+      { id = 'plugin:my-plugin:stats', label = 'Stats', icon = 'chart-bar' },
+      { id = 'plugin:my-plugin:actions', label = 'Actions', icon = 'zap' },
+    },
+  },
+},
+```
+
+Children can also be permission-gated individually.
+
 ### Pages
 
 ```lua

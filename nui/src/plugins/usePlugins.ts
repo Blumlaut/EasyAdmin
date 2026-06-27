@@ -51,6 +51,17 @@ export function usePlugins(permissions: Permissions): PluginContributions {
           icon: item.icon ?? plugin.icon ?? 'box',
           badge: item.badge,
           disabled: item.disabled,
+          children: item.children?.map((child) => {
+            if (child.permission && !permissions[child.permission]) return null
+            return {
+              type: 'item' as const,
+              id: child.id,
+              label: child.label,
+              icon: child.icon ?? plugin.icon ?? 'box',
+              badge: child.badge,
+              disabled: child.disabled,
+            }
+          }).filter((c): c is NonNullable<typeof c> => c !== null),
         })
       }
 
