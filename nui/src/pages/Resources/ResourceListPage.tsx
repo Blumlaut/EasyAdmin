@@ -15,6 +15,11 @@ import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
 
+// GitHub release tags include a leading "v" (e.g. "v7.53") — strip it for display
+function stripV(version: string): string {
+  return version.startsWith('v') ? version.slice(1) : version
+}
+
 interface ResourceListPageProps {
   permissions: Permissions
   onSelectResource: (name: string) => void
@@ -94,7 +99,7 @@ export function ResourceListPage({
       .map((r) => ({
         name: r.name,
         current: r.version ?? '?',
-        latest: r.latestVersion ?? '?',
+        latest: r.latestVersion ? stripV(r.latestVersion) : '?',
       }))
   }, [])
 
@@ -221,7 +226,7 @@ export function ResourceListPage({
           return {
             name: u.name,
             current: res?.version ?? '?',
-            latest: u.latest ?? '?',
+            latest: u.latest ? stripV(u.latest) : '?',
           }
         })
       setOutdatedResources(outdatedList)
@@ -390,7 +395,7 @@ function ResourceRow({
               className={`badge shrink-0 ${resource.outdated ? 'badge-warning' : ''}`}
               title={
                 resource.outdated && resource.latestVersion
-                  ? t("Update available: v{version}", { version: resource.latestVersion })
+                  ? t("Update available: v{version}", { version: stripV(resource.latestVersion) })
                   : `v${resource.version}`
               }
             >

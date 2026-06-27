@@ -6,6 +6,14 @@
 
 local currentResource = GetCurrentResourceName()
 
+-- Resources excluded from the Dashboard update notification.
+-- They still appear as outdated in the Resources page, but won't
+-- trigger the alert banner on the Dashboard. These are typically
+-- built-in FiveM resources that can't be updated independently.
+local dashboardUpdateExclusions = {
+  ['monitor'] = true,
+}
+
 -- ============================================================
 -- Permission helpers
 -- ============================================================
@@ -435,7 +443,7 @@ RegisterServerEvent('EasyAdmin:requestResourceUpdateSummary', function()
 
   local outdated = {}
   for name, cached in pairs(resourceUpdateCache) do
-    if cached.outdated and cached.latest then
+    if cached.outdated and cached.latest and not dashboardUpdateExclusions[name] then
       local version = GetResourceMetadata(name, 'version', 0)
       table.insert(outdated, {
         name = name,

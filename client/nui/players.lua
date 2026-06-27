@@ -50,6 +50,12 @@ RegisterNUICallback('spectatePlayer', function(data, cb)
   cb({ ok = true })
 end)
 
+RegisterNUICallback('stopSpectate', function(_data, cb)
+  if not permissions['player.spectate'] then return deny(cb) end
+  stopSpectating()
+  cb({ ok = true })
+end)
+
 RegisterNUICallback('toggleFreeze', function(data, cb)
   if not permissions['player.freeze'] then return deny(cb) end
   local id = tonumber(data and data.id)

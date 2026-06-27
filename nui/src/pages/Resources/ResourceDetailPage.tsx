@@ -11,6 +11,11 @@ import { Icon } from '../../components/icons'
 import { createConfirmModal, runModalAction } from '../../modals/helpers'
 import { notify } from '../../lib/notify'
 
+// GitHub release tags include a leading "v" (e.g. "v7.53") — strip it for display
+function stripV(version: string): string {
+  return version.startsWith('v') ? version.slice(1) : version
+}
+
 interface ResourceDetailPageProps {
   resourceName: string
   permissions: Permissions
@@ -180,7 +185,7 @@ export function ResourceDetailPage({
               <span
                 className="shrink-0 font-mono text-sm"
                 style={resource?.outdated ? { color: 'var(--accent-yellow)' } : undefined}
-                title={resource?.outdated && resource?.latestVersion ? t("Update available: v{version}", { version: resource.latestVersion }) : undefined}
+                title={resource?.outdated && resource?.latestVersion ? t("Update available: v{version}", { version: stripV(resource.latestVersion) }) : undefined}
               >
                 {resource?.outdated && resource?.latestVersion ? (
                   <>
@@ -218,7 +223,7 @@ export function ResourceDetailPage({
             <Icon name="arrow-right" size="xs" className="shrink-0 text-fg-muted" />
             <span>
               <span className="text-fg-muted">{t("Latest:")}</span>{' '}
-              <span className="font-mono">v{resource.latestVersion}</span>
+              <span className="font-mono">v{stripV(resource.latestVersion)}</span>
             </span>
           </div>
         </Alert>

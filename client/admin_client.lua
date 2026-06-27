@@ -329,6 +329,39 @@ end)
 
 -- Screenshot capture is now handled by client/screenshot.lua
 
+function stopSpectating()
+	local playerPed = PlayerPedId()
+	if oldCoords then
+		RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
+		Wait(500)
+		SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
+	end
+	NetworkSetInSpectatorMode(false, playerPed)
+	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Stopped Spectating."))
+	frozen = false
+	FreezeMyself(false)
+	Wait(200) -- to prevent staying invisible
+	SetEntityVisible(playerPed, true, 0)
+	SetEntityCollision(playerPed, true, true)
+	SetEntityInvincible(playerPed, false)
+	NetworkSetEntityInvisibleToNetwork(playerPed, false)
+	if vehicleInfo.netId and vehicleInfo.seat then
+		local vehicle = NetToVeh(vehicleInfo.netId)
+		if DoesEntityExist(vehicle) then
+			if IsVehicleSeatFree(vehicle, vehicleInfo.seat) then
+				SetPedIntoVehicle(playerPed, vehicle, vehicleInfo.seat)
+			else
+				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle seat you were in is now occupied."))
+			end
+		else
+			TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle you were in can no longer be found."))
+		end
+
+		vehicleInfo.netId = nil
+		vehicleInfo.seat = nil
+	end
+end
+
 function spectatePlayer(targetPed,target,name)
 	local playerPed = PlayerPedId() -- yourself
 	enable = true
@@ -352,35 +385,7 @@ function spectatePlayer(targetPed,target,name)
 		
 		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Spectating {name}", { name = name }))
 	else
-		if oldCoords then
-			RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
-			Wait(500)
-			SetEntityCoords(playerPed, oldCoords.x, oldCoords.y, oldCoords.z, 0, 0, 0, false)
-		end
-		NetworkSetInSpectatorMode(false, targetPed)
-		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Stopped Spectating."))
-		frozen = false
-		FreezeMyself(false)
-		Wait(200) -- to prevent staying invisible
-		SetEntityVisible(playerPed, true, 0)
-		SetEntityCollision(playerPed, true, true)
-		SetEntityInvincible(playerPed, false)
-		NetworkSetEntityInvisibleToNetwork(playerPed, false)
-		if vehicleInfo.netId and vehicleInfo.seat then
-			local vehicle = NetToVeh(vehicleInfo.netId)
-			if DoesEntityExist(vehicle) then
-				if IsVehicleSeatFree(vehicle, vehicleInfo.seat) then
-					SetPedIntoVehicle(playerPed, vehicle, vehicleInfo.seat)
-				else
-					TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle seat you were in is now occupied."))
-				end
-			else
-				TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("The vehicle you were in can no longer be found."))
-			end
-
-			vehicleInfo.netId = nil
-			vehicleInfo.seat = nil
-		end
+		stopSpectating()
 	end
 end
 

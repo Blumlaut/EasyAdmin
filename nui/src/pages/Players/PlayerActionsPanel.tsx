@@ -89,6 +89,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
   const [screenshotLoading, setScreenshotLoading] = useState(false)
+  const [isSpectating, setIsSpectating] = useState(false)
 
   // Screenshot callback returns immediately; actual image arrives via 'screenshot:received'
   useEffect(() => {
@@ -146,8 +147,15 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           })
           break
         case 'spectate':
-          await callLua('spectatePlayer', { id: player.id, name: player.name })
-          notify(t("Spectating {name}", { name: player.name }), 'success')
+          if (isSpectating) {
+            await callLua('stopSpectate', {})
+            setIsSpectating(false)
+            notify(t("Stopped spectating"), 'success')
+          } else {
+            await callLua('spectatePlayer', { id: player.id, name: player.name })
+            setIsSpectating(true)
+            notify(t("Spectating {name}", { name: player.name }), 'success')
+          }
           break
         case 'screenshot':
           setScreenshotLoading(true)
@@ -345,8 +353,8 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
               </p>
               <div className="player-action-group-grid">
                 {group.actions.map((action) => {
-                  const isToggle = action.id === 'freeze' || action.id === 'mute'
-                  const isActive = action.id === 'freeze' ? player.frozen : player.muted
+                  const isToggle = action.id === 'freeze' || action.id === 'mute' || action.id === 'spectate'
+                  const isActive = action.id === 'freeze' ? player.frozen : action.id === 'mute' ? player.muted : isSpectating
                   const isLoading = action.id === 'screenshot' && screenshotLoading
                   // Live stream is still in development (WebRTC transport needs
                   // work — vertical flip + connection stability). Render the
@@ -367,7 +375,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
                       title={isStream
                         ? undefined
                         : isToggle
-                          ? `${isActive ? 'Un' : ''}${action.label} ${player.name}`
+                          ? `${action.id === 'spectate' && isActive ? 'Stop Spectating ' : isActive ? 'Un' : ''}${action.label}${action.id !== 'spectate' || !isActive ? ' ' : ''}${action.id !== 'spectate' || !isActive ? player.name : ''}`
                           : `${action.label} ${player.name}`
                       }
                     >
@@ -377,7 +385,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
                         <Icon name={action.icon} size="sm" />
                       )}
                       <span className="player-action-group-btn-label">
-                        {isToggle && isActive ? `Un${action.label}` : action.label}
+                        {isToggle && isActive ? (action.id === 'spectate' ? 'Stop Spectating' : `Un${action.label}`) : action.label}
                       </span>
                     </button>
                   )
