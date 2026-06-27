@@ -77,12 +77,13 @@ jobs:
 
     - name: Package release
       run: |
+        find . -type d -name node_modules -exec rm -rf {} +
         zip -r "EasyAdmin-${{ github.event.inputs.version }}.zip" . \
           -x ".git" \
           -x ".git/*" \
           -x ".github/*" \
           -x ".agents/*" \
-          -x "*node_modules*" \
+          -x "*data/*" \
           -x "*data/*" \
           -x "*tests/*" \
           -x "*tools/*" \
