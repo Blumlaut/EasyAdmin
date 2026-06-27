@@ -87,7 +87,6 @@ jobs:
           -x ".git/*" \
           -x ".github/*" \
           -x ".agents/*" \
-          -x "*data/*" \
           -x "*tests/*" \
           -x "*tools/*" \
           -x "*PLANS/*" \
