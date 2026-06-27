@@ -39,17 +39,19 @@ charts, alerts, badges, icons, etc.).
 
 ## Permissions
 
-Plugins can define custom permissions and gate their contributions:
+Plugins declare permissions in the `RegisterPlugin` config. EasyAdmin
+registers them server-side so they work with `DoesPlayerHavePermission()`
+and the admin session handshake:
 
 ```lua
--- Register a permission in your resource's shared script
-Citizen.CreateThread(function()
-  while permissions == nil do Citizen.Wait(50) end
-  permissions['plugin.my-plugin'] = false
-end)
+exports.EasyAdmin:RegisterPlugin({
+  id = 'my-plugin',
+  permissions = { 'plugin.my-plugin', 'plugin.my-plugin.advanced' },
+  -- ...
+})
 ```
 
 Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see it.
-Gate individual tabs or the entire plugin via the `permission` field.
+Gate individual tabs, nav items, or the entire plugin via the `permission` field.
 
-See [Creating a Plugin](creating-plugins) for the full permission pattern.
+See [Custom Permissions](custom-permissions) for the full reference.

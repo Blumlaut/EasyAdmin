@@ -15,7 +15,6 @@ game 'gta5'
 
 dependencies { 'EasyAdmin' }
 
-shared_scripts { 'shared.lua' }
 client_scripts { 'client.lua' }
 server_scripts { 'server.lua' }
 ```
@@ -48,6 +47,7 @@ exports.EasyAdmin:RegisterPlugin({
 | `version` | Yes | Version string |
 | `icon` | No | Default icon for nav items |
 | `permission` | No | Hides everything if admin lacks this permission |
+| `permissions` | No | Array of permission keys this plugin uses |
 | `navItems` | No | Sidebar entries |
 | `pages` | No | Full-page views |
 | `playerDetailTabs` | No | Tabs in the player detail page |
@@ -60,10 +60,14 @@ navItems = {
   { id = 'plugin:my-plugin', label = 'My Plugin', icon = 'box' },
   -- Multi-page:
   { id = 'plugin:my-plugin:settings', label = 'Settings', icon = 'settings' },
+  -- Permission-gated:
+  { id = 'plugin:my-plugin:admin', label = 'Admin', icon = 'shield', permission = 'plugin.my-plugin.admin' },
 },
 ```
 
 Each `id` must match a page's `view`.
+
+The `permission` field hides the nav item from admins without that permission.
 
 ### Pages
 
@@ -171,21 +175,27 @@ The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>
 
 ## Permissions
 
-Register a permission in your resource's shared script:
+Declare permissions in the `RegisterPlugin` config. EasyAdmin registers
+them server-side so they work with `DoesPlayerHavePermission()` and the
+admin session handshake:
 
 ```lua
-Citizen.CreateThread(function()
-  -- Wait for EasyAdmin's permissions table to be available
-  while permissions == nil do
-    Citizen.Wait(50)
-  end
-  permissions['plugin.my-plugin'] = false
-end)
+exports.EasyAdmin:RegisterPlugin({
+  id = 'my-plugin',
+  permissions = {
+    'plugin.my-plugin',
+    'plugin.my-plugin.advanced',
+  },
+  -- ...
+})
 ```
 
 Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see the plugin.
 
-Gate the entire plugin:
+### Gate the entire plugin
+
+The top-level `permission` field hides all contributions when the admin
+lacks that permission:
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
@@ -195,7 +205,16 @@ exports.EasyAdmin:RegisterPlugin({
 })
 ```
 
-Gate a single player tab:
+### Gate individual nav items
+
+```lua
+navItems = {
+  { id = 'plugin:my-plugin', label = 'My Plugin', icon = 'box' },
+  { id = 'plugin:my-plugin:admin', label = 'Admin', permission = 'plugin.my-plugin.advanced' },
+},
+```
+
+### Gate individual player tabs
 
 ```lua
 playerDetailTabs = {
@@ -215,23 +234,10 @@ The NUI re-fetches the current view's schema.
 
 ## Full Example
 
-### `shared.lua`
-
-```lua
--- Register custom permissions
-Citizen.CreateThread(function()
-  while permissions == nil do
-    Citizen.Wait(50)
-  end
-  permissions['plugin.my-plugin'] = false
-  permissions['plugin.my-plugin.advanced'] = false
-end)
-```
-
 ### `server.lua`
 
 Register the plugin (server-side only — the server is the source of truth
-and broadcasts to all clients):
+and broadcasts to all clients). Permissions are declared in the config:
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
@@ -239,6 +245,11 @@ exports.EasyAdmin:RegisterPlugin({
   name = 'My Plugin',
   version = '1.0.0',
   icon = 'box',
+
+  permissions = {
+    'plugin.my-plugin',
+    'plugin.my-plugin.advanced',
+  },
 
   navItems = {
     { id = 'plugin:my-plugin', label = 'My Plugin', icon = 'box' },
