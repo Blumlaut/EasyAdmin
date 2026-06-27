@@ -129,6 +129,9 @@ jobs:
             git config user.email "<>"
             sed -i "/is_master/d" fxmanifest.lua
             sed -i "/^version/c\version '${{ github.event.inputs.version }}'" fxmanifest.lua
+            # Convert Major.Minor to semver for package.json (add .0 patch if missing)
+            SEMVER_VERSION=$(echo '${{ github.event.inputs.version }}' | awk -F. '{if(NF==2) print $0".0"; else print $0}')
+            sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$SEMVER_VERSION\"/" package.json
             git add .
             git commit -m "${{ github.event.inputs.version }}"
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"

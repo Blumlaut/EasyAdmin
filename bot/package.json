@@ -29,7 +29,7 @@
     "ws": "^8.21.0"
   },
   "scripts": {
-    "build": "rm -rf ./dist && node build.js",
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && node build.js",
     "watch": "node build.js --watch",
     "lint": "eslint bot/",
     "typecheck": "tsc --noEmit"
