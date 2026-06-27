@@ -154,26 +154,6 @@ function checkVersion()
 	local remoteVersion,remoteURL = getLatestVersion()
 
 	if KvpGet('scurrentVersion') ~= curVersion then
-		local legacyFiles = {
-			'__resource.lua', 'version.json', 'admin_server.lua', 'admin_client.lua', 'gui_c.lua', 'util_shared.lua', 'yarn.lock', '.yarn.installed',
-			'server/bot/notifications.js', 'package.json', 'server/bot/bot.js', 'server/bot/chat_bridge.js', 'server/bot/functions.js', 'server/bot/logging.js',
-			'server/bot/player_events.js', 'server/bot/reports.js', 'server/bot/roles.js', 'server/bot/server_status.js', 'server/bot/commands/add_ace.js',
-			'server/bot/commands/add_group.js', 'server/bot/commands/announce.js', 'server/bot/commands/ban.js', 'server/bot/commands/baninfo.js',
-			'server/bot/commands/cleanup.js', 'server/bot/commands/configure.js', 'server/bot/commands/freeze.js', 'server/bot/commands/kick.js',
-			'server/bot/commands/mute.js', 'server/bot/commands/playerinfo.js', 'server/bot/commands/playerlist.js', 'server/bot/commands/refreshperms.js',
-			'server/bot/commands/remove_ace.js', 'server/bot/commands/remove_group.js', 'server/bot/commands/screenshot.js', 'server/bot/commands/slap.js',
-			'server/bot/commands/unban.js', 'server/bot/commands/unfreeze.js', 'server/bot/commands/unmute.js', 'server/bot/commands/warn.js',
-			'bot/dist/commands/configure.js'
-		}
-
-		for i,file in pairs(legacyFiles) do
-			local fileExists = LoadResourceFile(GetCurrentResourceName(), file)
-			if fileExists then
-				os.remove(GetResourcePath(GetCurrentResourceName()).."/"..file)
-				PrintDebugMessage("Found legacy file "..file.." in EasyAdmin Folder and attempted deletion.", 2)
-			end
-		end
-
 		PrintDebugMessage('EasyAdmin has been updated, or just been installed for the first time, please restart EasyAdmin to ensure smooth operation.', 1)
 		KvpSetNoSync('scurrentVersion', curVersion)
 	end
