@@ -182,9 +182,8 @@ function checkVersion()
 		PrintDebugMessage("You are using an unstable version of EasyAdmin, if this was not your intention, please download the latest stable version from "..remoteURL, 1)
 	end
 
-	if not tonumber(curVersion) then
-		PrintDebugMessage("EasyAdmin's Version Number is invalid, this usually means you are using a pre-release version")
-	elseif curVersion ~= remoteVersion and tonumber(curVersion) < tonumber(remoteVersion) then
+	local cmp = compareVersions(curVersion, remoteVersion)
+	if cmp < 0 then
 		print("\n--------------------------------------------------------------------------")
 		print("\n"..resourceName.." is outdated.\nNewest Version: "..remoteVersion.."\nYour Version: "..curVersion.."\nPlease update it from "..remoteURL)
 		print("\n--------------------------------------------------------------------------")
@@ -195,7 +194,7 @@ function checkVersion()
 		for adminId,_ in pairs(OnlineAdmins or {}) do
 			TriggerClientEvent('EasyAdmin:updateInfo', adminId, updateInfo)
 		end
-	elseif tonumber(curVersion) > tonumber(remoteVersion) then
+	elseif cmp > 0 then
 		PrintDebugMessage("Your version of "..resourceName.." seems to be higher than the current stable version.", 2)
 	end
 end

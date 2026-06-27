@@ -136,6 +136,50 @@ function GetVersion()
 end
 exports('GetVersion', GetVersion)
 
+-- ============================================================
+-- Version comparison (shared between runtime update check + resources UI)
+--
+-- Supports both EasyAdmin's float-based versions ("8.0") and full
+-- semver ("8.0.1", "v1.2.3"). Non-numeric suffixes (e.g. "8.0a1",
+-- "1.2.3-beta") are stripped so only the numeric release is compared.
+-- ============================================================
+
+--- Parse a version string into a table of numeric parts.
+-- Strips an optional leading "v" and ignores non-numeric suffixes.
+-- @string version  Version string (e.g. "8.0", "v1.2.3", "8.0a1")
+-- @treturn number[] Table of numeric parts (e.g. {8, 0})
+function parseVersion(version)
+	if not version then return {} end
+	version = string.gsub(version, '^v', '')
+	local parts = {}
+	for part in string.gmatch(version, '%d+') do
+		table.insert(parts, tonumber(part))
+	end
+	return parts
+end
+exports('parseVersion', parseVersion)
+
+--- Compare two version strings.
+-- @string a  First version
+-- @string b  Second version
+-- @treturn number  -1 if a < b, 0 if equal, 1 if a > b
+function compareVersions(a, b)
+	if not a or not b then return 0 end
+
+	local partsA = parseVersion(a)
+	local partsB = parseVersion(b)
+
+	local len = math.max(#partsA, #partsB)
+	for i = 1, len do
+		local va = partsA[i] or 0
+		local vb = partsB[i] or 0
+		if va < vb then return -1 end
+		if va > vb then return 1 end
+	end
+	return 0
+end
+exports('compareVersions', compareVersions)
+
 
 -- i18n functions (GetLocalisedText, I18nLoad, I18nSet, I18nT) are now in shared/i18n.lua
 

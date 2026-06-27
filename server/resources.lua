@@ -129,28 +129,6 @@ end
 loadUpdateCache()
 
 -- ============================================================
--- Version comparison
--- ============================================================
-
--- Simple semver comparison (handles X.Y.Z and v-prefixed)
-function compareVersions(a, b)
-  if not a or not b then return 0 end
-  a = string.gsub(a, '^v', '')
-  b = string.gsub(b, '^v', '')
-
-  local partsA, partsB = {}, {}
-  for part in string.gmatch(a, '%d+') do table.insert(partsA, tonumber(part)) end
-  for part in string.gmatch(b, '%d+') do table.insert(partsB, tonumber(part)) end
-
-  for i = 1, math.max(#partsA, #partsB) do
-    local va, vb = partsA[i] or 0, partsB[i] or 0
-    if va < vb then return -1 end
-    if va > vb then return 1 end
-  end
-  return 0
-end
-
--- ============================================================
 -- Update checking
 -- ============================================================
 
