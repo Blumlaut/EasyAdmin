@@ -270,7 +270,6 @@ RegisterNetEvent('EasyAdmin:ReceivePlayerNameHistory', function(data, playerId)
       data = {
         id = playerId,
         nameHistory = data and data.nameHistory or {},
-        aliases = data and data.aliases or {},
         currentName = data and data.currentName or 'Unknown',
       },
     })

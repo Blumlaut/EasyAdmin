@@ -1,7 +1,7 @@
 ------------------------------------
 -- EasyAdmin: Player registry
 -- Tracks unique players by identifiers across sessions.
--- Handles name history, aliases, session lengths, and playtime.
+-- Handles name history, session lengths, and playtime.
 -- Persists to data/statistics/players.json
 ------------------------------------
 
@@ -10,10 +10,9 @@
 -- ============================================================
 
 -- Player registry keyed by a unique numeric ID.
--- { id, identifiers, name, firstSeen, lastSeen, sessions, playtime, sessionLengths, nameHistory, aliases }
+-- { id, identifiers, name, firstSeen, lastSeen, sessions, playtime, sessionLengths, nameHistory }
 local playerRegistry = {}
 local nextPlayerId = 1
-local nextAliasId = 1
 
 -- Reverse index: any identifier string → player registry entry ID
 local playerIndex = {}
@@ -138,7 +137,6 @@ local function load()
 	local playerCounts = data.playerCounts or {} -- preserved but owned by player_history module
 	playerRegistry = data.players or {}
 	nextPlayerId = data.nextPlayerId or 1
-	nextAliasId = data.nextAliasId or 1
 	playerIndex = {}
 
 	playerById = {}
@@ -158,12 +156,11 @@ local function save()
 		playerCounts = existing.playerCounts or {},
 		players = playerRegistry,
 		nextPlayerId = nextPlayerId,
-		nextAliasId = nextAliasId,
 	})
 end
 
 -- ============================================================
--- Migration: backfill nameHistory / aliases for existing entries
+-- Migration: backfill nameHistory for existing entries
 -- ============================================================
 
 local function migrateNameHistory()
@@ -176,9 +173,6 @@ local function migrateNameHistory()
 				}
 				migrated = migrated + 1
 			end
-		end
-		if not entry.aliases then
-			entry.aliases = {}
 		end
 	end
 	if migrated > 0 then
@@ -261,8 +255,7 @@ RegisterServerEvent('EasyAdmin:sessionStart', function()
 			sessions       = 1,
 			playtime       = 0,
 			sessionLengths = {},
-			nameHistory    = { { name = playerName, firstSeen = now, lastSeen = nil } },
-			aliases        = {},
+			nameHistory = { { name = playerName, firstSeen = now, lastSeen = nil } },
 		}
 		nextPlayerId = nextPlayerId + 1
 		table.insert(playerRegistry, entry)
@@ -443,48 +436,6 @@ function ResolvePlayerIdentifiers(playerId)
 		identifiers = (getCachedPlayerIdentifiers and getCachedPlayerIdentifiers(playerId)) or {}
 	end
 	return identifiers
-end
-
----Add an alias to a player entry
----@param identifiers table
----@param alias string
----@param addedBy string
----@param note string|nil
----@return boolean success
-function AddAlias(identifiers, alias, addedBy, note)
-	local entry = findPlayerByIdentifiers(identifiers)
-	if not entry then return false end
-
-	if not entry.aliases then entry.aliases = {} end
-
-	table.insert(entry.aliases, {
-		id      = nextAliasId,
-		alias   = alias,
-		addedBy = addedBy,
-		addedAt = os.time(),
-		note    = note,
-	})
-	nextAliasId = nextAliasId + 1
-	save()
-	return true
-end
-
----Remove an alias from a player entry
----@param identifiers table
----@param aliasId number
----@return boolean success
-function RemoveAlias(identifiers, aliasId)
-	local entry = findPlayerByIdentifiers(identifiers)
-	if not entry or not entry.aliases then return false end
-
-	for i = #entry.aliases, 1, -1 do
-		if entry.aliases[i].id == aliasId then
-			table.remove(entry.aliases, i)
-			save()
-			return true
-		end
-	end
-	return false
 end
 
 -- ============================================================

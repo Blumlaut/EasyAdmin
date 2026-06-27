@@ -57,8 +57,6 @@ After updating, you may need to grant the following new permissions to your admi
 | `player.adminnotes.add` | Add admin notes to players |
 | `player.adminnotes.delete` | Delete admin notes |
 | `player.namehistory.view` | View player name history |
-| `player.aliases.add` | Add aliases to a player |
-| `player.aliases.delete` | Delete player aliases |
 | `bot.history` | View Discord bot action history |
 | `bot.notes` | Manage notes via Discord bot |
 | `server.statistics.view` | View server statistics |

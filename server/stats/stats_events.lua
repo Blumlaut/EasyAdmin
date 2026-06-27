@@ -315,7 +315,7 @@ RegisterServerEvent('EasyAdmin:requestNetworkStats', function(data)
 end)
 
 -- ============================================================
--- Name History & Aliases
+-- Name History
 -- ============================================================
 
 RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
@@ -323,7 +323,6 @@ RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
 	if not DoesPlayerHavePermission(src, 'player.namehistory.view') then
 		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
 			nameHistory = {},
-			aliases = {},
 			currentName = 'Unknown',
 		}, playerId)
 		return
@@ -333,7 +332,6 @@ RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
 	if not targetPlayerId then
 		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
 			nameHistory = {},
-			aliases = {},
 			currentName = 'Unknown',
 		}, playerId)
 		return
@@ -343,7 +341,6 @@ RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
 	if #identifiers == 0 then
 		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
 			nameHistory = {},
-			aliases = {},
 			currentName = 'Unknown',
 		}, playerId)
 		return
@@ -353,7 +350,6 @@ RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
 	if not entry then
 		TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
 			nameHistory = {},
-			aliases = {},
 			currentName = 'Unknown',
 		}, playerId)
 		return
@@ -361,50 +357,6 @@ RegisterServerEvent('EasyAdmin:GetPlayerNameHistory', function(playerId)
 
 	TriggerClientEvent('EasyAdmin:ReceivePlayerNameHistory', src, {
 		nameHistory = entry.nameHistory or {},
-		aliases     = entry.aliases or {},
 		currentName = entry.name or 'Unknown',
 	}, playerId)
-end)
-
-RegisterServerEvent('EasyAdmin:AddPlayerAlias', function(data)
-	local src = source
-	if not DoesPlayerHavePermission(src, 'player.aliases.add') then return end
-
-	local playerId = tonumber(data and data.playerId)
-	if not playerId then return end
-
-	local aliasText = data and data.alias
-	if not aliasText or aliasText == '' or #aliasText > 128 then return end
-
-	local note = data and data.note
-	if note and #note > 256 then note = note:sub(1, 256) end
-
-	local identifiers = ResolvePlayerIdentifiers(playerId)
-	if #identifiers == 0 then return end
-
-	local success = AddAlias(identifiers, aliasText, GetPlayerName(src) or 'Console', note)
-	if success then
-		local entry = FindPlayerByIdentifiers(identifiers)
-		PrintDebugMessage(string.format('Alias "%s" added to player "%s" by "%s".',
-			aliasText, entry and entry.name or 'Unknown', GetPlayerName(src) or 'Console'), 3)
-	end
-end)
-
-RegisterServerEvent('EasyAdmin:RemovePlayerAlias', function(data)
-	local src = source
-	if not DoesPlayerHavePermission(src, 'player.aliases.delete') then return end
-
-	local playerId = tonumber(data and data.playerId)
-	local aliasId = tonumber(data and data.aliasId)
-	if not playerId or not aliasId then return end
-
-	local identifiers = ResolvePlayerIdentifiers(playerId)
-	if #identifiers == 0 then return end
-
-	local entry = FindPlayerByIdentifiers(identifiers)
-	local success = RemoveAlias(identifiers, aliasId)
-	if success then
-		PrintDebugMessage(string.format('Alias #%d removed from player "%s" by "%s".',
-			aliasId, entry and entry.name or 'Unknown', GetPlayerName(src) or 'Console'), 3)
-	end
 end)

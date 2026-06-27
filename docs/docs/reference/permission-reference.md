@@ -19,8 +19,6 @@ Complete alphabetical listing of all EasyAdmin permissions. For guidance on sett
 | `easyadmin.player.adminnotes.add` | Add admin notes to a player |
 | `easyadmin.player.adminnotes.delete` | Delete admin notes from a player |
 | `easyadmin.player.adminnotes.view` | View admin notes on a player |
-| `easyadmin.player.aliases.add` | Add aliases to a player |
-| `easyadmin.player.aliases.delete` | Delete aliases from a player |
 | `easyadmin.player.allowlist` | Join the server when allowlist is enabled |
 | `easyadmin.player.ban.edit` | Edit ban entries |
 | `easyadmin.player.ban.permanent` | Permanently ban players |

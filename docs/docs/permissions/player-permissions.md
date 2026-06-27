@@ -82,13 +82,6 @@ Routing buckets control which players can see each other in OneSync. These permi
 |------------|-------------|
 | `easyadmin.player.namehistory.view` | View a player's name history |
 
-## Aliases
-
-| Permission | What It Does |
-|------------|-------------|
-| `easyadmin.player.aliases.add` | Add aliases to a player |
-| `easyadmin.player.aliases.delete` | Delete aliases from a player |
-
 ## Allowlist
 
 | Permission | What It Does |

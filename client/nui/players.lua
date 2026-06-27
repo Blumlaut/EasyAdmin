@@ -295,31 +295,4 @@ RegisterNUICallback('getPlayerNameHistory', function(data, cb)
   cb({ ok = true })
 end)
 
----Add an alias (AKA) for a player.
-RegisterNUICallback('addPlayerAlias', function(data, cb)
-  if not permissions['player.aliases.add'] then return deny(cb) end
-  local id = tonumber(data and data.playerId)
-  if not id then return deny(cb, 'Missing player id') end
-  local alias = data and data.alias
-  if not alias or alias == '' then return deny(cb, 'Alias is empty') end
-  local note = data and data.note
-  TriggerServerEvent('EasyAdmin:AddPlayerAlias', { playerId = id, alias = alias, note = note })
-  -- Refresh name history after adding
-  TriggerServerEvent('EasyAdmin:GetPlayerNameHistory', id)
-  toast('Alias added')
-  cb({ ok = true })
-end)
 
----Remove an alias (AKA) from a player.
-RegisterNUICallback('removePlayerAlias', function(data, cb)
-  if not permissions['player.aliases.delete'] then return deny(cb) end
-  local playerId = tonumber(data and data.playerId)
-  local aliasId = tonumber(data and data.aliasId)
-  if not playerId then return deny(cb, 'Missing player id') end
-  if not aliasId then return deny(cb, 'Missing alias id') end
-  TriggerServerEvent('EasyAdmin:RemovePlayerAlias', { playerId = playerId, aliasId = aliasId })
-  -- Refresh name history after removing
-  TriggerServerEvent('EasyAdmin:GetPlayerNameHistory', playerId)
-  toast('Alias removed')
-  cb({ ok = true })
-end)

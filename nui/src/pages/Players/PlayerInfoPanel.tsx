@@ -27,7 +27,6 @@ export function PlayerInfoPanel({ player, permissions }: PlayerInfoPanelProps) {
     const unsub = on<{
       id: number
       nameHistory: NameHistoryEntry[]
-      aliases: unknown[]
       currentName: string
     }>('playerNameHistory', (data) => {
       if (cancelled || data.id !== player.id) return
