@@ -236,7 +236,6 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
           tabIndex={(isActive || (hasChildren && isParentActive)) ? 0 : -1}
           style={isDisabled ? { opacity: 0.5 } : undefined}
         >
-          {/* @ts-expect-error Icon name is dynamic but validated at runtime */}
           <Icon name={navItem.icon} size="sm" />
           <span className="nav-item-label">{navItem.label}</span>
           {navItem.badge !== undefined && (

@@ -1,20 +1,5 @@
 import React, { type SVGProps } from 'react'
-import {
-  Activity, AlertCircle, AlertTriangle, Archive, ArrowDownCircle, ArrowLeft,
-  ArrowRight, ArrowUpCircle, ArrowUpDown, AtSign, Ban, Bell, BookOpen, Box,
-  Calendar, Camera, Check, CheckCircle, ChevronDown, ChevronLeft, ChevronRight,
-  ChevronUp, ChevronsDown, ChevronsLeft, ChevronsRight, ChevronsUp, ChartBar,
-  Clipboard as ClipboardIcon, Clock, Code, Compass, Copy, CornerDownRight, Cpu,
-  Database, Download, Edit, Eye, EyeOff, ExternalLink, FileSearch, FileText,
-  Filter, Flag, FlagTriangleRight, Globe, GripVertical, HardDrive, Hash, Home,
-  LayoutGrid as LayoutGridIcon, GitBranch as GitBranchIcon, Gauge as GaugeIcon,
-  Menu as MenuIcon, RefreshCw, Mail, Map, MapPin, Maximize, MessageSquare,
-  Minimize, Monitor, MousePointerClick, Navigation, Plus, Play, Phone, Search,
-  Server, Settings, Shield, ShieldAlert, ShieldCheck, Signal, Sliders, Snowflake,
-  Star, Square, Terminal as TerminalIcon, Tag, Trash, Trash2, TrendingUp, Unlock,
-  Upload, User, UserCheck, UserMinus, UserSearch, UserX, Users, Volume2, VolumeX,
-  Wifi, Zap, Loader2, Lock, LogOut, History, Info, Key, Layers, Link, X,
-} from 'lucide-react'
+import * as Lucide from 'lucide-react'
 
 // Icon size tokens
 const SIZES: Record<string, number> = {
@@ -29,6 +14,8 @@ export interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'size'> {
   size?: 'xs' | 'sm' | 'md' | 'lg'
 }
 
+// Commonly-used icon names for IDE autocomplete.
+// Any valid lucide-react icon name (kebab-case) works at runtime — these are just hints.
 export type IconName =
   // Navigation
   | 'chevron-left' | 'chevron-right' | 'chevron-down' | 'chevron-up'
@@ -68,6 +55,13 @@ export type IconName =
   | 'log-out' | 'grip-vertical'
   // Brand logos (hand-crafted, not in lucide-react)
   | 'discord' | 'github'
+  // Accept any string so plugins can use any lucide icon name at runtime
+  | (string & {})
+
+// kebab-case → PascalCase: "chevron-double-left" → "ChevronDoubleLeft"
+function toPascalCase(kebab: string): string {
+  return kebab.replace(/(?:^|-)(\w)/g, (_, c) => c.toUpperCase())
+}
 
 // lucide-react v1.x exports class components (objects with { render }), not function components.
 // This helper detects them and renders via React.createElement.
@@ -75,36 +69,16 @@ function isLucideComponent(value: unknown): value is { new (props: Record<string
   return typeof value === 'object' && value !== null && 'render' in value
 }
 
-export function Icon({ name, size = 'md', className, ...props }: IconProps) {
-  const dimension = SIZES[size] ?? SIZES.md
-  const icon = ICONS[name]
-  if (!icon) {
-    console.warn(`Icon "${name}" not found`)
-    return null
+// Resolve a kebab-case icon name to a lucide-react component.
+// Tries the direct PascalCase name first, then falls back to the `*Icon` suffixed variant.
+function resolveLucideIcon(name: string): typeof Lucide.AlertTriangle | null {
+  const pascal = toPascalCase(name)
+  // Try direct name first (e.g. "ChevronLeft"), then suffixed variant (e.g. "ChevronLeftIcon")
+  const component = Lucide[pascal as keyof typeof Lucide] ?? Lucide[`${pascal}Icon` as keyof typeof Lucide]
+  if (component && isLucideComponent(component)) {
+    return component as typeof Lucide.AlertTriangle
   }
-
-  // Lucide components render their own <svg>; brand icons are raw JSX rendered inside our wrapper
-  if (isLucideComponent(icon)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return React.createElement(icon as any, { size: dimension, className, ...props })
-  }
-
-  return (
-    <svg
-      width={dimension}
-      height={dimension}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      {...props}
-    >
-      {icon}
-    </svg>
-  )
+  return null
 }
 
 // Brand icon names (hand-crafted SVGs, not available in lucide-react)
@@ -121,127 +95,43 @@ const BRAND_ICONS: Record<string, React.ReactNode> = {
   ),
 }
 
-// Lucide icon library — each value is a lucide-react component
-const LUCIDE_ICONS = {
-  // Navigation
-  'chevron-left': ChevronLeft,
-  'chevron-right': ChevronRight,
-  'chevron-down': ChevronDown,
-  'chevron-up': ChevronUp,
-  'chevron-double-left': ChevronsLeft,
-  'chevron-double-right': ChevronsRight,
-  'chevron-double-up': ChevronsUp,
-  'chevron-double-down': ChevronsDown,
-  'arrow-left': ArrowLeft,
-  'arrow-right': ArrowRight,
-  'arrow-up-circle': ArrowUpCircle,
-  'arrow-down-circle': ArrowDownCircle,
-  'arrow-up-down': ArrowUpDown,
-  'corner-down-right': CornerDownRight,
-  // Core UI
-  x: X,
-  plus: Plus,
-  check: Check,
-  search: Search,
-  refresh: RefreshCw,
-  edit: Edit,
-  trash: Trash,
-  'trash-2': Trash2,
-  copy: Copy,
-  filter: Filter,
-  link: Link,
-  'external-link': ExternalLink,
-  maximize: Maximize,
-  minimize: Minimize,
-  menu: MenuIcon,
-  home: Home,
-  archive: Archive,
-  play: Play,
-  square: Square,
-  'loader-2': Loader2,
-  // Status / Feedback
-  'alert-triangle': AlertTriangle,
-  'alert-circle': AlertCircle,
-  'check-circle': CheckCircle,
-  info: Info,
-  shield: Shield,
-  'shield-alert': ShieldAlert,
-  'shield-check': ShieldCheck,
-  lock: Lock,
-  unlock: Unlock,
-  key: Key,
-  ban: Ban,
-  star: Star,
-  flag: Flag,
-  'flag-triangle': FlagTriangleRight,
-  activity: Activity,
-  gauge: GaugeIcon,
-  zap: Zap,
-  'trending-up': TrendingUp,
-  // People
-  users: Users,
-  user: User,
-  'user-check': UserCheck,
-  'user-minus': UserMinus,
-  'user-x': UserX,
-  'user-search': UserSearch,
-  // Communication
-  'message-square': MessageSquare,
-  mail: Mail,
-  phone: Phone,
-  'at-sign': AtSign,
-  bell: Bell,
-  // Media / View
-  eye: Eye,
-  'eye-off': EyeOff,
-  camera: Camera,
-  'volume-x': VolumeX,
-  'volume-2': Volume2,
-  'chart-bar': ChartBar,
-  compass: Compass,
-  sliders: Sliders,
-  'mouse-pointer-click': MousePointerClick,
-  // Files / Data
-  box: Box,
-  database: Database,
-  'hard-drive': HardDrive,
-  'file-text': FileText,
-  'file-search': FileSearch,
-  layers: Layers,
-  'layout-grid': LayoutGridIcon,
-  code: Code,
-  terminal: TerminalIcon,
-  'git-branch': GitBranchIcon,
-  download: Download,
-  upload: Upload,
-  clipboard: ClipboardIcon,
-  // Location / Map
-  'map-pin': MapPin,
-  map: Map,
-  navigation: Navigation,
-  // Time
-  clock: Clock,
-  calendar: Calendar,
-  history: History,
-  // Server / System
-  server: Server,
-  settings: Settings,
-  globe: Globe,
-  snowflake: Snowflake,
-  cpu: Cpu,
-  monitor: Monitor,
-  wifi: Wifi,
-  signal: Signal,
-  'book-open': BookOpen,
-  tag: Tag,
-  hash: Hash,
-  // Actions
-  'log-out': LogOut,
-  'grip-vertical': GripVertical,
-} as const
+// Name aliases — map our icon names to the correct lucide-react export names
+const NAME_ALIASES: Record<string, string> = {
+  refresh: 'refresh-cw',
+  'flag-triangle': 'flag-triangle-right',
+}
 
-// Unified lookup: brand icons first, then lucide icons
-const ICONS: Record<IconName, React.ReactNode> = Object.fromEntries([
-  ...Object.entries(BRAND_ICONS),
-  ...Object.entries(LUCIDE_ICONS),
-]) as Record<IconName, React.ReactNode>
+export function Icon({ name, size = 'md', className, ...props }: IconProps) {
+  const dimension = SIZES[size] ?? SIZES.md
+
+  // Brand icons use our hand-crafted SVG wrapper
+  if (name in BRAND_ICONS) {
+    return (
+      <svg
+        width={dimension}
+        height={dimension}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        {...props}
+      >
+        {BRAND_ICONS[name]}
+      </svg>
+    )
+  }
+
+  // Resolve lucide icon dynamically from name (kebab-case → PascalCase)
+  const resolvedName = NAME_ALIASES[name] ?? name
+  const icon = resolveLucideIcon(resolvedName)
+  if (!icon) {
+    console.warn(`Icon "${name}" not found in lucide-react`)
+    return null
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return React.createElement(icon as any, { size: dimension, className, ...props })
+}
