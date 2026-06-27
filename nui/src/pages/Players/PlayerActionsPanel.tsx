@@ -78,7 +78,7 @@ const ACTION_GROUPS: ActionGroup[] = [
       { id: 'freeze', label: 'Freeze', icon: 'snowflake', permission: 'player.freeze' },
       { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute' },
       { id: 'screenshot', label: 'Screenshot', icon: 'camera', permission: 'player.screenshot' },
-      { id: 'stream', label: 'Stream', icon: 'play', permission: 'player.screenshot' },
+      // { id: 'stream', label: 'Stream', icon: 'play', permission: 'player.screenshot' }, // TODO: Re-enable when stream feature is stable
     ],
   },
 ]
@@ -159,10 +159,10 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           // Screenshot opens in a floating viewer window — no toast needed
           // setScreenshotLoading(false) is called by the screenshot:received listener above
           break
-        case 'stream':
-          await callLua('streamPlayer', { id: player.id, name: player.name })
-          // Stream opens in a floating viewer window — no toast needed
-          break
+        // case 'stream':
+        //   await callLua('streamPlayer', { id: player.id, name: player.name })
+        //   // Stream opens in a floating viewer window — no toast needed
+        //   break
         case 'bucket-join':
           await callLua('joinPlayerBucket', { id: player.id, name: player.name })
           notify(t('Joined bucket'), 'success')
