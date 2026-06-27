@@ -1,7 +1,7 @@
 {
   "name": "easyadmin",
   "private": true,
-  "version": "7.52",
+  "version": "7.52.0",
   "scripts": {
     "build": "npm run build:bot && npm run build:nui",
     "build:bot": "npm --prefix bot run build",
