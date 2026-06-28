@@ -99,6 +99,10 @@ const BRAND_ICONS: Record<string, React.ReactNode> = {
 const NAME_ALIASES: Record<string, string> = {
   refresh: 'refresh-cw',
   'flag-triangle': 'flag-triangle-right',
+  'chevron-double-left': 'chevrons-left',
+  'chevron-double-right': 'chevrons-right',
+  'chevron-double-up': 'chevrons-up',
+  'chevron-double-down': 'chevrons-down',
 }
 
 export function Icon({ name, size = 'md', className, ...props }: IconProps) {
