@@ -127,10 +127,10 @@ Storage = {
         end
         return false
     end,
-    addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time)
+    addBan = function(banId, username, bannedIdentifiers, moderator, reason, expires, expiryString, type, time, issuingResource)
         awaitReady()
         local banTime = time or os.time()
-        table.insert(banlist, {
+        local ban = {
             time = banTime,
             banid = banId,
             username = username,
@@ -140,7 +140,11 @@ Storage = {
             expire = expires,
             expiryString = expiryString,
             type = type,
-        })
+        }
+        if issuingResource then
+            ban.issuingResource = issuingResource
+        end
+        table.insert(banlist, ban)
         saveJsonFile(BANLIST_FILE, banlist)
         syncBanlistView()
     end,

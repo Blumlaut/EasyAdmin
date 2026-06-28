@@ -437,7 +437,7 @@ RegisterServerEvent("EasyAdmin:warnPlayer", function(id, reason)
 
 				reason = GetLocalisedText("Warned too many times.").. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getCachedPlayerName(id), banner = getName(src, true) })
 				local banId = GetFreshBanId()
-				Storage.addBan(banId, bannedUsername, bannedIdentifiers, getName(src, true), reason, expires, formatDateString(expires), "BAN", os.time())
+				Storage.addBan(banId, bannedUsername, bannedIdentifiers, getName(src, true), reason, expires, formatDateString(expires), "BAN", os.time(), GetInvokingResource() ~= GetCurrentResourceName() and GetInvokingResource() or nil)
 				Storage.addAction("BAN", bannedIdentifiers, "Reached maximum warnings", getName(src, true), getAllPlayerIdentifiers(src), banId)
 
 				PrintDebugMessage("Player "..getName(src,true).." warnbanned player "..getCachedPlayerName(id).." for "..reason, 3)

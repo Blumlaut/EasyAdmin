@@ -203,6 +203,15 @@ export function BanDetailPage({
         ? { onClick: () => handleEditField('expire'), actionLabel: t('Edit') }
         : {}),
     },
+    ...(current.issuingResource
+      ? [
+          {
+            key: t('Issuing resource'),
+            value: current.issuingResource ?? '—',
+            mono: true,
+          },
+        ]
+      : []),
   ]
 
   return (

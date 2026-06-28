@@ -36,6 +36,7 @@ export const DEMO_BANS: BanEntry[] = [
     expire: -1,
     expireString: 'Permanent',
     identifiers: ['license:zzzz3333', 'steam:1100001abcdef'],
+    issuingResource: 'anticheat',
   },
   {
     banid: '1004',
@@ -90,6 +91,7 @@ export const DEMO_BANS: BanEntry[] = [
     expire: -1,
     expireString: 'Permanent',
     identifiers: ['license:ffff9999', 'steam:1100001xyzxyz'],
+    issuingResource: 'race_manager',
   },
   {
     banid: '1010',

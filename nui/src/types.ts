@@ -60,6 +60,7 @@ export interface BanListEntry {
 export interface BanEntry extends BanListEntry {
   banner?: string
   identifiers: string[]
+  issuingResource?: string
 }
 
 // Server-side paginated ban response

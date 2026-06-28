@@ -18,6 +18,16 @@ banIndex = {}
 -- Next ban ID counter (avoids O(n) scan of the full banlist on every ban)
 local nextBanId = 1
 
+---Capture the invoking resource when it differs from EasyAdmin itself.
+---Used so admins can see which external resource issued a ban.
+local function getIssuingResource()
+    local invoking = GetInvokingResource()
+    if invoking and invoking ~= GetCurrentResourceName() then
+        return invoking
+    end
+    return nil
+end
+
 local function rebuildBanIndex()
     banIndex = {}
     for _, ban in ipairs(blacklist) do
@@ -90,7 +100,7 @@ RegisterServerEvent("EasyAdmin:banPlayer", function(playerId,reason,expires)
             if source and source ~= 0 then
                 moderatorIdentifiers = getAllPlayerIdentifiers(source)
             end
-            Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time())
+            Storage.addBan(banId, username, bannedIdentifiers, getName(src), reason, expires, formatDateString(expires), "BAN", os.time(), getIssuingResource())
             Storage.addAction("BAN", getAllPlayerIdentifiers(playerId), reason, getName(src), moderatorIdentifiers, banId)
             PrintDebugMessage("Player "..getName(src,true).." banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** banned **{target}**, Reason: {reason}, Ban Expires: {expires}, ID: {id}", { by = getName(src, false, true), target = getCachedPlayerName(playerId), reason = reason, expires = formatDateString(expires), id = tostring(banId) }), "ban", 16711680)
@@ -122,7 +132,7 @@ RegisterServerEvent("EasyAdmin:offlinebanPlayer", function(playerId,reason,expir
             
             reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getCachedPlayerName(playerId), banner = getName(source) })
             local banId = GetFreshBanId()
-            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time())
+            Storage.addBan(banId, username, bannedIdentifiers, getName(source), reason, expires, formatDateString(expires), "OFFLINE BAN", os.time(), getIssuingResource())
             Storage.addAction("OFFLINE BAN", bannedIdentifiers, reason, getName(source), getAllPlayerIdentifiers(src), banId)
             PrintDebugMessage("Player "..getName(source,true).." offline banned player "..getCachedPlayerName(playerId).." for "..reason, 3)
             SendWebhookMessage(moderationNotification, GetLocalisedText("**{by}** offline banned **{target}**, Reason: {reason}, Ban Expires: {expires}", { by = getName(source, false, true), target = getCachedPlayerName(playerId), reason = reason, expires = formatDateString(expires) }), "ban", 16711680)
@@ -168,7 +178,7 @@ function addBanExport(playerId,reason,expires,banner)
     end
     reason = formatShortcuts(reason).. GetLocalisedText(" ( Nickname: {nickname} ), Banned by: {banner}", { nickname = getName(tostring(playerId) or "?"), banner = banner or "Unknown" })
     local banId = GetFreshBanId()
-    Storage.addBan(banId, bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time())
+    Storage.addBan(banId, bannedUsername, bannedIdentifiers, banner or "Unknown", reason, expires, formatDateString(expires), "BAN", os.time(), getIssuingResource())
     Storage.addAction("BAN", bannedIdentifiers, reason, banner or "Unknown", getAllPlayerIdentifiers(source), banId)
     if source then
         PrintDebugMessage("Player "..getName(source,true).." added ban "..reason, 3)
@@ -364,7 +374,7 @@ end
 function addBan(data)
     if data then
         -- Route through Storage (the single banlist owner) rather than the derived blacklist view.
-        Storage.addBan(data.banid, data.username or data.name, data.identifiers, data.banner, data.reason, data.expire, data.expiryString, data.type, data.time)
+        Storage.addBan(data.banid, data.username or data.name, data.identifiers, data.banner, data.reason, data.expire, data.expiryString, data.type, data.time, getIssuingResource())
     end
 end
 
@@ -443,7 +453,7 @@ end
 ---@param reason string @The reason for the ban
 ---@return nil
 function BanIdentifier(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
+    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time(), getIssuingResource())
 end
 
 ---Bans a player using multiple identifiers
@@ -451,7 +461,7 @@ end
 ---@param reason string @The reason for the ban
 ---@return nil
 function BanIdentifiers(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time())
+    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time(), getIssuingResource())
 end
 
 ---Unbans a player using their identifier
