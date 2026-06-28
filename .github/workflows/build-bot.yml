@@ -20,7 +20,7 @@ jobs:
       - name: Install bot dependencies
         run: |
           cd bot/
-          npm ci
+          npm ci --legacy-peer-deps
 
       - name: Typecheck bot
         run: |
@@ -35,7 +35,7 @@ jobs:
       - name: Install NUI dependencies
         run: |
           cd nui/
-          npm ci
+          npm ci --legacy-peer-deps
 
       - name: Build NUI
         run: |
