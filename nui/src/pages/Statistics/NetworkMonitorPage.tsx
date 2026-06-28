@@ -319,7 +319,7 @@ export function NetworkMonitorPage() {
     }))
 
     entries.sort((a, b) => {
-      let cmp = 0
+      let cmp
       if (sortBy === 'name') {
         cmp = a.name.localeCompare(b.name)
       } else if (sortBy === 'rtt') {
