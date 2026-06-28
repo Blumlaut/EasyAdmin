@@ -65,8 +65,9 @@ function NuiToggle()
     SetNuiFocused(true)
     -- Send current settings to NUI
     NuiSendSettings()
-    -- Sync registered plugins to NUI
-    TriggerEvent('EasyAdmin:syncPluginsToNUI')
+    -- Sync registered plugins to NUI from the server (source of truth).
+    -- This ensures clients who joined after plugins registered still see them.
+    TriggerServerEvent('EasyAdmin:syncPluginsFromServer')
     if DoesPlayerHavePermissionForCategory(-1, 'player') then
       TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
     end

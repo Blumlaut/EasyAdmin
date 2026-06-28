@@ -18,6 +18,26 @@ exports('RegisterPlugin', function(config)
   return RegisterEasyAdminPlugin(config)
 end)
 
+-- ── Sync all registered plugins to a requesting client ────────
+-- Called by the client when the admin menu opens. The server is the
+-- source of truth — it pushes its full plugin list so that clients
+-- who connected after plugins registered still see them.
+RegisterNetEvent('EasyAdmin:syncPluginsFromServer')
+AddEventHandler('EasyAdmin:syncPluginsFromServer', function()
+  local src = source
+  local dict = GetRegisteredPlugins()
+  local list = {}
+  for _, plugin in pairs(dict) do
+    list[#list + 1] = plugin
+  end
+  -- Replays each registration so the client-side registry is populated,
+  -- then sends the full list to the NUI in one shot.
+  for _, plugin in ipairs(list) do
+    TriggerClientEvent('EasyAdmin:Plugin:registered', src, plugin)
+  end
+  TriggerClientEvent('EasyAdmin:syncPluginsToNUI', src)
+end)
+
 -- ── Cleanup when a plugin resource is stopped ──────────────────
 -- If a plugin that registered via the server export is stopped,
 -- clean it up automatically.
