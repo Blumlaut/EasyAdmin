@@ -25,7 +25,7 @@ export function ServerCleanup({ permissions }: ServerCleanupProps) {
   return (
     <div className="card flex flex-col">
       <p className="section-label">{t("Cleanup")}</p>
-      <p className="mb-3 text-sm text-fg-subtle flex-1">
+      <p className="mb-3 flex-1 text-sm text-fg-subtle">
         {t("Remove cars, peds, or props from an area around you.")}
       </p>
       <button

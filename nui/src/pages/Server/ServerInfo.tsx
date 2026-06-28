@@ -120,7 +120,7 @@ export function ServerInfo({ permissions }: ServerInfoProps) {
 
   return (
     <div className="card">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3 flex items-center justify-between">
         <p className="section-label mb-0">{t("Server Info")}</p>
         {canEdit && (
           <button

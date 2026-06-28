@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 /**
  * Manages pagination state for a list.
@@ -11,17 +11,13 @@ export function usePagination<T>(items: T[], pageSize = 10) {
 
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize))
 
-  // If items shrink below current page, fall back to the last page
-  useEffect(() => {
-    if (page > totalPages) {
-      setPage(totalPages)
-    }
-  }, [page, totalPages])
+  // Clamp page to valid range so we never render an empty page when items shrink
+  const clampedPage = useMemo(() => Math.min(page, totalPages), [page, totalPages])
 
   const pageItems = useMemo(() => {
-    const start = (page - 1) * pageSize
+    const start = (clampedPage - 1) * pageSize
     return items.slice(start, start + pageSize)
-  }, [items, page, pageSize])
+  }, [items, clampedPage, pageSize])
 
   const goToPage = useCallback((p: number) => {
     setPage(Math.min(Math.max(1, p), totalPages))
@@ -42,7 +38,7 @@ export function usePagination<T>(items: T[], pageSize = 10) {
   const reset = useCallback(() => setPage(1), [])
 
   return {
-    page,
+    page: clampedPage,
     totalPages,
     pageSize,
     pageItems,

@@ -258,6 +258,20 @@ Loading placeholder.
 
 ## Available icons
 
+EasyAdmin uses **[lucide-react](https://lucide.dev/icons/)** for icons. Any of the **1200+ lucide icons** can be used by name (kebab-case) in schema nodes that accept an `icon` field — no extra registration needed.
+
+```json
+{ "type": "button", "label": "My Action", "action": "doThing", "icon": "rocket" }
+{ "type": "stat-card", "label": "Score", "value": "42", "icon": "trophy" }
+{ "type": "icon", "name": "sparkles", "size": "lg" }
+```
+
+Just use the icon name as shown on [lucide.dev](https://lucide.dev/icons/) (e.g. `rocket`, `trophy`, `sparkles`, `heart`, `zap`, etc.).
+
+### Commonly-used icons
+
+The following icons are used throughout EasyAdmin and are always available:
+
 `users` `shield` `settings` `server` `alert-triangle` `x` `search`
 `chevron-left` `chevron-right` `chevron-down` `chevron-up`
 `chevron-double-left` `chevron-double-right` `chevron-double-up`
@@ -271,6 +285,8 @@ Loading placeholder.
 `maximize` `minimize` `history` `book-open` `info` `check-circle`
 `alert-circle` `download` `trending-up` `arrow-down-circle` `hard-drive`
 `database` `loader-2` `discord` `github`
+
+**Note:** `discord` and `github` are custom brand icons (not from lucide) and are included for convenience.
 
 ---
 

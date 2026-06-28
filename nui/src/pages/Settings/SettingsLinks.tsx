@@ -17,7 +17,7 @@ function LinkRow({ icon, label, url }: LinkRowProps) {
   return (
     <div className="flex items-center gap-3">
       <Icon name={icon} size="sm" className="shrink-0 text-fg-muted" />
-      <span className="flex-1 text-sm text-fg-secondary">{label}</span>
+      <span className="text-fg-secondary flex-1 text-sm">{label}</span>
       <CopyButton
         value={url}
         label={t("Copy")}
