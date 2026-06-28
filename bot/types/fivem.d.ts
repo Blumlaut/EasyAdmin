@@ -82,7 +82,7 @@ interface CitizenExports {
 		isScreenshotInProgress(): Promise<boolean>
 		SendWebhookMessage(webhook: string, message: string, feature?: string, colour?: number, title?: string, image?: string): void
 		sendWebhook(message: string, options?: {
-			webhook?: "moderation" | "detail" | "report" | string
+			webhook?: 'moderation' | 'detail' | 'report' | string
 			feature?: string
 			colour?: number
 			title?: string
