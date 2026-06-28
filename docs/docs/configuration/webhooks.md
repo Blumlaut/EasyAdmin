@@ -142,5 +142,5 @@ The `feature` option lets admins filter plugin messages independently via
 `ea_excludeWebhookFeature`. For example, `ea_excludeWebhookFeature esx`
 silences all webhook messages tagged with `feature = "esx"`.
 
-See [Plugin API — Webhooks](../plugins/plugin-api#webhooks) for the full
+See [Plugin API — Webhooks](../../plugins/plugin-api#webhooks) for the full
 export reference.
