@@ -20,7 +20,7 @@
     "esbuild": "^0.28.1",
     "eslint": "^10.6.0",
     "globals": "^17.7.0",
-    "typescript": "^5.8.2"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": "^22.0.0"
