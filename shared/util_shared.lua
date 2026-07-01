@@ -37,54 +37,6 @@ if IsDuplicityVersion() then
 	end
 end
 
-if not IsDuplicityVersion() then
-	RegisterNUICallback("keyboardFinished", function(data, cb)
-		keyboardResult = data.result
-		keyboardState = data.state
-		cb('ok')
-	end)
-
-
-end
-
-
-function displayKeyboardInput(title,default,maxLength)
-	if alreadyTyping then return nil end
-	keyboardResult, keyboardState = nil
-	local label = GetLabelText(title)
-
-	SetNuiFocus(true, true)
-	SendNUIMessage({action= "open", title=label, default=default, maxLength=maxLength, resource=GetCurrentResourceName()})
-
-	alreadyTyping = true
-
-	while not keyboardState do --While typing is not aborted and not finished, this loop waits
-		Citizen.Wait(0)
-	end
-
-	alreadyTyping = false
-	SetNuiFocus(false,false)
-	if keyboardState == 0 then
-		return keyboardResult
-	else
-		return nil
-	end
---[[ -- default V Input
-	DisplayOnscreenKeyboard(1, title, "", default, "", "", "", maxLength)
-
-	while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do --While typing is not aborted and not finished, this loop waits
-		Citizen.Wait(0)
-	end
-		
-	if UpdateOnscreenKeyboard() ~= 2 then
-		local result = GetOnscreenKeyboardResult()
-		return result
-	else
-		return nil
-	end
-]]
-end
-
 function copyToClipboard(text)
 	SendNUIMessage({action= "clip", text=text})
 	TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Text copied to Clipboard!"))
@@ -201,44 +153,12 @@ function formatShortcuts(thisstring)
 end
 exports('formatShortcuts', formatShortcuts)
 
-function formatRightString(thisstring, customWidth)
-	if not thisstring then return thisstring end -- in case string is nil, just yeet it back.
-	local width = (customWidth or maxRightTextWidth)
-	if string.len(thisstring) > width then
-		thisstring = string.sub(thisstring, 1, width)..".."
-	end
-
-	return thisstring
-end
-
-
-
 function math.round(num, numDecimalPlaces)
 	if numDecimalPlaces and numDecimalPlaces>0 then
 		local mult = 10^numDecimalPlaces
 		return math.floor(num * mult + 0.5) / mult
 	end
 	return math.floor(num + 0.5)
-end
-
-function string.split(inputstr, sep)
-	if sep == nil then
-		sep = "%s"
-	end
-	local t={} ; local i=1
-	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-		t[i] = str
-		i = i + 1
-	end
-	return t
-end
-
-function string.reverse(s)
-	local r = ""
-	for p,c in utf8.codes(s) do
-		r = utf8.char(c)..r
-	end
-	return r
 end
 
 function string.startswith(string,start)

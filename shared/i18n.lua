@@ -61,12 +61,6 @@ function I18nT(key, params)
     return template
 end
 
---- Get current language code
---- @return string
-function I18nGetLang()
-    return _lang
-end
-
 --- Get translations table and language code (for server-to-client push)
 --- @return table, string
 function I18nGetTranslations()

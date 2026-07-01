@@ -1,0 +1,19 @@
+# Linter configuration for scripts/lint-lua.py
+
+# Paths to exclude from all checks (fnmatch globs relative to resource root)
+exclude = [
+    "examples/**",
+    "tests/**",
+]
+
+# Additional functions to treat as "used" (plugin APIs, external entry points)
+[allowlist]
+functions = [
+    # Client plugin API
+    "IsNuiBackground",
+    "RegisterEasyAdminPluginHandler",
+    "HasEasyAdminPluginHandler",
+    "addPlugin",
+    # Server plugin API
+    "RegisterEasyAdminPluginServerHandler",
+]

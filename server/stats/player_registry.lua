@@ -84,50 +84,6 @@ local function findPlayerByIdentifiers(identifiers)
 	return nil
 end
 
----Merge two player entries (same player found under different identifiers).
----@param primary table
----@param secondary table
-local function mergePlayerEntries(primary, secondary)
-	local idSet = {}
-	for _, id in ipairs(primary.identifiers) do idSet[id] = true end
-	for _, id in ipairs(secondary.identifiers) do idSet[id] = true end
-	local mergedIds = {}
-	for id in pairs(idSet) do table.insert(mergedIds, id) end
-
-	unindexPlayerIdentifiers(primary)
-	unindexPlayerIdentifiers(secondary)
-	playerById[primary.id] = nil
-	playerById[secondary.id] = nil
-
-	primary.identifiers = mergedIds
-	if secondary.firstSeen and secondary.firstSeen < primary.firstSeen then
-		primary.firstSeen = secondary.firstSeen
-	end
-	primary.sessions = (primary.sessions or 0) + (secondary.sessions or 0)
-	primary.playtime = (primary.playtime or 0) + (secondary.playtime or 0)
-
-	if secondary.sessionLengths and #secondary.sessionLengths > 0 then
-		if not primary.sessionLengths then primary.sessionLengths = {} end
-		for _, sl in ipairs(secondary.sessionLengths) do
-			table.insert(primary.sessionLengths, sl)
-		end
-		while #primary.sessionLengths > 100 do
-			table.remove(primary.sessionLengths, 1)
-		end
-	end
-
-	indexPlayerIdentifiers(primary)
-	playerById[primary.id] = primary
-
-	playerById[secondary.id] = nil
-	for i = #playerRegistry, 1, -1 do
-		if playerRegistry[i].id == secondary.id then
-			table.remove(playerRegistry, i)
-			break
-		end
-	end
-end
-
 -- ============================================================
 -- Persistence
 -- ============================================================
@@ -315,11 +271,6 @@ end)
 ---Get the full player registry (internal use by stats_events)
 function GetPlayerRegistry()
 	return playerRegistry
-end
-
----Get the reverse identifier index
-function GetPlayerIndex()
-	return playerIndex
 end
 
 ---Find a player by identifiers

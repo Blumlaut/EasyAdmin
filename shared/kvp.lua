@@ -49,11 +49,6 @@ function KvpSetNoSync(key, value)
   end
 end
 
---- Delete a KVP (type-agnostic)
-function KvpDelete(key)
-  DeleteResourceKvp(key)
-end
-
 --- Ensure default values for all known settings
 function KvpEnsureDefaults()
   local defaults = {

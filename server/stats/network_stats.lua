@@ -183,12 +183,6 @@ function GetPlayerNetworkHistory(serverId, cutoff)
 	return result
 end
 
----Get current live peer statistics for all connected players.
----@return table per-player stats keyed by serverId
-function GetCurrentNetworkStats()
-	return collectPlayerStats()
-end
-
 ---Get the last recorded snapshot that has player data.
 ---Skips empty snapshots (recorded when no players were online).
 ---Returns nil if no snapshot with data exists.
@@ -208,14 +202,6 @@ function GetLastNetworkSnapshot()
 		end
 	end
 	return nil
-end
-
----Get average ping from the last recorded snapshot (ms).
----Returns 0 if no snapshots exist.
----@return number average ping in ms, 0 if no snapshots
-function GetLastNetworkAvgPing()
-	local last = networkSnapshots[#networkSnapshots]
-	return last and last.avgPing or 0
 end
 
 -- ============================================================

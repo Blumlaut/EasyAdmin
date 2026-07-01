@@ -448,22 +448,6 @@ function updateBlacklist(data, remove, forceChange)
     PrintDebugMessage("Completed Banlist Update.", 4)
 end
 
----Bans a player using their identifier
----@param identifier string @The identifier of the player to ban
----@param reason string @The reason for the ban
----@return nil
-function BanIdentifier(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", {identifier}, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time(), getIssuingResource())
-end
-
----Bans a player using multiple identifiers
----@param identifier table @A table of identifiers for the player to ban
----@param reason string @The reason for the ban
----@return nil
-function BanIdentifiers(identifier,reason)
-    Storage.addBan(GetFreshBanId(), "Unknown", identifier, "Unknown", reason, 10444633200, formatDateString(10444633200), "BAN", os.time(), getIssuingResource())
-end
-
 ---Unbans a player using their identifier
 ---@param identifier string @The identifier of the player to unban
 ---@return nil
