@@ -180,8 +180,9 @@ RegisterServerEvent('EasyAdmin:Stream:StopWatch', function(targetId)
 end)
 
 --- Target or viewer reports its PeerJS ID is ready.
---- @ea-audit:exempt Session membership is the guard — target players aren't admins,
+--- Session membership is the guard — target players aren't admins,
 --- and viewers are validated against streamSessions during StartWatch.
+--- @ea-audit:exempt
 RegisterServerEvent('EasyAdmin:Stream:PeerReady', function(peerId)
     local src = source
     if type(peerId) ~= 'string' or #peerId == 0 then return end

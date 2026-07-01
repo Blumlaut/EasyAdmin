@@ -77,7 +77,7 @@ When an admin takes a screenshot of a player, the image is captured natively (Th
 
 | Convar | Default | Description |
 |--------|---------|-------------|
-| `ea_screenshoturl` | `none` | URL to upload screenshots to. See [Image Hosting](image-hosting.md) for a ready-to-deploy solution. |
+| `ea_screenshoturl` | `none` | URL to upload screenshots to. See [Image Hosting](../image-hosting.md) for a ready-to-deploy solution. |
 | `ea_screenshotfield` | `files[]` | Form field name for the uploaded file |
 | `ea_screenshotMaxResolution` | `1280` | Max length of the longer dimension (px). Shorter dimension scales to match aspect ratio. |
 | `ea_screenshotQuality` | `0.8` | WebP encoding quality (0.0–1.0). |
