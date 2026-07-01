@@ -585,9 +585,11 @@ def check_orphaned_triggers(
 def check_unused_nui_callbacks(
     nui_callbacks: list[EventDef],
     nui_root: Path | None,
+    nui_allowlist: set[str] | None = None,
 ) -> list[str]:
     """Find RegisterNUICallback entries not called from the NUI TypeScript."""
     issues: list[str] = []
+    nui_allowlist = nui_allowlist or set()
 
     if not nui_root or not nui_root.is_dir():
         return issues  # Can't check without NUI source
@@ -610,6 +612,8 @@ def check_unused_nui_callbacks(
             callback_names.add(m.group(1))
 
     for event in nui_callbacks:
+        if event.name in nui_allowlist:
+            continue
         if event.name not in callback_names:
             rel = str(event.file.relative_to(event.file.parents[1]))
             issues.append(
@@ -798,10 +802,12 @@ def lint_resource(root: Path, config_path: Path | None = None) -> int:
         print(f"  {green('OK')} all triggered events have matching registrations")
 
     # --- Check 6: Unused NUICallbacks ---
+    nui_allowlist: set[str] = set(config.get("allowlist", {}).get("nui_callbacks", []))
     nui_root = root / "nui" / "src"
     nui_issues = check_unused_nui_callbacks(
         [e for e in all_events if e.kind == "nui_callback"],
         nui_root,
+        nui_allowlist,
     )
     if nui_issues:
         print(f"\n{dim('--- Unused NUICallbacks ---')}")

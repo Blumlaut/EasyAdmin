@@ -115,22 +115,6 @@ RegisterNUICallback('teleportPlayerToMe', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('teleportAllPlayersToMe', function(data, cb)
-  if not permissions['player.teleport.everyone'] then return deny(cb) end
-  -- Trigger server event with target = -1, meaning teleport everyone
-  for i = 0, 256 do
-    if NetworkIsPlayerActive(i) then
-      local serverId = GetPlayerServerId(i)
-      if serverId and serverId ~= PlayerId() then
-        local coords = GetEntityCoords(PlayerPedId(), true)
-        TriggerServerEvent('EasyAdmin:TeleportPlayerToCoords', serverId, coords)
-      end
-    end
-  end
-  toast('Teleported all players to you')
-  cb({ ok = true })
-end)
-
 RegisterNUICallback('teleportMeBack', function(data, cb)
   if not permissions['player.teleport.single'] then return deny(cb) end
   if lastLocation then
@@ -216,13 +200,6 @@ RegisterNUICallback('getPlayerIdentifiers', function(data, cb)
   if not id then return cb({ error = 'Missing player id' }) end
   TriggerServerEvent('EasyAdmin:getPlayerIdentifiers', id)
   -- Result arrives asynchronously via the 'playerIdentifiers' NUI event.
-  cb({ ok = true })
-end)
-
----Fetch avatars for all online players.
----Each avatar is pushed individually via 'playerUpdated' NUI events.
-RegisterNUICallback('fetchPlayerAvatars', function(_data, cb)
-  TriggerServerEvent('EasyAdmin:fetchPlayerAvatars')
   cb({ ok = true })
 end)
 

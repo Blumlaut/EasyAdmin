@@ -3,14 +3,6 @@
 -- Ban list viewing, editing, unbanning
 ------------------------------------
 
-RegisterNUICallback('requestBanList', function(_data, cb)
-  if not permissions['player.ban.view'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:requestBanlist')
-  -- Response only acknowledges the request. Ban list data arrives
-  -- via the 'updateBanList' NUI event (see events.lua fillBanlist handler).
-  cb({ ok = true })
-end)
-
 RegisterNUICallback('refreshBanList', function(_data, cb)
   if not permissions['player.ban.view'] then return deny(cb) end
   TriggerServerEvent('EasyAdmin:updateBanlist')

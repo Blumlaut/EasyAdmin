@@ -12,20 +12,6 @@ RegisterNUICallback('announce', function(data, cb)
   cb({ ok = true })
 end)
 
-RegisterNUICallback('setGameType', function(data, cb)
-  if not permissions['server.convars'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:SetGameType', data and data.value or '')
-  toast('Gametype updated')
-  cb({ ok = true })
-end)
-
-RegisterNUICallback('setMapName', function(data, cb)
-  if not permissions['server.convars'] then return deny(cb) end
-  TriggerServerEvent('EasyAdmin:SetMapName', data and data.value or '')
-  toast('Map name updated')
-  cb({ ok = true })
-end)
-
 -- Resource management handlers moved to client/nui/resources.lua (async server-side pattern)
 
 RegisterNUICallback('setConvar', function(data, cb)

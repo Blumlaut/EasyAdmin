@@ -17,3 +17,17 @@ functions = [
     # Server plugin API
     "RegisterEasyAdminPluginServerHandler",
 ]
+
+# NUICallbacks called dynamically from the NUI (e.g. callLua(action) where action is a variable)
+# These are genuine entry points but the linter can't detect dynamic calls
+nui_callbacks = [
+    # Settings page: callLua(action) where action is from a button click
+    "refreshBanList",
+    "refreshCachedPlayers",
+    "refreshPermissions",
+    # Player actions: callLua(opt.action, ...) from TELEPORT_OPTIONS array
+    "teleportToPlayer",
+    "teleportMeBack",
+    "teleportPlayerBack",
+    "teleportIntoVehicle",
+]
