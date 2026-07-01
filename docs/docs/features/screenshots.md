@@ -22,9 +22,11 @@ Set the URL to upload screenshots to:
 set ea_screenshoturl "https://example.com/upload.php"
 ```
 
-Default: `https://wew.wtf/upload.php`
+Default: `none`
 
 The endpoint receives a POST request with the image data. When set to `none`, the raw data URI is used instead (displayable in-game chat but not in Discord webhooks).
+
+**Need an image host?** See the [Image Hosting](../configuration/image-hosting.md) guide for a ready-to-deploy solution.
 
 ### Form Field Name
 

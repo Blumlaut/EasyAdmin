@@ -231,9 +231,17 @@ local function completeScreenshot(targetPlayerId, result)
 	local streamActive = exports.EasyAdmin:isStreamActive(targetPlayerId) or false
 	if uploadUrl ~= 'none' and uploadUrl ~= '' and not streamActive then
 		local field = GetConvar('ea_screenshotfield', 'files[]')
-		PerformHttpRequest(uploadUrl, function(body, statusCode) 
+		PerformHttpRequest(uploadUrl, function(body, statusCode)
 			if statusCode and statusCode >= 200 and statusCode < 300 and body and body ~= '' then
-				local res = matchURL(tostring(body)) or body
+				local bodyStr = tostring(body)
+				-- Try JSON response first (e.g. { "url": "https://..." })
+				local res = nil
+				local decoded = json.decode(bodyStr)
+				if type(decoded) == 'table' and type(decoded.url) == 'string' then
+					res = decoded.url
+				end
+				-- Fall back to regex URL extraction for plain-text responses
+				res = res or matchURL(bodyStr) or bodyStr
 				local invokingResource
 				if scrinprogress_invoking then
 					invokingResource = scrinprogress_invoking

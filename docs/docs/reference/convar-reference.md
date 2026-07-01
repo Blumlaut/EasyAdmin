@@ -485,10 +485,10 @@ WebP encoding quality for screenshots (0.0–1.0). Higher values produce larger 
 
 | | |
 |---|---|
-| **Default** | `https://wew.wtf/upload.php` |
+| **Default** | `none` |
 | **Type** | String |
 
-URL to upload screenshots to. Can be a Discord webhook URL or any endpoint that accepts POST requests with image data.
+URL to upload screenshots to. Can be a Discord webhook URL or any endpoint that accepts POST requests with image data. See the [Image Hosting](../../configuration/image-hosting.md) guide for a ready-to-deploy solution.
 
 ## ea_streamMaxResolution
 
