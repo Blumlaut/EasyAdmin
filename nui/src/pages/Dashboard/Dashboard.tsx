@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ServerStats, UpdateInfo } from '../../types'
+import type { RestartInfo, ServerStats, UpdateInfo } from '../../types'
 import { callLua } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { type IconName, Icon } from '../../components/icons'
@@ -181,12 +181,14 @@ interface DashboardProps {
   playerCount: number
   updateInfo: UpdateInfo | null
   onDismissUpdate: () => void
+  restartInfo: RestartInfo | null
+  onClearRestart: () => void
   onNavigateToResources: () => void
   /** Plugin-contributed dashboard widgets (runtime, schema-rendered). */
   pluginWidgets?: Array<PluginDashboardWidget & { _pluginId: string }>
 }
 
-export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigateToResources, pluginWidgets }: DashboardProps) {
+export function Dashboard({ playerCount, updateInfo, onDismissUpdate, restartInfo, onClearRestart, onNavigateToResources, pluginWidgets }: DashboardProps) {
   const { t } = useTranslation()
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -195,6 +197,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
   const [resourceUpdates, setResourceUpdates] = useState<OutdatedResource[]>([])
   const [integrityStatus, setIntegrityStatus] = useState<IntegrityStatus | null>(null)
   const [integrityDismissed, setIntegrityDismissed] = useState(false)
+  const [countdown, setCountdown] = useState(restartInfo?.secondsRemaining ?? 0)
 
   // Fetch server stats on mount
   useEffect(() => {
@@ -242,6 +245,32 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
       .catch(() => {})
     return () => { cancelled = true }
   }, [])
+
+  // Countdown timer for scheduled restart
+  useEffect(() => {
+    if (!restartInfo) {
+      setCountdown(0)
+      return
+    }
+    setCountdown(restartInfo.secondsRemaining)
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          onClearRestart()
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [restartInfo, onClearRestart])
+
+  // Format countdown (seconds) into a human-readable string
+  const formatCountdown = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
 
   // Format uptime (seconds) into a human-readable string
   const formatUptime = (seconds: number): string => {
@@ -439,6 +468,23 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, onNavigate
                 {t("Download clean release")}
               </a>
             </div>
+          </Alert>
+        </div>
+      )}
+
+      {/* Scheduled restart alert (txAdmin) */}
+      {restartInfo && countdown > 0 && (
+        <div className="mb-4">
+          <Alert
+            variant="warning"
+            title={t("Server restart scheduled")}
+            icon="clock"
+            onDismiss={onClearRestart}
+          >
+            <p className="text-sm">{restartInfo.message}</p>
+            <p className="mt-1 text-lg font-mono font-semibold text-fg">
+              {formatCountdown(countdown)}
+            </p>
           </Alert>
         </div>
       )}

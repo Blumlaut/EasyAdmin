@@ -7,6 +7,7 @@ import type {
   Player,
   ReasonShortcut,
   Report,
+  RestartInfo,
   UpdateInfo,
 } from '../types'
 import type { WindowPosition } from './useWindowDrag'
@@ -54,6 +55,10 @@ export interface AppDataResult {
   // Update info
   updateInfo: UpdateInfo | null
   dismissUpdate: () => void
+
+  // Restart notification (txAdmin scheduled restart)
+  restartInfo: RestartInfo | null
+  clearRestartInfo: () => void
 }
 
 export function useAppData(): AppDataResult {
@@ -92,6 +97,13 @@ export function useAppData(): AppDataResult {
 
   const dismissUpdate = useCallback(() => {
     setUpdateInfo(null)
+  }, [])
+
+  // Restart notification (txAdmin scheduled restart)
+  const [restartInfo, setRestartInfo] = useState<RestartInfo | null>(null)
+
+  const clearRestartInfo = useCallback(() => {
+    setRestartInfo(null)
   }, [])
 
   // === Event listeners from Lua ===
@@ -182,6 +194,22 @@ export function useAppData(): AppDataResult {
     })
   }, [])
 
+  // txAdmin scheduled restart notification
+  useEffect(() => {
+    return on<RestartInfo>('restartScheduled', (data) => {
+      if (data && data.secondsRemaining > 0) {
+        setRestartInfo(data)
+      }
+    })
+  }, [])
+
+  // txAdmin restart cancelled/skipped
+  useEffect(() => {
+    return on('restartCancelled', () => {
+      setRestartInfo(null)
+    })
+  }, [])
+
   // === Fetch functions ===
 
   const fetchPlayers = useCallback(() => {
@@ -223,5 +251,7 @@ export function useAppData(): AppDataResult {
     windowSizeData,
     updateInfo,
     dismissUpdate,
+    restartInfo,
+    clearRestartInfo,
   }
 }

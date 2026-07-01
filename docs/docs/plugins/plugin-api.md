@@ -176,13 +176,27 @@ exports.EasyAdmin:sendWebhook("Action logged", {
 
 Listen for these events in your resource:
 
-| Event | Description |
-|-------|-------------|
-| `EasyAdmin:reportAdded` | Triggered when a report is filed |
-| `EasyAdmin:reportClaimed` | Triggered when a report is claimed |
-| `EasyAdmin:reportRemoved` | Triggered when a report is closed |
-| `EasyAdmin:addBan` | Triggered when a ban is added |
-| `EasyAdmin:LogAction` | Triggered when an action is logged |
+| Event | Arguments | Description |
+|-------|-----------|-------------|
+| `EasyAdmin:AnnouncementSent` | `message`, `sender?` | Triggered server-side when an announcement is sent. `sender` is `{ name: string, id: number }` when available, or `nil` for external callers (e.g. Discord bot, direct export call). |
+| `EasyAdmin:reportAdded` | `reportData` | Triggered when a report is filed |
+| `EasyAdmin:reportClaimed` | `reportData` | Triggered when a report is claimed |
+| `EasyAdmin:reportRemoved` | `reportData` | Triggered when a report is closed |
+| `EasyAdmin:addBan` | `banData` | Triggered when a ban is added |
+| `EasyAdmin:LogAction` | `actionData` | Triggered when an action is logged |
+
+### `EasyAdmin:AnnouncementSent` — Forward to other systems
+
+Use this event to relay EasyAdmin announcements to other resources (phone apps, logging systems, audit trails, etc.):
+
+```lua
+-- In your resource's server script:
+AddEventHandler('EasyAdmin:AnnouncementSent', function(message, sender) 
+  local senderName = sender and sender.name or 'Unknown'
+  -- Forward to your own system
+  TriggerEvent('my-phone-app:pushAnnouncement', message, senderName)
+end)
+```
 
 ## Example
 

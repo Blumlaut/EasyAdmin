@@ -431,6 +431,15 @@ export interface UpdateInfo {
 }
 
 // ============================================================
+// Restart Info (txAdmin scheduled restart)
+// ============================================================
+
+export interface RestartInfo {
+  message: string
+  secondsRemaining: number
+}
+
+// ============================================================
 // Network Statistics
 // ============================================================
 

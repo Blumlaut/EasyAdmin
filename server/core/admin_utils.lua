@@ -138,9 +138,12 @@ exports('IsPlayerAdmin', IsPlayerAdmin)
 
 -- Sends a global announcement
 ---@param text string
+---@param sender? table @Optional sender info: { name: string, id: number|string } — included in AnnouncementSent event
 ---@return boolean
-function announce(reason)
+function announce(reason, sender)
 	if reason then
+		-- Server-side hook for other resources to listen for announcements
+		TriggerEvent("EasyAdmin:AnnouncementSent", reason, sender)
 		TriggerClientEvent("EasyAdmin:showNotification", -1, "[" .. GetLocalisedText("Announcement") .. "] " .. reason)
 		return true
 	else

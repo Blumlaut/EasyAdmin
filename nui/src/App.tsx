@@ -363,6 +363,8 @@ function App() {
                     playerCount={data.players.length}
                     updateInfo={data.updateInfo}
                     onDismissUpdate={data.dismissUpdate}
+                    restartInfo={data.restartInfo}
+                    onClearRestart={data.clearRestartInfo}
                     onNavigateToResources={() => nav.navigateTo('resources')}
                     pluginWidgets={pluginContrib.dashboardWidgets}
                   />

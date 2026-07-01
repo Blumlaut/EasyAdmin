@@ -414,6 +414,37 @@ describe("Admin Utils — announce", function()
         _G.TriggerClientEvent = originalTrigger
     end)
 
+    it("fires EasyAdmin:AnnouncementSent event with message and sender", function()
+        local capturedEvent = nil
+        local capturedSender = nil
+        local originalTrigger = _G.TriggerEvent
+        _G.TriggerEvent = function(event, msg, sender)
+            capturedEvent = event
+            capturedSender = sender
+        end
+
+        local senderInfo = { name = "AdminOne", id = 5 }
+        announce("Test announcement", senderInfo)
+
+        assert.are.equals("EasyAdmin:AnnouncementSent", capturedEvent)
+        assert.are.same(senderInfo, capturedSender)
+
+        _G.TriggerEvent = originalTrigger
+    end)
+
+    it("fires AnnouncementSent with nil sender when not provided", function()
+        local capturedSender = nil
+        local originalTrigger = _G.TriggerEvent
+        _G.TriggerEvent = function(event, msg, sender)
+            capturedSender = sender
+        end
+
+        announce("No sender info")
+        assert.is_nil(capturedSender)
+
+        _G.TriggerEvent = originalTrigger
+    end)
+
     it("returns false when message is nil", function()
         assert.is_false(announce(nil))
     end)

@@ -353,6 +353,26 @@ if GetConvar("ea_enableSplash", "true") == "true" then
 	PrintDebugMessage("Initialised.", 4)
 end
 
+-- txAdmin: forward scheduled restart events to the NUI dashboard
+AddEventHandler('txAdmin:events:scheduledRestart', function(eventData)
+	if eventData and eventData.secondsRemaining and eventData.secondsRemaining > 0 then
+		SendNUIMessage({
+			action = 'restartScheduled',
+			data = {
+				message = eventData.translatedMessage or 'Server restart scheduled',
+				secondsRemaining = eventData.secondsRemaining,
+			},
+		})
+	end
+end)
+
+AddEventHandler('txAdmin:events:scheduledRestartSkipped', function()
+	SendNUIMessage({
+		action = 'restartCancelled',
+		data = {},
+	})
+end)
+
 -- Integrity check result banner (printed after a short delay so the checker has time to run)
 Citizen.CreateThread(function()
 	-- Wait for the integrity checker thread to finish (it waits 500ms + hash time)

@@ -264,8 +264,9 @@ end)
 
 RegisterServerEvent("EasyAdmin:Announce", function(text)
 	if DoesPlayerHavePermission(source, "server.announce") then
-		PrintDebugMessage("Player "..getName(source,true).." sent a announcement: "..text, 3)
-		announce(text)
+		local src = source
+		PrintDebugMessage("Player "..getName(src,true).." sent a announcement: "..text, 3)
+		announce(text, { name = getName(src, true), id = src })
 		local preferredWebhook = getPreferredWebhook()
 		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** sent an announcement: **{message}**", { by = getName(source, false, true), message = text }), "settings", 16777214)
 	end
