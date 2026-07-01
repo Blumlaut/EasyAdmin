@@ -34,6 +34,9 @@ jobs:
     - name: Build bot + NUI
       run: npm run build
 
+    - name: Generate integrity hash file
+      run: python3 scripts/generate-integrity.py
+
     - name: Get previous tag
       id: previous_tag
       run: |

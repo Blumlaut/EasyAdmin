@@ -10,3 +10,4 @@ node_modules/
 bot/dist/
 nui/dist/
 .agents/skills/fivem-natives/cfx-natives/
+.ea_integrity.json
