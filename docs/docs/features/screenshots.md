@@ -1,6 +1,6 @@
 # Screenshots & Live Stream
 
-EasyAdmin can capture screenshots and live stream player screens for moderation purposes. Both features are captured natively using Three.js and FiveM's `CfxTexture`. Screenshots are uploaded to a configured image host, while live streams are relayed through the server to admin viewers in real time.
+EasyAdmin can capture screenshots and live stream player screens for moderation purposes. Both features use FiveM's `CfxTexture` to access the player's game render target. Screenshots are uploaded to a configured image host, while live streams connect peer-to-peer over WebRTC via PeerJS.
 
 No external resources are required — capture is built directly into EasyAdmin.
 
@@ -102,46 +102,80 @@ Screenshots can be triggered through:
 
 ## Live Stream
 
-Live stream lets admins watch a player's screen in real time. Unlike screenshots, streams are **not** uploaded to external hosts or sent to webhooks — frames stay within the FiveM client-to-server-to-client loop.
+Live stream lets admins watch a player's screen in real time over a peer-to-peer WebRTC connection. Frames are sent directly from the target player to the admin viewer — the server only relays small signaling messages to establish the connection.
 
 ### How It Works
 
+Live streaming uses **PeerJS** for WebRTC signaling and connection management:
+
 1. An admin clicks "Stream" on a target player
-2. The target player's NUI begins a continuous capture loop (Three.js + `CfxTexture`)
-3. Each frame is encoded as a low-quality WebP and sent to the server
-4. The server relays each frame to all subscribed admin viewers
-5. Multiple admins can watch the same stream — only one capture loop runs on the target
-6. When the last viewer disconnects, the capture loop stops automatically
+2. The server creates a session and tells the target to start a WebGL frame renderer
+3. Both the target and admin create PeerJS instances and report their peer IDs to the server
+4. The server relays the peer IDs so the admin can initiate a direct media call to the target
+5. Video flows peer-to-peer over WebRTC — no frames pass through the server
+6. When the admin closes the viewer, the connection is torn down
+
+### Connection Architecture
+
+```
+Target Player                FiveM Server              Admin Viewer
+     │                            │                        │
+     │  ── PeerReady ──────────▶  │                        │
+     │                            │  ── PeerReady ──────▶  │
+     │                            │                        │
+     │  ◀── TargetReady ─────────│  ── ViewerPeerReady ─▶ │
+     │                            │                        │
+     │  ◀═════ WebRTC (SRTP) ══════════════════════════▶  │
+     │     (peer-to-peer video)  │                        │
+```
+
+The server only relays peer IDs and session state. All video data flows directly between players.
 
 ### Multi-Viewer Support
 
-Multiple admins can stream the same player simultaneously. The target player runs **one** capture loop regardless of viewer count. Frames are fanned out from the server to all active viewers.
+Multiple admins can stream the same player simultaneously. Each admin gets its own peer-to-peer connection to the target. The target runs a single WebGL renderer regardless of viewer count.
 
 ### Configuration
 
-### Stream Max Resolution
+#### STUN Servers
 
-Cap the longer dimension of each streamed frame. The shorter dimension is scaled proportionally to preserve aspect ratio.
-
-```
-set ea_streamMaxResolution 640
-```
-
-Default: `640` (produces 640×360 from a 1920×1080 screen)
-
-### Stream Quality
-
-Control the WebP encoding quality for streamed frames (0.0–1.0). Lower values produce smaller frames and less bandwidth at the cost of visual quality.
+STUN servers help peers discover their public IP addresses for direct connections. The default Google STUN server works for most setups.
 
 ```
-set ea_streamQuality 0.3
+set ea_streamStunServers "stun:stun.l.google.com:19302"
 ```
 
-Default: `0.3`
+Default: `stun:stun.l.google.com:19302`
 
-### Stream Target FPS
+To use multiple STUN servers, separate them with commas:
 
-Control the target frame rate of the capture loop.
+```
+set ea_streamStunServers "stun:stun.l.google.com:19302,stun:stun1.l.google.com:19302"
+```
+
+#### TURN Servers (Optional)
+
+TURN servers relay traffic when a direct peer-to-peer connection is not possible (e.g., behind symmetric NATs or restrictive firewalls). **Most setups do not need TURN servers** — STUN alone is sufficient for the majority of connections.
+
+Configure TURN if streams fail to connect between certain players:
+
+```
+set ea_streamTurnServers "turn:turn.example.com:3478"
+set ea_streamTurnUser "myuser"
+set ea_streamTurnPassword "mypassword"
+```
+
+Multiple TURN servers can be specified (comma-separated):
+
+```
+set ea_streamTurnServers "turn:turn1.example.com:3478,turn:turn2.example.com:3478"
+```
+
+**Note:** TURN servers require their own infrastructure. You can use services like [Twilio Network Traversal](https://www.twilio.com/stun-turn), [OpenRelay](https://github.com/paullouisageneau/natron), or run your own [coturn](https://github.com/coturn/coturn) server.
+
+#### Stream Target FPS
+
+Control the frame rate of the capture loop on the target player's client. Lower values reduce CPU usage.
 
 ```
 set ea_streamTargetFps 8
@@ -151,9 +185,8 @@ Default: `8`
 
 ### Stream Behavior
 
-- **Stream timeout**: If no frames arrive within 10 seconds of starting, the stream is automatically stopped and viewers are notified.
 - **Target disconnect**: If the target player disconnects, all viewers are notified and the stream ends.
-- **Screenshot during stream**: Screenshots taken while a stream is active skip external upload and webhook notifications (frames stay local).
+- **Reconnection**: If a connection drops, the viewer will automatically attempt to reconnect (up to 2 retries).
 - **Permission**: Uses the same `player.screenshot` permission as screenshots.
 
 ### Usage
@@ -164,8 +197,9 @@ Streaming can be triggered through:
 
 The stream appears as a floating window with:
 - Player name in the header
-- Live FPS counter with a pulsing green dot
+- Status indicator (connecting, live, disconnected)
 - Draggable window (drag from the header)
+- Resizable window (drag the bottom-right corner)
 - Close button to stop watching
 
 ### API
@@ -178,11 +212,13 @@ The stream appears as a floating window with:
 
 | Event | Description |
 |-------|-------------|
-| `EasyAdmin:StartStream(playerId)` | Start streaming a player (server-side) |
-| `EasyAdmin:StopStream(playerId)` | Stop watching a player's stream (server-side) |
+| `EasyAdmin:Stream:StartWatch(playerId)` | Start streaming a player (server-side) |
+| `EasyAdmin:Stream:StopWatch(playerId)` | Stop watching a player's stream (server-side) |
 
 ### Troubleshooting
 
-- **Stream shows "Stream failed to start"** — The target player's NUI may not have Three.js/CfxTexture available. Ensure they are fully loaded into the game.
-- **Low FPS** — Reduce `ea_streamMaxResolution` or `ea_streamTargetFps`. Higher resolutions and frame rates increase CPU usage on the target player's client.
-- **Choppy stream** — Reduce `ea_streamTargetFps` or `ea_streamQuality`. Frames are dropped when the network cannot keep up.
+- **Stream shows "Connecting…" forever** — The most common cause is NAT traversal failure. Try configuring a TURN server (`ea_streamTurnServers`). Ensure both players have open UDP ports (WebRTC uses UDP by default).
+- **Stream connects but video is black** — The target player's CfxTexture may not be available. Ensure they are fully loaded into the game (not in the loading screen).
+- **Low FPS on target** — Reduce `ea_streamTargetFps`. The default of 8 FPS balances smoothness and CPU usage.
+- **Stream drops intermittently** — Check for high packet loss between the two players. A TURN server can help if the direct connection is unstable.
+- **Multiple viewers cause lag** — Each viewer gets its own peer-to-peer connection. The target's CPU usage increases with viewer count. Monitor target performance when multiple admins are streaming simultaneously.

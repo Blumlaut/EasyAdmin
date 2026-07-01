@@ -4,7 +4,7 @@
  * Three.js is a large dependency (~500-700 KB minified) that is only needed
  * for screenshot capture and live stream features. This module dynamically
  * imports it on demand and exposes it as `window.THREE` / `window.CfxTexture`
- * so the existing screenshot.ts and stream_webrtc.ts code works unchanged.
+ * so the existing screenshot.ts code works unchanged.
  *
  * Usage:
  *   const ready = await loadThree()

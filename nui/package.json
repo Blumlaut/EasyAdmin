@@ -26,6 +26,7 @@
     "date-fns": "^4.4.0",
     "easyadmin": "file:..",
     "lucide-react": "^1.22.0",
+    "peerjs": "^1.5.5",
     "react": "^19.2.7",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.7"
