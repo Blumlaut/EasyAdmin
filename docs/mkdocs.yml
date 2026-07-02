@@ -95,7 +95,6 @@ nav:
         - features/admin-notes.md
         - features/screenshots.md
         - features/reminders-and-shortcuts.md
-        - features/backups.md
         - features/allowlist.md
         - features/player-statistics.md
         - features/network-monitor.md
