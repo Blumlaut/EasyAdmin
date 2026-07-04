@@ -26,19 +26,6 @@ interface ResourceUpdateSummary {
 }
 
 // ============================================================
-// Integrity status types
-// ============================================================
-
-interface IntegrityStatus {
-  checked: boolean
-  passed: boolean
-  totalFiles: number
-  missingHashFile?: boolean
-  missingFiles?: string[]
-  modifiedFiles?: string[]
-}
-
-// ============================================================
 // EntityBar
 // Horizontal bar showing entity counts
 // ============================================================
@@ -195,8 +182,6 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, restartInf
   const [showPride] = useState(shouldShowPride)
   const [greeting] = useState(getGreeting)
   const [resourceUpdates, setResourceUpdates] = useState<OutdatedResource[]>([])
-  const [integrityStatus, setIntegrityStatus] = useState<IntegrityStatus | null>(null)
-  const [integrityDismissed, setIntegrityDismissed] = useState(false)
   const [countdown, setCountdown] = useState(restartInfo?.secondsRemaining ?? 0)
 
   // Fetch server stats on mount
@@ -227,19 +212,6 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, restartInf
       .then((res) => {
         if (!cancelled && res?.outdated && res.outdated.length > 0) {
           setResourceUpdates(res.outdated)
-        }
-      })
-      .catch(() => {})
-    return () => { cancelled = true }
-  }, [])
-
-  // Request integrity status from server on mount
-  useEffect(() => {
-    let cancelled = false
-    callLua<IntegrityStatus | null>('requestIntegrityStatus')
-      .then((res) => {
-        if (!cancelled && res) {
-          setIntegrityStatus(res)
         }
       })
       .catch(() => {})
@@ -420,53 +392,6 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, restartInf
                 <Icon name="layers" size="xs" />
                 {t("View resources")}
               </button>
-            </div>
-          </Alert>
-        </div>
-      )}
-
-      {/* Integrity check failure alert */}
-      {integrityStatus && !integrityStatus.passed && !integrityDismissed && (
-        <div className="mb-4">
-          <Alert
-            variant="error"
-            title={t("Integrity check failed")}
-            icon="shield-alert"
-            onDismiss={() => setIntegrityDismissed(true)}
-          >
-            <p className="text-sm">
-              {t("EasyAdmin has been modified from its original release. No support will be provided for modified builds.")}
-            </p>
-            {(integrityStatus.modifiedFiles && integrityStatus.modifiedFiles.length > 0) && (
-              <div className="mt-2 flex flex-col gap-1">
-                <span className="text-xs text-fg-muted">{t("Modified files:")}</span>
-                {integrityStatus.modifiedFiles.map((f) => (
-                  <span key={f} className="text-sm">
-                    <span className="text-mono font-medium">{f}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-            {(integrityStatus.missingFiles && integrityStatus.missingFiles.length > 0) && (
-              <div className="mt-2 flex flex-col gap-1">
-                <span className="text-xs text-fg-muted">{t("Missing files:")}</span>
-                {integrityStatus.missingFiles.map((f) => (
-                  <span key={f} className="text-sm">
-                    <span className="text-mono font-medium">{f}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-            <div className="mt-2">
-              <a
-                className="btn btn-sm btn-ghost"
-                href="https://github.com/Blumlaut/EasyAdmin/releases"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon name="download" size="xs" />
-                {t("Download clean release")}
-              </a>
             </div>
           </Alert>
         </div>

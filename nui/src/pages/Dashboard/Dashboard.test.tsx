@@ -32,9 +32,6 @@ beforeEach(() => {
     if (urlString.includes('requestUpdateInfo')) {
       return Promise.resolve({ json: () => Promise.resolve({ ok: true }) } as Response)
     }
-    if (urlString.includes('requestIntegrityStatus')) {
-      return Promise.resolve({ json: () => Promise.resolve({ checked: true, passed: true, totalFiles: 100 }) } as Response)
-    }
     return Promise.resolve({ json: () => Promise.resolve({ ok: true }) } as Response)
   })
 })

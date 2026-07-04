@@ -225,13 +225,6 @@ RegisterServerEvent('EasyAdmin:requestUpdateInfo', function()
   TriggerClientEvent('EasyAdmin:updateInfo', src, updateInfo)
 end)
 
--- NUI requests integrity status (sent when dashboard opens)
-RegisterServerEvent('EasyAdmin:requestIntegrityStatus', function()
-  local src = source
-  if not IsPlayerAdmin(src) then return end
-  TriggerClientEvent('EasyAdmin:integrityStatus', src, EasyAdminIntegrity or nil)
-end)
-
 Citizen.CreateThread(function()
 	while true do
 		checkVersion()
@@ -371,37 +364,4 @@ AddEventHandler('txAdmin:events:scheduledRestartSkipped', function()
 		action = 'restartCancelled',
 		data = {},
 	})
-end)
-
--- Integrity check result banner (printed after a short delay so the checker has time to run)
-Citizen.CreateThread(function()
-	-- Wait for the integrity checker thread to finish (it waits 500ms + hash time)
-	repeat Wait(100) until EasyAdminIntegrity and EasyAdminIntegrity.checked or (EasyAdminIntegrity and EasyAdminIntegrity.missingHashFile) or GetGameTimer() > 5000
-
-	if not EasyAdminIntegrity then
-		-- Integrity checker Lua file was deleted/missing entirely
-		print("")
-		print("^1[EasyAdmin] ^3! INTEGRITY CHECKER MISSING !^7")
-		print("")
-		print("^3  The integrity check module is not loaded.^7")
-		print("^3  EasyAdmin may have been modified from its original release.^7")
-		print("^3  No support will be provided for modified builds.^7")
-		print("^3  Download a clean release from:^7")
-		print("^3  https://github.com/Blumlaut/EasyAdmin/releases^7")
-		print("")
-	elseif EasyAdminIntegrity.missingHashFile then
-		-- Hash file not present (dev build)
-		PrintDebugMessage("Integrity hash file not found — running unverified build (no integrity check)", 1)
-	elseif not EasyAdminIntegrity.passed then
-		-- Check ran but failed
-		print("")
-		print("^1[EasyAdmin] ^3! INTEGRITY CHECK FAILED !^7")
-		print("")
-		print("^1  EasyAdmin has been modified from its original release.^7")
-		print("^1  No support will be provided for modified builds.^7")
-		print("")
-		print("^3  Download a clean release from:^7")
-		print("^3  https://github.com/Blumlaut/EasyAdmin/releases^7")
-		print("")
-	end
 end)
