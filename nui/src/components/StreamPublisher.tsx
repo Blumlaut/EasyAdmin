@@ -3,12 +3,17 @@
  *
  * Runs on the player being streamed. Creates a raw WebGL canvas that renders
  * the game frame (CfxTexture), captures it via canvas.captureStream(), and
- * publishes the video track to each viewer over PeerJS media connections.
+ * initiates PeerJS media connections to each viewer.
+ *
+ * The target (publisher) initiates the WebRTC calls because the caller's
+ * SDP offer must contain the media tracks. If the viewer called first with
+ * no tracks, the target's video answer would be silently dropped by the
+ * WebRTC spec — answers can only include media types that were offered.
  *
  * Messages handled (Lua -> NUI):
  *   streamPublisher:start          — init renderer + PeerJS (first viewer)
  *   streamPublisher:stop           — teardown everything (last viewer left)
- *   streamPublisher:addViewer      — expect an incoming call from a viewer
+ *   streamPublisher:callViewer     — initiate a WebRTC call to a viewer
  *   streamPublisher:removeViewer   — close a viewer's connection
  */
 
@@ -26,6 +31,13 @@ interface StreamStartData {
   targetFps: number
 }
 
+interface CallViewerData {
+  viewerSrc: number
+  viewerPeerId: string
+}
+
+const LOG = '[EA-StreamPublisher]'
+
 export function StreamPublisher() {
   const peerRef = useRef<Peer | null>(null)
   const callsRef = useRef<Map<number, MediaConnection>>(new Map())
@@ -35,6 +47,7 @@ export function StreamPublisher() {
   const isActiveRef = useRef(false)
 
   const teardown = () => {
+    console.log(LOG, 'teardown()')
     isActiveRef.current = false
 
     // Close all viewer connections
@@ -71,8 +84,10 @@ export function StreamPublisher() {
       const payload = event.data
       if (!payload || !payload.action) return
 
+      console.log(LOG, 'message received:', payload.action, payload.data)
       switch (payload.action) {
         case 'streamPublisher:start': {
+          console.log(LOG, 'start: tearing down any existing publisher')
           // If a publisher already exists, tear it down first
           teardown()
 
@@ -86,40 +101,32 @@ export function StreamPublisher() {
           targetFpsRef.current = data.targetFps ?? 8
 
           // Create the WebGL frame renderer
+          console.log(LOG, 'start: creating frame renderer at', targetFpsRef.current, 'fps')
           const renderer = createFrameRenderer(targetFpsRef.current)
           if (!renderer) {
             // WebGL / CfxTexture / captureStream unavailable
+            console.error(LOG, 'start: createFrameRenderer returned null — cannot publish')
             return
           }
+          console.log(LOG, 'start: frame renderer created, canvas:', renderer.canvas.width, 'x', renderer.canvas.height)
           rendererRef.current = renderer
           isActiveRef.current = true
 
           // Create PeerJS instance
           const peerConfig = buildPeerConfig(iceConfigRef.current)
           const peerId = `ea-streamer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+          console.log(LOG, 'start: creating PeerJS with id', peerId, 'config:', JSON.stringify(peerConfig))
           const peer = new Peer(peerId, peerConfig)
           peerRef.current = peer
 
           // On open: report our peerId to the server
           peer.on('open', () => {
-            void callLua('streamPublisher:peerReady', { peerId: peer.id })
+            console.log(LOG, 'PeerJS open, id:', peer.id)
+            void callLua('streamPublisher:peerReady', { peerId: peer.id, role: 'target' })
           })
 
-          // On incoming call from a viewer
-          peer.on('call', (call) => {
-            // Answer with the frame renderer's MediaStream
-            if (rendererRef.current) {
-              call.answer(rendererRef.current.stream)
-
-              // The call.peer is the viewer's PeerJS ID — we track by viewerSrc
-              // The mapping is established when the viewer initiates
-              call.on('close', () => {
-                callsRef.current.delete(call.peer as unknown as number)
-              })
-
-              // Store by the call's peer ID (we'll map viewerSrc -> call later)
-              callsRef.current.set(call.peer as unknown as number, call)
-            }
+          peer.on('error', (err) => {
+            console.error(LOG, 'PeerJS error:', err.type, err.message)
           })
 
           // Handle disconnection — attempt reconnect once
@@ -135,13 +142,44 @@ export function StreamPublisher() {
         }
 
         case 'streamPublisher:stop': {
+          console.log(LOG, 'stop: tearing down publisher')
           teardown()
           break
         }
 
-        case 'streamPublisher:addViewer': {
-          // The viewer will initiate the call once both peers are ready.
-          // We just need to be ready to answer (handled by peer.on('call') above).
+        case 'streamPublisher:callViewer': {
+          const data = payload.data as CallViewerData
+          const { viewerSrc, viewerPeerId } = data
+          const peer = peerRef.current
+          const renderer = rendererRef.current
+
+          console.log(LOG, 'callViewer: viewerSrc=', viewerSrc, 'viewerPeerId=', viewerPeerId)
+          if (!peer) { console.error(LOG, 'callViewer: no PeerJS instance'); return }
+          if (!renderer) { console.error(LOG, 'callViewer: no renderer'); return }
+          if (!viewerPeerId) { console.error(LOG, 'callViewer: no viewerPeerId'); return }
+          if (callsRef.current.has(viewerSrc)) { console.log(LOG, 'callViewer: already connected to viewer', viewerSrc); return }
+
+          console.log(LOG, 'callViewer: calling', viewerPeerId, 'with stream tracks:', renderer.stream.getTracks().length)
+          // Initiate a WebRTC call to the viewer, sending the video stream.
+          // The caller's SDP offer contains the video track, so the viewer's
+          // empty-stream answer is valid and the media path is established.
+          const call = peer.call(viewerPeerId, renderer.stream)
+          callsRef.current.set(viewerSrc, call)
+
+          call.on('stream', (remoteStream) => {
+            console.log(LOG, 'callViewer: received remote stream from viewer', viewerSrc, 'tracks:', remoteStream.getTracks().length)
+          })
+
+          call.on('close', () => {
+            console.log(LOG, 'callViewer: call closed for viewer', viewerSrc)
+            callsRef.current.delete(viewerSrc)
+          })
+
+          call.on('error', (err) => {
+            console.error(LOG, 'callViewer: call error for viewer', viewerSrc, err)
+            callsRef.current.delete(viewerSrc)
+          })
+
           break
         }
 
@@ -156,7 +194,6 @@ export function StreamPublisher() {
           }
           break
         }
-
       }
     }
 

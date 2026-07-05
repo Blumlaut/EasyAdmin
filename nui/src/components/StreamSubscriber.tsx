@@ -3,9 +3,12 @@
  * player's screen.
  *
  * The video arrives peer-to-peer over WebRTC via PeerJS (no per-frame server
- * events). The server signals this NUI with:
+ * events). The target (publisher) initiates the WebRTC call because the caller's
+ * SDP offer must contain the media tracks — if the viewer called first with no
+ * tracks, the target's video answer would be silently dropped by the WebRTC spec.
+ *
+ * The server signals this NUI with:
  *   streamSubscriber:start        — a stream session is active (opens the window)
- *   streamSubscriber:targetReady  — the target's PeerJS ID is ready
  *   streamSubscriber:ended        — the stream ended (target disconnected / stopped)
  *
  * Draggable via the topbar, closable via the X button.
@@ -20,16 +23,14 @@ import { useWindowResize, type WindowSize } from '../hooks/useWindowResize'
 import { buildPeerConfig, type IceConfigPayload } from '../lib/stream_ice'
 import { Icon } from './icons'
 
-type ConnectionState = 'waiting' | 'connecting' | 'live' | 'reconnecting' | 'failed'
+const LOG = '[EA-StreamSubscriber]'
+
+type ConnectionState = 'waiting' | 'live' | 'failed'
 
 interface StreamStartData {
   targetId: number
   targetName: string
   iceConfig: IceConfigPayload
-}
-
-interface TargetReadyData {
-  targetPeerId: string
 }
 
 interface StreamEndData {
@@ -53,9 +54,6 @@ export function StreamSubscriber() {
   const peerRef = useRef<Peer | null>(null)
   const callRef = useRef<MediaConnection | null>(null)
   const iceConfigRef = useRef<IceConfigPayload | null>(null)
-  const targetPeerIdRef = useRef<string | null>(null)
-  const retryCountRef = useRef(0)
-  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Center on open
   const openRef = useRef(false)
@@ -75,13 +73,7 @@ export function StreamSubscriber() {
   }, [targetName])
 
   const teardownPeer = useCallback(() => {
-    // Clear retry timer
-    if (retryTimerRef.current) {
-      clearTimeout(retryTimerRef.current)
-      retryTimerRef.current = null
-    }
-    retryCountRef.current = 0
-
+    console.log(LOG, 'teardownPeer()')
     // Close the media call
     if (callRef.current) {
       callRef.current.close()
@@ -104,64 +96,6 @@ export function StreamSubscriber() {
     }
   }, [])
 
-  // Use a ref to break the circular dependency between attemptCall and attemptReconnect
-  const attemptCallRef = useRef<(() => void) | null>(null)
-
-  const attemptReconnect = useCallback(() => {
-    if (retryCountRef.current >= 2) {
-      setConnState('failed')
-      setError('Connection lost')
-      return
-    }
-
-    retryCountRef.current++
-    setConnState('reconnecting')
-
-    retryTimerRef.current = setTimeout(() => {
-      attemptCallRef.current?.()
-    }, 2000)
-  }, [])
-
-  const attemptCall = useCallback(() => {
-    const peer = peerRef.current
-    const targetPeerId = targetPeerIdRef.current
-    if (!peer || !targetPeerId) return
-
-    setConnState('connecting')
-
-    // Pass an empty MediaStream — the subscriber only receives video, doesn't send
-    const call = peer.call(targetPeerId, new MediaStream())
-    callRef.current = call
-
-    call.on('stream', (stream) => {
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream
-        void videoRef.current.play().catch(() => {})
-      }
-      setConnState('live')
-      setError(null)
-      retryCountRef.current = 0
-    })
-
-    call.on('close', () => {
-      callRef.current = null
-      // If we're still supposed to be connected, attempt reconnect
-      if (targetName) {
-        attemptReconnect()
-      }
-    })
-
-    call.on('error', () => {
-      callRef.current = null
-      attemptReconnect()
-    })
-  }, [targetName, attemptReconnect])
-
-  // Keep the ref in sync
-  useEffect(() => {
-    attemptCallRef.current = attemptCall
-  }, [attemptCall])
-
   const handleClose = useCallback(() => {
     // Tell the server to remove us as a viewer before clearing local state
     const id = targetId
@@ -174,7 +108,6 @@ export function StreamSubscriber() {
     setTargetId(null)
     setError(null)
     setConnState('waiting')
-    targetPeerIdRef.current = null
   }, [targetId, teardownPeer])
 
   useWindowDrag({
@@ -203,58 +136,99 @@ export function StreamSubscriber() {
   // Open the viewer window when the server confirms the stream session is up
   useEffect(() => {
     return on<StreamStartData>('streamSubscriber:start', (payload) => {
+      console.log(LOG, 'start: targetId=', payload.targetId, 'targetName=', payload.targetName)
       teardownPeer()
       iceConfigRef.current = payload.iceConfig
       setTargetName(payload.targetName)
       setTargetId(payload.targetId)
       setError(null)
       setConnState('waiting')
-      retryCountRef.current = 0
 
-      // Create PeerJS instance
+      // Create PeerJS instance — the target will call us
       const peerConfig = buildPeerConfig(payload.iceConfig)
+      console.log(LOG, 'start: peer config:', JSON.stringify(peerConfig))
+
+      const setupPeer = (p: Peer) => {
+        p.on('open', () => {
+          console.log(LOG, 'PeerJS open, id:', p.id)
+          void callLua('streamSubscriber:peerReady', { peerId: p.id, role: 'viewer' })
+        })
+
+        p.on('call', (call) => {
+          console.log(LOG, 'incoming call from:', call.peer)
+          call.answer(new MediaStream())
+          callRef.current = call
+
+          call.on('stream', (stream) => {
+            console.log(LOG, 'received remote stream, tracks:', stream.getTracks().length)
+            if (videoRef.current) {
+              videoRef.current.srcObject = stream
+              void videoRef.current.play().catch(() => {})
+            }
+            setConnState('live')
+            setError(null)
+          })
+
+          call.on('close', () => {
+            console.log(LOG, 'call closed')
+            callRef.current = null
+            if (connState === 'live') {
+              setConnState('failed')
+              setError('Connection lost')
+            }
+          })
+
+          call.on('error', (err) => {
+            console.error(LOG, 'call error:', err)
+            callRef.current = null
+            if (connState === 'live') {
+              setConnState('failed')
+              setError('Connection error')
+            }
+          })
+        })
+
+        p.on('disconnected', () => {
+          console.log(LOG, 'PeerJS disconnected, attempting reconnect')
+          try {
+            p.reconnect()
+          } catch {
+            console.error(LOG, 'PeerJS reconnect failed')
+          }
+        })
+
+        p.on('error', (err) => {
+          console.error(LOG, 'PeerJS error:', err.type, err.message)
+          if (err.type === 'unavailable-id') {
+            // ID collision — create a new peer with a different ID
+            try {
+              p.destroy()
+            } catch { /* already destroyed */ }
+            peerRef.current = null
+            const newPeerId = `ea-viewer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+            const newPeer = new Peer(newPeerId, peerConfig)
+            peerRef.current = newPeer
+            setupPeer(newPeer)
+          }
+        })
+      }
+
       const peerId = `ea-viewer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+      console.log(LOG, 'start: creating PeerJS with id', peerId)
       const peer = new Peer(peerId, peerConfig)
       peerRef.current = peer
-
-      peer.on('open', () => {
-        // Report our peerId to the server
-        void callLua('streamSubscriber:peerReady', { peerId: peer.id })
-      })
-
-      peer.on('disconnected', () => {
-        try {
-          peer.reconnect()
-        } catch {
-          // Reconnect failed
-        }
-      })
-
-      peer.on('error', (err) => {
-        // PeerJS error — likely a network issue
-        if (err.type === 'unavailable-id' || err.type === 'peer-unavailable') {
-          attemptReconnect()
-        }
-      })
+      setupPeer(peer)
     })
-  }, [teardownPeer, attemptCall, attemptReconnect])
-
-  // Target's PeerJS ID is ready — initiate the call
-  useEffect(() => {
-    return on<TargetReadyData>('streamSubscriber:targetReady', (payload) => {
-      targetPeerIdRef.current = payload.targetPeerId
-      attemptCall()
-    })
-  }, [attemptCall])
+  }, [teardownPeer])
 
   // Listen for stream ended from Lua (target disconnected, etc.)
   useEffect(() => {
     return on<StreamEndData>('streamSubscriber:ended', (payload) => {
+      console.log(LOG, 'ended: targetName=', payload.targetName, 'reason=', payload.reason)
       if (targetName === payload.targetName) {
         teardownPeer()
         setError(payload.reason)
         setConnState('failed')
-        targetPeerIdRef.current = null
         // Auto-close after 3 seconds
         setTimeout(() => {
           setTargetName(null)
@@ -280,11 +254,7 @@ export function StreamSubscriber() {
         ? 'LIVE'
         : connState === 'failed'
           ? 'Disconnected'
-          : connState === 'reconnecting'
-            ? 'Reconnecting…'
-            : connState === 'connecting'
-              ? 'Connecting…'
-              : 'Waiting…'
+          : 'Waiting…'
 
   return (
     <div

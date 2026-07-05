@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import type { IconName } from '../../components/icons'
 import type { Permissions, Player } from '../../types'
 import { Icon } from '../../components/icons'
-import { Tooltip } from '../../components/Tooltip'
 import { useModalContext } from '../../ModalContext'
 import { SelectMenu } from '../../components/SelectMenu'
 import { callLua, on } from '../../fivem'
@@ -78,7 +77,7 @@ const ACTION_GROUPS: ActionGroup[] = [
       { id: 'freeze', label: 'Freeze', icon: 'snowflake', permission: 'player.freeze' },
       { id: 'mute', label: 'Mute', icon: 'volume-x', permission: 'player.mute' },
       { id: 'screenshot', label: 'Screenshot', icon: 'camera', permission: 'player.screenshot' },
-      // { id: 'stream', label: 'Stream', icon: 'play', permission: 'player.screenshot' }, // TODO: Re-enable when stream feature is stable
+      { id: 'stream', label: 'Stream', icon: 'play', permission: 'player.screenshot' },
     ],
   },
 ]
@@ -167,10 +166,10 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           // Screenshot opens in a floating viewer window — no toast needed
           // setScreenshotLoading(false) is called by the screenshot:received listener above
           break
-        // case 'stream':
-        //   await callLua('streamPlayer', { id: player.id, name: player.name })
-        //   // Stream opens in a floating viewer window — no toast needed
-        //   break
+        case 'stream':
+          await callLua('streamPlayer', { id: player.id, name: player.name })
+          // Stream opens in a floating viewer window — no toast needed
+          break
         case 'bucket-join':
           await callLua('joinPlayerBucket', { id: player.id, name: player.name })
           notify(t('Joined bucket'), 'success')
@@ -356,27 +355,15 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
                   const isToggle = action.id === 'freeze' || action.id === 'mute' || action.id === 'spectate'
                   const isActive = action.id === 'freeze' ? player.frozen : action.id === 'mute' ? player.muted : isSpectating
                   const isLoading = action.id === 'screenshot' && screenshotLoading
-                  // Live stream is still in development (WebRTC transport needs
-                  // work — vertical flip + connection stability). Render the
-                  // button visually-disabled with a hover tooltip, but NOT
-                  // HTML-disabled: a disabled button gets pointer-events:none
-                  // (see .panel-btn:disabled), which suppresses the native
-                  // title tooltip. Keeping it hoverable lets the "coming soon"
-                  // tooltip fire while the click guard prevents activation.
-                  const isStream = action.id === 'stream'
-
                   const btn = (
                     <button
                       key={action.id}
-                      className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}${isStream ? ' player-action-group-btn-soon' : ''}`}
-                      onClick={() => { if (isStream) return; handleQuickAction(action.id) }}
+                      className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
+                      onClick={() => handleQuickAction(action.id)}
                       disabled={isLoading || busyAction === action.id}
-                      aria-disabled={isStream || undefined}
-                      title={isStream
-                        ? undefined
-                        : isToggle
-                          ? `${action.id === 'spectate' && isActive ? 'Stop Spectating ' : isActive ? 'Un' : ''}${action.label}${action.id !== 'spectate' || !isActive ? ' ' : ''}${action.id !== 'spectate' || !isActive ? player.name : ''}`
-                          : `${action.label} ${player.name}`
+                      title={isToggle
+                        ? `${action.id === 'spectate' && isActive ? 'Stop Spectating ' : isActive ? 'Un' : ''}${action.label}${action.id !== 'spectate' || !isActive ? ' ' : ''}${action.id !== 'spectate' || !isActive ? player.name : ''}`
+                        : `${action.label} ${player.name}`
                       }
                     >
                       {isLoading ? (
@@ -390,13 +377,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
                     </button>
                   )
 
-                  return isStream ? (
-                    <Tooltip key={`tooltip-${action.id}`} content="This feature is still in development, check back later!">
-                      {btn}
-                    </Tooltip>
-                  ) : (
-                    btn
-                  )
+                  return btn
                 })}
               </div>
             </div>

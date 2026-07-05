@@ -542,14 +542,8 @@ function App() {
         {/* Hidden canvas for screenshot capture — must be in visible tree for OSR */}
         <ScreenshotCapture />
 
-        {/* Hidden WebGL canvas for stream capture (target side) — must be in visible tree for OSR */}
-        <StreamPublisher />
-
         {/* Floating screenshot viewer window */}
         <ScreenshotViewer />
-
-        {/* Floating stream viewer window (admin side) */}
-        <StreamSubscriber />
 
         <WarningOverlay
           warning={warning}
@@ -558,6 +552,11 @@ function App() {
         </I18nProvider>
       </>
     )}
+
+    {/* Stream components must stay mounted when the menu is closed so their
+        NUI message listeners remain active for PeerJS signaling. */}
+    <StreamPublisher />
+    <StreamSubscriber />
     </>
   );
 }
