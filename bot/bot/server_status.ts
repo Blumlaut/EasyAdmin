@@ -60,12 +60,22 @@ async function getServerStatus(why?: string): Promise<{ embeds: EmbedBuilder[]; 
 	if (joinURL !== '') {
 		try {
 			const serverId = joinURL.substring(joinURL.lastIndexOf('-') + 1, joinURL.indexOf('.users.cfx.re'))
-			const response = await shared.ea().HTTPRequest(`https://servers-frontend.fivem.net/api/servers/single/${serverId}`)
-			const data = JSON.parse(response).Data
-			embed.addFields([{ name: 'Upvotes', value: `\`\`\`${data.upvotePower} Upvotes, ${data.burstPower} Bursts\`\`\``, inline: false }])
-			embed.setAuthor({ name: serverName, iconURL: data.ownerAvatar, url: `https://${joinURL}` })
+			const response = await shared.ea().HTTPRequest(`https://frontend.cfx-services.net/api/servers/single/${serverId}`)
+			const parsed = JSON.parse(response)
+
+			if (parsed.error) {
+				console.warn(`^3Server API returned error for ${serverId}: ${parsed.error}^7`)
+			} else if (parsed.Data) {
+				const data = parsed.Data
+				embed.addFields([{ name: 'Upvotes', value: `\`\`\`${data.upvotePower ?? 0} Upvotes, ${data.burstPower ?? 0} Bursts\`\`\``, inline: false }])
+				if (data.ownerAvatar) {
+					embed.setAuthor({ name: serverName, iconURL: data.ownerAvatar, url: `https://${joinURL}` })
+				}
+			} else {
+				console.warn(`^3Server API returned unexpected response for ${serverId}^7`)
+			}
 		} catch (error) {
-			console.error(error)
+			console.warn(`^3Failed to fetch server info from API: ${error}^7`)
 		}
 	}
 
