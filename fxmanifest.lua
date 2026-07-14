@@ -6,6 +6,7 @@ author 'Blumlaut <blue@furfag.de>'
 description 'EasyAdmin - Admin Menu for FiveM & RedM'
 repository 'https://github.com/Blumlaut/EasyAdmin'
 version ' 8.0a5'
+is_master 'yes'
 storage_api_version '2'
 
 
