@@ -48,7 +48,7 @@
     "eslint": "^10.7.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-tailwindcss": "^4.1.0",
+    "eslint-plugin-tailwindcss": "^4.2.0",
     "globals": "^17.7.0",
     "jscpd": "^5.0.12",
     "jsdom": "^29.1.1",
