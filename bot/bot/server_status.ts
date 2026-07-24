@@ -61,7 +61,42 @@ async function getServerStatus(why?: string): Promise<{ embeds: EmbedBuilder[]; 
 		try {
 			const serverId = joinURL.substring(joinURL.lastIndexOf('-') + 1, joinURL.indexOf('.users.cfx.re'))
 			const response = await shared.ea().HTTPRequest(`https://frontend.cfx-services.net/api/servers/single/${serverId}`)
-			const parsed = JSON.parse(response)
+
+			// Extract the JSON object from the response, handling cases where
+			// FiveM's HTTP stack or the export bridge appends extra content
+			let jsonStr = response.trim()
+			if (jsonStr.length > 0 && jsonStr[0] === '{') {
+				let depth = 0
+				let inString = false
+				let escapeNext = false
+				for (let i = 0; i < jsonStr.length; i++) {
+					const ch = jsonStr[i]
+					if (escapeNext) {
+						escapeNext = false
+						continue
+					}
+					if (ch === '\\' && inString) {
+						escapeNext = true
+						continue
+					}
+					if (ch === '"') {
+						inString = !inString
+						continue
+					}
+					if (!inString) {
+						if (ch === '{') depth++
+						if (ch === '}') {
+							depth--
+							if (depth === 0) {
+								jsonStr = jsonStr.substring(0, i + 1)
+								break
+							}
+						}
+					}
+				}
+			}
+
+			const parsed = JSON.parse(jsonStr)
 
 			if (parsed.error) {
 				console.warn(`^3Server API returned error for ${serverId}: ${parsed.error}^7`)
