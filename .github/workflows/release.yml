@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version Number'
+        description: 'Version Number (must be valid semver, e.g. 8.0.0, 8.0.0-alpha.1)'
         required: true
       release_type:
         description: 'Release Type'
@@ -75,6 +75,20 @@ jobs:
           git tag -d "$TAG" 2>/dev/null || true
         fi
 
+    - name: Validate version
+      run: |
+        # semver is bundled with npm — use it to validate the input
+        node -e "
+          const semver = require('semver');
+          const v = '${{ github.event.inputs.version }}';
+          if (!semver.valid(v)) {
+            console.error('Error: \'' + v + '\' is not a valid semver version.');
+            console.error('Examples: 8.0.0, 8.0.1, 8.0.0-alpha.1, 8.0.0-beta.2');
+            process.exit(1);
+          }
+          console.log('Version \'' + v + '\' is valid semver.');
+        "
+
     - name: Package release
       run: |
         ZIP_PATH="$RUNNER_TEMP/EasyAdmin-${{ github.event.inputs.version }}.zip"
@@ -89,8 +103,7 @@ jobs:
           -x ".agents/*" \
           -x "*tests/*" \
           -x "*tools/*" \
-          -x "*PLANS/*" \
-          -x "*package-lock.json"
+          -x "*PLANS/*"
         if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
           sed -i "/^version/ais_master 'yes'" fxmanifest.lua
         fi
@@ -129,9 +142,8 @@ jobs:
             git config user.email "<>"
             sed -i "/is_master/d" fxmanifest.lua
             sed -i "/^version/c\version '${{ github.event.inputs.version }}'" fxmanifest.lua
-            # Convert Major.Minor to semver for package.json (add .0 patch if missing)
-            SEMVER_VERSION=$(echo '${{ github.event.inputs.version }}' | awk -F. '{if(NF==2) print $0".0"; else print $0}')
-            sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$SEMVER_VERSION\"/" package.json
+            # Version is already validated as semver — write it directly
+            sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"${{ github.event.inputs.version }}\"/" package.json
             git add .
             git commit -m "${{ github.event.inputs.version }}"
             git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
