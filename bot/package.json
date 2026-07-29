@@ -19,7 +19,7 @@
     "@typescript-eslint/parser": "^8.63.0",
     "esbuild": "^0.28.1",
     "eslint": "^10.7.0",
-    "globals": "^17.7.0",
+    "globals": "^17.8.0",
     "typescript": "^6.0.3"
   },
   "engines": {
