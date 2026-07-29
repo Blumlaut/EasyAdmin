@@ -77,17 +77,14 @@ jobs:
 
     - name: Validate version
       run: |
-        # semver is bundled with npm — use it to validate the input
-        node -e "
-          const semver = require('semver');
-          const v = '${{ github.event.inputs.version }}';
-          if (!semver.valid(v)) {
-            console.error('Error: \'' + v + '\' is not a valid semver version.');
-            console.error('Examples: 8.0.0, 8.0.1, 8.0.0-alpha.1, 8.0.0-beta.2');
-            process.exit(1);
-          }
-          console.log('Version \'' + v + '\' is valid semver.');
-        "
+        VERSION='${{ github.event.inputs.version }}'
+        # Validate semver format: MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]
+        if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+          echo "Error: '$VERSION' is not a valid semver version."
+          echo "Examples: 8.0.0, 8.0.1, 8.0.0-alpha.1, 8.0.0-beta.2"
+          exit 1
+        fi
+        echo "Version '$VERSION' is valid semver."
 
     - name: Package release
       run: |
