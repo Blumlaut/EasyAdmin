@@ -28,6 +28,16 @@ add_ace resource.EasyAdmin command allow
 
 The first line grants all EasyAdmin permissions to the `group.admin` group. The second line allows the resource to execute commands.
 
+### Filesystem Permission (GTA V Enhanced)
+
+If you are running **GTA V Enhanced**, you must also add the following line to your `server.cfg` for EasyAdmin to function properly:
+
+```
+add_filesystem_permission EasyAdmin write EasyAdmin
+```
+
+This grants the resource permission to read and write its own data files.
+
 Restart your server after adding these lines.
 
 ## Adding an Admin

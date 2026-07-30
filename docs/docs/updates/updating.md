@@ -44,6 +44,16 @@ src/
 
 > **Do NOT delete** `banlist.json` — your ban list will be preserved.
 
+#### Filesystem Permission (GTA V Enhanced)
+
+If you are running **GTA V Enhanced**, add the following line to your `server.cfg` for EasyAdmin to function properly:
+
+```
+add_filesystem_permission EasyAdmin write EasyAdmin
+```
+
+This grants the resource permission to read and write its own data files.
+
 #### New Permissions (8.0)
 
 After updating, you may need to grant the following new permissions to your admin groups via ACL:
