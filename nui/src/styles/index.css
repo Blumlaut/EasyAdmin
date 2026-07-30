@@ -27,6 +27,7 @@
 @import './components/avatars.css';
 @import './components/badges.css';
 @import './components/lists.css';
+@import './components/quick-action-bar.css';
 @import './components/skeletons.css';
 @import './components/warning-overlay.css';
 @import './components/screenshot-viewer.css';

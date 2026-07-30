@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { PlayerListPage } from './PlayerListPage'
+import { ModalProvider } from '../../ModalContext'
 import type { Permissions, Player } from '../../types'
 
 const mockPlayers: Player[] = [
@@ -21,10 +22,12 @@ const defaultProps = {
 describe('PlayerListPage', () => {
   it('renders all players passed in', () => {
     render(
-      <PlayerListPage
-        players={mockPlayers}
-        {...defaultProps}
-      />,
+      <ModalProvider>
+        <PlayerListPage
+          players={mockPlayers}
+          {...defaultProps}
+        />
+      </ModalProvider>,
     )
     expect(screen.getByText('Alice')).toBeInTheDocument()
     expect(screen.getByText('Bob')).toBeInTheDocument()
@@ -33,20 +36,24 @@ describe('PlayerListPage', () => {
 
   it('shows an empty state when no players are connected', () => {
     render(
-      <PlayerListPage
-        players={[]}
-        {...defaultProps}
-      />,
+      <ModalProvider>
+        <PlayerListPage
+          players={[]}
+          {...defaultProps}
+        />
+      </ModalProvider>,
     )
     expect(screen.getByText('No players connected')).toBeInTheDocument()
   })
 
   it('shows a cached players button', () => {
     render(
-      <PlayerListPage
-        players={mockPlayers}
-        {...defaultProps}
-      />,
+      <ModalProvider>
+        <PlayerListPage
+          players={mockPlayers}
+          {...defaultProps}
+        />
+      </ModalProvider>,
     )
     expect(screen.getByText('Cached players')).toBeInTheDocument()
   })

@@ -1,0 +1,79 @@
+/* ============================================================
+   QuickActionBar — Compact icon-button row + dropdown
+   ============================================================ */
+
+.quick-action-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.quick-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.quick-action-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.quick-action-btn:active {
+  opacity: 0.7;
+}
+
+/* -- Variants -- */
+
+.quick-action-btn--warning {
+  color: var(--accent-orange);
+}
+
+.quick-action-btn--warning:hover {
+  background: color-mix(in srgb, var(--accent-orange) 12%, transparent);
+  color: var(--accent-orange);
+}
+
+.quick-action-btn--danger {
+  color: var(--accent-red);
+}
+
+.quick-action-btn--danger:hover {
+  background: color-mix(in srgb, var(--accent-red) 12%, transparent);
+  color: var(--accent-red);
+}
+
+/* -- Dropdown trigger (right-edge radius) -- */
+
+.quick-action-btn--dropdown {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* -- First button gets left radius -- */
+
+.quick-action-bar > *:first-child .quick-action-btn,
+.quick-action-bar > *:first-child > button {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+/* Dropdown is the only child — give it full radius */
+.quick-action-bar:has(.quick-action-btn--dropdown:only-child) .quick-action-btn--dropdown {
+  border-radius: var(--radius-sm);
+}
+
+/* Dropdown menu positioning */
+.quick-action-bar .dropdown-menu {
+  right: 0;
+  left: auto;
+}

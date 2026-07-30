@@ -11,7 +11,12 @@ import { RoleBadges } from '../../components/RoleBadges'
 import { List } from '../../components/List'
 import { ListItem } from '../../components/ListItem'
 import { PlayerListSkeleton } from '../../components/PlayerListSkeleton'
+import { QuickActionBar, type QuickAction, type DropdownAction } from '../../components/QuickActionBar'
 import { AllPlayersActions } from './AllPlayersActions'
+import { useModalContext } from '../../ModalContext'
+import { createBanModal, createTextInputModal } from '../../modals/helpers'
+import { callLua } from '../../fivem'
+import { notify } from '../../lib/notify'
 import { useTranslation } from '../../lib/i18n'
 
 interface PlayerListPageProps {
@@ -32,6 +37,7 @@ export function PlayerListPage({
   onRefresh,
 }: PlayerListPageProps) {
   const { t } = useTranslation()
+  const { openModal, closeModal } = useModalContext()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
 
@@ -82,7 +88,10 @@ export function PlayerListPage({
             <PlayerRow
               key={player.id}
               player={player}
+              permissions={permissions}
               onClick={() => onSelectPlayer(player)}
+              onOpenModal={openModal}
+              onCloseModal={closeModal}
             />
           ))}
         </List>
@@ -95,8 +104,240 @@ export function PlayerListPage({
   )
 }
 
-function PlayerRow({ player, onClick }: { player: Player; onClick: () => void }) {
+interface PlayerRowProps {
+  player: Player
+  permissions: Permissions
+  onClick: () => void
+  onOpenModal: (definition: import('../../modals/types').ModalDefinition) => void
+  onCloseModal: () => void
+}
+
+function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: PlayerRowProps) {
   const { t } = useTranslation()
+
+  const canSpectate = !!permissions['player.spectate']
+  const canFreeze = !!permissions['player.freeze']
+  const canMute = !!permissions['player.mute']
+  const canKick = !!permissions['player.kick']
+  const canBan = !!permissions['player.ban.temporary']
+  const canSlap = !!permissions['player.slap']
+  const canScreenshot = !!permissions['player.screenshot']
+  const canBucketJoin = !!permissions['player.bucket.join']
+  const canBucketForce = !!permissions['player.bucket.force']
+
+  // ---- Direct (quick) actions ----
+  // Order follows the detail page: discipline first (Kick, Ban),
+  // then most-used controls (Spectate, Mute).
+  // Less-used actions go in the dropdown.
+
+  const quickActions = useMemo<QuickAction[]>(() => {
+    const actions: QuickAction[] = []
+
+    // Discipline (matches detail page — top section)
+    if (canKick) {
+      actions.push({
+        label: t("Kick {name}", { name: player.name }),
+        icon: 'log-out',
+        variant: 'warning',
+        onClick: (e) => {
+          e.stopPropagation()
+          onOpenModal(
+            createTextInputModal({
+              title: t("Kick {name}", { name: player.name }),
+              label: t('Reason'),
+              placeholder: t('No reason'),
+              required: true,
+              submitLabel: t('Kick'),
+              submitVariant: 'warning',
+              onSubmit: async (values) => {
+                const reason = typeof values.value === 'string' ? values.value.trim() : 'No reason'
+                try {
+                  await callLua('kickPlayer', { id: player.id, name: player.name, reason })
+                  notify(t("Kicked {name}", { name: player.name }), 'success')
+                } catch {
+                  notify(t('Kick failed'), 'error')
+                }
+                onCloseModal()
+              },
+            }),
+          )
+        },
+      })
+    }
+
+    if (canBan) {
+      actions.push({
+        label: t("Ban {name}", { name: player.name }),
+        icon: 'ban',
+        variant: 'danger',
+        onClick: (e) => {
+          e.stopPropagation()
+          onOpenModal(
+            createBanModal({
+              title: t("Ban {name}", { name: player.name }),
+              onSubmit: async (reason, duration) => {
+                try {
+                  await callLua('banPlayer', {
+                    id: player.id,
+                    name: player.name,
+                    reason,
+                    duration,
+                  })
+                  notify(t("Banned {name}", { name: player.name }), 'success')
+                } catch {
+                  notify(t('Failed to ban player'), 'error')
+                }
+                onCloseModal()
+              },
+            }),
+          )
+        },
+      })
+    }
+
+    // Most-used controls (Spectate is first in Movement on detail page)
+    if (canSpectate) {
+      actions.push({
+        label: t("Spectate {name}", { name: player.name }),
+        icon: 'eye',
+        onClick: (e) => {
+          e.stopPropagation()
+          callLua('spectatePlayer', { id: player.id, name: player.name })
+          notify(t("Spectating {name}", { name: player.name }), 'success')
+        },
+      })
+    }
+
+    // Mute — quick toggle, commonly used
+    if (canMute) {
+      actions.push({
+        label: player.muted
+          ? t("Unmute {name}", { name: player.name })
+          : t("Mute {name}", { name: player.name }),
+        icon: player.muted ? 'volume-2' : 'volume-x',
+        onClick: (e) => {
+          e.stopPropagation()
+          const newMuted = !player.muted
+          callLua('toggleMute', { id: player.id, name: player.name, mute: newMuted })
+          notify(
+            t(newMuted ? "Muted {name}" : "Unmuted {name}", { name: player.name }),
+            'success',
+          )
+        },
+      })
+    }
+
+    return actions
+  }, [player, canSpectate, canMute, canKick, canBan, t, onOpenModal, onCloseModal])
+
+  // ---- Dropdown (overflow) actions ----
+
+  const dropdownActions = useMemo<DropdownAction[]>(() => {
+    const items: DropdownAction[] = []
+
+    if (canSlap) {
+      items.push({
+        label: t('Slap'),
+        icon: 'zap',
+        onSelect: () => {
+          onOpenModal({
+            title: t('Slap {name}', { name: player.name }),
+            fields: [
+              {
+                key: 'amount',
+                type: 'slider',
+                label: t('Slap player'),
+                min: 1,
+                max: 20,
+                initialValue: 5,
+                formatValue: (n: number) => `${n * 10} damage`,
+              },
+            ],
+            onSubmit: async (values) => {
+              try {
+                const amount = typeof values.amount === 'number' ? values.amount * 10 : 50
+                await callLua('slapPlayer', { id: player.id, name: player.name, amount })
+                notify(t('Slapped'), 'success')
+              } catch {
+                notify(t('Slap failed'), 'error')
+              }
+              onCloseModal()
+            },
+          })
+        },
+      })
+    }
+
+    if (canFreeze) {
+      items.push({
+        label: player.frozen ? t('Unfreeze') : t('Freeze'),
+        icon: 'snowflake',
+        onSelect: async () => {
+          const newFrozen = !player.frozen
+          try {
+            await callLua('toggleFreeze', {
+              id: player.id,
+              name: player.name,
+              freeze: newFrozen,
+            })
+            notify(
+              t(newFrozen ? "Frozen {name}" : "Unfrozen {name}", { name: player.name }),
+              'success',
+            )
+          } catch {
+            notify(t('Action failed'), 'error')
+          }
+        },
+      })
+    }
+
+    if (canScreenshot) {
+      items.push({
+        label: t('Screenshot'),
+        icon: 'camera',
+        onSelect: async () => {
+          try {
+            await callLua('screenshotPlayer', { id: player.id, name: player.name })
+          } catch {
+            // Screenshot handled asynchronously
+          }
+        },
+      })
+    }
+
+    if (canBucketJoin) {
+      items.push({
+        label: t('Join bucket'),
+        icon: 'arrow-left',
+        onSelect: async () => {
+          try {
+            await callLua('joinPlayerBucket', { id: player.id, name: player.name })
+            notify(t('Joined bucket'), 'success')
+          } catch {
+            notify(t('Action failed'), 'error')
+          }
+        },
+      })
+    }
+
+    if (canBucketForce) {
+      items.push({
+        label: t('Force bucket'),
+        icon: 'map-pin',
+        onSelect: async () => {
+          try {
+            await callLua('forcePlayerBucket', { id: player.id, name: player.name })
+            notify(t('Forced bucket'), 'success')
+          } catch {
+            notify(t('Action failed'), 'error')
+          }
+        },
+      })
+    }
+
+    return items
+  }, [player, canSlap, canFreeze, canScreenshot, canBucketJoin, canBucketForce, t, onOpenModal, onCloseModal])
+
   return (
     <ListItem onClick={onClick}>
       <Avatar key={player.id} player={player} size="sm" variant="player" />
@@ -122,6 +363,9 @@ function PlayerRow({ player, onClick }: { player: Player; onClick: () => void })
           </Tooltip>
         )}
       </div>
+
+      <QuickActionBar actions={quickActions} dropdownActions={dropdownActions} />
+
       <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>
   )
