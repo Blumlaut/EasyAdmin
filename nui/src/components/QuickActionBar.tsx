@@ -76,7 +76,7 @@ export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps
             className={`quick-action-btn${action.variant ? ` quick-action-btn--${action.variant}` : ''}`}
             onClick={action.onClick}
           >
-            <Icon name={action.icon} size="xs" />
+            <Icon name={action.icon} size="sm" />
           </button>
         </Tooltip>
       ))}
@@ -90,7 +90,7 @@ export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps
               type="button"
               className="quick-action-btn quick-action-btn--dropdown"
             >
-              <Icon name="chevron-down" size="xs" />
+              <Icon name="chevron-down" size="sm" />
             </button>
           }
         />

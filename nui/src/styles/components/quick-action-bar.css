@@ -13,8 +13,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: none;
   border-radius: var(--radius-sm);
@@ -42,7 +42,7 @@
 
 .quick-action-btn--warning:hover {
   background: color-mix(in srgb, var(--accent-orange) 12%, transparent);
-  color: var(--accent-orange);
+  color: var(--text-primary);
 }
 
 .quick-action-btn--danger {
@@ -51,7 +51,7 @@
 
 .quick-action-btn--danger:hover {
   background: color-mix(in srgb, var(--accent-red) 12%, transparent);
-  color: var(--accent-red);
+  color: var(--text-primary);
 }
 
 /* -- Dropdown trigger (right-edge radius) -- */
@@ -70,10 +70,4 @@
 /* Dropdown is the only child — give it full radius */
 .quick-action-bar:has(.quick-action-btn--dropdown:only-child) .quick-action-btn--dropdown {
   border-radius: var(--radius-sm);
-}
-
-/* Dropdown menu positioning */
-.quick-action-bar .dropdown-menu {
-  right: 0;
-  left: auto;
 }
