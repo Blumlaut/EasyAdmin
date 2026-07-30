@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { BanListEntry, PaginatedBanResponse } from '../../types'
 import { on, callLua } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
@@ -32,7 +32,7 @@ export function BanListPage({
   const [loading, setLoading] = useState(true)
   const listRef = useRef<HTMLDivElement>(null)
 
-  useListKeyboardNav(listRef, bans.length)
+  useGridNavigation(listRef, () => 1)
 
   // Stable refs so the NUI message handler doesn't stale-out
   const bansRef = useRef<BanListEntry[]>([])

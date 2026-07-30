@@ -25,9 +25,14 @@
   flex-shrink: 0;
 }
 
-.quick-action-btn:hover {
+.quick-action-btn:hover,
+.quick-action-btn:focus {
   background: var(--bg-hover);
   color: var(--text-primary);
+}
+
+.quick-action-btn:focus {
+  outline: none;
 }
 
 .quick-action-btn:active {
@@ -40,7 +45,8 @@
   color: var(--accent-orange);
 }
 
-.quick-action-btn--warning:hover {
+.quick-action-btn--warning:hover,
+.quick-action-btn--warning:focus {
   background: color-mix(in srgb, var(--accent-orange) 12%, transparent);
   color: var(--text-primary);
 }
@@ -49,7 +55,8 @@
   color: var(--accent-red);
 }
 
-.quick-action-btn--danger:hover {
+.quick-action-btn--danger:hover,
+.quick-action-btn--danger:focus {
   background: color-mix(in srgb, var(--accent-red) 12%, transparent);
   color: var(--text-primary);
 }

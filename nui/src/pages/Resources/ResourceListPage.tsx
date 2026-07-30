@@ -3,7 +3,7 @@ import type { Permissions, ResourceEntry, ResourceMetadata, ResourceUpdateResult
 import { callLua, on } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 import { useModalContext } from '../../ModalContext'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
@@ -148,7 +148,13 @@ export function ResourceListPage({
   const outdatedCount = resources.filter((r) => r.outdated).length
   const listRef = useRef<HTMLDivElement>(null)
 
-  useListKeyboardNav(listRef, filtered.length)
+  // Zone count: 1 (row body) + 0/1 (single toggle) / 2 (restart+stop split button)
+  const zonesPerRow = useMemo(() => {
+    if (!canStart && !canStop) return 1
+    return canStart && canStop ? 3 : 2
+  }, [canStart, canStop])
+
+  useGridNavigation(listRef, () => zonesPerRow)
 
   // Execute a resource action (called after confirmation)
   const executeAction = useCallback(async (name: string, action: 'start' | 'stop' | 'ensure') => {

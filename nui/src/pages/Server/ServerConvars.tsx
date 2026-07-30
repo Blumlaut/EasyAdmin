@@ -3,7 +3,7 @@ import type { ConvarEntry } from '../../types'
 import { callLua } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 import { useModalContext } from '../../ModalContext'
 import { createTextInputModal, getStringValue, runModalAction } from '../../modals/helpers'
 import { SearchBar } from '../../components/SearchBar'
@@ -71,7 +71,7 @@ export function ServerConvars({ permissions }: ServerConvarsProps) {
     return Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]))
   }, [filtered])
 
-  useListKeyboardNav(listRef, filtered.length)
+  useGridNavigation(listRef, () => 1)
 
   function handleEditConvar(entry: ConvarEntry) {
     const typeLabel = entry.setType === 'setr' ? ' (replicated)' : entry.setType === 'sets' ? ' (server info)' : ''

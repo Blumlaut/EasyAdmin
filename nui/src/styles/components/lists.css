@@ -32,8 +32,15 @@
   transition: background var(--transition-fast);
 }
 
-.list-item-interactive:hover {
+.list-item-interactive:hover,
+.list-item-interactive:focus,
+.list-item-interactive:focus-within {
   background: var(--bg-hover);
+}
+
+/* Remove default outline — highlight is the background change */
+.list-item-interactive:focus {
+  outline: none;
 }
 
 .list-item-content {

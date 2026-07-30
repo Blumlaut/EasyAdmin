@@ -35,6 +35,8 @@ export interface QuickActionBarProps {
   actions: QuickAction[]
   /** Actions shown inside the dropdown (chevron) button. */
   dropdownActions?: DropdownAction[]
+  /** Called when a button in this bar receives focus. Zone 1 = first action, Zone N = dropdown. */
+  onZoneFocus?: (zoneIndex: number) => void
 }
 
 /**
@@ -48,7 +50,7 @@ export interface QuickActionBarProps {
  * `e.stopPropagation()` to prevent the parent row from firing its
  * own click handler (e.g. navigation to a detail page).
  */
-export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps) {
+export function QuickActionBar({ actions, dropdownActions, onZoneFocus }: QuickActionBarProps) {
   const hasDropdown = (dropdownActions?.length ?? 0) > 0
   const hasAny = actions.length > 0 || hasDropdown
 
@@ -67,6 +69,9 @@ export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps
     [dropdownActions],
   )
 
+  // Dropdown trigger zone: after all quick actions (zones start at 1)
+  const dropdownZone = actions.length + 1
+
   return (
     <div className="quick-action-bar">
       {actions.map((action, i) => (
@@ -75,6 +80,7 @@ export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps
             type="button"
             className={`quick-action-btn${action.variant ? ` quick-action-btn--${action.variant}` : ''}`}
             onClick={action.onClick}
+            onFocus={() => onZoneFocus?.(i + 1)}
           >
             <Icon name={action.icon} size="sm" />
           </button>
@@ -89,6 +95,7 @@ export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps
             <button
               type="button"
               className="quick-action-btn quick-action-btn--dropdown"
+              onFocus={() => onZoneFocus?.(dropdownZone)}
             >
               <Icon name="chevron-down" size="sm" />
             </button>

@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import type { CachedPlayer } from '../../types'
 import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 import { filterCachedPlayers } from '../../lib/playerSearch'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
@@ -35,7 +35,8 @@ export function CachedPlayersPage({
     return filterCachedPlayers(cachedPlayers, debouncedQuery)
   }, [cachedPlayers, debouncedQuery])
 
-  useListKeyboardNav(listRef, filtered.length)
+  // Each row: 1 (row div) + 1 (ban button) = 2 zones
+  useGridNavigation(listRef, () => 2)
 
   return (
     <div className="page-container">

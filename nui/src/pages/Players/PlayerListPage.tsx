@@ -1,7 +1,7 @@
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type { Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 import { filterPlayers } from '../../lib/playerSearch'
 import { SearchBar } from '../../components/SearchBar'
 import { Avatar } from '../../components/Avatar'
@@ -46,10 +46,41 @@ export function PlayerListPage({
   }, [players, debouncedQuery])
 
   const listRef = useRef<HTMLDivElement>(null)
-
-  useListKeyboardNav(listRef, filtered.length)
+  const focusedZoneRef = useRef<{ row: number; zone: number } | null>(null)
 
   const canTeleportAll = !!permissions['player.teleport.everyone']
+  const canKick = !!permissions['player.kick']
+  const canBan = !!permissions['player.ban.temporary']
+  const canSpectate = !!permissions['player.spectate']
+  const canMute = !!permissions['player.mute']
+  const canSlap = !!permissions['player.slap']
+  const canFreeze = !!permissions['player.freeze']
+  const canScreenshot = !!permissions['player.screenshot']
+  const canBucketJoin = !!permissions['player.bucket.join']
+  const canBucketForce = !!permissions['player.bucket.force']
+
+  // Compute zone count for a single row (constant for all rows given same permissions)
+  const zonesPerRow = useMemo(() => {
+    let z = 1 // row body
+    if (canKick) z++
+    if (canBan) z++
+    if (canSpectate) z++
+    if (canMute) z++
+    // Dropdown: slap + freeze + screenshot + bucketJoin + bucketForce
+    const dropdownCount = (canSlap ? 1 : 0) + (canFreeze ? 1 : 0) + (canScreenshot ? 1 : 0) + (canBucketJoin ? 1 : 0) + (canBucketForce ? 1 : 0)
+    if (dropdownCount > 0) z++ // dropdown trigger
+    return z
+  }, [canKick, canBan, canSpectate, canMute, canSlap, canFreeze, canScreenshot, canBucketJoin, canBucketForce])
+
+  useGridNavigation(listRef, () => zonesPerRow)
+
+  const handleRowFocus = useCallback((row: number) => {
+    focusedZoneRef.current = { row, zone: 0 }
+  }, [])
+
+  const handleZoneFocus = useCallback((row: number, zone: number) => {
+    focusedZoneRef.current = { row, zone }
+  }, [])
 
   return (
     <div className="page-container">
@@ -84,7 +115,7 @@ export function PlayerListPage({
         </div>
       ) : (
         <List ref={listRef}>
-          {filtered.map((player) => (
+          {filtered.map((player, index) => (
             <PlayerRow
               key={player.id}
               player={player}
@@ -92,6 +123,8 @@ export function PlayerListPage({
               onClick={() => onSelectPlayer(player)}
               onOpenModal={openModal}
               onCloseModal={closeModal}
+              onRowFocus={() => handleRowFocus(index)}
+              onZoneFocus={(zone) => handleZoneFocus(index, zone)}
             />
           ))}
         </List>
@@ -110,9 +143,11 @@ interface PlayerRowProps {
   onClick: () => void
   onOpenModal: (definition: import('../../modals/types').ModalDefinition) => void
   onCloseModal: () => void
+  onRowFocus: () => void
+  onZoneFocus: (zoneIndex: number) => void
 }
 
-function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: PlayerRowProps) {
+function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal, onRowFocus, onZoneFocus }: PlayerRowProps) {
   const { t } = useTranslation()
 
   const canSpectate = !!permissions['player.spectate']
@@ -339,7 +374,7 @@ function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: 
   }, [player, canSlap, canFreeze, canScreenshot, canBucketJoin, canBucketForce, t, onOpenModal, onCloseModal])
 
   return (
-    <ListItem onClick={onClick}>
+    <ListItem onClick={onClick} onFocus={onRowFocus}>
       <Avatar key={player.id} player={player} size="sm" variant="player" />
       <div className="list-item-content">
         <div className="list-item-title">
@@ -364,7 +399,7 @@ function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: 
         )}
       </div>
 
-      <QuickActionBar actions={quickActions} dropdownActions={dropdownActions} />
+      <QuickActionBar actions={quickActions} dropdownActions={dropdownActions} onZoneFocus={onZoneFocus} />
 
       <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>

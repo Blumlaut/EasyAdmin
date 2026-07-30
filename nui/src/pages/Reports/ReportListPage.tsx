@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import type { Report } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
@@ -40,7 +40,7 @@ export function ReportListPage({
   const listRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
-  useListKeyboardNav(listRef, filtered.length)
+  useGridNavigation(listRef, () => 1)
 
   return (
     <div className="page-container">

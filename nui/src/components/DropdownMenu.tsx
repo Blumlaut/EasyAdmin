@@ -50,10 +50,17 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
     })
   }, [align])
 
-  // Measure when opened
+  // Measure when opened + auto-focus first menu item
   useEffect(() => {
     if (!open) return
-    const raf = requestAnimationFrame(() => measureTrigger())
+    const raf = requestAnimationFrame(() => {
+      measureTrigger()
+      // Auto-focus first menu item after a frame so the portal is mounted
+      requestAnimationFrame(() => {
+        const first = menuRef.current?.querySelector<HTMLButtonElement>('button[role="menuitem"]')
+        first?.focus()
+      })
+    })
     return () => cancelAnimationFrame(raf)
   }, [open, measureTrigger])
 
@@ -75,11 +82,37 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
   // Click outside closes the menu
   useClickOutside(open, () => setOpen(false), menuRef)
 
-  // Close on Escape
+  // Keyboard navigation: Escape to close, ArrowUp/Down to navigate items
   useEffect(() => {
     if (!open) return
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        const buttons = menuRef.current?.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]')
+        if (!buttons || buttons.length === 0) return
+
+        const currentIdx = Array.from(buttons).indexOf(document.activeElement as HTMLButtonElement)
+        let nextIdx: number
+
+        if (e.key === 'ArrowDown') {
+          nextIdx = currentIdx < 0 ? 0 : (currentIdx + 1) % buttons.length
+        } else {
+          nextIdx = currentIdx <= 0 ? buttons.length - 1 : currentIdx - 1
+        }
+
+        e.preventDefault()
+        buttons[nextIdx].focus()
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        // Activate focused menu item
+        if (document.activeElement?.hasAttribute('role') && document.activeElement.getAttribute('role') === 'menuitem') {
+          e.preventDefault()
+          ;(document.activeElement as HTMLButtonElement).click()
+        }
+      }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
@@ -121,9 +154,9 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
           setOpen(!open)
         }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if ((e.key === 'Enter' || e.key === ' ') && !open) {
             e.preventDefault()
-            setOpen(!open)
+            setOpen(true)
           }
         }}
       >

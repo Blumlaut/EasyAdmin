@@ -11,7 +11,7 @@ import { BarChart } from '../../components/BarChart'
 import { Pagination } from '../../components/Pagination'
 import { SortableTable, type TableColumn, type SortState } from '../../components/SortableTable'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useListKeyboardNav } from '../../hooks/useListKeyboardNav'
+import { useGridNavigation } from '../../hooks/useGridNavigation'
 
 // ============================================================
 // Helpers
@@ -212,7 +212,9 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   const listRef = useRef<HTMLDivElement>(null)
   const debouncedQuery = useDebounce(query, 300)
 
-  useListKeyboardNav(listRef, players.length)
+  // SortableTable rows aren't individually focusable — nav operates on the
+  // table container. Up/down scrolls; left/right has no effect (1 zone/row).
+  useGridNavigation(listRef, () => 1)
 
   const fetchPage = useCallback((p: number, q: string, sort: RegistrySortBy, dir: 'asc' | 'desc') => {
     setLoading(true)
