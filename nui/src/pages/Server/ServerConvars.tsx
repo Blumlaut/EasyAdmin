@@ -4,6 +4,7 @@ import { callLua } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 import { useModalContext } from '../../ModalContext'
 import { createTextInputModal, getStringValue, runModalAction } from '../../modals/helpers'
 import { SearchBar } from '../../components/SearchBar'
@@ -28,6 +29,7 @@ export function ServerConvars({ permissions }: ServerConvarsProps) {
 
   const canEdit = !!permissions['server.convars']
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const fetchConvars = useCallback(() => {
     setRefreshing(true)
@@ -72,6 +74,7 @@ export function ServerConvars({ permissions }: ServerConvarsProps) {
   }, [filtered])
 
   useGridNavigation(listRef, () => 1)
+  useInitialFocus(searchRef)
 
   function handleEditConvar(entry: ConvarEntry) {
     const typeLabel = entry.setType === 'setr' ? ' (replicated)' : entry.setType === 'sets' ? ' (server info)' : ''
@@ -155,6 +158,7 @@ export function ServerConvars({ permissions }: ServerConvarsProps) {
 
       <div className="mb-3">
         <SearchBar
+          ref={searchRef}
           value={query}
           onChange={setQuery}
           placeholder={t("Search convars...")}

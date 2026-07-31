@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 import { filterPlayers } from '../../lib/playerSearch'
 import { SearchBar } from '../../components/SearchBar'
 import { Avatar } from '../../components/Avatar'
@@ -46,7 +47,23 @@ export function PlayerListPage({
   }, [players, debouncedQuery])
 
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
   const focusedZoneRef = useRef<{ row: number; zone: number } | null>(null)
+
+  // Auto-focus search bar when entering the page
+  useInitialFocus(searchRef)
+
+  // Ctrl/Cmd+F focuses the search input
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault()
+        searchRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [])
 
   const canTeleportAll = !!permissions['player.teleport.everyone']
   const canKick = !!permissions['player.kick']
@@ -86,6 +103,7 @@ export function PlayerListPage({
     <div className="page-container">
       <div className="mb-3 flex items-center gap-2">
         <SearchBar
+          ref={searchRef}
           value={query}
           onChange={setQuery}
           placeholder={t("Search by name, ID, or identifier...")}

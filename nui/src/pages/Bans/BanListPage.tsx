@@ -3,6 +3,7 @@ import type { BanListEntry, PaginatedBanResponse } from '../../types'
 import { on, callLua } from '../../fivem'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Pagination } from '../../components/Pagination'
@@ -31,8 +32,10 @@ export function BanListPage({
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
 
   useGridNavigation(listRef, () => 1)
+  useInitialFocus(searchRef)
 
   // Stable refs so the NUI message handler doesn't stale-out
   const bansRef = useRef<BanListEntry[]>([])
@@ -98,6 +101,7 @@ export function BanListPage({
     <div className="page-container">
       <div className="mb-3 flex items-center gap-2">
         <SearchBar
+          ref={searchRef}
           value={query}
           onChange={(v) => {
             setQuery(v)

@@ -12,6 +12,7 @@ import { Pagination } from '../../components/Pagination'
 import { SortableTable, type TableColumn, type SortState } from '../../components/SortableTable'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 
 // ============================================================
 // Helpers
@@ -210,11 +211,13 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
   const debouncedQuery = useDebounce(query, 300)
 
   // SortableTable rows aren't individually focusable — nav operates on the
   // table container. Up/down scrolls; left/right has no effect (1 zone/row).
   useGridNavigation(listRef, () => 1)
+  useInitialFocus(searchRef)
 
   const fetchPage = useCallback((p: number, q: string, sort: RegistrySortBy, dir: 'asc' | 'desc') => {
     setLoading(true)
@@ -325,6 +328,7 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
         <p className="section-label mb-3">{t("Player Registry")}</p>
         <div className="mb-3 flex items-center gap-2">
           <SearchBar
+            ref={searchRef}
             value={query}
             onChange={setQuery}
             placeholder={t("Search by name...")}

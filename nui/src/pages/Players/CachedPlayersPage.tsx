@@ -3,6 +3,7 @@ import type { CachedPlayer } from '../../types'
 import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 import { filterCachedPlayers } from '../../lib/playerSearch'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
@@ -29,7 +30,10 @@ export function CachedPlayersPage({
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
+
+  useInitialFocus(searchRef)
 
   const filtered = useMemo(() => {
     return filterCachedPlayers(cachedPlayers, debouncedQuery)
@@ -45,6 +49,7 @@ export function CachedPlayersPage({
       </p>
       <div className="mb-3 flex items-center gap-2">
         <SearchBar
+          ref={searchRef}
           value={query}
           onChange={setQuery}
           placeholder={t("Search by name, ID, or identifier...")}

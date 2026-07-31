@@ -4,6 +4,7 @@ import { callLua, on } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 import { useModalContext } from '../../ModalContext'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
@@ -147,6 +148,7 @@ export function ResourceListPage({
   const stoppedCount = resources.length - startedCount
   const outdatedCount = resources.filter((r) => r.outdated).length
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
 
   // Zone count: 1 (row body) + 0/1 (single toggle) / 2 (restart+stop split button)
   const zonesPerRow = useMemo(() => {
@@ -155,6 +157,7 @@ export function ResourceListPage({
   }, [canStart, canStop])
 
   useGridNavigation(listRef, () => zonesPerRow)
+  useInitialFocus(searchRef)
 
   // Execute a resource action (called after confirmation)
   const executeAction = useCallback(async (name: string, action: 'start' | 'stop' | 'ensure') => {
@@ -255,6 +258,7 @@ export function ResourceListPage({
     <div className="page-container">
       <div className="mb-3 flex items-center justify-between">
         <SearchBar
+          ref={searchRef}
           value={query}
           onChange={setQuery}
           placeholder={t("Search resources...")}

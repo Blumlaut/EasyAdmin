@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import type { Report } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
+import { useInitialFocus } from '../../hooks/useInitialFocus'
 import { useTranslation } from '../../lib/i18n'
 import { SearchBar } from '../../components/SearchBar'
 import { Skeleton } from '../../components/Skeleton'
@@ -38,14 +39,17 @@ export function ReportListPage({
   }, [reports, debouncedQuery])
 
   const listRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
 
   useGridNavigation(listRef, () => 1)
+  useInitialFocus(searchRef)
 
   return (
     <div className="page-container">
       <div className="mb-3 flex items-center gap-2">
         <SearchBar
+          ref={searchRef}
           value={query}
           onChange={setQuery}
           placeholder={t("Search by ID, name, or reason...")}
