@@ -217,15 +217,16 @@ export function useAppNavigation({
     if (item.id === 'server') {
       // Server dropdown: check permissions for each child
       const hasServerPerm = permissions['server.announce'] || permissions['server.convars'] || permissions['player.ban.view']
+      const hasCleanupPerm = permissions['server.cleanup.cars'] || permissions['server.cleanup.peds'] || permissions['server.cleanup.props']
       const hasResourcePerm = permissions['server.resources.start'] || permissions['server.resources.stop']
       const hasProfilerPerm = permissions['server.resources.monitor']
-      disabled = !hasServerPerm && !hasResourcePerm && !hasProfilerPerm
+      disabled = !hasServerPerm && !hasCleanupPerm && !hasResourcePerm && !hasProfilerPerm
       const children = item.children?.map((child) => {
         if ('type' in child && (child.type === 'separator' || child.type === 'header')) {
           return child
         }
         let childDisabled = false
-        if (child.id === 'server' && !hasServerPerm) childDisabled = true
+        if (child.id === 'server' && !hasServerPerm && !hasCleanupPerm) childDisabled = true
         if (child.id === 'resources' && !hasResourcePerm) childDisabled = true
         if (child.id === 'profiler' && !hasProfilerPerm) childDisabled = true
         return { ...child, disabled: childDisabled }
@@ -244,7 +245,10 @@ export function useAppNavigation({
     if (
       permissions['server.announce'] ||
       permissions['server.convars'] ||
-      permissions['player.ban.view']
+      permissions['player.ban.view'] ||
+      permissions['server.cleanup.cars'] ||
+      permissions['server.cleanup.peds'] ||
+      permissions['server.cleanup.props']
     ) {
       views.push('server')
     }
