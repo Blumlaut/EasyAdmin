@@ -51,7 +51,7 @@
     "eslint-plugin-tailwindcss": "^4.2.0",
     "globals": "^17.8.0",
     "jscpd": "^5.0.14",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "postcss": "^8.5.25",
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
