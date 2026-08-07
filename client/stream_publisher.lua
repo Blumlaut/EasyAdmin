@@ -58,7 +58,10 @@ RegisterNUICallback('streamPublisher:peerReady', function(data, cb)
     print(STREAM_LOG, 'Received peerReady from NUI — peerId:', data and data.peerId or 'nil')
     cb({})
     if data and type(data.peerId) == 'string' then
-        TriggerServerEvent('EasyAdmin:Stream:PeerReady', data.peerId, 'target')
+        TriggerServerEvent('EasyAdmin:Stream:PeerReady', {
+            peerId = data.peerId,
+            role = 'target',
+        })
         print(STREAM_LOG, 'Forwarded PeerReady (target) to server')
     end
 end)

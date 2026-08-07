@@ -7,8 +7,10 @@
  * SDP offer must contain the media tracks — if the viewer called first with no
  * tracks, the target's video answer would be silently dropped by the WebRTC spec.
  *
+ * Multiple instances can be mounted concurrently (one per active stream).
+ * Each instance owns its own PeerJS connection and video element.
+ *
  * The server signals this NUI with:
- *   streamSubscriber:start        — a stream session is active (opens the window)
  *   streamSubscriber:ended        — the stream ended (target disconnected / stopped)
  *
  * Draggable via the topbar, closable via the X button.
@@ -27,13 +29,8 @@ const LOG = '[EA-StreamSubscriber]'
 
 type ConnectionState = 'waiting' | 'live' | 'failed'
 
-interface StreamStartData {
-  targetId: number
-  targetName: string
-  iceConfig: IceConfigPayload
-}
-
 interface StreamEndData {
+  targetId: number
   targetName: string
   reason: string
 }
@@ -41,10 +38,19 @@ interface StreamEndData {
 const DEFAULT_POS: WindowPosition = { x: 0, y: 0 }
 const DEFAULT_SIZE: WindowSize = { width: 640, height: 420 }
 
-export function StreamSubscriber() {
+export interface StreamSubscriberProps {
+  /** Server ID of the streamed player (used as React key). */
+  targetId: number
+  /** Display name of the streamed player. */
+  targetName: string
+  /** ICE server configuration for PeerJS. */
+  iceConfig: IceConfigPayload
+  /** Called when the user closes the viewer. */
+  onClose: (targetId: number) => void
+}
+
+export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: StreamSubscriberProps) {
   const { t } = useTranslation()
-  const [targetName, setTargetName] = useState<string | null>(null)
-  const [targetId, setTargetId] = useState<number | null>(null)
   const [position, setPosition] = useState<WindowPosition>(DEFAULT_POS)
   const [size, setSize] = useState<WindowSize>(DEFAULT_SIZE)
   const [error, setError] = useState<string | null>(null)
@@ -53,27 +59,24 @@ export function StreamSubscriber() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const peerRef = useRef<Peer | null>(null)
   const callRef = useRef<MediaConnection | null>(null)
-  const iceConfigRef = useRef<IceConfigPayload | null>(null)
 
-  // Center on open
+  // Center on open (offset by instance to avoid stacking)
   const openRef = useRef(false)
   const windowRef = useRef<HTMLDivElement>(null)
+  const offsetRef = useRef(Math.random() * 40)
 
   useEffect(() => {
-    if (targetName && !openRef.current) {
+    if (!openRef.current) {
       openRef.current = true
       setPosition({
-        x: Math.round(window.innerWidth / 2 - 320),
-        y: Math.round(window.innerHeight / 2 - 210),
+        x: Math.round(window.innerWidth / 2 - 320 + offsetRef.current),
+        y: Math.round(window.innerHeight / 2 - 210 + offsetRef.current),
       })
     }
-    if (!targetName) {
-      openRef.current = false
-    }
-  }, [targetName])
+  }, [])
 
   const teardownPeer = useCallback(() => {
-    console.log(LOG, 'teardownPeer()')
+    console.log(LOG, targetId, 'teardownPeer()')
     // Close the media call
     if (callRef.current) {
       callRef.current.close()
@@ -94,31 +97,26 @@ export function StreamSubscriber() {
     if (videoRef.current) {
       videoRef.current.srcObject = null
     }
-  }, [])
+  }, [targetId])
 
   const handleClose = useCallback(() => {
-    // Tell the server to remove us as a viewer before clearing local state
+    // Tell the server to remove us as a viewer before tearing down locally
     const id = targetId
-    if (id) {
-      void callLua('streamSubscriber:stop', { targetId: id }).catch(() => {})
-    }
+    void callLua('streamSubscriber:stop', { targetId: id }).catch(() => {})
 
     teardownPeer()
-    setTargetName(null)
-    setTargetId(null)
-    setError(null)
-    setConnState('waiting')
-  }, [targetId, teardownPeer])
+    onClose(id)
+  }, [targetId, onClose, teardownPeer])
 
   useWindowDrag({
-    enabled: !!targetName,
+    enabled: true,
     position,
     onPositionChange: setPosition,
     elementRef: windowRef,
   })
 
   useWindowResize({
-    enabled: !!targetName,
+    enabled: true,
     size,
     elementRef: windowRef,
     onSizeChange: setSize,
@@ -133,119 +131,112 @@ export function StreamSubscriber() {
     },
   })
 
-  // Open the viewer window when the server confirms the stream session is up
+  // Initialize PeerJS on mount — the target will call us
   useEffect(() => {
-    return on<StreamStartData>('streamSubscriber:start', (payload) => {
-      console.log(LOG, 'start: targetId=', payload.targetId, 'targetName=', payload.targetName)
-      teardownPeer()
-      iceConfigRef.current = payload.iceConfig
-      setTargetName(payload.targetName)
-      setTargetId(payload.targetId)
-      setError(null)
-      setConnState('waiting')
+    console.log(LOG, targetId, 'init: targetName=', targetName)
+    const peerConfig = buildPeerConfig(iceConfig)
+    console.log(LOG, targetId, 'init: peer config:', JSON.stringify(peerConfig))
 
-      // Create PeerJS instance — the target will call us
-      const peerConfig = buildPeerConfig(payload.iceConfig)
-      console.log(LOG, 'start: peer config:', JSON.stringify(peerConfig))
+    const setupPeer = (p: Peer) => {
+      p.on('open', () => {
+        console.log(LOG, targetId, 'PeerJS open, id:', p.id)
+        void callLua('streamSubscriber:peerReady', { peerId: p.id, targetId, role: 'viewer' })
+      })
 
-      const setupPeer = (p: Peer) => {
-        p.on('open', () => {
-          console.log(LOG, 'PeerJS open, id:', p.id)
-          void callLua('streamSubscriber:peerReady', { peerId: p.id, role: 'viewer' })
+      p.on('call', (call) => {
+        console.log(LOG, targetId, 'incoming call from:', call.peer)
+        call.answer(new MediaStream())
+        callRef.current = call
+
+        call.on('stream', (stream) => {
+          console.log(LOG, targetId, 'received remote stream, tracks:', stream.getTracks().length)
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream
+            void videoRef.current.play().catch(() => {})
+          }
+          setConnState('live')
+          setError(null)
         })
 
-        p.on('call', (call) => {
-          console.log(LOG, 'incoming call from:', call.peer)
-          call.answer(new MediaStream())
-          callRef.current = call
-
-          call.on('stream', (stream) => {
-            console.log(LOG, 'received remote stream, tracks:', stream.getTracks().length)
-            if (videoRef.current) {
-              videoRef.current.srcObject = stream
-              void videoRef.current.play().catch(() => {})
-            }
-            setConnState('live')
-            setError(null)
-          })
-
-          call.on('close', () => {
-            console.log(LOG, 'call closed')
-            callRef.current = null
-            if (connState === 'live') {
-              setConnState('failed')
-              setError('Connection lost')
-            }
-          })
-
-          call.on('error', (err) => {
-            console.error(LOG, 'call error:', err)
-            callRef.current = null
-            if (connState === 'live') {
-              setConnState('failed')
-              setError('Connection error')
-            }
-          })
+        call.on('close', () => {
+          console.log(LOG, targetId, 'call closed')
+          callRef.current = null
+          setConnState((prev) => (prev === 'live' ? 'failed' : prev))
+          setError('Connection lost')
         })
 
-        p.on('disconnected', () => {
-          console.log(LOG, 'PeerJS disconnected, attempting reconnect')
+        call.on('error', (err) => {
+          console.error(LOG, targetId, 'call error:', err)
+          callRef.current = null
+          setConnState((prev) => (prev === 'live' ? 'failed' : prev))
+          setError('Connection error')
+        })
+      })
+
+      p.on('disconnected', () => {
+        console.log(LOG, targetId, 'PeerJS disconnected, attempting reconnect')
+        try {
+          p.reconnect()
+        } catch {
+          console.error(LOG, targetId, 'PeerJS reconnect failed')
+        }
+      })
+
+      p.on('error', (err) => {
+        console.error(LOG, targetId, 'PeerJS error:', err.type, err.message)
+        if (err.type === 'unavailable-id') {
+          // ID collision — create a new peer with a different ID
           try {
-            p.reconnect()
-          } catch {
-            console.error(LOG, 'PeerJS reconnect failed')
-          }
-        })
+            p.destroy()
+          } catch { /* already destroyed */ }
+          peerRef.current = null
+          const newPeerId = `ea-viewer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+          const newPeer = new Peer(newPeerId, peerConfig)
+          peerRef.current = newPeer
+          setupPeer(newPeer)
+        }
+      })
+    }
 
-        p.on('error', (err) => {
-          console.error(LOG, 'PeerJS error:', err.type, err.message)
-          if (err.type === 'unavailable-id') {
-            // ID collision — create a new peer with a different ID
-            try {
-              p.destroy()
-            } catch { /* already destroyed */ }
-            peerRef.current = null
-            const newPeerId = `ea-viewer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-            const newPeer = new Peer(newPeerId, peerConfig)
-            peerRef.current = newPeer
-            setupPeer(newPeer)
-          }
-        })
-      }
+    const peerId = `ea-viewer-${targetId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    console.log(LOG, targetId, 'init: creating PeerJS with id', peerId)
+    const peer = new Peer(peerId, peerConfig)
+    peerRef.current = peer
+    setupPeer(peer)
 
-      const peerId = `ea-viewer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-      console.log(LOG, 'start: creating PeerJS with id', peerId)
-      const peer = new Peer(peerId, peerConfig)
-      peerRef.current = peer
-      setupPeer(peer)
-    })
-  }, [teardownPeer])
+    return () => {
+      console.log(LOG, targetId, 'cleanup: unmounting')
+      teardownPeer()
+    }
+  }, [targetId, iceConfig, teardownPeer])
 
   // Listen for stream ended from Lua (target disconnected, etc.)
+  // Each instance only reacts to the ended event matching its own targetId.
   useEffect(() => {
-    return on<StreamEndData>('streamSubscriber:ended', (payload) => {
-      console.log(LOG, 'ended: targetName=', payload.targetName, 'reason=', payload.reason)
-      if (targetName === payload.targetName) {
+    let timer: ReturnType<typeof setTimeout> | null = null
+
+    const unsubscribe = on<StreamEndData>('streamSubscriber:ended', (payload) => {
+      console.log(LOG, targetId, 'ended: targetId=', payload.targetId, 'reason=', payload.reason)
+      if (targetId === payload.targetId) {
         teardownPeer()
         setError(payload.reason)
         setConnState('failed')
         // Auto-close after 3 seconds
-        setTimeout(() => {
-          setTargetName(null)
-          setTargetId(null)
-          setError(null)
-          setConnState('waiting')
+        timer = setTimeout(() => {
+          onClose(targetId)
+          timer = null
         }, 3000)
       }
     })
-  }, [targetName, teardownPeer])
 
-  // Clean up on unmount
-  useEffect(() => {
-    return () => teardownPeer()
-  }, [teardownPeer])
-
-  if (!targetName) return null
+    return () => {
+      unsubscribe()
+      if (timer) {
+        clearTimeout(timer)
+        timer = null
+      }
+    }
+  }, [targetId, teardownPeer, onClose])
 
   const statusLabel =
     error != null

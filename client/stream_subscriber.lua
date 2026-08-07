@@ -29,13 +29,15 @@ RegisterNetEvent('EasyAdmin:Stream:ViewerJoined', function(targetId, targetName,
 end)
 
 --- Stream ended notification from the server.
+--- @param targetId number Server ID of the streamed player.
 --- @param targetName string Name of the player whose stream ended.
 --- @param reason string  Reason the stream ended.
-RegisterNetEvent('EasyAdmin:Stream:Ended', function(targetName, reason)
-    print(STREAM_LOG, 'Received Ended — targetName:', targetName, 'reason:', reason)
+RegisterNetEvent('EasyAdmin:Stream:Ended', function(targetId, targetName, reason)
+    print(STREAM_LOG, 'Received Ended — targetId:', targetId, 'targetName:', targetName, 'reason:', reason)
     SendNUIMessage({
         action = 'streamSubscriber:ended',
         data = {
+            targetId = targetId,
             targetName = targetName or 'Unknown',
             reason = reason or 'Stream ended',
         },
@@ -45,10 +47,14 @@ end)
 --- NUI reports its PeerJS ID is ready.
 --- Guard: server validates session membership.
 RegisterNUICallback('streamSubscriber:peerReady', function(data, cb)
-    print(STREAM_LOG, 'Received peerReady from NUI — peerId:', data and data.peerId or 'nil')
+    print(STREAM_LOG, 'Received peerReady from NUI — peerId:', data and data.peerId or 'nil', 'targetId:', data and data.targetId or 'nil')
     cb({})
-    if data and type(data.peerId) == 'string' then
-        TriggerServerEvent('EasyAdmin:Stream:PeerReady', data.peerId, 'viewer')
+    if data and type(data.peerId) == 'string' and data.targetId then
+        TriggerServerEvent('EasyAdmin:Stream:PeerReady', {
+            peerId = data.peerId,
+            targetId = data.targetId,
+            role = 'viewer',
+        })
         print(STREAM_LOG, 'Forwarded PeerReady (viewer) to server')
     end
 end)

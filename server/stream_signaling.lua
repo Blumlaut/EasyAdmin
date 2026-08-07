@@ -148,19 +148,20 @@ end
 
 --- Force-stop a stream (target disconnected or admin command).
 --- @param targetId number  Target player server ID.
-local function forceStopStream(targetId)
+--- @param reason string  Reason the stream was stopped.
+local function forceStopStream(targetId, reason)
     local session = streamSessions[targetId]
     if not session then return end
 
     local playerName = getName(targetId, true)
     for viewerSrc in pairs(session.viewers) do
-        TriggerClientEvent('EasyAdmin:Stream:Ended', viewerSrc, playerName, 'Target player disconnected')
+        TriggerClientEvent('EasyAdmin:Stream:Ended', viewerSrc, targetId, playerName, reason or 'Target player disconnected')
     end
 
     -- Also tell the target to clean up.
     TriggerClientEvent('EasyAdmin:Stream:StopPublishing', targetId)
     streamSessions[targetId] = nil
-    print(STREAM_LOG, 'forceStopStream: target', targetId, 'disconnected')
+    print(STREAM_LOG, 'forceStopStream: target', targetId, 'stopped')
 end
 
 --- Admin requests to start watching a player's stream.
@@ -229,8 +230,12 @@ end)
 --- Session membership is the guard — target players aren't admins,
 --- and viewers are validated against streamSessions during StartWatch.
 --- @ea-audit:exempt
-RegisterServerEvent('EasyAdmin:Stream:PeerReady', function(peerId, role)
+RegisterServerEvent('EasyAdmin:Stream:PeerReady', function(data)
     local src = source
+    local peerId = data and data.peerId
+    local role = data and data.role
+    local targetId = data and data.targetId
+
     if type(peerId) ~= 'string' or #peerId == 0 then
         print(STREAM_LOG, 'PeerReady: invalid peerId from', src)
         return
@@ -253,29 +258,46 @@ RegisterServerEvent('EasyAdmin:Stream:PeerReady', function(peerId, role)
     end
 
     if role == 'viewer' then
-        -- Check if this source is a viewer in any session
-        for targetId, sess in pairs(streamSessions) do
-            if sess.viewers[src] then
-                print(STREAM_LOG, 'PeerReady: viewer', src, 'ready for target', targetId, 'targetReady=', sess.targetReady)
-                sess.viewers[src].peerId = peerId
-                -- Viewer is ready — if the target is also ready, tell it to call this viewer now
-                if sess.targetReady then
-                    tellTargetCallViewer(targetId, src)
-                else
-                    print(STREAM_LOG, 'PeerReady: target not ready yet, waiting for target to report ready')
-                end
-                return
-            end
+        -- targetId is required to route to the correct session (multi-viewer support)
+        if not targetId or type(targetId) ~= 'number' then
+            print(STREAM_LOG, 'PeerReady: viewer', src, 'missing or invalid targetId')
+            return
         end
-        print(STREAM_LOG, 'PeerReady: viewer', src, 'is not in any session')
+        local sess = streamSessions[targetId]
+        if not sess or not sess.viewers[src] then
+            print(STREAM_LOG, 'PeerReady: viewer', src, 'not in session for target', targetId)
+            return
+        end
+        print(STREAM_LOG, 'PeerReady: viewer', src, 'ready for target', targetId, 'targetReady=', sess.targetReady)
+        sess.viewers[src].peerId = peerId
+        -- Viewer is ready — if the target is also ready, tell it to call this viewer now
+        if sess.targetReady then
+            tellTargetCallViewer(targetId, src)
+        else
+            print(STREAM_LOG, 'PeerReady: target not ready yet, waiting for target to report ready')
+        end
         return
     end
 
     print(STREAM_LOG, 'PeerReady: src', src, 'has unknown role:', role)
 end)
 
---- Handle target player disconnect — notify all viewers and clean up.
+--- Handle any player disconnect — clean up both target and viewer roles.
 AddEventHandler('playerDropped', function()
-    local targetId = source
-    forceStopStream(targetId)
+    local playerId = source
+
+    -- Check if this player is a target in an active session
+    local targetSession = streamSessions[playerId]
+    if targetSession then
+        forceStopStream(playerId, 'Target player disconnected')
+        return
+    end
+
+    -- Check if this player is a viewer in any active session
+    for targetId, sess in pairs(streamSessions) do
+        if sess.viewers[playerId] then
+            print(STREAM_LOG, 'playerDropped: viewer', playerId, 'disconnected from target', targetId)
+            removeViewer(targetId, playerId)
+        end
+    end
 end)

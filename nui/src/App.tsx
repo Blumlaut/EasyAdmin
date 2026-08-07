@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState, type SuspenseProps } from 'react'
+import React, { useCallback, useEffect, useRef, useState, type SuspenseProps } from 'react'
+
 import { useAppData } from './hooks/useAppData'
 import { useAppNavigation } from './hooks/useAppNavigation'
 import { useWindowChrome } from './hooks/useWindowChrome'
@@ -11,6 +12,7 @@ import { ScreenshotCapture } from './components/ScreenshotCapture'
 import { ScreenshotViewer } from './components/ScreenshotViewer'
 import { StreamPublisher } from './components/StreamPublisher'
 import { StreamSubscriber } from './components/StreamSubscriber'
+import type { IceConfigPayload } from './lib/stream_ice'
 import { WarningOverlay } from './components/WarningOverlay'
 import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
@@ -68,11 +70,18 @@ interface WarningData {
   dismissText: string
 }
 
+interface ActiveStream {
+  targetId: number
+  targetName: string
+  iceConfig: IceConfigPayload
+}
+
 function App() {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const [hintFading, setHintFading] = useState(false)
   const [warning, setWarning] = useState<WarningData | null>(null)
+  const [activeStreams, setActiveStreams] = useState<ActiveStream[]>([])
   const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // === Hooks ===
@@ -124,6 +133,26 @@ function App() {
     return on<WarningData>('showWarning', (data) => {
       setWarning(data)
     })
+  }, [])
+
+  // === Active stream management (multi-instance support) ===
+
+  // Open a new stream viewer
+  useEffect(() => {
+    return on<ActiveStream>('streamSubscriber:start', (data) => {
+      setActiveStreams((prev) => {
+        // Avoid duplicates — if already streaming this target, keep existing instance
+        if (prev.some((s) => s.targetId === data.targetId)) {
+          return prev
+        }
+        return [...prev, data]
+      })
+    })
+  }, [])
+
+  // Remove a stream when the user closes it
+  const handleStreamClose = useCallback((targetId: number) => {
+    setActiveStreams((prev) => prev.filter((s) => s.targetId !== targetId))
   }, [])
 
   // === Global NUI background class for floating windows ===
@@ -553,10 +582,19 @@ function App() {
       </>
     )}
 
-    {/* Stream components must stay mounted when the menu is closed so their
-        NUI message listeners remain active for PeerJS signaling. */}
+    {/* StreamPublisher stays mounted when the menu is closed so its NUI
+        message listeners remain active for PeerJS signaling.
+        StreamSubscriber instances are mounted per active stream. */}
     <StreamPublisher />
-    <StreamSubscriber />
+    {activeStreams.map((stream) => (
+      <StreamSubscriber
+        key={stream.targetId}
+        targetId={stream.targetId}
+        targetName={stream.targetName}
+        iceConfig={stream.iceConfig}
+        onClose={handleStreamClose}
+      />
+    ))}
     </>
   );
 }
