@@ -43,6 +43,11 @@ interface SortableTableProps<T> {
   /** Empty state message */
   emptyMessage?: string
   emptySubMessage?: string
+  /**
+   * Make rows individually focusable for grid keyboard navigation
+   * (tabIndex=0 + data-nav-row). Focusing a row scrolls it into view.
+   */
+  rowFocusable?: boolean
   /** Additional CSS class on the table */
   tableClass?: string
   /** Additional CSS class on the wrapper */
@@ -61,6 +66,7 @@ export function SortableTable<T>({
   onSortChange,
   onRefresh,
   getKey,
+  rowFocusable = false,
   loading = false,
   emptyMessage = 'No data',
   emptySubMessage,
@@ -156,7 +162,11 @@ export function SortableTable<T>({
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={getKey(row, i)}>
+            <tr
+              key={getKey(row, i)}
+              tabIndex={rowFocusable ? 0 : undefined}
+              data-nav-row={rowFocusable ? '' : undefined}
+            >
               {columns.map((col) => (
                 <td key={col.key} className={col.cellClass}>
                   {col.render(row, i)}

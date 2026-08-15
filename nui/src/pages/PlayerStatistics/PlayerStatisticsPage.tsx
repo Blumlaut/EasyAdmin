@@ -210,13 +210,16 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
   const debouncedQuery = useDebounce(query, 300)
 
-  // SortableTable rows aren't individually focusable — nav operates on the
-  // table container. Up/down scrolls; left/right has no effect (1 zone/row).
-  useGridNavigation(listRef, () => 1)
+  // One focusable zone per table row (rows are focusable via rowFocusable).
+  // ArrowDown in the search bar enters the table; ArrowUp from the first
+  // row returns to the search bar.
+  const listRef = useGridNavigation(() => 1, {
+    itemSelector: '[data-nav-row]',
+    anchor: searchRef,
+  })
   useInitialFocus(searchRef)
 
   const fetchPage = useCallback((p: number, q: string, sort: RegistrySortBy, dir: 'asc' | 'desc') => {
@@ -366,6 +369,7 @@ function PlayerRegistryTable({ filterDays }: { filterDays: number }) {
               sortDir={sortDir}
               onSortChange={handleSortChange}
               getKey={(p) => p.identifier}
+              rowFocusable
             />
           </div>
         )}

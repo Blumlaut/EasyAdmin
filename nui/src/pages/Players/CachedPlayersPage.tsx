@@ -29,7 +29,6 @@ export function CachedPlayersPage({
   const { openModal, closeModal } = useModalContext()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 200)
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
 
@@ -40,7 +39,7 @@ export function CachedPlayersPage({
   }, [cachedPlayers, debouncedQuery])
 
   // Each row: 1 (row div) + 1 (ban button) = 2 zones
-  useGridNavigation(listRef, () => 2)
+  const listRef = useGridNavigation(() => 2, { anchor: searchRef })
 
   return (
     <div className="page-container">

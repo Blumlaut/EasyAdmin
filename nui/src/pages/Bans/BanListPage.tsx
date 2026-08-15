@@ -31,10 +31,8 @@ export function BanListPage({
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
-
-  useGridNavigation(listRef, () => 1)
+  const listRef = useGridNavigation(() => 1, { anchor: searchRef })
   useInitialFocus(searchRef)
 
   // Stable refs so the NUI message handler doesn't stale-out

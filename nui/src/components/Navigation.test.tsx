@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Navigation } from './Navigation'
@@ -166,6 +167,133 @@ describe('Navigation', () => {
       render(<Navigation items={itemsWithSeparators} activeId="main" onSelect={onSelect} />)
       await user.click(screen.getByText('Bans'))
       expect(onSelect).toHaveBeenCalledWith('bans')
+    })
+  })
+
+  describe('keyboard navigation', () => {
+    /** Controlled wrapper so arrow-key navigation can advance across renders. */
+    function ControlledNav({ items, orientation }: { items: Parameters<typeof Navigation>[0]['items']; orientation?: 'vertical' | 'horizontal' }) {
+      const [active, setActive] = useState('main')
+      return <Navigation items={items} orientation={orientation} activeId={active} onSelect={(id) => setActive(id)} />
+    }
+
+    function focusNavItem(label: string) {
+      const btn = screen.getByText(label).closest('button')
+      expect(btn).not.toBeNull()
+      ;(btn as HTMLButtonElement).focus()
+    }
+
+    it('ArrowDown moves to the next item and focuses it', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={itemsWithSeparators} />)
+      focusNavItem('Dashboard')
+      await user.keyboard('{ArrowDown}')
+      const playersBtn = screen.getByText('Players').closest('button')
+      expect(document.activeElement).toBe(playersBtn)
+    })
+
+    it('ArrowUp moves to the previous item', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={itemsWithSeparators} />)
+      // Navigate down first so the controlled state is on 'players'
+      focusNavItem('Dashboard')
+      await user.keyboard('{ArrowDown}')
+      await user.keyboard('{ArrowUp}')
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
+    })
+
+    it('ArrowDown wraps from the last item to the first', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={itemsWithSeparators} />)
+      focusNavItem('Dashboard')
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}') // -> reports
+      await user.keyboard('{ArrowDown}') // wraps
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
+    })
+
+    it('skips disabled items', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={items} />) // bans is disabled
+      focusNavItem('Dashboard')
+      await user.keyboard('{ArrowDown}') // players (bans skipped, it's last)
+      const playersBtn = screen.getByText('Players').closest('button')
+      expect(document.activeElement).toBe(playersBtn)
+      // From players, down wraps to main (bans still skipped)
+      await user.keyboard('{ArrowDown}')
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
+    })
+
+    it('Home focuses the first item and End the last', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={itemsWithSeparators} />)
+      focusNavItem('Dashboard')
+      await user.keyboard('{ArrowDown}{ArrowDown}') // -> bans
+      await user.keyboard('{End}')
+      const reportsBtn = screen.getByText('Reports').closest('button')
+      expect(document.activeElement).toBe(reportsBtn)
+      await user.keyboard('{Home}')
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
+    })
+
+    it('ignores non-nav keys', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={itemsWithSeparators} />)
+      focusNavItem('Dashboard')
+      await user.keyboard('{Enter} ')
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
+    })
+
+    it('skips collapsed dropdown parents and navigates expanded children', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={dropdownItems} />)
+      focusNavItem('Dashboard')
+      // Collapsed: leaves are [Dashboard, Settings]
+      await user.keyboard('{ArrowDown}')
+      const settingsBtn = screen.getByText('Settings').closest('button')
+      expect(document.activeElement).toBe(settingsBtn)
+    })
+
+    it('keyboard navigation traverses expanded dropdown children', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={dropdownItems} />)
+      // Expand the dropdown — clicking it also auto-navigates to the first child
+      await user.click(screen.getByText('Statistics'))
+      const childrenContainer =
+        screen.getByText('Statistics').closest('.nav-dropdown')?.querySelector('.nav-dropdown-children')
+      expect(childrenContainer).toHaveClass('nav-dropdown-children-open')
+      const childBtn = screen.getByText('Player Statistics').closest('button')
+
+      // Leaves are now [Dashboard, Player Statistics, Settings] and the
+      // active leaf is the child — ArrowUp exits it and moves to Dashboard
+      await user.keyboard('{ArrowUp}')
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
+
+      // ArrowDown re-enters the expanded dropdown child
+      await user.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(childBtn)
+
+      // And on again to Settings
+      await user.keyboard('{ArrowDown}')
+      const settingsBtn = screen.getByText('Settings').closest('button')
+      expect(document.activeElement).toBe(settingsBtn)
+    })
+
+    it('horizontal orientation uses ArrowRight/ArrowLeft', async () => {
+      const user = userEvent.setup()
+      render(<ControlledNav items={itemsWithSeparators} orientation="horizontal" />)
+      focusNavItem('Dashboard')
+      await user.keyboard('{ArrowRight}')
+      const playersBtn = screen.getByText('Players').closest('button')
+      expect(document.activeElement).toBe(playersBtn)
+      await user.keyboard('{ArrowLeft}')
+      const mainBtn = screen.getByText('Dashboard').closest('button')
+      expect(document.activeElement).toBe(mainBtn)
     })
   })
 })

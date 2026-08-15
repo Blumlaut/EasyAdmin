@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Permissions, Player } from '../../types'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useGridNavigation } from '../../hooks/useGridNavigation'
@@ -46,9 +46,7 @@ export function PlayerListPage({
     return filterPlayers(players, debouncedQuery)
   }, [players, debouncedQuery])
 
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
-  const focusedZoneRef = useRef<{ row: number; zone: number } | null>(null)
 
   // Auto-focus search bar when entering the page
   useInitialFocus(searchRef)
@@ -89,15 +87,9 @@ export function PlayerListPage({
     return z
   }, [canKick, canBan, canSpectate, canMute, canSlap, canFreeze, canScreenshot, canBucketJoin, canBucketForce])
 
-  useGridNavigation(listRef, () => zonesPerRow)
-
-  const handleRowFocus = useCallback((row: number) => {
-    focusedZoneRef.current = { row, zone: 0 }
-  }, [])
-
-  const handleZoneFocus = useCallback((row: number, zone: number) => {
-    focusedZoneRef.current = { row, zone }
-  }, [])
+  // Grid: row body + quick actions + optional dropdown trigger. ArrowDown in
+  // the search bar enters the list; ArrowUp from the first row returns to it.
+  const listRef = useGridNavigation(() => zonesPerRow, { anchor: searchRef })
 
   return (
     <div className="page-container">
@@ -133,7 +125,7 @@ export function PlayerListPage({
         </div>
       ) : (
         <List ref={listRef}>
-          {filtered.map((player, index) => (
+          {filtered.map((player) => (
             <PlayerRow
               key={player.id}
               player={player}
@@ -141,8 +133,6 @@ export function PlayerListPage({
               onClick={() => onSelectPlayer(player)}
               onOpenModal={openModal}
               onCloseModal={closeModal}
-              onRowFocus={() => handleRowFocus(index)}
-              onZoneFocus={(zone) => handleZoneFocus(index, zone)}
             />
           ))}
         </List>
@@ -161,11 +151,9 @@ interface PlayerRowProps {
   onClick: () => void
   onOpenModal: (definition: import('../../modals/types').ModalDefinition) => void
   onCloseModal: () => void
-  onRowFocus: () => void
-  onZoneFocus: (zoneIndex: number) => void
 }
 
-function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal, onRowFocus, onZoneFocus }: PlayerRowProps) {
+function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: PlayerRowProps) {
   const { t } = useTranslation()
 
   const canSpectate = !!permissions['player.spectate']
@@ -392,7 +380,7 @@ function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal, on
   }, [player, canSlap, canFreeze, canScreenshot, canBucketJoin, canBucketForce, t, onOpenModal, onCloseModal])
 
   return (
-    <ListItem onClick={onClick} onFocus={onRowFocus}>
+    <ListItem onClick={onClick}>
       <Avatar key={player.id} player={player} size="sm" variant="player" />
       <div className="list-item-content">
         <div className="list-item-title">
@@ -417,7 +405,7 @@ function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal, on
         )}
       </div>
 
-      <QuickActionBar actions={quickActions} dropdownActions={dropdownActions} onZoneFocus={onZoneFocus} />
+      <QuickActionBar actions={quickActions} dropdownActions={dropdownActions} />
 
       <Icon name="chevron-right" size="xs" className="opacity-subtle text-fg-muted" />
     </ListItem>

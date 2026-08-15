@@ -147,16 +147,26 @@ export function ResourceListPage({
   const startedCount = resources.filter((r) => r.state === 'started').length
   const stoppedCount = resources.length - startedCount
   const outdatedCount = resources.filter((r) => r.outdated).length
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
 
-  // Zone count: 1 (row body) + 0/1 (single toggle) / 2 (restart+stop split button)
-  const zonesPerRow = useMemo(() => {
-    if (!canStart && !canStop) return 1
-    return canStart && canStop ? 3 : 2
-  }, [canStart, canStop])
+  // Per-row zone count: 1 (row body) + CopyButton when a repository URL is
+  // present + action buttons (none for protected resources or when the
+  // resource's state doesn't match permissions; restart+stop split when a
+  // started resource can be both restarted and stopped).
+  const zonesForRow = useCallback((index: number): number => {
+    const resource = filtered[index]
+    if (!resource) return 0
+    let zones = 1 // row body
+    if (resource.repository) zones++ // copy repository button
+    if (!resource.isProtected) {
+      const isStarted = resource.state === 'started'
+      const canToggle = isStarted ? canStop : canStart
+      if (canToggle) zones += isStarted && canStart && canStop ? 2 : 1
+    }
+    return zones
+  }, [filtered, canStart, canStop])
 
-  useGridNavigation(listRef, () => zonesPerRow)
+  const listRef = useGridNavigation(zonesForRow, { anchor: searchRef })
   useInitialFocus(searchRef)
 
   // Execute a resource action (called after confirmation)

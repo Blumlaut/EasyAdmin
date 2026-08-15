@@ -38,11 +38,10 @@ export function ReportListPage({
     })
   }, [reports, debouncedQuery])
 
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
+  const listRef = useGridNavigation(() => 1, { anchor: searchRef })
   const { t } = useTranslation()
 
-  useGridNavigation(listRef, () => 1)
   useInitialFocus(searchRef)
 
   return (

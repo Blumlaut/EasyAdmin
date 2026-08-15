@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 /**
  * Default selector for grid navigation targets.
@@ -7,11 +7,12 @@ import { useEffect, useRef } from 'react'
 const DEFAULT_ITEM_SELECTOR = '[role="button"], button'
 
 function isVisible(el: HTMLElement): boolean {
-  return (
-    el.offsetParent !== null ||
-    el.checkVisibility?.() !== false ||
-    getComputedStyle(el).visibility !== 'hidden'
-  )
+  if (typeof el.checkVisibility === 'function') {
+    return el.checkVisibility()
+  }
+  // Fallback (jsdom, older Chromium): treat as visible unless explicitly hidden.
+  const style = getComputedStyle(el)
+  return style.display !== 'none' && style.visibility !== 'hidden'
 }
 
 export interface UseGridNavigationOptions {
@@ -23,6 +24,16 @@ export interface UseGridNavigationOptions {
    * custom data attributes, or table rows).
    */
   itemSelector?: string
+  /**
+   * Optional element rendered above the grid (typically the page's search
+   * input) to bridge keyboard focus with:
+   *
+   * - ArrowDown while the anchor is focused → focus first grid item
+   * - ArrowUp while the first grid item (row 0, zone 0) is focused → focus the anchor
+   *
+   * Leave undefined when there is no element above the list.
+   */
+  anchor?: React.RefObject<HTMLElement | null>
 }
 
 /**
@@ -33,61 +44,99 @@ export interface UseGridNavigationOptions {
  *
  *   ArrowUp / ArrowDown  — move between rows (same zone index)
  *   ArrowLeft / ArrowRight — move between zones within a row
- *   Home                 — first zone of first row
- *   End                  — last zone of last row
+ *   Home                 — first item of the grid
+ *   End                  — last item of the grid
+ *
+ * Home/End only act while focus is already inside the grid, so they never
+ * steal focus from text inputs, modals, or other UI.
  *
  * Pages define the grid topology via `zonesPerRow`. The hook is
  * completely generic — it does not know about ListItem, QuickActionBar,
  * or any page-specific logic.
  *
+ * Returns a callback ref to attach to the list container. Items are
+ * (re)collected whenever the container node mounts or its contents change,
+ * so lists that render after a loading state work correctly.
+ *
  * @example
  *   // Simple list — one focusable element per row
- *   useGridNavigation(listRef, () => 1)
+ *   const listRef = useGridNavigation(() => 1)
+ *   return <List ref={listRef}>...</List>
  *
  *   // Player list — row body + quick actions + optional dropdown
- *   const zones = () => 1 + quickActionCount + (hasDropdown ? 1 : 0)
- *   useGridNavigation(listRef, zones)
+ *   const listRef = useGridNavigation(() => zonesPerRow)
  *
- *   // Custom selector for a table-based list
- *   useGridNavigation(listRef, () => 1, { itemSelector: '[data-nav-item]' })
+ *   // Table-based list with a search input above it
+ *   const listRef = useGridNavigation(() => 1, {
+ *     itemSelector: '[data-nav-row]',
+ *     anchor: searchRef,
+ *   })
  */
 export function useGridNavigation(
-  containerRef: React.RefObject<HTMLElement | null>,
   zonesPerRow: (rowIndex: number) => number,
   options: UseGridNavigationOptions = {},
-) {
+): (el: HTMLElement | null) => void {
+  const [container, setContainer] = useState<HTMLElement | null>(null)
   const itemsRef = useRef<HTMLElement[]>([])
   const zonesRef = useRef(zonesPerRow)
   const selectorRef = useRef(options.itemSelector ?? DEFAULT_ITEM_SELECTOR)
+  const anchorObjRef = useRef<React.RefObject<HTMLElement | null> | undefined>(options.anchor)
 
+  // Live refs so the window handler never goes stale.
   zonesRef.current = zonesPerRow
   selectorRef.current = options.itemSelector ?? DEFAULT_ITEM_SELECTOR
+  anchorObjRef.current = options.anchor
 
-  // Collect matching, visible, enabled elements
-  const collectItems = () => {
-    const container = containerRef.current
-    if (!container) return
+  const setRef = useCallback((el: HTMLElement | null) => {
+    setContainer(el)
+  }, [])
 
-    itemsRef.current = Array.from(
-      container.querySelectorAll<HTMLElement>(selectorRef.current),
-    ).filter(
-      (el) =>
-        !el.hasAttribute('disabled') &&
-        el.getAttribute('aria-disabled') !== 'true' &&
-        isVisible(el),
-    )
-  }
-
+  // Collect matching, visible, enabled elements.
+  // Re-runs whenever the container node mounts/unmounts (fixes lists that
+  // only appear after a loading state) — the MutationObserver catches
+  // content changes while the container is alive.
   useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
+    if (!container) {
+      itemsRef.current = []
+      return
+    }
+
+    const collectItems = () => {
+      itemsRef.current = Array.from(
+        container.querySelectorAll<HTMLElement>(selectorRef.current),
+      ).filter(
+        (el) =>
+          !el.hasAttribute('disabled') &&
+          el.getAttribute('aria-disabled') !== 'true' &&
+          isVisible(el),
+      )
+    }
 
     collectItems()
 
     const observer = new MutationObserver(collectItems)
     observer.observe(container, { childList: true, subtree: true })
-    return () => observer.disconnect()
-  }, [containerRef])
+    return () => {
+      observer.disconnect()
+      itemsRef.current = []
+    }
+  }, [container])
+
+  // Locate the row/zone containing a flat item index.
+  // Returns null when the index falls outside the declared topology
+  // (happens if the DOM and zonesPerRow disagree — treated as "not in grid").
+  function locate(items: HTMLElement[], index: number) {
+    const zones = zonesRef.current
+    let acc = 0
+    for (let r = 0; r < items.length; r++) {
+      const z = zones(r)
+      if (acc + z > index) {
+        return { row: r, zone: index - acc, rowStart: acc, rowZones: z }
+      }
+      acc += z
+    }
+    return null
+  }
 
   // Stable handler via ref — reads live data from refs so it never goes stale.
   // This avoids re-attaching the window listener on every render.
@@ -96,36 +145,39 @@ export function useGridNavigation(
     if (items.length === 0) return
 
     const active = document.activeElement as HTMLElement | null
+    // Read the anchor element live so it works even when the anchor mounts
+    // in the same commit as the grid (ref .current is set after render).
+    const anchor = anchorObjRef.current?.current ?? null
     const currentIndex = active !== null ? items.indexOf(active) : -1
 
+    // Focus bridge: anchor (e.g. search input) → first grid item.
+    if (anchor && active === anchor) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        items[0].focus()
+      }
+      return
+    }
+
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      if (currentIndex === -1) return // focus not in our list — let other handlers take it
+      if (currentIndex === -1) return // focus not in our grid — let other handlers take it
 
       const upward = e.key === 'ArrowUp'
+      const pos = locate(items, currentIndex)
+      if (!pos) return
 
-      // Determine current row and zone
-      let row = -1
-      let zone = -1
-
-      if (currentIndex >= 0) {
-        const zones = zonesRef.current
-        let accumulated = 0
-        for (let r = 0; r < items.length; r++) {
-          const z = zones(r)
-          if (accumulated + z > currentIndex) {
-            row = r
-            zone = currentIndex - accumulated
-            break
-          }
-          accumulated += z
-        }
-        if (row === -1) return
+      // Bridge back up: first row, first zone → anchor
+      if (upward && pos.row === 0 && pos.zone === 0 && anchor) {
+        e.preventDefault()
+        anchor.focus()
+        return
       }
 
-      const targetRow = upward ? row - 1 : row + 1
+      const targetRow = upward ? pos.row - 1 : pos.row + 1
+      if (targetRow < 0) return
 
       // Find target row boundaries
-      let targetRowStart = 0
+      let targetRowStart = -1
       let targetRowZones = 0
       const zones = zonesRef.current
       let acc = 0
@@ -139,10 +191,10 @@ export function useGridNavigation(
         acc += z
       }
 
-      if (targetRow < 0 || targetRowZones === 0) return
+      if (targetRowStart === -1 || targetRowZones === 0) return
 
       // Clamp zone to target row's zone count
-      let targetZone = zone
+      let targetZone = pos.zone
       if (targetZone >= targetRowZones) {
         targetZone = targetRowZones - 1
       }
@@ -159,39 +211,26 @@ export function useGridNavigation(
 
       if (currentIndex === -1) return
 
-      // Determine current row boundaries
-      const zones = zonesRef.current
-      let rowStart = 0
-      let rowZones = 0
-      let zoneInRow = 0
-      let acc = 0
+      const pos = locate(items, currentIndex)
+      if (!pos) return
 
-      for (let r = 0; r < items.length; r++) {
-        const z = zones(r)
-        if (acc + z > currentIndex) {
-          rowStart = acc
-          rowZones = z
-          zoneInRow = currentIndex - acc
-          break
-        }
-        acc += z
-      }
+      const newZone = leftward ? pos.zone - 1 : pos.zone + 1
 
-      const newZone = leftward ? zoneInRow - 1 : zoneInRow + 1
-
-      if (newZone >= 0 && newZone < rowZones) {
+      if (newZone >= 0 && newZone < pos.rowZones) {
         e.preventDefault()
-        const newIndex = rowStart + newZone
+        const newIndex = pos.rowStart + newZone
         if (newIndex >= 0 && newIndex < items.length) {
           items[newIndex].focus()
         }
       }
-    } else if (e.key === 'Home') {
+    } else if (e.key === 'Home' || e.key === 'End') {
+      // Only act when focus is already inside the grid — otherwise we would
+      // steal focus from text inputs, open modals, or other UI elements.
+      if (currentIndex === -1) return
+
       e.preventDefault()
-      if (items[0]) items[0].focus()
-    } else if (e.key === 'End') {
-      e.preventDefault()
-      if (items[items.length - 1]) items[items.length - 1].focus()
+      const target = e.key === 'Home' ? items[0] : items[items.length - 1]
+      if (target) target.focus()
     }
   })
 
@@ -202,4 +241,6 @@ export function useGridNavigation(
     window.addEventListener('keydown', handleKeyDownRef.current)
     return () => window.removeEventListener('keydown', handleKeyDownRef.current)
   }, [])
+
+  return setRef
 }

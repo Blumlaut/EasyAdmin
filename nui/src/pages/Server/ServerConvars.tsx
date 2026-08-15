@@ -28,7 +28,6 @@ export function ServerConvars({ permissions }: ServerConvarsProps) {
   const [refreshing, setRefreshing] = useState(false)
 
   const canEdit = !!permissions['server.convars']
-  const listRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
 
   const fetchConvars = useCallback(() => {
@@ -73,7 +72,9 @@ export function ServerConvars({ permissions }: ServerConvarsProps) {
     return Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]))
   }, [filtered])
 
-  useGridNavigation(listRef, () => 1)
+  // Rows are only focusable (and editable) when the player has the
+  // server.convars permission — otherwise the grid has no items and is inert.
+  const listRef = useGridNavigation(() => 1, { anchor: searchRef })
   useInitialFocus(searchRef)
 
   function handleEditConvar(entry: ConvarEntry) {

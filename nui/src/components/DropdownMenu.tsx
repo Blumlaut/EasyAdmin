@@ -143,21 +143,18 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
     </div>
   )
 
+  // The wrapper is intentionally NOT focusable: the trigger is expected to be
+  // a native <button>, which is itself focusable and activates on Enter/Space
+  // (the click bubbles up to the wrapper's onClick). Making the wrapper a
+  // second focusable/interactive element would create a duplicate tab stop
+  // and double-count the row in grid keyboard navigation.
   return (
     <div className="inline-block">
       <div
         ref={triggerRef}
-        role="button"
-        tabIndex={0}
         onClick={(e) => {
           e.stopPropagation()
           setOpen(!open)
-        }}
-        onKeyDown={(e) => {
-          if ((e.key === 'Enter' || e.key === ' ') && !open) {
-            e.preventDefault()
-            setOpen(true)
-          }
         }}
       >
         {trigger}
