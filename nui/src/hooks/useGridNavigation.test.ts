@@ -284,6 +284,36 @@ describe('useGridNavigation', () => {
     expect(document.activeElement).toBe(items[1])
   })
 
+  it('re-collects when items are removed while navigating (e.g. filtered out)', async () => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    attach(() => 1, container)
+
+    const items: HTMLElement[] = []
+    for (let i = 0; i < 3; i++) {
+      const el = document.createElement('div')
+      el.setAttribute('role', 'button')
+      el.setAttribute('tabindex', '0')
+      el.id = `row-${i}`
+      container.appendChild(el)
+      items.push(el)
+    }
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+
+    act(() => { items[0].focus() })
+
+    // Middle row is removed (e.g. search filter narrows the list) while
+    // focus is on the first row — navigation must use the new collection
+    act(() => { items[1].remove() })
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+
+    act(() => { dispatchKey('ArrowDown') })
+    expect(document.activeElement).toBe(items[2])
+
+    act(() => { dispatchKey('ArrowUp') })
+    expect(document.activeElement).toBe(items[0])
+  })
+
   it('works with native button elements', () => {
     const { container, buttons } = setupButtonContainer(2, 2)
     attach(() => 2, container)

@@ -144,4 +144,72 @@ describe('DropdownMenu', () => {
     expect(onSelect).toHaveBeenCalledTimes(1)
     expect(menuItems()).toHaveLength(0)
   })
+
+  it('re-clicking the trigger closes the menu', async () => {
+    const user = userEvent.setup()
+    const { trigger } = renderMenu(2)
+
+    await user.click(trigger)
+    await flushFrames()
+    expect(menuItems()).toHaveLength(2)
+
+    // A second trigger click must close (not toggle shut-then-open again)
+    await user.click(trigger)
+    await flushFrames()
+    expect(menuItems()).toHaveLength(0)
+
+    // And the trigger still opens it on the next click
+    await user.click(trigger)
+    await flushFrames()
+    expect(menuItems()).toHaveLength(2)
+  })
+
+  it('returns focus to the trigger when closed with Escape', async () => {
+    const user = userEvent.setup()
+    const { trigger } = renderMenu(2)
+
+    await user.click(trigger)
+    await flushFrames()
+    expect(document.activeElement).toBe(menuItems()[0])
+
+    act(() => { dispatchKey('Escape') })
+    expect(menuItems()).toHaveLength(0)
+    // Focus must not be left on body — it belongs back on the trigger
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('returns focus to the trigger after an item is selected', async () => {
+    const user = userEvent.setup()
+    const { trigger } = renderMenu(2)
+
+    await user.click(trigger)
+    await flushFrames()
+    await user.click(menuItems()[0])
+    expect(menuItems()).toHaveLength(0)
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('does not steal focus back when closed by an outside click', async () => {
+    const user = userEvent.setup()
+    render(
+      <div>
+        <DropdownMenu
+          items={[{ label: 'A', onSelect: () => {} }]}
+          trigger={<button type="button" id="outside-trigger">open</button>}
+        />
+        <button type="button" id="elsewhere">elsewhere</button>
+      </div>,
+    )
+    const trigger = document.querySelector('#outside-trigger') as HTMLElement
+
+    await user.click(trigger)
+    await flushFrames()
+    expect(menuItems()).toHaveLength(1)
+
+    await user.click(document.querySelector('#elsewhere') as HTMLElement)
+    await flushFrames()
+    expect(menuItems()).toHaveLength(0)
+    // The outside click owns focus — the menu must not take it back
+    expect(document.activeElement).toBe(document.querySelector('#elsewhere'))
+  })
 })

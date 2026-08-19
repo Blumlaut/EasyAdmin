@@ -79,15 +79,31 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
     }
   }, [open, measureTrigger])
 
-  // Click outside closes the menu
-  useClickOutside(open, () => setOpen(false), menuRef)
+  // Click outside closes the menu. Both the portal menu panel AND the
+  // trigger wrapper count as "inside": otherwise a mousedown on the
+  // trigger closes the menu, and the ensuing click re-opens it (the
+  // wrapper's onClick toggles), so the trigger could never close the menu.
+  useClickOutside(open, () => setOpen(false), menuRef, triggerRef)
+
+  // Close the menu. With `restoreFocus`, focus moves back to the trigger
+  // element so keyboard flow continues from where the user left off.
+  // Used for Escape and menu-item activation; outside clicks do NOT
+  // restore focus (the user's new click target already owns focus).
+  const closeMenu = useCallback((restoreFocus: boolean) => {
+    setOpen(false)
+    if (restoreFocus) {
+      triggerRef.current
+        ?.querySelector<HTMLElement>('button, a, input, select, [tabindex]')
+        ?.focus()
+    }
+  }, [])
 
   // Keyboard navigation: Escape to close, ArrowUp/Down to navigate items
   useEffect(() => {
     if (!open) return
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setOpen(false)
+        closeMenu(true)
         return
       }
 
@@ -116,7 +132,7 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [open])
+  }, [open, closeMenu])
 
   const menuPanel = (
     <div
@@ -133,7 +149,7 @@ export function DropdownMenu({ trigger, items, align = 'left' }: DropdownMenuPro
           onClick={(e) => {
             e.stopPropagation()
             item.onSelect()
-            setOpen(false)
+            closeMenu(true)
           }}
         >
           {item.icon && <Icon name={item.icon} size="xs" />}

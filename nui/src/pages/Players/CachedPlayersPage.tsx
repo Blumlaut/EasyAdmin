@@ -38,8 +38,10 @@ export function CachedPlayersPage({
     return filterCachedPlayers(cachedPlayers, debouncedQuery)
   }, [cachedPlayers, debouncedQuery])
 
-  // Each row: 1 (row div) + 1 (ban button) = 2 zones
-  const listRef = useGridNavigation(() => 2, { anchor: searchRef })
+  // Each row exposes exactly ONE focusable element — the Ban button —
+  // because the row body is not interactive (cached players have no
+  // detail page). The grid is therefore one zone per row.
+  const listRef = useGridNavigation(() => 1, { anchor: searchRef })
 
   return (
     <div className="page-container">
