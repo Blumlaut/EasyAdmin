@@ -39,6 +39,8 @@ export function BanDetailPage({
     initialBan ? { status: 'success', ban: initialBan } : { status: 'loading' },
   )
   const [edited, setEdited] = useState<BanEntry | null>(initialBan ?? null)
+  // Snapshot of the original ban, used to detect pending (unsaved) changes
+  const [baseline, setBaseline] = useState<BanEntry | null>(initialBan ?? null)
   const [saving, setSaving] = useState(false)
 
   // Fetch ban detail from server if not provided via props
@@ -51,6 +53,7 @@ export function BanDetailPage({
       if (data.ban) {
         setState({ status: 'success', ban: data.ban })
         setEdited(data.ban)
+        setBaseline(data.ban)
       } else {
         setState({ status: 'error' })
       }
@@ -69,6 +72,16 @@ export function BanDetailPage({
       return true
     })
   }, [edited, ipPrivacy])
+
+  // Editable fields; expire is edited as a string, so compare normalized to string
+  const hasChanges = useMemo(() => {
+    if (!baseline || !edited) return false
+    const norm = (v: string | number | null | undefined) => (v == null ? '' : String(v))
+    return norm(baseline.reason) !== norm(edited.reason)
+      || norm(baseline.name) !== norm(edited.name)
+      || norm(baseline.banner) !== norm(edited.banner)
+      || norm(baseline.expire) !== norm(edited.expire)
+  }, [baseline, edited])
 
   if (state.status === 'loading' || !edited) {
     return (
@@ -136,6 +149,7 @@ export function BanDetailPage({
     setSaving(true)
     try {
       await callLua('editBan', edited)
+      setBaseline(edited) // No pending changes after a successful save
       notify(t('Ban updated'), 'success')
     } catch {
       notify(t('Failed to save ban'), 'error')
@@ -227,7 +241,7 @@ export function BanDetailPage({
             </h3>
             <p className="text-mono text-sm text-fg-muted">ID: {current.banid}</p>
           </div>
-          {canEdit && (
+          {canEdit && hasChanges && (
             <button
               className="btn btn-primary"
               onClick={handleSave}
