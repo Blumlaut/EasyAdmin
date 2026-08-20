@@ -17,6 +17,14 @@
   letter-spacing: 0.01em;
 }
 
+/* Textareas: don't clip to the fixed 1-line height (causes a stray scrollbar) */
+textarea.input {
+  height: auto;
+  min-height: 38px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
 .input:focus {
   border-color: var(--brand-blue);
   box-shadow: 0 0 0 3px var(--bg-active);
