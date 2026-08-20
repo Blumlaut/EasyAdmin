@@ -87,7 +87,7 @@ The NUI supports keyboard navigation for list interactions:
 
 - Arrow keys — Navigate list items
 - Enter — Select item
-- Escape — Go back / close modal
+- Escape — Close an open modal or dropdown; otherwise folds the window (releases focus). The menu is only closed and reopened with the `/easyadmin` (`/ea`) command.
 
 ## Accessibility
 

@@ -318,12 +318,17 @@ export function useAppNavigation({
     }
   }, [view, fetchReports, fetchCachedPlayers, setLoadingReports, setLoadingCached])
 
-  // ESC closes the menu
+  // ESC folds the menu (releases NUI focus). The menu is only closed/
+  // reopened by the /easyadmin (/ea) command — Escape must never call
+  // `closeMenu`. Folding keeps the menu rendered in the background so
+  // the player can re-engage with the focus keybind (default: Alt).
+  // Skip while an overlay (modal / dropdown / select) is open so its
+  // own Escape handler takes the key instead.
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        callLua('closeMenu').catch(() => {})
-      }
+      if (e.key !== 'Escape') return
+      if (document.querySelector('[role="dialog"], [role="menu"], [role="listbox"]')) return
+      callLua('releaseFocus').catch(() => {})
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)

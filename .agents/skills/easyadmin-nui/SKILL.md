@@ -21,6 +21,13 @@ All data flow between the NUI frontend and Lua backend goes through a dedicated 
 
 Never use raw `fetch` or `window.addEventListener` directly — use the exported helpers.
 
+## Menu Focus Convention
+
+The menu is only fully closed/reopened by the `/easyadmin` (`/ea`) command (`NuiToggle` in `client/nui/core.lua`). **Never call the `closeMenu` NUI callback from key handlers or other UI actions.**
+
+- **Escape folds the menu** — call `releaseFocus`, which releases NUI focus but keeps the menu rendered in the background (player re-engages with the focus keybind, default Left Alt).
+- **Overlays own their Escape** — while a modal (`role="dialog"`), dropdown (`role="menu"`), or select (`role="listbox"`) is open, skip app-level Escape handling so the overlay's own handler takes the key.
+
 ## Project Structure
 
 ```
