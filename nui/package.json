@@ -38,7 +38,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.4",
+    "@testing-library/user-event": "^14.6.5",
     "@types/chart.js": "^4.0.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
@@ -50,7 +50,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-tailwindcss": "^4.2.0",
     "globals": "^17.11.0",
-    "jscpd": "^5.0.15",
+    "jscpd": "^5.0.16",
     "jsdom": "^30.0.1",
     "postcss": "^8.5.26",
     "stylelint": "^17.14.1",
@@ -58,7 +58,7 @@
     "tailwindcss": "^4.3.1",
     "typescript": "^7.0.2",
     "typescript-eslint": "^8.67.0",
-    "vite": "^8.2.1",
-    "vitest": "^4.1.10"
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
   }
 }
