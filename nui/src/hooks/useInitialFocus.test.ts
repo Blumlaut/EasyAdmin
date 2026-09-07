@@ -1,16 +1,10 @@
-import { JSDOM } from 'jsdom'
-import { act, renderHook } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import { useInitialFocus } from './useInitialFocus'
-
-function setupDom() {
-  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>')
-  global.document = dom.window.document
-  global.HTMLElement = dom.window.HTMLElement
-}
 
 describe('useInitialFocus', () => {
   beforeEach(() => {
-    setupDom()
+    // Reset the jsdom environment provided by vitest
+    document.body.innerHTML = ''
   })
 
   it('focuses the element referenced by a ref object', () => {
