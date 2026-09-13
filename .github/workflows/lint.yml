@@ -24,7 +24,7 @@ jobs:
           node-version: 22
 
       - name: Install Node.js dependencies
-        run: cd bot && npm ci
+        run: cd bot && npm ci --legacy-peer-deps
 
       - name: Configure Git user
         run: |
