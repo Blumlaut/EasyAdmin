@@ -84,7 +84,7 @@ export function StreamPublisher() {
       const payload = event.data
       if (!payload || !payload.action) return
 
-      console.log(LOG, 'message received:', payload.action, payload.data)
+      console.log(LOG, 'message received:', payload.action, JSON.stringify(payload.data))
       switch (payload.action) {
         case 'streamPublisher:start': {
           console.log(LOG, 'start: tearing down any existing publisher')
