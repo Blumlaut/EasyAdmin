@@ -90,6 +90,7 @@ json = {
 -- Event system (no-op for tests)
 -- ============================================================
 function AddEventHandler(name, fn) end
+function RegisterNetEvent(name, fn) end
 function TriggerEvent(name, ...) end
 function TriggerClientEvent(name, target, ...) end
 function TriggerServerEvent(name, ...) end
@@ -201,6 +202,8 @@ function GetAllObjects() return {} end
 function DoesEntityExist(entity) return false end
 function GetEntityCoords(entity) return 0, 0, 0 end
 function DeleteEntity(entity) end
+function GetPlayerPed(src) return 0 end
+function DoesPlayerExist(src) return _mockPlayers[tonumber(src)] ~= nil end
 function IsPedAPlayer(ped) return false end
 function GetDistanceBetweenCoords(x1, y1, z1, x2, y2, z2) return 0 end
 

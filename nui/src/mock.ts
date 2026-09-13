@@ -20,6 +20,8 @@ import {
   settingsMock,
   profilerMock,
   pluginsMock,
+  mapMock,
+  startMapStreamer,
   DEMO_PLAYERS,
   DEMO_PERMISSIONS,
   DEMO_REPORTS,
@@ -38,6 +40,7 @@ const HANDLERS: Record<string, NonNullable<Parameters<typeof executeHandler>[0]>
   ...settingsMock.handlers,
   ...profilerMock.handlers,
   ...pluginsMock.handlers,
+  ...mapMock.handlers,
 }
 
 async function executeHandler(fn: (body: Record<string, unknown>) => Promise<Response>, body: Record<string, unknown>): Promise<Response> {
@@ -72,6 +75,8 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
 
 // ---- Auto-open the menu and push initial data after a short delay ----
 
+const isRedmDev = new URLSearchParams(window.location.search).has('redm')
+
 setTimeout(() => {
   window.postMessage({ action: 'menuToggle', data: { visible: true } }, '*')
   window.postMessage({
@@ -79,7 +84,7 @@ setTimeout(() => {
     data: {
       players: DEMO_PLAYERS,
       permissions: DEMO_PERMISSIONS,
-      redm: false,
+      redm: isRedmDev,
       ipprivacy: false,
     },
   }, '*')
@@ -101,6 +106,7 @@ setTimeout(() => {
     action: 'updateReports',
     data: { reports: DEMO_REPORTS },
   }, '*')
+  startMapStreamer()
 }, 500)
 
 // eslint-disable-next-line no-console -- dev-only banner

@@ -46,6 +46,7 @@ export interface UseAppNavigationResult {
 const BASE_NAV_ITEMS: NavItem[] = [
   { id: 'main', label: 'Dashboard', icon: 'home' },
   { id: 'players', label: 'Players', icon: 'users' },
+  { id: 'map', label: 'Map', icon: 'map' },
   { id: 'bans', label: 'Ban List', icon: 'ban' },
   { id: 'reports', label: 'Reports', icon: 'flag' },
   {
@@ -165,6 +166,7 @@ export function useAppNavigation({
     if (view === 'report-detail' && selectedReportId !== null) return `Report #${selectedReportId}`
     if (view === 'player-statistics') return 'Player Statistics'
     if (view === 'network-monitor') return 'Network Monitor'
+    if (view === 'map') return 'Map'
     if (view === 'server') return 'Server'
     if (view === 'resources') return 'Resource Management'
     if (view === 'resource-detail') return 'Resource Details'
@@ -198,6 +200,7 @@ export function useAppNavigation({
     }
 
     let disabled = false
+    if (item.id === 'map' && !permissions['server.map.view']) disabled = true
     if (item.id === 'bans' && !permissions['player.ban.view']) disabled = true
     if (item.id === 'reports' && !permissions['player.reports.view']) disabled = true
     if (item.id === 'statistics') {
@@ -238,6 +241,7 @@ export function useAppNavigation({
 
   const availableViews: View[] = useMemo(() => {
     const views: View[] = ['main', 'players']
+    if (permissions['server.map.view']) views.push('map')
     if (permissions['player.ban.view']) views.push('bans')
     if (permissions['player.reports.view']) views.push('reports')
     if (permissions['server.statistics.view']) views.push('player-statistics')

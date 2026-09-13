@@ -160,6 +160,12 @@ Real-time and historical network statistics:
 
 Requires `server.network.monitor` permission.
 
+## Map
+
+Live player positions on the GTA V world map (three tile styles). Clicking a marker opens a popup with spectate/teleport/details actions. RedM falls back to a coordinate grid (no tile source exists for RedM).
+
+Requires `server.map.view` permission.
+
 ## Settings
 
 ### Accessibility

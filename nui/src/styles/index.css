@@ -42,6 +42,12 @@
 @import './pages/reports.css';
 @import './pages/server.css';
 
+/* Leaflet before map.css so the themed overrides below win the cascade.
+   (Importing it from the lazy Map chunk instead injects it later and
+   restores Leaflet's default white popup/zoom-control chrome. */
+@import 'leaflet/dist/leaflet.css';
+@import './pages/map.css';
+
 /* -- Design System Tokens (Tailwind v4 @theme) -- */
 @theme {
   /* -- Brand colors -- */

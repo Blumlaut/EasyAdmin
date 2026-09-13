@@ -38,6 +38,7 @@ const ResourceDetailPage = React.lazy(() => import('./pages/Resources/ResourceDe
 const ProfilerPage = React.lazy(() => import('./pages/Profiler/ProfilerPage').then(m => ({ default: m.ProfilerPage })))
 const SettingsPage = React.lazy(() => import('./pages/Settings/SettingsPage').then(m => ({ default: m.SettingsPage })))
 const NetworkMonitorPage = React.lazy(() => import('./pages/Statistics/NetworkMonitorPage').then(m => ({ default: m.NetworkMonitorPage })))
+const MapPage = React.lazy(() => import('./pages/Map/MapPage').then(m => ({ default: m.MapPage })))
 
 // --- Loading placeholder for lazy pages ---
 
@@ -270,6 +271,7 @@ function App() {
       'reports': 'reports',
       'player-statistics': 'player-statistics',
       'network-monitor': 'network-monitor',
+      'map': 'map',
       'server': 'server',
       'resources': 'resources',
       'profiler': 'profiler',
@@ -495,6 +497,17 @@ function App() {
               {nav.view === 'network-monitor' && (
                 <LazyPage>
                   <NetworkMonitorPage />
+                </LazyPage>
+              )}
+
+              {nav.view === 'map' && (
+                <LazyPage>
+                  <MapPage
+                    players={data.players}
+                    permissions={data.permissions}
+                    isRedm={data.isRedm}
+                    onOpenPlayer={(p) => nav.selectPlayer(p)}
+                  />
                 </LazyPage>
               )}
 

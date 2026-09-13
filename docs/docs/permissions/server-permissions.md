@@ -56,6 +56,7 @@ Cleanup removes spawned entities from the world. Use with caution on populated s
 |------------|-------------|
 | `easyadmin.server.statistics.view` | Access the Player Statistics page |
 | `easyadmin.server.network.monitor` | Access the Network Monitor page |
+| `easyadmin.server.map.view` | Access the Map page |
 
 ## Special Permissions
 

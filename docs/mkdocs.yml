@@ -98,6 +98,7 @@ nav:
         - features/allowlist.md
         - features/player-statistics.md
         - features/network-monitor.md
+        - features/map.md
         - features/profiler.md
         - features/resource-monitor.md
     - NUI:

@@ -138,6 +138,7 @@ Find what you need by task:
 | Monitor server resources | [Resource Monitor](features/resource-monitor) |
 | View player statistics | [Player Statistics](features/player-statistics) |
 | Check network stats | [Network Monitor](features/network-monitor) |
+| See players on the world map | [Map](features/map) |
 | Update EasyAdmin | [Updating](updates/updating) |
 
 ---

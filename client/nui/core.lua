@@ -146,6 +146,7 @@ function NuiBuildPlayerList()
           p.ipprivacy = thePlayer.ipprivacy
           p.frozen = FrozenPlayers[thePlayer.id] or false
           p.muted = MutedPlayers[thePlayer.id] or false
+          p.admin = thePlayer.admin
           p.developer = thePlayer.developer
           p.contributor = thePlayer.contributor
           table.insert(playerData, p)

@@ -86,6 +86,7 @@ function _resetGlobals()
     clearTable(_G.reports)
     clearTable(_G.AdminCooldowns)
     clearTable(_G.AnonymousAdmins)
+    if _G.mapStreamTargets then clearTable(_G.mapStreamTargets) end
     _MockClearConvars()
     _MockClearPlayers()
     _MockClearFiles()

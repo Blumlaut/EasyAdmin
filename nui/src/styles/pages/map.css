@@ -1,0 +1,303 @@
+/* ============================================================
+   Map page
+   ============================================================ */
+
+.map-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  height: 100%;
+  min-height: 0;
+}
+
+.map-page-toolbar {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.map-page-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.map-page-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  pointer-events: none;
+}
+
+.map-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+/* ---- Legend ---- */
+
+.map-legend {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 4px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  background: rgba(10, 14, 20, 0.75);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+
+.map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.map-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.map-legend-swatch--normal {
+  background: var(--accent-blue);
+}
+
+.map-legend-swatch--admin {
+  background: var(--accent-green);
+}
+
+.map-legend-swatch--frozen {
+  background: var(--accent-red);
+}
+
+.map-legend-swatch--self {
+  background: var(--accent-yellow);
+  border-width: 2px;
+  box-shadow: 0 0 0 2px rgba(227, 179, 65, 0.35), 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- Leaflet map ---- */
+
+.ea-map {
+  width: 100%;
+  height: 100%;
+}
+
+.ea-map.leaflet-container {
+  /* Same element as .ea-map (Leaflet adds leaflet-container to the map div). */
+  background: #0a0e14;
+  font: inherit;
+}
+
+.ea-map-tile {
+  width: 256px;
+  height: 256px;
+}
+
+.ea-map-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* Leaflet zoom control — match app theme */
+.ea-map .leaflet-control-zoom a {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.ea-map .leaflet-control-zoom a:hover {
+  background: var(--bg-hover);
+}
+
+.ea-map .leaflet-control-attribution {
+  background: rgba(10, 14, 20, 0.7);
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.ea-map .leaflet-control-attribution a {
+  color: var(--text-secondary);
+}
+
+/* ---- Player markers ---- */
+
+.ea-map-marker-wrap {
+  background: transparent;
+  border: none;
+}
+
+.ea-map-marker {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+
+.ea-map-marker--normal {
+  background: var(--accent-blue);
+}
+
+.ea-map-marker--admin {
+  background: var(--accent-green);
+}
+
+.ea-map-marker--frozen {
+  background: var(--accent-red);
+}
+
+.ea-map-marker--self {
+  background: var(--accent-yellow);
+  border-width: 3px;
+  box-shadow: 0 0 0 3px rgba(227, 179, 65, 0.35), 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- Popup ---- */
+
+.ea-map-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 170px;
+  font: inherit;
+}
+
+.ea-map-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ea-map-popup-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ea-map-popup-badge {
+  flex-shrink: 0;
+  padding: 1px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.ea-map-popup-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.ea-map-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.ea-map .leaflet-popup-content-wrapper {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.ea-map .leaflet-popup-content {
+  margin: 10px 12px;
+}
+
+.ea-map .leaflet-popup-tip {
+  background: var(--bg-elevated);
+}
+
+.ea-map .leaflet-container a.leaflet-popup-close-button {
+  color: var(--text-muted);
+}
+
+/* ---- RedM coordinate grid ---- */
+
+.redm-grid {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+}
+
+.redm-grid-svg {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.redm-grid-line {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+
+.redm-grid-label {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+
+.redm-dot {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.redm-dot--normal {
+  fill: var(--accent-blue);
+}
+
+.redm-dot--admin {
+  fill: var(--accent-green);
+}
+
+.redm-dot--frozen {
+  fill: var(--accent-red);
+}
+
+.redm-dot--self {
+  fill: var(--accent-yellow);
+  stroke-width: 2;
+}
+
+.redm-grid-caption {
+  padding: var(--space-1) var(--space-2);
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}

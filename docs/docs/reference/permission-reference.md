@@ -51,6 +51,7 @@ Complete alphabetical listing of all EasyAdmin permissions. For guidance on sett
 | `easyadmin.server.cleanup.peds` | Clean up NPCs |
 | `easyadmin.server.cleanup.props` | Clean up props |
 | `easyadmin.server.convars` | Edit server convars |
+| `easyadmin.server.map.view` | Access the Map page |
 | `easyadmin.server.network.monitor` | Access the Network Monitor page |
 | `easyadmin.server.reminder.add` | Add reminders (non-persistent) |
 | `easyadmin.server.resources.monitor` | Access the Profiler page |

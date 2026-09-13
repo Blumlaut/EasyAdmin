@@ -81,6 +81,14 @@ export interface CachedPlayer {
   immune?: boolean
 }
 
+// Player position streamed from the client to the Map page (~2 Hz)
+export interface MapPlayerPos {
+  id: number
+  x: number
+  y: number
+  z?: number
+}
+
 // Report entry from server
 export interface Report {
   id: number
@@ -139,6 +147,7 @@ export type View =
   | 'profiler'
   | 'player-statistics'
   | 'network-monitor'
+  | 'map'
   | 'settings'
   | (string & {})
 
