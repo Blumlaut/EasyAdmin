@@ -137,9 +137,9 @@ EasyAdmin has a Lua test suite using **[busted](https://lunarmodules.github.io/b
 When working on any code related to FiveM, always consult the official documentation:
 
 - **FiveM Docs**: https://docs.fivem.net/docs/ — Server framework, client/server API, resources, events, etc.
-- **Natives (GTA V & CFX)**: Use the **fivem-natives** skill to look up native function signatures, parameters, return types, and examples. 6,400+ GTA V natives and 800+ FiveM-specific CFX natives are indexed locally.
+- **Natives (GTA V & CFX)**: ALWAYS Use the **fivem-natives** skill to look up native function signatures, parameters, return types, and examples before using them in code. 6,400+ GTA V natives and 800+ FiveM-specific CFX natives are indexed locally.
 
-Never guess at API behavior or native signatures. Always verify against the official docs before suggesting changes.
+Never guess at API behavior or native signatures. Always verify against the official docs before writing code.
 
 ## Merge Requests
 
