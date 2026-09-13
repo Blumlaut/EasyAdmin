@@ -22,8 +22,10 @@ function CollectMapPositions(selfId)
   for _, src in ipairs(GetPlayers()) do
     local ped = GetPlayerPed(src)
     if ped and ped ~= 0 and DoesEntityExist(ped) then
-      local x, y, z = GetEntityCoords(ped)
-      positions[#positions + 1] = { id = src, x = x, y = y, z = z }
+      -- GetEntityCoords returns a vector3 table ({x, y, z}), not separate return values.
+      -- GetPlayers() returns src as strings — normalise to number to match the NUI's Player.id.
+      local coords = GetEntityCoords(ped)
+      positions[#positions + 1] = { id = tonumber(src), x = coords.x, y = coords.y, z = coords.z }
     end
   end
   return { players = positions, selfId = selfId }
