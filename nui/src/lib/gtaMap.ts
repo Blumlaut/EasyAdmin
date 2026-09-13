@@ -37,6 +37,23 @@ export function worldToLatLng(x: number, y: number): [number, number] {
   return [-py, px]
 }
 
+/**
+ * Approximate inverse of worldToLatLng: Leaflet lat/lng back to game-world
+ * coords.  Because the transform is a simple affine fit (not a true map
+ * projection) the result is only approximate — typically within 20-50 game
+ * units of the clicked tile position, which is sufficient for "get me near
+ * this area" teleportation.
+ */
+export function mapToGameCoords(lat: number, lng: number): { x: number; y: number } {
+  // worldToLatLng: lat = -py, lng = px
+  // worldToMapPx: px = KX * x + OX, py = KY * y + OY
+  // Inverse: x = (lng - OX) / KX, y = (-lat - OY) / KY
+  return {
+    x: (lng - OX) / KX,
+    y: (-lat - OY) / KY,
+  }
+}
+
 // ---- Tile server geometry ----
 
 /** Available tile styles. */

@@ -110,6 +110,20 @@ RegisterServerEvent("EasyAdmin:TeleportPlayerToCoords", function(playerId,tgtCoo
 	end
 end)
 
+-- Teleport the requesting admin to a map-clicked coordinate.
+-- The client resolves the ground Z (needs streaming data) and moves the ped.
+RegisterServerEvent("EasyAdmin:TeleportAdminToCoords", function(x, y)
+    local src = source
+    if type(x) ~= "number" or type(y) ~= "number" then return end
+    if not DoesPlayerHavePermission(src, "player.teleport.single") then return end
+    if not CheckAdminCooldown(src, "teleport") then return end
+    SetAdminCooldown(src, "teleport")
+    PrintDebugMessage("Player "..getName(src, true).." requested teleport to map coords "..x..", "..y, 3)
+    local preferredWebhook = getPreferredWebhook()
+    SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** has Teleported to **{target}**", { by = getName(src, false, true), target = string.format("%.0f, %.0f", x, y) }), "teleport", 16777214)
+    TriggerClientEvent("EasyAdmin:TeleportToMapCoords", src, x, y)
+end)
+
 RegisterServerEvent("EasyAdmin:TeleportAdminToPlayer", function(id)
 	local source=source
 	if CachedPlayers[id] and not CachedPlayers[id].dropped and DoesPlayerHavePermission(source, "player.teleport.single") and CheckAdminCooldown(source, "teleport") then

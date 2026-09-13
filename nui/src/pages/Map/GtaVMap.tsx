@@ -7,11 +7,13 @@ import type { Permissions, Player } from '../../types'
 import { callLua } from '../../fivem'
 import { I18nProvider } from '../../lib/i18n'
 import { MapPlayerPopup } from './MapPlayerPopup'
+import { MapTeleportPopup } from './MapTeleportPopup'
 import {
   MAP_BOUNDS,
   MAP_MIN_ZOOM,
   MAP_MAX_ZOOM,
   worldToLatLng,
+  mapToGameCoords,
   scTileForLeaflet,
   scTileUrl,
   type ScStyle,
@@ -99,6 +101,13 @@ export function GtaVMap({ mapPlayers, style, permissions, onOpenPlayer }: GtaVMa
   const iconSigRef = useRef<Map<number, string>>(new Map())
   // One popup is open at a time (markers close the previous one on click).
   const popupRootRef = useRef<Root | null>(null)
+  // Transient teleport popup (click-on-map). Separate from the player popup root.
+  const teleportPopupRef = useRef<L.Popup | null>(null)
+  const teleportPopupRootRef = useRef<Root | null>(null)
+
+  // Ref so the map click handler (registered once) always sees current permissions.
+  const permissionsRef = useRef(permissions)
+  permissionsRef.current = permissions
 
   // --- Map lifecycle ---
   useEffect(() => {
@@ -136,8 +145,54 @@ export function GtaVMap({ mapPlayers, style, permissions, onOpenPlayer }: GtaVMa
     })
     map.on('popupclose', (e: L.PopupEvent) => {
       e.popup.options.autoPan = true
-      popupRootRef.current?.unmount()
-      popupRootRef.current = null
+      if (e.popup === teleportPopupRef.current) {
+        teleportPopupRootRef.current?.unmount()
+        teleportPopupRootRef.current = null
+        teleportPopupRef.current = null
+      } else {
+        popupRootRef.current?.unmount()
+        popupRootRef.current = null
+      }
+    })
+
+    // Clicking empty map space (not a marker or popup) opens a teleport popup
+    // at the clicked location.
+    map.on('click', (e: L.LeafletMouseEvent) => {
+      const target = e.originalEvent.target
+      if (!(target instanceof HTMLElement)) return
+      if (target.closest('.leaflet-popup, .ea-map-marker-wrap')) return
+      if (!permissionsRef.current['player.teleport.single']) return
+
+      const { x, y } = mapToGameCoords(e.latlng.lat, e.latlng.lng)
+      // Leaflet auto-closes any open popup before this handler runs
+      // (closePopupOnClick: true is the default).
+      const el = document.createElement('div')
+      // Stop clicks inside the popup from reaching the map (which would open a new teleport popup).
+      el.addEventListener('click', (ev) => ev.stopPropagation())
+      const root = createRoot(el)
+      flushSync(() => {
+        root.render(
+          <I18nProvider>
+            <MapTeleportPopup
+              x={x}
+              y={y}
+              onTeleport={() => {
+                map.closePopup()
+                void callLua('teleportToMapCoords', { x, y }).catch(() => {})
+              }}
+            />
+          </I18nProvider>,
+        )
+      })
+      teleportPopupRootRef.current = root
+      teleportPopupRef.current = L.popup({
+        closeButton: false,
+        autoPan: true,
+        autoPanPadding: [12, 12],
+      })
+        .setLatLng(e.latlng)
+        .setContent(el)
+        .openOn(map)
     })
 
     markerLayerRef.current = L.layerGroup().addTo(map)
@@ -150,6 +205,9 @@ export function GtaVMap({ mapPlayers, style, permissions, onOpenPlayer }: GtaVMa
       ro.disconnect()
       popupRootRef.current?.unmount()
       popupRootRef.current = null
+      teleportPopupRootRef.current?.unmount()
+      teleportPopupRootRef.current = null
+      teleportPopupRef.current = null
       map.remove()
       mapRef.current = null
       tileLayerRef.current = null
@@ -197,6 +255,7 @@ export function GtaVMap({ mapPlayers, style, permissions, onOpenPlayer }: GtaVMa
           const data = popupDataRef.current.get(p.player.id)
           if (!data) return ''
           const el = document.createElement('div')
+          el.addEventListener('click', (ev) => ev.stopPropagation())
           popupRootRef.current?.unmount()
           const root = createRoot(el)
           popupRootRef.current = root

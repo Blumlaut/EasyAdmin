@@ -40,3 +40,19 @@ end)
 RegisterNetEvent('EasyAdmin:updateMapPlayers', function(data)
   SendNUIMessage({ action = 'updateMapPlayers', data = data })
 end)
+
+-- Teleport the admin to a map-clicked coordinate. The NUI converts Leaflet
+-- lat/lng to approximate game-world x/y; the server validates and the
+-- client resolves the ground Z before moving the ped.
+RegisterNUICallback('teleportToMapCoords', function(data, cb)
+  if not permissions['player.teleport.single'] then
+    return deny(cb, 'Permission denied')
+  end
+  local x = tonumber(data and data.x)
+  local y = tonumber(data and data.y)
+  if not x or not y then
+    return deny(cb, 'Invalid coordinates')
+  end
+  TriggerServerEvent('EasyAdmin:TeleportAdminToCoords', x, y)
+  cb({ ok = true })
+end)

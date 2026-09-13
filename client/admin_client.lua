@@ -284,6 +284,49 @@ RegisterNetEvent("EasyAdmin:TeleportRequest", function(id, tgtCoords)
 	end
 end)
 
+-- Teleport to a map-clicked coordinate.
+local mapTeleportRequestId = 0
+RegisterNetEvent("EasyAdmin:TeleportToMapCoords", function(x, y)
+	mapTeleportRequestId = mapTeleportRequestId + 1
+	local requestId = mapTeleportRequestId
+	Citizen.CreateThread(function()
+		local ped = PlayerPedId()
+		local oldCoords = GetEntityCoords(ped)
+		lastLocation = oldCoords
+		SetEntityCoords(ped, x, y, 250.0, 0, 0, 0, false)
+		FreezeEntityPosition(ped, true)
+		local groundZ
+		for attempt = 1, 100 do
+			if mapTeleportRequestId ~= requestId then
+				FreezeEntityPosition(ped, false)
+				return
+			end
+			local searchZ = 1000.0
+			while searchZ >= -100.0 do
+				RequestCollisionAtCoord(x, y, searchZ)
+				RequestAdditionalCollisionAtCoord(x, y, searchZ)
+				local found, z = GetGroundZFor_3dCoord(x, y, searchZ, true)
+				if found then
+					groundZ = z
+					break
+				end
+				searchZ = searchZ - 25.0
+			end
+			if groundZ then break end
+			Wait(100)
+		end
+		if mapTeleportRequestId ~= requestId then
+			FreezeEntityPosition(ped, false)
+			return
+		end
+		if groundZ then
+			SetEntityCoords(ped, x, y, groundZ + 1.0, 0, 0, 0, false)
+		end
+		FreezeEntityPosition(ped, false)
+		local finalCoords = GetEntityCoords(ped)
+	end)
+end)
+
 RegisterNetEvent("EasyAdmin:SlapPlayer", function(slapAmount)
 	local ped = PlayerPedId()
 	if slapAmount > GetEntityHealth(ped) then
