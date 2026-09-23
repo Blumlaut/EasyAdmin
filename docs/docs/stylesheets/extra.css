@@ -112,12 +112,6 @@
 	height: auto;
 }
 
-.ea-gallery figcaption {
-	padding: .6rem .8rem;
-	font-size: .75rem;
-	font-weight: 700;
-	color: var(--md-default-fg-color--medium);
-}
 
 /* ---- Tables ---- */
 .md-typeset table:not([class]) {

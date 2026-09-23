@@ -12,47 +12,38 @@ Version 8.0 ships a complete UI rework. Take a look at the main screens:
 
 <figure>
 <img src="assets/screenshots/dashboard.png" alt="Dashboard" loading="lazy">
-<figcaption>Dashboard</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/players.png" alt="Player management" loading="lazy">
-<figcaption>Player Management</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/reports.png" alt="Reports" loading="lazy">
-<figcaption>Reports</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/bans.png" alt="Ban list" loading="lazy">
-<figcaption>Ban List</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/server.png" alt="Server management" loading="lazy">
-<figcaption>Server Management</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/resources.png" alt="Resource management" loading="lazy">
-<figcaption>Resources</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/profiler.png" alt="Profiler" loading="lazy">
-<figcaption>Profiler</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/player-statistics.png" alt="Player statistics" loading="lazy">
-<figcaption>Player Statistics</figcaption>
 </figure>
 
 <figure>
 <img src="assets/screenshots/map.png" alt="Map" loading="lazy">
-<figcaption>Live player map with position markers and player selection</figcaption>
 </figure>
 
 </div>
