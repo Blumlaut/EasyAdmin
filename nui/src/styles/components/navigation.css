@@ -53,6 +53,17 @@
   border-color: rgba(59, 130, 246, 0.2);
 }
 
+/* Layout-transparent by default so the label keeps its own flex sizing and
+   the chevron stays pinned to the right edge — only horizontal mode makes it
+   a real box (see horizontal overrides below). */
+.nav-item-text {
+  display: contents;
+}
+
+.nav-item-label {
+  flex: 1;
+}
+
 /* Dropdown children nav items — must come before :disabled pseudo-selectors */
 .nav-dropdown-children .nav-item {
   position: relative;
@@ -73,12 +84,30 @@
   pointer-events: none;
 }
 
-/* Horizontal nav item overrides — must come before :disabled pseudo-selectors */
+/* Horizontal nav item overrides — must come before :disabled pseudo-selectors.
+   Icon stacks above the label so each item is only as wide as its label,
+   which keeps the taskbar from overflowing sideways. */
 .navigation--horizontal .nav-item {
   width: auto;
-  min-width: max-content;
+  min-width: 58px;
   margin: 0;
   padding: var(--space-2) var(--space-3);
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.navigation--horizontal .nav-item-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.navigation--horizontal .nav-item-label {
+  flex: none;
+  font-size: var(--text-xs);
+  white-space: nowrap;
 }
 
 /* Higher-specificity :disabled states come after all base .nav-item overrides */
@@ -93,10 +122,6 @@
 .nav-item[disabled]:hover {
   background: transparent;
   color: var(--text-muted);
-}
-
-.nav-item-label {
-  flex: 1;
 }
 
 .nav-item-badge {
@@ -248,14 +273,6 @@
   background: var(--bg-active);
   color: var(--brand-blue-light);
   border-color: rgba(59, 130, 246, 0.2);
-}
-
-.navigation--horizontal .nav-dropdown-children .nav-dropdown-chevron {
-  transform: rotate(-90deg);
-}
-
-.navigation--horizontal .nav-dropdown-children .nav-dropdown-chevron-open {
-  transform: rotate(0deg);
 }
 
 .navigation--horizontal .nav-separator {

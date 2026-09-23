@@ -237,17 +237,19 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
           style={isDisabled ? { opacity: 0.5 } : undefined}
         >
           <Icon name={navItem.icon} size="sm" />
-          <span className="nav-item-label">{navItem.label}</span>
-          {navItem.badge !== undefined && (
-            <span className="nav-item-badge">{navItem.badge}</span>
-          )}
-          {hasChildren && (
-            <Icon
-              name="chevron-down"
-              size="xs"
-              className={`nav-dropdown-chevron${isExpanded ? ' nav-dropdown-chevron-open' : ''}`}
-            />
-          )}
+          <span className="nav-item-text">
+            <span className="nav-item-label">{navItem.label}</span>
+            {navItem.badge !== undefined && (
+              <span className="nav-item-badge">{navItem.badge}</span>
+            )}
+            {hasChildren && (
+              <Icon
+                name="chevron-down"
+                size="xs"
+                className={`nav-dropdown-chevron${isExpanded ? ' nav-dropdown-chevron-open' : ''}`}
+              />
+            )}
+          </span>
         </button>
         {/* Always render children container for animated expand/collapse */}
         {hasChildren && (
