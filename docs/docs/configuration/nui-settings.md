@@ -1,65 +1,67 @@
 # NUI Settings
 
-EasyAdmin's graphical interface stores per-admin settings in FiveM's Key-Value Persistence (KVP) system. Settings are saved per-player and persist across sessions.
+The Settings page inside EasyAdmin's menu remembers your choices and stores them locally on your computer, so they apply to that machine and are still there the next time you open the menu. None of these settings are configured through server convars.
+
+Open the menu and go to Settings to change any of them.
 
 ## Accessibility
 
 ### Font Size
 
-Adjust the base font size of the NUI interface.
+Adjusts the text size across the whole menu with a slider.
 
 - Range: 10 to 20 pixels
 - Default: 12
 
-Set via the Settings page in the NUI (no convar available).
-
 ### High Contrast
 
-Enable high contrast mode for improved readability. This increases color contrast throughout the interface.
+Boosts the color contrast of the menu for easier reading. Use the toggle to turn it on or off.
 
-Set via the Settings page in the NUI (no convar available).
+### UI Density
+
+Controls how much space sits between the elements in the menu. The options are Cramped, Cozy, Default, Spacious and Airy, and the default is Default.
+
+Choose Spacious or Airy if the menu feels cramped, or Cramped or Cozy to fit more on screen at once.
 
 ## Layout
 
 ### Sidebar Mode
 
-Choose between vertical (sidebar on the side) or horizontal (sidebar on top/bottom) layout.
+Choose where the navigation sits. Each option shows a preview of the layout:
 
-- `vertical` — Sidebar appears on the left or right side (default)
-- `horizontal` — Sidebar appears at the top or bottom
+| Option | Layout |
+|---|---|
+| Left sidebar (default) | Navigation on the left, content opens to the right |
+| Right sidebar | Navigation on the right, content opens to the left |
+| Top taskbar | Navigation along the top, content opens downward |
+| Bottom taskbar | Navigation along the bottom, content opens upward |
 
-Default: `vertical`
+### Fold Opacity
 
-### Sidebar Direction
+Sets how see-through the menu becomes when it is folded into the background.
 
-Controls the sidebar position within the chosen mode.
+- Range: 10% to 100%
+- Default: 85%
 
-- `vertical` mode: `left` (sidebar on right side of window) or `right` (sidebar on left side of window)
-- `horizontal` mode: `up` (sidebar at bottom) or `down` (sidebar at top)
-
-Defaults depend on sidebar mode:
-- `vertical` → `right`
-- `horizontal` → `down`
+Lower values let more of the game show through while the menu is folded in. At 100% the menu stays fully solid.
 
 ### Window Position and Size
 
-The window position and size are saved automatically when moved or resized. Defaults:
+The menu remembers where you moved it and how you resized it.
 
-- Width: 1210 pixels
-- Height: 750 pixels
-
-Position is centered on first use if no saved position exists.
+- Default size: 1210 × 750 pixels
+- First open: centered on the screen
 
 ## Data Refresh
 
-The Settings page includes buttons to manually refresh data without closing and reopening the menu:
+The Data section pulls fresh information from the server without closing the menu:
 
-- **Refresh ban list** — Reloads the current banlist from disk
-- **Refresh cached players** — Reloads the cached player list
-- **Refresh permissions** — Re-fetches the admin's permissions from the server
+- **Refresh ban list** — re-checks the ban list and clears out expired bans.
+- **Refresh cached players** — reloads the list of players the server has seen.
+- **Refresh permissions** — re-checks your own permissions, which is handy right after they were changed.
 
 ## Anonymous Mode
 
-Toggle anonymous mode to hide your admin username in logs and webhook notifications. This is a per-session setting (not persisted).
+In the Privacy section, use the toggle to hide your admin name in moderation logs and Discord webhook messages for the actions you take.
 
-Requires the `easyadmin.anon` permission.
+Anonymous mode lasts for the current session only and turns off again when you leave the server. The option is only shown to admins with the `easyadmin.anon` permission.

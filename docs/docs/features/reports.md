@@ -6,7 +6,7 @@ Reports allow players to flag other players for rule violations. They are displa
 
 ### Player Reports
 
-Players can report other players using the report command. Reports are visible to admins in the NUI and can be claimed, processed, or closed.
+Players can report other players using the report command. A report names the reported player and a reason. Reports are visible to admins in the NUI and can be claimed, processed, or closed.
 
 ### Calladmin
 
@@ -29,6 +29,8 @@ Call an admin for assistance.
 Usage: `/calladmin [reason]`
 
 Requires `ea_enableCallAdminCommand` to be enabled (default: `true`).
+
+Each player must wait `ea_callAdminCooldown` seconds between calladmin requests. Default: `60`.
 
 Customize the command name:
 
@@ -59,7 +61,9 @@ set ea_MinReportModifierEnabled "true"
 
 Default: `true`
 
-The adjusted minimum is calculated as: `floor(playerCount / ea_MinReportModifier)`
+The modifier only applies when more than `ea_MinReportPlayers` players are online. The adjusted minimum is then:
+
+`round(playerCount / ea_MinReportModifier)`
 
 Configuration:
 
@@ -68,8 +72,10 @@ set ea_MinReportPlayers 12
 set ea_MinReportModifier 4
 ```
 
-- `ea_MinReportPlayers` — Minimum players online for the modifier to activate (default: `12`)
+- `ea_MinReportPlayers` — Players online before the modifier activates (default: `12`)
 - `ea_MinReportModifier` — Divisor for the calculation (default: `4`)
+
+For example, with the defaults above and 20 players online, a player is banned after 5 reports.
 
 ### Auto-Ban
 
@@ -93,13 +99,19 @@ Default: `true`
 
 Screenshot capture is built into EasyAdmin — no external resources required.
 
+### Report Webhook
+
+New reports are also posted to the report webhook. Set `ea_reportNotification`, or leave it unset to use `ea_moderationNotification`. See [Webhooks](../../configuration/webhooks).
+
 ## Report Lifecycle
 
 1. A player files a report via `/report` or `/calladmin`
 2. The report appears in the NUI Reports page and triggers notifications to online admins
 3. An admin claims the report (prevents duplicate handling)
-4. The admin processes the report (closes it)
+4. The admin processes the report (closes it), or closes all similar reports at once
 5. The report is removed from the list
+
+Reports are not saved between server restarts, and a report is removed automatically when either the reporter or the reported player disconnects.
 
 ## Permissions
 

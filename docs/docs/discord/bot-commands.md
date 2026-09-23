@@ -1,6 +1,8 @@
 # Bot Commands
 
-The Discord bot provides slash commands for server management. Each command requires the appropriate bot permission to execute.
+The Discord bot provides slash commands for server management. Every command needs its own permission, `easyadmin.bot.<command>`. Granting `easyadmin.bot` covers all of them. See [Bot Permissions](../../permissions/bot-permissions) for how to grant them.
+
+The owner of the Discord server the bot runs on has every permission automatically.
 
 ## User Actions
 
@@ -11,9 +13,9 @@ Ban a player from the server.
 Parameters:
 - `user` — Username or ID (required)
 - `reason` — Reason text (required)
-- `timeframe` — Duration in human-readable format (required). Examples: `30 mins`, `1 hour`, `2 weeks`, `permanent`
+- `timeframe` — Duration such as `30 mins`, `1 hour`, `2 weeks` or `permanent` (required)
 
-Permission: `easyadmin.bot.ban`
+Permission: `easyadmin.bot.ban`, plus `easyadmin.player.ban.temporary` for a timed ban or `easyadmin.player.ban.permanent` for a permanent ban.
 
 ### /unban
 
@@ -141,6 +143,8 @@ View details of a specific ban entry.
 Parameters:
 - `banid` — Ban ID number (required)
 
+Permission: `easyadmin.bot.baninfo`
+
 ### /announce
 
 Send an announcement to all players on the server.
@@ -163,29 +167,37 @@ Permission: `easyadmin.bot.cleanup`
 
 ### /refreshperms
 
-Refresh your EasyAdmin permissions. Optionally specify another user.
+Refresh your EasyAdmin permissions.
 
 Parameters:
 - `user` — Discord user to refresh permissions for (optional)
 
-Permission: `easyadmin.bot.refreshperms`
+Permission: none for a self-refresh. Refreshing another user, or using the `user` option at all, needs `easyadmin.bot.refreshperms`.
 
 ## Permission Reference
 
 | Permission | Commands |
 |------------|----------|
-| `easyadmin.bot.ban` | `/ban` |
-| `easyadmin.bot.unban` | `/unban` |
+| `easyadmin.bot.announce` | `/announce` |
+| `easyadmin.bot.ban` | `/ban` (see below) |
+| `easyadmin.bot.baninfo` | `/baninfo` |
+| `easyadmin.bot.cleanup` | `/cleanup` |
+| `easyadmin.bot.freeze` | `/freeze` |
+| `easyadmin.bot.history` | `/history` |
 | `easyadmin.bot.kick` | `/kick` |
-| `easyadmin.bot.mute` | `/mute`, `/unmute` |
-| `easyadmin.bot.freeze` | `/freeze`, `/unfreeze` |
-| `easyadmin.bot.slap` | `/slap` |
-| `easyadmin.bot.warn` | `/warn` |
-| `easyadmin.bot.screenshot` | `/screenshot` |
+| `easyadmin.bot.mute` | `/mute` |
+| `easyadmin.bot.notes` | `/notes` |
 | `easyadmin.bot.playerinfo` | `/playerinfo` |
 | `easyadmin.bot.playerlist` | `/playerlist` |
-| `easyadmin.bot.history` | `/history` |
-| `easyadmin.bot.notes` | `/notes` |
-| `easyadmin.bot.announce` | `/announce` |
-| `easyadmin.bot.cleanup` | `/cleanup` |
-| `easyadmin.bot.refreshperms` | `/refreshperms` |
+| `easyadmin.bot.refreshperms` | `/refreshperms` for another user |
+| `easyadmin.bot.screenshot` | `/screenshot` |
+| `easyadmin.bot.slap` | `/slap` |
+| `easyadmin.bot.unban` | `/unban` |
+| `easyadmin.bot.unfreeze` | `/unfreeze` |
+| `easyadmin.bot.unmute` | `/unmute` |
+| `easyadmin.bot.warn` | `/warn` |
+
+Two commands need more than their own bot permission:
+
+- `/ban` also needs `easyadmin.player.ban.temporary` for a timed ban, or `easyadmin.player.ban.permanent` for a permanent ban.
+- `/refreshperms` with no options needs no permission. Using the `user` option, even on yourself, needs `easyadmin.bot.refreshperms`.

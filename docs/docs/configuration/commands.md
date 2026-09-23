@@ -4,13 +4,13 @@ Configure the `/calladmin` and `/report` commands, and set up automatic actions 
 
 ## Calladmin Command
 
-Players use this command to request admin assistance.
+Players use this command to request admin assistance. They must give a reason.
 
 | Convar | Default | Description |
 |--------|---------|-------------|
 | `ea_enableCallAdminCommand` | `true` | Enable or disable the calladmin command |
 | `ea_callAdminCommandName` | `calladmin` | The command name players type (e.g., `calladmin`, `help`) |
-| `ea_callAdminCooldown` | `60` | Cooldown in seconds between uses per player |
+| `ea_callAdminCooldown` | `60` | Seconds a player must wait before calling an admin again |
 
 Example:
 
@@ -20,11 +20,17 @@ set ea_callAdminCommandName "help"
 set ea_callAdminCooldown 30
 ```
 
-When a player runs the command, admins receive a notification with the player's name, reason, and a report ID. The notification is sent to the report webhook (`ea_reportNotification`) or falls back to the moderation webhook.
+Usage by players:
+
+```
+/calladmin [reason]
+```
+
+Online admins receive a notification with the player's name, reason, and a report ID. Notifications go to the report webhook (`ea_reportNotification`), or to the moderation webhook (`ea_moderationNotification`) if no report webhook is set.
 
 ## Report Command
 
-Players use this command to report other players. When a player reaches the minimum report threshold, they are automatically banned.
+Players use this command to report other players. Once enough players have reported the same player, that player is automatically banned.
 
 | Convar | Default | Description |
 |--------|---------|-------------|
@@ -49,17 +55,19 @@ Usage by players:
 /report [player name or ID] [reason]
 ```
 
+Each player can report the same target only once.
+
 ### Report Modifier
 
-The report modifier scales the minimum report count based on the number of players online, preventing mass-report abuse on populated servers.
+Busy servers usually need more reports before an auto-ban, which makes mass-report abuse harder.
 
 | Convar | Default | Description |
 |--------|---------|-------------|
 | `ea_MinReportModifierEnabled` | `true` | Enable the player-count-based report modifier |
-| `ea_MinReportPlayers` | `12` | Minimum number of players online for the modifier to activate |
-| `ea_MinReportModifier` | `4` | Divisor for calculating the adjusted minimum (players / divisor = minimum reports) |
+| `ea_MinReportPlayers` | `12` | Player count the modifier activates above |
+| `ea_MinReportModifier` | `4` | Whole number to divide the player count by |
 
-How it works: when the player count exceeds `ea_MinReportPlayers`, the minimum report count is recalculated as `floor(playerCount / ea_MinReportModifier)`. For example, with 24 players online and a divisor of 4, the minimum becomes 6 reports instead of the default 3.
+How it works: once more than `ea_MinReportPlayers` players are online, the minimum report count is recalculated by dividing the player count by `ea_MinReportModifier` and rounding to the nearest whole number (halves round up). With 24 players online and a divisor of 4, the minimum becomes 6 reports instead of 3; with 26 players it becomes 7.
 
 To disable the modifier (use a fixed minimum regardless of player count):
 
@@ -87,4 +95,4 @@ set ea_warningBanTime 2592000
 
 When a player is warned, they receive an in-game warning message showing the reason, current warning count, and maximum. When the limit is reached, the configured action (kick or ban) is executed automatically.
 
-Warning state is tracked per-player session and is not persisted to the banlist. Resetting the server clears all warnings.
+Warnings are kept in memory only. They are not saved to the banlist, and restarting the server clears them.

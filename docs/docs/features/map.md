@@ -4,7 +4,7 @@ The Map page shows live player positions on the GTA V world map, letting you see
 
 ## Map Styles
 
-Three tile styles are available, switchable from the toolbar:
+On GTA V the tiles come in three styles, switchable from the toolbar above the map:
 
 | Style | Description |
 |-------|-------------|
@@ -12,7 +12,7 @@ Three tile styles are available, switchable from the toolbar:
 | Game | In-game render with labels |
 | Print | Muted print-style map |
 
-Tiles are served from Rockstar's Social Club tile CDN (`s.rsg.sc`) — no API key required.
+Tiles are served from Rockstar's Social Club tile CDN, so no API key is required. RedM has no tile styles at all (see [RedM](#redm) below).
 
 ## Player Markers
 
@@ -25,28 +25,38 @@ Tiles are served from Rockstar's Social Club tile CDN (`s.rsg.sc`) — no API ke
 
 A legend explaining the markers is shown in the corner of the map.
 
-The server streams positions at ~2 Hz while the menu is open and the Map page is showing. Collection happens server-side because the server holds authoritative (OneSync) positions for every player — a client only sees peds within its own streaming range and routing bucket, so a client-side read would miss or zero out players the client cannot stream.
+Positions are collected by the server and streamed to the page about twice a second while it is open, so players are shown even when they are far away or in another routing bucket.
 
-Clicking a marker opens a popup with the player's name, ID, and coordinates, plus actions available to you:
+Clicking a marker opens a popup with the player's name, ID, and coordinates, plus the actions you are allowed to use:
 
-- **Spectate** — requires `player.spectate`
-- **Teleport** — requires `player.teleport.single`
-- **Details** — opens the player's detail page
+- **Spectate** — watch that player (requires `easyadmin.player.spectate`)
+- **Teleport** — move yourself to that player (requires `easyadmin.player.teleport.single`)
+- **Details** — open the player's detail page
+
+## Teleporting to a Location
+
+On GTA V you can travel to any spot on the map. Click a part of the map that has no marker on it and a small "Teleport here" popup opens at that spot, showing its coordinates. Pressing **Teleport** moves your character to that area, on the ground.
+
+- This requires `easyadmin.player.teleport.single`. Without it, clicking the map does nothing.
+- The target is approximate: you arrive close to the spot you clicked, not exactly on it.
+- RedM's coordinate grid does not support click-to-teleport.
 
 ## RedM
 
-RedM has no tile source, so positions are rendered on a coordinate grid instead (1 unit = 2 m, north is up). The grid auto-scales to the players' positions and shows per-player coordinates on hover.
+RedM has no tile source, so positions are drawn on a coordinate grid instead (1 unit = 2 m, north is up). The grid auto-scales to the players' positions and shows each player's coordinates on hover. Click a player's dot to open their detail page.
 
 ## Notes
 
-- The map is a flat orthographic projection of the game world, fitted against the tile imagery (landmark residuals < 30 m).
-- The deepest zoom with full island coverage is used as the maximum zoom.
+- The map is a flat projection of the game world, so marker positions and teleport targets are approximate.
+- Zooming in stops at the deepest level that still covers the whole island.
 - The stream starts when the Map page opens and stops when the page closes or the menu is hidden.
-- Players who are still loading in are skipped until their ped exists.
-- The page shows an "awaiting positions" state until the first update arrives.
+- Players who are still loading in are not shown until they exist in the world.
+- The page shows an "awaiting positions" message until the first update arrives.
 
 ## Permissions
 
 | Permission | Description |
 |------------|-------------|
-| `easyadmin.server.map.view` | Access the Map page |
+| `easyadmin.server.map.view` | Open the Map page |
+| `easyadmin.player.spectate` | Spectate a player from the map |
+| `easyadmin.player.teleport.single` | Teleport to a player or to a clicked map location |

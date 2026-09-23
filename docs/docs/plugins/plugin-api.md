@@ -21,8 +21,8 @@ registration:
 
 ### `exports.EasyAdmin:RegisterPlugin(config)`
 
-Register a plugin from your resource's **server script**. The server is the
-source of truth — it stores the plugin and broadcasts to all clients.
+Register a plugin from your resource's **server script** only. The server is
+the source of truth — it stores the plugin and broadcasts it to all clients.
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
@@ -30,12 +30,17 @@ exports.EasyAdmin:RegisterPlugin({
   name = 'My Plugin',
   version = '1.0.0',
   icon = 'box',
+  permissions = { 'plugin.my-plugin', 'plugin.my-plugin.admin' },
   navItems = { ... },
   pages = { ... },
   playerDetailTabs = { ... },
   dashboardWidgets = { ... },
 })
 ```
+
+Declare every permission you gate UI on in `permissions`. A gate that uses an
+undeclared permission hides that nav item, tab or page from every admin. The
+ACE name of a permission is always `easyadmin.<permission>`.
 
 See [Creating a Plugin](../creating-plugins) for the full config shape.
 
@@ -81,57 +86,75 @@ end)
 
 | Parameter | Type | Description |
 |---|---|---|
-| `source` | `number` | Player server ID (set globally by FiveM) |
+| `source` | `number` | Player server ID — passed as the handler's first argument |
 | `data` | `table` | Payload from the NUI |
-| `cb` | `function(result)` | Callback — call with response table |
+| `cb` | `function(result)` | Callback — call with a response table |
+
+Read the `source` argument. Do not rely on the global `source` variable, which
+is not set for this event.
 
 > **Server handlers must always be permission-guarded.** The bridge does
 > not perform automatic permission checks.
 
-## NUI Messages
+### Handler Constraints
 
-### `plugin:<id>:update`
+Handlers must call `cb` within about 500 ms. Dispatch falls back after 500 ms
+and the NUI waits 600 ms for server actions, so a slower handler is reported as
+`no handler registered` / `no server handler`. `cb` is single-shot: further calls
+from the same request are ignored.
 
-Push a schema refresh to the NUI:
-
-```lua
-SendNUIMessage({ action = 'plugin:my-plugin:update' })
-```
-
-The NUI re-fetches the current view's `renderAction`.
+Long-running work must be finished before the request (for example cached).
+There is no supported way for a plugin to push a refresh to the NUI: the view
+re-fetches when it is opened, and whenever an action returns a non-schema result.
 
 ## Other EasyAdmin Exports
 
-These exports exist independently of the plugin system and can be used by
-any external resource:
+These exports exist independently of the plugin system. The tables below are a
+curated subset for plugin authors, not the full export list.
+
+### Permissions and Admin State
+
+| Export | Parameters | Description |
+|--------|-----------|-------------|
+| `EasyAdmin:DoesPlayerHavePermission` | `player, permission` | Server: pass a player server ID. Client: pass `-1` for the local player |
+| `EasyAdmin:DoesPlayerHavePermissionForCategory` | `player, prefix` | True if any permission starting with `prefix` is held |
+| `EasyAdmin:IsPlayerAdmin` | `playerId` | True if the player is a known online admin |
+| `EasyAdmin:GetOnlineAdmins` | (none) | Table of online admins keyed by server ID |
+| `EasyAdmin:CanTargetPlayerForModeration` | `src, target, immuneMessage?` | `false` when the target is immune to `src` |
+| `EasyAdmin:announce` | `message, sender?` | Send a global announcement. Returns `false` for an empty message |
+| `EasyAdmin:getName` | `playerId, anonymousDisabled?, identifierEnabled?` | Player name, resolved from cache when possible |
+| `EasyAdmin:isPlayerOnline` | `playerId` | Cache-backed online check |
+
+### Player Actions
+
+| Export | Parameters | Description |
+|--------|-----------|-------------|
+| `EasyAdmin:mutePlayer` | `playerId, toggle, source` | Mute or unmute a player |
+| `EasyAdmin:warnPlayer` | `source, playerId, reason` | Warn a player (moderator first) |
+| `EasyAdmin:getPlayerWarnings` | `playerId` | Number of warnings on record |
 
 ### Ban Management
 
 | Export | Parameters | Description |
 |--------|-----------|-------------|
-| `EasyAdmin:addBan` | `playerId, reason, expires, banner` | Add a new ban |
+| `EasyAdmin:addBan` | `playerId, reason, expires, banner` | Add a new ban. `playerId` may be a server ID or a table of identifiers |
 | `EasyAdmin:unbanPlayer` | `banId` | Remove a ban by ID |
 | `EasyAdmin:fetchBan` | `banId` | Fetch a ban entry |
 | `EasyAdmin:GetFreshBanId` | (none) | Get the next available ban ID |
 | `EasyAdmin:IsIdentifierBanned` | `identifier` | Check if an identifier is banned |
 
-### Action History
+`addBan` fires the `EasyAdmin:addBan` event (see below). Called from your own
+resource there is no invoking player, so `banner` is what is recorded as the
+moderator.
+
+### History, Notes, Reports and Screenshots
 
 | Export | Parameters | Description |
 |--------|-----------|-------------|
 | `EasyAdmin:getActionHistory` | `identifiers` | Get action history for identifiers |
-
-### Screenshots
-
-| Export | Parameters | Description |
-|--------|-----------|-------------|
-| `EasyAdmin:isScreenshotInProgress` | (none) | Check if a screenshot is in progress |
-
-### Reports
-
-| Export | Parameters | Description |
-|--------|-----------|-------------|
+| `EasyAdmin:getAdminNotes` | `identifiers` | Get admin notes for identifiers |
 | `EasyAdmin:getAllReports` | (none) | Get all active reports |
+| `EasyAdmin:isScreenshotInProgress` | (none) | Check if a screenshot is in progress |
 
 ### Webhooks
 
@@ -174,16 +197,20 @@ exports.EasyAdmin:sendWebhook("Action logged", {
 
 ## Events
 
-Listen for these events in your resource:
+### Listen for these events
 
 | Event | Arguments | Description |
 |-------|-----------|-------------|
-| `EasyAdmin:AnnouncementSent` | `message`, `sender?` | Triggered server-side when an announcement is sent. `sender` is `{ name: string, id: number }` when available, or `nil` for external callers (e.g. Discord bot, direct export call). |
-| `EasyAdmin:reportAdded` | `reportData` | Triggered when a report is filed |
-| `EasyAdmin:reportClaimed` | `reportData` | Triggered when a report is claimed |
-| `EasyAdmin:reportRemoved` | `reportData` | Triggered when a report is closed |
-| `EasyAdmin:addBan` | `banData` | Triggered when a ban is added |
-| `EasyAdmin:LogAction` | `actionData` | Triggered when an action is logged |
+| `EasyAdmin:Plugin:registered` | `config` | A plugin was registered — use it to initialise client-side state |
+| `EasyAdmin:Plugin:unregistered` | `pluginId` | A plugin was removed, usually because its resource stopped |
+| `EasyAdmin:AnnouncementSent` | `message`, `sender?` | An announcement was sent. `sender` is `{ name: string, id: number }` when available, or `nil` for external callers (e.g. Discord bot, direct export call) |
+| `EasyAdmin:reportAdded` | `report` | A report was filed |
+| `EasyAdmin:reportClaimed` | `report` | A report was claimed |
+| `EasyAdmin:reportRemoved` | `report` | A report was closed |
+| `EasyAdmin:addBan` | `playerId`, `reason`, `expires`, `banner?` | A ban was added |
+
+`EasyAdmin:addBan` passes positional arguments, not a table. `banner` is absent
+for bans raised automatically from player reports.
 
 ### `EasyAdmin:AnnouncementSent` — Forward to other systems
 
@@ -198,12 +225,39 @@ AddEventHandler('EasyAdmin:AnnouncementSent', function(message, sender)
 end)
 ```
 
+### `EasyAdmin:LogAction` — Log an action
+
+This is a server-side event you **trigger**, not one you listen to. It is not a
+net event, so fire it from server code with `TriggerEvent`:
+
+```lua
+TriggerEvent('EasyAdmin:LogAction', {
+  action = 'CUSTOM',
+  identifiers = { 'license:1100001123456789' },
+  reason = 'Example entry',
+  moderator = 'Console',
+  moderatorIdents = {},
+  banid = '1234',
+}, playerId)
+```
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| `action` | Yes | Action type string, stored as-is |
+| `identifiers` | No | Identifiers to attach the entry to. When omitted, the identifiers of `playerId` are used |
+| `reason` | No | Reason or description |
+| `moderator` | No | Moderator name. Defaults to `Console` |
+| `moderatorIdents` | No | Moderator identifiers. Defaults to an empty table |
+| `banid` | No | Associated ban ID |
+
+The second argument (`playerId`) is only needed when `identifiers` is omitted.
+
 ## Example
 
 ```lua
 -- Listen for new bans
-AddEventHandler('EasyAdmin:addBan', function(banData)
-  print('New ban: ' .. banData.reason)
+AddEventHandler('EasyAdmin:addBan', function(playerId, reason, expires, banner)
+  print('New ban: ' .. tostring(reason))
 end)
 
 -- Add a ban programmatically

@@ -1,118 +1,78 @@
 # Command Reference
 
-All EasyAdmin commands are server-side and can be run from the server console or in-game by players with the appropriate permissions.
+EasyAdmin commands can be run from in-game chat, the server console, or the NUI menu. Each entry lists where the command can be used, the arguments it takes, and the permission it needs. Server-side commands can always be run from the server console.
+
+## Opening the Menu
+
+### /easyadmin
+
+Open the EasyAdmin menu.
+
+Alias: `/ea`
 
 ## Ban and Kick
 
 ### /ban
 
-Ban a player.
+Permanently ban a player. In-game only.
 
 Usage: `/ban [playerID] [reason]`
 
-Requires: `easyadmin.player.ban.temporary` or `easyadmin.player.ban.permanent`
+Requires: `easyadmin.player.ban.permanent`
+
+Temporary bans are issued from the NUI menu.
 
 ### /unban
 
-Unban a player by ban ID.
+Unban a player by ban ID or by identifier.
 
-Usage: `/unban [banID]`
+Usage: `/unban [banID or identifier]`
 
 Requires: `easyadmin.player.ban.remove`
 
-## Player Actions
-
 ### /kick
 
-Kick a player.
+Kick a player. In-game only.
 
 Usage: `/kick [playerID] [reason]`
 
 Requires: `easyadmin.player.kick`
 
+## Player Actions
+
 ### /slap
 
-Slap a player (remove health).
+Slap a player, removing the given amount of health.
 
 Usage: `/slap [playerID] [amount]`
 
 Requires: `easyadmin.player.slap`
 
-### /freeze
-
-Freeze or unfreeze a player.
-
-Usage: `/freeze [playerID]`
-
-Requires: `easyadmin.player.freeze`
-
-### /mute
-
-Mute or unmute a player.
-
-Usage: `/mute [playerID]`
-
-Requires: `easyadmin.player.mute`
-
-### /warn
-
-Warn a player.
-
-Usage: `/warn [playerID] [reason]`
-
-Requires: `easyadmin.player.warn`
-
-### /screenshot
-
-Take a screenshot of a player's screen.
-
-Usage: `/screenshot [playerID]`
-
-Requires: `easyadmin.player.screenshot`
-
 ### /spectate
 
-Spectate a player.
+Spectate a player. In-game only.
 
 Usage: `/spectate [playerID]`
 
 Requires: `easyadmin.player.spectate`
 
-## Teleport
+## Reports
 
-### /tp
+### /calladmin
 
-Teleport to a player.
+Ask an admin for help. Available to every player.
 
-Usage: `/tp [playerID]`
+Usage: `/calladmin [reason]`
 
-Requires: `easyadmin.player.teleport.single`
+### /report
 
-### /tpp
+Report a player. Available to every player.
 
-Teleport a player to you.
+Usage: `/report [player name or ID] [reason]`
 
-Usage: `/tpp [playerID]`
-
-Requires: `easyadmin.player.teleport.single`
-
-### /tpe
-
-Teleport all players to you.
-
-Usage: `/tpe`
-
-Requires: `easyadmin.player.teleport.everyone`
+Both commands can be renamed or turned off in the server configuration. See [Command Configuration](../../configuration/commands).
 
 ## Server Management
-
-### /cleanup
-
-Clean up entities.
-
-Usage: `/cleanup [cars|peds|props]`
-
-Requires: `easyadmin.server.cleanup.cars`, `easyadmin.server.cleanup.peds`, or `easyadmin.server.cleanup.props`
 
 ### /setgametype
 
@@ -132,51 +92,41 @@ Requires: `easyadmin.server.convars`
 
 ## Information
 
-### /printidentifiers
+### /ea_printIdentifiers
 
-Print a player's identifiers.
+Print a player's identifiers to the server console. Server console only.
 
-Usage: `/printidentifiers [playerID]`
-
-### /history
-
-View a player's action history.
-
-Usage: `/history [playerID]`
-
-Requires: `easyadmin.player.actionhistory.view`
-
-### /notes
-
-View admin notes for a player.
-
-Usage: `/notes [playerID]`
-
-Requires: `easyadmin.player.adminnotes.view`
+Usage: `/ea_printIdentifiers [playerID]`
 
 ## Shortcuts and Reminders
 
 ### /ea_addShortcut
 
-Add a reason text shortcut (non-persistent).
+Add a reason shortcut.
 
 Usage: `/ea_addShortcut [keyword] [full text]`
 
 Requires: `easyadmin.server.shortcut.add`
 
+Shortcuts are not saved and are lost when the server restarts. See [Shortcuts, Reminders, and Allowlist](../../configuration/shortcuts).
+
 ### /ea_addReminder
 
-Add a chat reminder (non-persistent).
+Add a chat reminder.
 
 Usage: `/ea_addReminder [message text]`
 
 Requires: `easyadmin.server.reminder.add`
 
+Reminders are not saved and are lost when the server restarts.
+
 ## Backups
 
 ### /ea_createBackup
 
-Create a banlist backup manually.
+Create a banlist backup.
+
+Requires: `easyadmin.server`
 
 ### /ea_loadBackup
 
@@ -184,15 +134,15 @@ Load a banlist backup by filename.
 
 Usage: `/ea_loadBackup [filename]`
 
-## Discord Bot
+Requires: `easyadmin.server`
 
-### /ea_addBotLogForwarding
+## Webhooks
 
-Add a log forwarding rule for the Discord bot.
+### /ea_testWebhook
 
-Usage: `/ea_addBotLogForwarding [feature] [channelID]`
+Send a test message to the configured webhooks.
 
-Run without arguments to list current forwarding rules.
+Requires: `easyadmin.server`
 
 ### /ea_excludeWebhookFeature
 
@@ -200,15 +150,26 @@ Exclude features from webhook notifications.
 
 Usage: `/ea_excludeWebhookFeature [feature1] [feature2] ...`
 
-Run without arguments to reset exclusions.
+Run without arguments to reset the exclusions.
 
-### /ea_testWebhook
+Requires: `easyadmin.server`
 
-Test the configured webhook URL.
+## Discord Bot
+
+### /ea_addBotLogForwarding
+
+Send a feature's log messages to a Discord channel.
+
+Usage: `/ea_addBotLogForwarding [feature] [channelID]`
+
+Requires: `easyadmin.server`
+
+Forwarding rules are not saved.
 
 ## See Also
 
 - [Permissions Overview](../../permissions) — Permission requirements for commands
-- [Configuration](../../configuration/commands) — Command configuration options
-- [Reports](../../features/reports) — Report and calladmin commands
-- [Shortcuts & Reminders](../../features/reminders-and-shortcuts) — Shortcut and reminder commands
+- [Command Configuration](../../configuration/commands) — Command names and options
+- [Reports](../../features/reports) — The calladmin and report features
+- [Shortcuts & Reminders](../../features/reminders-and-shortcuts) — Shortcut and reminder options
+- [Discord Bot Commands](../../discord/bot-commands) — Slash commands run from Discord

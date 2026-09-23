@@ -1,36 +1,28 @@
 # Basic Configuration
 
-These convars control core behavior: language, ban screen appearance, keybinds, and connection deferral.
+These convars control core behavior: language, ban screen appearance, keybinds, and connection deferral. Add them to your `server.cfg`.
 
 ## Language
 
-Sets the UI language for EasyAdmin. Language files are stored in the `language/` directory.
+Sets the language used across the EasyAdmin menu and messages. Language files live in the `language/` folder of the resource.
 
 ```
-setr ea_LanguageName "en"
+set ea_LanguageName "en"
 ```
 
 Available languages: `de` (German), `en` (English), `es` (Spanish), `fr` (French), `it` (Italian), `nl` (Dutch), `pl` (Polish).
 
 Default: `en`
 
-Use `setr` so the language persists client-side.
-
 ## Menu Keybind
 
 ### FiveM
 
-On FiveM, the menu key is set through the FiveM settings UI. Press F1 in-game, go to Key Bindings, find "Open EasyAdmin", and assign a key. The `/easyadmin` or `/ea` chat commands always work as a fallback.
+The menu key is set through the FiveM settings UI. In game, open the FiveM settings, go to Key Bindings, find "Open EasyAdmin", and assign a key. The `/easyadmin` or `/ea` chat commands always work as a fallback.
 
 ### RedM
 
-On RedM, set the key in your `server.cfg`:
-
-```
-setr ea_defaultKey "F2"
-```
-
-Use a standard GTA V key name such as `F2`, `K`, or `LCTRL`. If not set, the menu can only be opened via the `/easyadmin` command.
+RedM has no menu key. Open the menu by typing `/easyadmin` or `/ea` in the chat.
 
 ## Ban Screen
 

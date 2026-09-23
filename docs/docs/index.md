@@ -193,7 +193,7 @@ Find what you need by task:
 
 | Section | Contents |
 |---------|----------|
-| **Getting Started** | Installation, basic configuration, permissions setup |
+| **Home / Installation / Permissions** | Installation, admin access, permissions setup |
 | **Discord Integration** | Bot setup, commands, logging, chat bridge, server status |
 | **Configuration** | Webhooks, commands, action history, backups, shortcuts, advanced options |
 | **Features** | Ban list, reports, screenshots, reminders, statistics, monitoring tools |

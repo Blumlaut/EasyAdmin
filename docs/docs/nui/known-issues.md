@@ -1,26 +1,36 @@
 # NUI Known Issues
 
-## Unsupported CSS Features
+## Blur Effects
 
-### `backdrop-filter`
+`backdrop-filter` (and `-webkit-backdrop-filter`) does render in FiveM's CEF, but the blur is
+unreliable: it can flicker, keep repainting and cost frame rate. EasyAdmin uses it on the glass
+panels, dialogs and the warning overlay.
 
-The `backdrop-filter` and `-webkit-backdrop-filter` CSS properties are not supported in FiveM's CEF build. The blur effect is not applied. Do not use `backdrop-filter` in NUI styles.
+If a blurred area flickers, or the UI stutters while a blurred panel is on screen:
+
+- keep blurred layers few and static — do not animate or scroll large blurred surfaces
+- remove the blur from the affected element and test again
+- never rely on the blur for legibility, because the panels behind it are semi-transparent — text must
+  stay readable without it
 
 ## OSR Rendering
 
 ### Backgrounded Rendering
 
-The NUI runs in Off-Screen Rendering (OSR) mode. Elements rendered outside the visible conditional in the main App component may not paint correctly when the window is folded or backgrounded.
+The NUI runs in Off-Screen Rendering (OSR) mode. Elements rendered outside the visible block may not
+paint correctly when the window is folded or backgrounded.
 
 ### Overlay Components
 
-Toast notifications and warning overlays must be inside the visible block in App.tsx to render correctly when the NUI is backgrounded.
+Full-screen overlays (the warning overlay and the screenshot viewer) must be inside the visible block
+so they paint when the window is backgrounded. Panel streams are deliberately kept outside it so they
+stay connected while the menu is closed — that is intentional, not a bug.
 
 ## Modal System
 
 ### Positioning
 
-Modals render via `ModalProvider` as siblings of the main `.ea-window` element, not as nested children. The overlay uses:
+Dialogs render as siblings of the main window, not as nested children. The overlay uses:
 
 ```css
 position: fixed;
@@ -28,40 +38,51 @@ inset: 0;
 z-index: 9999;
 ```
 
+The warning overlay uses `z-index: 10000`, so it always sits above dialogs.
+
 ### Background Colors
 
-Dialog backgrounds use hardcoded solid colors (`#1e293b`) rather than CSS variables, as variable backgrounds may not resolve reliably in OSR mode.
+Dialog backgrounds are hardcoded solid colours rather than CSS variables, because variable backgrounds
+may not resolve reliably in OSR mode:
+
+- background `#161b22`
+- border `#30363d`
 
 ### Shadow
 
-Dialogs use a hardcoded box-shadow: `0 4px 16px rgba(0, 0, 0, 0.4)`
+Dialogs use the shared large shadow: `0 8px 24px rgba(0, 0, 0, 0.6)`.
 
 ## Window Positioning
 
-Never use hardcoded pixel values for the main window or layout dimensions. Use:
+Never use hardcoded pixel values for the main window or for layout inside it. The window is sized and
+positioned in code, not CSS: it defaults to 1210x750, cannot shrink below 500x400, and maximises to the
+viewport with a small margin. Use:
 
-- `min(92vw, 1210px)` for width
-- `min(85vh, 750px)` for height
 - CSS custom properties for spacing and sizing
-- Relative units (`rem`, `em`, `%`, `vw`, `vh`) over absolute `px`
+- relative units (`rem`, `em`, `%`, `vh`) over absolute `px`
 
 ## CEF Limitations
 
 ### JavaScript
 
-The FiveM CEF build does not execute JavaScript for NUI pages — the React app is pre-built and served from `nui/dist/`. Dynamic script injection is not supported.
+The UI is a normal JavaScript app and runs normally in CEF. Source changes only take effect after the
+bundle is rebuilt and the resource restarted — editing source alone changes nothing in-game.
 
 ### WebGL
 
-WebGL support may be limited depending on the FiveM build and GPU drivers. Charts in the Network Monitor use Canvas 2D, not WebGL.
+Charts in the Network Monitor are drawn with Canvas 2D, not WebGL. Screenshot capture and live
+streaming do use WebGL, so blank or black frames in those features usually point to a GPU/WebGL problem
+rather than a UI bug.
 
 ## Cross-Resolution Testing
 
-Always test NUI changes on multiple screen resolutions:
+Always test NUI changes on several screen resolutions:
 
-- 720p (1280x720) — ultrawide and common lower-res
-- 1080p (1920x1080) — standard
-- 1440p (2560x1440) — high-res
-- 4K (3840x2160) — ultra high-res
+- 1280x720 (720p) — low-res
+- 1920x1080 (1080p) — standard
+- 2560x1440 (1440p) — high-res
+- 2560x1080 / 3440x1440 — ultrawide
+- 3840x2160 (4K) — ultra high-res
 
-The NUI should scale appropriately on all resolutions.
+The window is clamped to the viewport, so smaller screens shrink the panel instead of clipping it.
+Check that nothing overflows at the smallest size.

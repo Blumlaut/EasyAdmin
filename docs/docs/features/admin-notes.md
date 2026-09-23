@@ -12,17 +12,35 @@ Admin notes allow moderators to leave persistent notes on player profiles. Notes
 
 ## Usage
 
-Admins with the appropriate permissions can add, view, and delete notes from the NUI player detail page. Notes are associated with the player's identifiers and persist even if the player changes their display name.
+Admins with the appropriate permissions can add, view, and delete notes from the NUI player detail page. Note content is limited to 512 characters.
+
+Notes are attached to the player's identifiers, so they follow a player across name changes and reconnects. A note is shown for a player when it shares **any** identifier with them — one match is enough.
+
+Notes can also be read from Discord with `/notes`, which requires the `easyadmin.bot.notes` permission.
+
+## Configuration
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_enableAdminNotes` | `true` | Reserved. EasyAdmin does not use this setting yet, so changing it has no effect |
 
 ## Storage
 
-Notes are stored in `resources/EasyAdmin/admin_notes.json`. Each note contains:
+Notes are stored in `resources/EasyAdmin/data/notes.json`. On first load, a legacy `notes.json` in the resource root is migrated to the new path automatically.
+
+Each note contains:
 
 | Field | Description |
 |-------|-------------|
+| `time` | When the note was created, formatted as `DD/MM/YYYY HH:MM` |
 | `id` | Unique note ID |
-| `playerIdentifiers` | Player identifiers the note is attached to |
-| `author` | Name of the admin who created the note |
-| `authorIdentifiers` | Identifiers of the author |
-| `text` | Note content |
-| `timestamp` | Unix timestamp of creation |
+| `content` | Note text |
+| `idents` | Player identifiers the note is attached to |
+| `moderator` | Name of the admin who created the note |
+| `moderatorIdents` | Identifiers of the admin who created the note |
+
+## See Also
+
+- [Action History](../action-history) — Moderation actions recorded for a player
+- [Action History and Admin Notes](../../configuration/action-history) — Convar and permission reference
+- [Discord Bot Commands](../../discord/bot-commands) — `/notes`

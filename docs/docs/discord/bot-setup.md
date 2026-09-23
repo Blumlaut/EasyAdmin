@@ -45,10 +45,12 @@ set ea_botToken "your-bot-token-here"
 Restart your server. If the bot connects successfully, you will see a message in the console:
 
 ```
-[    script:EasyAdmin] Logged in as BotName#1234!
+[    script:EasyAdmin] Logged in as BotName!
 ```
 
 The bot will appear online in your Discord server.
+
+Upgrading from EasyAdmin 7.x? If your `server.cfg` sets `ea_botGuild`, keep it. EasyAdmin uses it once to remove the old server-specific copy of its commands from that Discord server. A fresh install does not need it — bot commands now work in every server the bot is in.
 
 ## Bot Permissions
 
@@ -56,9 +58,10 @@ The bot requires specific Discord channel permissions to function:
 
 - **Send Messages** — For chat bridge and status updates
 - **View Channels** — To read messages in the chat bridge channel
+- **Manage Messages** — So the bot can delete messages posted in the server status channel
 - **Embed Links** — For formatted messages
 - **Read Message History** — For chat bridge functionality
-- **Use Slash Commands** — Required for bot commands
+- **Use Application Commands** — Required for bot commands
 
 The invite URL above includes the necessary permissions. If you customize the invite, ensure these permissions are granted.
 

@@ -4,11 +4,13 @@ EasyAdmin supports mapping Discord roles to FiveM ACE permission groups. This al
 
 ## How It Works
 
-When a player joins the server, EasyAdmin reads their Discord roles and applies corresponding ACE permissions. Permissions sync:
+When a player connects to the server, EasyAdmin reads their Discord roles and applies the matching ACE permissions. Permissions sync:
 
-- When a player connects to the server
-- When a player runs `/refreshperms` in Discord
-- When Discord role changes are detected (via the `guildMemberUpdate` event)
+- When a player connects to the server (before they spawn)
+- When a member runs `/refreshperms` in Discord
+- When a member's Discord roles change
+
+This needs the Discord bot to be set up (`ea_botToken`) and present in the same Discord server as the member. See [Bot Setup](../bot-setup).
 
 ## Granting Permissions
 
@@ -59,8 +61,17 @@ add_principal role:655500055000 group.moderator
 
 ## Permission Priority
 
-ACE permission evaluation follows FiveM's standard priority rules:
+FiveM's ACE system follows two rules:
 
-1. Specific `add_ace` entries override group membership
-2. `allow` takes precedence over `deny`
-3. More specific permissions (e.g., `easyadmin.player.kick`) override broader ones (e.g., `easyadmin.player`)
+- **A `deny` always wins.** If any `allow` and any `deny` apply to a permission, it is denied.
+- **A parent permission covers everything below it.** Granting `easyadmin.player` also grants `easyadmin.player.kick`, and denying `easyadmin.player` denies `easyadmin.player.kick` too.
+
+Because a `deny` on a broad permission blocks all of its children, a narrower `allow` cannot win it back:
+
+```
+# Kicking is allowed...
+add_ace group.trialadmin easyadmin.player.kick allow
+
+# ...but this deny blocks every EasyAdmin permission, kicking included
+add_ace group.trialadmin easyadmin deny
+```

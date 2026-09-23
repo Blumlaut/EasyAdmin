@@ -11,7 +11,7 @@ renders using its built-in components.
 ```lua
 -- fxmanifest.lua (in YOUR resource)
 fx_version 'cerulean'
-game 'gta5'
+game 'gta5' -- RedM: use 'rdr3'. Both: games { 'gta5', 'rdr3' }
 
 dependencies { 'EasyAdmin' }
 
@@ -31,6 +31,8 @@ exports.EasyAdmin:RegisterPlugin({
   version = '1.0.0',
   icon = 'box',
 
+  permissions = { 'plugin.my-plugin', 'plugin.my-plugin.advanced' },
+
   navItems = {
     { id = 'plugin:my-plugin', label = 'My Plugin', icon = 'box' },
   },
@@ -42,16 +44,24 @@ exports.EasyAdmin:RegisterPlugin({
 
 | Field | Required | Description |
 |---|---|---|
-| `id` | Yes | Unique plugin id |
+| `id` | Yes | Unique plugin id. The only field EasyAdmin validates |
 | `name` | Yes | Display name |
 | `version` | Yes | Version string |
+| `author` | No | Author name |
+| `description` | No | Short description |
 | `icon` | No | Default icon for nav items |
 | `permission` | No | Hides everything if admin lacks this permission |
-| `permissions` | No | Array of permission keys this plugin uses |
+| `permissions` | No | Permission keys this plugin uses. Every gate must be listed here |
 | `navItems` | No | Sidebar entries |
 | `pages` | No | Full-page views |
 | `playerDetailTabs` | No | Tabs in the player detail page |
 | `dashboardWidgets` | No | Cards on the dashboard |
+
+`name` and `version` must be set for the UI to display your plugin, even though
+EasyAdmin only rejects a registration without an `id`.
+
+Registering the same `id` again replaces the previous registration. When your
+resource stops, EasyAdmin removes the plugin and its permissions automatically.
 
 ### Nav items
 
@@ -60,14 +70,19 @@ navItems = {
   { id = 'plugin:my-plugin', label = 'My Plugin', icon = 'box' },
   -- Multi-page:
   { id = 'plugin:my-plugin:settings', label = 'Settings', icon = 'settings' },
-  -- Permission-gated:
-  { id = 'plugin:my-plugin:admin', label = 'Admin', icon = 'shield', permission = 'plugin.my-plugin.admin' },
+  -- Permission-gated, with a badge:
+  { id = 'plugin:my-plugin:queue', label = 'Queue', icon = 'list',
+    permission = 'plugin.my-plugin.advanced', badge = 3 },
+  -- Placeholder that cannot be opened yet:
+  { id = 'plugin:my-plugin:soon', label = 'Coming Soon', icon = 'clock', disabled = true },
 },
 ```
 
-Each `id` must match a page's `view`.
+`id` is used as the target view unless you set `view` explicitly, and that
+target must match a page's `view`.
 
-The `permission` field hides the nav item from admins without that permission.
+`permission` hides the nav item from admins without that permission, `badge`
+shows a small counter, and `disabled = true` greys the item out.
 
 ### Categories (dropdown nav items)
 
@@ -105,9 +120,12 @@ pages = {
 ```lua
 playerDetailTabs = {
   { id = 'notes', label = 'Notes', icon = 'book-open', renderAction = 'renderTab' },
-  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.admin', renderAction = 'renderAdminTab' },
+  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.advanced', renderAction = 'renderAdminTab' },
 },
 ```
+
+Every permission used as a gate here must also be listed in the plugin's
+`permissions` array — see [Permissions](#permissions).
 
 ### Dashboard widgets
 
@@ -143,6 +161,10 @@ The handler receives `data.context`:
 | `target` | `'page'`, `'widget'`, or `'player-tab'` |
 | `playerId` | Player server ID (only for player tabs) |
 
+Handlers must call `cb` within about 500 ms — this applies to client and
+server handlers alike. EasyAdmin drops the response after that, so cache or
+precompute slow data instead of blocking inside the handler.
+
 See the [schema component reference](../../nui-plugins#schema-components) for all available components.
 
 ## Button Actions
@@ -168,8 +190,11 @@ end)
 
 | `cb(...)` returns | NUI behaviour |
 |---|---|
-| Schema array (`{ { type = ... } }`) | Replaces the current page with the new schema |
-| Non-schema (`{ ok = true }`) | Re-fetches the original `renderAction` |
+| Schema array (`{ { type = ... } }`) or `{ schema = { ... } }` | Replaces the current page with the new schema |
+| Anything else (`{ ok = true }`) | Re-fetches the original `renderAction` |
+
+An empty array counts as "nothing to render" and triggers a re-fetch, so
+return at least one node to replace the page.
 
 ### Server-side Actions
 
@@ -181,7 +206,7 @@ Add `server = true` to a button to route it to a server handler:
 
 -- Server handler:
 AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:getCount', function(source, data, cb)
-  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.view') then
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.advanced') then
     return cb({ ok = false, error = 'permission denied' })
   end
   cb({ ok = true, count = #GetPlayers() })
@@ -195,9 +220,9 @@ The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>
 
 ## Permissions
 
-Declare permissions in the `RegisterPlugin` config. EasyAdmin registers
-them server-side so they work with `DoesPlayerHavePermission()` and the
-admin session handshake:
+Declare every permission your plugin uses in the `RegisterPlugin` config.
+EasyAdmin registers them server-side, so `DoesPlayerHavePermission()`
+accepts them and the menu can gate your contributions on them:
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
@@ -210,7 +235,16 @@ exports.EasyAdmin:RegisterPlugin({
 })
 ```
 
-Grant the `easyadmin.plugin.my-plugin` ACE to admins who should see the plugin.
+**Every permission used in a `permission` field — including the top-level
+plugin gate — must also be listed here.** A gate on an undeclared permission
+hides that contribution from every admin, with no warning.
+
+Grant the ACE to admins who should see the plugin:
+
+```cfg
+add_ace group.admin easyadmin.plugin.my-plugin allow
+add_ace group.admin easyadmin.plugin.my-plugin.advanced allow
+```
 
 ### Gate the entire plugin
 
@@ -238,21 +272,33 @@ navItems = {
 
 ```lua
 playerDetailTabs = {
-  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.admin', renderAction = 'renderAdmin' },
+  { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.advanced', renderAction = 'renderAdmin' },
 },
 ```
 
-## Live Updates
+## Refreshing Content
 
-Push a schema refresh from Lua at any time:
+A plugin cannot ask the NUI to re-render on its own — there is no push
+channel from Lua. Refresh the content from a button instead:
 
 ```lua
-SendNUIMessage({ action = 'plugin:my-plugin:update' })
+-- In the schema:
+-- { type = 'button', label = 'Refresh', action = 'refresh', icon = 'refresh' }
+
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
+  cb({ ok = true }) -- no schema returned → the page re-fetches renderPage
+end)
 ```
 
-The NUI re-fetches the current view's schema.
+Returning schema nodes from a handler replaces the page outright; returning
+anything else re-runs the page's `renderAction`. Leaving and re-opening the
+page also re-fetches it.
 
 ## Full Example
+
+A complete runnable version of this example — with gated tabs, server actions
+and form modals — lives in the `examples/ea-plugin-demo` resource in the
+EasyAdmin repository.
 
 ### `server.lua`
 
@@ -357,5 +403,3 @@ AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refetchPage', function(data, 
   cb({ ok = true })
 end)
 ```
-
-

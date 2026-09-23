@@ -1,6 +1,6 @@
 # Bot Logging
 
-When the Discord bot logging channel is configured, moderation actions are sent to Discord through the bot instead of webhooks. Webhook notifications are disabled when bot logging is active.
+When the Discord bot logging channel is configured, moderation actions are sent to Discord through the bot instead of webhooks. Webhook notifications are disabled while bot logging is active.
 
 ## Configuring the Logging Channel
 
@@ -15,12 +15,16 @@ All moderation actions (bans, kicks, warns, mutes, etc.) are sent to this channe
 
 ## Log Forwarding
 
-Forward specific log types to additional channels using the `ea_addBotLogForwarding` command:
+Every log type goes to the main logging channel by default. To send one log type to a different channel, use the `ea_addBotLogForwarding` command:
 
 ```
 ea_addBotLogForwarding joinleave 123456789012345678
 ea_addBotLogForwarding ban 123456789012345678
 ```
+
+Give the log type first, then the channel ID. Both are required — the command does nothing if either is missing.
+
+Run it from the server console, or in-game with the `easyadmin.server` permission. Forwarding only works while the bot is running and `ea_botLogChannel` is set. Forwarding rules are not saved, so set them again after the bot restarts.
 
 Available log types:
 
@@ -29,17 +33,17 @@ Available log types:
 - `slap` — Slap action notifications
 - `warn` — Warning notifications
 - `teleport` — Teleport notifications
-- `freeze` — Freeze/unfreeze notifications
+- `freeze` — Freeze and unfreeze notifications
 - `spectate` — Spectate notifications
 - `settings` — Server setting changes, resource start/stop, announcements
 - `calladmin` — Player calladmin reports
 - `report` — Player report notifications
-- `reports` — Report claim/close notifications
+- `reports` — Report claim and close notifications
 - `screenshot` — Screenshot capture notifications
-- `permissions` — Permission edits
-- `joinleave` — Player join/leave notifications
-
-Run the command with a log type and channel ID to forward that type. Run without arguments to list current forwarding rules.
+- `mute` — Mute, unmute and Emergency Mode notifications
+- `cleanup` — Cleanup notifications
+- `joinleave` — Player join and leave notifications
+- `startup` — Bot startup messages
 
 ## Webhook Fallback
 

@@ -1,548 +1,131 @@
 # Convar Reference
 
-Complete reference of all EasyAdmin configuration convars, sorted alphabetically.
+Every EasyAdmin convar, grouped by what it controls. The default is the value used when the convar is not set.
+
+## Core
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_dangerousDevMode` | `false` | Developer-only features. Never enable on a live server |
+| `ea_defaultKey` | `none` | Has no effect. Open the menu with `/easyadmin` or `/ea` instead |
+| `ea_enableSplash` | `true` | Print the version banner in the server console on startup |
+| `ea_IpPrivacy` | `true` | Hide IP addresses in the player list and player details |
+| `ea_LanguageName` | `en` | Menu and message language. Available: `de`, `en`, `es`, `fr`, `it`, `nl`, `pl` |
+| `ea_minIdentifierMatches` | `2` | Identifier matches needed before a player counts as banned |
+| `ea_presentDeferral` | `true` | Show a progress bar during the banlist check on connection |
+| `ea_useTokenIdentifiers` | `true` | Use token identifiers for ban matching |
+
+## Ban Screen
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_banMessageFooter` | `You can appeal this by ban by visiting our discord.` | Footer text, for example appeal instructions |
+| `ea_banMessageServerName` | `sv_projectName` | Server name shown on the ban screen |
+| `ea_banMessageShowStaff` | `true` | Show the name of the admin who issued the ban |
+| `ea_banMessageSubHeader` | `You have been banned from this server.` | Subheader text |
+| `ea_banMessageTitleColour` | `#354557` | Hex colour for the server name |
+| `ea_banMessageWatermark` | (EasyAdmin logo) | Image URL or base64 data URI for the watermark |
+
+## Warnings and Chat
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_adminCooldown:<action>` | `0` | Seconds before the same admin can repeat an action. `0` disables it |
+| `ea_chatReminderTime` | `0` | Minutes between chat reminders. `0` disables them |
+| `ea_enableChat` | `true` | Enable the admin-only chat channel |
+| `ea_maxWarnings` | `3` | Warnings before the automatic action |
+| `ea_warnAction` | `kick` | Action at the limit: `kick` or `ban` |
+| `ea_warningBanTime` | `604800` | Ban length in seconds when the action is `ban` |
+
+Actions for `ea_adminCooldown:<action>`: `ban`, `unban`, `kick`, `warn`, `slap`, `freeze`, `mute`, `teleport`, `spectate`, `screenshot`. These per-action convars are not shown in the server's convar editor, so add them to `server.cfg` by hand.
+
+## Reports and Calladmin
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_callAdminCommandName` | `calladmin` | Command name for calladmin |
+| `ea_callAdminCooldown` | `60` | Seconds a player must wait before calling an admin again |
+| `ea_defaultMinReports` | `3` | Reports needed to auto-ban a player |
+| `ea_enableCallAdminCommand` | `true` | Enable the calladmin command |
+| `ea_enableReportCommand` | `true` | Enable the report command |
+| `ea_enableReportScreenshots` | `true` | Take a screenshot when a player is reported |
+| `ea_MinReportModifier` | `4` | Divisor for the minimum report count. The result is rounded to the nearest whole number (halves round up) |
+| `ea_MinReportModifierEnabled` | `true` | Enable the player-count-based report modifier |
+| `ea_MinReportPlayers` | `12` | Player count above which the report modifier activates |
+| `ea_ReportBanTime` | `86400` | Auto-ban length in seconds |
+| `ea_reportCommandName` | `report` | Command name for reports |
+
+## Screenshots and Streaming
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_screenshotfield` | `files[]` | JSON field name that carries the image in the upload request |
+| `ea_screenshotMaxResolution` | `1280` | Longest side of a screenshot, in pixels. The other side scales to keep the aspect ratio |
+| `ea_screenshotQuality` | `0.8` | WebP quality for screenshots (0.0–1.0) |
+| `ea_screenshoturl` | `none` | Upload URL for screenshots. Must accept a JSON POST and reply with a `url` field |
+| `ea_streamMaxResolution` | `640` | Currently has no effect. Streams are always captured at up to 640 px on the longest side |
+| `ea_streamStunServers` | `stun:stun.l.google.com:19302` | Comma-separated STUN servers used for streaming |
+| `ea_streamTargetFps` | `8` | Capture frame rate for streaming |
+| `ea_streamTurnPassword` | (empty) | Password for the TURN relay server |
+| `ea_streamTurnServers` | (empty) | Comma-separated TURN relay servers used when a direct connection fails |
+| `ea_streamTurnUser` | (empty) | Username for the TURN relay server |
+
+## Webhooks and Logging
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_dateFormat` | `%d/%m/%Y %H:%M:%S` | Lua date/time format for webhooks and ban screens. The default separates the date and time with a tab |
+| `ea_detailNotification` | `false` | Webhook URL for detail actions (spectate, teleport, freeze, slap, cleanup, settings). Falls back to `ea_moderationNotification` |
+| `ea_enableDebugging` | `false` | Legacy. Setting it to anything other than `false` raises logging to level 3 for the session |
+| `ea_logIdentifier` | `steam,discord,license` | Set to `false` to hide the Discord ID shown next to player names in logs and webhooks |
+| `ea_logLevel` | `1` | Console output: `1` errors, `2` warnings, `3` info, `4` debug |
+| `ea_moderationNotification` | `false` | Webhook URL for moderation actions (kicks, bans, warns, mutes, screenshots) |
+| `ea_reportNotification` | `false` | Webhook URL for reports and calladmin. Falls back to `ea_moderationNotification` |
+
+## Discord Bot
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_botChatBridge` | (empty) | Channel ID for the chat bridge between Discord and the in-game admin chat |
+| `ea_botGuild` | (empty) | Only for upgrades from 7.x. Discord server whose old per-server bot commands should be removed |
+| `ea_botLogChannel` | (empty) | Channel ID for bot log messages. When set, webhook notifications are skipped |
+| `ea_botStatusChannel` | (empty) | Channel ID for the live server status message. Leave empty to turn it off |
+| `ea_botToken` | `none` | Discord bot token. Required for the bot to run |
+
+## Player Data
+
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_actionHistoryExpiry` | `120` | Days before action history entries are deleted |
+| `ea_enableActionHistory` | `true` | Record new action history entries |
+| `ea_enableAdminNotes` | `true` | Reserved. EasyAdmin does not use this setting yet, so changing it has no effect |
+| `ea_playerCacheExpiryTime` | `1800` | Seconds a disconnected player stays in the cache |
+
+## Backups and Allowlist
 
-## ea_IpPrivacy
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_backupFrequency` | `72` | Hours between automatic banlist backups. `0` disables them |
+| `ea_custombanlist` | `false` | Fire ban events so another resource can track your bans |
+| `ea_enableAllowlist` | `false` | Only allowlisted players can join |
+| `ea_maxBackupCount` | `10` | Backups to keep |
+| `ea_routingBucketOptions` | `false` | Reserved. Changing it has no effect; routing bucket access is controlled by permissions |
 
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-| **Scope** | `setr` |
+## Profiler
 
-Hides IP addresses in the NUI player list and detail views.
+| Convar | Default | Description |
+|--------|---------|-------------|
+| `ea_profilerEndpoint` | (empty) | Profiler address override, as `host:port` |
 
-## ea_LanguageName
+## Commands
 
-| | |
-|---|---|
-| **Default** | `en` |
-| **Type** | String |
-| **Scope** | `setr` |
+| Command | Description |
+|---------|-------------|
+| `ea_addReminder` | Add a chat reminder. Not saved across restarts |
+| `ea_addShortcut` | Add a reason shortcut. Not saved across restarts |
+| `ea_excludeWebhookFeature` | Turn off selected webhook notification types. Run with no arguments to reset |
 
-Sets the UI language. Available: `de`, `en`, `es`, `fr`, `it`, `nl`, `pl`.
-
-## ea_MinReportModifier
-
-| | |
-|---|---|
-| **Default** | `4` |
-| **Type** | Integer |
-
-Divisor for calculating the adjusted minimum report count when the report modifier is active. Formula: `floor(playerCount / ea_MinReportModifier)`.
-
-## ea_MinReportModifierEnabled
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Enable the player-count-based report modifier. When disabled, `ea_defaultMinReports` is used regardless of player count.
-
-## ea_MinReportPlayers
-
-| | |
-|---|---|
-| **Default** | `12` |
-| **Type** | Integer |
-
-Minimum number of players online for the report modifier to activate.
-
-## ea_ReportBanTime
-
-| | |
-|---|---|
-| **Default** | `86400` |
-| **Type** | Integer |
-
-Duration of the auto-ban triggered by report threshold, in seconds. Default: 86400 (24 hours).
-
-## ea_actionHistoryExpiry
-
-| | |
-|---|---|
-| **Default** | `120` |
-| **Type** | Integer |
-
-Number of days to keep action history entries before automatic cleanup.
-
-## ea_addReminder
-
-| | |
-|---|---|
-| **Type** | Command |
-
-Add a chat reminder. Place after EasyAdmin starts in `server.cfg` or run in-game. Format: `ea_addReminder "message text"`. Not persisted across restarts.
-
-## ea_addShortcut
-
-| | |
-|---|---|
-| **Type** | Command |
-
-Add a reason shortcut. Place after EasyAdmin starts in `server.cfg` or run in-game. Format: `ea_addShortcut keyword "full text"`. Not persisted across restarts.
-
-## ea_adminCooldown
-
-| | |
-|---|---|
-| **Type** | Convar (dynamic) |
-
-Set cooldown in seconds for a specific action. Replace `ACTION` with the action name. Examples: `ea_adminCooldown:ban 60`, `ea_adminCooldown:kick 30`. Set to `0` to disable.
-
-Available actions: `ban`, `kick`, `warn`, `slap`, `freeze`, `mute`, `teleport`, `spectate`, `screenshot`
-
-## ea_backupFrequency
-
-| | |
-|---|---|
-| **Default** | `72` |
-| **Type** | Integer |
-
-Hours between automatic banlist backups. Set to `0` to disable automatic backups.
-
-## ea_banMessageFooter
-
-| | |
-|---|---|
-| **Default** | `You can appeal this by ban by visiting our discord.` |
-| **Type** | String |
-
-Footer text on the ban screen.
-
-## ea_banMessageServerName
-
-| | |
-|---|---|
-| **Default** | `sv_projectName` |
-| **Type** | String |
-
-Server name displayed on the ban screen.
-
-## ea_banMessageShowStaff
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Show the staff member's name on the ban screen.
-
-## ea_banMessageSubHeader
-
-| | |
-|---|---|
-| **Default** | `You have been banned from this server.` |
-| **Type** | String |
-
-Subheader text on the ban screen.
-
-## ea_banMessageTitleColour
-
-| | |
-|---|---|
-| **Default** | `#354557` |
-| **Type** | String |
-
-Hex color for the ban screen title.
-
-## ea_banMessageWatermark
-
-| | |
-|---|---|
-| **Default** | (embedded EasyAdmin logo) |
-| **Type** | String |
-
-URL to a logo image for the ban screen watermark. Can also be a base64 data URI.
-
-## ea_botChatBridge
-
-| | |
-|---|---|
-| **Default** | (empty) |
-| **Type** | String |
-
-Discord channel ID for the chat bridge. Syncs messages between Discord and FiveM chat.
-
-## ea_botLogChannel
-
-| | |
-|---|---|
-| **Default** | (empty) |
-| **Type** | String |
-
-Discord channel ID for bot logging. When set, webhook notifications are disabled.
-
-## ea_botStatusChannel
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | String |
-
-Discord channel ID for the live server status display.
-
-## ea_botToken
-
-| | |
-|---|---|
-| **Default** | `none` |
-| **Type** | String |
-
-Discord bot token. Required for the Discord bot to function.
-
-## ea_callAdminCommandName
-
-| | |
-|---|---|
-| **Default** | `calladmin` |
-| **Type** | String |
-
-Command name for the calladmin feature.
-
-## ea_callAdminCooldown
-
-| | |
-|---|---|
-| **Default** | `60` |
-| **Type** | Integer |
-
-Cooldown in seconds between calladmin uses per player.
-
-## ea_chatReminderTime
-
-| | |
-|---|---|
-| **Default** | `0` |
-| **Type** | Integer |
-
-Interval in minutes between chat reminders. Set to `0` to disable.
-
-## ea_custombanlist
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | Boolean |
-
-When enabled, triggers `ea_data:addBan` and `ea_data:updateBan` events during banlist operations for custom banlist integration.
-
-## ea_dangerousDevMode
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | Boolean |
-
-Enables developer-only features. **Never enable on a production server.**
-
-## ea_dateFormat
-
-| | |
-|---|---|
-| **Default** | `%d/%m/%Y %H:%M:%S` |
-| **Type** | String |
-
-Custom date/time format for webhooks and ban screens. Uses Lua date format specifiers.
-
-## ea_defaultKey
-
-| | |
-|---|---|
-| **Default** | `none` |
-| **Type** | String |
-
-Menu key for RedM. On FiveM, use the settings UI instead.
-
-## ea_defaultMinReports
-
-| | |
-|---|---|
-| **Default** | `3` |
-| **Type** | Integer |
-
-Minimum number of reports needed to auto-ban a player.
-
-## ea_detailNotification
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | String |
-
-Discord webhook URL for detail notifications (spectate, teleport, freeze, slap, cleanup, settings). Falls back to `ea_moderationNotification` if not set.
-
-## ea_enableActionHistory
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Enable action history tracking.
-
-## ea_enableAllowlist
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | Boolean |
-
-Enable the allowlist system. Only players with `easyadmin.player.allowlist` can join.
-
-## ea_enableCallAdminCommand
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Enable the calladmin command.
-
-## ea_enableChat
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Enable the admin-only chat channel.
-
-## ea_enableReportCommand
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Enable the report command.
-
-## ea_enableReportScreenshots
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Automatically take a screenshot when a player is reported.
-
-## ea_enableSplash
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Show ASCII art version banner on server startup.
-
-## ea_excludeWebhookFeature
-
-| | |
-|---|---|
-| **Type** | Command |
-
-Exclude specific webhook notification types. Format: `ea_excludeWebhookFeature kick ban slap`. Run without arguments to reset.
-
-Available features: `kick`, `ban`, `slap`, `warn`, `teleport`, `freeze`, `spectate`, `settings`, `calladmin`, `report`, `reports`, `screenshot`, `permissions`, `joinleave`, `cleanup`
-
-## ea_logIdentifier
-
-| | |
-|---|---|
-| **Default** | `steam` |
-| **Type** | String |
-
-Comma-separated list of identifier types to include in logs and webhooks. Order determines display order.
-
-## ea_logLevel
-
-| | |
-|---|---|
-| **Default** | `1` |
-| **Type** | Integer |
-
-Logging verbosity: `1` (errors), `2` (warnings), `3` (info), `4` (debug).
-
-## ea_maxBackupCount
-
-| | |
-|---|---|
-| **Default** | `10` |
-| **Type** | Integer |
-
-Maximum number of banlist backups to retain.
-
-## ea_maxWarnings
-
-| | |
-|---|---|
-| **Default** | `3` |
-| **Type** | Integer |
-
-Maximum warnings before automatic action.
-
-## ea_minIdentifierMatches
-
-| | |
-|---|---|
-| **Default** | `2` |
-| **Type** | Integer |
-
-Minimum number of matching identifiers required to consider a player banned.
-
-## ea_moderationNotification
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | String |
-
-Discord webhook URL for moderation notifications (kicks, bans, warns, mutes, screenshots).
-
-## ea_playerCacheExpiryTime
-
-| | |
-|---|---|
-| **Default** | `900` |
-| **Type** | Integer |
-
-Time in seconds before cached player data expires.
-
-## ea_presentDeferral
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Show progress bar during banlist check on connection. Set to `false` if using another deferral resource.
-
-## ea_profilerEndpoint
-
-| | |
-|---|---|
-| **Default** | (empty) |
-| **Type** | String |
-
-Override the profiler HTTP endpoint. Format: `host:port`. Used by the Profiler page.
-
-## ea_reportCommandName
-
-| | |
-|---|---|
-| **Default** | `report` |
-| **Type** | String |
-
-Command name for the report feature.
-
-## ea_reportNotification
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | String |
-
-Discord webhook URL for report notifications. Falls back to `ea_moderationNotification` if not set.
-
-## ea_routingBucketOptions
-
-| | |
-|---|---|
-| **Default** | `false` |
-| **Type** | Boolean |
-
-Registers routing bucket permission options. Actual gating is controlled by `player.bucket.join` and `player.bucket.force` permissions.
-
-## ea_screenshotfield
-
-| | |
-|---|---|
-| **Default** | `files[]` |
-| **Type** | String |
-
-Form field name for screenshot upload POST requests.
-
-## ea_screenshotMaxResolution
-
-| | |
-|---|---|
-| **Default** | `1280` |
-| **Type** | Integer |
-
-Maximum length of the longer dimension for captured screenshots (in pixels). The shorter dimension is scaled proportionally to preserve aspect ratio. For example, a 1920×1080 screen with a max resolution of 1280 produces a 1280×720 image.
-
-## ea_screenshotQuality
-
-| | |
-|---|---|
-| **Default** | `0.8` |
-| **Type** | Float |
-
-WebP encoding quality for screenshots (0.0–1.0). Higher values produce larger files with better quality.
-
-## ea_screenshoturl
-
-| | |
-|---|---|
-| **Default** | `none` |
-| **Type** | String |
-
-URL to upload screenshots to. Can be a Discord webhook URL or any endpoint that accepts POST requests with image data. See the [Image Hosting](../../configuration/image-hosting.md) guide for a ready-to-deploy solution.
-
-## ea_streamMaxResolution
-
-| | |
-|---|---|
-| **Default** | `640` |
-| **Type** | Integer |
-
-Maximum length of the longer dimension for streamed frames (in pixels). The shorter dimension is scaled proportionally to preserve aspect ratio. For example, a 1920×1080 screen with a max resolution of 640 produces 640×360 frames.
-
-## ea_streamQuality
-
-| | |
-|---|---|
-| **Default** | `0.3` |
-| **Type** | Float |
-
-WebP encoding quality for streamed frames (0.0–1.0). Lower values produce smaller frames and use less bandwidth.
-
-## ea_streamTargetFps
-
-| | |
-|---|---|
-| **Default** | `8` |
-| **Type** | Integer |
-
-Target frame rate for the stream capture loop. Higher values produce smoother video but increase CPU usage on the target player's client.
-
-## ea_useTokenIdentifiers
-
-| | |
-|---|---|
-| **Default** | `true` |
-| **Type** | Boolean |
-
-Use token identifiers for ban matching. Disable if multiple servers share the same banlist.
-
-## ea_warnAction
-
-| | |
-|---|---|
-| **Default** | `kick` |
-| **Type** | String |
-
-Action after maximum warnings reached: `kick` or `ban`.
-
-## ea_warningBanTime
-
-| | |
-|---|---|
-| **Default** | `604800` |
-| **Type** | Integer |
-
-Ban duration in seconds when `ea_warnAction` is `ban`. Default: 604800 (7 days).
+Excludable types for `ea_excludeWebhookFeature`: `ban`, `calladmin`, `cleanup`, `freeze`, `kick`, `mute`, `report`, `reports`, `screenshot`, `settings`, `slap`, `spectate`, `teleport`, `warn`.
 
 ## See Also
 
@@ -550,3 +133,4 @@ Ban duration in seconds when `ea_warnAction` is `ban`. Default: 604800 (7 days).
 - [Webhooks](../../configuration/webhooks) — Webhook configuration
 - [Advanced](../../configuration/advanced) — Advanced configuration options
 - [NUI Settings](../../configuration/nui-settings) — NUI-specific convars
+- [Command Reference](../command-reference) — All EasyAdmin commands

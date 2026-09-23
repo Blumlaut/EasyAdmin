@@ -16,21 +16,21 @@ setr ea_logLevel 3
 
 ## Player Cache
 
-Cached players (recently disconnected players whose data is retained for ban matching) expire after a configurable time.
+Disconnected players stay in EasyAdmin's cache for a while so their data can still be matched for bans and reports.
 
 ```
-set ea_playerCacheExpiryTime 900
+set ea_playerCacheExpiryTime 1800
 ```
 
 Time in seconds before cached player data is cleared.
 
-Default: `900` (15 minutes)
+Default: `1800` (30 minutes)
 
 ## Identifier Handling
 
 ### Token Identifiers
 
-When enabled, EasyAdmin uses FiveM's token identifiers (`identifier.token:*`) for ban matching in addition to traditional identifiers.
+When enabled, EasyAdmin uses FiveM's token identifiers for ban matching in addition to traditional identifiers.
 
 ```
 set ea_useTokenIdentifiers "true"
@@ -52,7 +52,7 @@ Default: `true`
 
 ## Admin Cooldown
 
-Set a cooldown in seconds between uses of specific moderation actions. This prevents rapid repeated actions by the same admin.
+Set a cooldown in seconds between uses of a moderation action by the same admin. This prevents rapid repeated actions.
 
 ```
 set ea_adminCooldown:ban 60
@@ -60,9 +60,11 @@ set ea_adminCooldown:kick 30
 set ea_adminCooldown:warn 10
 ```
 
-Replace `ban`, `kick`, `warn`, etc. with the action name. Set to `0` to disable cooldown for that action.
+Replace `ban`, `kick`, `warn`, etc. with the action name. Set to `0` to disable the cooldown for that action.
 
-Available actions: `ban`, `kick`, `warn`, `slap`, `freeze`, `mute`, `teleport`, `spectate`, `screenshot`
+Available actions: `ban`, `unban`, `kick`, `warn`, `slap`, `freeze`, `mute`, `teleport`, `spectate`, `screenshot`
+
+Each action has its own convar. They are not part of EasyAdmin's convar options, so add them to your server config by hand.
 
 ## Dangerous Dev Mode
 
@@ -76,22 +78,12 @@ Default: `false`
 
 **Never enable this on a live server.**
 
-## Routing Bucket Options
-
-Registers convars for routing bucket permissions (`player.bucket.join`, `player.bucket.force`). Note: this convar is registered in the manifest but the actual permission gating is controlled by the `player.bucket.join` and `player.bucket.force` permissions.
-
-```
-set ea_routingBucketOptions "false"
-```
-
-Default: `false`
-
 ## Profiler Endpoint Override
 
-Override the profiler HTTP endpoint used by the Profiler page. Format: `host:port`.
+Override the profiler address used by the Profiler page. Format: `host:port`.
 
 ```
 set ea_profilerEndpoint "127.0.0.1:30120"
 ```
 
-By default, EasyAdmin attempts to auto-detect the profiler endpoint using `GetCurrentServerEndpoint()` or common ports (30120, 30121, etc.). Use this convar if auto-detection fails.
+EasyAdmin tries to work out the address on its own, and remembers the last one that worked. Set this convar if the Profiler page cannot reach the server.

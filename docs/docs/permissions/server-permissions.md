@@ -21,46 +21,63 @@ add_ace group.admin easyadmin.server allow
 
 | Permission | What It Does |
 |------------|-------------|
-| `easyadmin.server.cleanup.cars` | Clean up vehicles not in use |
-| `easyadmin.server.cleanup.props` | Clean up props (excluding map props) |
-| `easyadmin.server.cleanup.peds` | Clean up NPCs (peds) |
+| `easyadmin.server.cleanup.cars` | Remove vehicles that no player is driving |
+| `easyadmin.server.cleanup.props` | Remove props (objects) |
+| `easyadmin.server.cleanup.peds` | Remove NPCs (peds) |
 
-Cleanup removes spawned entities from the world. Use with caution on populated servers.
+Cleanup removes the matching entities from the world, either server-wide or within a radius around you. Players themselves are never removed. EasyAdmin already requires OneSync, which cleanup relies on.
+
+Use with caution on populated servers.
 
 ## Resource Management
 
 | Permission | What It Does |
 |------------|-------------|
-| `easyadmin.server.resources.start` | Start server resources |
-| `easyadmin.server.resources.stop` | Stop server resources |
-| `easyadmin.server.resources.monitor` | Access the Profiler page and view resource monitoring data |
+| `easyadmin.server.resources.start` | Start resources |
+| `easyadmin.server.resources.stop` | Stop resources |
+| `easyadmin.server.resources.monitor` | Open the Profiler page and see CPU and memory use per resource |
 
 ## Server Administration
 
 | Permission | What It Does |
 |------------|-------------|
-| `easyadmin.server.announce` | Send announcements to all players |
-| `easyadmin.server.convars` | Edit server convars through the NUI |
+| `easyadmin.server.announce` | Send an announcement to all players |
+| `easyadmin.server.convars` | View and change server settings from the Server page |
 | `easyadmin.server.chat` | Use the admin-only chat channel |
+| `easyadmin.server.mute.global` | Turn Emergency Mode (server-wide chat mute) on or off, and keep chatting while it is active |
+
+The admin chat channel comes from the `chat` resource. It only works when that resource is running and `ea_enableChat` is `true` (the default). See [Chat Bridge](../../discord/chat-bridge).
 
 ## Shortcuts and Reminders
 
 | Permission | What It Does |
 |------------|-------------|
-| `easyadmin.server.shortcut.add` | Use the `ea_addShortcut` command (non-persistent) |
-| `easyadmin.server.reminder.add` | Use the `ea_addReminder` command (non-persistent) |
+| `easyadmin.server.shortcut.add` | Add a reason shortcut with `/ea_addShortcut` (not saved across restarts) |
+| `easyadmin.server.reminder.add` | Add a periodic chat reminder with `/ea_addReminder` (not saved across restarts) |
 
 ## Statistics and Monitoring
 
 | Permission | What It Does |
 |------------|-------------|
-| `easyadmin.server.statistics.view` | Access the Player Statistics page |
-| `easyadmin.server.network.monitor` | Access the Network Monitor page |
-| `easyadmin.server.map.view` | Access the Map page |
+| `easyadmin.server.statistics.view` | Open the Player Statistics page |
+| `easyadmin.server.network.monitor` | Open the Network Monitor page |
+| `easyadmin.server.map.view` | Open the live Map page |
 
 ## Special Permissions
 
 | Permission | What It Does |
 |------------|-------------|
-| `easyadmin.immune` | Prevent being kicked or banned by other admins |
-| `easyadmin.anon` | Hide admin username in logs and actions |
+| `easyadmin.immune` | Other admins cannot kick, ban, warn, mute, freeze, slap, teleport, watch your screen or move you to another bucket |
+| `easyadmin.anon` | Show your actions as "Anonymous Admin" instead of your name |
+
+Immunity is not absolute: while `ea_dangerousDevMode` is enabled, admins can act on immune players. That setting is for development only — never turn it on for a live server.
+
+## New in 8.0
+
+These permissions did not exist in 7.x, so ACE entries copied from an older setup will not include them:
+
+- `easyadmin.server.statistics.view`
+- `easyadmin.server.map.view`
+- `easyadmin.server.resources.monitor`
+- `easyadmin.server.network.monitor`
+- `easyadmin.server.mute.global`

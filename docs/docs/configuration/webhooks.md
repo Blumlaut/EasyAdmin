@@ -1,8 +1,8 @@
 # Webhooks and Screenshot Configuration
 
-EasyAdmin sends Discord notifications for moderation actions through webhooks. It also supports configuring screenshot upload destinations.
+EasyAdmin can send Discord notifications for moderation actions through webhooks. It also supports uploading screenshots to an external image host.
 
-> **Note:** If the Discord bot logging channel (`ea_botLogChannel`) is configured, webhook notifications are disabled. The bot sends logs to Discord instead.
+> **Note:** If the Discord bot logging channel (`ea_botLogChannel`) is set, logs are sent through the bot and webhook notifications are ignored. Leave it empty to keep using webhooks.
 
 ## Webhook Channels
 
@@ -11,8 +11,8 @@ Three separate webhook URLs can be configured for different notification types:
 | Convar | Default | Description |
 |--------|---------|-------------|
 | `ea_moderationNotification` | `false` | Main webhook for moderation actions (kicks, bans, warns, mutes, screenshots) |
-| `ea_reportNotification` | `false` | Webhook for report and calladmin notifications. Falls back to `ea_moderationNotification` if not set |
-| `ea_detailNotification` | `false` | Webhook for detail actions (spectate, teleport, freeze, slap, cleanup, settings changes, resource management). Falls back to `ea_moderationNotification` if not set |
+| `ea_reportNotification` | `false` | Player reports and calladmin requests. Falls back to `ea_moderationNotification` if not set |
+| `ea_detailNotification` | `false` | Detail actions (spectate, teleport, freeze, slap, cleanup, settings changes). Falls back to `ea_moderationNotification` if not set |
 
 Example:
 
@@ -22,11 +22,11 @@ set ea_reportNotification "https://discord.com/api/webhooks/987654321/zyxwvutsrq
 set ea_detailNotification "https://discord.com/api/webhooks/111222333/abcdefghijklmnopqrstuvwx"
 ```
 
-To disable all webhooks, set the relevant convar to `false` (the default).
+To disable a webhook, leave its convar unset or set it to `false`.
 
 ## Excluding Webhook Features
 
-Individual webhook notification types can be disabled using the `ea_excludeWebhookFeature` command. Run this in the server console or in-game:
+Individual notification types can be turned off with the `ea_excludeWebhookFeature` command. Run this in the server console or in-game:
 
 ```
 ea_excludeWebhookFeature kick ban slap warn
@@ -35,22 +35,23 @@ ea_excludeWebhookFeature kick ban slap warn
 Available feature names:
 
 - `kick` — Player kick notifications
-- `ban` — Player ban notifications
+- `ban` — Player ban and unban notifications
 - `slap` — Slap action notifications
 - `warn` — Warning notifications
+- `mute` — Mute and unmute notifications
 - `teleport` — Teleport notifications
-- `freeze` — Freeze/unfreeze notifications
+- `freeze` — Freeze and unfreeze notifications
 - `spectate` — Spectate notifications
 - `settings` — Server setting changes, resource start/stop, announcements
-- `calladmin` — Player calladmin reports
+- `calladmin` — Player calladmin requests
 - `report` — Player report notifications
-- `reports` — Report claim/close notifications
+- `reports` — Report claim and close notifications
 - `screenshot` — Screenshot capture notifications
-- `permissions` — Permission edits
-- `joinleave` — Player join/leave notifications
 - `cleanup` — Server cleanup notifications
 
 Run the command without arguments to reset exclusions.
+
+Plugins can tag their own messages, and those tags can be excluded in the same way. See [Using Webhooks from Plugins](#using-webhooks-from-plugins).
 
 ## Date Format
 
@@ -69,44 +70,48 @@ Common format specifiers:
 - `%M` — Minute (00-59)
 - `%S` — Second (00-59)
 
-Default: `%d/%m/%Y %H:%M:%S`
+The default format shows the date and time separated by whitespace. Whitespace inside the format is kept exactly as written, so always quote the value.
 
 ## Screenshot Upload
 
-When an admin takes a screenshot of a player, the image is captured natively (Three.js + CfxTexture), downsampled, encoded as WebP, and uploaded to a configured endpoint.
+When an admin takes a screenshot of a player, EasyAdmin can upload it to an image host and share the resulting link in webhook messages and chat. Without an upload destination, the screenshot is only shown to the admin who took it.
 
 | Convar | Default | Description |
 |--------|---------|-------------|
-| `ea_screenshoturl` | `none` | URL to upload screenshots to. See [Image Hosting](../image-hosting.md) for a ready-to-deploy solution. |
-| `ea_screenshotfield` | `files[]` | Form field name for the uploaded file |
-| `ea_screenshotMaxResolution` | `1280` | Max length of the longer dimension (px). Shorter dimension scales to match aspect ratio. |
-| `ea_screenshotQuality` | `0.8` | WebP encoding quality (0.0–1.0). |
+| `ea_screenshoturl` | `none` | URL to upload screenshots to. See [Image Hosting](../image-hosting) for a ready-to-deploy solution |
+| `ea_screenshotfield` | `files[]` | Name of the JSON field that carries the image in the upload request |
+| `ea_screenshotMaxResolution` | `1280` | Maximum length of the longer dimension in pixels. The shorter dimension scales to match the aspect ratio |
+| `ea_screenshotQuality` | `0.8` | WebP encoding quality (0.0–1.0) |
 | `ea_enableReportScreenshots` | `true` | Automatically take a screenshot when a player is reported |
 
-To use Discord as a screenshot uploader:
-
 ```
-setr ea_screenshoturl "https://discord.com/api/webhooks/123456789/abcdefghijklmnopqrstuvwxyz"
+setr ea_screenshoturl "https://img.example.com/upload"
 setr ea_screenshotfield "files[]"
 ```
 
-The screenshot endpoint receives a POST request with the image data.
+The upload is a JSON POST with a single field holding the screenshot, for example:
+
+```json
+{ "files[]": "data:image/webp;base64,..." }
+```
+
+The upload service must reply with the image URL as JSON:
+
+```json
+{ "url": "https://img.example.com/abc123.webp" }
+```
+
+A Discord webhook URL cannot be used here, because Discord expects a file upload rather than JSON.
 
 ## Log Identifiers
 
-Controls which identifiers are included in webhook messages and logs.
+EasyAdmin can show a player's Discord ID next to their name in webhook messages and logs.
 
 ```
-set ea_logIdentifier "steam,discord,license"
+set ea_logIdentifier "false"
 ```
 
-Comma-separated list of identifier types to include. Order determines display order.
-
-Available types: `steam`, `discord`, `license`, `xbl`, `live`, `ip`, `discordId`, `fivem`, `a2s`, `appinfo`, `fortnite`, `opsgenie`, `epic`, `teamcenter`, `ssauth`, `xbl2`
-
-Set to `false` to disable identifiers in logs entirely.
-
-Default: `steam`
+Set it to `false` to hide Discord IDs. Any other value keeps them enabled — the value is not a list, so listing identifier types has no effect.
 
 ## Testing Webhooks
 

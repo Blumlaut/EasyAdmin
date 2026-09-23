@@ -74,7 +74,11 @@ extra_javascript:
 nav:
     - Home: index.md
     - Installation: install.md
-    - Permissions: permissions/index.md
+    - Permissions:
+        - permissions/index.md
+        - permissions/player-permissions.md
+        - permissions/server-permissions.md
+        - permissions/bot-permissions.md
     - Discord Integration:
         - discord/bot-setup.md
         - discord/bot-commands.md
@@ -85,6 +89,7 @@ nav:
     - Configuration:
         - configuration/basic.md
         - configuration/webhooks.md
+        - configuration/image-hosting.md
         - configuration/commands.md
         - configuration/action-history.md
         - configuration/backups.md
@@ -120,4 +125,5 @@ nav:
         - reference/command-reference.md
     - Updates:
         - updates/updating.md
+    - Translating: i18n/translating.md
     - Troubleshooting: troubleshooting.md

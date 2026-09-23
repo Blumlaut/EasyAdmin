@@ -13,48 +13,47 @@ its built-in React components. No plugin code is ever compiled into EasyAdmin.
 External resource
   │  exports['easyadmin']:RegisterPlugin(config)
   ▼
-EasyAdmin (shared/plugin_api.lua)
-  │  stores registration, networks to clients
+EasyAdmin (server)
+  │  stores the registration, sends it to clients
   ▼
-NUI (React)
-  │  receives registration via SendNUIMessage
-  │  renders nav items, dashboard widgets, player tabs
+EasyAdmin menu
+  │  renders your nav items, dashboard widgets and player tabs
   │
   │  user opens a plugin page:
   │  pluginCall(pluginId, renderAction) → schema tree
   ▼
-SchemaRenderer
-  │  maps schema nodes to built-in components
+EasyAdmin renders the schema with its own components
   │  button click → pluginCall(pluginId, action, data)
 ```
 
-## NUI source files
-
-| File | Purpose |
-|---|---|
-| `nui/src/plugins/schema.ts` | Schema node type definitions |
-| `nui/src/plugins/types.ts` | Runtime plugin registration types |
-| `nui/src/plugins/store.ts` | Plugin registry + NUI message listeners |
-| `nui/src/plugins/usePlugins.ts` | Hook: collects & permission-filters contributions |
-| `nui/src/plugins/usePluginSchema.ts` | Hook: fetches & manages schema from Lua |
-| `nui/src/plugins/SchemaRenderer.tsx` | Maps schema nodes → built-in components |
-| `nui/src/plugins/hosts.tsx` | Page/widget/tab host components |
-| `nui/src/plugins/bridge.ts` | `pluginCall` Lua bridge |
-
-## Lua source files
-
-| File | Purpose |
-|---|---|
-| `shared/plugin_api.lua` | `RegisterPlugin` export, NUI sync, client networking |
-| `client/nui/plugins.lua` | `pluginCall` NUI callback, client handler dispatch |
-| `server/_plugin_bridge.lua` | Server handler dispatch |
+Rendering is pull-based. A refresh only happens when one of the plugin's own
+actions runs — a page, widget or tab cannot be updated from a plugin resource
+while it is open.
 
 ---
 
 ## Schema components
 
-Every render handler returns an array of schema nodes. Each node has a
-`type` field that determines which built-in component is rendered.
+A render handler returns an array of nodes:
+
+```json
+[ { "type": "heading", "text": "My Page" } ]
+```
+
+An object with a `schema` array is accepted as well:
+
+```json
+{ "schema": [ { "type": "heading", "text": "My Page" } ] }
+```
+
+Every node has a `type`. These fields are shared:
+
+| Field | Type | Applies to | Description |
+|---|---|---|---|
+| `type` | `string` | all nodes | Node type |
+| `key` | `string` | all nodes | Optional node id, kept stable between re-renders |
+| `children` | `schema[]` | `card`, `row`, `col`, `alert`, `tooltip`, `timeline-entry` | Child nodes |
+| `className` | `string` | `card`, `row`, `col` | Extra EasyAdmin design-system class(es) |
 
 ### Layout
 
@@ -63,7 +62,7 @@ Every render handler returns an array of schema nodes. Each node has a
 A styled card container.
 
 ```json
-{ "type": "card", "children": [ ... ] }
+{ "type": "card", "children": [ { "type": "text", "text": "Inside a card" } ] }
 ```
 
 #### `row`
@@ -74,10 +73,10 @@ Horizontal flex layout.
 { "type": "row", "gap": 3, "wrap": true, "children": [ ... ] }
 ```
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `gap` | `0\|1\|2\|3\|4` | — | Spacing between children |
-| `wrap` | `boolean` | `false` | Allow wrapping |
+| Field | Type | Description |
+|---|---|---|
+| `gap` | `0\|1\|2\|3\|4` | Space between children; omitted means none |
+| `wrap` | `boolean` | Allow children to wrap to the next line (default `false`) |
 
 #### `col`
 
@@ -87,9 +86,13 @@ Vertical flex layout.
 { "type": "col", "gap": 2, "children": [ ... ] }
 ```
 
+| Field | Type | Description |
+|---|---|---|
+| `gap` | `0\|1\|2\|3\|4` | Space between children; omitted means none |
+
 #### `divider`
 
-Horizontal rule.
+Horizontal rule. No fields.
 
 ```json
 { "type": "divider" }
@@ -103,10 +106,10 @@ Horizontal rule.
 { "type": "heading", "text": "My Page", "level": 2 }
 ```
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `text` | `string` | — | Heading text |
-| `level` | `1\|2\|3\|4` | `3` | Heading size |
+| Field | Type | Description |
+|---|---|---|
+| `text` | `string` | Heading text (required) |
+| `level` | `1\|2\|3\|4` | Heading size (default `3`) |
 
 #### `text`
 
@@ -114,10 +117,10 @@ Horizontal rule.
 { "type": "text", "text": "Some text", "variant": "muted" }
 ```
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `text` | `string` | — | Text content |
-| `variant` | `string` | `default` | `default`, `muted`, `small`, `large`, `mono` |
+| Field | Type | Description |
+|---|---|---|
+| `text` | `string` | Text content (required) |
+| `variant` | `string` | `default`, `muted`, `small`, `large`, `mono` (default `default`) |
 
 ### Interactive
 
@@ -130,16 +133,66 @@ re-renders with it. Otherwise the original `renderAction` is re-fetched.
 { "type": "button", "label": "Refresh", "action": "refresh", "icon": "refresh", "variant": "ghost", "size": "sm" }
 ```
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `label` | `string` | — | Button text |
-| `action` | `string` | — | Handler action name |
-| `data` | `any` | — | Payload sent to handler |
-| `server` | `boolean` | `false` | Route to server-side handler |
-| `icon` | `string` | — | Icon name |
-| `variant` | `string` | `ghost` | `primary`, `secondary`, `ghost`, `danger` |
-| `size` | `string` | `md` | `xs`, `sm`, `md` |
-| `disabled` | `boolean` | `false` | Disabled state |
+| Field | Type | Description |
+|---|---|---|
+| `label` | `string` | Button text (required) |
+| `action` | `string` | Handler action name (required) |
+| `data` | `any` | Payload sent to handler |
+| `server` | `boolean` | Route to server-side handler (default `false`) |
+| `modal` | `object` | Open a form modal instead — see below |
+| `icon` | `string` | Icon name |
+| `variant` | `string` | `primary`, `secondary`, `ghost`, `danger` (default `ghost`) |
+| `size` | `string` | `xs`, `sm`, `md` (default `md`) |
+| `disabled` | `boolean` | Disabled state (default `false`) |
+
+##### Form-modal buttons
+
+Add a `modal` object to open a form dialog instead of calling the action
+right away:
+
+```json
+{
+  "type": "button", "label": "Kick Player", "action": "kickPlayer", "server": true,
+  "modal": {
+    "title": "Kick Player",
+    "description": "Optional supporting text",
+    "submitLabel": "Kick",
+    "submitVariant": "danger",
+    "fields": [
+      { "type": "text", "key": "reason", "label": "Reason", "placeholder": "Why?", "maxLength": 120, "required": true, "description": "Shown under the field" }
+    ]
+  }
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | `string` | Dialog title (required) |
+| `description` | `string` | Text shown under the title |
+| `fields` | `field[]` | Form fields (required) |
+| `submitLabel` | `string` | Submit button text (default `Submit`) |
+| `submitVariant` | `string` | `primary`, `secondary`, `danger`, `warning`, `success` (default `primary`) |
+
+On submit the modal closes and the action runs with the form values as its
+`data` payload, keyed by each field's `key`.
+
+##### Modal field types
+
+Every field needs a `key`, and may also set `label`, `description` and
+`required`.
+
+| `type` | Extra fields |
+|---|---|
+| `text` | `placeholder`, `initialValue`, `maxLength` |
+| `textarea` | `placeholder`, `initialValue`, `maxLength`, `rows` |
+| `number` | `placeholder`, `initialValue`, `min`, `max`, `step` |
+| `slider` | `min`, `max` (both required), `initialValue`, `step` |
+| `select` | `options` (required), `placeholder`, `initialValue` |
+| `checkbox` | `initialValue` |
+
+```json
+{ "type": "select", "key": "weapon", "label": "Weapon", "options": [ { "value": "pistol", "label": "Pistol" } ] }
+```
 
 #### `copy-button`
 
@@ -148,6 +201,24 @@ Copy-to-clipboard button.
 ```json
 { "type": "copy-button", "value": "hello", "label": "Copy" }
 ```
+
+| Field | Type | Description |
+|---|---|---|
+| `value` | `string` | Text to copy (required) |
+| `label` | `string` | Button text |
+
+#### `notification`
+
+Fires a native notification when the node appears or its text changes. The
+node itself renders nothing.
+
+```json
+{ "type": "notification", "text": "Data reloaded" }
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `text` | `string` | Notification message (required) |
 
 ### Data display
 
@@ -161,12 +232,12 @@ Metric card with icon.
 
 | Field | Type | Description |
 |---|---|---|
-| `label` | `string` | Metric label |
-| `value` | `string\|number` | Metric value |
-| `subValue` | `string?` | Optional sub-text |
-| `icon` | `string` | Icon name |
-| `iconColor` | `string` | CSS color (use `var(--...)`) |
-| `bgColor` | `string` | CSS color (use `var(--...)`) |
+| `label` | `string` | Metric label (required) |
+| `value` | `string\|number` | Metric value (required) |
+| `subValue` | `string` | Optional sub-text |
+| `icon` | `string` | Icon name (required) |
+| `iconColor` | `string` | CSS color, use `var(--...)` (required) |
+| `bgColor` | `string` | CSS color, use `var(--...)` (required) |
 
 #### `key-value-table`
 
@@ -182,6 +253,14 @@ Key-value pairs table. Rows with an `action` are clickable.
 }
 ```
 
+| Row field | Type | Description |
+|---|---|---|
+| `key` | `string` | Row label (required) |
+| `value` | `string` | Row value (required) |
+| `mono` | `boolean` | Render the value in a monospace font |
+| `action` | `string` | Handler called when the row is clicked. Client-side, with no payload |
+| `actionLabel` | `string` | Hint text next to a clickable value |
+
 #### `alert`
 
 Alert banner.
@@ -190,7 +269,11 @@ Alert banner.
 { "type": "alert", "variant": "warning", "title": "Heads up", "children": [ ... ] }
 ```
 
-`variant`: `info`, `warning`, `success`, `error`.
+| Field | Type | Description |
+|---|---|---|
+| `variant` | `string` | `info`, `warning`, `success`, `error` (default `info`) |
+| `title` | `string` | Alert title |
+| `children` | `schema[]` | Alert body |
 
 #### `badge`
 
@@ -200,7 +283,13 @@ Small status badge.
 { "type": "badge", "text": "Online", "variant": "online", "icon": "check-circle" }
 ```
 
-`variant`: `default`, `online`, `offline`, `admin`, `warning`.
+| Field | Type | Description |
+|---|---|---|
+| `text` | `string` | Badge text (required) |
+| `variant` | `string` | `default`, `online`, `offline`, `admin`, `warning` (default `default`) |
+| `icon` | `string` | Icon name |
+
+`offline` is accepted but currently renders without its own style.
 
 #### `icon`
 
@@ -210,7 +299,10 @@ Standalone icon.
 { "type": "icon", "name": "users", "size": "md" }
 ```
 
-`size`: `xs`, `sm`, `md`, `lg`.
+| Field | Type | Description |
+|---|---|---|
+| `name` | `string` | Icon name (required) |
+| `size` | `string` | `xs`, `sm`, `md`, `lg` (default `md`) |
 
 #### `tooltip`
 
@@ -220,6 +312,11 @@ Wraps children with a hover tooltip.
 { "type": "tooltip", "content": "Help text", "children": [ ... ] }
 ```
 
+| Field | Type | Description |
+|---|---|---|
+| `content` | `string` | Tooltip text (required) |
+| `children` | `schema[]` | Wrapped nodes (required) |
+
 #### `timeline-entry`
 
 Timeline-style entry with title, time, body, and footer.
@@ -227,6 +324,13 @@ Timeline-style entry with title, time, body, and footer.
 ```json
 { "type": "timeline-entry", "title": "Warning", "time": "2h ago", "footer": "Admin", "children": [ ... ] }
 ```
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | `string` | Shown at the top left |
+| `time` | `string` | Shown at the top right |
+| `footer` | `string` | Shown at the bottom left |
+| `children` | `schema[]` | Entry body |
 
 ### Charts
 
@@ -244,6 +348,12 @@ Horizontal bar chart.
 }
 ```
 
+| Item field | Type | Description |
+|---|---|---|
+| `label` | `string` | Bar label (required) |
+| `value` | `number` | Bar value (required) |
+| `color` | `string` | CSS color for the bar |
+
 ### Loading
 
 #### `skeleton`
@@ -254,11 +364,19 @@ Loading placeholder.
 { "type": "skeleton", "height": 48, "width": "100%" }
 ```
 
+| Field | Type | Description |
+|---|---|---|
+| `height` | `number` | Height in pixels |
+| `width` | `string\|number` | Width, as a number of pixels or any CSS length |
+
 ---
 
 ## Available icons
 
-EasyAdmin uses **[lucide-react](https://lucide.dev/icons/)** for icons. Any of the **1200+ lucide icons** can be used by name (kebab-case) in schema nodes that accept an `icon` field — no extra registration needed.
+EasyAdmin uses **[lucide-react](https://lucide.dev/icons/)** for icons. Any
+lucide icon name from the pinned version can be used as-is (kebab-case) in
+schema nodes that accept an `icon` field — no extra registration needed.
+Unknown names render nothing.
 
 ```json
 { "type": "button", "label": "My Action", "action": "doThing", "icon": "rocket" }
@@ -267,6 +385,20 @@ EasyAdmin uses **[lucide-react](https://lucide.dev/icons/)** for icons. Any of t
 ```
 
 Just use the icon name as shown on [lucide.dev](https://lucide.dev/icons/) (e.g. `rocket`, `trophy`, `sparkles`, `heart`, `zap`, etc.).
+
+### Name aliases
+
+A few names are aliases and map to a different lucide name. All other names
+are passed through unchanged.
+
+| Schema name | lucide name |
+|---|---|
+| `refresh` | `refresh-cw` |
+| `flag-triangle` | `flag-triangle-right` |
+| `chevron-double-left` | `chevrons-left` |
+| `chevron-double-right` | `chevrons-right` |
+| `chevron-double-up` | `chevrons-up` |
+| `chevron-double-down` | `chevrons-down` |
 
 ### Commonly-used icons
 

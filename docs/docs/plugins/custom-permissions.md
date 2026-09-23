@@ -1,12 +1,12 @@
 # Custom Permissions
 
-Plugins can gate their UI contributions behind custom permissions so only
+Plugins can gate their own UI contributions behind custom permissions, so only
 authorized admins see them.
 
 ## Declaring permissions
 
-Add a `permissions` array to your plugin config. EasyAdmin registers each
-entry and makes it available to `exports.EasyAdmin:DoesPlayerHavePermission()`:
+List every permission your plugin uses in the `permissions` array of your
+plugin config:
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
@@ -21,19 +21,32 @@ exports.EasyAdmin:RegisterPlugin({
 })
 ```
 
-Grant ACEs in your `server.cfg` or via Discord:
+**Every permission you use as a gate must appear in this array.** A `permission`
+field that names an undeclared permission hides that contribution from every
+admin, with no warning — the menu only knows the permissions your plugin
+declared.
+
+Declaring a permission does not grant it. Admins receive it through an ACE in
+`server.cfg`, written as `easyadmin.<key>`:
 
 ```cfg
 add_ace group.admin easyadmin.plugin.my-plugin allow
 add_ace group.admin easyadmin.plugin.my-plugin.advanced allow
 ```
 
+Both steps are required: declare the permission so the menu can see it, and
+grant the ACE so the admin actually holds it. An ACE without a declaration
+does nothing for the UI, and a declaration without an ACE stays hidden.
+
+Permissions are removed when your plugin resource stops, so do not reuse a
+plugin's permission keys in another resource.
+
 ## Gating contributions
 
 ### Entire plugin
 
-The top-level `permission` field hides all contributions when the admin
-lacks that permission:
+The top-level `permission` field hides all contributions when the admin lacks
+that permission:
 
 ```lua
 exports.EasyAdmin:RegisterPlugin({
@@ -41,6 +54,19 @@ exports.EasyAdmin:RegisterPlugin({
   permission = 'plugin.my-plugin',
   -- navItems, pages, etc. — all hidden without this perm
 })
+```
+
+### Individual nav items
+
+Set `permission` on a nav item or on a child of a category to hide just that
+entry:
+
+```lua
+navItems = {
+  { id = 'plugin:my-plugin', label = 'My Plugin', icon = 'box' },
+  { id = 'plugin:my-plugin:admin', label = 'Admin', icon = 'shield',
+    permission = 'plugin.my-plugin.advanced' },
+},
 ```
 
 ### Individual player tab
@@ -51,6 +77,9 @@ playerDetailTabs = {
   { id = 'admin', label = 'Admin', permission = 'plugin.my-plugin.advanced', renderAction = 'renderAdmin' },
 },
 ```
+
+Gating only controls what the menu renders. It is not a security boundary —
+always check the permission again in the handler that does the work.
 
 ## Guarding server handlers
 
@@ -65,10 +94,17 @@ AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(sou
 end)
 ```
 
+Every server handler must check its own permission — the bridge does not check
+it for you.
+
+To accept any permission in a group, use
+`DoesPlayerHavePermissionForCategory(source, 'plugin.my-plugin')`. It returns
+true when the admin holds at least one permission starting with that string,
+which is useful for deciding whether to allow a whole section.
+
 ## Guarding client handlers
 
-Use the client-side permission check (`player = -1`) to return a limited
-schema when the admin lacks a permission:
+Use `-1` as the player id to check the current client's permissions:
 
 ```lua
 AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
@@ -78,3 +114,14 @@ AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, c
   cb({ { type = 'heading', text = 'Full access', level = 2 } })
 end)
 ```
+
+This only changes what the admin's own menu renders. It is a convenience, not
+a security boundary — the data may already have been fetched.
+
+## Permission changes and reloads
+
+Permissions reach the menu when the admin session starts. If your plugin is
+started after an admin has the menu open, its gated contributions stay hidden
+until that admin refreshes permissions (menu → **Settings** → **Refresh
+permissions**) or reconnects. The same refresh applies after you change ACEs in
+`server.cfg`.

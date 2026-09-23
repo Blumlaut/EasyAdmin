@@ -2,9 +2,9 @@
 
 ## Reason Shortcuts
 
-Reason shortcuts are text replacements for commonly used moderation reasons. When a player types a shortcut keyword in any reason field (ban, kick, warn, etc.), it expands to the full configured text.
+Reason shortcuts let you type a short keyword instead of the same long moderation reason. When you enter just the keyword as the reason for a ban, kick or warning, EasyAdmin replaces it with the full text before the action is carried out.
 
-Shortcuts are added via the `ea_addShortcut` command. They are not persisted to disk — they must be re-added after each server restart, or added in `server.cfg` after EasyAdmin starts.
+Add a shortcut with the `ea_addShortcut` command:
 
 ```
 ea_addShortcut rdm "RDMing is not allowed, please read our Rules! (/rules)"
@@ -14,13 +14,17 @@ ea_addShortcut stfu "Please be respectful in Voice and Text Chat! (/rules)"
 
 Format: `ea_addShortcut [keyword] [full text]`
 
-The keyword can be any short string. The full text is everything after the keyword.
+- The keyword is a single word and is matched case-insensitively.
+- The full text is everything after the keyword.
+- The keyword only expands when it is the whole reason, not part of a longer sentence.
 
-Shortcuts are pushed to all online admins' NUI instances when added.
+Requires the `easyadmin.server.shortcut.add` permission. The server console can always run the command.
+
+Shortcuts are not saved. They are lost when the server restarts, so add them again after a restart or list them in `server.cfg` after EasyAdmin starts. Admins who are online see new shortcuts straight away, and admins who join later get the current list.
 
 ## Chat Reminders
 
-Chat reminders are periodic messages sent to all players' chat. A random reminder is selected from the configured list at each interval.
+Chat reminders are periodic messages sent to all players' chat. A random reminder is selected from the list at each interval. Nothing is sent until at least one reminder has been added.
 
 | Convar | Default | Description |
 |--------|---------|-------------|
@@ -34,22 +38,26 @@ ea_addReminder "Current time: @time"
 ea_addReminder "Our banlist has @bancount entries"
 ```
 
+Requires the `easyadmin.server.reminder.add` permission. The server console can always run the command.
+
+Reminders are not saved. Add them again after a restart, or list them in `server.cfg` after EasyAdmin starts.
+
 ### Placeholders
 
 | Placeholder | Replaced With |
 |-------------|---------------|
-| `@admins` | Comma-separated list of online admin names, or `@admins` if none are online |
-| `@bancount` | Total number of entries in the banlist |
-| `@time` | Current time (Lua `%X` format) |
-| `@date` | Current date (Lua `%x` format) |
+| `@admins` | Names of the admins who are online, or the text `@admins` if none are online |
+| `@bancount` | Number of entries in the banlist |
+| `@time` | Current time |
+| `@date` | Today's date |
 
-Color codes (`^1` through `^9`) can be used in reminder text for formatting.
+Color codes (`^1` through `^9`) can be used in reminder text.
 
 Reminders are sent as chat messages from "EasyAdmin".
 
 ## Allowlist
 
-The allowlist system restricts server access to players with the `player.allowlist` permission only.
+The allowlist restricts server access to players with the `easyadmin.player.allowlist` permission only.
 
 ```
 set ea_enableAllowlist "true"
@@ -57,11 +65,13 @@ set ea_enableAllowlist "true"
 
 When enabled, players without the `easyadmin.player.allowlist` permission are denied connection with a message. Players with the permission (typically admins and whitelisted community members) can connect normally.
 
-This is checked during the player connection deferral, after the banlist check.
+This is checked during the player connection deferral, after the banlist check, so banned players are still shown their ban message.
 
 ### Adding to the Allowlist
 
-Grant the permission to a player's group or identifier:
+Grant the permission with an ACE in `server.cfg`, the same way as any other EasyAdmin permission.
+
+Grant it to a player's identifier:
 
 ```
 add_ace identifier.steam:1100001018c7433 easyadmin.player.allowlist allow
