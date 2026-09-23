@@ -17,6 +17,7 @@ import { WarningOverlay } from './components/WarningOverlay'
 import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
 import { notify } from './lib/notify'
+import { copyToClipboard } from './utils/clipboard'
 import { I18nProvider } from './lib/i18n'
 import { usePlugins, PluginPageHost } from './plugins'
 
@@ -167,6 +168,14 @@ function App() {
       unsubUnhook()
       unsubRehook()
     }
+  }, [])
+
+  // === Clipboard: Lua's copyToClipboard() pushes the text via NUI ===
+
+  useEffect(() => {
+    return on<{ text: string }>('clip', (data) => {
+      if (data.text) copyToClipboard(data.text)
+    })
   }, [])
 
   // === Background hint auto-fade ===
