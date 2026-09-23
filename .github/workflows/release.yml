@@ -14,25 +14,56 @@ on:
           - stable
           - beta
 
+permissions:
+  contents: write
+
 jobs:
   create:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v7
+      with:
+        # Full history + tags: the changelog and "previous tag" detection need them
+        fetch-depth: 0
 
     - name: Set up Node.js 22
       uses: actions/setup-node@v7
       with:
         node-version: '22'
 
-    - name: Install dependencies
-      run: npm run install:all
+    - name: Validate version
+      env:
+        VERSION: ${{ inputs.version }}
+        RELEASE_TYPE: ${{ inputs.release_type }}
+      run: |
+        # Validate semver format: MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]
+        if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+          echo "Error: '$VERSION' is not a valid semver version."
+          echo "Examples: 8.0.0, 8.0.1, 8.0.0-alpha.1, 8.0.0-beta.2"
+          exit 1
+        fi
+        if [ "$RELEASE_TYPE" = "beta" ] && [[ "$VERSION" != *-* ]]; then
+          echo "::warning::'$VERSION' has no prerelease suffix, but is being published as a beta."
+        fi
+        if [ "$RELEASE_TYPE" != "beta" ] && [[ "$VERSION" == *-* ]]; then
+          echo "::warning::'$VERSION' is a prerelease version, but is being published as stable."
+        fi
+        echo "Version '$VERSION' is valid semver."
 
-    - name: Typecheck bot
-      run: cd bot && npm run typecheck
-
-    - name: Build bot + NUI
-      run: npm run build
+    - name: Remove existing tag + release (if any)
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        if gh release view "$VERSION" >/dev/null 2>&1; then
+          echo "Release $VERSION already exists — removing it along with its tag"
+          gh release delete "$VERSION" --yes --cleanup-tag
+        fi
+        if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" >/dev/null 2>&1; then
+          echo "Tag $VERSION already exists — removing it"
+          git push origin ":refs/tags/$VERSION"
+        fi
+        git tag -d "$VERSION" 2>/dev/null || true
 
     - name: Get previous tag
       id: previous_tag
@@ -42,83 +73,102 @@ jobs:
 
     - name: Generate changelog
       id: generate_changelog
+      env:
+        PREVIOUS_TAG: ${{ steps.previous_tag.outputs.previous_tag }}
+        VERSION: ${{ inputs.version }}
       run: |
-        if [ -n "${{ steps.previous_tag.outputs.previous_tag }}" ]; then
-          CHANGELOG=$(git log --pretty=format:"- %s" ${{ steps.previous_tag.outputs.previous_tag }}..HEAD)
+        if [ -n "$PREVIOUS_TAG" ]; then
+          CHANGELOG=$(git log --pretty=format:"- %s" "$PREVIOUS_TAG..HEAD")
+          COMPARE_URL="https://github.com/${GITHUB_REPOSITORY}/compare/$PREVIOUS_TAG...$VERSION"
         else
           CHANGELOG=$(git log --pretty=format:"- %s")
+          COMPARE_URL=""
         fi
-        echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
-        echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
-        echo "EOF" >> "$GITHUB_OUTPUT"
+        {
+          echo "changelog<<CHANGELOG_EOF"
+          echo "$CHANGELOG"
+          echo "CHANGELOG_EOF"
+        } >> "$GITHUB_OUTPUT"
+        echo "compare_url=$COMPARE_URL" >> "$GITHUB_OUTPUT"
 
-    - name: Remove existing tag + release (if any)
+    - name: Install dependencies
+      run: npm run install:all
+
+    - name: Typecheck bot
+      run: npm run typecheck:bot
+
+    - name: Build bot + NUI
+      run: npm run build
+
+    - name: Bump version + tag
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: ${{ inputs.version }}
+        RELEASE_TYPE: ${{ inputs.release_type }}
       run: |
-        TAG="${{ github.event.inputs.version }}"
-        # Check if the tag exists remotely
-        if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
-          echo "Tag $TAG already exists — removing old tag and release"
-          # Delete the existing GitHub release via API
-          RELEASE_ID=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG" \
-            | jq -r '.id // empty')
-          if [ -n "$RELEASE_ID" ]; then
-            curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID" \
-              && echo "Deleted existing release" || echo "Failed to delete release (may not exist)"
-          fi
-          # Delete the remote tag
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} --delete "$TAG"
-          # Remove any local copy
-          git tag -d "$TAG" 2>/dev/null || true
-        fi
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Validate version
-      run: |
-        VERSION='${{ github.event.inputs.version }}'
-        # Validate semver format: MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]
-        if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
-          echo "Error: '$VERSION' is not a valid semver version."
-          echo "Examples: 8.0.0, 8.0.1, 8.0.0-alpha.1, 8.0.0-beta.2"
-          exit 1
-        fi
-        echo "Version '$VERSION' is valid semver."
-
-    - name: Package release
-      run: |
-        ZIP_PATH="$RUNNER_TEMP/EasyAdmin-${{ github.event.inputs.version }}.zip"
-        find . -type d -name node_modules -exec rm -rf {} +
-        if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
+        # Stable packages must not advertise themselves as master-branch builds.
+        # The flag is restored on the branch after the release is published.
+        if [ "$RELEASE_TYPE" != "beta" ]; then
           sed -i "/is_master/d" fxmanifest.lua
         fi
-        zip -r "$ZIP_PATH" . \
+        sed -i "/^version/c\version '$VERSION'" fxmanifest.lua
+        # Version is already validated as semver — write it directly
+        sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" package.json
+
+        git add fxmanifest.lua package.json
+        if git diff --cached --quiet; then
+          echo "Nothing to commit — already at $VERSION"
+        else
+          git commit -m "$VERSION"
+        fi
+        git tag -a "$VERSION" -m "Version $VERSION"
+
+    - name: Package release
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        ZIP_PATH="$RUNNER_TEMP/EasyAdmin-$VERSION.zip"
+        find . -type d -name node_modules -exec rm -rf {} +
+        # Docs keep their markdown, but the ~11MB of GIF/PNG assets are not shipped
+        zip -rX "$ZIP_PATH" . \
           -x ".git" \
           -x ".git/*" \
           -x ".github/*" \
           -x ".agents/*" \
           -x "*tests/*" \
           -x "*tools/*" \
-          -x "*PLANS/*"
-        if [ "${{ github.event.inputs.release_type }}" != "beta" ]; then
-          sed -i "/^version/ais_master 'yes'" fxmanifest.lua
-        fi
+          -x "*PLANS/*" \
+          -x "docs/*.gif" \
+          -x "docs/*.png" \
+          -x "docs/*.jpg" \
+          -x "docs/*.jpeg" \
+          -x "docs/*.webp" \
+          -x "docs/*.svg" \
+          -x "docs/*.ico"
         echo "zip_path=$ZIP_PATH" >> "$GITHUB_ENV"
+
+    - name: Push version commit + tag
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        # Atomic: never leave a pushed tag pointing somewhere the branch doesn't
+        git push --atomic origin HEAD "refs/tags/$VERSION"
 
     - name: Create Release
       uses: softprops/action-gh-release@v3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.event.inputs.version }}
-        name: EasyAdmin ${{ github.event.inputs.version }}${{ github.event.inputs.release_type == 'beta' && ' (Beta)' || '' }}
+        tag_name: ${{ inputs.version }}
+        name: EasyAdmin ${{ inputs.version }}${{ inputs.release_type == 'beta' && ' (Beta)' || '' }}
         body: |
-          # EasyAdmin ${{ github.event.inputs.version }}
+          # EasyAdmin ${{ inputs.version }}
 
           ## Download
 
-          [EasyAdmin-${{ github.event.inputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.version }}/EasyAdmin-${{ github.event.inputs.version }}.zip)
+          [EasyAdmin-${{ inputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/${{ inputs.version }}/EasyAdmin-${{ inputs.version }}.zip)
 
           ## What's Changed
           ${{ steps.generate_changelog.outputs.changelog }}
@@ -126,25 +176,19 @@ jobs:
           Supported by:
           <a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
           <p align="center">10% Discount Code: <b>EasyAdmin</b></p>
-
-          **Full Changelog**: https://github.com/Blumlaut/EasyAdmin/compare/${{ steps.previous_tag.outputs.previous_tag }}...${{ github.event.inputs.version }}
+          ${{ steps.generate_changelog.outputs.compare_url && format('**Full Changelog**: {0}', steps.generate_changelog.outputs.compare_url) || '' }}
         draft: false
-        prerelease: ${{ github.event.inputs.release_type == 'beta' }}
+        prerelease: ${{ inputs.release_type == 'beta' }}
         files: ${{ env.zip_path }}
 
-    - name: Push Tag
+    - name: Restore is_master on the master branch
+      if: ${{ inputs.release_type != 'beta' }}
       run: |
-            echo "version is ${{ github.event.inputs.version }}"
-            git config user.name "GitHub Actions Bot"
-            git config user.email "<>"
-            sed -i "/is_master/d" fxmanifest.lua
-            sed -i "/^version/c\version '${{ github.event.inputs.version }}'" fxmanifest.lua
-            # Version is already validated as semver — write it directly
-            sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"${{ github.event.inputs.version }}\"/" package.json
-            git add .
-            git commit -m "${{ github.event.inputs.version }}"
-            git tag -a ${{ github.event.inputs.version }} -m "Version ${{ github.event.inputs.version }}"
-            sed -i "/^version/ais_master 'yes'" fxmanifest.lua
-            git add .
-            git commit -m "Update Version"
-            git push --follow-tags
+        if grep -q "^is_master" fxmanifest.lua; then
+          echo "is_master already present — nothing to restore"
+          exit 0
+        fi
+        sed -i "/^version/ais_master 'yes'" fxmanifest.lua
+        git add fxmanifest.lua
+        git commit -m "chore: restore is_master after release"
+        git push origin HEAD
