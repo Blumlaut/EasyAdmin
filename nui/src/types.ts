@@ -79,6 +79,7 @@ export interface CachedPlayer {
   identifier?: string
   droppedTime?: number
   immune?: boolean
+  avatar?: string
 }
 
 // Player position streamed from the client to the Map page (~2 Hz)

@@ -20,7 +20,7 @@ const LANDMARK_POSITIONS: Record<number, { x: number; y: number; label: string }
   8: { x: 600, y: 5400, label: 'near Mount Chiliad' },
 }
 
-const SELF_ID = 6 // Frank Castle (demo admin)
+const SELF_ID = 6 // Blumlaut (demo admin)
 
 let timer: ReturnType<typeof setInterval> | null = null
 

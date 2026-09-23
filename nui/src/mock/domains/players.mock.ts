@@ -10,15 +10,16 @@ import { jsonResponse } from '../types'
 
 // ---- Demo Data ----
 
+// Demo players use real EasyAdmin contributors (GitHub profiles) where possible.
 export const DEMO_PLAYERS: Player[] = [
-  { id: 1, name: 'Alice Johnson', license: 'license:abc123', ip: '127.0.0.1', discord: 'alice#0001' },
-  { id: 2, name: 'Bob Smith', license: 'license:def456', ip: '192.168.1.50' },
-  { id: 3, name: 'Charlie Brown', license: 'license:ghi789', ip: '10.0.0.12', frozen: true },
-  { id: 4, name: 'Diana Prince', license: 'license:jkl012', ip: '172.16.0.5', muted: true },
-  { id: 5, name: 'Eve Adams', license: 'license:mno345', ip: '192.168.2.100' },
-  { id: 6, name: 'Frank Castle', license: 'license:pqr678', ip: '10.10.10.10', admin: true, developer: true },
-  { id: 7, name: 'Grace Hopper', license: 'license:stu901', ip: '172.20.0.3' },
-  { id: 8, name: 'Hank Pym', license: 'license:vwx234', ip: '192.168.3.200', contributor: true },
+  { id: 1, name: 'Gravxd', license: 'license:abc123', ip: '127.0.0.1', discord: 'gravxd', avatar: 'https://github.com/Gravxd.png' },
+  { id: 2, name: 'Jaccosf', license: 'license:def456', ip: '192.168.1.50', avatar: 'https://github.com/Jaccosf.png' },
+  { id: 3, name: 'zRxnx', license: 'license:ghi789', ip: '10.0.0.12', frozen: true, avatar: 'https://github.com/zRxnx.png' },
+  { id: 4, name: 'coleminer0112', license: 'license:jkl012', ip: '172.16.0.5', muted: true, avatar: 'https://github.com/coleminer0112.png' },
+  { id: 5, name: 'DukeOfCheese', license: 'license:mno345', ip: '192.168.2.100', avatar: 'https://github.com/DukeOfCheese.png' },
+  { id: 6, name: 'Blumlaut', license: 'license:pqr678', ip: '10.10.10.10', admin: true, developer: true, avatar: 'https://github.com/Blumlaut.png' },
+  { id: 7, name: 'vecchiotom', license: 'license:stu901', ip: '172.20.0.3', avatar: 'https://github.com/vecchiotom.png' },
+  { id: 8, name: 'ewwepy', license: 'license:vwx234', ip: '192.168.3.200', contributor: true, avatar: 'https://github.com/ewwepy.png' },
 ]
 
 export const DEMO_PERMISSIONS: Permissions = {
@@ -57,10 +58,10 @@ export const DEMO_PERMISSIONS: Permissions = {
 }
 
 export const DEMO_CACHED: CachedPlayer[] = [
-  { id: 99, name: 'Recent1', identifier: 'license:recent0001', droppedTime: Date.now() / 1000 - 60 },
-  { id: 100, name: 'Recent2', identifier: 'license:recent0002', droppedTime: Date.now() / 1000 - 300 },
-  { id: 101, name: 'Recent3', identifier: 'license:recent0003', droppedTime: Date.now() / 1000 - 600 },
-  { id: 102, name: 'Recent4', identifier: 'license:recent0004', droppedTime: Date.now() / 1000 - 1200 },
+  { id: 99, name: 'Bartixxx32', identifier: 'license:recent0001', droppedTime: Date.now() / 1000 - 60, avatar: 'https://github.com/Bartixxx32.png' },
+  { id: 100, name: 'jonteohr', identifier: 'license:recent0002', droppedTime: Date.now() / 1000 - 300, avatar: 'https://github.com/jonteohr.png' },
+  { id: 101, name: 'OfficialSkypo', identifier: 'license:recent0003', droppedTime: Date.now() / 1000 - 600, avatar: 'https://github.com/OfficialSkypo.png' },
+  { id: 102, name: 'TheIndra55', identifier: 'license:recent0004', droppedTime: Date.now() / 1000 - 1200, avatar: 'https://github.com/TheIndra55.png' },
 ]
 
 // ---- Mutable state ----

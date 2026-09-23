@@ -20,6 +20,7 @@ function getStartedResources(): number {
 async function handleRequestServerStats(): Promise<Response> {
   return jsonResponse({
     maxPlayers: 48,
+    avgPing: 34,
     resources: {
       total: 80,
       started: getStartedResources(),
@@ -30,6 +31,10 @@ async function handleRequestServerStats(): Promise<Response> {
       peds: 387,
       objects: 1253,
     },
+    adminsOnline: 2,
+    pendingReports: 3,
+    uptime: 4 * 3600 + 27 * 60 + 12, // 4h 27m
+    peakToday: 12,
   })
 }
 

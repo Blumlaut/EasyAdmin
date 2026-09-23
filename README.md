@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/13604413/129143671-3ab6a643-faf0-479d-8b97-af71ffb5193c.png)
+![EasyAdmin 8.0 — Dashboard](docs/docs/assets/screenshots/dashboard.png)
 
 EasyAdmin is a feature-rich administration suite designed specifically for FiveM and RedM servers.
 
@@ -29,15 +29,15 @@ EasyAdmin is a feature-rich administration suite designed specifically for FiveM
 * Configurable ban screens for customizing server branding and colors using easy-to-use convars.
 * [An extensive Documentation](https://easyadmin.readthedocs.io/) for installation and configuration instructions.
 
-![image](https://user-images.githubusercontent.com/13604413/126916981-1680e5ac-e024-467b-aad3-a5a9658449e0.png)
+![EasyAdmin 8.0 — Player Management](docs/docs/assets/screenshots/players.png)
 
-![image](https://user-images.githubusercontent.com/13604413/126916983-0e62e13f-aa66-49ea-b7ef-4f8449601c53.png)
+![EasyAdmin 8.0 — Reports](docs/docs/assets/screenshots/reports.png)
 
-![image](https://user-images.githubusercontent.com/13604413/126916995-213fca15-d356-47b6-8b80-8745b4a37eb9.png)
+![EasyAdmin 8.0 — Ban List](docs/docs/assets/screenshots/bans.png)
 
-![image](https://user-images.githubusercontent.com/13604413/126916989-f78d7b16-d20a-49ba-a559-6c3b56e98de5.png)
+![EasyAdmin 8.0 — Server Management](docs/docs/assets/screenshots/server.png)
 
-![image](https://github.com/Gravxd/EasyAdmin/assets/75702884/8a4e4694-5ff5-429a-986c-ab43148929a8)
+![EasyAdmin 8.0 — Map](docs/docs/assets/screenshots/map.png)
 
 ### Installation
 

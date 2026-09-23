@@ -83,6 +83,42 @@
 	flex-grow: 1;
 }
 
+/* ---- Screenshot gallery ---- */
+.ea-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 1rem;
+	margin: 1.5em 0 2em;
+}
+
+.ea-gallery figure {
+	margin: 0;
+	background: var(--md-code-bg-color);
+	border: 1px solid var(--md-default-fg-color--lightest);
+	border-radius: .5rem;
+	overflow: hidden;
+	transition: border-color .2s ease, box-shadow .2s ease;
+	break-inside: avoid;
+}
+
+.ea-gallery figure:hover {
+	border-color: var(--md-primary-fg-color);
+	box-shadow: 0 0 .5rem rgba(0,0,0,.1);
+}
+
+.ea-gallery img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.ea-gallery figcaption {
+	padding: .6rem .8rem;
+	font-size: .75rem;
+	font-weight: 700;
+	color: var(--md-default-fg-color--medium);
+}
+
 /* ---- Tables ---- */
 .md-typeset table:not([class]) {
 	font-size: .75rem;
