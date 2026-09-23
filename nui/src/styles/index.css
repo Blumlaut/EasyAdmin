@@ -34,6 +34,7 @@
 @import './components/screenshot-capture.css';
 @import './components/stream-viewer.css';
 @import './components/timeline-entry.css';
+@import './components/version-badge.css';
 @import './pages/resources.css';
 @import './pages/profiler.css';
 @import './pages/player-detail.css';

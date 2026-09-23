@@ -49,6 +49,18 @@ async function executeHandler(fn: (body: Record<string, unknown>) => Promise<Res
   return fn(body)
 }
 
+// ---- Simulated EasyAdmin version / update state ----
+// Add `?update` to the dev URL to preview the "update available" state.
+const params = new URLSearchParams(window.location.search)
+const demoUpdateInfo = params.has('update')
+  ? { currentVersion: '8.0', latestVersion: '8.1', available: true }
+  : { currentVersion: '8.0', latestVersion: '8.0', available: false }
+
+HANDLERS.requestUpdateInfo = async () => {
+  window.postMessage({ action: 'updateInfo', data: demoUpdateInfo }, '*')
+  return jsonResponse({ ok: true })
+}
+
 // ---- Intercept fetch calls that go to the Lua backend ----
 
 const originalFetch = window.fetch
@@ -105,6 +117,10 @@ setTimeout(() => {
   window.postMessage({
     action: 'updateReports',
     data: { reports: DEMO_REPORTS },
+  }, '*')
+  window.postMessage({
+    action: 'updateInfo',
+    data: demoUpdateInfo,
   }, '*')
   startMapStreamer()
 }, 500)

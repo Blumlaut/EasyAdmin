@@ -55,6 +55,13 @@ export interface AppDataResult {
   // Update info
   updateInfo: UpdateInfo | null
   dismissUpdate: () => void
+  /** Currently installed EasyAdmin version, null until the server answers */
+  version: string | null
+  /** Latest available version, null when up to date or not yet known */
+  latestVersion: string | null
+  /** Whether a newer EasyAdmin version is available (survives banner dismissal) */
+  updateAvailable: boolean
+  fetchUpdateInfo: () => void
 
   // Restart notification (txAdmin scheduled restart)
   restartInfo: RestartInfo | null
@@ -92,12 +99,20 @@ export function useAppData(): AppDataResult {
   const [windowPosData, setWindowPosData] = useState<WindowPosition | null>(null)
   const [windowSizeData, setWindowSizeData] = useState<WindowSize | null>(null)
 
-  // Update info (pushed from server when a new version is detected)
-  const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
+  // Update info pushed from the server on request / when a new version is detected.
+  // The raw payload is kept even after the dashboard banner is dismissed so the
+  // sidebar badge keeps reporting the true state.
+  const [serverUpdate, setServerUpdate] = useState<UpdateInfo | null>(null)
+  const [updateDismissed, setUpdateDismissed] = useState(false)
 
   const dismissUpdate = useCallback(() => {
-    setUpdateInfo(null)
+    setUpdateDismissed(true)
   }, [])
+
+  const version = serverUpdate?.currentVersion ?? null
+  const latestVersion = serverUpdate?.available ? serverUpdate.latestVersion : null
+  const updateAvailable = serverUpdate?.available === true
+  const updateInfo = updateAvailable && !updateDismissed ? serverUpdate : null
 
   // Restart notification (txAdmin scheduled restart)
   const [restartInfo, setRestartInfo] = useState<RestartInfo | null>(null)
@@ -188,8 +203,8 @@ export function useAppData(): AppDataResult {
   // Update notification from server (pushed when checkVersion detects a new version)
   useEffect(() => {
     return on<UpdateInfo>('updateInfo', (data) => {
-      if (data && data.available) {
-        setUpdateInfo(data)
+      if (data && data.currentVersion) {
+        setServerUpdate(data)
       }
     })
   }, [])
@@ -225,6 +240,10 @@ export function useAppData(): AppDataResult {
     callLua('requestCachedPlayers').catch(() => setLoadingCached(false))
   }, [])
 
+  const fetchUpdateInfo = useCallback(() => {
+    callLua('requestUpdateInfo').catch(() => {})
+  }, [])
+
   return {
     players,
     loadingPlayers,
@@ -251,6 +270,10 @@ export function useAppData(): AppDataResult {
     windowSizeData,
     updateInfo,
     dismissUpdate,
+    version,
+    latestVersion,
+    updateAvailable,
+    fetchUpdateInfo,
     restartInfo,
     clearRestartInfo,
   }

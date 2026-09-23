@@ -1,0 +1,39 @@
+/* ============================================================
+   Sidebar footer version badge
+   ============================================================ */
+
+.sidebar-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ea-window--sidebar-horizontal .sidebar-footer {
+  height: 100%;
+  padding: 0 var(--space-4);
+  border-top: none;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.version-badge--update {
+  color: var(--accent-orange);
+  background: var(--bg-orange);
+  border-color: var(--accent-orange);
+  font-weight: var(--font-medium);
+}

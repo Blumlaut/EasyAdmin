@@ -14,6 +14,7 @@ import { StreamPublisher } from './components/StreamPublisher'
 import { StreamSubscriber } from './components/StreamSubscriber'
 import type { IceConfigPayload } from './lib/stream_ice'
 import { WarningOverlay } from './components/WarningOverlay'
+import { VersionBadge } from './components/VersionBadge'
 import { Skeleton } from './components/Skeleton'
 import { ModalProvider } from './ModalContext'
 import { notify } from './lib/notify'
@@ -128,6 +129,11 @@ function App() {
       }
     })
   }, [_chrome, _nav])
+
+  // Refresh the EasyAdmin version / update status whenever the menu opens
+  useEffect(() => {
+    if (visible) data.fetchUpdateInfo()
+  }, [visible, data.fetchUpdateInfo])
 
   // === Player warning (full-screen overlay) ===
 
@@ -351,6 +357,13 @@ function App() {
                 activeId={nav.activeNavId}
                 onSelect={handleNavSelect}
                 orientation={data.settings.sidebarMode}
+              />
+            </div>
+            <div className="sidebar-footer">
+              <VersionBadge
+                version={data.version}
+                latestVersion={data.latestVersion}
+                updateAvailable={data.updateAvailable}
               />
             </div>
           </aside>
