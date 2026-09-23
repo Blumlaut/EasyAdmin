@@ -122,17 +122,9 @@
   object-fit: fill;
 }
 
-/* Leaflet zoom control — match app theme */
-.ea-map .leaflet-control-zoom a {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-  border-color: var(--border-color);
-}
-
-.ea-map .leaflet-control-zoom a:hover {
-  background: var(--bg-hover);
-}
-
+/* Leaflet controls — match app theme.
+   Declared in ascending specificity order (attribution before zoom:
+   `.a:hover` outranks `.a`) to satisfy no-descending-specificity. */
 .ea-map .leaflet-control-attribution {
   background: rgba(10, 14, 20, 0.7);
   color: var(--text-muted);
@@ -141,6 +133,16 @@
 
 .ea-map .leaflet-control-attribution a {
   color: var(--text-secondary);
+}
+
+.ea-map .leaflet-control-zoom a {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.ea-map .leaflet-control-zoom a:hover {
+  background: var(--bg-hover);
 }
 
 /* ---- Player markers ---- */
