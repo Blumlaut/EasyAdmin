@@ -1,4 +1,4 @@
-![EasyAdmin 8.0 — Dashboard](docs/docs/assets/screenshots/dashboard.png)
+![EasyAdmin 8.0](docs/docs/assets/screenshots/dashboard.png)
 
 EasyAdmin is a feature-rich administration suite designed specifically for FiveM and RedM servers.
 
