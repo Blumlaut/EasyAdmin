@@ -81,52 +81,12 @@ function EntityBars({ vehicles, peds, objects }: EntityBarProps) {
 // Time-dependent greeting
 // ============================================================
 
-const greetings: Array<[number, string[]]> = [
-  // 00:00 - 05:59: late night / early morning
-  [6, [
-    'Just one more ban before bed?',
-    'The server sleeps, but you don\'t?',
-    'Night shift moderation. Respect.',
-    'Even the bots are offline by now.',
-  ]],
-  // 06:00 - 09:59: morning
-  [10, [
-    'Good morning! Fresh coffee, fresh bans.',
-    'Rise and shine, moderator.',
-    'Morning shift, let\'s clean this server up.',
-    'Good morning! The server missed you.',
-  ]],
-  // 10:00 - 16:59: day
-  [17, [
-    'Hi there! Server looking good today.',
-    'Afternoon moderation, you got this.',
-    'Hope your shift is going smoothly.',
-    'Dashboard loaded, let\'s get to work.',
-  ]],
-  // 17:00 - 21:59: evening
-  [22, [
-    'Evening shift, nice work.',
-    'Evening moderation, the troublemakers come out now.',
-    'Good evening! Time to watch the chat.',
-    'Evening shift loaded and ready.',
-  ]],
-  // 22:00 - 23:59: late evening
-  [-1, [
-    'Late evening moderation?',
-    'Still here? Impressive dedication.',
-    'Late night patrol, stay sharp.',
-    'The night owls are online now.',
-  ]],
-]
-
 function getGreeting(): string {
   const hour = new Date().getHours()
-  for (const [cutoff, messages] of greetings) {
-    if (cutoff === -1 || hour < cutoff) {
-      return messages[Math.floor(Math.random() * messages.length)]
-    }
-  }
-  return 'Hi there!'
+  if (hour < 6) return 'Good night'
+  if (hour < 12) return 'Good morning'
+  if (hour < 18) return 'Good afternoon'
+  return 'Good evening'
 }
 
 // Pride Month: 1 in 3 chance during June
