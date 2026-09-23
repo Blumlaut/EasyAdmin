@@ -19,7 +19,7 @@ describe("Map — CollectMapPositions", function()
         -- Default entity stubs; tests override via _G where needed.
         _G.GetPlayerPed = function(_src) return 0 end
         _G.DoesEntityExist = function(_ped) return false end
-        _G.GetEntityCoords = function(_ped) return 0, 0, 0 end
+        _G.GetEntityCoords = function(_ped) return { x = 0, y = 0, z = 0 } end
 
         -- Load the file; event/thread registration are no-ops in the mock.
         local chunk = assert(loadfile(_TESTS_DIR .. "/../server/map.lua"))
@@ -47,7 +47,7 @@ describe("Map — CollectMapPositions", function()
         _G.GetEntityCoords = function(ped)
             local src = ped - 1000
             local c = coords[src]
-            return c[1], c[2], c[3]
+            return { x = c[1], y = c[2], z = c[3] }
         end
 
         local result = CollectMapPositions(b)
@@ -68,7 +68,7 @@ describe("Map — CollectMapPositions", function()
         _G.DoesEntityExist = function(_ped) return true end
         _G.GetEntityCoords = function(ped)
             local src = ped - 2000
-            return src * 1, src * 2, src * 3
+            return { x = src * 1, y = src * 2, z = src * 3 }
         end
 
         local result = CollectMapPositions(a)
@@ -87,7 +87,7 @@ describe("Map — CollectMapPositions", function()
         end
         _G.GetEntityCoords = function(ped)
             local src = ped - 3000
-            return src, src, src
+            return { x = src, y = src, z = src }
         end
 
         local result = CollectMapPositions(b)

@@ -200,7 +200,8 @@ function GetAllVehicles() return {} end
 function GetAllPeds() return {} end
 function GetAllObjects() return {} end
 function DoesEntityExist(entity) return false end
-function GetEntityCoords(entity) return 0, 0, 0 end
+-- FiveM returns a vector3 table ({x, y, z})
+function GetEntityCoords(entity) return { x = 0, y = 0, z = 0 } end
 function DeleteEntity(entity) end
 function GetPlayerPed(src) return 0 end
 function DoesPlayerExist(src) return _mockPlayers[tonumber(src)] ~= nil end
