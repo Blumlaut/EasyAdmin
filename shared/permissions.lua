@@ -18,6 +18,7 @@ permissions = {
 	["player.ban.view"] = false,
 	["player.ban.edit"] = false,
 	["player.ban.remove"] = false,
+	["player.allowlist"] = false,
 	["player.kick"] = false,
 	["player.spectate"] = false,
 	["player.teleport.single"] = false,
