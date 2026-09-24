@@ -108,15 +108,6 @@ RegisterServerEvent("EasyAdmin:StopResource", function(text)
 	end
 end)
 
-RegisterServerEvent("EasyAdmin:SetConvar", function(convarname, convarvalue)
-	if DoesPlayerHavePermission(source, "server.convars") then
-		PrintDebugMessage("Player "..getName(source,true).." set convar "..convarname.. " to "..convarvalue, 3)
-		SetConvar(convarname, convarvalue)
-		local preferredWebhook = getPreferredWebhook()
-		SendWebhookMessage(preferredWebhook, GetLocalisedText("**{by}** changed convar **{name}** to **{value}**", { by = getName(source, false, true), name = convarname, value = convarvalue }), "settings", 16777214)
-	end
-end)
-
 -- Known convars the NUI can browse and edit.
 -- setType: 'set' = SetConvar (server-only), 'setr' = SetConvarReplicated (synced to clients),
 --          'sets' = SetConvarServerInfo (appears in server browser / info.json)
@@ -239,7 +230,7 @@ RegisterServerEvent("EasyAdmin:requestConvars", function()
 	TriggerClientEvent("EasyAdmin:convarsResult", src, convars)
 end)
 
--- Override SetConvar handler to use the correct type when a setType is provided
+-- Set a convar, using the correct function for the provided type
 RegisterServerEvent("EasyAdmin:SetConvar", function(convarname, convarvalue, setType)
 	if DoesPlayerHavePermission(source, "server.convars") then
 		PrintDebugMessage("Player "..getName(source,true).." set convar "..convarname.. " to "..convarvalue, 3)
