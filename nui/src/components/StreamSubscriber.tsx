@@ -76,7 +76,6 @@ export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: S
   }, [])
 
   const teardownPeer = useCallback(() => {
-    console.log(LOG, targetId, 'teardownPeer()')
     // Close the media call
     if (callRef.current) {
       callRef.current.close()
@@ -133,23 +132,18 @@ export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: S
 
   // Initialize PeerJS on mount — the target will call us
   useEffect(() => {
-    console.log(LOG, targetId, 'init: targetName=', targetName)
     const peerConfig = buildPeerConfig(iceConfig)
-    console.log(LOG, targetId, 'init: peer config:', JSON.stringify(peerConfig))
 
     const setupPeer = (p: Peer) => {
       p.on('open', () => {
-        console.log(LOG, targetId, 'PeerJS open, id:', p.id)
         void callLua('streamSubscriber:peerReady', { peerId: p.id, targetId, role: 'viewer' })
       })
 
       p.on('call', (call) => {
-        console.log(LOG, targetId, 'incoming call from:', call.peer)
         call.answer(new MediaStream())
         callRef.current = call
 
         call.on('stream', (stream) => {
-          console.log(LOG, targetId, 'received remote stream, tracks:', stream.getTracks().length)
           if (videoRef.current) {
             videoRef.current.srcObject = stream
             void videoRef.current.play().catch(() => {})
@@ -159,7 +153,6 @@ export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: S
         })
 
         call.on('close', () => {
-          console.log(LOG, targetId, 'call closed')
           callRef.current = null
           setConnState((prev) => (prev === 'live' ? 'failed' : prev))
           setError('Connection lost')
@@ -174,7 +167,6 @@ export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: S
       })
 
       p.on('disconnected', () => {
-        console.log(LOG, targetId, 'PeerJS disconnected, attempting reconnect')
         try {
           p.reconnect()
         } catch {
@@ -199,13 +191,11 @@ export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: S
     }
 
     const peerId = `ea-viewer-${targetId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-    console.log(LOG, targetId, 'init: creating PeerJS with id', peerId)
     const peer = new Peer(peerId, peerConfig)
     peerRef.current = peer
     setupPeer(peer)
 
     return () => {
-      console.log(LOG, targetId, 'cleanup: unmounting')
       teardownPeer()
     }
   }, [targetId, iceConfig, teardownPeer])
@@ -216,7 +206,6 @@ export function StreamSubscriber({ targetId, targetName, iceConfig, onClose }: S
     let timer: ReturnType<typeof setTimeout> | null = null
 
     const unsubscribe = on<StreamEndData>('streamSubscriber:ended', (payload) => {
-      console.log(LOG, targetId, 'ended: targetId=', payload.targetId, 'reason=', payload.reason)
       if (targetId === payload.targetId) {
         teardownPeer()
         setError(payload.reason)

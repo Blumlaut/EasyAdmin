@@ -238,7 +238,6 @@ export class ScreenshotCaptureCtx {
     )
 
     const capturePromise = (async () => {
-      console.log('[EA-Screenshot] capture: starting pixel read')
       const srcWidth = window.innerWidth
       const srcHeight = window.innerHeight
 
@@ -251,9 +250,7 @@ export class ScreenshotCaptureCtx {
         console.error('[EA-Screenshot] capture: renderer or rtTexture is null')
         return null
       }
-      console.log('[EA-Screenshot] capture: readRenderTargetPixels (' + srcWidth + 'x' + srcHeight + ')')
       renderer.readRenderTargetPixels(rt, 0, 0, srcWidth, srcHeight, read)
-      console.log('[EA-Screenshot] capture: pixel read complete, nonZeroBytes=' + read.reduce((a, b) => a + (b !== 0 ? 1 : 0), 0) + '/' + pixelCount)
 
       // Cap the longer dimension, scale the shorter to preserve aspect ratio.
       const longer = Math.max(srcWidth, srcHeight)
@@ -276,16 +273,11 @@ export class ScreenshotCaptureCtx {
         srcHeight,
       )
 
-      console.log('[EA-Screenshot] capture: createImageBitmap')
       const bitmap = await createImageBitmap(imageData)
-      console.log('[EA-Screenshot] capture: drawImage (scale ' + srcWidth + 'x' + srcHeight + ' -> ' + dstWidth + 'x' + dstHeight + ')')
       ctx.drawImage(bitmap, 0, 0, dstWidth, dstHeight)
       bitmap.close()
 
-      console.log('[EA-Screenshot] capture: toDataURL webp')
-      const dataUrl = offscreen.toDataURL('image/webp', quality)
-      console.log('[EA-Screenshot] capture: toDataURL complete, length=' + dataUrl.length)
-      return dataUrl
+      return offscreen.toDataURL('image/webp', quality)
     })()
 
     return Promise.race([capturePromise, timeoutPromise]).catch(() => null)
