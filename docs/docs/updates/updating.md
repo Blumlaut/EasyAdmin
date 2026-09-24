@@ -7,7 +7,7 @@
 3. Download the release zip:
    - **Latest**: [GitHub Releases](https://github.com/Blumlaut/EasyAdmin/releases/latest)
    - **Specific version**: `https://github.com/Blumlaut/EasyAdmin/releases/download/{version}/EasyAdmin-{version}.zip`
-     (e.g. `https://github.com/Blumlaut/EasyAdmin/releases/download/8.0a1/EasyAdmin-8.0a1.zip`)
+     (e.g. `https://github.com/Blumlaut/EasyAdmin/releases/download/8.0.0-alpha.1/EasyAdmin-8.0.0-alpha.1.zip`)
 4. Delete any files/folders listed below for your target version.
 5. Replace the EasyAdmin folder in your `resources/` directory with the new version.
 6. Start your server.

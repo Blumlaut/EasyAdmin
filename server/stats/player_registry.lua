@@ -20,10 +20,10 @@ local playerIndex = {}
 -- Direct index: entry ID → entry reference (avoids O(n) scan of playerRegistry)
 local playerById = {}
 
--- Temporary: track connect times per source for session length calculation
+-- Connect time per source (set at sessionStart, used for session length calculation)
 local sessionStarts = {}
 
--- Temporary: map source → best identifier (set at sessionStart, used at playerDropped)
+-- Best identifier per source (set at sessionStart, used at playerDropped)
 local sourceBestId = {}
 
 -- File path (shared with player_history module)
