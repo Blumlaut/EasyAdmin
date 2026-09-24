@@ -45,7 +45,6 @@ ui_page "nui/dist/index.html"
 
 files {
     "dependencies/images/*.png",
-    "dependencies/nui/**/*",
     "nui/dist/**/*",
 }
 
