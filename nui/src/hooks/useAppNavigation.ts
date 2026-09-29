@@ -47,8 +47,8 @@ const BASE_NAV_ITEMS: NavItem[] = [
   { id: 'main', label: 'Dashboard', icon: 'home' },
   { id: 'players', label: 'Players', icon: 'users' },
   { id: 'map', label: 'Map', icon: 'map' },
-  { id: 'bans', label: 'Ban List', icon: 'ban' },
   { id: 'reports', label: 'Reports', icon: 'flag' },
+  { id: 'bans', label: 'Ban List', icon: 'ban' },
   {
     id: 'statistics',
     label: 'Statistics',
