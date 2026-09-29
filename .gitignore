@@ -11,3 +11,5 @@ bot/dist/
 nui/dist/
 .agents/skills/fivem-natives/cfx-natives/
 docs-site/
+scripts/demo-video/out/frames/
+scripts/demo-video/out/.*.lock

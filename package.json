@@ -15,7 +15,8 @@
     "typecheck:nui": "npm --prefix nui run typecheck",
     "test:nui": "npm --prefix nui run test",
     "watch:all": "node scripts/watch-all.mjs",
-    "capture:screenshots": "node scripts/capture-screenshots.mjs"
+    "capture:screenshots": "node scripts/capture-screenshots.mjs",
+    "demo:video": "bash scripts/demo-video/build.sh"
   },
   "engines": {
     "node": "^22.0.0"
