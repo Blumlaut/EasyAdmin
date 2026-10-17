@@ -13,3 +13,8 @@ nui/dist/
 docs-site/
 scripts/demo-video/out/frames/
 scripts/demo-video/out/.*.lock
+
+# the paid plugins live outside this repo, along with everything derived from them
+/plugins/
+nui/src/plugins/__fixtures__/
+nui/src/plugins/__snapshots__/
