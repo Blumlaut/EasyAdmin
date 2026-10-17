@@ -77,7 +77,7 @@ AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderMainPage', functio
             { type = 'button', label = 'Re-fetch Page', action = 'refetchPage', icon = 'refresh', variant = 'primary', size = 'sm' },
             { type = 'button', label = 'Toggle Counter', action = 'toggleCounter', icon = 'zap', variant = 'secondary', size = 'sm' },
             { type = 'button', label = 'Get Server Data', action = 'getServerData', server = true, icon = 'server', variant = 'danger', size = 'sm' },
-            { type = 'button', label = 'Replace Page', action = 'replacePage', icon = 'arrow-right-arrow-left', variant = 'ghost', size = 'sm' },
+            { type = 'button', label = 'Replace Page', action = 'replacePage', icon = 'arrow-right-left', variant = 'ghost', size = 'sm' },
             { type = 'button', label = 'Open Form Modal', action = 'submitModal', icon = 'clipboard', variant = 'secondary', size = 'sm',
               modal = {
                 title = 'Form Modal Demo',

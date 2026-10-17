@@ -65,7 +65,7 @@ exports.EasyAdmin:RegisterPlugin({
 -- Returns server state that the client stores and displays on re-fetch.
 
 AddEventHandler('EasyAdmin:Plugin:serverAction:ea-plugin-demo:getServerData', function(source, data, cb)
-  if not DoesPlayerHavePermission(source, 'plugin.demo.advanced') then
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.demo.advanced') then
     return cb({ ok = false, error = 'Requires permission: plugin.demo.advanced' })
   end
 

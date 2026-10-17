@@ -7,19 +7,19 @@ EasyAdmin runtime plugin system.
 
 | Feature | Where |
 |---|---|
-| Plugin registration | `client.lua` — `exports.EasyAdmin:RegisterPlugin()` |
-| Nav items (multi-page) | `client.lua` — three pages, three nav entries |
-| Pages with render actions | `client.lua` — `renderMainPage`, `renderStatsPage`, `renderActionsPage` |
-| Player detail tabs | `client.lua` — public + permission-gated tab |
-| Dashboard widgets | `client.lua` — `renderWidget` |
+| Plugin registration | `server.lua` — `exports.EasyAdmin:RegisterPlugin()` |
+| Nav items (multi-page) | `server.lua` — a nav item plus a matching page; `client.lua` — the render actions |
+| Pages with render actions | `server.lua` — `renderMainPage`, `renderStatsPage`, `renderActionsPage`; `client.lua` — their handlers |
+| Player detail tabs | `server.lua` — public + permission-gated tab; `client.lua` — `renderPlayerTab` |
+| Dashboard widgets | `server.lua` — `renderWidget` registration; `client.lua` — the handler |
 | Client handlers (event-based) | `client.lua` — `AddEventHandler('EasyAdmin:Plugin:action:...')` |
 | Server handlers (event-based) | `server.lua` — `AddEventHandler('EasyAdmin:Plugin:serverAction:...')` |
-| Permission guarding | `server.lua` — `DoesPlayerHavePermission` checks |
-| Permissions | `shared.lua` — `plugin.demo`, `plugin.demo.advanced` |
-| Live updates | `client.lua` — `pushUpdate` calls `SendNUIMessage` |
-| Every schema component | `client.lua` `renderMainPage` — all schema types |
-| Form modals | `client.lua` — `Open Form Modal` button with 6 field types |
-| Notifications | `client.lua` — `submitModal` handler returns `notification` component |
+| Permission guarding | `server.lua` — `exports.EasyAdmin:DoesPlayerHavePermission` checks |
+| Permissions | `server.lua` — declared in the registration: `plugin.demo`, `plugin.demo.advanced` |
+| Re-fetching a view | `client.lua` — action handlers return a non-schema result to re-run the view's render action |
+| The schema palette | `client.lua` `renderMainPage` — rows, cards, stat cards, buttons, modals |
+| Form modals | `client.lua` — the `Open Form Modal` button, six field types |
+| Notifications | `client.lua` — the `submitModal` handler returns a `notification` node |
 
 ## Why event-based handlers?
 
@@ -102,6 +102,8 @@ exports.EasyAdmin:RegisterPlugin({
   name = 'My Plugin',
   version = '1.0.0',
   icon = 'box',
+  permission = 'plugin.my-plugin',            -- hides everything without it
+  permissions = { 'plugin.my-plugin', 'plugin.my-plugin.admin' },
   navItems = { ... },
   pages = { ... },
   playerDetailTabs = { ... },
@@ -111,11 +113,28 @@ exports.EasyAdmin:RegisterPlugin({
 
 ### Registering a permission
 
+Declare it in the registration's `permissions` array — that is the only place
+EasyAdmin looks. Every permission used as a gate (including `permission` above)
+must be listed there, or the gated UI disappears for everyone.
+
 ```lua
-Citizen.CreateThread(function()
-  while permissions == nil do Citizen.Wait(50) end
-  permissions['plugin.my-plugin'] = false
-end)
+permissions = { 'plugin.my-plugin', 'plugin.my-plugin.admin' }
+```
+
+Then grant it to a group. The ACE name always carries the `easyadmin.` prefix:
+
+```cfg
+add_ace group.admin easyadmin.plugin.my-plugin allow
+add_ace group.admin easyadmin.plugin.my-plugin.admin allow
+```
+
+Never wait on or write to a `permissions` global: FiveM resources do not share
+Lua globals, so the loop below never sees EasyAdmin's table and spins forever.
+
+```lua
+-- WRONG, does nothing
+while permissions == nil do Citizen.Wait(50) end
+permissions['plugin.my-plugin'] = false
 ```
 
 ### Client render handler (event-based)
@@ -146,17 +165,16 @@ end)
 
 ```lua
 AddEventHandler('EasyAdmin:Plugin:action:my-plugin:notify', function(data, cb)
-  SendNUIMessage({ action = 'plugin:my-plugin:update' })
-  cb({ ok = true })
+  TriggerEvent('EasyAdmin:showNotification', 'Done')
+  cb({ ok = true }) -- no schema, so the page re-fetches its render action
 end)
 ```
 
 ### Server handler (permission-guarded, event-based)
 
 ```lua
-AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(data, cb)
-  local source = source -- FiveM sets this globally in event handlers
-  if not DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:doAction', function(source, data, cb)
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.my-plugin.admin') then
     return cb({ ok = false, error = 'permission denied' })
   end
   cb({ ok = true, result = 'done' })
@@ -165,7 +183,8 @@ end)
 
 The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>`
 
-- `source` — the player source (set globally by FiveM in event handlers)
+- `source` — the player server ID, the handler's first argument. Read it; the
+global `source` is not set for this event
 - `data` — the payload from the NUI
 - `cb` — callback function. Call `cb(result)` to send the response back to the client
 
@@ -175,11 +194,19 @@ The event name format is: `EasyAdmin:Plugin:serverAction:<pluginId>:<actionName>
 { type = 'button', label = 'Server Action', action = 'doAction', server = true }
 ```
 
-### Live update
+### Refreshing the page
+
+Returning a non-schema result re-fetches the page's render action, so there is no
+need to ask for a refresh:
 
 ```lua
-SendNUIMessage({ action = 'plugin:my-plugin:update' })
+cb({ ok = true })
 ```
+
+A plugin cannot push to EasyAdmin's NUI: `SendNUIMessage` is delivered to the NUI
+page of the resource that calls it, and a plugin resource has none. Keep the data
+a render action needs in a client-side cache and let the next render pick it up
+(see `renderMainPage` in `client.lua`, which renders from `state.serverData`).
 
 ### Button that opens a form modal
 
