@@ -74,8 +74,17 @@ function ModalButton({ node, onAction }: { node: ButtonNode; onAction: SchemaRen
   const sizeCls = SIZE_MAP[node.size ?? 'md']
   const variantCls = VARIANT_MAP[node.variant ?? 'ghost']
 
+  // node.data also reaches the handler, so a modal action keeps its context (playerId and the like)
+  const staticData =
+    typeof node.data === 'object' && node.data !== null
+      ? (node.data as Record<string, unknown>)
+      : {}
+
+  // a Lua empty table arrives as {} rather than [], so fields is not always an array
+  const fields = Array.isArray(modal.fields) ? modal.fields : []
+
   // Map schema field nodes to ModalFieldDefinition instances
-  const modalFields: ModalFieldDefinition[] = modal.fields.map((f) => {
+  const modalFields: ModalFieldDefinition[] = fields.map((f) => {
     const base = {
       key: f.key,
       type: f.type,
@@ -112,7 +121,8 @@ function ModalButton({ node, onAction }: { node: ButtonNode; onAction: SchemaRen
           submitVariant: modal.submitVariant,
           fields: modalFields,
           onSubmit: (values) => {
-            onAction(node.action, values, node.server ?? false)
+            // form values win over the button's static data, so a field can override it
+            onAction(node.action, { ...staticData, ...values }, node.server ?? false)
           },
         })
       }}
