@@ -278,44 +278,41 @@ playerDetailTabs = {
 
 ## Refreshing Content
 
-Most refreshes need no help from the plugin: returning schema nodes from a
-handler replaces the view outright, returning anything else re-runs its
-`renderAction`, and leaving and re-opening the view always re-fetches it.
+There is no push channel from Lua into EasyAdmin's NUI — `SendNUIMessage` only
+reaches the NUI page of the resource that calls it, and your resource has none.
+A view re-fetches when EasyAdmin decides to:
 
-When Lua has to push a refresh on its own — a slow lookup that finished after
-the handler returned, or state that changed elsewhere — send the update message
-for your plugin. EasyAdmin re-runs the `renderAction` of whichever of your views
-the admin has open:
+- the admin opens it, or switches away and back;
+- one of its button handlers calls `cb` with anything that is not a schema array;
+- returning a schema array replaces the view instead.
 
-```lua
-AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:load', function(source, data, cb)
-  cb({ ok = true })          -- answer inside the 500 ms budget
-  CreateThread(function()    -- then do the slow work
-    Wait(2000)
-    TriggerClientEvent('my-plugin:data', source, collectStats())
-  end)
-end)
-
-AddEventHandler('my-plugin:data', function(stats)
-  cache = stats
-  SendNUIMessage({ action = 'plugin:my-plugin:update' })
-end)
-```
-
-The message is `plugin:<pluginId>:update` and it carries no payload — EasyAdmin
-only re-runs the view's own handler, so the fresh data has to be reachable from
-that handler, usually via the client-side cache above.
-
-Offer a button instead when the admin should drive the refresh:
+So a handler that needs slow data should render the state it has plus the button
+that fetches the rest, and let the next `renderAction` render the result:
 
 ```lua
--- In the schema:
--- { type = 'button', label = 'Refresh', action = 'refresh', icon = 'refresh' }
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderPage', function(data, cb)
+  if not cache then
+    TriggerServerEvent('my-plugin:load')
+    return cb({
+      { type = 'text', text = 'Loading…', variant = 'muted' },
+      { type = 'button', label = 'Refresh', action = 'refresh', icon = 'refresh' },
+    })
+  end
+  cb(renderFromCache(cache))
+end)
 
+-- a non-schema result re-runs renderPage, which now finds the cache
 AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
-  cb({ ok = true }) -- no schema returned → the page re-fetches renderPage
+  cache = nil
+  TriggerServerEvent('my-plugin:load')
+  cb({ ok = true })
 end)
 ```
+
+Actions the admin triggers themselves need no help: a `server = true` button whose
+handler returns `{ ok = true }` re-fetches the view, so the result shows up by
+itself. See [Refreshing an open view](../../nui-plugins#refreshing-an-open-view)
+for the full picture.
 
 ## Full Example
 

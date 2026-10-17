@@ -26,41 +26,64 @@ EasyAdmin renders the schema with its own components
   │  button click → pluginCall(pluginId, action, data)
 ```
 
-Rendering is pull-based. A refresh happens when one of the plugin's own actions
-runs, or when the plugin asks for one with a `plugin:<pluginId>:update` NUI
-message — see [Refreshing an open view](#refreshing-an-open-view).
+Rendering is pull-based. A view is re-fetched when it is opened, when one of the
+plugin's own actions runs, or when a handler returns schema nodes. There is no
+push channel into EasyAdmin's NUI — see
+[Refreshing an open view](#refreshing-an-open-view).
 
 ---
 
 ## Refreshing an open view
 
-A plugin cannot hand the NUI a new schema directly, but it can ask EasyAdmin to
-re-run the render action of the view the admin has open:
+A plugin cannot send messages to EasyAdmin's NUI page. `SendNUIMessage` only
+reaches the NUI of the resource that calls it, and a plugin resource has no page
+of its own, so a view is re-fetched only when EasyAdmin decides to:
+
+| Trigger | What happens |
+|---|---|
+| The view is opened, or the admin switches away and back | `renderAction` runs |
+| A button handler calls `cb` with anything that is not a schema array | `renderAction` runs again |
+| A button handler calls `cb` with a schema array | that schema replaces the view |
+
+That is what the 500 ms budget leaves you. A handler that needs slow data cannot
+fetch it inline, so render what you have plus the button that fetches it, keep the
+result in a client-side cache, and let the next `renderAction` pick it up:
 
 ```lua
-SendNUIMessage({ action = 'plugin:my-plugin:update' })
-```
-
-One message covers all three contribution types — page, dashboard widget and
-player tab. It carries no data, so whatever the view should now show has to be
-reachable from its own `renderAction`, usually through a client-side cache. This
-is how a handler answers inside the 500 ms budget and still shows the result that
-arrives later:
-
-```lua
-AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:load', function(source, data, cb)
-  cb({ ok = true })                       -- answer now, the work happens after
-  CreateThread(function()
-    local result = slowLookup(source)
-    TriggerClientEvent('my-plugin:data', source, result)
-  end)
+-- first open: nothing cached yet, so offer the button that loads it
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderTab', function(data, cb)
+  if not cache then
+    TriggerServerEvent('my-plugin:load', data.context.playerId)
+    return cb({
+      { type = 'text', text = 'Loading player data…', variant = 'muted' },
+      { type = 'skeleton', height = 48, width = '100%' },
+      { type = 'button', label = 'Refresh', action = 'refresh', icon = 'refresh',
+        variant = 'primary', size = 'sm', data = { playerId = data.context.playerId } },
+    })
+  end
+  cb(renderFromCache(cache))
 end)
 
+-- anything that is not a schema array re-runs renderTab, which now finds the cache
+AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
+  cache = nil
+  TriggerServerEvent('my-plugin:load', data.playerId)
+  cb({ ok = true })
+end)
+
+-- answer the admin who asked; the next render renders their data
+RegisterNetEvent('my-plugin:data')
 AddEventHandler('my-plugin:data', function(result)
   cache = result
-  SendNUIMessage({ action = 'plugin:my-plugin:update' })
 end)
 ```
+
+Actions the admin triggers themselves need none of this — a button with
+`server = true` whose handler returns `{ ok = true }` re-fetches the view, so the
+result of the action shows up on its own.
+
+EasyAdmin's NUI does listen for a `plugin:<pluginId>:update` message, but nothing
+in Lua can deliver one from another resource today.
 
 ## Schema components
 
@@ -204,7 +227,19 @@ right away:
 | `submitVariant` | `string` | `primary`, `secondary`, `danger`, `warning`, `success` (default `primary`) |
 
 On submit the modal closes and the action runs with the form values as its
-`data` payload, keyed by each field's `key`.
+`data` payload, keyed by each field's `key`, merged over the button's own `data`
+field. Form values win on a key collision, so a button can carry context the
+form does not ask for — a player id, most often:
+
+```json
+{
+  "type": "button", "label": "Add Money", "action": "addMoney", "server": true,
+  "data": { "playerId": 7 },
+  "modal": { "title": "Add Money", "fields": [{ "type": "number", "key": "amount", "label": "Amount" }] }
+}
+```
+
+That handler receives `{ playerId = 7, amount = 250 }`.
 
 ##### Modal field types
 
