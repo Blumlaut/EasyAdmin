@@ -278,8 +278,35 @@ playerDetailTabs = {
 
 ## Refreshing Content
 
-A plugin cannot ask the NUI to re-render on its own — there is no push
-channel from Lua. Refresh the content from a button instead:
+Most refreshes need no help from the plugin: returning schema nodes from a
+handler replaces the view outright, returning anything else re-runs its
+`renderAction`, and leaving and re-opening the view always re-fetches it.
+
+When Lua has to push a refresh on its own — a slow lookup that finished after
+the handler returned, or state that changed elsewhere — send the update message
+for your plugin. EasyAdmin re-runs the `renderAction` of whichever of your views
+the admin has open:
+
+```lua
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:load', function(source, data, cb)
+  cb({ ok = true })          -- answer inside the 500 ms budget
+  CreateThread(function()    -- then do the slow work
+    Wait(2000)
+    TriggerClientEvent('my-plugin:data', source, collectStats())
+  end)
+end)
+
+AddEventHandler('my-plugin:data', function(stats)
+  cache = stats
+  SendNUIMessage({ action = 'plugin:my-plugin:update' })
+end)
+```
+
+The message is `plugin:<pluginId>:update` and it carries no payload — EasyAdmin
+only re-runs the view's own handler, so the fresh data has to be reachable from
+that handler, usually via the client-side cache above.
+
+Offer a button instead when the admin should drive the refresh:
 
 ```lua
 -- In the schema:
@@ -289,10 +316,6 @@ AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
   cb({ ok = true }) -- no schema returned → the page re-fetches renderPage
 end)
 ```
-
-Returning schema nodes from a handler replaces the page outright; returning
-anything else re-runs the page's `renderAction`. Leaving and re-opening the
-page also re-fetches it.
 
 ## Full Example
 

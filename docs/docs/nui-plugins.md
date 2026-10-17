@@ -26,11 +26,41 @@ EasyAdmin renders the schema with its own components
   │  button click → pluginCall(pluginId, action, data)
 ```
 
-Rendering is pull-based. A refresh only happens when one of the plugin's own
-actions runs — a page, widget or tab cannot be updated from a plugin resource
-while it is open.
+Rendering is pull-based. A refresh happens when one of the plugin's own actions
+runs, or when the plugin asks for one with a `plugin:<pluginId>:update` NUI
+message — see [Refreshing an open view](#refreshing-an-open-view).
 
 ---
+
+## Refreshing an open view
+
+A plugin cannot hand the NUI a new schema directly, but it can ask EasyAdmin to
+re-run the render action of the view the admin has open:
+
+```lua
+SendNUIMessage({ action = 'plugin:my-plugin:update' })
+```
+
+One message covers all three contribution types — page, dashboard widget and
+player tab. It carries no data, so whatever the view should now show has to be
+reachable from its own `renderAction`, usually through a client-side cache. This
+is how a handler answers inside the 500 ms budget and still shows the result that
+arrives later:
+
+```lua
+AddEventHandler('EasyAdmin:Plugin:serverAction:my-plugin:load', function(source, data, cb)
+  cb({ ok = true })                       -- answer now, the work happens after
+  CreateThread(function()
+    local result = slowLookup(source)
+    TriggerClientEvent('my-plugin:data', source, result)
+  end)
+end)
+
+AddEventHandler('my-plugin:data', function(result)
+  cache = result
+  SendNUIMessage({ action = 'plugin:my-plugin:update' })
+end)
+```
 
 ## Schema components
 

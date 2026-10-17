@@ -104,8 +104,9 @@ and the NUI waits 600 ms for server actions, so a slower handler is reported as
 from the same request are ignored.
 
 Long-running work must be finished before the request (for example cached).
-There is no supported way for a plugin to push a refresh to the NUI: the view
-re-fetches when it is opened, and whenever an action returns a non-schema result.
+When it is not, answer the request first and refresh the view afterwards with
+the `plugin:<pluginId>:update` NUI message — see
+[Refreshing an open view](../../nui-plugins#refreshing-an-open-view).
 
 ## Other EasyAdmin Exports
 
