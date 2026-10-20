@@ -406,7 +406,7 @@ export function Dashboard({ playerCount, updateInfo, onDismissUpdate, restartInf
       {pluginWidgets && pluginWidgets.length > 0 && (
         <div className="dashboard-grid grid gap-3">
           {pluginWidgets.map((widget) => (
-            <PluginWidgetHost key={widget.id} pluginId={widget._pluginId} renderAction={widget.renderAction} />
+            <PluginWidgetHost key={widget.id} pluginId={widget._pluginId} widgetId={widget.id} renderAction={widget.renderAction} />
           ))}
         </div>
       )}

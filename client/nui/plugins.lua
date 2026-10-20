@@ -61,6 +61,51 @@ AddEventHandler('EasyAdmin:Plugin:serverResponse', function(pluginId, action, re
   })
 end)
 
+-- ── Refresh a plugin view ───────────────────────────────────
+-- A plugin resource cannot send NUI messages to us: SendNUIMessage reaches the
+-- calling resource's own page, and a plugin has none. So plugins ask us to
+-- refresh a view they own, addressed so only that view re-fetches.
+--
+-- Address: target = 'page' | 'tab' | 'widget', id = the page view, tab id or
+-- widget id, playerId narrows a tab. Omit all three to refresh every view.
+local function pushPluginRefresh(pluginId, target, id, playerId)
+  if type(pluginId) ~= 'string' or pluginId == '' then return false end
+  if target ~= nil and target ~= 'page' and target ~= 'tab' and target ~= 'widget' then return false end
+  if id ~= nil and type(id) ~= 'string' then return false end
+  if playerId ~= nil and type(playerId) ~= 'number' then return false end
+
+  SendNUIMessage({
+    action = 'pluginRefresh',
+    data = {
+      pluginId = pluginId,
+      target = target,
+      id = id,
+      playerId = playerId,
+    },
+  })
+  return true
+end
+
+-- server-driven refresh: TriggerClientEvent('EasyAdmin:Plugin:refresh', src, pluginId, target, id, playerId)
+RegisterNetEvent('EasyAdmin:Plugin:refresh')
+AddEventHandler('EasyAdmin:Plugin:refresh', pushPluginRefresh)
+
+-- client-driven refresh for the plugin's own client script
+-- a plugin may only refresh its own views, never another plugin's
+exports('RefreshPlugin', function(pluginId, target, id, playerId)
+  if type(pluginId) ~= 'string' then return false end
+
+  local plugin = GetRegisteredPlugins()[pluginId]
+  if not plugin then return false end
+
+  local invoking = GetInvokingResource()
+  if invoking and plugin.resourceName and invoking ~= plugin.resourceName then
+    return false
+  end
+
+  return pushPluginRefresh(pluginId, target, id, playerId)
+end)
+
 -- ── NUI callback: pluginCall ──────────────────────────────────
 -- Payload: { pluginId = string, action = string, data = table, server = boolean }
 RegisterNUICallback('pluginCall', function(data, cb)

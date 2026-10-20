@@ -583,7 +583,7 @@ function App() {
                   if (!page) return null
                   const pluginId = nav.view.split(':')[1] ?? ''
                   return (
-                    <PluginPageHost pluginId={pluginId} renderAction={page.renderAction} />
+                    <PluginPageHost pluginId={pluginId} view={page.view} renderAction={page.renderAction} />
                   )
                 })()
               }

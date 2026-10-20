@@ -139,7 +139,7 @@ export function PlayerDetailPage({
             if (!tab) return null
             return (
               <div className="player-detail-plugin-tab-content">
-                <PluginTabHost pluginId={tab._pluginId} renderAction={tab.renderAction} playerId={player.id} />
+                <PluginTabHost pluginId={tab._pluginId} tabId={tab.id} renderAction={tab.renderAction} playerId={player.id} />
               </div>
             )
           })()}

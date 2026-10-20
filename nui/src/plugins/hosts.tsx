@@ -1,9 +1,12 @@
 /**
  * Host components for rendering runtime plugin contributions.
  *
- * Each host fetches a schema tree from the plugin's Lua render action
- * and renders it via {@link SchemaRenderer}. Buttons and other interactive
- * nodes call back to Lua via `dispatch`.
+ * Each host fetches a schema tree from the plugin's Lua render action and
+ * renders it via {@link SchemaRenderer}. Buttons and other interactive nodes
+ * call back to Lua via `dispatch`.
+ *
+ * Every host tells the refresh bus which contribution it is showing, so a
+ * refresh addressed at one view does not reload the others.
  */
 
 import { useMemo } from 'react'
@@ -38,12 +41,21 @@ function PluginError({ message }: { message: string }) {
 // PluginPageHost — full page
 // ---------------------------------------------------------------------------
 
-export function PluginPageHost({ pluginId, renderAction }: { pluginId: string; renderAction: string }) {
+export function PluginPageHost({
+  pluginId,
+  view,
+  renderAction,
+}: {
+  pluginId: string
+  /** The page's view, e.g. `plugin:my-plugin`. Addresses refreshes at this page. */
+  view: string
+  renderAction: string
+}) {
   const context = useMemo<PluginRenderContext>(() => ({ target: 'page' }), [])
-  const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context)
+  const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context, view)
 
   if (loading) return <PluginLoading />
-  if (error) return <PluginError message={error} />
+  if (error && schema.length === 0) return <PluginError message={error} />
 
   return (
     <div className="page-container">
@@ -56,12 +68,21 @@ export function PluginPageHost({ pluginId, renderAction }: { pluginId: string; r
 // PluginWidgetHost — dashboard widget
 // ---------------------------------------------------------------------------
 
-export function PluginWidgetHost({ pluginId, renderAction }: { pluginId: string; renderAction: string }) {
+export function PluginWidgetHost({
+  pluginId,
+  widgetId,
+  renderAction,
+}: {
+  pluginId: string
+  /** The widget's id from the registration. Addresses refreshes at this widget. */
+  widgetId: string
+  renderAction: string
+}) {
   const context = useMemo<PluginRenderContext>(() => ({ target: 'widget' }), [])
-  const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context)
+  const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context, widgetId)
 
   if (loading) return <Skeleton height={80} width="100%" />
-  if (error) return <PluginError message={error} />
+  if (error && schema.length === 0) return <PluginError message={error} />
 
   return <SchemaRenderer schema={schema} onAction={dispatch} />
 }
@@ -72,18 +93,21 @@ export function PluginWidgetHost({ pluginId, renderAction }: { pluginId: string;
 
 export function PluginTabHost({
   pluginId,
+  tabId,
   renderAction,
   playerId,
 }: {
   pluginId: string
+  /** The tab's id from the registration. Addresses refreshes at this tab. */
+  tabId: string
   renderAction: string
   playerId: number
 }) {
   const context = useMemo<PluginRenderContext>(() => ({ target: 'player-tab', playerId }), [playerId])
-  const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context)
+  const { schema, loading, error, dispatch } = usePluginSchema(pluginId, renderAction, context, tabId)
 
   if (loading) return <PluginLoading />
-  if (error) return <PluginError message={error} />
+  if (error && schema.length === 0) return <PluginError message={error} />
 
   return <SchemaRenderer schema={schema} onAction={dispatch} />
 }
