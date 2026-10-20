@@ -104,9 +104,14 @@ and the NUI waits 600 ms for server actions, so a slower handler is reported as
 from the same request are ignored.
 
 Long-running work must be finished before the request (for example cached).
-There is no supported way for a plugin to push a refresh to the NUI: the view
-re-fetches when it is opened, and whenever an action returns a non-schema result.
-See [Refreshing an open view](../../nui-plugins#refreshing-an-open-view).
+When it cannot be, answer first and ask for a refresh once the result is in:
+
+```lua
+exports.EasyAdmin:RefreshPlugin('my-plugin', 'tab', 'info', playerId)
+```
+
+See [Refreshing an open view](../../nui-plugins#refreshing-an-open-view) for the
+addressing rules.
 
 ## Other EasyAdmin Exports
 
@@ -125,6 +130,13 @@ curated subset for plugin authors, not the full export list.
 | `EasyAdmin:announce` | `message, sender?` | Send a global announcement. Returns `false` for an empty message |
 | `EasyAdmin:getName` | `playerId, anonymousDisabled?, identifierEnabled?` | Player name, resolved from cache when possible |
 | `EasyAdmin:isPlayerOnline` | `playerId` | Cache-backed online check |
+
+### Plugin Views
+
+| Export / event | Parameters | Description |
+|--------|-----------|-------------|
+| `EasyAdmin:RefreshPlugin` (client) | `pluginId, target?, id?, playerId?` | Re-run one of your views' render action. `target` is `'page'`, `'widget'` or `'tab'`; `id` is the page view, widget id or tab id. Omit them to refresh every view of the plugin. Only the calling plugin's own views can be refreshed |
+| `EasyAdmin:Plugin:refresh` (net event) | `pluginId, target?, id?, playerId?` | The server-side equivalent: `TriggerClientEvent('EasyAdmin:Plugin:refresh', src, ...)` after handing that client fresh data |
 
 ### Player Actions
 

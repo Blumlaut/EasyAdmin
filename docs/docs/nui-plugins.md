@@ -26,64 +26,61 @@ EasyAdmin renders the schema with its own components
   │  button click → pluginCall(pluginId, action, data)
 ```
 
-Rendering is pull-based. A view is re-fetched when it is opened, when one of the
-plugin's own actions runs, or when a handler returns schema nodes. There is no
-push channel into EasyAdmin's NUI — see
+Rendering is pull-based: a view is re-fetched when it is opened, when one of its
+actions returns a non-schema result, or when the plugin asks for a refresh — see
 [Refreshing an open view](#refreshing-an-open-view).
 
 ---
 
 ## Refreshing an open view
 
-A plugin cannot send messages to EasyAdmin's NUI page. `SendNUIMessage` only
-reaches the NUI of the resource that calls it, and a plugin resource has no page
-of its own, so a view is re-fetched only when EasyAdmin decides to:
-
-| Trigger | What happens |
-|---|---|
-| The view is opened, or the admin switches away and back | `renderAction` runs |
-| A button handler calls `cb` with anything that is not a schema array | `renderAction` runs again |
-| A button handler calls `cb` with a schema array | that schema replaces the view |
-
-That is what the 500 ms budget leaves you. A handler that needs slow data cannot
-fetch it inline, so render what you have plus the button that fetches it, keep the
-result in a client-side cache, and let the next `renderAction` pick it up:
+A plugin cannot send NUI messages to EasyAdmin: `SendNUIMessage` reaches the NUI
+page of the resource that calls it, and a plugin resource has none. So a plugin
+asks EasyAdmin to re-run a view's render action instead, and EasyAdmin sends the
+message from its own client.
 
 ```lua
--- first open: nothing cached yet, so offer the button that loads it
-AddEventHandler('EasyAdmin:Plugin:action:my-plugin:renderTab', function(data, cb)
-  if not cache then
-    TriggerServerEvent('my-plugin:load', data.context.playerId)
-    return cb({
-      { type = 'text', text = 'Loading player data…', variant = 'muted' },
-      { type = 'skeleton', height = 48, width = '100%' },
-      { type = 'button', label = 'Refresh', action = 'refresh', icon = 'refresh',
-        variant = 'primary', size = 'sm', data = { playerId = data.context.playerId } },
-    })
-  end
-  cb(renderFromCache(cache))
-end)
+-- from the plugin's client script (page view, then widget id, then tab id)
+exports.EasyAdmin:RefreshPlugin('my-plugin', 'page', 'plugin:my-plugin')
+exports.EasyAdmin:RefreshPlugin('my-plugin', 'widget', 'status')
+exports.EasyAdmin:RefreshPlugin('my-plugin', 'tab', 'info', playerId)
 
--- anything that is not a schema array re-runs renderTab, which now finds the cache
-AddEventHandler('EasyAdmin:Plugin:action:my-plugin:refresh', function(data, cb)
-  cache = nil
-  TriggerServerEvent('my-plugin:load', data.playerId)
-  cb({ ok = true })
-end)
+-- from the plugin's server script, for the admin who asked
+TriggerClientEvent('EasyAdmin:Plugin:refresh', source, 'my-plugin', 'tab', 'info', playerId)
+```
 
--- answer the admin who asked; the next render renders their data
+Both forms take `(pluginId, target?, id?, playerId?)`:
+
+| Argument | Values |
+|---|---|
+| `target` | `'page'`, `'widget'`, `'tab'` (alias of `'player-tab'`). Omit to refresh every view of the plugin |
+| `id` | The page's `view`, the widget's `id`, or the tab's `id`. Omit to refresh every view of that target |
+| `playerId` | Narrows a tab refresh to the player on screen. Omit for any player |
+
+Only the views the request addresses re-fetch: a page refresh does not touch the
+plugin's dashboard widget, and two admins looking at different players do not
+refetch each other's tabs. A plugin's client script can only refresh its own
+plugin — the export checks the calling resource against the registration.
+
+Refreshing never blanks the view. The tree already on screen stays mounted until
+the new one arrives, and a failed refresh keeps the last good tree, so there is
+no skeleton flash on a refresh. The loading state only appears for the first
+fetch of a contribution.
+
+That makes the slow-data pattern simple: answer the handler immediately and
+refresh once the real result is in.
+
+```lua
+-- client: keep the result, then ask for the view to be re-rendered
 RegisterNetEvent('my-plugin:data')
 AddEventHandler('my-plugin:data', function(result)
   cache = result
+  exports.EasyAdmin:RefreshPlugin('my-plugin', 'tab', 'info', result.playerId)
 end)
 ```
 
-Actions the admin triggers themselves need none of this — a button with
-`server = true` whose handler returns `{ ok = true }` re-fetches the view, so the
-result of the action shows up on its own.
-
-EasyAdmin's NUI does listen for a `plugin:<pluginId>:update` message, but nothing
-in Lua can deliver one from another resource today.
+`plugin:<pluginId>:update` is still accepted as an unaddressed refresh (every
+view of the plugin), but it is deprecated: prefer the addressed call.
 
 ## Schema components
 

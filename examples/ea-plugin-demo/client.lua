@@ -13,6 +13,7 @@
 local state = {
   toggleCount = 0,
   serverData = nil,
+  delayedData = nil,
   lastRefresh = 0,
 }
 
@@ -24,6 +25,14 @@ AddEventHandler('ea-plugin-demo:serverData', function(result)
   if result.ok then
     state.serverData = result
   end
+end)
+
+-- A result that arrives after its handler already answered. Nothing can push a
+-- schema at the NUI, so we ask EasyAdmin to re-run this page's renderAction.
+RegisterNetEvent('ea-plugin-demo:delayedData')
+AddEventHandler('ea-plugin-demo:delayedData', function(result)
+  state.delayedData = result
+  exports.EasyAdmin:RefreshPlugin('ea-plugin-demo', 'page', 'plugin:ea-plugin-demo')
 end)
 
 -- ---------------------------------------------------------------------------
@@ -65,6 +74,12 @@ AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderMainPage', functio
             { key = 'Uptime', value = string.format('%.1fs', state.serverData.uptime) },
           },
         } or nil,
+        state.delayedData and {
+          type = 'alert', variant = 'success', title = 'Delayed result arrived', children = {
+            { type = 'text', text = ('Pushed at tick %s with %s players online — no click needed.'):format(
+              tostring(state.delayedData.tick), tostring(state.delayedData.players)), variant = 'muted' },
+          },
+        } or nil,
       }},
 
     { type = 'divider' },
@@ -77,6 +92,7 @@ AddEventHandler('EasyAdmin:Plugin:action:ea-plugin-demo:renderMainPage', functio
             { type = 'button', label = 'Re-fetch Page', action = 'refetchPage', icon = 'refresh', variant = 'primary', size = 'sm' },
             { type = 'button', label = 'Toggle Counter', action = 'toggleCounter', icon = 'zap', variant = 'secondary', size = 'sm' },
             { type = 'button', label = 'Get Server Data', action = 'getServerData', server = true, icon = 'server', variant = 'danger', size = 'sm' },
+            { type = 'button', label = 'Delayed Push', action = 'delayedPush', server = true, icon = 'clock', variant = 'secondary', size = 'sm' },
             { type = 'button', label = 'Replace Page', action = 'replacePage', icon = 'arrow-right-left', variant = 'ghost', size = 'sm' },
             { type = 'button', label = 'Open Form Modal', action = 'submitModal', icon = 'clipboard', variant = 'secondary', size = 'sm',
               modal = {

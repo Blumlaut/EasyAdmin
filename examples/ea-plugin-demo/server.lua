@@ -85,3 +85,25 @@ AddEventHandler('EasyAdmin:Plugin:serverAction:ea-plugin-demo:getServerData', fu
   TriggerClientEvent('ea-plugin-demo:serverData', source, result)
   cb(result)
 end)
+
+-- ---------------------------------------------------------------------------
+-- Server handler: delayedPush
+-- Answers immediately, then sends the result a second later. The client asks
+-- EasyAdmin to refresh the page it is showing, so the late data appears without
+-- a single click. This is the pattern for any lookup slower than the 500 ms
+-- handler budget.
+
+AddEventHandler('EasyAdmin:Plugin:serverAction:ea-plugin-demo:delayedPush', function(source, data, cb)
+  if not exports.EasyAdmin:DoesPlayerHavePermission(source, 'plugin.demo') then
+    return cb({ ok = false, error = 'permission denied' })
+  end
+
+  cb({ ok = true })
+
+  SetTimeout(1000, function()
+    TriggerClientEvent('ea-plugin-demo:delayedData', source, {
+      tick = GetGameTimer(),
+      players = #GetPlayers(),
+    })
+  end)
+end)

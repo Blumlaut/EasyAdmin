@@ -16,7 +16,7 @@ EasyAdmin runtime plugin system.
 | Server handlers (event-based) | `server.lua` — `AddEventHandler('EasyAdmin:Plugin:serverAction:...')` |
 | Permission guarding | `server.lua` — `exports.EasyAdmin:DoesPlayerHavePermission` checks |
 | Permissions | `server.lua` — declared in the registration: `plugin.demo`, `plugin.demo.advanced` |
-| Re-fetching a view | `client.lua` — action handlers return a non-schema result to re-run the view's render action |
+| Re-fetching a view | `client.lua` — action handlers return a non-schema result to re-run the view's render action; `exports.EasyAdmin:RefreshPlugin` refreshes one addressed view later |
 | The schema palette | `client.lua` `renderMainPage` — rows, cards, stat cards, buttons, modals |
 | Form modals | `client.lua` — the `Open Form Modal` button, six field types |
 | Notifications | `client.lua` — the `submitModal` handler returns a `notification` node |
@@ -196,17 +196,26 @@ global `source` is not set for this event
 
 ### Refreshing the page
 
-Returning a non-schema result re-fetches the page's render action, so there is no
-need to ask for a refresh:
+Returning a non-schema result re-fetches the page's render action:
 
 ```lua
 cb({ ok = true })
 ```
 
-A plugin cannot push to EasyAdmin's NUI: `SendNUIMessage` is delivered to the NUI
-page of the resource that calls it, and a plugin resource has none. Keep the data
-a render action needs in a client-side cache and let the next render pick it up
-(see `renderMainPage` in `client.lua`, which renders from `state.serverData`).
+A plugin still cannot send NUI messages to EasyAdmin (`SendNUIMessage` reaches
+the calling resource's own page, and a plugin has none). To refresh a view after
+its handler already answered, ask EasyAdmin to re-run that one view — it keeps
+the current content on screen until the new schema arrives, so nothing flashes:
+
+```lua
+exports.EasyAdmin:RefreshPlugin('ea-plugin-demo', 'page', 'plugin:ea-plugin-demo')
+```
+
+The **Delayed Push** button demonstrates it: the server answers immediately, then
+sends the real result a second later, and the client caches it and refreshes the
+page. Arguments are `(pluginId, target?, id?, playerId?)`; omit the last three to
+refresh every view of the plugin, and see `docs/nui-plugins.md` for the addressing
+rules.
 
 ### Button that opens a form modal
 
