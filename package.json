@@ -19,6 +19,6 @@
     "demo:video": "bash scripts/demo-video/build.sh"
   },
   "engines": {
-    "node": "^22.0.0"
+    "node": "^22.23.4"
   }
 }
