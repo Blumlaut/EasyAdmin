@@ -17,6 +17,17 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    ignore:
+      # typescript-eslint cannot run against TypeScript 7: TS 7.0 ships no JS
+      # API, so @typescript-eslint/parser and eslint-plugin throw on import and
+      # `npm run lint:bot` fails. Support only arrives for TS 7.1+ via the
+      # experimental backend in typescript-eslint PR #12803; the bot therefore
+      # stays on TypeScript 6 until that lands. Do not merge a TS 7 bump before
+      # removing this rule.
+      # Tracking issue: https://github.com/typescript-eslint/typescript-eslint/issues/10940
+      - dependency-name: "typescript"
+        versions:
+          - "^7.0.0"
     groups:
       patch-updates:
         patterns:
