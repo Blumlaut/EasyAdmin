@@ -22,7 +22,7 @@ EasyAdmin used to default to a third-party upload service that is no longer avai
 
 ### Quick Setup
 
-You'll need a [Cloudflare account](https://dash.cloudflare.com/sign-up) and [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-update/) installed.
+You'll need a [Cloudflare account](https://dash.cloudflare.com/sign-up) and [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) installed.
 
 #### 1. Authenticate Wrangler
 
