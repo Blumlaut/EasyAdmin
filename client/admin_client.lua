@@ -150,7 +150,12 @@ RegisterNetEvent("EasyAdmin:CopyDiscord", function(discord)
 end)
 
 RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, playerData)
-	
+	-- asking for the player we already watch means the admin wants out
+	if playerServerId and spectateTargetId == tonumber(playerServerId) then
+		stopSpectating()
+		return
+	end
+
 	local localPlayerPed = PlayerPedId()
 	
 	if IsPedInAnyVehicle(localPlayerPed) then
