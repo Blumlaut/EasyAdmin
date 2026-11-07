@@ -5,12 +5,30 @@ import { useTranslation } from '../lib/i18n'
 
 export type NavItemType = 'item' | 'separator' | 'header'
 
+/** `count` is muted inline text, `attention` is a filled pill that needs action. */
+export type NavBadgeVariant = 'count' | 'attention'
+
+interface NavBadgeProps {
+  value: string | number
+  variant?: NavBadgeVariant
+}
+
+/** Counter shown inside a nav item: players online, open reports, plugin counts. */
+export function NavBadge({ value, variant = 'count' }: NavBadgeProps) {
+  return (
+    <span className={`nav-item-badge nav-item-badge--${variant}`}>
+      <span className="nav-item-badge-value">{value}</span>
+    </span>
+  )
+}
+
 export interface NavItemBase {
   type?: 'item'
   id: string
   label: string
   icon: string
   badge?: string | number
+  badgeVariant?: NavBadgeVariant
   disabled?: boolean
   // Dropdown support: when present, this item renders as an expandable group
   children?: NavItem[]
@@ -240,7 +258,7 @@ export function Navigation({ items, activeId, onSelect, orientation = 'vertical'
           <span className="nav-item-text">
             <span className="nav-item-label">{navItem.label}</span>
             {navItem.badge !== undefined && (
-              <span className="nav-item-badge">{navItem.badge}</span>
+              <NavBadge value={navItem.badge} variant={navItem.badgeVariant} />
             )}
             {hasChildren && (
               <Icon

@@ -102,6 +102,8 @@ With the edit permission (if `player.ban.edit`), fields can be edited and saved 
 
 ## Reports
 
+Open reports show as a count on the Reports sidebar item, so admins see that someone is waiting without opening the page. The count comes from the report list loaded when the panel opens and updates as reports arrive, are claimed or are closed.
+
 ### Report List
 
 Lists all active reports with:

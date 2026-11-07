@@ -126,8 +126,37 @@
 
 .nav-item-badge {
   font-size: var(--text-xs);
+
+  /* Same inline inset for every counter, so all the numbers sit in one column. */
+  padding-inline: 0.5em;
+}
+
+.nav-item-badge--count {
   color: var(--text-muted);
   font-weight: var(--font-normal);
+}
+
+/* Actionable counters (open reports) get a tinted pill so they read first.
+   The pill is pulled up so it centres on the label's cap height rather than
+   on its line box, which sits lower because of the descender space. */
+.nav-item-badge--attention {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -0.15em;
+  padding-block: 0.05em;
+  border-radius: var(--radius-full);
+  background: var(--bg-orange);
+  color: var(--accent-orange);
+  font-weight: var(--font-semibold);
+  line-height: 1.2;
+}
+
+/* Digits sit high in their line box, so the pill would look bottom-heavy
+   without nudging the number back into its centre. */
+.nav-item-badge--attention .nav-item-badge-value {
+  position: relative;
+  top: 0.08em;
 }
 
 /* ============================================================

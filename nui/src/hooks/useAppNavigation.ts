@@ -7,9 +7,7 @@ export interface UseAppNavigationOptions {
   permissions: Permissions
   players: Player[]
   banDetailCache: Record<string, BanEntry>
-  fetchReports: () => void
   fetchCachedPlayers: () => void
-  setLoadingReports: (v: boolean) => void
   setLoadingCached: (v: boolean) => void
   /** Plugin-contributed nav items (already permission-filtered). */
   pluginNavItems?: NavItem[]
@@ -76,9 +74,7 @@ export function useAppNavigation({
   permissions,
   players,
   banDetailCache,
-  fetchReports,
   fetchCachedPlayers,
-  setLoadingReports,
   setLoadingCached,
   pluginNavItems = [],
 }: UseAppNavigationOptions): UseAppNavigationResult {
@@ -305,22 +301,17 @@ export function useAppNavigation({
     navigateTo('resource-detail')
   }, [navigateTo])
 
-  // Track which data sets have already been fetched (lazy-load once)
-  const fetchedRef = useRef({ reports: false, cachedPlayers: false })
+  // Cached players load on first visit; reports are loaded when the panel opens
+  // so the sidebar counter is accurate without opening the page.
+  const cachedPlayersFetched = useRef(false)
 
-  // Trigger lazy data fetch on navigation
   useEffect(() => {
-    if (view === 'reports' && !fetchedRef.current.reports) {
-      fetchedRef.current.reports = true
-      setLoadingReports(true)
-      queueMicrotask(() => fetchReports())
-    }
-    if (view === 'cached-players' && !fetchedRef.current.cachedPlayers) {
-      fetchedRef.current.cachedPlayers = true
+    if (view === 'cached-players' && !cachedPlayersFetched.current) {
+      cachedPlayersFetched.current = true
       setLoadingCached(true)
       queueMicrotask(() => fetchCachedPlayers())
     }
-  }, [view, fetchReports, fetchCachedPlayers, setLoadingReports, setLoadingCached])
+  }, [view, fetchCachedPlayers, setLoadingCached])
 
   // ESC folds the menu (releases NUI focus). The menu is only closed/
   // reopened by the /easyadmin (/ea) command — Escape must never call

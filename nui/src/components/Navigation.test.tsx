@@ -62,7 +62,15 @@ describe('Navigation', () => {
 
   it('shows badge when provided', () => {
     render(<Navigation items={items} activeId="main" onSelect={() => {}} />)
-    expect(screen.getByText('5')).toBeInTheDocument()
+    expect(screen.getByText('5').closest('.nav-item-badge')).toHaveClass('nav-item-badge', 'nav-item-badge--count')
+  })
+
+  it('renders an attention badge as a pill', () => {
+    const attentionItems = [
+      { id: 'reports', label: 'Reports', icon: 'flag' as const, badge: 3, badgeVariant: 'attention' as const },
+    ]
+    render(<Navigation items={attentionItems} activeId="main" onSelect={() => {}} />)
+    expect(screen.getByText('3').closest('.nav-item-badge')).toHaveClass('nav-item-badge', 'nav-item-badge--attention')
   })
 
   it('highlights active item', () => {

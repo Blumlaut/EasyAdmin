@@ -7,7 +7,7 @@ import type { View, Player } from './types'
 import { on } from './fivem'
 import { useTranslation } from './lib/i18n'
 import { Icon } from './components/icons'
-import { Navigation } from './components/Navigation'
+import { Navigation, type NavBadgeVariant } from './components/Navigation'
 import { ScreenshotCapture } from './components/ScreenshotCapture'
 import { ScreenshotViewer } from './components/ScreenshotViewer'
 import { StreamPublisher } from './components/StreamPublisher'
@@ -95,9 +95,7 @@ function App() {
     permissions: data.permissions,
     players: data.players,
     banDetailCache: data.banDetailCache,
-    fetchReports: data.fetchReports,
     fetchCachedPlayers: data.fetchCachedPlayers,
-    setLoadingReports: data.setLoadingReports,
     setLoadingCached: data.setLoadingCached,
     pluginNavItems: pluginContrib.navItems,
   })
@@ -134,6 +132,14 @@ function App() {
   useEffect(() => {
     if (visible) data.fetchUpdateInfo()
   }, [visible, data.fetchUpdateInfo])
+
+  // Load reports on open so the sidebar counter is right without visiting the page
+  const canViewReports = data.permissions['player.reports.view'] === true
+  useEffect(() => {
+    if (!visible || !canViewReports) return
+    data.setLoadingReports(true)
+    data.fetchReports()
+  }, [visible, canViewReports, data.fetchReports, data.setLoadingReports])
 
   // === Player warning (full-screen overlay) ===
 
@@ -305,6 +311,18 @@ function App() {
     nav.navigateTo(targetView)
   }
 
+  // Live counters for the sidebar. `attention` badges need an admin to act.
+  const navBadges: Record<string, { badge: string | number; badgeVariant?: NavBadgeVariant }> = {
+    players: { badge: data.players.length },
+  }
+  const openReportCount = data.reports.length
+  if (canViewReports && openReportCount > 0) {
+    navBadges.reports = {
+      badge: openReportCount > 99 ? '99+' : openReportCount,
+      badgeVariant: 'attention',
+    }
+  }
+
   // === Render ===
 
   return (
@@ -350,8 +368,8 @@ function App() {
             <div className="sidebar-nav">
               <Navigation
                 items={nav.visibleNavItems.map((item) =>
-                  'id' in item && item.id === 'players'
-                    ? { ...item, badge: data.players.length }
+                  'id' in item && navBadges[item.id]
+                    ? { ...item, ...navBadges[item.id] }
                     : item,
                 )}
                 activeId={nav.activeNavId}
