@@ -7,6 +7,7 @@ import { SelectMenu } from '../../components/SelectMenu'
 import { callLua, on } from '../../fivem'
 import { createBanModal, createTextInputModal } from '../../modals/helpers'
 import { notify } from '../../lib/notify'
+import { toggleSpectate, useSpectatingTarget } from '../../lib/spectate'
 import { useTranslation } from '../../lib/i18n'
 
 interface PlayerActionsPanelProps {
@@ -88,7 +89,8 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
   const [busyAction, setBusyAction] = useState<string | null>(null)
   const [teleportBusy, setTeleportBusy] = useState<TeleportAction | null>(null)
   const [screenshotLoading, setScreenshotLoading] = useState(false)
-  const [isSpectating, setIsSpectating] = useState(false)
+  const spectatingTarget = useSpectatingTarget()
+  const isSpectating = spectatingTarget === player.id
 
   // Screenshot callback returns immediately; actual image arrives via 'screenshot:received'
   useEffect(() => {
@@ -146,15 +148,7 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
           })
           break
         case 'spectate':
-          if (isSpectating) {
-            await callLua('stopSpectate', {})
-            setIsSpectating(false)
-            notify(t("Stopped spectating"), 'success')
-          } else {
-            await callLua('spectatePlayer', { id: player.id, name: player.name })
-            setIsSpectating(true)
-            notify(t("Spectating {name}", { name: player.name }), 'success')
-          }
+          await toggleSpectate(player.id)
           break
         case 'screenshot':
           setScreenshotLoading(true)
@@ -355,25 +349,27 @@ export function PlayerActionsPanel({ player, permissions }: PlayerActionsPanelPr
                   const isToggle = action.id === 'freeze' || action.id === 'mute' || action.id === 'spectate'
                   const isActive = action.id === 'freeze' ? player.frozen : action.id === 'mute' ? player.muted : isSpectating
                   const isLoading = action.id === 'screenshot' && screenshotLoading
+                  const label = !isActive
+                    ? action.label
+                    : action.id === 'spectate'
+                      ? t('Stop spectating')
+                      : action.id === 'freeze'
+                        ? t('Unfreeze')
+                        : t('Unmute')
                   const btn = (
                     <button
                       key={action.id}
                       className={`panel-btn player-action-group-btn${isToggle && isActive ? ' player-action-group-btn-active' : ''}`}
                       onClick={() => handleQuickAction(action.id)}
                       disabled={isLoading || busyAction === action.id}
-                      title={isToggle
-                        ? `${action.id === 'spectate' && isActive ? 'Stop Spectating ' : isActive ? 'Un' : ''}${action.label}${action.id !== 'spectate' || !isActive ? ' ' : ''}${action.id !== 'spectate' || !isActive ? player.name : ''}`
-                        : `${action.label} ${player.name}`
-                      }
+                      title={action.id === 'spectate' ? label : `${label} ${player.name}`}
                     >
                       {isLoading ? (
                         <Icon name="loader-2" size="sm" className="icon-spin" />
                       ) : (
                         <Icon name={action.icon} size="sm" />
                       )}
-                      <span className="player-action-group-btn-label">
-                        {isToggle && isActive ? (action.id === 'spectate' ? 'Stop Spectating' : `Un${action.label}`) : action.label}
-                      </span>
+                      <span className="player-action-group-btn-label">{label}</span>
                     </button>
                   )
 

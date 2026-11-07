@@ -61,6 +61,19 @@
   color: var(--text-primary);
 }
 
+/* -- Engaged toggle -- */
+
+.quick-action-btn--active {
+  color: var(--accent-blue);
+  background: color-mix(in srgb, var(--accent-blue) 16%, transparent);
+}
+
+.quick-action-btn--active:hover,
+.quick-action-btn--active:focus {
+  background: color-mix(in srgb, var(--accent-blue) 24%, transparent);
+  color: var(--accent-blue);
+}
+
 /* -- Dropdown trigger (right-edge radius) -- */
 
 .quick-action-btn--dropdown {

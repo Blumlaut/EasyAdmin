@@ -68,6 +68,7 @@ export const DEMO_CACHED: CachedPlayer[] = [
 
 let mockPlayers = [...DEMO_PLAYERS]
 export const mockToasts: Notification[] = []
+let mockSpectateTarget: number | null = null
 
 // ---- Handlers ----
 
@@ -99,8 +100,18 @@ async function handleSlapPlayer(_body: Record<string, unknown>): Promise<Respons
   return jsonResponse({ success: true })
 }
 
-async function handleSpectatePlayer(_body: Record<string, unknown>): Promise<Response> {
+async function handleSpectatePlayer(body: Record<string, unknown>): Promise<Response> {
+  mockSpectateTarget = typeof body.id === 'number' ? body.id : null
   return jsonResponse({ success: true })
+}
+
+async function handleStopSpectate(): Promise<Response> {
+  mockSpectateTarget = null
+  return jsonResponse({ success: true })
+}
+
+async function handleSyncSpectate(): Promise<Response> {
+  return jsonResponse({ targetId: mockSpectateTarget })
 }
 
 async function handleTeleportToPlayer(_body: Record<string, unknown>): Promise<Response> {
@@ -204,6 +215,8 @@ export const playersMock: DomainMock & { toasts: Notification[]; getPlayers: () 
     warnPlayer: handleWarnPlayer,
     slapPlayer: handleSlapPlayer,
     spectatePlayer: handleSpectatePlayer,
+    stopSpectate: handleStopSpectate,
+    syncSpectate: handleSyncSpectate,
     teleportToPlayer: handleTeleportToPlayer,
     teleportPlayerToMe: handleTeleportPlayerToMe,
     teleportMeBack: handleTeleportMeBack,

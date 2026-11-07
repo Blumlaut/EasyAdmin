@@ -18,6 +18,7 @@ import { useModalContext } from '../../ModalContext'
 import { createBanModal, createTextInputModal } from '../../modals/helpers'
 import { callLua } from '../../fivem'
 import { notify } from '../../lib/notify'
+import { toggleSpectate, useSpectatingTarget } from '../../lib/spectate'
 import { useTranslation } from '../../lib/i18n'
 
 interface PlayerListPageProps {
@@ -155,6 +156,7 @@ interface PlayerRowProps {
 
 function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: PlayerRowProps) {
   const { t } = useTranslation()
+  const spectatingTarget = useSpectatingTarget()
 
   const canSpectate = !!permissions['player.spectate']
   const canFreeze = !!permissions['player.freeze']
@@ -238,13 +240,16 @@ function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: 
 
     // Most-used controls (Spectate is first in Movement on detail page)
     if (canSpectate) {
+      const watchingThisPlayer = spectatingTarget === player.id
       actions.push({
-        label: t("Spectate {name}", { name: player.name }),
+        label: watchingThisPlayer
+          ? t('Stop spectating')
+          : t("Spectate {name}", { name: player.name }),
         icon: 'eye',
+        active: watchingThisPlayer,
         onClick: (e) => {
           e.stopPropagation()
-          callLua('spectatePlayer', { id: player.id, name: player.name })
-          notify(t("Spectating {name}", { name: player.name }), 'success')
+          toggleSpectate(player.id).catch(() => notify(t('Action failed'), 'error'))
         },
       })
     }
@@ -269,7 +274,7 @@ function PlayerRow({ player, permissions, onClick, onOpenModal, onCloseModal }: 
     }
 
     return actions
-  }, [player, canSpectate, canMute, canKick, canBan, t, onOpenModal, onCloseModal])
+  }, [player, canSpectate, canMute, canKick, canBan, spectatingTarget, t, onOpenModal, onCloseModal])
 
   // ---- Dropdown (overflow) actions ----
 

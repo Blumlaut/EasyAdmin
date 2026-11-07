@@ -5,6 +5,7 @@ import type { Root } from 'react-dom/client'
 import L from 'leaflet'
 import type { Permissions, Player } from '../../types'
 import { callLua } from '../../fivem'
+import { toggleSpectate } from '../../lib/spectate'
 import { I18nProvider } from '../../lib/i18n'
 import { MapPlayerPopup } from './MapPlayerPopup'
 import { MapTeleportPopup } from './MapTeleportPopup'
@@ -267,7 +268,7 @@ export function GtaVMap({ mapPlayers, style, permissions, onOpenPlayer }: GtaVMa
                   permissions={data.permissions}
                   onSpectate={(pl) => {
                     mapRef.current?.closePopup()
-                    void callLua('spectatePlayer', { id: pl.player.id }).catch(() => {})
+                    void toggleSpectate(pl.player.id).catch(() => {})
                   }}
                   onTeleport={(pl) => {
                     mapRef.current?.closePopup()

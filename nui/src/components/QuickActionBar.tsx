@@ -15,6 +15,8 @@ export interface QuickAction {
   icon: IconName
   /** Color variant for the button. */
   variant?: QuickActionVariant
+  /** Renders the button in its engaged state (e.g. a running toggle). */
+  active?: boolean
   /** Called when the action is triggered. Pass the event so the caller can stopPropagation. */
   onClick: (e: React.MouseEvent) => void | Promise<void>
 }
@@ -73,7 +75,7 @@ export function QuickActionBar({ actions, dropdownActions }: QuickActionBarProps
         <Tooltip key={`${action.icon}-${i}`} content={action.label}>
           <button
             type="button"
-            className={`quick-action-btn${action.variant ? ` quick-action-btn--${action.variant}` : ''}`}
+            className={`quick-action-btn${action.variant ? ` quick-action-btn--${action.variant}` : ''}${action.active ? ' quick-action-btn--active' : ''}`}
             onClick={action.onClick}
           >
             <Icon name={action.icon} size="sm" />
