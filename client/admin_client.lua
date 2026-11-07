@@ -32,6 +32,21 @@ local vehicleInfo = {
 
 local freezeThreadRunning = false
 
+IsSpectating = false
+-- server id of the player we watch, nil when not spectating
+spectateTargetId = nil
+
+---Store the spectate state and push it to the NUI so its buttons can toggle.
+---@param targetId number|nil
+function SetSpectateState(targetId)
+	spectateTargetId = targetId
+	IsSpectating = targetId ~= nil
+	SendNUIMessage({
+		action = 'spectateState',
+		data = { targetId = targetId },
+	})
+end
+
 RegisterNetEvent("EasyAdmin:adminresponse", function(perms)
 	permissions = perms
 
@@ -177,6 +192,7 @@ RegisterNetEvent("EasyAdmin:requestSpectate", function(playerServerId, playerDat
 		timer = timer + 1
 	until ( (GetPlayerPed(playerId) > 0) and (playerId ~= -1) or timer > 25)
 	if timer >= 25 then
+		SetSpectateState(nil)
 		return
 	end
 	spectatePlayer(GetPlayerPed(playerId),playerId,GetPlayerName(playerId))
@@ -373,6 +389,7 @@ end)
 -- Screenshot capture is now handled by client/screenshot.lua
 
 function stopSpectating()
+	SetSpectateState(nil)
 	local playerPed = PlayerPedId()
 	if oldCoords then
 		RequestCollisionAtCoord(oldCoords.x, oldCoords.y, oldCoords.z)
@@ -425,7 +442,8 @@ function spectatePlayer(targetPed,target,name)
 		local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
 		RequestCollisionAtCoord(targetx,targety,targetz)
 		NetworkSetInSpectatorMode(true, targetPed)
-		
+		SetSpectateState(GetPlayerServerId(target))
+
 		TriggerEvent("EasyAdmin:showNotification", GetLocalisedText("Spectating {name}", { name = name }))
 	else
 		stopSpectating()

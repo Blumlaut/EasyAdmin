@@ -56,6 +56,11 @@ RegisterNUICallback('stopSpectate', function(_data, cb)
   cb({ ok = true })
 end)
 
+---Current spectate state, for when the menu (re)loads.
+RegisterNUICallback('syncSpectate', function(_data, cb)
+  cb({ targetId = spectateTargetId })
+end)
+
 RegisterNUICallback('toggleFreeze', function(data, cb)
   if not permissions['player.freeze'] then return deny(cb) end
   local id = tonumber(data and data.id)
