@@ -13,7 +13,6 @@ async function main() {
 		treeShaking: true,
 		ignoreAnnotations: true,
 		define: { 'process.env.NODE_ENV': '"production"' },
-		external: ['zlib-sync'],
 	})
 
 	if (isWatch) {

@@ -19,9 +19,6 @@ export default {
     'selector-class-pattern': null,
     'keyframes-name-pattern': null,
 
-    // -- Layout: allow multi-declaration blocks --
-    'declaration-block-single-line-max-declarations': null,
-
     // -- Media features --
     'media-feature-range-notation': null,
 
