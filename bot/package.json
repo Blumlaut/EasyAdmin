@@ -5,13 +5,11 @@
     "discord-api-types": "^0.38.57",
     "discord.js": "14.27.0",
     "easyadmin": "file:..",
-    "erlpack": "0.1.4",
     "juration": "0.1.1",
     "path-browserify": "^1.0.1",
     "pretty-ms": "10.0.0",
     "sprintf-js": "1.1.3",
-    "utf-8-validate": "^6.0.6",
-    "zlib-sync": "0.1.10"
+    "utf-8-validate": "^6.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
