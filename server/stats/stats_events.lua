@@ -56,9 +56,11 @@ RegisterServerEvent('EasyAdmin:requestServerStats', function()
 	local adminsOnline = 0
 	for _ in pairs(OnlineAdmins) do adminsOnline = adminsOnline + 1 end
 
-	-- Count pending reports
+	-- Reports still waiting for an admin to claim them
 	local pendingReports = 0
-	for _ in pairs(reports) do pendingReports = pendingReports + 1 end
+	for _, report in pairs(reports) do
+		if not report.claimed then pendingReports = pendingReports + 1 end
+	end
 
 	-- Server uptime in seconds
 	local uptime = os.time() - ServerStartTime

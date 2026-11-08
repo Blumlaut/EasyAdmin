@@ -6,7 +6,7 @@ The NUI consists of the following pages, accessible through the sidebar navigati
 
 The landing page, showing a snapshot of the server:
 
-- Stat cards for Players Online, Peak Today, Average Ping, Resources (started / total), Admins Online, Server Uptime and Pending Reports
+- Stat cards for Players Online, Peak Today, Average Ping, Resources (started / total), Admins Online, Server Uptime and Pending Reports (reports no admin has claimed yet)
 - A chart showing how full the server is, based on the current player count and the max player count
 - A players-over-time chart with 1h, 6h, 24h and 7d ranges
 - Bars counting the vehicles, peds and objects in the world

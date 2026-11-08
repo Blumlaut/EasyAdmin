@@ -315,10 +315,10 @@ function App() {
   const navBadges: Record<string, { badge: string | number; badgeVariant?: NavBadgeVariant }> = {
     players: { badge: data.players.length },
   }
-  const openReportCount = data.reports.length
-  if (canViewReports && openReportCount > 0) {
+  const unclaimedReportCount = data.reports.filter((report) => !report.claimed).length
+  if (canViewReports && unclaimedReportCount > 0) {
     navBadges.reports = {
-      badge: openReportCount > 99 ? '99+' : openReportCount,
+      badge: unclaimedReportCount > 99 ? '99+' : unclaimedReportCount,
       badgeVariant: 'attention',
     }
   }

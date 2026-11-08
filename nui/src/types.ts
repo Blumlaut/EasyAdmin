@@ -170,7 +170,7 @@ export interface ServerStats {
     objects: number
   }
   adminsOnline: number
-  pendingReports: number
+  pendingReports: number   // reports no admin has claimed yet
   uptime: number            // seconds since server start
   peakToday: number
 }
