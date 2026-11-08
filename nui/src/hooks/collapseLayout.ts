@@ -1,7 +1,16 @@
 import type { SidebarDirection, SidebarMode } from '../types'
 
-export const COLLAPSED_SIDEBAR_WIDTH = 260
-export const COLLAPSED_TASKBAR_HEIGHT = 84
+/** Width of the expanded sidebar / taskbar. Keep in sync with layout.css. */
+export const SIDEBAR_WIDTH = 260
+export const TASKBAR_HEIGHT = 84
+
+/** Width of the icon rail, the default folded appearance. */
+export const RAIL_WIDTH = 64
+
+/** Size of the floating chip. */
+export const CHIP_SIZE = 56
+
+export type FoldState = 'open' | 'rail' | 'chip'
 
 export interface WindowRect {
   x: number
@@ -10,63 +19,97 @@ export interface WindowRect {
   height: number
 }
 
-interface GetTargetWindowRectOptions {
-  currentRect: WindowRect
-  expandedSize: { width: number; height: number }
-  nextCollapsed: boolean
+interface GetFoldRectsOptions {
+  /** Expanded window rect: current position plus the saved window size. */
+  expandedRect: WindowRect
   sidebarMode: SidebarMode
   sidebarDirection: SidebarDirection
+  /** Height the sidebar needs in rail layout, measured from the live DOM. */
+  railHeight: number
+  viewport: { width: number; height: number }
 }
 
-export function getTargetWindowRect({
-  currentRect,
-  expandedSize,
-  nextCollapsed,
+/**
+ * Geometry for every fold state, anchored to the same screen edge the
+ * expanded window sits against so folding never makes the window drift.
+ */
+export function getFoldRects({
+  expandedRect,
   sidebarMode,
   sidebarDirection,
-}: GetTargetWindowRectOptions): WindowRect {
-  const width = sidebarMode === 'horizontal'
-    ? expandedSize.width
-    : (nextCollapsed ? COLLAPSED_SIDEBAR_WIDTH : expandedSize.width)
+  railHeight,
+  viewport,
+}: GetFoldRectsOptions): Record<FoldState, WindowRect> {
+  const vertical = sidebarMode === 'vertical'
+  const anchoredRight = vertical && sidebarDirection === 'left'
+  const anchoredBottom = !vertical && sidebarDirection === 'up'
 
-  const height = sidebarMode === 'horizontal'
-    ? (nextCollapsed ? COLLAPSED_TASKBAR_HEIGHT : expandedSize.height)
-    : expandedSize.height
+  const open = clampWindowRectToViewport(expandedRect, viewport)
 
-  const x = sidebarMode === 'vertical' && sidebarDirection === 'left'
-    ? currentRect.x + currentRect.width - width
-    : currentRect.x
+  const railSize = vertical
+    ? { width: RAIL_WIDTH, height: Math.min(railHeight, viewport.height) }
+    : { width: Math.min(expandedRect.width, viewport.width), height: TASKBAR_HEIGHT }
 
-  const y = sidebarMode === 'horizontal' && sidebarDirection === 'up'
-    ? currentRect.y + currentRect.height - height
-    : currentRect.y
-
-  return { x, y, width, height }
-}
-
-interface GetRenderedWindowSizeOptions {
-  contentCollapsed: boolean
-  sidebarMode: SidebarMode
-  expandedSize: { width: number; height: number }
-}
-
-export function getRenderedWindowSize({
-  contentCollapsed,
-  sidebarMode,
-  expandedSize,
-}: GetRenderedWindowSizeOptions) {
-  if (!contentCollapsed) return expandedSize
+  const anchorX = (width: number) => anchoredRight ? open.x + open.width - width : open.x
+  const anchorY = (height: number) => anchoredBottom ? open.y + open.height - height : open.y
 
   return {
-    width: sidebarMode === 'horizontal' ? expandedSize.width : COLLAPSED_SIDEBAR_WIDTH,
-    height: sidebarMode === 'horizontal' ? COLLAPSED_TASKBAR_HEIGHT : expandedSize.height,
+    open,
+    rail: clampWindowRectToViewport(
+      { x: anchorX(railSize.width), y: anchorY(railSize.height), ...railSize },
+      viewport,
+    ),
+    chip: clampWindowRectToViewport(
+      { x: anchorX(CHIP_SIZE), y: anchorY(CHIP_SIZE), width: CHIP_SIZE, height: CHIP_SIZE },
+      viewport,
+    ),
   }
 }
 
-export function clampWindowRectToViewport(rect: WindowRect, viewport: { width: number; height: number }): WindowRect {
+/**
+ * The rect between two states: full height at the folded width. Folding visits
+ * it after the width shrinks, unfolding visits it before the width grows, so
+ * both directions read as the panel peeling open sideways.
+ */
+export function getStripRect(from: FoldState, to: FoldState, rects: Record<FoldState, WindowRect>): WindowRect {
+  const folded = from === 'open' ? rects[to] : rects[from]
+
+  return {
+    x: folded.x,
+    y: rects.open.y,
+    width: folded.width,
+    height: rects.open.height,
+  }
+}
+
+export function clampWindowRectToViewport(
+  rect: WindowRect,
+  viewport: { width: number; height: number },
+): WindowRect {
   return {
     ...rect,
     x: Math.max(0, Math.min(viewport.width - rect.width, rect.x)),
     y: Math.max(0, Math.min(viewport.height - rect.height, rect.y)),
   }
+}
+
+export function rectsAreEqual(a: WindowRect, b: WindowRect): boolean {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height
+}
+
+/** Natural height of the sidebar contents, with the nav laid out at its own size. */
+export function measureRailHeight(windowEl: HTMLElement): number {
+  const header = windowEl.querySelector<HTMLElement>('.sidebar-header')
+  const nav = windowEl.querySelector<HTMLElement>('.sidebar-nav')
+  if (!header || !nav) return CHIP_SIZE * 2
+
+  const previousFlex = nav.style.flex
+  const previousHeight = nav.style.height
+  nav.style.flex = '0 0 auto'
+  nav.style.height = 'auto'
+  const height = header.offsetHeight + nav.offsetHeight
+  nav.style.flex = previousFlex
+  nav.style.height = previousHeight
+
+  return Math.round(height)
 }

@@ -252,7 +252,8 @@ end)
 -- Player dismissed the full-screen warning overlay.
 -- Release NUI focus so the game regains input.
 RegisterNUICallback('dismissWarning', function(_data, cb)
-  SetNuiFocus(false, false)
+  -- Go through the shared setter so the NUI folds like on any other focus release
+  SetNuiFocused(false)
   cb({ ok = true })
 end)
 
