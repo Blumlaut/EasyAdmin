@@ -10,6 +10,11 @@
 ------------------------------------
 ------------------------------------
 
+-- Open admin menus pull a fresh roster when someone joins or leaves.
+AddEventHandler('playerJoining', function()
+	NotifyPlayerListChanged()
+end)
+
 AddEventHandler('playerDropped', function (reason)
 	local src = source
 	if OnlineAdmins[src] then
@@ -28,6 +33,7 @@ AddEventHandler('playerDropped', function (reason)
 		end
 	end
 	PrintDebugMessage(src.." disconnected.", 4)
+	NotifyPlayerListChanged()
 end)
 
 RegisterServerEvent("EasyAdmin:GetInfinityPlayerList", function()

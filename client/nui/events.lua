@@ -13,6 +13,11 @@ RegisterNetEvent('EasyAdmin:GetInfinityPlayerList', function(_pl)
   end
 end)
 
+-- Someone joined or left; refresh so ban and teleport targets stay current.
+RegisterNetEvent('EasyAdmin:playerListChanged', function()
+  if IsNuiVisible() then NuiRefreshPlayerList() end
+end)
+
 -- Push ban list to NUI when received from server (legacy, kept for backward compat).
 RegisterNetEvent('EasyAdmin:fillBanlist', function(thebanlist)
   banlist = thebanlist

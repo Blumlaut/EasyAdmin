@@ -68,23 +68,28 @@ function NuiToggle()
     -- Sync registered plugins to NUI from the server (source of truth).
     -- This ensures clients who joined after plugins registered still see them.
     TriggerServerEvent('EasyAdmin:syncPluginsFromServer')
-    if DoesPlayerHavePermissionForCategory(-1, 'player') then
-      TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
-    end
-    -- send initial data once player list is available
-    CreateThread(function()
-      local waitTime = 0
-      repeat
-        Wait(10)
-        waitTime = waitTime + 1
-      until playerlist or waitTime > 50
-      NuiSendPlayerData()
-    end)
+    NuiRefreshPlayerList()
   else
     -- Notify server that the UI is no longer in the foreground
     TriggerServerEvent('EasyAdmin:UiStateChanged', false)
     SetNuiFocused(false)
   end
+end
+
+-- Pull the roster from the server and send it to the NUI once it lands.
+-- The timeout stops the NUI sitting on a skeleton if no answer comes.
+function NuiRefreshPlayerList()
+  if DoesPlayerHavePermissionForCategory(-1, 'player') then
+    TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
+  end
+  CreateThread(function()
+    local waitTime = 0
+    repeat
+      Wait(10)
+      waitTime = waitTime + 1
+    until playerlist or waitTime > 50
+    NuiSendPlayerData()
+  end)
 end
 
 function NuiSendPlayerData()
@@ -262,17 +267,7 @@ RegisterNUICallback('releaseFocus', function(_data, cb)
 end)
 
 RegisterNUICallback('requestPlayers', function(_data, cb)
-  if DoesPlayerHavePermissionForCategory(-1, 'player') then
-    TriggerServerEvent('EasyAdmin:GetInfinityPlayerList')
-    CreateThread(function()
-      local waitTime = 0
-      repeat
-        Wait(10)
-        waitTime = waitTime + 1
-      until playerlist or waitTime > 100
-      NuiSendPlayerData()
-    end)
-  end
+  NuiRefreshPlayerList()
   cb({ ok = true })
 end)
 

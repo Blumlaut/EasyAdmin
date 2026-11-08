@@ -356,6 +356,72 @@ describe("Admin Utils — IsPlayerAdmin / GetOnlineAdmins", function()
     end)
 end)
 
+describe("Admin Utils — NotifyPlayerListChanged", function()
+    local sent
+    local originalTrigger
+
+    before_each(function()
+        _resetGlobals()
+        sent = {}
+        originalTrigger = _G.TriggerClientEvent
+        _G.TriggerClientEvent = function(event, target)
+            table.insert(sent, { event = event, target = target })
+        end
+    end)
+
+    after_each(function()
+        _MockAdvanceTime(1000)
+        _G.TriggerClientEvent = originalTrigger
+    end)
+
+    it("notifies every online admin once the delay has passed", function()
+        _G.OnlineAdmins[1] = true
+        _G.OnlineAdmins[4] = true
+
+        NotifyPlayerListChanged()
+        _MockAdvanceTime(1000)
+
+        local targets = {}
+        for _, call in ipairs(sent) do
+            targets[call.target] = call.event
+        end
+        assert.are.equal(2, #sent)
+        assert.are.equal("EasyAdmin:playerListChanged", targets[1])
+        assert.are.equal("EasyAdmin:playerListChanged", targets[4])
+    end)
+
+    it("sends nothing before the delay elapses", function()
+        _G.OnlineAdmins[1] = true
+
+        NotifyPlayerListChanged()
+        _MockAdvanceTime(999)
+
+        assert.are.equal(0, #sent)
+    end)
+
+    it("collapses a burst of joins and leaves into one notification", function()
+        _G.OnlineAdmins[1] = true
+
+        NotifyPlayerListChanged()
+        NotifyPlayerListChanged()
+        NotifyPlayerListChanged()
+        _MockAdvanceTime(1000)
+
+        assert.are.equal(1, #sent)
+    end)
+
+    it("notifies again after a previous refresh has fired", function()
+        _G.OnlineAdmins[1] = true
+
+        NotifyPlayerListChanged()
+        _MockAdvanceTime(1000)
+        NotifyPlayerListChanged()
+        _MockAdvanceTime(1000)
+
+        assert.are.equal(2, #sent)
+    end)
+end)
+
 describe("Admin Utils — getName", function()
     before_each(function()
         _resetGlobals()

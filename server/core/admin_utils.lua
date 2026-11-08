@@ -136,6 +136,22 @@ function IsPlayerAdmin(pid)
 end
 exports('IsPlayerAdmin', IsPlayerAdmin)
 
+-- Tells open admin menus that someone joined or left, so ban and teleport
+-- targets stay current. The delay lets the player finish joining or dropping,
+-- and turns a burst into a single refresh.
+local rosterRefreshPending = false
+function NotifyPlayerListChanged()
+	if rosterRefreshPending then return end
+	rosterRefreshPending = true
+	Citizen.SetTimeout(1000, function()
+		rosterRefreshPending = false
+		for adminId in pairs(OnlineAdmins) do
+			TriggerClientEvent("EasyAdmin:playerListChanged", adminId)
+		end
+	end)
+end
+exports('NotifyPlayerListChanged', NotifyPlayerListChanged)
+
 -- Sends a global announcement
 ---@param text string
 ---@param sender? table @Optional sender info: { name: string, id: number|string } — included in AnnouncementSent event
