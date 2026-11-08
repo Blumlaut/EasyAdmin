@@ -97,19 +97,22 @@ export function rectsAreEqual(a: WindowRect, b: WindowRect): boolean {
   return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height
 }
 
-/** Natural height of the sidebar contents, with the nav laid out at its own size. */
+/**
+ * Height the sidebar needs to show every nav item. Read off the last item's
+ * box so the nav's own scroll container does not distort the measurement.
+ */
 export function measureRailHeight(windowEl: HTMLElement): number {
   const header = windowEl.querySelector<HTMLElement>('.sidebar-header')
   const nav = windowEl.querySelector<HTMLElement>('.sidebar-nav')
   if (!header || !nav) return CHIP_SIZE * 2
 
-  const previousFlex = nav.style.flex
-  const previousHeight = nav.style.height
-  nav.style.flex = '0 0 auto'
-  nav.style.height = 'auto'
-  const height = header.offsetHeight + nav.offsetHeight
-  nav.style.flex = previousFlex
-  nav.style.height = previousHeight
+  const last = nav.lastElementChild as HTMLElement | null
+  if (!last) return Math.round(header.getBoundingClientRect().height)
 
-  return Math.round(height)
+  const navRect = nav.getBoundingClientRect()
+  const lastRect = last.getBoundingClientRect()
+  const paddingBottom = parseFloat(getComputedStyle(nav).paddingBottom) || 0
+  const content = lastRect.bottom - navRect.top + nav.scrollTop + paddingBottom
+
+  return Math.round(header.getBoundingClientRect().height + content)
 }
