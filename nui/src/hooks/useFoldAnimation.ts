@@ -70,7 +70,12 @@ export function useFoldAnimation({
     const strip = getStripRect(from, next, rects)
 
     el.classList.add('ea-window--folding')
-    if (!folding) el.classList.remove('ea-window--rail', 'ea-window--chip')
+    // Growing: the strip phase is rail-shaped, the width phase is the full panel.
+    // Shrinking: the panel slides away first, then collapses into the folded shape.
+    if (!folding) {
+      el.classList.remove('ea-window--chip')
+      el.classList.add('ea-window--rail')
+    }
 
     // Hold the content at its full size so it gets revealed by the window
     // instead of reflowing through every frame.
@@ -92,6 +97,7 @@ export function useFoldAnimation({
       }
     } else {
       if (!rectsAreEqual(start, strip)) await animateRect(el, start, strip)
+      el.classList.remove('ea-window--rail', 'ea-window--chip')
       await animateRect(el, strip, target)
     }
 

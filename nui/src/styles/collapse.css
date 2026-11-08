@@ -14,9 +14,11 @@
   border-radius: var(--radius-lg);
 }
 
+/* The sidebar always fills the window it is folded into, so the icons stay
+   centred on every frame of the unfold instead of on the window's last size. */
 .ea-window--chip .sidebar {
-  width: 56px;
-  height: 56px;
+  width: 100%;
+  height: 100%;
 }
 
 .ea-window--chip .sidebar-header {
@@ -70,7 +72,7 @@
 /* -- Icon rail (default) -- */
 
 .ea-window--sidebar-vertical.ea-window--rail .sidebar {
-  width: 64px;
+  width: 100%;
 }
 
 .ea-window--sidebar-vertical.ea-window--rail .sidebar-header {
