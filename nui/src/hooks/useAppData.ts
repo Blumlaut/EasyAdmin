@@ -92,6 +92,7 @@ export function useAppData(): AppDataResult {
     sidebarMode: 'vertical',
     sidebarDirection: 'right',
     foldOpacity: 85,
+    foldedStyle: 'rail',
   })
   const [shortcuts, setShortcuts] = useState<ReasonShortcut[]>([])
 

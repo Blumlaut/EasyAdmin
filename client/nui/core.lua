@@ -201,6 +201,10 @@ function NuiSendSettings()
   local uiDensity = KvpGet('suiDensity') or 'default'
   if not validDensities[uiDensity] then uiDensity = 'default' end
 
+  -- What stays on screen while the game holds the input
+  local foldedStyle = KvpGet('sfoldedStyle') or 'rail'
+  if foldedStyle ~= 'rail' and foldedStyle ~= 'chip' then foldedStyle = 'rail' end
+
   SendNUIMessage({
     action = 'initSettings',
     data = {
@@ -211,6 +215,7 @@ function NuiSendSettings()
       sidebarMode = sidebarMode,
       sidebarDirection = sidebarDirection,
       foldOpacity = KvpGet('ifoldOpacity') or 85,
+      foldedStyle = foldedStyle,
     },
   })
 
@@ -252,7 +257,8 @@ end)
 -- Player dismissed the full-screen warning overlay.
 -- Release NUI focus so the game regains input.
 RegisterNUICallback('dismissWarning', function(_data, cb)
-  SetNuiFocus(false, false)
+  -- Go through the shared setter so the NUI folds like on any other focus release
+  SetNuiFocused(false)
   cb({ ok = true })
 end)
 

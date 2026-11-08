@@ -24,6 +24,12 @@ async function handleSetResourceKvp(): Promise<Response> {
   return jsonResponse({ success: true })
 }
 
+// Mirrors the Lua side: releasing focus folds the window and keeps it rendered
+async function handleReleaseFocus(): Promise<Response> {
+  window.postMessage({ action: 'nuiUnhook' }, '*')
+  return jsonResponse({ success: true })
+}
+
 async function handleCloseMenu(): Promise<Response> {
   window.postMessage({ action: 'menuToggle', data: { visible: false } }, '*')
   return jsonResponse({ success: true })
@@ -36,5 +42,6 @@ export const settingsMock: DomainMock = {
     setShowLicenses: handleSetShowLicenses,
     setResourceKvp: handleSetResourceKvp,
     closeMenu: handleCloseMenu,
+    releaseFocus: handleReleaseFocus,
   },
 }
