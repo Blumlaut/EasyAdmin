@@ -174,8 +174,8 @@ jobs:
           ${{ steps.generate_changelog.outputs.changelog }}
 
           Supported by:
-          <a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
-          <p align="center">10% Discount Code: <b>EasyAdmin</b></p>
+          <a href='https://zap-hosting.com/ref/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
+          <p align="center">20% Discount Code: <b>EASYADMIN</b></p>
           ${{ steps.generate_changelog.outputs.compare_url && format('**Full Changelog**: {0}', steps.generate_changelog.outputs.compare_url) || '' }}
         draft: false
         prerelease: ${{ inputs.release_type == 'beta' }}

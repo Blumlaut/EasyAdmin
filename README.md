@@ -66,6 +66,6 @@ Join our Discord community: [https://discord.gg/snaily](https://discord.gg/snail
 
 **Supported by:**
 
-ZAP-Hosting (https://zap-hosting.com/easyadmin)
-<a href='https://zap-hosting.com/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
-Get 20% off your ZAP-Hosting subscription with code: EasyAdmin
+ZAP-Hosting (https://zap-hosting.com/ref/easyadmin)
+<a href='https://zap-hosting.com/ref/easyadmin'><img src="https://zap-cdn.com/interface/_images/banner/gameserver/fivem-affiliate-banner-1006x180.png" alt="ZAP-Hosting Gameserver and Webhosting"></a>
+Get 20% off your ZAP-Hosting subscription with code: EASYADMIN
