@@ -111,6 +111,9 @@ export type CleanupRadius = 10 | 20 | 50 | 100 | 'global'
 // App settings (mirrors ea_* kvp entries)
 export type SidebarMode = 'vertical' | 'horizontal'
 export type SidebarDirection = 'right' | 'left' | 'down' | 'up'
+
+// What is left on screen while the game has the input
+export type FoldedStyle = 'rail' | 'chip'
 export type UiDensity = 'cramped' | 'cozy' | 'default' | 'spacious' | 'airy'
 
 export interface AppSettings {
@@ -124,6 +127,8 @@ export interface AppSettings {
   sidebarDirection: SidebarDirection
   // Fold transparency (0 = fully transparent, 100 = fully opaque), default 85
   foldOpacity: number
+  // Folded appearance while the game has focus, default 'rail'
+  foldedStyle: FoldedStyle
 }
 
 // Default window dimensions (used when no KVP saved size exists)

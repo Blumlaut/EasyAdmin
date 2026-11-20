@@ -113,6 +113,17 @@ The NUI supports keyboard navigation for list interactions:
 - Enter — Select item
 - Escape — Close an open modal or dropdown; otherwise folds the window (releases focus). The menu is only closed and reopened with the `/easyadmin` (`/ea`) command.
 
+## Folding
+
+The window is only folded while the game holds the input. Releasing focus (Escape, the backdrop, the close button or a Lua call) folds it to the appearance picked in Settings → Layout → Folded appearance, and regaining focus with the keybind (default Left Alt) unfolds it again. Both directions run in two phases: the window grows or shrinks to full height at the folded width first, then changes width, so opening reads as the panel unfolding rather than resizing.
+
+| Folded appearance | Size | What it is |
+|---|---|---|
+| Icon rail (default) | 64px wide | Nav icons with a dot for anything that needs attention |
+| Floating icon | 56 × 56 | The logo with the open report count |
+
+Neither state takes input, because the NUI has released focus. Nothing in the folded window should look clickable.
+
 ## Accessibility
 
 - High contrast mode increases color contrast throughout the interface

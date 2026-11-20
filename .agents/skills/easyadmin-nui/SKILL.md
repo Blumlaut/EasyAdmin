@@ -26,6 +26,7 @@ Never use raw `fetch` or `window.addEventListener` directly — use the exported
 The menu is only fully closed/reopened by the `/easyadmin` (`/ea`) command (`NuiToggle` in `client/nui/core.lua`). **Never call the `closeMenu` NUI callback from key handlers or other UI actions.**
 
 - **Escape folds the menu** — call `releaseFocus`, which releases NUI focus but keeps the menu rendered in the background (player re-engages with the focus keybind, default Left Alt).
+- **Folding follows focus, never a button of its own** — `useWindowChrome` derives the fold target from the `nuiUnhook` / `nuiRehook` messages and `useFoldAnimation` animates to it. Anything that releases focus folds the window; anything that grabs focus unfolds it.
 - **Overlays own their Escape** — while a modal (`role="dialog"`), dropdown (`role="menu"`), or select (`role="listbox"`) is open, skip app-level Escape handling so the overlay's own handler takes the key.
 
 ## Project Structure

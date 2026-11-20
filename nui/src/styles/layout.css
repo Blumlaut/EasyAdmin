@@ -61,14 +61,6 @@
   cursor: grabbing;
 }
 
-/* Collapse button pushed to the right of the header */
-.sidebar-collapse-btn {
-  margin-left: auto;
-  flex-shrink: 0;
-  cursor: pointer;
-  user-select: none;
-}
-
 .sidebar-logo {
   height: 36px;
   width: auto;
