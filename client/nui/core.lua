@@ -51,6 +51,13 @@ function NuiToggle()
     return
   end
 
+  -- A folded menu is still on screen, so the command brings it back instead
+  -- of hiding it. The focus keybind is the usual way in, and it can be unbound.
+  if nuiVisible and not nuiFocused then
+    SetNuiFocused(true)
+    return
+  end
+
   nuiVisible = not nuiVisible
 
   SendNUIMessage({
