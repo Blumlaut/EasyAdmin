@@ -10,15 +10,21 @@
 
 /* -- Floating chip -- */
 
-.ea-window--chip {
-  border-radius: var(--radius-lg);
+/* The badge hangs off the corner, so the chip must let it out. Both classes
+   are needed to beat the window's own `overflow: hidden`. */
+.ea-window.ea-window--chip {
+  overflow: visible;
 }
 
 /* The sidebar always fills the window it is folded into, so the icons stay
-   centred on every frame of the unfold instead of on the window's last size. */
+   centred on every frame of the unfold instead of on the window's last size.
+   It takes the window's rounding and drops its divider border, which has
+   nothing left to divide and eats the pixel the icons centre on. */
 .ea-window--chip .sidebar {
   width: 100%;
   height: 100%;
+  border: none;
+  border-radius: inherit;
 }
 
 .ea-window--chip .sidebar-header {
@@ -44,27 +50,28 @@
   display: none;
 }
 
-/* -- Fold badge: open report count, chip only -- */
+/* -- Fold badge: unclaimed report count, chip only -- */
 
 .ea-fold-badge {
   display: none;
 }
 
+/* Sized in em so the count follows the font size setting */
 .ea-window--chip .ea-fold-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 1px;
-  right: 1px;
-  min-width: 17px;
-  height: 17px;
-  padding: 0 4px;
+  top: -0.35em;
+  right: -0.35em;
+  min-width: 1.45em;
+  height: 1.45em;
+  padding: 0 0.35em;
   border-radius: var(--radius-full);
   background: var(--accent-orange);
   border: 1.5px solid var(--brand-dark);
   color: var(--brand-dark);
-  font-size: 11px;
+  font-size: var(--text-xs);
   font-weight: var(--font-bold);
   line-height: 1;
 }
@@ -73,6 +80,7 @@
 
 .ea-window--sidebar-vertical.ea-window--rail .sidebar {
   width: 100%;
+  border: none;
 }
 
 .ea-window--sidebar-vertical.ea-window--rail .sidebar-header {
@@ -108,11 +116,13 @@
   margin: var(--space-2) var(--space-4);
 }
 
-/* Counters shrink to a dot on the icon, the number itself needs a label */
+/* Counters shrink to a dot pinned to the icon's top right, since the number
+   itself needs the label that the rail hides */
 .ea-window--sidebar-vertical.ea-window--rail .nav-item-badge {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 50%;
+  right: 50%;
+  transform: translate(calc(50% + 10px), calc(-50% - 10px));
   width: 7px;
   height: 7px;
   min-width: 0;
