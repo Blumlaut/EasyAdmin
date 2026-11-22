@@ -332,7 +332,7 @@ end
 RegisterNetEvent('EasyAdmin:showWarning')
 AddEventHandler('EasyAdmin:showWarning', function(warnedBy, message, title, labelWarnedBy, labelDismiss) 
   -- Grab NUI focus so the overlay can capture keyboard input
-  SetNuiFocus(true, true)
+  SetNuiFocused(true)
   SendNUIMessage({
     action = 'showWarning',
     data = {
