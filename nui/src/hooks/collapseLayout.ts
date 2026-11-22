@@ -98,8 +98,10 @@ export function rectsAreEqual(a: WindowRect, b: WindowRect): boolean {
 }
 
 /**
- * Height the sidebar needs to show every nav item. Read off the last item's
- * box so the nav's own scroll container does not distort the measurement.
+ * Height the sidebar needs to show every nav item in the rail layout. The last
+ * item's box is measured so the nav's own scroll container cannot distort the
+ * result, and the window's border is added so the rail's outer height holds the
+ * sidebar it sits around.
  */
 export function measureRailHeight(windowEl: HTMLElement): number {
   const header = windowEl.querySelector<HTMLElement>('.sidebar-header')
@@ -107,12 +109,13 @@ export function measureRailHeight(windowEl: HTMLElement): number {
   if (!header || !nav) return CHIP_SIZE * 2
 
   const last = nav.lastElementChild as HTMLElement | null
-  if (!last) return Math.round(header.getBoundingClientRect().height)
+  const headerHeight = header.getBoundingClientRect().height
+  if (!last) return Math.round(headerHeight)
 
   const navRect = nav.getBoundingClientRect()
-  const lastRect = last.getBoundingClientRect()
   const paddingBottom = parseFloat(getComputedStyle(nav).paddingBottom) || 0
-  const content = lastRect.bottom - navRect.top + nav.scrollTop + paddingBottom
+  const content = last.getBoundingClientRect().bottom - navRect.top + nav.scrollTop + paddingBottom
+  const chrome = windowEl.offsetHeight - windowEl.clientHeight
 
-  return Math.round(header.getBoundingClientRect().height + content)
+  return Math.round(headerHeight + content + chrome)
 }

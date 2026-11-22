@@ -105,8 +105,70 @@ describe('clampWindowRectToViewport', () => {
   })
 })
 
+/** jsdom has no layout, so every box is stubbed by hand */
+function domRect(top: number, bottom: number, height: number): DOMRect {
+  return { top, bottom, height, left: 0, right: 0, width: 0, x: 0, y: 0, toJSON: () => ({}) } as DOMRect
+}
+
+function sidebarWith(metrics: {
+  headerHeight: number
+  navTop: number
+  itemsBottom: number[]
+  paddingBottom?: string
+  chrome?: number
+}) {
+  const windowEl = document.createElement('div')
+  const header = document.createElement('div')
+  header.className = 'sidebar-header'
+  header.getBoundingClientRect = () => domRect(0, metrics.headerHeight, metrics.headerHeight)
+
+  const nav = document.createElement('nav')
+  nav.className = 'sidebar-nav'
+  nav.style.paddingBottom = metrics.paddingBottom ?? '0px'
+  nav.getBoundingClientRect = () => domRect(metrics.navTop, metrics.navTop + 600, 600)
+  for (const bottom of metrics.itemsBottom) {
+    const item = document.createElement('div')
+    item.getBoundingClientRect = () => domRect(bottom - 40, bottom, 40)
+    nav.appendChild(item)
+  }
+
+  windowEl.append(header, nav)
+  document.body.appendChild(windowEl)
+  Object.defineProperty(windowEl, 'offsetHeight', { value: 750 + (metrics.chrome ?? 0) })
+  Object.defineProperty(windowEl, 'clientHeight', { value: 750 })
+
+  return windowEl
+}
+
 describe('measureRailHeight', () => {
   it('falls back to two chip heights when the sidebar is missing', () => {
     expect(measureRailHeight(document.createElement('div'))).toBe(CHIP_SIZE * 2)
+  })
+
+  it('measures to the last nav item, ignoring the nav container height', () => {
+    const windowEl = sidebarWith({ headerHeight: 49, navTop: 52, itemsBottom: [200, 400, 560] })
+
+    expect(measureRailHeight(windowEl)).toBe(557)
+    windowEl.remove()
+  })
+
+  it('adds the nav bottom padding and the window border', () => {
+    const windowEl = sidebarWith({
+      headerHeight: 49,
+      navTop: 52,
+      itemsBottom: [560],
+      paddingBottom: '18px',
+      chrome: 2,
+    })
+
+    expect(measureRailHeight(windowEl)).toBe(577)
+    windowEl.remove()
+  })
+
+  it('falls back to the header height when the nav is empty', () => {
+    const windowEl = sidebarWith({ headerHeight: 49, navTop: 52, itemsBottom: [] })
+
+    expect(measureRailHeight(windowEl)).toBe(49)
+    windowEl.remove()
   })
 })

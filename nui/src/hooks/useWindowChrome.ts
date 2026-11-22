@@ -3,7 +3,7 @@ import { useFoldAnimation } from './useFoldAnimation'
 import { useWindowDrag, type WindowPosition } from './useWindowDrag'
 import { useWindowResize, type WindowSize } from './useWindowResize'
 import { DEFAULT_WINDOW_SIZE, type FoldedStyle, type SidebarDirection, type SidebarMode } from '../types'
-import { CHIP_SIZE, getFoldRects, measureRailHeight, type FoldState, type WindowRect } from './collapseLayout'
+import { CHIP_SIZE, RAIL_WIDTH, getFoldRects, measureRailHeight, type FoldState, type WindowRect } from './collapseLayout'
 import { on, callLua, setResourceKvp } from '../fivem'
 
 const MIN_WIDTH = 500
@@ -64,14 +64,22 @@ export function useWindowChrome({
 
   // === Geometry for every fold state ===
 
-  // Measuring costs a forced layout, so it only happens when a fold is about to
-  // happen. The chip hides the nav, which is why the value is cached.
+  // The rail height only exists in the rail layout, so that layout is applied
+  // for the measurement and reverted before the frame paints.
+  const measureRail = useCallback((el: HTMLElement) => {
+    const width = el.style.width
+    el.classList.add('ea-window--rail')
+    el.style.width = `${RAIL_WIDTH}px`
+    railHeightRef.current = measureRailHeight(el)
+    el.style.width = width
+    el.classList.remove('ea-window--rail')
+  }, [])
+
+  // Measuring costs a forced layout, so it only happens when the expanded
+  // window is about to fold. The chip hides the nav, which is why it is cached.
   const getRects = useCallback((options?: { measure?: boolean }): Record<FoldState, WindowRect> => {
     const el = windowRef.current
-    const nav = el?.querySelector<HTMLElement>('.sidebar-nav')
-    if (options?.measure && el && nav && nav.getClientRects().length > 0) {
-      railHeightRef.current = measureRailHeight(el)
-    }
+    if (options?.measure && el && sidebarMode === 'vertical') measureRail(el)
 
     return getFoldRects({
       expandedRect: {
@@ -85,7 +93,7 @@ export function useWindowChrome({
       railHeight: railHeightRef.current || CHIP_SIZE * 2,
       viewport: { width: window.innerWidth, height: window.innerHeight },
     })
-  }, [sidebarMode, sidebarDirection])
+  }, [measureRail, sidebarMode, sidebarDirection])
 
   const handleFoldSettled = useCallback((state: FoldState, rects: Record<FoldState, WindowRect>) => {
     if (state !== 'open') return
