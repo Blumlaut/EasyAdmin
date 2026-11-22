@@ -21,8 +21,8 @@ end
 
 -- Centralized focus setter so the NUI stays in sync with the Lua state.
 -- Whenever focus is acquired we send `nuiRehook`; whenever it is
--- released we send `nuiUnhook`. The NUI uses these to dim/undim the
--- window and show/hide the "Press ALT to interact" hint.
+-- released we send `nuiUnhook`. The NUI uses these to fold the window and
+-- show/hide the "Press ALT to unfold" hint.
 local function SetNuiFocused(focused)
   -- Sent even when the state is unchanged: the NUI may have missed an earlier
   -- message, and a resync costs nothing.
@@ -299,9 +299,8 @@ end)
 -- ============================================================
 -- "Press to toggle focus" keybind (Alt to unfold/fold)
 -- ============================================================
--- The user can release the NUI into background mode (by clicking the
--- backdrop or via the unhook button) and then re-engage by pressing
--- the bound key. Pressing again toggles focus off (folds back in).
+-- The user folds the menu (Escape, the backdrop or the fold button) and then
+-- re-engages by pressing the bound key. Pressing again folds it back.
 --
 -- The default key is Left Alt (the `lmenu` VK code).
 
