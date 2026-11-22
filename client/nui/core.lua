@@ -298,22 +298,19 @@ end)
 -- backdrop or via the unhook button) and then re-engage by pressing
 -- the bound key. Pressing again toggles focus off (folds back in).
 --
--- The default key is Left Alt (the `lmenu` VK code). FiveM only
--- supports RegisterKeyMapping on FiveM (not RedM), so we guard the
--- registration behind the existing RedM flag.
+-- The default key is Left Alt (the `lmenu` VK code).
 
+-- No `+` prefix on purpose: a mapping to a plain command runs it once on key
+-- down, while a `+name` mapping also fires `-name` when the key comes back up.
 RegisterCommand('-ea_setFocused', function()
   if not nuiVisible then return end
   SetNuiFocused(not nuiFocused)
 end, false)
 
--- Only register the key mapping on FiveM. We can't rely on the
--- global `RedM` flag yet because it is set inside a CreateThread in
--- client/init/globals.lua, which is loaded before us but whose body may
--- not have executed by the time we reach this point. We use the same
--- `CompendiumHorseObserved` existence check the original code uses
--- for the `easyadmin` keybind.
-if not CompendiumHorseObserved then
+-- RedM exposes RegisterKeyMapping as well: it ignores the mapper name and
+-- leaves the key unbound when the parameter is unknown, so the binding still
+-- shows up for the player to assign.
+if RegisterKeyMapping then
   RegisterKeyMapping(
     '-ea_setFocused',
     'EasyAdmin - Toggle menu focus',
