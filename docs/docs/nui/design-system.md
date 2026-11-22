@@ -115,12 +115,12 @@ The NUI supports keyboard navigation for list interactions:
 
 ## Folding
 
-The window is only folded while the game holds the input. Releasing focus (Escape, the backdrop, the close button or a Lua call) folds it to the appearance picked in Settings → Layout → Folded appearance, and regaining focus with the keybind (default Left Alt) unfolds it again. Both directions run in two phases: the window grows or shrinks to full height at the folded width first, then changes width, so opening reads as the panel unfolding rather than resizing.
+The window is only folded while the game holds the input. Releasing focus (Escape, the backdrop, the close button or a Lua call) folds it to the appearance picked in Settings → Layout → Folded appearance, and regaining focus with the keybind (default Left Alt) unfolds it again. Folding runs in two phases: the window narrows to the rail width at full height, then drops to the nav height. Unfolding runs them the other way round, so opening reads as the panel unfolding rather than resizing.
 
 | Folded appearance | Size | What it is |
 |---|---|---|
-| Icon rail (default) | 64px wide | Nav icons with a dot for anything that needs attention |
-| Floating icon | 56 × 56 | The logo with the open report count |
+| Icon rail (default) | 64px wide, as tall as the nav | Nav icons with a dot for anything that needs attention |
+| Floating icon | 56 × 56 | The logo with a count of unclaimed reports |
 
 Neither state takes input, because the NUI has released focus. Nothing in the folded window should look clickable.
 

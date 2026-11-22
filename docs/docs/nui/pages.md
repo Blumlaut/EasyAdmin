@@ -239,6 +239,7 @@ Both can be copied to the clipboard.
 ### Layout
 
 - Sidebar layout (left sidebar, right sidebar, top taskbar or bottom taskbar)
+- Folded appearance (icon rail or floating icon)
 - Fold opacity slider
 
 ### Anonymous Mode
