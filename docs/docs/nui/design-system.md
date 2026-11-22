@@ -115,7 +115,7 @@ The NUI supports keyboard navigation for list interactions:
 
 ## Folding
 
-The window is only folded while the game holds the input. Releasing focus (Escape, the backdrop, the close button or a Lua call) folds it to the appearance picked in Settings → Layout → Folded appearance, and regaining focus with the keybind (default Left Alt) unfolds it again. Folding runs in two phases: the window narrows to the rail width at full height, then drops to the nav height. Unfolding runs them the other way round, so opening reads as the panel unfolding rather than resizing.
+The window is only folded while the game holds the input. Releasing focus (Escape, the backdrop, the close button or a Lua call) folds it to the appearance picked in Settings → Layout → Folded appearance, and regaining focus with the keybind (default Left Alt) unfolds it again. Running `/easyadmin` (`/ea`) on a folded menu also unfolds it, which is the way back when the keybind is unbound. Folding runs in two phases: the window narrows to the rail width at full height, then drops to the nav height. Unfolding runs them the other way round, so opening reads as the panel unfolding rather than resizing.
 
 | Folded appearance | Size | What it is |
 |---|---|---|
