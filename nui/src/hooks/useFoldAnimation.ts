@@ -64,7 +64,8 @@ export function useFoldAnimation({
     if (!el || from === next) return
 
     const folding = next !== 'open'
-    const rects = getRects({ measure: folding })
+    // Only the expanded window can be measured, and only the rail needs it
+    const rects = getRects({ measure: folding && from === 'open' })
     const start = rects[from]
     const target = rects[next]
     const strip = getStripRect(from, next, rects)
