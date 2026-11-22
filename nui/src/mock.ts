@@ -80,6 +80,14 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
   return originalFetch(input, init)
 }
 
+// ---- Focus keybind ----
+// Alt mirrors the in-game focus keybind so a folded window can be unfolded
+// in the browser too.
+window.addEventListener('keydown', (event) => {
+  if (event.key !== 'Alt' || event.repeat) return
+  window.postMessage({ action: 'nuiRehook' }, '*')
+})
+
 // ---- Provide the FiveM global ----
 
 // @ts-expect-error FiveM global not in lib.dom
