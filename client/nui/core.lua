@@ -24,10 +24,8 @@ end
 -- released we send `nuiUnhook`. The NUI uses these to dim/undim the
 -- window and show/hide the "Press ALT to interact" hint.
 local function SetNuiFocused(focused)
-  if nuiFocused == focused then
-    -- No-op: still send a sync message in case the NUI state drifted
-    -- (e.g. it missed a previous SendNUIMessage). Cheap, idempotent.
-  end
+  -- Sent even when the state is unchanged: the NUI may have missed an earlier
+  -- message, and a resync costs nothing.
   nuiFocused = focused
   nuiBackground = not focused
   SetNuiFocus(focused, focused)
