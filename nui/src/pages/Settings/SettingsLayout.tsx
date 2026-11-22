@@ -3,8 +3,8 @@ import { setResourceKvp } from '../../fivem'
 import { notify } from '../../lib/notify'
 import { useTranslation } from '../../lib/i18n'
 import type { FoldedStyle, SidebarDirection, SidebarMode } from '../../types'
-import { LayoutWireframe } from './LayoutWireframe'
-import { FoldedWireframe } from './FoldedWireframe'
+import { WireframeOption } from './WireframeOption'
+import type { WireframeVariant } from './Wireframe'
 
 interface SettingsLayoutProps {
   sidebarMode: SidebarMode
@@ -28,14 +28,12 @@ const FOLDED_OPTIONS: { style: FoldedStyle; labelKey: string; descriptionKey: st
   {
     style: 'chip',
     labelKey: 'Floating icon',
-    descriptionKey: 'One small icon with the open report count',
+    descriptionKey: 'One small icon with a count of unclaimed reports',
   },
 ]
 
-type LayoutVariant = 'left-sidebar' | 'right-sidebar' | 'top-taskbar' | 'bottom-taskbar'
-
 const OPTIONS: {
-  variant: LayoutVariant
+  variant: WireframeVariant
   mode: SidebarMode
   direction: SidebarDirection
   labelKey: string
@@ -100,13 +98,10 @@ export function SettingsLayout({
     notify(t("Sidebar layout set to {mode} ({direction})", { mode, direction }), 'success')
   }
 
-  function setFoldedStyle(style: FoldedStyle) {
-    onChange({ foldedStyle: style })
-    setResourceKvp('sfoldedStyle', style)
-    notify(
-      t('Folded appearance set to {style}', { style: t(style === 'chip' ? 'Floating icon' : 'Icon rail') }),
-      'success',
-    )
+  function setFoldedStyle(opt: (typeof FOLDED_OPTIONS)[number]) {
+    onChange({ foldedStyle: opt.style })
+    setResourceKvp('sfoldedStyle', opt.style)
+    notify(t('Folded appearance set to {style}', { style: t(opt.labelKey) }), 'success')
   }
 
   function setFoldOpacity(value: number) {
@@ -129,30 +124,17 @@ export function SettingsLayout({
       <fieldset className="layout-grid">
         <legend className="sr-only">{t("Sidebar layout options")}</legend>
 
-        {OPTIONS.map((opt) => {
-          const checked = matchOption(opt, sidebarMode, sidebarDirection)
-          return (
-            <label
-              key={opt.variant}
-              className={`layout-grid-option selectable-card${checked ? ' selectable-card--checked' : ''}`}
-            >
-              <input
-                className="radio-group-input"
-                type="radio"
-                name="sidebar-layout"
-                checked={checked}
-                onChange={() => setLayout(opt.mode, opt.direction)}
-              />
-              <div className="layout-wireframe-wrap">
-                <LayoutWireframe variant={opt.variant} checked={checked} />
-              </div>
-              <div className="layout-grid-content">
-                <span className="layout-grid-label">{t(opt.labelKey)}</span>
-                <span className="layout-grid-description">{t(opt.descriptionKey)}</span>
-              </div>
-            </label>
-          )
-        })}
+        {OPTIONS.map((opt) => (
+          <WireframeOption
+            key={opt.variant}
+            name="sidebar-layout"
+            variant={opt.variant}
+            checked={matchOption(opt, sidebarMode, sidebarDirection)}
+            onSelect={() => setLayout(opt.mode, opt.direction)}
+            label={t(opt.labelKey)}
+            description={t(opt.descriptionKey)}
+          />
+        ))}
       </fieldset>
 
       {/* Folded appearance */}
@@ -166,30 +148,17 @@ export function SettingsLayout({
       <fieldset className="layout-grid mt-2">
         <legend className="sr-only">{t("Folded appearance options")}</legend>
 
-        {FOLDED_OPTIONS.map((opt) => {
-          const checked = foldedStyle === opt.style
-          return (
-            <label
-              key={opt.style}
-              className={`layout-grid-option selectable-card${checked ? ' selectable-card--checked' : ''}`}
-            >
-              <input
-                className="radio-group-input"
-                type="radio"
-                name="folded-style"
-                checked={checked}
-                onChange={() => setFoldedStyle(opt.style)}
-              />
-              <div className="layout-wireframe-wrap">
-                <FoldedWireframe variant={opt.style} checked={checked} />
-              </div>
-              <div className="layout-grid-content">
-                <span className="layout-grid-label">{t(opt.labelKey)}</span>
-                <span className="layout-grid-description">{t(opt.descriptionKey)}</span>
-              </div>
-            </label>
-          )
-        })}
+        {FOLDED_OPTIONS.map((opt) => (
+          <WireframeOption
+            key={opt.style}
+            name="folded-style"
+            variant={opt.style}
+            checked={foldedStyle === opt.style}
+            onSelect={() => setFoldedStyle(opt)}
+            label={t(opt.labelKey)}
+            description={t(opt.descriptionKey)}
+          />
+        ))}
       </fieldset>
 
       {/* Fold Opacity */}
