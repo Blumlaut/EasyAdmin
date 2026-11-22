@@ -298,11 +298,12 @@ function App() {
     players: { badge: data.players.length },
   }
   const unclaimedReportCount = data.reports.filter((report) => !report.claimed).length
-  if (canViewReports && unclaimedReportCount > 0) {
-    navBadges.reports = {
-      badge: unclaimedReportCount > 99 ? '99+' : unclaimedReportCount,
-      badgeVariant: 'attention',
-    }
+  // Same count on the nav item and on the folded chip
+  const reportBadge = canViewReports && unclaimedReportCount > 0
+    ? unclaimedReportCount > 99 ? '99+' : unclaimedReportCount
+    : null
+  if (reportBadge !== null) {
+    navBadges.reports = { badge: reportBadge, badgeVariant: 'attention' }
   }
 
   // === Render ===
@@ -330,9 +331,9 @@ function App() {
                 <h1 className="sidebar-title text-gradient text-xl font-bold">EasyAdmin</h1>
                 <p className="sidebar-subtitle text-xs text-fg-muted">{t("Admin Panel")}</p>
               </div>
-              {unclaimedReportCount > 0 && (
+              {reportBadge !== null && (
                 <span className="ea-fold-badge" aria-hidden="true">
-                  {unclaimedReportCount > 99 ? '99+' : unclaimedReportCount}
+                  {reportBadge}
                 </span>
               )}
             </div>
