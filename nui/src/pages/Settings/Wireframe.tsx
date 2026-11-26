@@ -1,8 +1,9 @@
 /*
- * Mini window wireframes for the layout picker.
- * Each variant draws a small rectangle representing the EA window,
- * with the sidebar / taskbar region highlighted using the brand palette.
+ * Mini window wireframes used by the settings pickers: the four window
+ * layouts, and the two appearances the window folds down to.
  */
+
+import type { ReactNode } from 'react'
 
 const W = 100
 const H = 64
@@ -11,39 +12,66 @@ const SIDEBAR_W = 26
 const TASKBAR_H = 14
 const CONTENT_GAP = 1 // gap between sidebar and content
 
-interface LayoutWireframeProps {
-  variant: 'left-sidebar' | 'right-sidebar' | 'top-taskbar' | 'bottom-taskbar'
+export type WireframeVariant =
+  | 'left-sidebar'
+  | 'right-sidebar'
+  | 'top-taskbar'
+  | 'bottom-taskbar'
+  | 'rail'
+  | 'chip'
+
+interface WireframeProps {
+  variant: WireframeVariant
   checked: boolean
 }
 
-export function LayoutWireframe({ variant, checked }: LayoutWireframeProps) {
-  const accent = checked
-    ? 'var(--brand-blue-light)'
-    : 'var(--text-muted)'
-  const accentBg = checked
-    ? 'rgba(59, 130, 246, 0.2)'
-    : 'rgba(139, 148, 158, 0.15)'
-  const contentFill = checked
-    ? 'rgba(139, 148, 158, 0.1)'
-    : 'rgba(139, 148, 158, 0.06)'
-  const border = checked
-    ? 'var(--brand-blue-light)'
-    : 'var(--border-subtle)'
+function palette(checked: boolean) {
+  return {
+    accent: checked ? 'var(--brand-blue-light)' : 'var(--text-muted)',
+    accentBg: checked ? 'rgba(59, 130, 246, 0.2)' : 'rgba(139, 148, 158, 0.15)',
+    contentFill: checked ? 'rgba(139, 148, 158, 0.1)' : 'rgba(139, 148, 158, 0.06)',
+    border: checked ? 'var(--brand-blue-light)' : 'var(--border-subtle)',
+  }
+}
 
-  // Common: outer window frame
-  const frame = (
+// The screen the folded window floats over, dashed until the option is picked
+function screen(border: string, checked: boolean) {
+  return (
     <rect
-      key="frame"
+      key="screen"
       x={1}
       y={1}
       width={W - 2}
       height={H - 2}
       rx={R}
-      fill="var(--bg-secondary)"
+      fill="transparent"
       stroke={border}
+      strokeDasharray={checked ? undefined : '3 2'}
       strokeWidth={1.5}
     />
   )
+}
+
+export function Wireframe({ variant, checked }: WireframeProps) {
+  const { accent, accentBg, contentFill, border } = palette(checked)
+  const folded = variant === 'rail' || variant === 'chip'
+
+  // Folded appearances float over a dashed screen; the layouts draw the window
+  const frame = folded
+    ? screen(border, checked)
+    : (
+      <rect
+        key="frame"
+        x={1}
+        y={1}
+        width={W - 2}
+        height={H - 2}
+        rx={R}
+        fill="var(--bg-secondary)"
+        stroke={border}
+        strokeWidth={1.5}
+      />
+    )
 
   // Content placeholder lines (subtle horizontal bars)
   const contentLines = (x: number, y: number, w: number, count: number) =>
@@ -59,7 +87,7 @@ export function LayoutWireframe({ variant, checked }: LayoutWireframeProps) {
       />
     ))
 
-  let regions: React.ReactNode
+  let regions: ReactNode
 
   switch (variant) {
     case 'left-sidebar': {
@@ -205,6 +233,31 @@ export function LayoutWireframe({ variant, checked }: LayoutWireframeProps) {
       )
       break
     }
+
+    case 'rail': {
+      regions = (
+        <>
+          <rect x={1} y={1} width={13} height={H - 2} rx={R} fill={accentBg} stroke="none" />
+          <rect x={4} y={5} width={7} height={4} rx={1.5} fill={accent} opacity={0.6} />
+          {[14, 22, 30, 38, 46, 54].map((y) => (
+            <rect key={y} x={4.5} y={y} width={6} height={6} rx={1.5} fill={accent} opacity={0.3} />
+          ))}
+          <circle cx={10} cy={16.5} r={1.6} fill={accent} />
+        </>
+      )
+      break
+    }
+
+    case 'chip': {
+      const size = 16
+      regions = (
+        <>
+          <rect x={6} y={6} width={size} height={size} rx={4} fill="var(--bg-secondary)" stroke={accent} strokeWidth={1.5} />
+          <circle cx={6 + size - 2} cy={6 + 2} r={3} fill={accent} />
+        </>
+      )
+      break
+    }
   }
 
   return (
@@ -215,6 +268,7 @@ export function LayoutWireframe({ variant, checked }: LayoutWireframeProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="layout-wireframe"
+      aria-hidden="true"
     >
       {frame}
       {regions}

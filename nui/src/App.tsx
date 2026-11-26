@@ -107,6 +107,7 @@ function App() {
     windowSizeData: data.windowSizeData,
     sidebarMode: data.settings.sidebarMode,
     sidebarDirection: data.settings.sidebarDirection,
+    foldedStyle: data.settings.foldedStyle,
   })
   // Extract ref so the remaining object is plain state (avoids react-hooks/refs false positives)
   const { windowRef: _windowRef, ...chrome } = _chrome
@@ -238,19 +239,6 @@ function App() {
 
   // === Window classes ===
 
-  const isHorizontalSidebar = data.settings.sidebarMode === 'horizontal'
-
-  // Base icon points toward the content area. CSS rotates it 180° when collapsed
-  // so it points toward the sidebar (expand direction). This keeps the spin animation smooth.
-  const collapseIconName = (() => {
-    if (isHorizontalSidebar) {
-      // sidebarDirection 'up' = sidebar at bottom, 'down' = sidebar at top
-      return data.settings.sidebarDirection === 'up' ? 'chevron-double-down' : 'chevron-double-up'
-    }
-    // sidebarDirection 'left' = sidebar at right, 'right' = sidebar at left
-    return data.settings.sidebarDirection === 'left' ? 'chevron-double-right' : 'chevron-double-left'
-  })()
-
   const windowClasses = [
     'ea-window',
     `ea-window--sidebar-${data.settings.sidebarMode}`,
@@ -258,7 +246,8 @@ function App() {
     `ea-density-${data.settings.uiDensity}`,
   ]
   if (data.settings.highContrast) windowClasses.push('high-contrast')
-  if (chrome.contentCollapsed) windowClasses.push('ea-window--collapsed')
+  if (chrome.foldState === 'rail') windowClasses.push('ea-window--rail')
+  if (chrome.foldState === 'chip') windowClasses.push('ea-window--chip')
   if (chrome.nuiBackground) windowClasses.push('ea-window--background')
 
   const windowStyle: React.CSSProperties & Record<string, unknown> = {
@@ -301,13 +290,6 @@ function App() {
     // Built-in lookup, then plugin lookup.
     const targetView = (viewMap[id] ?? pluginViewMap[id]) as View | undefined
     if (!targetView) return
-
-    // Auto-unfold when clicking a sidebar item while collapsed
-    if (chrome.contentCollapsed) {
-      chrome.toggleCollapsed()
-      setTimeout(() => nav.navigateTo(targetView), 50)
-      return
-    }
     nav.navigateTo(targetView)
   }
 
@@ -316,11 +298,12 @@ function App() {
     players: { badge: data.players.length },
   }
   const unclaimedReportCount = data.reports.filter((report) => !report.claimed).length
-  if (canViewReports && unclaimedReportCount > 0) {
-    navBadges.reports = {
-      badge: unclaimedReportCount > 99 ? '99+' : unclaimedReportCount,
-      badgeVariant: 'attention',
-    }
+  // Same count on the nav item and on the folded chip
+  const reportBadge = canViewReports && unclaimedReportCount > 0
+    ? unclaimedReportCount > 99 ? '99+' : unclaimedReportCount
+    : null
+  if (reportBadge !== null) {
+    navBadges.reports = { badge: reportBadge, badgeVariant: 'attention' }
   }
 
   // === Render ===
@@ -348,22 +331,11 @@ function App() {
                 <h1 className="sidebar-title text-gradient text-xl font-bold">EasyAdmin</h1>
                 <p className="sidebar-subtitle text-xs text-fg-muted">{t("Admin Panel")}</p>
               </div>
-              <button
-                className="btn btn-ghost btn-icon sidebar-collapse-btn"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  chrome.toggleCollapsed()
-                }}
-                aria-label={chrome.contentCollapsed ? 'Expand main content' : 'Collapse main content'}
-                title={chrome.contentCollapsed ? 'Expand main content' : 'Collapse main content'}
-                disabled={chrome.nuiBackground}
-              >
-                <Icon
-                  name={collapseIconName as 'chevron-double-left' | 'chevron-double-right' | 'chevron-double-up' | 'chevron-double-down'}
-                  size="xs"
-                  className="sidebar-collapse-icon"
-                />
-              </button>
+              {reportBadge !== null && (
+                <span className="ea-fold-badge" aria-hidden="true">
+                  {reportBadge}
+                </span>
+              )}
             </div>
             <div className="sidebar-nav">
               <Navigation

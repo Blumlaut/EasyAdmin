@@ -21,13 +21,11 @@ end
 
 -- Centralized focus setter so the NUI stays in sync with the Lua state.
 -- Whenever focus is acquired we send `nuiRehook`; whenever it is
--- released we send `nuiUnhook`. The NUI uses these to dim/undim the
--- window and show/hide the "Press ALT to interact" hint.
+-- released we send `nuiUnhook`. The NUI uses these to fold the window and
+-- show/hide the "Press ALT to unfold" hint.
 local function SetNuiFocused(focused)
-  if nuiFocused == focused then
-    -- No-op: still send a sync message in case the NUI state drifted
-    -- (e.g. it missed a previous SendNUIMessage). Cheap, idempotent.
-  end
+  -- Sent even when the state is unchanged: the NUI may have missed an earlier
+  -- message, and a resync costs nothing.
   nuiFocused = focused
   nuiBackground = not focused
   SetNuiFocus(focused, focused)
@@ -48,6 +46,13 @@ function NuiToggle()
       if not isAdmin then return end
       NuiToggle()
     end)
+    return
+  end
+
+  -- A folded menu is still on screen, so the command brings it back instead
+  -- of hiding it. The focus keybind is the usual way in, and it can be unbound.
+  if nuiVisible and not nuiFocused then
+    SetNuiFocused(true)
     return
   end
 
@@ -201,6 +206,10 @@ function NuiSendSettings()
   local uiDensity = KvpGet('suiDensity') or 'default'
   if not validDensities[uiDensity] then uiDensity = 'default' end
 
+  -- What stays on screen while the game holds the input
+  local foldedStyle = KvpGet('sfoldedStyle') or 'rail'
+  if foldedStyle ~= 'rail' and foldedStyle ~= 'chip' then foldedStyle = 'rail' end
+
   SendNUIMessage({
     action = 'initSettings',
     data = {
@@ -211,6 +220,7 @@ function NuiSendSettings()
       sidebarMode = sidebarMode,
       sidebarDirection = sidebarDirection,
       foldOpacity = KvpGet('ifoldOpacity') or 85,
+      foldedStyle = foldedStyle,
     },
   })
 
@@ -252,7 +262,8 @@ end)
 -- Player dismissed the full-screen warning overlay.
 -- Release NUI focus so the game regains input.
 RegisterNUICallback('dismissWarning', function(_data, cb)
-  SetNuiFocus(false, false)
+  -- Go through the shared setter so the NUI folds like on any other focus release
+  SetNuiFocused(false)
   cb({ ok = true })
 end)
 
@@ -288,26 +299,22 @@ end)
 -- ============================================================
 -- "Press to toggle focus" keybind (Alt to unfold/fold)
 -- ============================================================
--- The user can release the NUI into background mode (by clicking the
--- backdrop or via the unhook button) and then re-engage by pressing
--- the bound key. Pressing again toggles focus off (folds back in).
+-- The user folds the menu (Escape, the backdrop or the fold button) and then
+-- re-engages by pressing the bound key. Pressing again folds it back.
 --
--- The default key is Left Alt (the `lmenu` VK code). FiveM only
--- supports RegisterKeyMapping on FiveM (not RedM), so we guard the
--- registration behind the existing RedM flag.
+-- The default key is Left Alt (the `lmenu` VK code).
 
+-- No `+` prefix on purpose: a mapping to a plain command runs it once on key
+-- down, while a `+name` mapping also fires `-name` when the key comes back up.
 RegisterCommand('-ea_setFocused', function()
   if not nuiVisible then return end
   SetNuiFocused(not nuiFocused)
 end, false)
 
--- Only register the key mapping on FiveM. We can't rely on the
--- global `RedM` flag yet because it is set inside a CreateThread in
--- client/init/globals.lua, which is loaded before us but whose body may
--- not have executed by the time we reach this point. We use the same
--- `CompendiumHorseObserved` existence check the original code uses
--- for the `easyadmin` keybind.
-if not CompendiumHorseObserved then
+-- RedM exposes RegisterKeyMapping as well: it ignores the mapper name and
+-- leaves the key unbound when the parameter is unknown, so the binding still
+-- shows up for the player to assign.
+if RegisterKeyMapping then
   RegisterKeyMapping(
     '-ea_setFocused',
     'EasyAdmin - Toggle menu focus',
@@ -326,7 +333,7 @@ end
 RegisterNetEvent('EasyAdmin:showWarning')
 AddEventHandler('EasyAdmin:showWarning', function(warnedBy, message, title, labelWarnedBy, labelDismiss) 
   -- Grab NUI focus so the overlay can capture keyboard input
-  SetNuiFocus(true, true)
+  SetNuiFocused(true)
   SendNUIMessage({
     action = 'showWarning',
     data = {

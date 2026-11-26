@@ -80,6 +80,15 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
   return originalFetch(input, init)
 }
 
+// ---- Focus keybind ----
+// Alt mirrors the in-game toggle so the fold can be driven from the keyboard
+// in the browser too
+window.addEventListener('keydown', (event) => {
+  if (event.key !== 'Alt' || event.repeat) return
+  const folded = document.querySelector('.ea-window--rail, .ea-window--chip')
+  window.postMessage({ action: folded ? 'nuiRehook' : 'nuiUnhook' }, '*')
+})
+
 // ---- Provide the FiveM global ----
 
 // @ts-expect-error FiveM global not in lib.dom
